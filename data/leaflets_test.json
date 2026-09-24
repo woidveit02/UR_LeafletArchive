@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "title": "Für Frieden und soziale Gerechtigkeit",
+    "organisation": "Beispielpartei Regensburg",
+    "date": "2025-09-15",
+    "caption": "Gemeinsam für eine gerechte und friedliche Gesellschaft.",
+    "page_count": 2,
+    "buzzwords": [
+      "Frieden",
+      "Gerechtigkeit",
+      "Demokratie"
+    ],
+    "topics": [
+      "Soziales",
+      "Frieden",
+      "Demokratie"
+    ],
+    "signatures": [
+      "Max Mustermann",
+      "Anna Beispiel"
+    ],
+    "mentioned_names": [
+      "Max Mustermann",
+      "Anna Beispiel"
+    ],
+    "mentioned_locations": [
+      "Regensburg",
+      "Bayern"
+    ],
+    "referenced_leaflets": []
+  },
+  {
+    "id": 2,
+    "title": "Unsere Stadt gemeinsam gestalten",
+    "organisation": "Bürgerinitiative Regensburg",
+    "date": "2025-10-03",
+    "caption": "Ideen für eine lebenswerte und nachhaltige Stadt.",
+    "page_count": 4,
+    "buzzwords": [
+      "Nachhaltigkeit",
+      "Verkehr",
+      "Umwelt"
+    ],
+    "topics": [
+      "Stadtentwicklung",
+      "Verkehr",
+      "Umwelt"
+    ],
+    "signatures": [
+      "Peter Müller"
+    ],
+    "mentioned_names": [
+      "Peter Müller",
+      "Lisa Schmidt"
+    ],
+    "mentioned_locations": [
+      "Regensburg",
+      "Innenstadt",
+      "Donau"
+    ],
+    "referenced_leaflets": [
+      1
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Bildung für alle",
+    "organisation": "Bildungsforum Bayern",
+    "date": "2025-11-12",
+    "caption": "Chancengleichheit und bessere Bildung für alle.",
+    "page_count": 3,
+    "buzzwords": [
+      "Bildung",
+      "Chancengleichheit",
+      "Schule"
+    ],
+    "topics": [
+      "Bildung",
+      "Jugend",
+      "Soziales"
+    ],
+    "signatures": [
+      "Julia Weber",
+      "Thomas Bauer"
+    ],
+    "mentioned_names": [
+      "Julia Weber",
+      "Thomas Bauer"
+    ],
+    "mentioned_locations": [
+      "Regensburg",
+      "München"
+    ],
+    "referenced_leaflets": [
+      1,
+      2
+    ]
+  }
+]
