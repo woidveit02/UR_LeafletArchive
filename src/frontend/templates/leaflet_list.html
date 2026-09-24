@@ -2,19 +2,19 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>woidveit02s RaumManager</title>
+    <title>UR Leaflet Archive</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 	<div class="app">
         {% include '_navigation.html' %}
-		<h1>Raumliste:</h1>
-        <ul id="room-list">
-            {% for room in rooms %}
-            <li><a href="/rooms/{{ room.id }}">{{ room.names[0] if room.names else '*kein Name*' }}</a></li>
+		<h1>Flugblatt-Liste:</h1>
+        <ul id="leaflet-list">
+            {% for leaflet in leaflets %}
+            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a></li>
             {% else %}
-            <li>Keine Räume gefunden.</li>
+            <li>Keine Flugblätter gefunden.</li>
             {% endfor %}
         </ul>
 	</div>

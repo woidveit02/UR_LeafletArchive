@@ -10,7 +10,7 @@ DATA_DIR = Path(__file__).resolve().parents[4] / "data"
 # Loads the data of the leaflets_test.json file and returns it.
 def load_leaflet_data():
 
-    leaflet_file = DATA_DIR / "leaflets_test.json"
+    leaflet_file = DATA_DIR / "leaflets.json"
 
     with open(leaflet_file, encoding="utf-8") as f:
         return json.load(f)

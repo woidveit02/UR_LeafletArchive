@@ -1,6 +1,5 @@
 from .base import Base
 from sqlalchemy import Column, Integer, String, Float, JSON, ForeignKey
-from sqlalchemy.orm import relationship
 
 # SQLAlchemy models for the application
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>Leaflet Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="app">
+        {% include '_navigation.html' %}
+	    <h1>Leaflet Details</h1>
+
+	    <ul>
+		    <li><strong>Titel:</strong> {{ leaflet.title if leaflet.title else 'n.a.' }}</li>
+            <li><strong>Organisation:</strong> {{ leaflet.organisation if leaflet.organisation else 'n.a.' }}</li>
+            <li><strong>Datum:</strong> {{ leaflet.date if leaflet.date else 'n.a.' }}</li>
+            <li><strong>Beschreibung:</strong> {{ leaflet.description if leaflet.description else 'n.a.' }}</li>
+	    </ul>
+
+
+	    <p><a href="/leaflets">Zurück zur Flugblatt-Liste</a></p>
+    </div>
+</body>
+</html>

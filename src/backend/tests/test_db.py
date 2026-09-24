@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from backend.app.database.models import Building, Location, Room, User
+from backend.app.database.models import Leaflet
 from backend.app.database.session import session
 
 # Tests if there is a connection to the database and if the session object is properly created.
@@ -20,19 +20,8 @@ def test_expected_tables_exist():
             text("SELECT name FROM sqlite_master WHERE type='table'")
         ).fetchall()
     }
-    assert {"rooms", "buildings", "locations", "users", "events"}.issubset(table_names)
+    assert {"leaflets"}.issubset(table_names)
 
 # Tests if the database contains at least one entry for each of the main models (Room, Building, Location, User).
 def test_database_contains_basic_seed_data():
-    assert session.query(Location).count() >= 1
-    assert session.query(Building).count() >= 1
-    assert session.query(Room).count() >= 1
-    assert session.query(User).count() >= 1
-
-# Tests if a room has an associated building and location, which are expected to be present in the database.
-def test_room_has_building_and_location():
-    room = session.query(Room).first()
-
-    assert room is not None
-    assert room.building_rel is not None
-    assert room.building_rel.location_rel is not None
+    assert session.query(Leaflet).count() >= 1
