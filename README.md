@@ -8,8 +8,8 @@ Dass ganze Projekt wurde mit Visual Studio Code erstellt, dieses wurde zudem mit
 
 ## Getting Started / Bedienung
 
-Um den Docker-Container und damit die Anwendung zu starten, einfach `docker compose up` ausführen, dann ist die Anwendung unter http://localhost:8000/ verfügbar.
-Zum Erstellen & Füllen der Datenbank einfach die `main.py` ausführen (vorher ggf. die bestehende Datenbank löschen). Das ist nach jedem `git pull` nötig, wenn sich die Daten in `data/` geändert haben (siehe nächster Abschnitt).
+Um den Docker-Container und damit die Anwendung zu starten, einfach `docker compose up` ausführen, dann ist die Anwendung unter http://localhost:8000/ verfügbar. Die Datenbank wird beim Start automatisch angelegt und gefüllt, falls sie leer ist.
+Nach `git pull` mit Änderungen in `data/`: alte `.db` löschen, dann neu starten (siehe nächster Abschnitt).
 
 ## Daten & Synchronisation
 
@@ -28,8 +28,9 @@ Die Korrektheit der Code-Formatierung erfolgt mittels `PyCodeStyle`, dazu einfac
 
 ```
 .
-├── data/ # Ordner für alle vorgegebenen Testdaten
-│   └── leaflets.json # JSON-Dateien mit Testdaten
+├── data/ # Metadaten und Organisations-Normdatei (Quelle für die DB)
+│   ├── nr002_metadata.json
+│   └── organizations.json
 ├── src/
 │   ├── backend/
 │   │   ├── app/

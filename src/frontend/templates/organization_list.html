@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>UR Leaflet Archive</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+
+<body>
+	<div class="app">
+        {% include '_navigation.html' %}
+		<h1>Organisationen:</h1>
+        <ul id="organization-list">
+            {% for org in organizations %}
+            <li><a href="/organizations/{{ org.id }}">{{ org.name }}</a></li>
+            {% else %}
+            <li>Keine Organisationen gefunden.</li>
+            {% endfor %}
+        </ul>
+	</div>
+
+
+</body>
+
+</html>

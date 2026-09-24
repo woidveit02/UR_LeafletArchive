@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Organization Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+
+<body>
+    <div class="app">
+        {% include '_navigation.html' %}
+        <h1>{{ org.name }}</h1>
+
+        <ul>
+            <li><strong>Vollständiger Name:</strong> {{ org.full_name if org.full_name else 'n.a.' }}</li>
+            <li><strong>Typ:</strong> {{ org.type if org.type else 'n.a.' }}</li>
+            <li><strong>Schreibweisen:</strong> {{ org.variants | join(', ') if org.variants else 'n.a.' }}</li>
+            <li><strong>Jahre (laut Findmittel):</strong> {{ org.jahre | join(', ') if org.jahre else 'n.a.' }}</li>
+            <li><strong>Verzeichnungseinheit(en):</strong> {{ org.vz | join(', ') if org.vz else 'n.a.' }}</li>
+            <li><strong>GND-ID:</strong> {{ org.gnd_id if org.gnd_id else 'n.a.' }}</li>
+            <li><strong>Quelle:</strong> {{ org.notes if org.notes else 'n.a.' }}</li>
+        </ul>
+
+        <h2>Flugblätter</h2>
+        <ul>
+            {% for leaflet in org.leaflets %}
+            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a></li>
+            {% else %}
+            <li>Keine Flugblätter gefunden.</li>
+            {% endfor %}
+        </ul>
+
+        <p><a href="/leaflets">Zurück zur Flugblatt-Liste</a></p>
+    </div>
+</body>
+</html>

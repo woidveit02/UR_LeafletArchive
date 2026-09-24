@@ -13,9 +13,13 @@
 
 	    <ul>
 		    <li><strong>Titel:</strong> {{ leaflet.title if leaflet.title else 'n.a.' }}</li>
-            <li><strong>Organisation:</strong> {{ leaflet.organisation if leaflet.organisation else 'n.a.' }}</li>
-            <li><strong>Datum:</strong> {{ leaflet.date if leaflet.date else 'n.a.' }}</li>
-            <li><strong>Beschreibung:</strong> {{ leaflet.description if leaflet.description else 'n.a.' }}</li>
+            <li><strong>Band:</strong> {{ leaflet.volume if leaflet.volume else 'n.a.' }}, Seiten {{ leaflet.pages }}</li>
+            <li><strong>Datum:</strong> {{ leaflet.date_text if leaflet.date_text else 'n.a.' }} ({{ leaflet.date_type }})</li>
+            <li><strong>Textsorte:</strong> {{ leaflet.doc_type if leaflet.doc_type else 'n.a.' }}</li>
+            <li><strong>Herausgeber:</strong>
+                {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
+            </li>
+            <li><strong>Unterzeichner:</strong> {{ leaflet.signatories | join(', ') if leaflet.signatories else 'n.a.' }}</li>
 	    </ul>
 
 

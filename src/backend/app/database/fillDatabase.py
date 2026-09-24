@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from .session import session
-from .models import Leaflet
+from .models import Volume, Page, Leaflet, Organization, LeafletIssuer
 
 # Data dir: LEAFLET_DATA_DIR in Docker (mounted), else repo-root data/.
 if os.environ.get("LEAFLET_DATA_DIR"):
@@ -11,48 +11,86 @@ if os.environ.get("LEAFLET_DATA_DIR"):
 else:
     DATA_DIR = Path(__file__).resolve().parents[4] / "data"
 
-# Loads the data of the leaflets_test.json file and returns it.
-def load_leaflet_data():
 
-    leaflet_file = DATA_DIR / "leaflets.json"
-
-    with open(leaflet_file, encoding="utf-8") as f:
+def load_json(name):
+    with open(DATA_DIR / name, encoding="utf-8") as f:
         return json.load(f)
 
-# Takes the data of all leaflets, extracts the relevant information and fills the Leaflet table of the database with it.
-def fill_leaflet_database(leaflet_data):
 
-    for leaflet in leaflet_data:
-        id = leaflet['id']
-        title = leaflet['title']
-        organisation = leaflet['organisation']
-        date = leaflet['date']
-        caption = leaflet['caption']
-        page_count = leaflet['page_count']
-        buzzwords = leaflet['buzzwords']
-        topics = leaflet['topics']
-        signatures = leaflet['signatures']
-        mentioned_names = leaflet['mentioned_names']
-        mentioned_locations = leaflet['mentioned_locations']
-        referenced_leaflets = leaflet['referenced_leaflets']
-
-        session.add(Leaflet(id=id,
-                            title=title,
-                            organisation=organisation,
-                            date=date,
-                            caption=caption,
-                            page_count=page_count,
-                            buzzwords=buzzwords,
-                            topics=topics,
-                            signatures=signatures,
-                            mentioned_names=mentioned_names,
-                            mentioned_locations=mentioned_locations,
-                            referenced_leaflets=referenced_leaflets))
-
-        session.commit()
+def fill_organizations():
+    orgs_by_variant = {}
+    for org in load_json("organizations.json"):
+        session.add(Organization(
+            id=org["org_id"],
+            name=org["name"],
+            full_name=org.get("full_name", ""),
+            type=org.get("type", ""),
+            variants=org.get("variants", []),
+            jahre=org.get("jahre", []),
+            vz=org.get("vz", []),
+            gnd_id=org.get("gnd_id", ""),
+            notes=org.get("notes", ""),
+        ))
+        for variant in org.get("variants", []):
+            orgs_by_variant[variant.strip().lower()] = org["org_id"]
+    session.commit()
+    return orgs_by_variant
 
 
-# Main function to fill the database with data from JSON files via calling every fill function.
+def fill_leaflets(orgs_by_variant):
+    meta = load_json("nr002_metadata.json")
+    records = meta["segments"]
+    n_pages = max(r["end_page"] for r in records)
+
+    volume = Volume(
+        stem=meta["source_pdf"].removesuffix(".pdf"),
+        label="Nr. 002 (1968)",
+        year=1968,
+        n_pages=n_pages,
+    )
+    session.add(volume)
+    session.commit()
+
+    leaflet_by_page = {}
+    for r in records:
+        if r.get("no_content"):
+            continue
+        leaflet = Leaflet(
+            id=r["id"],
+            volume_id=volume.id,
+            start_page=r["start_page"],
+            end_page=r["end_page"],
+            title=r.get("title", ""),
+            title_type=r.get("title_type", ""),
+            date_text=r.get("date_text", ""),
+            date_iso=r.get("date_iso", ""),
+            date_type=r.get("date_type", ""),
+            doc_type=r.get("doc_type", ""),
+            confidence=r.get("confidence", 0),
+        )
+        session.add(leaflet)
+        for issuer in r.get("issuers", []):
+            session.add(LeafletIssuer(
+                leaflet_id=leaflet.id,
+                surface=issuer["surface"],
+                role=issuer["role"],
+                org_id=orgs_by_variant.get(issuer["surface"].strip().lower()),
+            ))
+        for page_no in range(r["start_page"], r["end_page"] + 1):
+            leaflet_by_page[page_no] = leaflet.id
+    session.commit()
+
+    for page_no in range(1, n_pages + 1):
+        session.add(Page(
+            volume_id=volume.id,
+            page_no=page_no,
+            leaflet_id=leaflet_by_page.get(page_no),
+        ))
+    session.commit()
+
+
 def fill_database():
-    leaflet_data = load_leaflet_data()
-    fill_leaflet_database(leaflet_data)
+    if session.query(Leaflet).count() > 0:
+        return
+    orgs_by_variant = fill_organizations()
+    fill_leaflets(orgs_by_variant)

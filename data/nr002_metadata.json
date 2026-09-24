@@ -1,0 +1,2099 @@
+{
+  "source_pdf": "0118_0002.pdf",
+  "created": "2026-09-22T17:56:34.716486",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-promptfix",
+  "prompt_version": "v2",
+  "batch_size": 50,
+  "grounding": {
+    "checked": 59,
+    "flagged": 8,
+    "rate_percent": 86.4
+  },
+  "segments": [
+    {
+      "id": 1,
+      "title": "Streik in der Universität Regensburg am Mittwoch, 29. Mai 1968!",
+      "date": "",
+      "start_page": 1,
+      "end_page": 1,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STREIK\n\nin der \nUniversität Regensburg\n\n\nam Mittwoch, 29. Mai 1968!",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "STUDENTENAUSSCHUSS IM AKTIONSKOMITEE NOTSTAND",
+          "surface": "Studentenausschuss im Aktionskomitee Notstand",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD, SHB, SDS Regensburg. Hermann Brammerts,\n84 Regensburg, Nibelungenstr. 18.",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD, SHB, SDS Regensburg. Hermann Brammerts,\n84 Regensburg, Nibelungenstr. 18.",
+          "surface": "SHB",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD, SHB, SDS Regensburg. Hermann Brammerts,\n84 Regensburg, Nibelungenstr. 18.",
+          "surface": "SDS Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD, SHB, SDS Regensburg. Hermann Brammerts,\n84 Regensburg, Nibelungenstr. 18.",
+          "surface": "Hermann Brammerts",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "am Mittwoch, 29. Mai 1968",
+      "date_text": "29. Mai 1968",
+      "date_iso": "1968-05-29",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.95,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Argumente zur Sache I: Hochschulgesetz - Mittel zur Disziplinierung",
+      "date": "",
+      "start_page": 2,
+      "end_page": 3,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ARGUMENTE ZUR SACHE I\n\n\n\nHochschulgesetz - Mittel zur Disziplinierung",
+      "title_type": "original",
+      "series": "Wahlmitteilung",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "lsd lsd lsd ls6 - wahlmitteilung - ls6 lsd lsd",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Leut Aufschläger, Gerhard Kothrade, Hermann Brammerts, Liberaler Studentenbund (LSD), Regensburg, Mstr. 16",
+          "surface": "Liberaler Studentenbund (LSD)",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "bei der am 14.11. vom LSD veranstalteten Podiumsdiskussion",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Einer untersagten Kundgabe",
+      "date": "",
+      "start_page": 4,
+      "end_page": 5,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Einer untersagten Kundgabe",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD Regensburg. Hermann Brammerts, Helmut Aufschläger, Alfons Schild.",
+          "surface": "Hermann Brammerts",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortlich: LSD Regensburg. Hermann Brammerts, Helmut Aufschläger, Alfons Schild.",
+          "surface": "Helmut Aufschläger",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortlich: LSD Regensburg. Hermann Brammerts, Helmut Aufschläger, Alfons Schild.",
+          "surface": "Alfons Schild",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 4,
+      "title": "Emil Franzel und Franz Bayer. Oder: Wie man das Ansehen der Universität Regensburg ruiniert",
+      "date": "",
+      "start_page": 6,
+      "end_page": 7,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "EMIL FRANZEL UND FRANZ BAYER\nOder : Wie man das Ansehen der Universität Regensburg\nruiniert",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LSD- LSD - LSD-LSD- LSD- LSD- LSD- LSD- LSD- LSD- LSD-",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Herausg.: LSD Regensburg. Verantw.: Helmut Aufschlager, Engelbert Angele, Nibelungenstr. 18.",
+          "surface": "Helmut Aufschlager",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Herausg.: LSD Regensburg. Verantw.: Helmut Aufschlager, Engelbert Angele, Nibelungenstr. 18.",
+          "surface": "Engelbert Angele",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "23. 7. 68",
+      "date_text": "23.7.1968",
+      "date_iso": "1968-07-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 5,
+      "title": "Bundeswehr als Bürgerkriegswaffe?",
+      "date": "",
+      "start_page": 8,
+      "end_page": 8,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "\" Bundeswehr als Bürgerkriegs -\n\n\nw a f f e ?\n \"",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD - LSD",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: LSD Regensburg. Helmut Aufschläger, 84 Regensburg, Carl-Maria-von-Weber-Str. 7 a.",
+          "surface": "Helmut Aufschläger",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "am Mittwoch, 24. Juli 1968, um 20 Uhr",
+      "date_text": "24. Juli 1968",
+      "date_iso": "1968-07-24",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Provokation - einziger Weg zum Erfolg?",
+      "date": "",
+      "start_page": 9,
+      "end_page": 9,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Provokation - einziger Weg zum Erfolg?",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "lsd - lsd - lsd - lsd - lsd - lsd - lsd - lsd - lsd - lsd",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Gerhard Kothrade. Liberaler Studentenbund Regensburg, Nibelungenstr. 16.",
+          "surface": "Gerhard Kothrade",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "Argumente zur Sache II: Gesellschaftliches Engagement",
+      "date": "",
+      "start_page": 10,
+      "end_page": 10,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ARGUMENTE ZUR SACHE II\n\n\nGesellschaftliches Engagement",
+      "title_type": "original",
+      "series": "Wahlmitteilung",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "lsd lsd lsd lsd lsd lsd lsd lsd lsd lsd\n- Wahlmitteilung -",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Liberaler Studentenbund Deutschlands (LSD). Helmut Aufschläger, Nibelungenstr. 16.",
+          "surface": "Liberaler Studentenbund Deutschlands (LSD)",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Argumente zur Sache I: Hochschulgesetz - Mittel zur Disziplinierung",
+      "date": "",
+      "start_page": 11,
+      "end_page": 12,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ARGUMENTE ZUR SACHE I\n\n\n\nHochschulgesetz - Mittel zur Disziplinierung",
+      "title_type": "original",
+      "series": "Wahlmitteilung",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "lsd lsd lsd lsd - wahlmitteilung - lsd lsd lsd",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Helmut Aufschläger, Gerhard Kothrade, Hermann Brammerts. Liberaler Studentenbund (LSD). Regensburg, Nibelungenstr. 16",
+          "surface": "Helmut Aufschläger",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Helmut Aufschläger, Gerhard Kothrade, Hermann Brammerts. Liberaler Studentenbund (LSD). Regensburg, Nibelungenstr. 16",
+          "surface": "Gerhard Kothrade",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Helmut Aufschläger, Gerhard Kothrade, Hermann Brammerts. Liberaler Studentenbund (LSD). Regensburg, Nibelungenstr. 16",
+          "surface": "Hermann Brammerts",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "bei der am 17.11. vom LSD veranstalteten Podiumsdiskussion",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Argumente zur Sache IV: Wahlversammlung",
+      "date": "",
+      "start_page": 13,
+      "end_page": 13,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ARGUMENTE ZUR SACHE IV\n\n\n\nW a h l v e r s a m m l u n g",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LSD - LSD - LSD - LSD",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Elfi Hartenstein, LSD, Regensburg, Nibelungenstr. 16",
+          "surface": "Elfi Hartenstein",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "Dokumentation: Rektor Mayer sorgt für Ordnung. Chronik eines autoritären Fehlverhaltens",
+      "date": "",
+      "start_page": 14,
+      "end_page": 23,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DOKUMENTATION\n\nREKTOR MAYER SORGT FÜR ORDNUNG\n\nCHRONIK EINES AUTORITÄREN FEHLVERHALTENS",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LSD - SHB - SDS - LSD - SHB - SDS - LSD - SHB - SDS - LSD",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "LSD - SHB - SDS - LSD - SHB - SDS - LSD - SHB - SDS - LSD",
+          "surface": "SHB",
+          "role": "issuer"
+        },
+        {
+          "evidence": "LSD - SHB - SDS - LSD - SHB - SDS - LSD - SHB - SDS - LSD",
+          "surface": "SDS",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Herausgeber der Dokumentation: Die Hochschulgruppen Regensburg des LSD, SHB und SDS. Verantwortlich für den Inhalt: Hermann Brammerts (84 Regensburg, Nibelungenstr. 18) und Roland Asanger (84 Rgb., Gumpenbergstr. 24).",
+          "surface": "Hermann Brammerts",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Herausgeber der Dokumentation: Die Hochschulgruppen Regensburg des LSD, SHB und SDS. Verantwortlich für den Inhalt: Hermann Brammerts (84 Regensburg, Nibelungenstr. 18) und Roland Asanger (84 Rgb., Gumpenbergstr. 24).",
+          "surface": "Roland Asanger",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Der Stellenwert der Mitbestimmungsdebatte an der Uni Tübingen für die dem SDS verbleibende (1 1/2 Monate) politische Arbeit im WS 67/68",
+      "date": "",
+      "start_page": 24,
+      "end_page": 25,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der Stellenvert der Mitbestimmungsdebatte an der Uni Tübingen für die dem SDS verbleibende (1 1/2 Monate) politische Arbeit im WS 67/68",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "vorgelegt: Genosse\nKasprík",
+          "surface": "Kasprík",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "11.12.67",
+      "date_text": "11.12.1967",
+      "date_iso": "1967-12-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": [
+        "date_iso 1967-12-11 passt nicht zum Jahrgang 1968"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Offener Brief an Rektor Mayer",
+      "date": "",
+      "start_page": 26,
+      "end_page": 26,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Offener Brief an Rektor Mayer",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBSHBS",
+          "surface": "SHB",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Sozialdemokratischer\nHochschulbund Regensburg",
+          "surface": "Sozialdemokratischer Hochschulbund Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Otto Ebnet, 1. Vorsitzender des SHB",
+          "surface": "Otto Ebnet",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Regensburg, am 6.2.1968",
+      "date_text": "6.2.1968",
+      "date_iso": "1968-02-06",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Wir danken der demokratischen Bevölkerung von Regensburg ...",
+      "date": "",
+      "start_page": 27,
+      "end_page": 28,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wir danken der demokratischen Bevölkerung von Regensburg:",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SHE LSD SDS SHE LSD SDS SHE LSD SDS SHE LSD SDS",
+          "surface": "SHB",
+          "role": "issuer"
+        },
+        {
+          "evidence": "SHE LSD SDS SHE LSD SDS SHE LSD SDS SHE LSD SDS",
+          "surface": "LSD",
+          "role": "issuer"
+        },
+        {
+          "evidence": "SHE LSD SDS SHE LSD SDS SHE LSD SDS SHE LSD SDS",
+          "surface": "SDS",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Carola Knirsch, Regensburg, Herrichstr. 25",
+          "surface": "Carola Knirsch",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Gedanken und Vorschläge der Studenten des Fachbereiches Sprach- und Literaturwissenschaften zur geplanten Zwischenprüfungsordnung der Universität Regensburg",
+      "date": "",
+      "start_page": 29,
+      "end_page": 29,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gedanken und Vorschläge der Studenten des Fachbereiches Sprach- und Literaturwissenschaften zur geplanten Zwischenprüfungsordnung der Universität Regensburg.",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Alfons Peturri\n\n(Alfons Söllner)\n\nstudent. Fachbereichssprecher",
+          "surface": "Alfons Peturri",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Januar 1968",
+      "date_text": "Januar 1968",
+      "date_iso": "1968-01",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "Antwort an Herrn Asanger",
+      "date": "",
+      "start_page": 30,
+      "end_page": 30,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Antwort an Herrn Asanger",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Hartmut Kiener",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Reinald Lüke",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Eugen Graber",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Februar 1968",
+      "date_text": "Februar 1968",
+      "date_iso": "1968-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Hartmut Kiener'",
+        "issuer-evidence nicht im Text: 'Reinald Lüke'",
+        "issuer-evidence nicht im Text: 'Eugen Graber'"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Das neue bayerische Hochschulgesetz - ein Gesetz von Gestern?",
+      "date": "",
+      "start_page": 31,
+      "end_page": 32,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Das neue bayerische Hochschulgesetz -\n\n\nein Gesetz von Gestern?",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "surface": "RCDS",
+          "role": "issuer"
+        },
+        {
+          "evidence": "RCDS- Uni-Regensburg e.V. Weiherweg 6",
+          "surface": "RCDS-Uni-Regensburg e.V.",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich für den Inhalt: Hans Heimerl, Karthaus-Prüll 12",
+          "surface": "Hans Heimerl",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "D i e n s t a g, 9. Juli 1968 um 19.30 Uhr",
+      "date_text": "9. Juli 1968",
+      "date_iso": "1968-07-09",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 17,
+      "title": "Offener Brief",
+      "date": "",
+      "start_page": 33,
+      "end_page": 33,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Offener Brief",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Ring christlich-demokratischer Studenten\nan der Universität Regensburg e.V.",
+          "surface": "Ring christlich-demokratischer Studenten an der Universität Regensburg e.V.",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Uni-Regensburg e.V.\nPeter Schubert\n\nVorsitzender",
+          "surface": "Peter Schubert",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "84 Regensburg, 14.11.68",
+      "date_text": "14.11.1968",
+      "date_iso": "1968-11-14",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "Einladung",
+      "date": "",
+      "start_page": 34,
+      "end_page": 34,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "E i n l a d u n g",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Ring Christlich-Demokratischer Studenten an der Universität\nRegensburg e.V.",
+          "surface": "Ring Christlich-Demokratischer Studenten an der Universität Regensburg e.V.",
+          "role": "issuer"
+        },
+        {
+          "evidence": "gez. Hubert Fexer",
+          "surface": "Hubert Fexer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Donnerstag, 25. Jan. 68",
+      "date_text": "25. Januar 1968",
+      "date_iso": "1968-01-25",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 19,
+      "title": "Ein Drama in 4 Akten. Die Linke bittet zum ...",
+      "date": "",
+      "start_page": 35,
+      "end_page": 35,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATEN wählen\n\n\n\nRCDS",
+          "surface": "RCDS",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "Rehabilitierungsversorgung von S.M. Mayer: Verfälschung der Wahrheit",
+      "date": "",
+      "start_page": 36,
+      "end_page": 36,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "R ü c k t r i t t s e r k l ä r u n g\n\n\n\nVerfälschung der Wahrheit",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SDS SDS SDS SDS SDS SDS SDS SDS SDS SDS SDS SDS SDS",
+          "surface": "SDS",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Carola Knirsch, Regensburg, Herrichstr. 25.",
+          "surface": "Carola Knirsch",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "title_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 21,
+      "title": "Grüß Gott! Wir laden herzlich ein zum Wochenende in der ...",
+      "date": "",
+      "start_page": 37,
+      "end_page": 37,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "BUND DER DEUTSCHEN KATHOLISCHEN JUGEND\n\n\n- Diözese Regensburg -\nArbeitskreis PFFF",
+          "surface": "Bund der Deutschen Katholischen Jugend - Diözese Regensburg - Arbeitskreis PFFF",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Ernestine Lutz\nDiözesanjugendführerin\nR. Siegmaier\nSachbearb. f. k. Jugendarb.\nSebastian Henw\nJugendpfarrer\nKurt Diem\nDiözesanjugendführer\ngez. Gerard Zacher\nDiözesanreferent PFFF",
+          "surface": "Ernestine Lutz",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Ernestine Lutz\nDiözesanjugendführerin\nR. Siegmaier\nSachbearb. f. k. Jugendarb.\nSebastian Henw\nJugendpfarrer\nKurt Diem\nDiözesanjugendführer\ngez. Gerard Zacher\nDiözesanreferent PFFF",
+          "surface": "R. Siegmaier",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Ernestine Lutz\nDiözesanjugendführerin\nR. Siegmaier\nSachbearb. f. k. Jugendarb.\nSebastian Henw\nJugendpfarrer\nKurt Diem\nDiözesanjugendführer\ngez. Gerard Zacher\nDiözesanreferent PFFF",
+          "surface": "Sebastian Henw",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Ernestine Lutz\nDiözesanjugendführerin\nR. Siegmaier\nSachbearb. f. k. Jugendarb.\nSebastian Henw\nJugendpfarrer\nKurt Diem\nDiözesanjugendführer\ngez. Gerard Zacher\nDiözesanreferent PFFF",
+          "surface": "Kurt Diem",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Ernestine Lutz\nDiözesanjugendführerin\nR. Siegmaier\nSachbearb. f. k. Jugendarb.\nSebastian Henw\nJugendpfarrer\nKurt Diem\nDiözesanjugendführer\ngez. Gerard Zacher\nDiözesanreferent PFFF",
+          "surface": "Gerard Zacher",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "17.Jan.1968",
+      "date_text": "17. Januar 1968",
+      "date_iso": "1968-01-17",
+      "date_type": "issued",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Die trojanische Stute oder der missachtete Wählerwille",
+      "date": "",
+      "start_page": 38,
+      "end_page": 38,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIE TROJANISCHE STUTE ODER DER MISACHTETE WÄHLERWILLE",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE DEMOKRATISCHE MITTE",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "K.P. Gaschik",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "H. Lauterbach",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "F. Bergenthal",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Heute: VDS",
+      "date": "",
+      "start_page": 39,
+      "end_page": 39,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HEUTE: VDS • VDS • VDS",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Lutz Füger, Regensburg, Keilberger Schulweg 1",
+          "surface": "Lutz Füger",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "11.68",
+      "date_text": "November 1968",
+      "date_iso": "1968-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Lassen Sie sich manipulieren?",
+      "date": "",
+      "start_page": 40,
+      "end_page": 40,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Lassen SIE sich manipulieren ?",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE • DEMOKRATISCHE MITTE",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Peter Schubert, RCDS-Vorsitzender,\nRegensburg, Ernst Reuter Platz 2",
+          "surface": "Peter Schubert",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Heute: Studentische Mitbestimmung",
+      "date": "",
+      "start_page": 41,
+      "end_page": 41,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HEUTE:\n Studentische Mitbestimmung",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Felix Bergenthal, Regensburg, Weiherweg 6",
+          "surface": "Felix Bergenthal",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Heute: Sozial",
+      "date": "",
+      "start_page": 42,
+      "end_page": 42,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HEUTE: Sozial • sozial • sozial",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: Günter Weig, Sozialreferent des AStA,\nRegensburg, Reichsstraße 11",
+          "surface": "Günter Weig",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Härn Miniesder fier Underichd und Guhlduß Ludwik Huber Minken Bosd ...",
+      "date": "",
+      "start_page": 43,
+      "end_page": 43,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: Helmut Aufschläger, Wilfried Hummel, Alfons Schild.",
+          "surface": "Helmut Aufschläger",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortlich: Helmut Aufschläger, Wilfried Hummel, Alfons Schild.",
+          "surface": "Wilfried Hummel",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortlich: Helmut Aufschläger, Wilfried Hummel, Alfons Schild.",
+          "surface": "Alfons Schild",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Die trojanische Stute oder der missachtete Wählerwille",
+      "date": "",
+      "start_page": 44,
+      "end_page": 44,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIE TROJANISCHE STUTE ODER DER MISACHTETE WÄHLERWILLE",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "D E M O K R A T I S C H E M I T T E D E M O K R A T I S C H E M I T T E D",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "K.P. Gaschik",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "H. Lauterbach",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantw.: K.P. Gaschik, H. Lauterbach, F. Bergenthal, Karthausers tr. 35",
+          "surface": "F. Bergenthal",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Werden Wähler und Parlament für dumm verkauft???!",
+      "date": "",
+      "start_page": 45,
+      "end_page": 45,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WERDEN WÄHLER UND PARLAMENT FÜR\nDUMM VERKAUFT ???!",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES MITTE DEMOKRATISCHES MITTE DEMO",
+          "surface": "Demokratische Mitte",
+          "role": "issuer"
+        },
+        {
+          "evidence": "verantw.: Felix Bergenthal, Heinz Lauterbach, Konrad Schießl, Klaus Gaschik, Konrad Bogner,",
+          "surface": "Felix Bergenthal",
+          "role": "signatory"
+        },
+        {
+          "evidence": "verantw.: Felix Bergenthal, Heinz Lauterbach, Konrad Schießl, Klaus Gaschik, Konrad Bogner,",
+          "surface": "Heinz Lauterbach",
+          "role": "signatory"
+        },
+        {
+          "evidence": "verantw.: Felix Bergenthal, Heinz Lauterbach, Konrad Schießl, Klaus Gaschik, Konrad Bogner,",
+          "surface": "Konrad Schießl",
+          "role": "signatory"
+        },
+        {
+          "evidence": "verantw.: Felix Bergenthal, Heinz Lauterbach, Konrad Schießl, Klaus Gaschik, Konrad Bogner,",
+          "surface": "Klaus Gaschik",
+          "role": "signatory"
+        },
+        {
+          "evidence": "verantw.: Felix Bergenthal, Heinz Lauterbach, Konrad Schießl, Klaus Gaschik, Konrad Bogner,",
+          "surface": "Konrad Bogner",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Honnef-Stipendium",
+      "date": "",
+      "start_page": 46,
+      "end_page": 46,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HONNEF - Stipendium",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "+ AStA-Info + AStA-Info + AStA-Info + AStA-Info + AStA-Info +",
+          "surface": "AStA",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Erklärung der studentischen Fachbereichssprecher",
+      "date": "",
+      "start_page": 47,
+      "end_page": 47,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Erklärung der studentischen Fachbereichssprecher",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Info\n\nStudentenschaft der\nUniversität Regensburg",
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Die Konferenz\nder studentischen Fachbereichssprecher\nan der Universität Regensburg",
+          "surface": "Die Konferenz der studentischen Fachbereichssprecher an der Universität Regensburg",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "Amerika auf dem Weg zum offenen Faschismus",
+      "date": "",
+      "start_page": 48,
+      "end_page": 48,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AMERIKA AUF DEM WEG ZUM OFFENEN FACHISMUS",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-Info – ASTA-Info – ASTA-Info – ASTA-Info",
+          "surface": "AStA",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: ASTA-Kollektiv",
+          "surface": "AStA-Kollektiv",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "8. Mai",
+      "date_text": "8. Mai",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Zulassungssperre",
+      "date": "",
+      "start_page": 49,
+      "end_page": 49,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZULASSUNGSSPERRE",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Info\n\nStudentenschaft der\nUniversität Regensburg",
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "gez. Wilfried Hummel\nHochschulreferent-AStA\n\ngez. Hermann Brammerts\nAStA-Vorsitzender",
+          "surface": "Wilfried Hummel",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Wilfried Hummel\nHochschulreferent-AStA\n\ngez. Hermann Brammerts\nAStA-Vorsitzender",
+          "surface": "Hermann Brammerts",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "7.1.1969",
+      "date_text": "7.1.1969",
+      "date_iso": "1969-01-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_iso 1969-01-07 passt nicht zum Jahrgang 1968"
+      ]
+    },
+    {
+      "id": 34,
+      "title": "AStA-Beitrag",
+      "date": "",
+      "start_page": 50,
+      "end_page": 50,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "A S t A - B e i t r a g",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Hartmut Kiener",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Reinald Lüke",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Eugen Graber",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Erklärung der studentischen Fachbereichssprecher",
+      "date": "",
+      "start_page": 51,
+      "end_page": 51,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Erklärung der studentischen Fachbereichssprecher",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Info\n\nStudentenschaft der\nUniversität Regensburg",
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Die Konferenz\nder studentischen Fachbereichssprecher\nan der Universität Regensburg",
+          "surface": "Die Konferenz der studentischen Fachbereichssprecher an der Universität Regensburg",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Der Henker wartet schon",
+      "date": "",
+      "start_page": 52,
+      "end_page": 53,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DER HENKER WARTET SCHON",
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Info + AStA - Info + AStA - Info + AStA - Info + AStA - Info",
+          "surface": "AStA",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortlich: AStA der Universität Regensburg, Universitäts-\nstraße 33",
+          "surface": "AStA der Universität Regensburg",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "Reflexionen eines Parlamentsmitgliedes",
+      "date": "",
+      "start_page": 54,
+      "end_page": 54,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Reflexionen eines Parlamentsmitgliedes",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich für den Inhalt: Holger Wiese, 84 Regensburg\nAm Hochbehälter 5",
+          "surface": "Holger Wiese",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Rücktrittserklärung",
+      "date": "",
+      "start_page": 55,
+      "end_page": 55,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "R ü c k t r i t t s e r k l ä r u n g",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Roland Asanger\n\n(Roland Asanger)",
+          "surface": "Roland Asanger",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "in der Studentenparlamentssitzung vom 6. Februar",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Der AStA stellt fest ...",
+      "date": "",
+      "start_page": 56,
+      "end_page": 56,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der ASTA stellt fest:",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA der Universität Regensburg\n\nverantwortlich für den Inhalt: Hans Schwemmer,\nASTA - Vorsitzender",
+          "surface": "AStA der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "ASTA der Universität Regensburg\n\nverantwortlich für den Inhalt: Hans Schwemmer,\nASTA - Vorsitzender",
+          "surface": "Hans Schwemmer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "Richtigstellung des AStA",
+      "date": "",
+      "start_page": 57,
+      "end_page": 57,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Richtigstellung des AStA:",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Der AStA\nder Universität Regensburg\n\nverantwortlich für den Inhalt: Hans Schwemmer\nAStA - Vorsitzender",
+          "surface": "Der AStA der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Der AStA\nder Universität Regensburg\n\nverantwortlich für den Inhalt: Hans Schwemmer\nAStA - Vorsitzender",
+          "surface": "Hans Schwemmer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "am 6.2.1968",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Podiumsdiskussion",
+      "date": "",
+      "start_page": 58,
+      "end_page": 58,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "P O D I U M S D I S K U S S I O N",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "Heute im Hörsaal 01 um 16.30 Uhr",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "AStA-Beitrag",
+      "date": "",
+      "start_page": 59,
+      "end_page": 59,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "A S t . - B e i t r a g",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Hartmut Kiener",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Reinald Lüke",
+          "role": "signatory"
+        },
+        {
+          "evidence": "V e r a n t w o r t l i c h : Hartmut Kiener, Reinald Lüke,\nEugen Graber, 8411 Etterzhausen,",
+          "surface": "Eugen Graber",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Probleme der Gegenwartspolitik",
+      "date": "",
+      "start_page": 60,
+      "end_page": 60,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Probleme der Gegenwartspolitik",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ND-Hochschulring\nVeit Wagner",
+          "surface": "ND-Hochschulring",
+          "role": "issuer"
+        },
+        {
+          "evidence": "ND-Hochschulring\nVeit Wagner",
+          "surface": "Veit Wagner",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Heute Mittwoch. 20 Uhr c.t.",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Am Montagabend wählte das Studentenparlament den neuen Allgemeinen Studenten-Ausschuß (AStA) ...",
+      "date": "",
+      "start_page": 61,
+      "end_page": 61,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Info + AStA - Info + AStA - Info + AStA - Info + AStA - Info",
+          "surface": "AStA",
+          "role": "issuer"
+        },
+        {
+          "evidence": "i.A.\n\ngez. Peter Rothammer\n\nParlamentspräsident",
+          "surface": "Peter Rothammer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Donnerstag, 12.12., um 13 Uhr c.t.",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "Ja bei der Urabstimmung 18.-28. Juni. BHG und HRG wollen ...",
+      "date": "",
+      "start_page": 62,
+      "end_page": 67,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA UNI",
+          "surface": "AStA Uni",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "18.-28. JUNI",
+      "date_text": "18.-28. Juni",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "broschuere",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Erklärung des AStA",
+      "date": "",
+      "start_page": 68,
+      "end_page": 68,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Erklärung des ASTA:",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für die Studentenschaft\nder Universität Regensburg\n\n\n\n(Klaus Poitsch)\nParlamentssprecher\n\n\n\n(Hans Schwemmer)\nASTA - Vorsitzender",
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Für die Studentenschaft\nder Universität Regensburg\n\n\n\n(Klaus Poitsch)\nParlamentssprecher\n\n\n\n(Hans Schwemmer)\nASTA - Vorsitzender",
+          "surface": "Klaus Poitsch",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Für die Studentenschaft\nder Universität Regensburg\n\n\n\n(Klaus Poitsch)\nParlamentssprecher\n\n\n\n(Hans Schwemmer)\nASTA - Vorsitzender",
+          "surface": "Hans Schwemmer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Öffentliche Erklärung des AStA",
+      "date": "",
+      "start_page": 69,
+      "end_page": 69,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Öffentliche Erklärung des AStA",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "(Hans Schwenmer)",
+          "surface": "Hans Schwenmer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Seit der Sitzung am 24. Januar 1968",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Die Studentenschaft der Universität Regensburg ist empört über das Verhalten ...",
+      "date": "",
+      "start_page": 70,
+      "end_page": 70,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "v. 23.7.1968",
+      "date_text": "23.7.1968",
+      "date_iso": "1968-07-23",
+      "date_type": "issued",
+      "doc_type": "protokoll",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Mitbürgerinnen Mitbürger!",
+      "date": "",
+      "start_page": 71,
+      "end_page": 71,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "MITBÜRGERINNEN MITBÜRGER !",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: stud. Fachbereichsvertreter Keyserlingk, Weiherweg 6",
+          "surface": "Keyserlingk",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Bibliothek wird geschlossen!!!",
+      "date": "",
+      "start_page": 72,
+      "end_page": 72,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "!!! Bibliothek wird geschlossen !!!",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Christian Stehr",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Manfred Spöttl",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Jutta Schust",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Klaus Götz",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Hartmut Kiener",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Christian Stehr\n\n(Fachbereichssprecher)\n\n\n\nManfred Spöttl\n\n(stellvertr. Fachbereichssprecher / Romanistik)\n\n\n\nJutta Schust\n\n(Slavistik)\n\n\n\nKlaus Götz\n\n(Althilologie)\n\n\n\nHartmut Kiener\n\n(Anglistik)\n\n\n\nEberhard Spengler\n\n(Germanistik)",
+          "surface": "Eberhard Spengler",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "4. Juni (halbtägig); 10. Juni (halbtägig); 11. und 12. Juni (ganztäglich)",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "Hurra! § Naturwissenschaftler!!",
+      "date": "",
+      "start_page": 73,
+      "end_page": 73,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HURRA ! § NATURWISSENSCHAFTLER !!",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Die studentischen Vertreter des\nFachs Psychologie",
+          "surface": "Die studentischen Vertreter des Fachs Psychologie",
+          "role": "issuer"
+        },
+        {
+          "evidence": "Verantwortl.: Asanger, Aulich, Schmid, Wahl",
+          "surface": "Asanger",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortl.: Asanger, Aulich, Schmid, Wahl",
+          "surface": "Aulich",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortl.: Asanger, Aulich, Schmid, Wahl",
+          "surface": "Schmid",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Verantwortl.: Asanger, Aulich, Schmid, Wahl",
+          "surface": "Wahl",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "Zulassungs-Stop im Fach Psychologie",
+      "date": "",
+      "start_page": 74,
+      "end_page": 75,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZULASSUNGS-STOP IM FACH PSYCHOLOGIE",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "stud. fachbereichsvertretung philosophie-psychologie-pädagogik",
+          "surface": "Stud. Fachbereichsvertretung Philosophie-Psychologie-Pädagogik",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "8.1.69",
+      "date_text": "8.1.1969",
+      "date_iso": "1969-01-08",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_iso 1969-01-08 passt nicht zum Jahrgang 1968"
+      ]
+    },
+    {
+      "id": 53,
+      "title": "90 Psychologiestudenten ohne Professor!",
+      "date": "",
+      "start_page": 76,
+      "end_page": 76,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "90 PSYCHOLOGIESTUDENTEN OHNE PROFESSOR!",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Hrsg.: Stud. Vertretung des Fachs Psychologie, Haidpl. 8",
+          "surface": "Stud. Vertretung des Fachs Psychologie",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "Am MONTAG, 1.7.68",
+      "date_text": "1.7.1968",
+      "date_iso": "1968-07-01",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 54,
+      "title": "Zulassungs-Stop im Fach Psychologie",
+      "date": "",
+      "start_page": 77,
+      "end_page": 78,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZULASSUNGS - STOP IM FACH PSYCHOLOGIE",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "stud. fachbereichsvertretung philosophie-psychologie-pädagogik",
+          "surface": "Stud. Fachbereichsvertretung Philosophie-Psychologie-Pädagogik",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "8.1.69",
+      "date_text": "8.1.1969",
+      "date_iso": "1969-01-08",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_iso 1969-01-08 passt nicht zum Jahrgang 1968"
+      ]
+    },
+    {
+      "id": 55,
+      "title": "Der zukünftige Realschullehrer - Stiefkind der Universität???",
+      "date": "",
+      "start_page": 79,
+      "end_page": 80,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der zukünftige Realschullehrer - Stiefkind der Universität ???",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "gez.:\n\nDr. Plate\n(Vertreter der Assistenten)",
+          "surface": "Dr. Plate",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Stehr\n(stud. Fachbereichs-\nsprecher für Sprach-\nu. Literaturwiss.)",
+          "surface": "Stehr",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Spengler\n(Fachschafts-\nsprecher für\nGermanistik)",
+          "surface": "Spengler",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 56,
+      "title": "Lehrstühlereien im Fachbereich Philosophie, Psychologie, Pädagogik",
+      "date": "",
+      "start_page": 81,
+      "end_page": 81,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Lehrstühlereien im Fachbereich Philosophie, Psychologie, Pädagogik",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Dagegen ließe sich auch kaum etwas sagen, wenn sich ...",
+      "date": "",
+      "start_page": 82,
+      "end_page": 82,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Die Verwalter der Dienstgeschäfte wiss. Assistenten\nam Lehrstuhl für Psychologie der Universität Regensburg\n\nGünter Nengelken, Dipl.-Psych.\n\nJürgen Nitsch, Dipl.-Psych.\n\nWalter Volpert, Dipl.-Psych.",
+          "surface": "Günter Nengelken",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Die Verwalter der Dienstgeschäfte wiss. Assistenten\nam Lehrstuhl für Psychologie der Universität Regensburg\n\nGünter Nengelken, Dipl.-Psych.\n\nJürgen Nitsch, Dipl.-Psych.\n\nWalter Volpert, Dipl.-Psych.",
+          "surface": "Jürgen Nitsch",
+          "role": "signatory"
+        },
+        {
+          "evidence": "Die Verwalter der Dienstgeschäfte wiss. Assistenten\nam Lehrstuhl für Psychologie der Universität Regensburg\n\nGünter Nengelken, Dipl.-Psych.\n\nJürgen Nitsch, Dipl.-Psych.\n\nWalter Volpert, Dipl.-Psych.",
+          "surface": "Walter Volpert",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Regensburg, 5. August 1968",
+      "date_text": "5. August 1968",
+      "date_iso": "1968-08-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich 'mentioned'"
+      ]
+    },
+    {
+      "id": 58,
+      "title": "Gegen das Bayer. Hochschulgesetz und Hochschullehrergesetz",
+      "date": "",
+      "start_page": 83,
+      "end_page": 84,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "gegen das\nBayer. Hochschulgesetz\nund\nHochschullehrergesetz",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Bayerische\nAssistetenkonferenz\nzur Aktionswoche",
+          "surface": "Bayerische Assistentenkonferenz",
+          "role": "issuer"
+        },
+        {
+          "evidence": "gez. Feuerstack\n\n(Dr. Rainer Feuerstack)\n\ngez. Vollmuth\n\n(Joachim Vollmuth)\n\nGeschäftsführender Vorstand der\n\nBAYERISCHEN ASSISTENTENKONFERENZ",
+          "surface": "Dr. Rainer Feuerstack",
+          "role": "signatory"
+        },
+        {
+          "evidence": "gez. Feuerstack\n\n(Dr. Rainer Feuerstack)\n\ngez. Vollmuth\n\n(Joachim Vollmuth)\n\nGeschäftsführender Vorstand der\n\nBAYERISCHEN ASSISTENTENKONFERENZ",
+          "surface": "Joachim Vollmuth",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "auf ihrer Sitzung am 2. Juni 1973",
+      "date_text": "2. Juni 1973",
+      "date_iso": "1973-06-02",
+      "date_type": "mentioned",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Bayerische Assistentenkonferenz'",
+        "date_iso 1973-06-02 passt nicht zum Jahrgang 1968"
+      ]
+    },
+    {
+      "id": 59,
+      "title": "Erklärung des Konvents der Assistentenvereinigung Regensburg vom 30. Juli 1968.",
+      "date": "",
+      "start_page": 85,
+      "end_page": 85,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Erklärung des Konvents der Assistenten-\n\n\nvereinigung Regensburg vom 30. Juli 1968.",
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Die Assistentenvereinigung",
+          "surface": "Assistentenvereinigung",
+          "role": "issuer"
+        }
+      ],
+      "date_evidence": "vom 30. Juli 1968",
+      "date_text": "30. Juli 1968",
+      "date_iso": "1968-07-30",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    }
+  ]
+}
