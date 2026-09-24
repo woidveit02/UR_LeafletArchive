@@ -1,0 +1,6 @@
+@baseUrl = http://127.0.0.1:8000
+@roomId = 12
+
+# @name getInfoGuest
+
+GET {{baseUrl}}/api/rooms/{{roomId}} HTTP/1.1

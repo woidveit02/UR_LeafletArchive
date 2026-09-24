@@ -1,0 +1,23 @@
+@baseUrl = http://127.0.0.1:8000
+@roomId = 12
+
+# @name loginAdmin
+POST {{baseUrl}}/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+	"username": "addMynn",
+	"password": "UQjWqD[C@sklh3e02o7g5ci5@H[B.="
+}
+
+###
+
+GET {{baseUrl}}/api/admin HTTP/1.1
+Authorization: Bearer {{loginAdmin.response.body.$.token}}
+
+###
+
+GET {{baseUrl}}/api/rooms/{{roomId}} HTTP/1.1
+Authorization: Bearer {{loginAdmin.response.body.$.token}}
+
+

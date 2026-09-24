@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "name": "Einführung in die Medieninformatik",
+        "description": "Wöchentlich wiederkehrende Vorlesung des 1. Semester B.A. Medieninformatik"
+    },
+    {
+        "id": 2,
+        "name": "Projektbesprechung Robotik",
+        "description": "Teammeeting zur Planung des Semesterprojekts Robotik"
+    },
+    {
+        "id": 3,
+        "name": "Gastvortrag KI-Ethik",
+        "description": "Externer Experte spricht über ethische Fragestellungen in der KI"
+    },
+    {
+        "id": 4,
+        "name": "Seminar Visualisierung",
+        "description": "Seminar für Fortgeschrittene im Bereich Datenvisualisierung"
+    },
+    {
+        "id": 5,
+        "name": "Workshop Webentwicklung",
+        "description": "Hands-on-Workshop zu modernen Webtechnologien"
+    },
+    {
+        "id": 6,
+        "name": "Prüfung Medienrecht",
+        "description": "Klausur für das Fach Medienrecht"
+    },
+    {
+        "id": 7,
+        "name": "Vortrag Barrierefreiheit",
+        "description": "Informationsveranstaltung zur barrierefreien Gestaltung von Anwendungen"
+    },
+    {
+        "id": 8,
+        "name": "Labortermin Netzwerke",
+        "description": "Praktische Übung im Computernetzwerk-Labor"
+    },
+    {
+        "id": 9,
+        "name": "Diskussionsrunde Open Source",
+        "description": "Studierende debattieren über Open-Source-Softwaremodelle"
+    },
+    {
+        "id": 10,
+        "name": "Lernsession Statistik",
+        "description": "Gemeinsames Lernen für die Statistikprüfung"
+    },
+    {
+        "id": 11,
+        "name": "Abschlussfeier Semester",
+        "description": "Feierliches Ende des Semesters mit allen Studierenden"
+    },
+    {
+        "id": 12,
+        "name": "Networking-Frühstück",
+        "description": "Informelles Treffen für Studierende und Dozenten"
+    },
+    {
+        "id": 13,
+        "name": "Präsentation Game Design",
+        "description": "Studierende stellen ihre Spieleprojekte vor"
+    },
+    {
+        "id": 14,
+        "name": "Workshop Agile Methoden",
+        "description": "Einführung in Scrum und Kanban für Studierende"
+    },
+    {
+        "id": 15,
+        "name": "Künstliche Intelligenz 101",
+        "description": "Basisvorlesung zur Einführung in KI"
+    },
+    {
+        "id": 16,
+        "name": "Hackathon Start",
+        "description": "Begin des 24-stündigen Coding-Events"
+    },
+    {
+        "id": 17,
+        "name": "Sprachkurs Python",
+        "description": "Intensivkurs für Anfänger in Python"
+    },
+    {
+        "id": 18,
+        "name": "Sicherheits-Workshop",
+        "description": "Grundlagen der IT-Sicherheit und Datenschutz"
+    },
+    {
+        "id": 19,
+        "name": "Filmabend Dokumentation",
+        "description": "Vorführung eines Dokumentarfilms mit Diskussion"
+    },
+    {
+        "id": 20,
+        "name": "Studienberatung",
+        "description": "Offene Sprechstunde für Studienfragen"
+    }
+]

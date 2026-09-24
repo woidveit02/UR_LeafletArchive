@@ -1,0 +1,7 @@
+Flask
+PyJWT
+pytest
+pycodestyle
+sqlalchemy
+pathlib
+flask-swagger-ui

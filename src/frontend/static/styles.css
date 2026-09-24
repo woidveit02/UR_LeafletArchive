@@ -1,0 +1,203 @@
+/* Zu Teilen erarbeitet mit Ki */
+/* Prompt "Überarbeite diese Templates und das Stylesheet, sodass die Seite optisch besser aussieht. Halte es simpel und ändere nicht viel."*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.app {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.app-wide {
+    max-width: 1200px;
+}
+
+h1 {
+    margin: 0 0 20px;
+    color: #111827;
+}
+
+h2 {
+    margin-top: 24px;
+}
+
+p {
+    margin: 12px 0;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.site-header {
+    margin-bottom: 20px;
+}
+
+.site-title {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.site-title:hover {
+    text-decoration: none;
+}
+
+.top-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.action-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-nav a,
+.action-links a,
+.map-links a {
+    display: inline-block;
+    width: fit-content;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border: 1px solid #dbe3ee;
+    border-radius: 8px;
+}
+
+#room-list,
+#building-list,
+#location-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+}
+
+#room-list li,
+#building-list li,
+#location-list li {
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+ul:not(#room-list):not(#building-list):not(#location-list) {
+    margin: 16px 0;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+form {
+    display: grid;
+    gap: 12px;
+    max-width: 560px;
+    margin-top: 16px;
+}
+
+form > div {
+    display: grid;
+    gap: 6px;
+}
+
+label {
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font: inherit;
+    background: #ffffff;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+button {
+    width: fit-content;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.media-gallery {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.media-item {
+    margin: 0;
+    max-width: 360px;
+    padding: 10px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.media-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.map-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+#map {
+    width: 100%;
+    height: 70vh;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}

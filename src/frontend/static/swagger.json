@@ -1,0 +1,1066 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "woidveits RoomManager API Documentation",
+    "version": "1.0.0",
+    "description": "Swagger-Dokumentation der API-Endpunkte des RoomManager-Backends.",
+    "contact": {
+      "email": "veit.korpies@stud.uni-regensburg.de"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8000",
+      "description": "Lokale Entwicklungsumgebung"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Login und Rolleninformationen"
+    },
+    {
+      "name": "Rooms",
+      "description": "Raumbezogene API-Funktionen"
+    },
+    {
+      "name": "Administration",
+      "description": "Admin-Endpunkte für Import und Export"
+    }
+  ],
+  "paths": {
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "JWT-Login",
+        "description": "Prüft Benutzername und Passwort und liefert bei Erfolg einen JWT zurück.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              },
+              "example": {
+                "username": "addMynn",
+                "password": "UQjWqD[C@sklh3e02o7g5ci5@H[B.="
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login erfolgreich",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+                  "message": "Login successful",
+                  "token": "<jwt-token>"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Ungültige Zugangsdaten",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Invalid username or password"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/myrole": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Aktuelle Benutzerrolle abfragen",
+        "description": "Gibt den aktuellen Benutzernamen und die erkannten Rollen zurück. Ohne Token oder mit abgelaufenem Token wird auf `guest` zurückgefallen.",
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rolleninformation erfolgreich geliefert",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleResponse"
+                },
+                "examples": {
+                  "guest": {
+                    "value": {
+                      "username": "guest",
+                      "groups": [
+                        "guest"
+                      ]
+                    }
+                  },
+                  "student": {
+                    "value": {
+                      "username": "stewDunt",
+                      "groups": [
+                        "student"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ist ungültig",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unbekannte Benutzerrolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Unknown user role"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/nearby": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Nahe Räume finden",
+        "description": "Liefert die `amt` nächstgelegenen Räume für die übergebenen Koordinaten.",
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": true,
+            "description": "Breitengrad des Ausgangspunkts",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 48.995801
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": true,
+            "description": "Längengrad des Ausgangspunkts",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "example": 12.0932219
+            }
+          },
+          {
+            "name": "amt",
+            "in": "query",
+            "required": false,
+            "description": "Anzahl der zurückzugebenden Räume (Standard: 5)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 5,
+              "example": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste der gefundenen Räume",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NearbyRoomsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Fehlende oder ungültige Query-Parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "examples": {
+                  "missing": {
+                    "value": {
+                      "message": "Query parameters are missing"
+                    }
+                  },
+                  "invalidAmt": {
+                    "value": {
+                      "message": "Query parameter amt must be a positive integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ist ungültig",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Invalid token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/{room_id}/occupancy": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Belegung eines Raums abrufen",
+        "description": "Liefert den simulierten Belegungsstatus eines Raums. Erlaubte Rollen: `student`, `employee`, `admin`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "room_id",
+            "in": "path",
+            "required": true,
+            "description": "ID des Raums",
+            "schema": {
+              "type": "integer",
+              "example": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Belegungsstatus erfolgreich geliefert",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OccupancyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehlender oder ungültiger Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "examples": {
+                  "missing": {
+                    "value": {
+                      "message": "Missing or invalid Authorization header"
+                    }
+                  },
+                  "invalid": {
+                    "value": {
+                      "message": "Invalid token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nicht ausreichende Rolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Insufficient role"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Raum nicht gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Room not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/buildings/{building_id}": {
+      "delete": {
+        "tags": [
+          "Administration"
+        ],
+        "summary": "Gebäude löschen",
+        "description": "Löscht ein vorhandenes `Building` anhand seiner ID. Nur für `admin`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "building_id",
+            "in": "path",
+            "required": true,
+            "description": "ID des zu löschenden Gebäudes",
+            "schema": {
+              "type": "integer",
+              "example": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gebäude erfolgreich gelöscht",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                },
+                "example": {
+                  "message": "Building deleted successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehlender oder ungültiger Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nicht ausreichende Rolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Insufficient role"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gebäude nicht gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Building not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/locations/{location_id}": {
+      "delete": {
+        "tags": [
+          "Administration"
+        ],
+        "summary": "Location löschen",
+        "description": "Löscht eine vorhandene `Location` anhand ihrer ID. Nur für `admin`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "location_id",
+            "in": "path",
+            "required": true,
+            "description": "ID der zu löschenden Location",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Location erfolgreich gelöscht",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                },
+                "example": {
+                  "message": "Location deleted successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehlender oder ungültiger Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nicht ausreichende Rolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Insufficient role"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location nicht gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Location not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/export": {
+      "get": {
+        "tags": [
+          "Administration"
+        ],
+        "summary": "Datenbank exportieren",
+        "description": "Exportiert alle `locations`, `buildings`, `rooms`, `users` und `events` als JSON. Nur für `admin`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datenbank erfolgreich exportiert",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseExport"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehlender oder ungültiger Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nicht ausreichende Rolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Insufficient role"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/import": {
+      "post": {
+        "tags": [
+          "Administration"
+        ],
+        "summary": "Datenbank importieren",
+        "description": "Importiert `locations`, `buildings`, `rooms`, `users` und `events` aus einer JSON-Datei. Vorhandene `id`-Felder werden beim Erstellen ignoriert. Nur für `admin`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatabaseImport"
+              },
+              "example": {
+                "locations": [
+                  {
+                    "id": 1,
+                    "name": "Bajuwarenstraße"
+                  }
+                ],
+                "buildings": [
+                  {
+                    "id": 1,
+                    "name": "Gebäude A",
+                    "location_id": 1
+                  }
+                ],
+                "rooms": [
+                  {
+                    "id": 1,
+                    "secondary_ids": [
+                      "A101",
+                      "R101"
+                    ],
+                    "names": [
+                      "Seminarraum 101",
+                      "Gruppenarbeitsraum"
+                    ],
+                    "category": "Seminarraum",
+                    "comment": "Neu eingerichteter Seminarraum mit moderner Ausstattung",
+                    "building_id": 1,
+                    "level": 1,
+                    "longitude": 8.6753,
+                    "latitude": 50.1234,
+                    "seats_amount": 24,
+                    "seats_arrangement": "U-Form",
+                    "outlet_amount": 8,
+                    "projector": "Epson EB-2250U",
+                    "projector_resolution": "1920x1200",
+                    "lighting": "LED",
+                    "foto1": "room_a101_1.jpg",
+                    "foto2": "room_a101_2.jpg",
+                    "foto1_info": "Gesamtübersicht des Raums",
+                    "foto2_info": "Nähe des Beamers",
+                    "pdf": "raumplan_a101.pdf"
+                  }
+                ],
+                "users": [],
+                "events": []
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Import erfolgreich",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                },
+                "example": {
+                  "message": "Daten erfolgreich importiert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Keine JSON-Daten geliefert",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Keine JSON-Daten vorhanden"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Fehlender oder ungültiger Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Nicht ausreichende Rolle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Insufficient role"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fehler beim Import",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                },
+                "example": {
+                  "message": "Fehler beim Import: <details>"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT aus `/api/login`. Die App akzeptiert alternativ auch ein Cookie namens `token`."
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "required": [
+          "message",
+          "token"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Login successful"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT für weitere API-Aufrufe"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessMessage": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "RoleResponse": {
+        "type": "object",
+        "required": [
+          "username",
+          "groups"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "guest",
+                "student",
+                "employee",
+                "admin"
+              ]
+            }
+          }
+        }
+      },
+      "NearbyRoom": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "building": {
+            "type": "string",
+            "nullable": true
+          },
+          "level": {
+            "type": "integer",
+            "nullable": true
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        }
+      },
+      "NearbyRoomsResponse": {
+        "type": "object",
+        "required": [
+          "rooms"
+        ],
+        "properties": {
+          "rooms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NearbyRoom"
+            }
+          }
+        }
+      },
+      "EventSummary": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "OccupancyResponse": {
+        "type": "object",
+        "required": [
+          "room_id",
+          "room_name",
+          "occupied",
+          "event"
+        ],
+        "properties": {
+          "room_id": {
+            "type": "integer"
+          },
+          "room_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "occupied": {
+            "type": "boolean"
+          },
+          "event": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EventSummary"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Building": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "location_id": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "secondary_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "building_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "level": {
+            "type": "integer",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "seats_amount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "seats_arrangement": {
+            "type": "string",
+            "nullable": true
+          },
+          "outlet_amount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "projector": {
+            "type": "string",
+            "nullable": true
+          },
+          "projector_resolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "lighting": {
+            "type": "string",
+            "nullable": true
+          },
+          "foto1": {
+            "type": "string",
+            "nullable": true
+          },
+          "foto2": {
+            "type": "string",
+            "nullable": true
+          },
+          "foto1_info": {
+            "type": "string",
+            "nullable": true
+          },
+          "foto2_info": {
+            "type": "string",
+            "nullable": true
+          },
+          "pdf": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DatabaseExport": {
+        "type": "object",
+        "properties": {
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Location"
+            }
+          },
+          "buildings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Building"
+            }
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Room"
+            }
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          }
+        }
+      },
+      "DatabaseImport": {
+        "$ref": "#/components/schemas/DatabaseExport"
+      }
+    }
+  }
+}

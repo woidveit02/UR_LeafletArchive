@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<title>Raumkarte</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <div class="app app-wide">
+        {% include '_navigation.html' %}
+        <h1>Raumkarte</h1>
+
+        <div class="map-links">
+            <a href="/rooms/map">Alle Ebenen</a>
+            <a href="/rooms/map/0">Ebene 0</a>
+            <a href="/rooms/map/1">Ebene 1</a>
+            <a href="/rooms/map/2">Ebene 2</a>
+            <a href="/rooms/map/3">Ebene 3</a>
+            <a href="/rooms/map/4">Ebene 4</a>
+            <a href="/rooms/map/5">Ebene 5</a>
+            <a href="/rooms/map/6">Ebene 6</a>
+            <a href="/rooms/map/7">Ebene 7</a>
+            <a href="/rooms/map/8">Ebene 8</a>
+            <a href="/rooms/map/9">Ebene 9</a>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script id="rooms-data" type="application/json">{{ rooms | tojson }}</script>
+    
+    <!-- https://www.youtube.com/watch?v=wywYRQb3JCE -->
+
+    <script>
+
+        let room_data = JSON.parse(document.getElementById('rooms-data').textContent);
+
+        let mapOptions = {
+            center: [48.9988048, 12.0951252],
+            zoom: 15
+        };
+        
+        let map = new L.map('map', mapOptions);
+
+        let layer = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        map.addLayer(layer);
+
+        let bounds = [];
+
+        for (const room of room_data) {
+            L.marker([room.latitude, room.longitude])
+                .addTo(map)
+                .bindPopup(`<a href="/rooms/${room.id}">${room.name}</a>`);
+
+            bounds.push([room.latitude, room.longitude]);
+        }
+
+        if (bounds.length > 0) {
+            map.fitBounds(bounds, { padding: [20, 20] });
+        }
+        
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+image: python:latest
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - echo "Setting up the environment..."
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+
+test:
+  stage: test
+  script:
+    - echo "Testing..."
+    - cd src/backend
+    - pip install -r requirements.txt
+    - pytest tests/
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying..."
+  environment: production

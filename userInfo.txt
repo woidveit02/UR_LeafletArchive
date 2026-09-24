@@ -1,0 +1,23 @@
+id: 1
+username: stewDunt
+email: stew.dunt@example.de
+password: vu3,W_6F[3;8J:R>1uWK17sc@rbqv?
+group: student
+
+id: 2
+username: wurrKerr
+email: wurr.kerr@example.de
+password: D'6P0C,P))n]:!#-9FX8aK057!NR6>
+group: employee
+
+id: 3
+username: addMynn
+email: add.Mynn@example.de
+password: UQjWqD[C@sklh3e02o7g5ci5@H[B.=
+group: admin & employee
+
+id: 4
+username: mynnEjob
+email: mynn.ejob@example.de
+password: Bo+Hivf£8u8+3zF!6BO£JAX+ky8PP#
+group: student & admin

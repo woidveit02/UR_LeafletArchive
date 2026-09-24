@@ -1,0 +1,18 @@
+@baseUrl = http://127.0.0.1:8000
+@roomId = 12
+@amt = 5
+@latitude = 48.995801
+@longitude = 12.0932219
+
+# @name loginGuest
+POST {{baseUrl}}/api/login HTTP/1.1
+Content-Type: application/json
+
+###
+
+# @name getBaseRoom
+GET {{baseUrl}}/api/rooms/{{roomId}} HTTP/1.1
+
+###
+
+GET {{baseUrl}}/api/rooms/nearby?latitude={{latitude}}&longitude={{longitude}}&amt={{amt}} HTTP/1.1

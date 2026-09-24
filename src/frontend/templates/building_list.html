@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>woidveit02s RaumManager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+	<div class="app">
+        {% include '_navigation.html' %}
+		<h1>Gebäudeliste:</h1>
+        <ul id="building-list">
+            {% for building in buildings %}
+            <li><a href="/buildings/{{ building.id }}">{{ building.name if building.name else '*kein Name*' }}</a></li>
+            {% else %}
+            <li>Keine Gebäude gefunden.</li>
+            {% endfor %}
+        </ul>
+	</div>
+
+
+</body>
+
+</html>

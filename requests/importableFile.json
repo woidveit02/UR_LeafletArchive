@@ -1,0 +1,41 @@
+{
+  "locations": [
+    {
+      "id": 1,
+      "name": "Bajuwarenstraße"
+    }
+  ],
+  "buildings": [
+    {
+      "id": 1,
+      "name": "Gebäude A",
+      "location_id": 1
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "secondary_ids": ["A101", "R101"],
+      "names": ["Seminarraum 101", "Gruppenarbeitsraum"],
+      "category": "Seminarraum",
+      "comment": "Neu eingerichteter Seminarraum mit moderner Ausstattung",
+      "building_id": 1,
+      "level": 1,
+      "longitude": 8.6753,
+      "latitude": 50.1234,
+      "seats_amount": 24,
+      "seats_arrangement": "U-Form",
+      "outlet_amount": 8,
+      "projector": "Epson EB-2250U",
+      "projector_resolution": "1920x1200",
+      "lighting": "LED",
+      "foto1": "room_a101_1.jpg",
+      "foto2": "room_a101_2.jpg",
+      "foto1_info": "Gesamtübersicht des Raums",
+      "foto2_info": "Nähe des Beamers",
+      "pdf": "raumplan_a101.pdf"
+    }
+  ],
+  "users": [],
+  "events": []
+}

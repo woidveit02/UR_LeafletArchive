@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: ./src/backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/backend:/app
+      - ./src/frontend/templates:/app/app/templates
+      - ./src/frontend/static:/app/app/static
+      - ./data/photos:/app/app/static/photos

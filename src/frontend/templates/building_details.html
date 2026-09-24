@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>Gebäudedetails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="app">
+        {% include '_navigation.html' %}
+	    <h1>Gebäudedetails</h1>
+
+	    <ul>
+		    <li><strong>Name:</strong> {{ building.name if building.name else 'n.a.' }}</li>
+		    <li><strong>Standort:</strong> {{ building.location if building.location else 'n.a.' }}</li>
+	    </ul>
+
+		<h2>Räume im Gebäude:</h2>
+        <ul id="room-list">
+            {% for room in rooms %}
+            <li><a href="/rooms/{{ room.id }}">{{ room.names[0] if room.names else '*kein Name*' }}</a></li>
+            {% else %}
+            <li>Keine Räume gefunden.</li>
+            {% endfor %}
+        </ul>
+
+	    <p><a href="/buildings">Zurück zur Gebäudeliste</a></p>
+    </div>
+</body>
+</html>

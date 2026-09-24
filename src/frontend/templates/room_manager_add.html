@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>woidveit02s RaumManager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+	<div class="app">
+        {% include '_navigation.html' %}
+
+		<h1>Raum hinzufügen:</h1>
+
+        <form action="/admin/rooms/add" method="post">
+
+		    <div>
+			    <label>Weitere IDs: (Liste)</label>
+			    <input type="text" id="secondary_ids" name="secondary_ids" required>
+		    </div>
+			<div>
+			    <label>Namen: (Liste)</label>
+			    <input type="text" id="names" name="names" required>
+		    </div>
+			<div>
+			    <label>Kategorie:</label>
+			    <input type="text" id="category" name="category" required>
+		    </div>
+			<div>
+			    <label>Kommentar:</label>
+			    <input type="text" id="comment" name="comment" required>
+		    </div>
+			<div>
+			    <label>Gebäude ID:</label>
+			    <input type="text" id="building_id" name="building_id" required>
+		    </div>
+			<div>
+			    <label>Ebene:</label>
+			    <input type="text" id="level" name="level" required>
+		    </div>
+			<div>
+			    <label>Koordinaten-Länge:</label>
+			    <input type="text" id="longitude" name="longitude" required>
+		    </div>
+			<div>
+			    <label>Koordinaten-Breite:</label>
+			    <input type="text" id="latitude" name="latitude" required>
+		    </div>
+			<div>
+			    <label>Anzahl Sitze:</label>
+			    <input type="text" id="seats_amount" name="seats_amount" required>
+		    </div>
+			<div>
+			    <label>Arrangement Sitze:</label>
+			    <input type="text" id="seats_arrangement" name="seats_arrangement" required>
+		    </div>
+			<div>
+			    <label>Anzahl Steckdosen:</label>
+			    <input type="text" id="outlet_amount" name="outlet_amount" required>
+		    </div>
+			<div>
+			    <label>Projektor:</label>
+			    <input type="text" id="projector" name="projector" required>
+		    </div>
+			<div>
+			    <label>Projektor Auflösung:</label>
+			    <input type="text" id="projector_resolution" name="projector_resolution" required>
+		    </div>
+			<div>
+			    <label>Beleuchtung:</label>
+			    <input type="text" id="lighting" name="lighting" required>
+		    </div>
+			<div>
+			    <label>Foto 1 ID:</label>
+			    <input type="text" id="foto1" name="foto1" required>
+		    </div>
+			<div>
+			    <label>Foto 2 ID:</label>
+			    <input type="text" id="foto2" name="foto2" required>
+		    </div>
+			<div>
+			    <label>Foto 1 Info:</label>
+			    <input type="text" id="foto1_info" name="foto1_info" required>
+		    </div>
+			<div>
+			    <label>Foto 2 Info:</label>
+			    <input type="text" id="foto2_info" name="foto2_info" required>
+		    </div>
+			<div>
+			    <label>PDF ID:</label>
+			    <input type="text" id="pdf" name="pdf" required>
+		    </div>
+
+		    <button type="submit">Raum hinzufügen</button>
+	    </form>
+
+	    {% if error %}
+	    <p>{{ error }}</p>
+	    {% endif %}
+
+	    {% if success %}
+	    <p>{{ success }}</p>
+	    {% endif %}
+
+	</div>
+</body>
+
+</html>
