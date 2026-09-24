@@ -91,17 +91,15 @@ a:hover {
     border-radius: 8px;
 }
 
-#room-list,
-#building-list,
-#location-list {
+#leaflet-list,
+#organization-list {
     list-style: none;
     padding: 0;
     margin: 16px 0 0;
 }
 
-#room-list li,
-#building-list li,
-#location-list li {
+#leaflet-list li,
+#organization-list li {
     margin-bottom: 10px;
     padding: 10px 12px;
     background: #f8fafc;
@@ -109,7 +107,7 @@ a:hover {
     border-radius: 8px;
 }
 
-ul:not(#room-list):not(#building-list):not(#location-list) {
+ul:not(#leaflet-list):not(#organization-list) {
     margin: 16px 0;
     padding: 16px 20px;
     background: #f8fafc;
@@ -166,6 +164,11 @@ button:hover {
 }
 
 .unresolved {
+    color: #6b7280;
+    font-size: 0.9em;
+}
+
+.meta {
     color: #6b7280;
     font-size: 0.9em;
 }

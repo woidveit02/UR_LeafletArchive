@@ -12,7 +12,7 @@
 		<h1>Organisationen:</h1>
         <ul id="organization-list">
             {% for org in organizations %}
-            <li><a href="/organizations/{{ org.id }}">{{ org.name }}</a></li>
+            <li><a href="/organizations/{{ org.id }}">{{ org.name }}</a>{% if org.full_name %} <span class="meta">{{ org.full_name }}</span>{% endif %} <span class="meta">({{ org.count }})</span></li>
             {% else %}
             <li>Keine Organisationen gefunden.</li>
             {% endfor %}

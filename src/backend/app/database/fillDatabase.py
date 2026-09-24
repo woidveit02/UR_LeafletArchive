@@ -37,15 +37,21 @@ def fill_organizations():
     return orgs_by_variant
 
 
-def fill_leaflets(orgs_by_variant):
-    meta = load_json("nr002_metadata.json")
+VOLUMES = [
+    {"metadata_file": "nr002_metadata.json",
+     "label": "Nr. 002 (1968)", "year": 1968},
+]
+
+
+def fill_volume(cfg, orgs_by_variant):
+    meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
 
     volume = Volume(
         stem=meta["source_pdf"].removesuffix(".pdf"),
-        label="Nr. 002 (1968)",
-        year=1968,
+        label=cfg["label"],
+        year=cfg["year"],
         n_pages=n_pages,
     )
     session.add(volume)
@@ -56,7 +62,6 @@ def fill_leaflets(orgs_by_variant):
         if r.get("no_content"):
             continue
         leaflet = Leaflet(
-            id=r["id"],
             volume_id=volume.id,
             start_page=r["start_page"],
             end_page=r["end_page"],
@@ -69,6 +74,7 @@ def fill_leaflets(orgs_by_variant):
             confidence=r.get("confidence", 0),
         )
         session.add(leaflet)
+        session.flush()
         for issuer in r.get("issuers", []):
             session.add(LeafletIssuer(
                 leaflet_id=leaflet.id,
@@ -93,4 +99,5 @@ def fill_database():
     if session.query(Leaflet).count() > 0:
         return
     orgs_by_variant = fill_organizations()
-    fill_leaflets(orgs_by_variant)
+    for cfg in VOLUMES:
+        fill_volume(cfg, orgs_by_variant)

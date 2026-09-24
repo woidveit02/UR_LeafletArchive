@@ -22,6 +22,6 @@ def test_expected_tables_exist():
     }
     assert {"leaflets"}.issubset(table_names)
 
-# Tests if the database contains at least one entry for each of the main models (Room, Building, Location, User).
+# Tests if the database contains at least one leaflet entry.
 def test_database_contains_basic_seed_data():
     assert session.query(Leaflet).count() >= 1

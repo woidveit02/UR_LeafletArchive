@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Seite nicht gefunden</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+
+<body>
+	<div class="app">
+        {% include '_navigation.html' %}
+		<h1>Seite nicht gefunden</h1>
+        <p>Unter dieser Adresse gibt es nichts.</p>
+        <p><a href="/">Zurück zur Startseite</a></p>
+	</div>
+</body>
+
+</html>

@@ -12,7 +12,10 @@
 		<h1>Flugblatt-Liste:</h1>
         <ul id="leaflet-list">
             {% for leaflet in leaflets %}
-            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a></li>
+            <li>
+                <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a><br>
+                <span class="meta">{{ leaflet.volume }}{% if leaflet.issuers %} · {{ leaflet.issuers }}{% endif %}</span>
+            </li>
             {% else %}
             <li>Keine Flugblätter gefunden.</li>
             {% endfor %}
