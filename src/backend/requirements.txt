@@ -1,7 +1,6 @@
-Flask
-PyJWT
+fastapi
+uvicorn[standard]
+jinja2
 pytest
 pycodestyle
 sqlalchemy
-pathlib
-flask-swagger-ui

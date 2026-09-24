@@ -3,8 +3,11 @@ services:
     build: ./src/backend
     ports:
       - "8000:8000"
+    environment:
+      - LEAFLET_DATA_DIR=/app/data
     volumes:
       - ./src/backend:/app
       - ./src/frontend/templates:/app/app/templates
       - ./src/frontend/static:/app/app/static
+      - ./data:/app/data
       - ./data/photos:/app/app/static/photos

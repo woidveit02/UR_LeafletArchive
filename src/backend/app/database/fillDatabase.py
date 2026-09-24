@@ -1,11 +1,15 @@
 import json
+import os
 from pathlib import Path
 
 from .session import session
 from .models import Leaflet
 
-# Path to the data directory, which contains the JSON files to fill the database with.
-DATA_DIR = Path(__file__).resolve().parents[4] / "data"
+# Data dir: LEAFLET_DATA_DIR in Docker (mounted), else repo-root data/.
+if os.environ.get("LEAFLET_DATA_DIR"):
+    DATA_DIR = Path(os.environ["LEAFLET_DATA_DIR"])
+else:
+    DATA_DIR = Path(__file__).resolve().parents[4] / "data"
 
 # Loads the data of the leaflets_test.json file and returns it.
 def load_leaflet_data():

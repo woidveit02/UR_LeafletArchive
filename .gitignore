@@ -17,6 +17,10 @@ __pycache__/
 .pytest_cache/
 .venv/
 
+# Generierte Datenbank (build via main.py)
+*.db
+
 data/photos/
 ToDo.txt
 src/backend/app/logs/app.log
+src/backend/leaflet_database.db
