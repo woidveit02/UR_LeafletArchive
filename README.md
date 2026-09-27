@@ -15,6 +15,8 @@ Nach `git pull` mit Änderungen in `data/`: alte `.db` löschen, dann neu starte
 
 Rohdaten (PDFs) liegen in Drive, nicht in Git. `data/*.json` ist maßgeblich und liegt in Git. Die generierte `leaflet_database.db` liegt nicht in Git – nach jedem Pull mit Änderungen in `data/`: alte `.db` löschen, `main.py` neu ausführen.
 
+Für Scans und OCR-Text den Drive-Ordner lokal ablegen und in einer `.env` im Projektordner eintragen, z. B. `LEAFLET_PDF_HOST_DIR=/pfad/zu/UR_LeafletArchive_data`. Ohne diesen Ordner läuft die Anwendung trotzdem, zeigt aber keine Scans und keinen OCR-Text. Wird der Ordner nachträglich eingebunden: `.db` löschen und neu starten.
+
 ## Git Commits
 
 Möglichst an `Conventional Commits`-Richtlinien halten.

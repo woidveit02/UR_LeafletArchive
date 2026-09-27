@@ -22,5 +22,6 @@ __pycache__/
 
 data/photos/
 ToDo.txt
+.env
 src/backend/app/logs/app.log
 src/backend/leaflet_database.db

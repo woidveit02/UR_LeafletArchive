@@ -2,16 +2,17 @@ import logging
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from . import pdf_service
 from .database.session import session
-from .database.models import Leaflet, LeafletIssuer, Volume, Organization
+from .database.models import Leaflet, LeafletIssuer, Volume, Organization, Page
 from .app_helper import setup_logging
 
 
-# Logging Setup
 setup_logging()
 logger = logging.getLogger(__name__)
 
@@ -30,14 +31,12 @@ async def not_found(request: Request, exc: StarletteHTTPException):
     raise exc
 
 
-# Main page
 @app.get("/")
 def index(request: Request):
     logger.info('Opening index page')
     return templates.TemplateResponse(request, "index.html", {})
 
 
-# Leaflet list page
 @app.get("/leaflets")
 def leaflet_list(request: Request):
     logger.info('Opening leaflet list')
@@ -57,6 +56,7 @@ def leaflet_list(request: Request):
         'id': leaflet.id,
         'title': leaflet.title,
         'volume': volumes.get(leaflet.volume_id, ''),
+        'date_text': leaflet.date_text,
         'issuers': ', '.join(issuers_by_leaflet.get(leaflet.id, [])),
     } for leaflet in leaflets]
 
@@ -64,7 +64,6 @@ def leaflet_list(request: Request):
         request, "leaflet_list.html", {"leaflets": rows})
 
 
-# Leaflet details page
 @app.get("/leaflets/{leaflet_id}")
 def leaflet_detail(request: Request, leaflet_id: int):
     logger.info('Opening leaflet details')
@@ -93,13 +92,33 @@ def leaflet_detail(request: Request, leaflet_id: int):
             issuer_display.append({'surface': i.surface, 'org_id': None})
 
     if leaflet.start_page == leaflet.end_page:
-        pages = f'Seite {leaflet.start_page}'
+        pages = f'Bandseite {leaflet.start_page}'
     else:
-        pages = f'Seiten {leaflet.start_page}-{leaflet.end_page}'
+        pages = f'Bandseiten {leaflet.start_page}–{leaflet.end_page}'
+
+    page_rows = session.query(Page).filter_by(leaflet_id=leaflet_id) \
+        .order_by(Page.page_no).all()
+
+    pdf_path = pdf_service.PDF_DIR / volume.label / f"{volume.stem}.pdf"
+    has_pdf = pdf_path.is_file()
+    page_list = []
+    for i, p in enumerate(page_rows, start=1):
+        width, height = (pdf_service.page_size(pdf_path, p.page_no)
+                         if has_pdf else (None, None))
+        page_list.append({'no': p.page_no, 'index': i,
+                          'blocks': p.blocks or [],
+                          'width': width, 'height': height})
+
+    siblings = [row.id for row in session.query(Leaflet.id)
+                .filter_by(volume_id=leaflet.volume_id)
+                .order_by(Leaflet.start_page)]
+    pos = siblings.index(leaflet.id)
 
     data = {
         'id': leaflet.id,
         'title': leaflet.title,
+        'prev_id': siblings[pos - 1] if pos > 0 else None,
+        'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'volume': volume.label if volume else '',
         'date_text': leaflet.date_text,
         'date_type': leaflet.date_type,
@@ -107,13 +126,31 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'pages': pages,
         'issuers': issuer_display,
         'signatories': [i.surface for i in issuers if i.role == 'signatory'],
+        'page_list': page_list,
+        'has_pdf': has_pdf,
     }
 
     return templates.TemplateResponse(
         request, "leaflet_details.html", {"leaflet": data})
 
 
-# Organization list page
+@app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")
+def leaflet_page_image(leaflet_id: int, page_no: int, dpi: int = 110):
+    leaflet = session.get(Leaflet, leaflet_id)
+    if leaflet is None or not (
+            leaflet.start_page <= page_no <= leaflet.end_page):
+        raise HTTPException(404)
+
+    volume = session.get(Volume, leaflet.volume_id)
+    pdf_path = pdf_service.PDF_DIR / volume.label / f"{volume.stem}.pdf"
+    if not pdf_path.is_file():
+        raise HTTPException(404)
+
+    png = pdf_service.render_page(
+        pdf_path, page_no, dpi=max(72, min(dpi, 300)))
+    return Response(content=png, media_type="image/png")
+
+
 @app.get("/organizations")
 def organization_list(request: Request):
     logger.info('Opening organization list')
@@ -137,7 +174,6 @@ def organization_list(request: Request):
         request, "organization_list.html", {"organizations": rows})
 
 
-# Organization details page
 @app.get("/organizations/{org_id}")
 def organization_detail(request: Request, org_id: str):
     logger.info('Opening organization details')

@@ -19,6 +19,7 @@ class Page(Base):
     volume_id = Column(Integer, ForeignKey("volumes.id"))
     page_no = Column(Integer)
     text = Column(Text, default="")
+    blocks = Column(JSON, default=list)
     leaflet_id = Column(Integer, ForeignKey("leaflets.id"), nullable=True)
 
 

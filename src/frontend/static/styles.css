@@ -8,28 +8,77 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     line-height: 1.5;
-    background: #f5f7fb;
+    background: #ffffff;
     color: #1f2937;
 }
 
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.brand:hover {
+    text-decoration: none;
+}
+
+.topnav {
+    display: flex;
+    gap: 4px;
+}
+
+.topnav a {
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: #4b5563;
+}
+
+.topnav a:hover {
+    background: #f3f4f6;
+    color: #111827;
+    text-decoration: none;
+}
+
+.topnav a.active {
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 600;
+}
+
 .app {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 24px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 28px 24px 48px;
 }
 
 .app-wide {
-    max-width: 1200px;
+    max-width: 1400px;
 }
 
 h1 {
     margin: 0 0 20px;
+    font-size: 1.75rem;
+    line-height: 1.25;
     color: #111827;
 }
 
@@ -50,37 +99,12 @@ a:hover {
     text-decoration: underline;
 }
 
-.site-header {
-    margin-bottom: 20px;
-}
-
-.site-title {
-    display: inline-block;
-    margin-bottom: 12px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-}
-
-.site-title:hover {
-    text-decoration: none;
-}
-
-.top-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
 .action-links {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.top-nav a,
 .action-links a,
 .map-links a {
     display: inline-block;
@@ -107,7 +131,7 @@ a:hover {
     border-radius: 8px;
 }
 
-ul:not(#leaflet-list):not(#organization-list) {
+ul:not(#leaflet-list):not(#organization-list):not(.ocr-list) {
     margin: 16px 0;
     padding: 16px 20px;
     background: #f8fafc;
@@ -196,6 +220,130 @@ button:hover {
     border-radius: 8px;
 }
 
+.viewer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 800px) {
+    .viewer {
+        grid-template-columns: 1fr;
+    }
+}
+
+.leaflet-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+.leaflet-nav span {
+    display: flex;
+    gap: 16px;
+}
+
+.leaflet-nav .breadcrumb {
+    gap: 6px;
+    color: #6b7280;
+}
+
+.leaflet-nav .disabled {
+    color: #d1d5db;
+}
+
+.leaflet-meta {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 20px;
+    margin: 16px 0;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.leaflet-meta dt {
+    color: #6b7280;
+}
+
+.leaflet-meta dd {
+    margin: 0;
+}
+
+.viewer-pages {
+    margin-top: 16px;
+}
+
+.scan-missing {
+    padding: 48px 24px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    color: #6b7280;
+    text-align: center;
+}
+
+.leaflet-page {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    cursor: zoom-in;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.leaflet-page.loaded {
+    opacity: 1;
+}
+
+.leaflet-page:not(.loaded) ~ .ocr-box {
+    visibility: hidden;
+}
+
+.page-frame {
+    position: relative;
+    display: block;
+    border-radius: 8px;
+    background: #f3f4f6;
+}
+
+.ocr-box {
+    position: absolute;
+    border-radius: 3px;
+    transition: background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.page-frame:hover .ocr-box {
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+}
+
+.page-frame .ocr-box.active {
+    background: rgba(37, 99, 235, 0.12);
+    box-shadow: 0 0 0 2px #2563eb;
+}
+
+.ocr-block {
+    margin: 0 -8px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: background 0.12s ease;
+}
+
+.ocr-block.active {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.page-caption {
+    margin: 6px 0 20px;
+    color: #6b7280;
+    font-size: 0.85em;
+}
+
 .map-links {
     display: flex;
     flex-wrap: wrap;
@@ -208,4 +356,123 @@ button:hover {
     height: 70vh;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
+}
+
+.ocr-page {
+    margin-bottom: 16px;
+    max-width: 68ch;
+    line-height: 1.6;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+}
+
+.ocr-block table {
+    margin: 0 0 10px;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    hyphens: manual;
+}
+
+.ocr-block td,
+.ocr-block th {
+    padding: 2px 16px 2px 0;
+    vertical-align: top;
+    text-align: left;
+}
+
+.ocr-block p {
+    margin: 0 0 10px;
+}
+
+.ocr-block h1,
+.ocr-block h2,
+.ocr-block h3,
+.ocr-block h4 {
+    margin: 0;
+    font-size: inherit;
+}
+
+.ocr-sectionheader {
+    margin-top: 22px;
+    margin-bottom: 6px;
+    font-size: 1.1em;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #111827;
+    hyphens: manual;
+}
+
+.ocr-sectionheader p {
+    margin: 0;
+}
+
+.ocr-page > .ocr-sectionheader:first-child {
+    margin-top: 0;
+}
+
+.ocr-list {
+    margin: 0 0 10px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.ocr-pageheader,
+.ocr-pagefooter,
+.ocr-picture {
+    color: #6b7280;
+    font-size: 0.85em;
+}
+
+.ocr-picture {
+    margin: 0 0 10px;
+    font-style: italic;
+}
+
+.page-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 10px;
+    color: #6b7280;
+    font-size: 0.85em;
+}
+
+.page-divider::before,
+.page-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #e5e7eb;
+}
+
+.page-divider a,
+.page-caption a {
+    color: inherit;
+    text-decoration: underline dotted;
+}
+
+.page-divider a:hover,
+.page-caption a:hover {
+    color: #2563eb;
+}
+
+[id^="scan-"],
+[id^="text-"] {
+    scroll-margin-top: 72px;
+}
+
+html,
+body {
+    overscroll-behavior-y: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.heading-note {
+    margin-left: 6px;
+    color: #6b7280;
+    font-size: 0.6em;
+    font-weight: 400;
 }

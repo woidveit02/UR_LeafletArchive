@@ -5,9 +5,11 @@ services:
       - "8000:8000"
     environment:
       - LEAFLET_DATA_DIR=/app/data
+      - LEAFLET_PDF_DIR=/data/pdfs
     volumes:
       - ./src/backend:/app
       - ./src/frontend/templates:/app/app/templates
       - ./src/frontend/static:/app/app/static
       - ./data:/app/data
       - ./data/photos:/app/app/static/photos
+      - ${LEAFLET_PDF_HOST_DIR:-./data}:/data/pdfs

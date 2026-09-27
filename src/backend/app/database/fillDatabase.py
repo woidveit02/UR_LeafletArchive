@@ -1,15 +1,19 @@
+import html
 import json
 import os
+import re
+from html.parser import HTMLParser
 from pathlib import Path
 
 from .session import session
 from .models import Volume, Page, Leaflet, Organization, LeafletIssuer
 
-# Data dir: LEAFLET_DATA_DIR in Docker (mounted), else repo-root data/.
 if os.environ.get("LEAFLET_DATA_DIR"):
     DATA_DIR = Path(os.environ["LEAFLET_DATA_DIR"])
 else:
     DATA_DIR = Path(__file__).resolve().parents[4] / "data"
+
+PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 
 
 def load_json(name):
@@ -43,13 +47,77 @@ VOLUMES = [
 ]
 
 
+ALLOWED_TAGS = {"p", "br", "u", "b", "i", "strong", "em",
+                "ul", "ol", "li", "h1", "h2", "h3", "h4",
+                "table", "thead", "tbody", "tr", "th", "td"}
+
+
+class _Sanitizer(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.out = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ("ul", "ol"):
+            self.out.append(f'<{tag} class="ocr-list">')
+        elif tag in ALLOWED_TAGS:
+            self.out.append(f"<{tag}>")
+
+    def handle_endtag(self, tag):
+        if tag in ALLOWED_TAGS and tag != "br":
+            self.out.append(f"</{tag}>")
+
+    def handle_data(self, data):
+        self.out.append(html.escape(data))
+
+
+def sanitize(raw):
+    parser = _Sanitizer()
+    parser.feed(raw)
+    parser.close()
+    return "".join(parser.out)
+
+
+def load_pages(volume_label, stem):
+    json_path = PDF_DIR / volume_label / stem / f"{stem}.json"
+    if not json_path.is_file():
+        return {}
+    doc = json.loads(json_path.read_text(encoding="utf-8"))
+    pages = {}
+    for page_no, page in enumerate(doc.get("children", []), start=1):
+        px0, py0, px1, py1 = page.get("bbox", [0, 0, 1, 1])
+        pw, ph = (px1 - px0) or 1, (py1 - py0) or 1
+        blocks, parts = [], []
+        for b in page.get("children", []):
+            block_type = b.get("block_type", "Text")
+            x0, y0, x1, y1 = b.get("bbox", [0, 0, 0, 0])
+            box = [round((x0 - px0) / pw * 100, 2),
+                   round((y0 - py0) / ph * 100, 2),
+                   round((x1 - x0) / pw * 100, 2),
+                   round((y1 - y0) / ph * 100, 2)]
+            if block_type == "Picture":
+                blocks.append({"type": block_type, "html": "", "box": box})
+                continue
+            clean = sanitize(b.get("html", ""))
+            blocks.append({"type": block_type, "html": clean, "box": box})
+            parts.append(html.unescape(re.sub(r"<[^>]+>", " ", clean)))
+        text = re.sub(r"\s+", " ", " ".join(parts)).strip()
+        pages[page_no] = {"text": text, "blocks": blocks}
+    return pages
+
+
 def fill_volume(cfg, orgs_by_variant):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
+    stem = meta["source_pdf"].removesuffix(".pdf")
+    ocr_pages = load_pages(cfg["label"], stem)
+    if not ocr_pages:
+        print(f"Warnung: Keine OCR-Daten unter {PDF_DIR / cfg['label']}, "
+              "Transkriptionen bleiben leer.")
 
     volume = Volume(
-        stem=meta["source_pdf"].removesuffix(".pdf"),
+        stem=stem,
         label=cfg["label"],
         year=cfg["year"],
         n_pages=n_pages,
@@ -87,9 +155,12 @@ def fill_volume(cfg, orgs_by_variant):
     session.commit()
 
     for page_no in range(1, n_pages + 1):
+        ocr = ocr_pages.get(page_no, {})
         session.add(Page(
             volume_id=volume.id,
             page_no=page_no,
+            text=ocr.get("text", ""),
+            blocks=ocr.get("blocks", []),
             leaflet_id=leaflet_by_page.get(page_no),
         ))
     session.commit()
