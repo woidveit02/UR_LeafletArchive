@@ -4,12 +4,13 @@
 	<meta charset="UTF-8">
 	<title>{{ leaflet.title if leaflet.title else 'Flugblatt' }}</title>
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
 </head>
 
 <body>
     {% include '_navigation.html' %}
     <div class="app app-wide">
-        <nav class="leaflet-nav">
+        <nav class="detail-nav">
             <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {{ leaflet.volume }}</span>
             <span>
                 {% if leaflet.prev_id %}<a href="/leaflets/{{ leaflet.prev_id }}">‹ Vorheriges</a>{% else %}<span class="disabled">‹ Vorheriges</span>{% endif %}
@@ -50,9 +51,12 @@
             </div>
 
             <div class="viewer-info">
-                <dl class="leaflet-meta">
+                <dl class="meta-list">
                     <dt>Band</dt>
-                    <dd>{{ leaflet.volume if leaflet.volume else 'n.a.' }}, {{ leaflet.pages }}</dd>
+                    <dd>
+                        <a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}
+                        {% if leaflet.volume_title %}<br><span class="meta">{{ leaflet.volume_title }}{% if leaflet.volume_collection %} (Organisationsband){% endif %}</span>{% endif %}
+                    </dd>
                     <dt>Datum</dt>
                     <dd>
                         {% if leaflet.date_text %}{{ leaflet.date_text }}
@@ -67,6 +71,12 @@
                     </dd>
                     <dt>Unterzeichner</dt>
                     <dd>{{ leaflet.signatories | join(', ') if leaflet.signatories else 'n.a.' }}</dd>
+                    {% if leaflet.provenance %}
+                    <dt>Erschließung</dt>
+                    <dd>automatisch extrahiert <span class="meta">({{ leaflet.provenance }})</span></dd>
+                    {% endif %}
+                    <dt>Zitiervorschlag</dt>
+                    <dd>{{ leaflet.citation }}</dd>
                 </dl>
 
                 <h2>Transkription <span class="heading-note">OCR, automatisch erkannt</span></h2>
@@ -78,7 +88,9 @@
                 {% endif %}
                 <div class="ocr-page">
                     {% for block in page.blocks %}
-                    {% if block.type == 'Picture' %}
+                    {% if block.type == 'Picture' and block.image and leaflet.has_pdf %}
+                    <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}"><img src="/volumes/{{ leaflet.volume_vz }}/images/{{ block.image }}" alt="Abbildung" loading="lazy"></div>
+                    {% elif block.type == 'Picture' %}
                     <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung]</div>
                     {% else %}
                     <div class="ocr-block ocr-{{ block.type | lower }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>

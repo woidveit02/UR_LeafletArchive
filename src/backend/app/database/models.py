@@ -1,15 +1,25 @@
 from .base import Base
-from sqlalchemy import Column, Integer, String, Float, Text, JSON, ForeignKey
+from sqlalchemy import (Column, Integer, String, Float, Text, JSON, Boolean,
+                        ForeignKey)
 
 
 class Volume(Base):
     __tablename__ = "volumes"
 
     id = Column(Integer, primary_key=True)
-    stem = Column(String, unique=True)
+    vz = Column(Integer, unique=True)
+    stem = Column(String, unique=True, nullable=True)
     label = Column(String)
     year = Column(Integer)
-    n_pages = Column(Integer)
+    title = Column(String)
+    group = Column(String)
+    signature = Column(String)
+    collection = Column(String, nullable=True)
+    digitized = Column(Boolean, default=True)
+    portal_url = Column(String, nullable=True)
+    meta_model = Column(String, nullable=True)
+    meta_created = Column(String, nullable=True)
+    n_pages = Column(Integer, nullable=True)
 
 
 class Page(Base):

@@ -1,60 +1,91 @@
-# UR_LeafletArchive: UR Flugblattsammlung
+# UR Leaflet Archive
 
-## Beschreibung
+Explorationswerkzeug für die Flugblattsammlung des Universitätsarchivs Regensburg (Rep. 118, 1967–1973): Flugblätter mit Scan, OCR-Transkription und automatisch extrahierten Metadaten, dazu Organisationen und Bände laut Findmittel des Archivs.
 
-Eine einfache FastAPI-Website zum Durchsuchen und Betrachten der verschiedenen Flugblätter der Flugblattsammlung des Archivs der Universität Regensburg. 
+## Setup
+1. Repo klonen und hineinwechseln via `cd UR_LeafletArchive`.
+2. Den Ordner `UR_LeafletArchive_data` aus Drive lokal ablegen (Scans und OCR-Daten).
+3. `.env.example` nach `.env` kopieren und dort den Pfad zu diesem Ordner eintragen.
+4. Die Anwendung starten via `docker compose up`. Sie ist dann unter http://localhost:8000/ erreichbar; die Datenbank wird beim ersten Start angelegt und gefüllt.
+5. Im Log muss „Data folder ok“ stehen (`docker compose logs backend`). Sonst nennt die Meldung, was am Pfad nicht stimmt.
 
-Dass ganze Projekt wurde mit Visual Studio Code erstellt, dieses wurde zudem mit einigen Extensions modifiziert, darunter die `Container Tools` für Docker und einige Python-Extensions von Microsoft, der `REST Client` von Huachao Mao und der `SQLite Viewer` von Florian Klampfer.
+Der Pfad in `.env` zeigt auf den Datenordner selbst, nicht auf einen Band darin:
 
-## Getting Started / Bedienung
+```
+UR_LeafletArchive_data/
+├── Nr. 001 (1967)/
+│   ├── 0118_0001.pdf          # Scan des Bandes
+│   └── 0118_0001/
+│       ├── 0118_0001.json     # OCR (Datalab)
+│       └── <hash>_img.jpg     # Abbildungen aus der OCR
+├── Nr. 002 (1968)/
+│   └── …
+└── …
+```
 
-Um den Docker-Container und damit die Anwendung zu starten, einfach `docker compose up` ausführen, dann ist die Anwendung unter http://localhost:8000/ verfügbar. Die Datenbank wird beim Start automatisch angelegt und gefüllt, falls sie leer ist.
-Nach `git pull` mit Änderungen in `data/`: alte `.db` löschen, dann neu starten (siehe nächster Abschnitt).
+Ohne Datenordner läuft die Anwendung auch, zeigt aber keine Scans und keinen OCR-Text.
 
-## Daten & Synchronisation
+## Ansichten
 
-Rohdaten (PDFs) liegen in Drive, nicht in Git. `data/*.json` ist maßgeblich und liegt in Git. Die generierte `leaflet_database.db` liegt nicht in Git – nach jedem Pull mit Änderungen in `data/`: alte `.db` löschen, `main.py` neu ausführen.
+| Seite | Route | Inhalt |
+|-------|-------|--------|
+| Flugblätter | `/leaflets` | Liste mit Band, Datum und Herausgeber |
+| Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten, Zitiervorschlag |
+| Organisationen | `/organizations` | Normdatei der herausgebenden Gruppen |
+| Organisation | `/organizations/{id}` | Angaben laut Findmittel, Bände, Flugblätter |
+| Bände | `/volumes` | Verzeichnungseinheiten 1967–1973, gegliedert wie im Findmittel |
+| Band | `/volumes/{vz}` | Findmittel-Titel, Signatur, Organisationen, Link ins Archivportal-D |
 
-Für Scans und OCR-Text den Drive-Ordner lokal ablegen und in einer `.env` im Projektordner eintragen, z. B. `LEAFLET_PDF_HOST_DIR=/pfad/zu/UR_LeafletArchive_data`. Ohne diesen Ordner läuft die Anwendung trotzdem, zeigt aber keine Scans und keinen OCR-Text. Wird der Ordner nachträglich eingebunden: `.db` löschen und neu starten.
+Auf der Flugblatt-Seite sind Scan und Transkription verknüpft: Fährt man über einen Textblock, wird die zugehörige Stelle im Scan markiert und umgekehrt. Bände werden über ihre Vz-Nummer adressiert (`/volumes/2` = Nr. 002), damit die Adressen beim Neuaufbau der Datenbank gleich bleiben.
 
-## Git Commits
+## Daten
 
-Möglichst an `Conventional Commits`-Richtlinien halten.
+Die Datenbank wird aus den JSON-Dateien in [`data/`](data/) gebaut; sie sind maßgeblich und liegen in Git. Scans und OCR liegen in Drive.
 
-## PyTest & PyCodeStyle
+| Datei | Inhalt | Herkunft |
+|-------|--------|----------|
+| [`nr002_metadata.json`](data/nr002_metadata.json) | Titel, Datum, Textsorte, Herausgeber je Flugblatt | LLM-Extraktion im Pipeline-Repo |
+| [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
+| [`volumes.json`](data/volumes.json) | Bände mit Titel, Signatur, Link ins Archivportal-D | Findmittel |
 
-Es gibt eine Datei für Tests mit `PyTest`, dazu einfach `pytest` in der Konsole ausführen.
-Die Korrektheit der Code-Formatierung erfolgt mittels `PyCodeStyle`, dazu einfach `pycodestyle .` für alle Dateien oder `pycodestyle <Name der Datei>.py` ausführen.
+Bisher ist nur Nr. 002 (1968) mit Flugblättern importiert; die übrigen Bände erscheinen in der Bandliste.
+
+Nach einem Pull mit Änderungen in `data/` oder am Datenbankschema, oder wenn der Datenordner erst nachträglich eingebunden wurde: `src/backend/leaflet_database.db` löschen und neu starten.
+
+## Tests & Codestil
+
+Die Tests prüfen Datenbank und Datenordner-Prüfung ([`src/backend/tests/`](src/backend/tests/)):
+
+```bash
+cd src
+python -m pytest backend/tests
+```
+
+Der Codestil wird mit `pycodestyle .` geprüft. Commits folgen den `Conventional Commits`.
 
 ## Projektstruktur
 
 ```
 .
-├── data/ # Metadaten und Organisations-Normdatei (Quelle für die DB)
-│   ├── nr002_metadata.json
-│   └── organizations.json
+├── data/                          # Quelle für die DB (siehe Daten)
 ├── src/
 │   ├── backend/
 │   │   ├── app/
 │   │   │   ├── database/
-│   │   │   │   ├── base.py
-│   │   │   │   ├── createDatabase.py # Erstellung der DB
-│   │   │   │   ├── fillDatabase.py # Füllt DB mit Elementen aus JSONs
-│   │   │   │   ├── models.py # DB-Struktur
-│   │   │   │   └── session.py 
-│   │   │   ├── app_helper.py # Ausgelagerte Hilfsfunktionen für app.py
-│   │   │   ├── app.py # Backend-Script (startet Anwendung im Container)
-│   │   │   └── main.py # Zentrales Script zu Erstellung der DB
-│   │   ├── logs/
-│   │   ├── tests/ # Alle Testdateien mit Unit-Tests
-│   │   ├──Dockerfile
-│   │   ├──requirements.txt # Benötigte Python-Packages
-│   │   └──leaflet_database.db # Datenbank (von main.py erstellt, nicht in Git)
+│   │   │   │   ├── createDatabase.py  # Erstellung der DB
+│   │   │   │   ├── fillDatabase.py    # Füllt die DB aus den JSONs, prüft den Datenordner
+│   │   │   │   ├── models.py          # DB-Struktur
+│   │   │   │   └── session.py
+│   │   │   ├── app.py                 # Routen (FastAPI)
+│   │   │   ├── main.py                # Erstellt und füllt die DB beim Start
+│   │   │   └── pdf_service.py         # Rendert Scan-Seiten aus den PDFs
+│   │   ├── tests/
+│   │   ├── Dockerfile
+│   │   └── requirements.txt
 │   └── frontend/
-│       ├── static/ # Stylesheet
-│       └── templates/ # Alle HTML-Templates für FastAPI
-├── .gitignore
+│       ├── static/                    # Stylesheet, Favicon
+│       └── templates/                 # HTML-Templates
+├── .env.example                       # Vorlage für .env (Pfad zum Datenordner)
 ├── docker-compose.yml
-├── LICENCE # MIT-Lizenz
-└── README.md
+└── LICENCE                            # MIT-Lizenz
 ```

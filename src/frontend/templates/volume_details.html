@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ volume.label }} – UR Leaflet Archive</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
+</head>
+
+<body>
+    {% include '_navigation.html' %}
+    <div class="app">
+        <nav class="detail-nav">
+            <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
+            <span>
+                {% if volume.prev_vz %}<a href="/volumes/{{ volume.prev_vz }}">‹ Vorheriger</a>{% else %}<span class="disabled">‹ Vorheriger</span>{% endif %}
+                {% if volume.next_vz %}<a href="/volumes/{{ volume.next_vz }}">Nächster ›</a>{% else %}<span class="disabled">Nächster ›</span>{% endif %}
+            </span>
+        </nav>
+        <h1>{{ volume.label }}</h1>
+
+        <dl class="meta-list">
+            <dt>Titel im Findmittel</dt>
+            <dd>{{ volume.title }}</dd>
+            <dt>Art</dt>
+            <dd>{% if volume.collection %}Organisationsband: nur Blätter von {{ volume.collection }}{% else %}gemischter Band{% endif %}</dd>
+            <dt>Signatur</dt>
+            <dd>{{ volume.signature }}</dd>
+            <dt>Stand</dt>
+            <dd>{{ volume.status }}{% if volume.n_pages %} · {{ volume.n_pages }} Seiten{% endif %}</dd>
+            {% if volume.provenance %}
+            <dt>Erschließung</dt>
+            <dd>Titel, Daten und Herausgeber automatisch extrahiert <span class="meta">({{ volume.provenance }})</span></dd>
+            {% endif %}
+            <dt>Organisationen laut Findmittel</dt>
+            <dd>
+                {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% else %}n.a.{% endfor %}
+            </dd>
+        </dl>
+
+        {% if volume.portal_url %}
+        <p><a class="button-link" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Im Archivportal-D ansehen ↗</a></p>
+        {% endif %}
+
+        {% if volume.leaflets %}
+        <h2>Flugblätter</h2>
+        <ul id="leaflet-list">
+            {% for leaflet in volume.leaflets %}
+            <li>
+                <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a><br>
+                <span class="meta">{% if leaflet.start_page == leaflet.end_page %}Bandseite {{ leaflet.start_page }}{% else %}Bandseiten {{ leaflet.start_page }}–{{ leaflet.end_page }}{% endif %}{% if leaflet.date_text %} · {{ leaflet.date_text }}{% endif %}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,8 +1,9 @@
 import logging
+import re
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import Response
+from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -21,6 +22,29 @@ app = FastAPI(title="UR Leaflet Archive")
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
+
+def provenance(volume):
+    """'claude-sonnet-4.5, 22.09.2026' für automatisch erschlossene Bände."""
+    if not volume or not volume.meta_model:
+        return None
+    model = volume.meta_model.split("/")[-1]
+    try:
+        y, m, d = volume.meta_created.split("-")
+        return f"{model}, {d}.{m}.{y}"
+    except (AttributeError, ValueError):
+        return model
+
+
+def org_sort_key(org):
+    """Sortiert nach dem angezeigten Namen (voller Name vor Kürzel),
+    Umlaute wie ihre Grundbuchstaben."""
+    name = (org.full_name or org.name).casefold()
+    return name.translate(str.maketrans("äöüß", "aous"))
+
+
+def group_anchor(group):
+    return (group or "").lower().replace(" ", "-")
 
 
 @app.exception_handler(StarletteHTTPException)
@@ -117,9 +141,15 @@ def leaflet_detail(request: Request, leaflet_id: int):
     data = {
         'id': leaflet.id,
         'title': leaflet.title,
+        'volume_vz': volume.vz,
+        'provenance': provenance(volume),
+        'citation': ("Universitätsarchiv Regensburg, Rep. 118 Allgemeine "
+                     f"Flugblattsammlung, Nr. {volume.vz}, {pages}"),
         'prev_id': siblings[pos - 1] if pos > 0 else None,
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'volume': volume.label if volume else '',
+        'volume_title': volume.title if volume else '',
+        'volume_collection': volume.collection if volume else None,
         'date_text': leaflet.date_text,
         'date_type': leaflet.date_type,
         'doc_type': leaflet.doc_type,
@@ -151,11 +181,106 @@ def leaflet_page_image(leaflet_id: int, page_no: int, dpi: int = 110):
     return Response(content=png, media_type="image/png")
 
 
+def volume_status(volume, n_leaflets):
+    if n_leaflets:
+        noun = "Flugblatt" if n_leaflets == 1 else "Flugblätter"
+        return f"{n_leaflets} {noun}"
+    if volume.digitized:
+        return "digitalisiert"
+    return "nicht digitalisiert"
+
+
+@app.get("/volumes")
+def volume_list(request: Request):
+    logger.info('Opening volume list')
+
+    counts = {}
+    for (volume_id,) in session.query(Leaflet.volume_id):
+        counts[volume_id] = counts.get(volume_id, 0) + 1
+
+    rows = [{
+        'vz': v.vz,
+        'label': v.label,
+        'title': v.title,
+        'group': v.group,
+        'anchor': group_anchor(v.group),
+        'collection': v.collection,
+        'status': volume_status(v, counts.get(v.id, 0)),
+    } for v in session.query(Volume).order_by(Volume.vz)]
+
+    return templates.TemplateResponse(
+        request, "volume_list.html", {"volumes": rows})
+
+
+def volume_by_vz(vz):
+    volume = session.query(Volume).filter_by(vz=vz).first()
+    if volume is None:
+        raise HTTPException(404)
+    return volume
+
+
+@app.get("/volumes/{vz}")
+def volume_detail(request: Request, vz: int):
+    logger.info('Opening volume details')
+
+    volume = volume_by_vz(vz)
+    leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
+        .order_by(Leaflet.start_page).all()
+    orgs = sorted((o for o in session.query(Organization)
+                   if volume.vz in (o.vz or [])), key=org_sort_key)
+
+    vzs = [row.vz for row in session.query(Volume.vz).order_by(Volume.vz)]
+    pos = vzs.index(volume.vz)
+
+    data = {
+        'prev_vz': vzs[pos - 1] if pos > 0 else None,
+        'next_vz': vzs[pos + 1] if pos + 1 < len(vzs) else None,
+        'label': volume.label,
+        'vz': volume.vz,
+        'group': volume.group,
+        'anchor': group_anchor(volume.group),
+        'title': volume.title,
+        'signature': volume.signature,
+        'portal_url': volume.portal_url,
+        'collection': volume.collection,
+        'n_pages': volume.n_pages,
+        'status': volume_status(volume, len(leaflets)),
+        'provenance': provenance(volume),
+        'organizations': orgs,
+        'leaflets': leaflets,
+    }
+
+    return templates.TemplateResponse(
+        request, "volume_details.html", {"volume": data})
+
+
+@app.get("/volumes/{vz}/{start_page}")
+def leaflet_permalink(vz: int, start_page: int):
+    volume = volume_by_vz(vz)
+    leaflet = session.query(Leaflet) \
+        .filter_by(volume_id=volume.id, start_page=start_page).first()
+    if leaflet is None:
+        raise HTTPException(404)
+    return RedirectResponse(f"/leaflets/{leaflet.id}")
+
+
+@app.get("/volumes/{vz}/images/{name}")
+def volume_image(vz: int, name: str):
+    volume = volume_by_vz(vz)
+    if not re.fullmatch(r"[0-9a-f]+_img\.(jpg|png)", name):
+        raise HTTPException(404)
+
+    path = pdf_service.PDF_DIR / volume.label / volume.stem / name
+    if not path.is_file():
+        raise HTTPException(404)
+    return FileResponse(path)
+
+
 @app.get("/organizations")
 def organization_list(request: Request):
     logger.info('Opening organization list')
 
-    organizations = session.query(Organization).all()
+    organizations = sorted(session.query(Organization), key=org_sort_key)
 
     leaflet_ids_by_org = {}
     issuer_rows = session.query(LeafletIssuer) \
@@ -188,14 +313,21 @@ def organization_detail(request: Request, org_id: str):
     leaflets = session.query(Leaflet) \
         .filter(Leaflet.id.in_(leaflet_ids)).all()
 
+    org_ids = [o.id for o in sorted(session.query(Organization), key=org_sort_key)]
+    pos = org_ids.index(org.id)
+    volumes = session.query(Volume).filter(Volume.vz.in_(org.vz or [])) \
+        .order_by(Volume.vz).all()
+
     data = {
         'id': org.id,
+        'prev_id': org_ids[pos - 1] if pos > 0 else None,
+        'next_id': org_ids[pos + 1] if pos + 1 < len(org_ids) else None,
         'name': org.name,
         'full_name': org.full_name,
         'type': org.type,
         'variants': org.variants,
         'jahre': org.jahre,
-        'vz': org.vz,
+        'volumes': volumes,
         'gnd_id': org.gnd_id,
         'notes': org.notes,
         'leaflets': leaflets,

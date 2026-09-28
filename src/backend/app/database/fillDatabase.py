@@ -41,6 +41,20 @@ def fill_organizations():
     return orgs_by_variant
 
 
+def fill_volumes():
+    volumes = {}
+    for v in load_json("volumes.json"):
+        volume = Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
+                        year=v["year"], title=v["title"], group=v["group"],
+                        signature=v["signature"], collection=v["collection"],
+                        digitized=v["digitized"],
+                        portal_url=v.get("portal_url"))
+        session.add(volume)
+        volumes[v["label"]] = volume
+    session.commit()
+    return volumes
+
+
 VOLUMES = [
     {"metadata_file": "nr002_metadata.json",
      "label": "Nr. 002 (1968)", "year": 1968},
@@ -96,7 +110,9 @@ def load_pages(volume_label, stem):
                    round((x1 - x0) / pw * 100, 2),
                    round((y1 - y0) / ph * 100, 2)]
             if block_type == "Picture":
-                blocks.append({"type": block_type, "html": "", "box": box})
+                src = re.search(r'src="([^"]+)"', b.get("html", ""))
+                blocks.append({"type": block_type, "html": "", "box": box,
+                               "image": src.group(1) if src else None})
                 continue
             clean = sanitize(b.get("html", ""))
             blocks.append({"type": block_type, "html": clean, "box": box})
@@ -106,23 +122,21 @@ def load_pages(volume_label, stem):
     return pages
 
 
-def fill_volume(cfg, orgs_by_variant):
+def fill_volume(cfg, orgs_by_variant, volumes):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
     stem = meta["source_pdf"].removesuffix(".pdf")
     ocr_pages = load_pages(cfg["label"], stem)
-    if not ocr_pages:
-        print(f"Warnung: Keine OCR-Daten unter {PDF_DIR / cfg['label']}, "
-              "Transkriptionen bleiben leer.")
 
-    volume = Volume(
-        stem=stem,
-        label=cfg["label"],
-        year=cfg["year"],
-        n_pages=n_pages,
-    )
-    session.add(volume)
+    volume = volumes.get(cfg["label"])
+    if volume is None:
+        volume = Volume(label=cfg["label"], year=cfg["year"])
+        session.add(volume)
+    volume.stem = stem
+    volume.n_pages = n_pages
+    volume.meta_model = meta.get("model")
+    volume.meta_created = meta.get("created", "")[:10]
     session.commit()
 
     leaflet_by_page = {}
@@ -166,9 +180,60 @@ def fill_volume(cfg, orgs_by_variant):
     session.commit()
 
 
+def check_data_dir(pdf_dir=PDF_DIR):
+    """Returns readable hints if PDFs or OCR files are missing in the
+    mounted data folder; empty list if everything is in place."""
+    if not pdf_dir.is_dir() or not any(pdf_dir.iterdir()):
+        return [f"{pdf_dir} is empty or missing. Is the path in "
+                "LEAFLET_PDF_HOST_DIR (.env) correct? For a wrong path, "
+                "Docker silently creates an empty folder."]
+    problems = []
+    for cfg in VOLUMES:
+        label = cfg["label"]
+        stem = load_json(cfg["metadata_file"])["source_pdf"].removesuffix(".pdf")
+        vol_dir = pdf_dir / label
+        if not vol_dir.is_dir():
+            if (pdf_dir / f"{stem}.pdf").is_file():
+                hint = "The path points one level too deep, at the volume folder itself."
+            elif any(p.is_dir() for p in pdf_dir.glob(f"*/{label}")):
+                hint = "The path points one level too high."
+            elif (pdf_dir / "organizations.json").is_file():
+                hint = "The default folder ./data is mounted. Is the .env missing?"
+            else:
+                found = ", ".join(sorted(p.name for p in pdf_dir.iterdir())[:5])
+                hint = f"Found instead: {found}"
+            problems.append(f"Folder '{label}' is missing. {hint}")
+            continue
+        if not (vol_dir / f"{stem}.pdf").is_file():
+            problems.append(f"{label}: {stem}.pdf is missing, no scans will be shown.")
+        if not (vol_dir / stem / f"{stem}.json").is_file():
+            problems.append(f"{label}: {stem}/{stem}.json is missing, "
+                            "transcriptions will be empty.")
+    return problems
+
+
+def report_data_dir():
+    problems = check_data_dir()
+    host_dir = os.environ.get("LEAFLET_PDF_HOST_DIR") or "(not set)"
+    if not problems:
+        print(f"Data folder ok: {host_dir}")
+        return True
+    print(f"WARNING data folder {host_dir}:")
+    for problem in problems:
+        print(f"  - {problem}")
+    print("  The site still runs, but without scans or OCR text. "
+          "After fixing it, delete the .db and restart.")
+    return False
+
+
 def fill_database():
+    data_ok = report_data_dir()
     if session.query(Leaflet).count() > 0:
+        if data_ok and session.query(Page).filter(Page.text != "").first() is None:
+            print("Note: the database was built without OCR text, but the "
+                  "data folder is complete now. Delete the .db and restart.")
         return
     orgs_by_variant = fill_organizations()
+    volumes = fill_volumes()
     for cfg in VOLUMES:
-        fill_volume(cfg, orgs_by_variant)
+        fill_volume(cfg, orgs_by_variant, volumes)

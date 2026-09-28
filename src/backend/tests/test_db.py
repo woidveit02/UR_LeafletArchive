@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from backend.app.database.models import Leaflet
+from backend.app.database.models import Leaflet, Volume
 from backend.app.database.session import session
 
 # Tests if there is a connection to the database and if the session object is properly created.
@@ -25,3 +25,9 @@ def test_expected_tables_exist():
 # Tests if the database contains at least one leaflet entry.
 def test_database_contains_basic_seed_data():
     assert session.query(Leaflet).count() >= 1
+
+# Tests if all Findmittel units 1967-1973 exist and imported leaflets point to one of them.
+def test_volumes_from_findmittel():
+    assert session.query(Volume).count() == 15
+    leaflet = session.query(Leaflet).first()
+    assert session.get(Volume, leaflet.volume_id).title

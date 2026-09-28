@@ -4,22 +4,39 @@
     <meta charset="UTF-8">
     <title>Organization Details</title>
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
 </head>
 
 <body>
     {% include '_navigation.html' %}
     <div class="app">
+        <nav class="detail-nav">
+            <span class="breadcrumb"><a href="/organizations">Organisationen</a></span>
+            <span>
+                {% if org.prev_id %}<a href="/organizations/{{ org.prev_id }}">‹ Vorherige</a>{% else %}<span class="disabled">‹ Vorherige</span>{% endif %}
+                {% if org.next_id %}<a href="/organizations/{{ org.next_id }}">Nächste ›</a>{% else %}<span class="disabled">Nächste ›</span>{% endif %}
+            </span>
+        </nav>
         <h1>{{ org.name }}</h1>
 
-        <ul>
-            <li><strong>Vollständiger Name:</strong> {{ org.full_name if org.full_name else 'n.a.' }}</li>
-            <li><strong>Typ:</strong> {{ org.type if org.type else 'n.a.' }}</li>
-            <li><strong>Schreibweisen:</strong> {{ org.variants | join(', ') if org.variants else 'n.a.' }}</li>
-            <li><strong>Jahre (laut Findmittel):</strong> {{ org.jahre | join(', ') if org.jahre else 'n.a.' }}</li>
-            <li><strong>Verzeichnungseinheit(en):</strong> {{ org.vz | join(', ') if org.vz else 'n.a.' }}</li>
-            <li><strong>GND-ID:</strong> {{ org.gnd_id if org.gnd_id else 'n.a.' }}</li>
-            <li><strong>Quelle:</strong> {{ org.notes if org.notes else 'n.a.' }}</li>
-        </ul>
+        <dl class="meta-list">
+            <dt>Vollständiger Name</dt>
+            <dd>{{ org.full_name if org.full_name else 'n.a.' }}</dd>
+            <dt>Typ</dt>
+            <dd>{{ org.type if org.type else 'n.a.' }}</dd>
+            <dt>Schreibweisen</dt>
+            <dd>{{ org.variants | join(', ') if org.variants else 'n.a.' }}</dd>
+            <dt>Jahre (laut Findmittel)</dt>
+            <dd>{{ org.jahre | join(', ') if org.jahre else 'n.a.' }}</dd>
+            <dt>Bände laut Findmittel</dt>
+            <dd>
+                {% for v in org.volumes %}<a href="/volumes/{{ v.vz }}">{{ v.label }}</a>{% if v.collection %} <span class="meta">(Organisationsband)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
+            </dd>
+            <dt>GND-ID</dt>
+            <dd>{{ org.gnd_id if org.gnd_id else 'n.a.' }}</dd>
+            <dt>Quelle</dt>
+            <dd>{{ org.notes if org.notes else 'n.a.' }}</dd>
+        </dl>
 
         <h2>Flugblätter</h2>
         <ul>
@@ -29,8 +46,6 @@
             <li>Keine Flugblätter gefunden.</li>
             {% endfor %}
         </ul>
-
-        <p><a href="/leaflets">Zurück zur Flugblatt-Liste</a></p>
     </div>
 </body>
 </html>

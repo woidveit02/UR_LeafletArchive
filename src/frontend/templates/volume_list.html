@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Bände – UR Leaflet Archive</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
+</head>
+
+<body>
+    {% include '_navigation.html' %}
+    <div class="app">
+        <h1>Bände</h1>
+        <p class="meta">Verzeichnungseinheiten 1967–1973 im Bestand Rep. 118 laut Findmittel des Universitätsarchivs
+            (<a href="https://www.archivportal-d.de/item/NFTD57JPRHJOTMAI46F4P3EQ6NA5DKLZ" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
+        {% for group in volumes | groupby('group', default='') | sort(attribute='list.0.label') %}
+        <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }}</h2>
+        <ul class="volume-list">
+            {% for volume in group.list %}
+            <li>
+                <a href="/volumes/{{ volume.vz }}">{{ volume.label }}</a>{% if volume.collection %} <span class="meta">· nur {{ volume.collection }}</span>{% endif %}<br>
+                <span class="meta">{{ volume.status }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+</body>
+</html>

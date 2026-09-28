@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <title>UR Leaflet Archive</title>
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
 </head>
 
 <body>
     {% include '_navigation.html' %}
 	<div class="app">
-		<h1>Organisationen:</h1>
+		<h1>Organisationen</h1>
         <ul id="organization-list">
             {% for org in organizations %}
-            <li><a href="/organizations/{{ org.id }}">{{ org.name }}</a>{% if org.full_name %} <span class="meta">{{ org.full_name }}</span>{% endif %} <span class="meta">({{ org.count }})</span></li>
+            <li>
+                <a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a><br>
+                <span class="meta">{{ org.count }} {{ 'Flugblatt' if org.count == 1 else 'Flugblätter' }}</span>
+            </li>
             {% else %}
             <li>Keine Organisationen gefunden.</li>
             {% endfor %}

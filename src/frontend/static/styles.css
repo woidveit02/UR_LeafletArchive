@@ -116,14 +116,16 @@ a:hover {
 }
 
 #leaflet-list,
-#organization-list {
+#organization-list,
+.volume-list {
     list-style: none;
     padding: 0;
     margin: 16px 0 0;
 }
 
 #leaflet-list li,
-#organization-list li {
+#organization-list li,
+.volume-list li {
     margin-bottom: 10px;
     padding: 10px 12px;
     background: #f8fafc;
@@ -131,7 +133,7 @@ a:hover {
     border-radius: 8px;
 }
 
-ul:not(#leaflet-list):not(#organization-list):not(.ocr-list) {
+ul:not(#leaflet-list):not(#organization-list):not(.volume-list):not(.ocr-list) {
     margin: 16px 0;
     padding: 16px 20px;
     background: #f8fafc;
@@ -233,44 +235,72 @@ button:hover {
     }
 }
 
-.leaflet-nav {
+.detail-nav {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
     font-size: 0.9em;
 }
 
-.leaflet-nav span {
+.detail-nav span {
     display: flex;
     gap: 16px;
 }
 
-.leaflet-nav .breadcrumb {
+.detail-nav .breadcrumb {
     gap: 6px;
     color: #6b7280;
 }
 
-.leaflet-nav .disabled {
+.detail-nav .disabled {
     color: #d1d5db;
 }
 
-.leaflet-meta {
+.meta-list {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 6px 20px;
     margin: 16px 0;
-    padding: 16px 20px;
+    padding: 4px 20px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
 }
 
-.leaflet-meta dt {
-    color: #6b7280;
+.meta-list dt,
+.meta-list dd {
+    padding: 9px 0;
+    border-top: 1px solid #edf0f4;
 }
 
-.leaflet-meta dd {
+.meta-list dt:first-of-type,
+.meta-list dd:first-of-type {
+    border-top: none;
+}
+
+.meta-list dt {
+    padding-right: 24px;
+    color: #6b7280;
+    font-size: 0.9em;
+    line-height: 1.65;
+}
+
+.meta-list dd {
     margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.button-link:hover {
+    background: #1d4ed8;
+    text-decoration: none;
 }
 
 .viewer-pages {
@@ -427,6 +457,14 @@ button:hover {
 .ocr-picture {
     margin: 0 0 10px;
     font-style: italic;
+}
+
+.ocr-picture img {
+    display: block;
+    max-width: 100%;
+    max-height: 360px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
 }
 
 .page-divider {
