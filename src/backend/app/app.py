@@ -114,6 +114,12 @@ def leaflet_list(request: Request, org: str | None = None):
     volumes = {v.id: v.label for v in session.query(Volume).all()}
     orgs = {o.id: o.name for o in session.query(Organization).all()}
 
+    organizations = sorted(session.query(Organization), key=org_sort_key)
+    org_options = [{
+        'id': o.id,
+        'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
+    } for o in organizations]
+
     issuers_by_leaflet = {}
     for i in session.query(LeafletIssuer).filter_by(role='issuer').all():
         name = orgs[i.org_id] if i.org_id else i.surface
@@ -130,7 +136,8 @@ def leaflet_list(request: Request, org: str | None = None):
     } for leaflet in leaflets]
 
     return templates.TemplateResponse(
-        request, "leaflet_list.html", {"leaflets": rows})
+        request, "leaflet_list.html",
+        {"leaflets": rows, "org_options": org_options, "selected_org": org})
 
 
 @app.get("/leaflets/{leaflet_id}")

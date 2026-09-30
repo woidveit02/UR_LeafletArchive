@@ -9,19 +9,30 @@
 
 <body>
     {% include '_navigation.html' %}
-	<div class="app">
-		<h1>Flugblätter</h1>
+    <div class="app">
+        <h1>Flugblätter</h1>
+        <form method="get" action="/leaflets" class="filter">
+            <label for="org">nach Herausgeber filtern:</label>
+            <select name="org" id="org" onchange="this.form.submit()">
+                <option value="">-</option>
+                {% for o in org_options %}
+                <option value="{{ o.id }}" {% if o.id==selected_org %}selected{% endif %}>{{ o.label }}</option>
+                {% endfor %}
+            </select>
+            <noscript><button type="submit">Filtern</button></noscript>
+        </form>
         <ul id="leaflet-list">
             {% for leaflet in leaflets %}
             <li>
                 <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a><br>
-                <span class="meta">{{ leaflet.volume }}{% if leaflet.date_text %} · {{ leaflet.date_text }}{% endif %}{% if leaflet.issuers %} · {{ leaflet.issuers }}{% endif %}</span>
+                <span class="meta">{{ leaflet.volume }}{% if leaflet.date_text %} · {{ leaflet.date_text }}{% endif %}{%
+                    if leaflet.issuers %} · {{ leaflet.issuers }}{% endif %}</span>
             </li>
             {% else %}
             <li>Keine Flugblätter gefunden.</li>
             {% endfor %}
         </ul>
-	</div>
+    </div>
 
 
 </body>
