@@ -1,6 +1,7 @@
 import logging
 import re
 from pathlib import Path
+from urllib.parse import urlencode
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, RedirectResponse, Response
@@ -77,6 +78,12 @@ def iso_to_text(iso):
     return text
 
 
+def leaflet_year(leaflet, volume_year):
+    """Year of the leaflet's date, else the year of its volume."""
+    year = (leaflet.date_iso or '')[:4]
+    return year if year.isdigit() else str(volume_year)
+
+
 def list_date(leaflet, fallback_year=None):
     """(date, label) for lists: the leaflet's date, else the archive stamp
     (unless its year is uncertain), else the volume year."""
@@ -132,7 +139,8 @@ def index(request: Request):
 
 
 @app.get("/leaflets")
-def leaflet_list(request: Request, org: str | None = None):
+def leaflet_list(request: Request, org: str | None = None,
+                 jahr: str | None = None, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
 
     query = (
@@ -148,7 +156,10 @@ def leaflet_list(request: Request, org: str | None = None):
         )
         query = query.filter(Leaflet.id.in_(matching_ids))
 
-    leaflets = query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all()
+    items = leaflet_items(
+        query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
+    if jahr:
+        items = [item for item in items if item['year'] == jahr]
 
     organizations = sorted(session.query(Organization), key=org_sort_key)
     org_options = [{
@@ -156,9 +167,20 @@ def leaflet_list(request: Request, org: str | None = None):
         'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
     } for o in organizations]
 
+    # years of all leaflets, so the options stay while a filter is set
+    volume_years = {v.id: v.year for v in session.query(Volume)}
+    years = sorted({leaflet_year(lf, volume_years[lf.volume_id])
+                    for lf in session.query(Leaflet)})
+
+    params = {k: v for k, v in request.query_params.items()
+              if v and k != 'ansicht'}
+    query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": leaflet_items(leaflets), "org_options": org_options, "selected_org": org})
+        {"leaflets": items, "org_options": org_options, "selected_org": org,
+         "years": years, "selected_year": jahr, "filtered": any((org, jahr)),
+         "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
+         "switch_base": '/leaflets' + query_string})
 
 
 @app.get("/leaflets/{leaflet_id}")
@@ -357,9 +379,11 @@ def leaflet_items(leaflets):
     issuers = issuer_names([lf.id for lf in leaflets])
     items = []
     for lf in leaflets:
-        date, date_label = list_date(lf, volumes[lf.volume_id].year)
-        items.append({'leaflet': lf, 'vz': volumes[lf.volume_id].vz,
+        volume = volumes[lf.volume_id]
+        date, date_label = list_date(lf, volume.year)
+        items.append({'leaflet': lf, 'vz': volume.vz,
                       'date': date, 'date_label': date_label,
+                      'year': leaflet_year(lf, volume.year),
                       'thumb': has_pdf[lf.volume_id],
                       'issuers': issuers.get(lf.id, [])})
     return items

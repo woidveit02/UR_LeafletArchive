@@ -39,7 +39,7 @@
         </dl>
 
         {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards %}
-        <div class="section-head" id="flugblaetter">
+        <div class="section-head">
             <h2>Flugblätter</h2>
             {% if org.has_thumbs %}{{ view_switch('/organizations/' ~ org.id, org.view,
                 [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
@@ -50,5 +50,6 @@
         {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count')) }}
         {% endif %}
     </div>
+    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
 </body>
 </html>

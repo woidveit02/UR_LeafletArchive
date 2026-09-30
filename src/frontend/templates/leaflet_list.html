@@ -11,21 +11,42 @@
     {% include '_navigation.html' %}
     <div class="app">
         <h1>Flugblätter</h1>
+        {% from '_leaflets.html' import leaflet_list, leaflet_cards, view_switch %}
         <form method="get" action="/leaflets" class="filter">
-            <label for="org">Herausgeber</label>
-            <select name="org" id="org" onchange="this.form.submit()">
-                <option value="">alle</option>
-                {% for o in org_options %}
-                <option value="{{ o.id }}" {% if o.id==selected_org %}selected{% endif %}>{{ o.label }}</option>
-                {% endfor %}
-            </select>
-            <noscript><button type="submit">Filtern</button></noscript>
+            {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
+            <div class="filter-fields">
+                <label>Herausgeber
+                    <select name="org" onchange="this.form.submit()">
+                        <option value="">alle</option>
+                        {% for o in org_options %}
+                        <option value="{{ o.id }}" {% if o.id==selected_org %}selected{% endif %}>{{ o.label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Jahr
+                    <select name="jahr" onchange="this.form.submit()">
+                        <option value="">alle</option>
+                        {% for y in years %}<option {% if y == selected_year %}selected{% endif %}>{{ y }}</option>{% endfor %}
+                    </select>
+                </label>
+            </div>
+            {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
+            {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
+            <div class="filter-bar">
+                <p class="filter-result">{% if leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}{% else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
+                {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
+                <noscript><button type="submit">Filtern</button></noscript>
+            </div>
         </form>
-        {% from '_leaflets.html' import leaflet_list %}
+        {% if leaflets and view == 'kacheln' %}
+        {{ leaflet_cards(leaflets, fields=('date', 'count')) }}
+        {% elif leaflets %}
         {{ leaflet_list(leaflets, fields=('date', 'issuers', 'series', 'count')) }}
+        {% endif %}
     </div>
 
 
+    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
 </body>
 
 </html>

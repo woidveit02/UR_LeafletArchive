@@ -44,7 +44,7 @@
 
         {% if volume.leaflets %}
         {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards, title %}
-        <div class="section-head" id="flugblaetter">
+        <div class="section-head">
             <h2>Flugblätter</h2>
             {% if volume.has_scans %}{{ view_switch('/volumes/' ~ volume.vz, volume.view,
                 [('liste', 'Liste'), ('kacheln', 'Kacheln'), ('bandseiten', 'Bandseiten')]) }}{% endif %}
@@ -75,5 +75,6 @@
         {% endif %}
         {% endif %}
     </div>
+    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
 </body>
 </html>

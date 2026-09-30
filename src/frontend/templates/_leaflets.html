@@ -23,7 +23,7 @@
 {% macro view_switch(base, current, views) %}
 <nav class="view-switch" aria-label="Ansicht">
     {% for key, label in views %}
-    <a href="{{ base }}{% if not loop.first %}?ansicht={{ key }}{% endif %}#flugblaetter"{% if key == current %} aria-current="page"{% endif %}>
+    <a href="{{ base }}{% if not loop.first %}{{ '&' if '?' in base else '?' }}ansicht={{ key }}{% endif %}"{% if key == current %} aria-current="page"{% endif %}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{{ ICONS[key] | safe }}</svg>{{ label }}</a>
     {% endfor %}
 </nav>

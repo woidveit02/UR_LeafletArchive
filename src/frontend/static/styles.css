@@ -318,23 +318,53 @@ button:hover {
 
 .filter {
     max-width: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 12px;
+    gap: 16px;
+}
+
+.filter-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 24em) 8em;
+    gap: 12px;
 }
 
 .filter label {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    font-size: 0.85em;
     font-weight: 400;
-    color: #374151;
+    color: #6b7280;
 }
 
 .filter select {
-    width: auto;
     min-width: 0;
-    max-width: 100%;
     padding: 6px 10px;
+    font-size: 1rem;
+    color: #111827;
     cursor: pointer;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.filter-bar .filter-result {
+    margin-right: auto;
+}
+
+.filter-result {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.9em;
+}
+
+@media (max-width: 600px) {
+    .filter-fields {
+        grid-template-columns: minmax(0, 1fr) 6em;
+    }
 }
 
 .unresolved {
@@ -353,11 +383,6 @@ button:hover {
     justify-content: space-between;
     gap: 12px;
     margin-top: 24px;
-}
-
-/* keep the anchor clear of the sticky top bar */
-.section-head[id] {
-    scroll-margin-top: 90px;
 }
 
 .section-head h2 {
