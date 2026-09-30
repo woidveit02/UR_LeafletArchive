@@ -96,7 +96,12 @@ def index(request: Request):
 def leaflet_list(request: Request):
     logger.info('Opening leaflet list')
 
-    leaflets = session.query(Leaflet).all()
+    leaflets = (
+        session.query(Leaflet)
+        .join(Volume, Leaflet.volume_id == Volume.id)
+        .order_by(Volume.vz, Leaflet.start_page, Leaflet.id)
+        .all()
+    )
     volumes = {v.id: v.label for v in session.query(Volume).all()}
     orgs = {o.id: o.name for o in session.query(Organization).all()}
 
@@ -228,7 +233,8 @@ def evidence_image(leaflet_id: int, blocks: str):
     page_no = int(ids[0][0])
     if not leaflet.start_page <= page_no <= leaflet.end_page:
         raise HTTPException(404)
-    page = session.query(Page).filter_by(volume_id=leaflet.volume_id, page_no=page_no).first()
+    page = session.query(Page).filter_by(
+        volume_id=leaflet.volume_id, page_no=page_no).first()
     boxes = [page.blocks[int(i) - 1]["box"] for p, i in ids
              if int(p) == page_no and 0 < int(i) <= len(page.blocks or [])]
     if not boxes:
@@ -240,7 +246,8 @@ def evidence_image(leaflet_id: int, blocks: str):
     # keep some context to the sides of small blocks, but not the next lines
     grow_x = max(0, 40 - (right - left)) / 2
     grow_y = max(0, 3 - (bottom - top)) / 2
-    left, right, top, bottom = left - grow_x, right + grow_x, top - grow_y, bottom + grow_y
+    left, right, top, bottom = left - grow_x, right + \
+        grow_x, top - grow_y, bottom + grow_y
 
     png = pdf_service.render_clip(leaflet_pdf(leaflet), page_no,
                                   [left, top, right - left, bottom - top])
@@ -379,7 +386,8 @@ def organization_detail(request: Request, org_id: str):
     leaflets = session.query(Leaflet) \
         .filter(Leaflet.id.in_(leaflet_ids)).all()
 
-    org_ids = [o.id for o in sorted(session.query(Organization), key=org_sort_key)]
+    org_ids = [o.id for o in sorted(
+        session.query(Organization), key=org_sort_key)]
     pos = org_ids.index(org.id)
     volumes = session.query(Volume).filter(Volume.vz.in_(org.vz or [])) \
         .order_by(Volume.vz).all()
