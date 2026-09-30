@@ -9,6 +9,8 @@ Explorationswerkzeug für die Flugblattsammlung des Universitätsarchivs Regensb
 4. Die Anwendung starten via `docker compose up`. Sie ist dann unter http://localhost:8000/ erreichbar; die Datenbank wird beim ersten Start angelegt und gefüllt.
 5. Im Log muss „Data folder ok“ stehen (`docker compose logs backend`). Sonst nennt die Meldung, was am Pfad nicht stimmt.
 
+Nach einem Pull, der `Dockerfile` oder `requirements.txt` ändert, das Image neu bauen: `docker compose up -d --build`. Beim Start erzeugt die Anwendung im Hintergrund die Vorschaubilder der Kachelansicht (einmalig einige Minuten, danach im Datenordner unter `.thumbs/` gespeichert).
+
 Der Pfad in `.env` zeigt auf den Datenordner selbst, nicht auf einen Band darin:
 
 ```

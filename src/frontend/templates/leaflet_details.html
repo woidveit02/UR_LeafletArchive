@@ -106,6 +106,13 @@
                         {% for s in leaflet.signatories %}{{ s.name }}{% if s.details %} <span class="meta">({{ s.details }})</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
                         {{ beleg('Unterzeichnende') }}
                     </dd>
+                    {% if leaflet.copies %}
+                    <dt>Mögliche weitere Exemplare</dt>
+                    <dd>
+                        {% for c in leaflet.copies %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
+                        <br><span class="meta">automatisch erkannt am Textvergleich, nicht geprüft</span>
+                    </dd>
+                    {% endif %}
                 </dl>
                 {% if leaflet.provenance_model %}
                 <p class="review-note">Automatisch erschlossen mit {{ leaflet.provenance_model }} ({{ leaflet.provenance_date }}). „Beleg“ zeigt die Textstelle, auf die sich eine Angabe stützt.</p>

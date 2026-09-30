@@ -58,6 +58,8 @@ class Leaflet(Base):
     title_quote = Column(String)
     date_quote = Column(String)
     received_quote = Column(String)
+    # possible copies of the same leaflet share a group (find_copies.py, unreviewed)
+    copy_group = Column(Integer)
 
     @property
     def series_label(self):

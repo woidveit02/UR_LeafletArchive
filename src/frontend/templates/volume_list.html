@@ -12,7 +12,7 @@
     <div class="app">
         <h1>Bände</h1>
         <p class="meta">Verzeichnungseinheiten 1967–1973 im Bestand Rep. 118 laut Findmittel des Universitätsarchivs
-            (<a href="https://www.archivportal-d.de/item/NFTD57JPRHJOTMAI46F4P3EQ6NA5DKLZ" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
+            (<a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
         {% for group in volumes | groupby('group', default='') | sort(attribute='list.0.label') %}
         <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }}</h2>
         <ul class="leaflet-list leaflet-list-plain">

@@ -1,3 +1,4 @@
+import csv
 import html
 import json
 import os
@@ -20,6 +21,16 @@ PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 def load_json(name):
     with open(DATA_DIR / name, encoding="utf-8") as f:
         return json.load(f)
+
+
+def copy_groups(name="copies.tsv"):
+    """(volume label, start page) -> group id, from exemplare.tsv of find_copies.py."""
+    path = DATA_DIR / name
+    if not path.is_file():
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return {(r["band"], int(r["seiten"].split("-")[0])): int(r["gruppe"])
+                for r in csv.DictReader(f, delimiter="\t")}
 
 
 def issuer_org_ids(issuer, orgs_by_variant, known_ids):
@@ -95,6 +106,8 @@ VOLUMES = [
      "label": "Nr. 001 (1967)", "year": 1967},
     {"metadata_file": "nr002_metadata.json",
      "label": "Nr. 002 (1968)", "year": 1968},
+    {"metadata_file": "nr003_metadata.json",
+     "label": "Nr. 003 (1969)", "year": 1969},
     {"metadata_file": "nr004_metadata.json",
      "label": "Nr. 004 (1970)", "year": 1970},
 ]
@@ -163,7 +176,7 @@ def load_pages(volume_label, stem):
     return pages
 
 
-def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None):
+def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None, copies=None):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
@@ -207,6 +220,7 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None):
             title_quote=r.get("title_evidence", ""),
             date_quote=r.get("date_evidence", ""),
             received_quote=r.get("received_evidence", ""),
+            copy_group=(copies or {}).get((cfg["label"], r["start_page"])),
         )
         session.add(leaflet)
         session.flush()
@@ -295,5 +309,6 @@ def fill_database():
     orgs_by_variant = fill_organizations()
     volumes = fill_volumes()
     series_by_key = series_names(VOLUMES)
+    copies = copy_groups()
     for cfg in VOLUMES:
-        fill_volume(cfg, orgs_by_variant, volumes, series_by_key)
+        fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies)

@@ -9,12 +9,54 @@
 
 <body>
     {% include '_navigation.html' %}
-	<div class="app">
-		<h1>Mögliche Aktionen</h1>
-        <div class="action-links">
-            <a href="/leaflets">Flugblätter</a>
+    <div class="app">
+        <h1>Flugblätter aus dem Universitätsarchiv Regensburg</h1>
+        {% set span = timeline[0][0] ~ '–' ~ timeline[-1][0] if timeline else '' %}
+        <div class="intro">
+            <p>Die Flugblattsammlung (Bestand Rep.&nbsp;118) wird seit 1968 an der Universität zusammengetragen.</p>        </div>
+
+        <p class="stats-line">
+            <a href="/leaflets">{{ stats.leaflets }} Flugblätter</a> ·
+            <a href="/organizations">{{ stats.organizations }} Organisationen</a> ·
+            <a href="/volumes">{{ stats.volumes_done }} von {{ stats.volumes }} Bänden erschlossen</a>
+        </p>
+
+        {% if featured %}
+        {% from '_leaflets.html' import leaflet_cards %}
+        <div class="section-head">
+            <h2>Ausgewählte Flugblätter</h2>
+            <a href="/leaflets">Alle Flugblätter ansehen →</a>
         </div>
-	</div>
+        <div class="featured">{{ leaflet_cards(featured, fields=('date',)) }}</div>
+        {% endif %}
+
+        <div class="home-columns">
+        {% if timeline %}
+        <section>
+        <h2>Nach Jahr entdecken</h2>
+        <ul class="timeline">
+            {% for year, n in timeline %}
+            <li{% if not n %} class="row-empty"{% endif %}>
+                {% if n %}<a href="/leaflets?jahr={{ year }}">{{ year }}</a>{% else %}<span>{{ year }}</span>{% endif %}
+                <span class="timeline-bar" style="width: {{ (100 * n / max_count) | round(1) }}%"></span>
+                <span class="timeline-count">{{ n }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="meta">Verteilung der bisher erschlossenen Flugblätter. Jahr des Datums auf dem Blatt, sonst Jahr des Bandes.</p>
+        </section>
+        {% endif %}
+        <section>
+        <h2>Über den Bestand</h2>
+        <p>Die Universitätsbibliothek legte die Sammlung 1968 an; seit 2004 übernimmt das Universitätsarchiv die Jahrgänge.</p>
+        <p><a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im <span class="nowrap">Archivportal-D ↗</span></a></p>
+        <p>Von den {{ stats.volumes }} Bänden 1967–1973 sind bisher {{ stats.volumes_done }} erschlossen{% if span %}, mit Flugblättern
+            von <span class="nowrap">{{ span }}</span>{% endif %}.</p>
+        <p>Titel, Datum, Herausgeber und Unterzeichnende wurden automatisch aus den Scans erkannt. Die Angaben können Fehler enthalten.
+            Wo ein Beleg vorliegt, lässt sich die Angabe auf der Detailseite im Scan prüfen.</p>
+        </section>
+        </div>
+    </div>
 </body>
 
 </html>

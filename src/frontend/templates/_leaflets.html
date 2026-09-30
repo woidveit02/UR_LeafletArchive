@@ -41,6 +41,7 @@
     {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
     {%- endif -%}
 {%- endfor -%}
+{%- if item.copies %}{% set _ = parts.append(item.copies ~ (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare')) %}{% endif -%}
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 
@@ -68,8 +69,10 @@
     <figure class="doc-card">
         {% if item.thumb %}
         {% set n = l.end_page - l.start_page + 1 %}
-        <a class="doc-stack{% if n == 2 %} doc-stack-two{% elif n > 2 %} doc-stack-more{% endif %}" href="/leaflets/{{ l.id }}" tabindex="-1" aria-hidden="true">
-            <img src="/volumes/{{ item.vz }}/pages/{{ l.start_page }}.jpg" alt="" loading="lazy">
+        <a class="doc-thumb" href="/leaflets/{{ l.id }}" tabindex="-1" aria-hidden="true">
+            <span class="doc-sheet{% if n == 2 %} doc-sheet-two{% elif n > 2 %} doc-sheet-more{% endif %}">
+                <img src="/volumes/{{ item.vz }}/pages/{{ l.start_page }}.jpg" alt="" loading="lazy">
+            </span>
         </a>
         {% endif %}
         <figcaption>

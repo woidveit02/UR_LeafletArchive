@@ -21,7 +21,7 @@ body {
 }
 
 .topbar-inner {
-    max-width: 1400px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 12px 24px;
     display: flex;
@@ -98,7 +98,8 @@ body {
     padding: 28px 24px 48px;
 }
 
-.app-wide {
+.app-wide,
+body:has(.app-wide) .topbar-inner {
     max-width: 1400px;
 }
 
@@ -115,6 +116,7 @@ h2 {
 
 p {
     margin: 12px 0;
+    hyphens: auto;
 }
 
 a {
@@ -126,20 +128,94 @@ a:hover {
     text-decoration: underline;
 }
 
-.action-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.intro {
+    font-size: 1.1em;
 }
 
-.action-links a,
-.map-links a {
-    display: inline-block;
-    width: fit-content;
-    padding: 8px 12px;
-    background: #f8fafc;
-    border: 1px solid #dbe3ee;
-    border-radius: 8px;
+.intro p {
+    margin: 0 0 6px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.stats-line {
+    margin: 20px 0 32px;
+    color: #6b7280;
+}
+
+.timeline {
+    list-style: none;
+    padding: 0;
+}
+
+.featured .doc-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 16px 0 40px;
+}
+
+.featured .doc-title {
+    font-size: 1rem;
+    -webkit-line-clamp: 3;
+    min-height: calc(3 * 1.35em);
+}
+
+.home-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px;
+}
+
+.home-columns h2 {
+    margin-top: 0;
+}
+
+@media (max-width: 600px) {
+    .featured .doc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+.timeline li {
+    position: relative;
+    margin: 0 -8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 3.5em 1fr 2.5em;
+    align-items: center;
+    gap: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timeline li:has(a):hover {
+    background: #eef2f7;
+}
+
+.timeline a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.timeline-bar {
+    height: 12px;
+    background: #93b4f5;
+    border-radius: 2px;
+}
+
+.timeline-count {
+    color: #374151;
+    text-align: right;
+}
+
+.timeline li.row-empty span {
+    color: #9ca3af;
 }
 
 .leaflet-list {
@@ -230,7 +306,6 @@ abbr[title] {
 
 .untitled {
     color: #6b7280;
-    font-style: italic;
 }
 
 @media (max-width: 600px) {
@@ -487,47 +562,70 @@ button:hover {
     }
 }
 
+/* padding and negative margin: the hover area reaches 8 px around the card
+   without shifting the layout */
 .doc-card {
-    margin: 0;
-    border-radius: 4px;
+    margin: -8px;
+    padding: 8px;
+    border-radius: 8px;
     font-size: 0.85em;
     line-height: 1.35;
 }
 
-/* the shadow extends the background without shifting layout */
-.doc-card:hover,
-.doc-card:focus-within {
+.doc-card:hover {
     background: #eef2f7;
-    box-shadow: 0 0 0 8px #eef2f7;
 }
 
-.doc-stack {
+.doc-card:has(:focus-visible) {
+    outline: 2px solid #2563eb;
+}
+
+.doc-card :focus-visible {
+    outline: none;
+}
+
+/* room right and below for the sheets behind; the scan sits at the bottom,
+   next to the title */
+.doc-thumb {
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 3 / 4;
+    padding: 0 8px 8px 0;
+    box-sizing: border-box;
+    container-type: size;
+}
+
+/* wraps the scan itself, so the sheets follow its real size */
+.doc-sheet {
+    position: relative;
+    z-index: 0;
+}
+
+/* fits portrait and landscape scans without letterboxing */
+.doc-sheet img {
     display: block;
-    aspect-ratio: 5 / 7;
-    margin: 0 8px 8px 0;
-    border: 1px solid #d1d5db;
-    background: #f3f4f6;
+    width: auto;
+    height: auto;
+    max-width: 100cqw;
+    max-height: 100cqh;
+    border: 1px solid #cfc6b3;
 }
 
-.doc-stack-two {
-    box-shadow: 4px 4px 0 -1px #fff, 4px 4px 0 0 #d1d5db;
+/* sheets as bordered boxes behind the scan; box-shadows would render
+   1 or 2 px wide at fractional sizes */
+.doc-sheet-two::after,
+.doc-sheet-more::after,
+.doc-sheet-more::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 4px -4px -4px 4px;
+    border: 1px solid #cfc6b3;
+    background: #ece5d6;
 }
 
-.doc-stack-more {
-    box-shadow: 4px 4px 0 -1px #fff, 4px 4px 0 0 #d1d5db,
-                8px 8px 0 -1px #fff, 8px 8px 0 0 #d1d5db;
-}
-
-.doc-card:hover .doc-stack,
-.doc-card:focus-within .doc-stack {
-    border-color: #2563eb;
-}
-
-.doc-stack img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.doc-sheet-more::before {
+    inset: 8px -8px -8px 8px;
 }
 
 .doc-card figcaption {
@@ -537,9 +635,9 @@ button:hover {
 .doc-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     overflow: hidden;
-    min-height: calc(3 * 1.35em);
+    min-height: calc(2 * 1.35em);
 }
 
 .doc-issuers {

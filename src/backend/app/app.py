@@ -1,5 +1,6 @@
 import logging
 import re
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -49,6 +50,8 @@ def page_range(start, end):
 
 
 templates.env.globals['page_range'] = page_range
+templates.env.globals['FONDS_URL'] = \
+    "https://www.archivportal-d.de/item/NFTD57JPRHJOTMAI46F4P3EQ6NA5DKLZ"
 
 
 def german_date(iso):
@@ -132,10 +135,35 @@ async def not_found(request: Request, exc: StarletteHTTPException):
     raise exc
 
 
+# (volume vz, start page): stable across database rebuilds, unlike ids
+FEATURED = [(4, 101), (4, 234), (4, 263), (4, 180)]
+
+
 @app.get("/")
 def index(request: Request):
     logger.info('Opening index page')
-    return templates.TemplateResponse(request, "index.html", {})
+    featured = [session.query(Leaflet).join(Volume)
+                .filter(Volume.vz == vz, Leaflet.start_page == page).first()
+                for vz, page in FEATURED]
+    volume_years = {v.id: v.year for v in session.query(Volume)}
+    per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id])
+                       for lf in session.query(Leaflet))
+    years = [int(y) for y in per_year if y.isdigit()]
+    # every year in the range, so gaps in the collection stay visible
+    timeline = [(str(y), per_year[str(y)])
+                for y in range(min(years), max(years) + 1)] if years else []
+    stats = {
+        'leaflets': sum(per_year.values()),
+        'organizations': session.query(LeafletIssuer.org_id)
+        .filter(LeafletIssuer.org_id.isnot(None)).distinct().count(),
+        'volumes': len(volume_years),
+        'volumes_done': session.query(Leaflet.volume_id).distinct().count(),
+    }
+    return templates.TemplateResponse(
+        request, "index.html",
+        {"stats": stats, "timeline": timeline,
+         "featured": leaflet_items([lf for lf in featured if lf]),
+         "max_count": max(per_year.values(), default=1)})
 
 
 @app.get("/leaflets")
@@ -228,6 +256,15 @@ def leaflet_detail(request: Request, leaflet_id: int):
                           'blocks': p.blocks or [],
                           'width': width, 'height': height})
 
+    copies = []
+    if leaflet.copy_group:
+        rows = session.query(Leaflet, Volume).join(Volume).filter(
+            Leaflet.copy_group == leaflet.copy_group,
+            Leaflet.id != leaflet.id).order_by(Volume.vz, Leaflet.start_page)
+        copies = [{'id': lf.id, 'label': f"{vol.label}, "
+                   f"{page_range(lf.start_page, lf.end_page)}"}
+                  for lf, vol in rows]
+
     siblings = [row.id for row in session.query(Leaflet.id)
                 .filter_by(volume_id=leaflet.volume_id)
                 .order_by(Leaflet.start_page)]
@@ -268,6 +305,7 @@ def leaflet_detail(request: Request, leaflet_id: int):
                         for i in signatories],
         'page_list': page_list,
         'has_pdf': has_pdf,
+        'copies': copies,
     }
 
     return templates.TemplateResponse(
@@ -377,6 +415,8 @@ def leaflet_items(leaflets):
         Volume.id.in_({lf.volume_id for lf in leaflets}))}
     has_pdf = {vid: volume_pdf(v).is_file() for vid, v in volumes.items()}
     issuers = issuer_names([lf.id for lf in leaflets])
+    group_sizes = Counter(g for (g,) in session.query(Leaflet.copy_group)
+                          .filter(Leaflet.copy_group.isnot(None)))
     items = []
     for lf in leaflets:
         volume = volumes[lf.volume_id]
@@ -385,7 +425,9 @@ def leaflet_items(leaflets):
                       'date': date, 'date_label': date_label,
                       'year': leaflet_year(lf, volume.year),
                       'thumb': has_pdf[lf.volume_id],
-                      'issuers': issuers.get(lf.id, [])})
+                      'issuers': issuers.get(lf.id, []),
+                      'copies': group_sizes[lf.copy_group] - 1
+                      if lf.copy_group else 0})
     return items
 
 
