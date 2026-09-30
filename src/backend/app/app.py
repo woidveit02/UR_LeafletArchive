@@ -93,15 +93,24 @@ def index(request: Request):
 
 
 @app.get("/leaflets")
-def leaflet_list(request: Request):
+def leaflet_list(request: Request, org: str | None = None):
     logger.info('Opening leaflet list')
 
-    leaflets = (
+    query = (
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
-        .order_by(Volume.vz, Leaflet.start_page, Leaflet.id)
-        .all()
     )
+
+    if org:
+        matching_ids = (
+            session.query(LeafletIssuer.leaflet_id)
+            .filter(LeafletIssuer.org_id == org,
+                    LeafletIssuer.role == 'issuer')
+        )
+        query = query.filter(Leaflet.id.in_(matching_ids))
+
+    leaflets = query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all()
+
     volumes = {v.id: v.label for v in session.query(Volume).all()}
     orgs = {o.id: o.name for o in session.query(Organization).all()}
 
