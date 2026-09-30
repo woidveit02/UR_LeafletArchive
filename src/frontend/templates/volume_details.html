@@ -9,7 +9,7 @@
 
 <body>
     {% include '_navigation.html' %}
-    <div class="app">
+    <div class="app{% if volume.view == 'seiten' %} app-wide{% endif %}">
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
             <span>
@@ -27,7 +27,7 @@
             <dt>Signatur</dt>
             <dd>{{ volume.signature }}</dd>
             <dt>Stand</dt>
-            <dd>{{ volume.status }}{% if volume.n_pages %} · {{ volume.n_pages }} Seiten{% endif %}</dd>
+            <dd>{{ volume.status }}{% if volume.n_pages %} · {{ volume.n_pages }} Bandseiten <span class="meta">(fortlaufend gezählt im Digitalisat)</span>{% endif %}</dd>
             {% if volume.provenance %}
             <dt>Erschließung</dt>
             <dd>Titel, Daten und Herausgeber automatisch extrahiert <span class="meta">({{ volume.provenance }})</span></dd>
@@ -43,15 +43,36 @@
         {% endif %}
 
         {% if volume.leaflets %}
-        <h2>Flugblätter</h2>
-        <ul id="leaflet-list">
-            {% for leaflet in volume.leaflets %}
-            <li>
-                <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.display_title if leaflet.display_title else '*kein Titel*' }}</a><br>
-                <span class="meta">{% if leaflet.start_page == leaflet.end_page %}Bandseite {{ leaflet.start_page }}{% else %}Bandseiten {{ leaflet.start_page }}–{{ leaflet.end_page }}{% endif %}{% if leaflet.date_text %} · {{ leaflet.date_text }}{% endif %}</span>
-            </li>
+        {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards, title %}
+        <div class="section-head" id="flugblaetter">
+            <h2>Flugblätter</h2>
+            {% if volume.has_scans %}{{ view_switch('/volumes/' ~ volume.vz, volume.view,
+                [('liste', 'Liste'), ('kacheln', 'Kacheln'), ('bandseiten', 'Bandseiten')]) }}{% endif %}
+        </div>
+        {% if volume.view == 'kacheln' %}
+        {{ leaflet_cards(volume.leaflets) }}
+        {% elif volume.view == 'bandseiten' %}
+        <div class="page-strip">
+            {% for group in volume.page_groups %}
+            <figure class="strip-group{% if not group.leaflet %} strip-empty{% endif %}">
+                <div class="strip-pages">
+                    {% for page in group.pages %}
+                    {% set img %}<img src="/volumes/{{ volume.vz }}/pages/{{ page.no }}.jpg" alt="Bandseite {{ page.no }}" title="Bandseite {{ page.no }}"
+                       width="{{ page.width }}" height="{{ page.height }}" loading="lazy">{% endset %}
+                    {% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}#scan-{{ page.no }}">{{ img }}</a>{% else %}{{ img }}{% endif %}
+                    {% endfor %}
+                </div>
+                <figcaption>
+                    <span class="strip-title">{% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}" title="{{ group.leaflet.display_title }}">{{ title(group.leaflet) }}</a>{% else %}kein Flugblatt{% endif %}</span>
+                    {% if group.issuers %}<span class="strip-issuers" title="{{ group.issuers }}">{{ group.issuers }}</span>{% endif %}
+                    <span class="meta">{{ page_range(group.pages[0].no, group.pages[-1].no) }}</span>
+                </figcaption>
+            </figure>
             {% endfor %}
-        </ul>
+        </div>
+        {% else %}
+        {{ leaflet_list(volume.leaflets, fields=('pages', 'date', 'issuers')) }}
+        {% endif %}
         {% endif %}
     </div>
 </body>

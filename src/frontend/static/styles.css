@@ -142,25 +142,123 @@ a:hover {
     border-radius: 8px;
 }
 
-#leaflet-list,
-#organization-list,
-.volume-list {
+.leaflet-list {
     list-style: none;
     padding: 0;
     margin: 16px 0 0;
 }
 
-#leaflet-list li,
-#organization-list li,
-.volume-list li {
-    margin-bottom: 10px;
-    padding: 10px 12px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+.leaflet-list {
+    border-top: 1px solid #e5e7eb;
 }
 
-ul:not(#leaflet-list):not(#organization-list):not(.volume-list):not(.ocr-list) {
+.leaflet-list li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 8em 1fr 4.4em;
+    gap: 4px 28px;
+    align-items: baseline;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.leaflet-list li:hover,
+.leaflet-list li:focus-within {
+    background: #f1f5f9;
+}
+
+.row-date {
+    color: #374151;
+    font-size: 0.9em;
+    font-variant-numeric: tabular-nums;
+}
+
+.row-date small {
+    display: block;
+    color: #6b7280;
+    font-size: 0.85em;
+}
+
+.row-main {
+    grid-column: 2;
+    min-width: 0;
+}
+
+.row-main .meta {
+    display: block;
+}
+
+abbr[title] {
+    text-decoration: none;
+    cursor: help;
+}
+
+/* above the row link, so the tooltip still shows */
+.row-main abbr {
+    position: relative;
+    z-index: 1;
+}
+
+/* the title link covers the whole row */
+.row-title::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.row-empty .row-title,
+.row-empty .row-count {
+    color: #6b7280;
+}
+
+.leaflet-list-plain li {
+    grid-template-columns: 1fr 6.8em;
+}
+
+.leaflet-list-plain .row-main {
+    grid-column: 1;
+}
+
+.row-count {
+    grid-column: -2;
+    color: #374151;
+    font-size: 0.9em;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.untitled {
+    color: #6b7280;
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .leaflet-list li {
+        grid-template-columns: 1fr 4.4em;
+    }
+
+    .leaflet-list-plain li {
+        grid-template-columns: 1fr 6.8em;
+    }
+
+    .row-date {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .row-main {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .row-count {
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+
+ul:not(.leaflet-list):not(.ocr-list) {
     margin: 16px 0;
     padding: 16px 20px;
     background: #f8fafc;
@@ -185,7 +283,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid #cbd5e1;
@@ -195,7 +294,8 @@ input[type="password"] {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
@@ -216,6 +316,27 @@ button:hover {
     background: #1d4ed8;
 }
 
+.filter {
+    max-width: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.filter label {
+    font-weight: 400;
+    color: #374151;
+}
+
+.filter select {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
 .unresolved {
     color: #6b7280;
     font-size: 0.9em;
@@ -224,6 +345,211 @@ button:hover {
 .meta {
     color: #6b7280;
     font-size: 0.9em;
+}
+
+.section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* keep the anchor clear of the sticky top bar */
+.section-head[id] {
+    scroll-margin-top: 90px;
+}
+
+.section-head h2 {
+    margin: 0;
+}
+
+.view-switch {
+    display: flex;
+    gap: 4px;
+    font-size: 0.9em;
+}
+
+.view-switch svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.view-switch a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+    padding: 5px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #374151;
+}
+
+.view-switch a[aria-current="page"] {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+}
+
+.page-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.strip-group {
+    box-sizing: border-box;
+    width: fit-content;
+    min-width: 130px;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f3f4f6;
+}
+
+.strip-group:hover {
+    border-color: #93c5fd;
+}
+
+.strip-empty {
+    border-style: dashed;
+    background: none;
+}
+
+.strip-pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.strip-pages img {
+    display: block;
+    height: 150px;
+    width: auto;
+    background: #e5e7eb;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
+}
+
+.strip-pages a:hover img {
+    outline: 2px solid #2563eb;
+}
+
+.strip-empty .strip-pages img {
+    opacity: 0.45;
+}
+
+.doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 24px 20px;
+    margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+    .doc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 12px;
+    }
+}
+
+.doc-card {
+    margin: 0;
+    border-radius: 4px;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+/* the shadow extends the background without shifting layout */
+.doc-card:hover,
+.doc-card:focus-within {
+    background: #eef2f7;
+    box-shadow: 0 0 0 8px #eef2f7;
+}
+
+.doc-stack {
+    display: block;
+    aspect-ratio: 5 / 7;
+    margin: 0 8px 8px 0;
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+}
+
+.doc-stack-two {
+    box-shadow: 4px 4px 0 -1px #fff, 4px 4px 0 0 #d1d5db;
+}
+
+.doc-stack-more {
+    box-shadow: 4px 4px 0 -1px #fff, 4px 4px 0 0 #d1d5db,
+                8px 8px 0 -1px #fff, 8px 8px 0 0 #d1d5db;
+}
+
+.doc-card:hover .doc-stack,
+.doc-card:focus-within .doc-stack {
+    border-color: #2563eb;
+}
+
+.doc-stack img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.doc-card figcaption {
+    margin-top: 6px;
+}
+
+.doc-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    min-height: calc(3 * 1.35em);
+}
+
+.doc-issuers {
+    min-height: 1.35em;
+}
+
+.doc-issuers,
+.strip-issuers {
+    display: block;
+    overflow: hidden;
+    color: #374151;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* width 0 + min-width 100%: the caption follows the images' width */
+.strip-group figcaption {
+    width: 0;
+    min-width: 100%;
+    margin-top: 6px;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+.strip-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .strip-pages img {
+        height: 110px;
+    }
 }
 
 .media-gallery {

@@ -142,7 +142,8 @@
           ],
           "surface": "Allgemeiner Studentenausschuß der Universität",
           "role": "issuer",
-          "org_ids": [
+          "org_ids": [],
+          "_other_institution": [
             "asta"
           ]
         }

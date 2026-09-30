@@ -1,41 +1,33 @@
 {
   "source_pdf": "0118_0004.pdf",
-  "created": "2026-09-30T01:10:40.792454",
+  "created": "2026-09-30T17:24:14.886667",
   "model": "anthropic/claude-sonnet-4.5",
   "backend": "openrouter",
-  "tag": "claude-r9",
+  "tag": "claude-r11a2",
   "prompt_version": "v2",
   "batch_size": 20,
   "grounding": {
-    "checked": 195,
-    "flagged": 16,
-    "rate_percent": 91.8
+    "checked": 194,
+    "flagged": 21,
+    "rate_percent": 89.2
   },
   "organizations": "organizations.draft.json",
-  "segmentation_hints": [
-    {
-      "segment": 164,
-      "page": 251,
-      "relation": "vorige Seite",
-      "continuation_mark": false
-    }
-  ],
+  "segmentation_hints": [],
   "segments": [
     {
       "id": 1,
-      "title": "Ausstellung des Malers und Graphikers Otto Baumann in der Universität Regensburg vom 25.5. bis 27.5.1970",
+      "title": "Ausstellung des Malers und Graphikers Otto Baumann in der Universität Regensburg",
       "date": "",
       "start_page": 1,
       "end_page": 2,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "AUSSTELLUNG DES MALERS UND GRAPHIKERS\nOTTO BAUMANN\nIN DER UNIVERSITÄT REGENSBURG\nvom 25.5. bis 27.5.1970",
+      "title_evidence": "AUSSTELLUNG DES MALERS UND GRAPHIKERS\nOTTO BAUMANN\nIN DER UNIVERSITÄT REGENSBURG",
       "title_blocks": [
         "1-3",
         "1-4",
-        "1-5",
-        "1-6"
+        "1-5"
       ],
       "title_type": "original",
       "series": "",
@@ -75,7 +67,9 @@
             "3-18"
           ],
           "surface": "Aar",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -85,6 +79,7 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.75,
+      "_retried_signatory": true,
       "_retried_issuer": [
         "Verantwortlich: Aar"
       ],
@@ -114,6 +109,8 @@
           ],
           "surface": "Aktion Demokratische Fachschaften",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "adf"
           ]
@@ -124,7 +121,9 @@
             "4-13"
           ],
           "surface": "E.Hartenstein",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die ADF"
         },
         {
           "evidence": "Für die ADF: E.Hartenstein, A.Schild, H.Westphal, D.Klar, B.Harms-Ziegler",
@@ -132,7 +131,9 @@
             "4-13"
           ],
           "surface": "A.Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die ADF"
         },
         {
           "evidence": "Für die ADF: E.Hartenstein, A.Schild, H.Westphal, D.Klar, B.Harms-Ziegler",
@@ -140,7 +141,9 @@
             "4-13"
           ],
           "surface": "H.Westphal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die ADF"
         },
         {
           "evidence": "Für die ADF: E.Hartenstein, A.Schild, H.Westphal, D.Klar, B.Harms-Ziegler",
@@ -148,7 +151,9 @@
             "4-13"
           ],
           "surface": "D.Klar",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die ADF"
         },
         {
           "evidence": "Für die ADF: E.Hartenstein, A.Schild, H.Westphal, D.Klar, B.Harms-Ziegler",
@@ -156,7 +161,9 @@
             "4-13"
           ],
           "surface": "B.Harms-Ziegler",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die ADF"
         }
       ],
       "date_evidence": "",
@@ -165,7 +172,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -192,6 +199,8 @@
           ],
           "surface": "Aktion Demokratischer Fachschaften",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "fachschaften"
           ]
@@ -202,7 +211,9 @@
             "5-17"
           ],
           "surface": "B. Altehenger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "FÜR DIE A D F"
         },
         {
           "evidence": "FÜR DIE A D F : B. Altehenger, B. Harms-Ziegler, A. Schild, H. Klar",
@@ -210,7 +221,9 @@
             "5-17"
           ],
           "surface": "B. Harms-Ziegler",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "FÜR DIE A D F"
         },
         {
           "evidence": "FÜR DIE A D F : B. Altehenger, B. Harms-Ziegler, A. Schild, H. Klar",
@@ -218,7 +231,9 @@
             "5-17"
           ],
           "surface": "A. Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "FÜR DIE A D F"
         },
         {
           "evidence": "FÜR DIE A D F : B. Altehenger, B. Harms-Ziegler, A. Schild, H. Klar",
@@ -226,7 +241,9 @@
             "5-17"
           ],
           "surface": "H. Klar",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "FÜR DIE A D F"
         }
       ],
       "date_evidence": "Regensburg, den 12.11.70",
@@ -264,6 +281,8 @@
           ],
           "surface": "Aktion Demokratischer Fachschaften",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "fachschaften"
           ]
@@ -274,7 +293,9 @@
             "6-13"
           ],
           "surface": "E. Hartenstein",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: E. Hartenstein, A. Schild, R. Wessely, H. Ihlefeld,\nP. Rosemeier",
@@ -282,7 +303,9 @@
             "6-13"
           ],
           "surface": "A. Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: E. Hartenstein, A. Schild, R. Wessely, H. Ihlefeld,\nP. Rosemeier",
@@ -290,7 +313,9 @@
             "6-13"
           ],
           "surface": "R. Wessely",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: E. Hartenstein, A. Schild, R. Wessely, H. Ihlefeld,\nP. Rosemeier",
@@ -298,7 +323,9 @@
             "6-13"
           ],
           "surface": "H. Ihlefeld",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: E. Hartenstein, A. Schild, R. Wessely, H. Ihlefeld,\nP. Rosemeier",
@@ -306,7 +333,9 @@
             "6-13"
           ],
           "surface": "P. Rosemeier",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -315,7 +344,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -342,6 +371,8 @@
           ],
           "surface": "Aktion demokratische Fachschaften",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "adf"
           ]
@@ -352,7 +383,9 @@
             "7-13"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
         },
         {
           "evidence": "Verantwortlich für den Inhalt: ADF Alfons Schild, Elfi Hartenstein,\nBernd Altehender",
@@ -360,7 +393,9 @@
             "7-13"
           ],
           "surface": "Elfi Hartenstein",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
         },
         {
           "evidence": "Verantwortlich für den Inhalt: ADF Alfons Schild, Elfi Hartenstein,\nBernd Altehender",
@@ -368,7 +403,9 @@
             "7-13"
           ],
           "surface": "Bernd Altehender",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
         }
       ],
       "date_evidence": "Regensburg, den 9.11.1970",
@@ -406,6 +443,8 @@
           ],
           "surface": "Aktion Demokratischer Fachschaften",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "fachschaften"
           ]
@@ -416,7 +455,9 @@
             "8-9"
           ],
           "surface": "Beate Harms-Ziegler",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die Aktionsgemeinschaft Demokratischer Fachschaften"
         },
         {
           "evidence": "Für die Aktionsgemeinschaft Demokratischer Fachschaften:\nBeate Harms-Ziegler, Alfons Schild, Hannelore Klar",
@@ -424,7 +465,9 @@
             "8-9"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die Aktionsgemeinschaft Demokratischer Fachschaften"
         },
         {
           "evidence": "Für die Aktionsgemeinschaft Demokratischer Fachschaften:\nBeate Harms-Ziegler, Alfons Schild, Hannelore Klar",
@@ -432,7 +475,9 @@
             "8-9"
           ],
           "surface": "Hannelore Klar",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die Aktionsgemeinschaft Demokratischer Fachschaften"
         }
       ],
       "date_evidence": "",
@@ -468,6 +513,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -492,22 +539,32 @@
     },
     {
       "id": 9,
-      "title": "Franz I. von Mayern. Patriarch in Regensburg",
+      "title": "Franz I. von Mayern",
       "date": "",
       "start_page": 10,
       "end_page": 10,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "Franz I. von Mayern\nPatriarch in Regensburg",
+      "title_evidence": "Franz I. von Mayern",
       "title_blocks": [
-        "10-4",
-        "10-5"
+        "10-4"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
+        {
+          "evidence": "Universität Regensburg\nFACHBEREICH RECHTSWISSENSCHAFT",
+          "blocks": [
+            "10-1"
+          ],
+          "surface": "Fachbereich Rechtswissenschaft",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
         {
           "evidence": "Studentische Vertreter\nim Fachbereichsrat Recht",
           "blocks": [
@@ -515,10 +572,12 @@
           ],
           "surface": "Studentische Vertreter im Fachbereichsrat Recht",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
-      "date_evidence": "2, 11. 11. 70",
+      "date_evidence": "8400 Regensburg 2, 11. 11. 70",
       "date_blocks": [
         "10-2"
       ],
@@ -531,40 +590,40 @@
     },
     {
       "id": 10,
-      "title": "Programm für den \"Tag der Studienreform\" des Fachbereichs Rechtswissenschaft am Mittwoch, 22.7. 1970 10 c.t. in H07",
+      "title": "Programm",
       "date": "",
       "start_page": 11,
       "end_page": 11,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "P R O G R A M M\nfür den \" Tag der Studienreform \"\ndes Fachbereichs Rechtswissenschaft am Mittwoch, 22.7. 1970 10 c.t. in H07",
+      "title_evidence": "P R O G R A M M",
       "title_blocks": [
-        "11-6",
-        "11-7",
-        "11-8"
+        "11-6"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
         {
-          "evidence": "gez. Der Fachbereichsrat",
+          "evidence": "D E R F A C H B E R E I C H S R A T L Ä D T H I E R Z U H E R Z U -\nL I C H E I N !",
           "blocks": [
-            "11-24"
+            "11-23"
           ],
           "surface": "Der Fachbereichsrat",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
-      "date_evidence": "8400 Regensburg 2, 15. 7. 1970",
+      "date_evidence": "am Mittwoch, 22.7. 1970",
       "date_blocks": [
-        "11-2"
+        "11-8"
       ],
-      "date_text": "15.7.1970",
-      "date_iso": "1970-07-15",
-      "date_type": "issued",
+      "date_text": "22.7.1970",
+      "date_iso": "1970-07-22",
+      "date_type": "event",
       "doc_type": "einladung",
       "confidence": 0.9,
       "_grounding": []
@@ -587,12 +646,15 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "gez. Fachschaft - AK Kritische Juristen",
+          "evidence": "FACHBEREICH RECHTSWISSENSCHAFT",
           "blocks": [
-            "12-16"
+            "12-2",
+            "12-3"
           ],
-          "surface": "Fachschaft",
+          "surface": "Fachbereich Rechtswissenschaft",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -600,8 +662,10 @@
           "blocks": [
             "12-16"
           ],
-          "surface": "AK Kritische Juristen",
+          "surface": "Fachschaft - AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "gez.",
           "org_ids": [
             "ak"
           ]
@@ -616,32 +680,36 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.85,
-      "_grounding": []
+      "_grounding": [
+        "issuer 'Fachschaft - AK Kritische Juristen': Stichwort bei Organisation"
+      ]
     },
     {
       "id": 12,
-      "title": "Aktionsprogramm der Liste 4",
+      "title": "Blatt 2 zur Fachbereichswahl",
       "date": "",
       "start_page": 13,
       "end_page": 13,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "A K T I O N S P R O G R A M M der L I S T E 4",
+      "title_evidence": "Blatt 2 zur Fachbereichswahl",
       "title_blocks": [
-        "13-6"
+        "13-5"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
         {
-          "evidence": "L I S T E 4 - Aufsässige Interessengemeinschaft unabhängiger\nkritischer liberaler und abgeklärter Juristen\nzwecks aufmüpfiger Fachbereichspolitik",
+          "evidence": "L I S T E 4 - L I S T E 4 - L I S T E 4 -12043",
           "blocks": [
-            "13-22"
+            "13-3"
           ],
-          "surface": "Aufsässige Interessengemeinschaft unabhängiger kritischer liberaler und abgeklärter Juristen zwecks aufmüpfiger Fachbereichspolitik",
+          "surface": "Liste 4",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -650,7 +718,9 @@
             "13-23"
           ],
           "surface": "FReindl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "FReindl - R.Birnstiel - R.Schmid - F.Bergenthal",
@@ -658,7 +728,9 @@
             "13-23"
           ],
           "surface": "R.Birnstiel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "FReindl - R.Birnstiel - R.Schmid - F.Bergenthal",
@@ -666,7 +738,9 @@
             "13-23"
           ],
           "surface": "R.Schmid",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "FReindl - R.Birnstiel - R.Schmid - F.Bergenthal",
@@ -674,7 +748,9 @@
             "13-23"
           ],
           "surface": "F.Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -683,7 +759,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -710,6 +786,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -720,7 +798,9 @@
             "15-13"
           ],
           "surface": "A. SCHILD",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
         },
         {
           "evidence": "Verantwortl.: A. SCHILD, J. MÜNDER, W. HIEDL, A. BÜSCHEL, J. SCHWAB",
@@ -728,7 +808,9 @@
             "15-13"
           ],
           "surface": "J. MÜNDER",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
         },
         {
           "evidence": "Verantwortl.: A. SCHILD, J. MÜNDER, W. HIEDL, A. BÜSCHEL, J. SCHWAB",
@@ -736,7 +818,9 @@
             "15-13"
           ],
           "surface": "W. HIEDL",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
         },
         {
           "evidence": "Verantwortl.: A. SCHILD, J. MÜNDER, W. HIEDL, A. BÜSCHEL, J. SCHWAB",
@@ -744,7 +828,9 @@
             "15-13"
           ],
           "surface": "A. BÜSCHEL",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
         },
         {
           "evidence": "Verantwortl.: A. SCHILD, J. MÜNDER, W. HIEDL, A. BÜSCHEL, J. SCHWAB",
@@ -752,7 +838,9 @@
             "15-13"
           ],
           "surface": "J. SCHWAB",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
         }
       ],
       "date_evidence": "",
@@ -761,7 +849,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -788,6 +876,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -798,7 +888,9 @@
             "17-8"
           ],
           "surface": "Willi Hiedl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -812,18 +904,18 @@
     },
     {
       "id": 15,
-      "title": "Von der Vollversammlung des Fachbereichs WiWi erhielten die ...",
+      "title": "Von der Vollversammlung des Fachbereichs WiWi erhielten die Kandidaten der Liste I den Auftrag, den Punkt II (Politisierung der Studenten) ihrer programmatischen Erklärung zu präzisieren.",
       "date": "",
       "start_page": 18,
       "end_page": 19,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Von der Vollversammlung des Fachbereichs WiWi erhielten die Kandidaten der Liste I den Auftrag, den Punkt II (Politisierung der Studenten) ihrer programmatischen Erklärung zu präzisieren.",
       "title_blocks": [
         "18-3"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -833,7 +925,9 @@
             "19-9"
           ],
           "surface": "Fischer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Liste I"
         },
         {
           "evidence": "Liste I            Fischer, Munde, Renkl, Widmann",
@@ -841,7 +935,9 @@
             "19-9"
           ],
           "surface": "Munde",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Liste I"
         },
         {
           "evidence": "Liste I            Fischer, Munde, Renkl, Widmann",
@@ -849,7 +945,9 @@
             "19-9"
           ],
           "surface": "Renkl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Liste I"
         },
         {
           "evidence": "Liste I            Fischer, Munde, Renkl, Widmann",
@@ -857,7 +955,9 @@
             "19-9"
           ],
           "surface": "Widmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Liste I"
         }
       ],
       "date_evidence": "",
@@ -866,7 +966,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.7,
+      "confidence": 0.75,
       "_grounding": []
     },
     {
@@ -893,6 +993,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -903,7 +1005,9 @@
             "21-9"
           ],
           "surface": "Bernd Altehenger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -945,6 +1049,8 @@
           ],
           "surface": "Fachbereich Rechtswissenschaft",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -953,7 +1059,9 @@
             "22-17"
           ],
           "surface": "A. Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "Fachschaftssprecher",
+          "marker": "gez."
         }
       ],
       "date_evidence": "",
@@ -961,8 +1069,8 @@
       "date_text": "",
       "date_iso": "",
       "date_type": "undated",
-      "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "doc_type": "einladung",
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -989,6 +1097,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -1000,19 +1110,19 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
       "id": 19,
-      "title": "Ew Schpeckdabilitet, liber Här Kohlegga! Augh ich bin in ...",
+      "title": "Aus einer unergründlichen Quelle erhielt ich eine Fotokopie folgenden Briefes, den ein durch seine Schreibfreudig- bekannter Professor unseres Fachbereiches an einen Kollegen gerichtet hat. ...",
       "date": "",
       "start_page": 24,
       "end_page": 24,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Aus einer unergründlichen Quelle erhielt ich eine Fotokopie folgenden Briefes, den ein durch seine Schreibfreudig- bekannter Professor unseres Fachbereiches an einen Kollegen gerichtet hat.",
       "title_blocks": [
         "24-3"
       ],
@@ -1021,12 +1131,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Der studentische Fachbereichs Sprecher",
+          "evidence": "FACHBEREICH RECHT ... FACHBEREICH RECHT ... FACHBEREICH RECHT ... FACHBEREICH RECHT ... FACHBEREICH RECHT ...",
           "blocks": [
-            "24-2"
+            "24-1"
           ],
-          "surface": "Der studentische Fachbereichs Sprecher",
+          "surface": "Fachbereich Recht",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1035,51 +1147,9 @@
             "24-15"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
-        }
-      ],
-      "date_evidence": "",
-      "date_blocks": [],
-      "date_text": "",
-      "date_iso": "",
-      "date_type": "undated",
-      "doc_type": "flugblatt",
-      "confidence": 0.7,
-      "_grounding": []
-    },
-    {
-      "id": 20,
-      "title": "I. Bericht über die FBratssitzung vom 21.1.1970: 1. Brief des ...",
-      "date": "",
-      "start_page": 25,
-      "end_page": 25,
-      "confirmed": false,
-      "no_content": false,
-      "note": "",
-      "title_evidence": "",
-      "title_blocks": [
-        "25-3"
-      ],
-      "title_type": "incipit",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "Der studentische Fachbereichssprecher",
-          "blocks": [
-            "25-2"
-          ],
-          "surface": "Der studentische Fachbereichssprecher",
-          "role": "issuer",
-          "org_ids": []
-        },
-        {
-          "evidence": "gez. Alfons Schild\n(studentischer Fachbereichssprecher)",
-          "blocks": [
-            "25-13"
-          ],
-          "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "stud. Fachbereichs Sprecher",
+          "marker": "Für den Inhalt verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -1089,6 +1159,54 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "I. Bericht über die FBratssitzung vom 21.1.1970:",
+      "date": "",
+      "start_page": 25,
+      "end_page": 25,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "I. Bericht über die FBratssitzung vom 21.1.1970:",
+      "title_blocks": [
+        "25-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHBEREICH RECHT .... FACHBEREICH RECHT .... FACHBEREICH RECHT ...",
+          "blocks": [
+            "25-1"
+          ],
+          "surface": "Fachbereich Recht",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "gez. Alfons Schild\n(studentischer Fachbereichssprecher)",
+          "blocks": [
+            "25-13"
+          ],
+          "surface": "Alfons Schild",
+          "role": "signatory",
+          "function": "studentischer Fachbereichssprecher",
+          "marker": "gez."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -1117,6 +1235,8 @@
           ],
           "surface": "AK Kritische Juristen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "ak"
           ]
@@ -1155,6 +1275,8 @@
           ],
           "surface": "Pressestelle der BEGEFOGREGETZ",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "begefogregetz"
           ]
@@ -1173,18 +1295,18 @@
     },
     {
       "id": 23,
-      "title": "I. Bericht über die FBratssitzung vom 21.1.1970: 1. Brief des ...",
+      "title": "I. Bericht über die FBratssitzung vom 21.1.1970:",
       "date": "",
       "start_page": 28,
       "end_page": 28,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "I. Bericht über die FBratssitzung vom 21.1.1970:",
       "title_blocks": [
         "28-3"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -1194,7 +1316,9 @@
             "28-13"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "studentischer Fachbereichs Sprecher",
+          "marker": "gez."
         }
       ],
       "date_evidence": "",
@@ -1203,19 +1327,19 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.7,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
       "id": 24,
-      "title": "Aus einer unergründlichen Quelle erhielt ich eine Fotokopie folgenden Briefes, den ...",
+      "title": "Aus einer unergründlichen Quelle erhielt ich eine Fotokopie folgenden Briefes, den ein durch seine Schreibfreudig- bekannter Professor ...",
       "date": "",
       "start_page": 29,
       "end_page": 29,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Aus einer unergründlichen Quelle erhielt ich eine Fotokopie folgenden Briefes, den ein durch seine Schreibfreudig- bekannter Professor unseres Fachbereiches an einen Kollegen gerichtet hat. Trotz erheblicher Zweifel an der Echtheit und der Richtigkeit des Inhaltes des Briefes (gezielte Falschinformation ?) möchte ich Ihnen diesen Brief dennoch bekanntgeben:",
       "title_blocks": [
         "29-7"
       ],
@@ -1229,7 +1353,9 @@
             "29-19"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "stud. Fachbereichs Sprecher",
+          "marker": ""
         }
       ],
       "date_evidence": "28. 1. 70",
@@ -1240,7 +1366,7 @@
       "date_iso": "1970-01-28",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.7,
       "_grounding": []
     },
     {
@@ -1267,17 +1393,21 @@
           ],
           "surface": "Aktion Ostern '70",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "aktion_ostern_70"
           ]
         },
         {
-          "evidence": "Herausgeber: Aktion Ostern '70.\nVerantwortlich: Erich Eisner, 8 München 27, Buschingstraße 15.",
+          "evidence": "Verantwortlich: Erich Eisner, 8 München 27, Buschingstraße 15.",
           "blocks": [
             "35-3"
           ],
           "surface": "Erich Eisner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "16.-21.MÄRZ",
@@ -1315,6 +1445,8 @@
           ],
           "surface": "Aktionskomitee Roter Punkt",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "aktionskomitee_roter_punkt"
           ]
@@ -1328,7 +1460,7 @@
       "date_iso": "1970-01-30",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -1340,7 +1472,7 @@
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Als einzige studentische Gruppe an dieser Alma mater wird die",
       "title_blocks": [
         "37-3"
       ],
@@ -1355,7 +1487,49 @@
           ],
           "surface": "als",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
+        },
+        {
+          "evidence": "a l s Pöllath, Bettermann, Schalitzky, Wolff a l s a l s a l s",
+          "blocks": [
+            "37-12"
+          ],
+          "surface": "Pöllath",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "a l s Pöllath, Bettermann, Schalitzky, Wolff a l s a l s a l s",
+          "blocks": [
+            "37-12"
+          ],
+          "surface": "Bettermann",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "a l s Pöllath, Bettermann, Schalitzky, Wolff a l s a l s a l s",
+          "blocks": [
+            "37-12"
+          ],
+          "surface": "Schalitzky",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "a l s Pöllath, Bettermann, Schalitzky, Wolff a l s a l s a l s",
+          "blocks": [
+            "37-12"
+          ],
+          "surface": "Wolff",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -1385,13 +1559,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantwortlich: a l s\nBettermann-Lohmann-Pöllath-Schmidt",
+          "evidence": "Aktionsgemeinschaft\nliberaler Studenten\na l s",
           "blocks": [
-            "38-10",
-            "38-11"
+            "38-8"
           ],
-          "surface": "als",
+          "surface": "Aktionsgemeinschaft liberaler Studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1401,7 +1576,9 @@
             "38-11"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: a l s\nBettermann-Lohmann-Pöllath-Schmidt",
@@ -1410,7 +1587,9 @@
             "38-11"
           ],
           "surface": "Lohmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: a l s\nBettermann-Lohmann-Pöllath-Schmidt",
@@ -1419,7 +1598,9 @@
             "38-11"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: a l s\nBettermann-Lohmann-Pöllath-Schmidt",
@@ -1428,7 +1609,9 @@
             "38-11"
           ],
           "surface": "Schmidt",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -1442,16 +1625,16 @@
     },
     {
       "id": 29,
-      "title": "Die a l s heißt Aktionsgemeinschaft liberaler Studenten. Liberal, für ...",
+      "title": "Die als ...",
       "date": "",
       "start_page": 39,
       "end_page": 39,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Die a l s",
       "title_blocks": [
-        "39-3"
+        "39-2"
       ],
       "title_type": "incipit",
       "series": "",
@@ -1464,6 +1647,8 @@
           ],
           "surface": "als",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1472,7 +1657,9 @@
             "39-11"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -1486,14 +1673,14 @@
     },
     {
       "id": 30,
-      "title": "Daß in der BRD und an ihren Universitäten vieles beschissen ...",
+      "title": "Daß in der BRD und an ihren Universitäten vieles beschissen ist, weiß jeder. Die Frage ist vielmehr, ob ...",
       "date": "",
       "start_page": 40,
       "end_page": 40,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Daß in der BRD und an ihren Universitäten vieles beschissen ist, weiß jeder. Die Frage ist vielmehr, ob das ganze System deswegen von Anhängern einer unklar-fragwürdigen Ideologie umgekrempelt werden muß; einer Ideologie, deren praktische Auswirkungen auf der ganzen Welt bisher lediglich unfreiere Zustände geschaffen haben, als in den westlichen Demokratien gemeinhin üblich.",
       "title_blocks": [
         "40-3"
       ],
@@ -1509,6 +1696,8 @@
           ],
           "surface": "Aktionsgemeinschaft liberaler Studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1518,7 +1707,9 @@
             "40-9"
           ],
           "surface": "Amann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich für die Aktionsgemeinschaft liberaler Studenten\nAmann - Müllner",
@@ -1527,7 +1718,9 @@
             "40-9"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -1536,75 +1729,93 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.75,
       "_grounding": []
     },
     {
       "id": 31,
-      "title": "Zum Wochenende empfehlen wir Ihnen: Samstag, 7.11.70, 20.30 Uhr, Neuhaus-Saal ...",
+      "title": "Zum Wochenende empfehlen wir Ihnen: ...",
       "date": "",
       "start_page": 41,
       "end_page": 41,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Zum Wochenende empfehlen wir Ihnen:",
       "title_blocks": [
         "41-2"
       ],
       "title_type": "incipit",
-      "series": "",
+      "series": "als-info",
       "issue": "",
       "issuers": [
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath\naktionsgemeinschaft\nliberaler\nstudenten",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath\naktionsgemeinschaft\nliberaler\nstudenten",
           "blocks": [
+            "41-14",
             "41-15",
             "41-16"
           ],
           "surface": "aktionsgemeinschaft liberaler studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
           "blocks": [
+            "41-14",
             "41-15"
           ],
           "surface": "Meyer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
           "blocks": [
+            "41-14",
             "41-15"
           ],
           "surface": "Hilpert",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
           "blocks": [
+            "41-14",
             "41-15"
           ],
           "surface": "Pfister",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
           "blocks": [
+            "41-14",
             "41-15"
           ],
           "surface": "Vogel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Meyer - Hilpert - Pfister - Vogel - Pöllath",
+          "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
           "blocks": [
+            "41-14",
             "41-15"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -1613,7 +1824,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "einladung",
-      "confidence": 0.75,
+      "confidence": 0.7,
       "received_date": "1970-11-16",
       "received_evidence": "16. NOV. 1970",
       "received_blocks": [
@@ -1646,6 +1857,8 @@
           ],
           "surface": "als",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1654,7 +1867,9 @@
             "42-13"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die a l s : Pöllath - Müllner - Bettermann - Hof - Gensel u.a.",
@@ -1662,7 +1877,9 @@
             "42-13"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die a l s : Pöllath - Müllner - Bettermann - Hof - Gensel u.a.",
@@ -1670,7 +1887,9 @@
             "42-13"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die a l s : Pöllath - Müllner - Bettermann - Hof - Gensel u.a.",
@@ -1678,7 +1897,9 @@
             "42-13"
           ],
           "surface": "Hof",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die a l s : Pöllath - Müllner - Bettermann - Hof - Gensel u.a.",
@@ -1686,7 +1907,9 @@
             "42-13"
           ],
           "surface": "Gensel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -1700,18 +1923,18 @@
     },
     {
       "id": 33,
-      "title": "Wir verweisen auf unsere Tätigkeit im vergangenen Semester und verzichten ...",
+      "title": "Wir verweisen auf unsere Tätigkeit im vergangenen Semester und verzichten darauf, uns jetzt plötzlich an der Flugblatt- Materialschlacht zu beteiligen.",
       "date": "",
       "start_page": 43,
       "end_page": 43,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Wir verweisen auf unsere\nTätigkeit im vergangenen\nSemester und verzichten\ndarauf,\nuns jetzt plötzlich an der\nFlugblatt-\nMaterialschlacht\nzu beteiligen.",
       "title_blocks": [
         "43-4"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -1721,7 +1944,9 @@
             "43-6"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "P ö l l a t h\nM ü l l n e r\nBettermann\nH o f\nu.a.",
@@ -1729,7 +1954,9 @@
             "43-6"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "P ö l l a t h\nM ü l l n e r\nBettermann\nH o f\nu.a.",
@@ -1737,7 +1964,9 @@
             "43-6"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "P ö l l a t h\nM ü l l n e r\nBettermann\nH o f\nu.a.",
@@ -1745,7 +1974,9 @@
             "43-6"
           ],
           "surface": "Hof",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -1754,14 +1985,18 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.7,
+      "confidence": 0.75,
       "received_date": "1978-06-22",
       "received_evidence": "22. JUNI 1978",
       "received_blocks": [
         "43-11"
       ],
       "received_year_uncertain": true,
-      "_grounding": []
+      "_grounding": [
+        "issuer 'Pöllath': Name 'Pöllath' nicht im Beleg",
+        "issuer 'Müllner': Name 'Müllner' nicht im Beleg",
+        "issuer 'Hof': Name 'Hof' nicht im Beleg"
+      ]
     },
     {
       "id": 34,
@@ -1786,7 +2021,9 @@
             "44-17"
           ],
           "surface": "J. Randzio",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "i. A."
         }
       ],
       "date_evidence": "",
@@ -1800,18 +2037,19 @@
     },
     {
       "id": 35,
-      "title": "Zum Mittagessen: Über die Lage unserer Studentenvertretung Ging es uns ...",
+      "title": "Zum Mittagessen: Über die Lage unserer Studentenvertretung",
       "date": "",
       "start_page": 45,
       "end_page": 45,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Zum Mittagessen:\nÜber die Lage unserer Studentenvertretung",
       "title_blocks": [
-        "45-3"
+        "45-3",
+        "45-4"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -1822,6 +2060,8 @@
           ],
           "surface": "Aktionsgemeinschaft liberaler Studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -1830,7 +2070,9 @@
             "45-16"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich:\nBettermann - Müllner - Pöllath",
@@ -1838,7 +2080,9 @@
             "45-16"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich:\nBettermann - Müllner - Pöllath",
@@ -1846,7 +2090,9 @@
             "45-16"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -1855,7 +2101,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "confidence": 0.8,
       "received_date": "1970-11-09",
       "received_evidence": "- 9. NOV. 1970",
       "received_blocks": [
@@ -1866,18 +2112,19 @@
     },
     {
       "id": 36,
-      "title": "Sind Sie ein Gemeinschaftsmuffel? (muffelus socialis) Liebe Kommilitonin! Lieber Kommilitone! ...",
+      "title": "Sind Sie ein Gemeinschaftsmuffel? (muffelus socialis)",
       "date": "",
       "start_page": 46,
       "end_page": 46,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Sind Sie ein\nGEMEINSCHAFTSMUFFEL?\n(muffelus socialis)",
       "title_blocks": [
-        "46-3"
+        "46-3",
+        "46-4"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -1888,6 +2135,8 @@
           ],
           "surface": "Aktionskreis sozialer Dienst",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asd"
           ]
@@ -1906,19 +2155,19 @@
     },
     {
       "id": 37,
-      "title": "Warum wir den neuen Kultusminister Maier bekämpfen müssen Einheitsfront zwischen ...",
+      "title": "AStA Info",
       "date": "",
       "start_page": 47,
       "end_page": 47,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "ASTA INFO",
       "title_blocks": [
-        "47-5"
+        "47-3"
       ],
-      "title_type": "incipit",
-      "series": "ASTA INFO",
+      "title_type": "original",
+      "series": "AStA Info",
       "issue": "50. Woche 1970",
       "issuers": [
         {
@@ -1928,6 +2177,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -1992,7 +2243,9 @@
             "55-11"
           ],
           "surface": "b.w.",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -2032,29 +2285,47 @@
     },
     {
       "id": 41,
-      "title": "In Treue fest zu Marx und Lenin",
+      "title": "Regensburger Studentenvertreter: In Treue fest zu Marx und Lenin",
       "date": "",
       "start_page": 59,
       "end_page": 60,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "In Treue fest zu Marx und Lenin",
+      "title_evidence": "Regensburger Studentenvertreter:\nIn Treue fest zu Marx und Lenin",
       "title_blocks": [
+        "59-1",
         "59-2"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
-      "issuers": [],
+      "issuers": [
+        {
+          "evidence": "AStA-Kollektiv",
+          "blocks": [
+            "60-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
       "date_evidence": "",
       "date_blocks": [],
       "date_text": "",
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.7,
-      "_grounding": []
+      "confidence": 0.75,
+      "_grounding": [
+        "issuer 'AStA': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'AStA'"
+      ]
     },
     {
       "id": 42,
@@ -2079,12 +2350,12 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "confidence": 0.7,
       "_grounding": []
     },
     {
       "id": 43,
-      "title": "Haushaltsplan des AStA vom 1. 12. 1970 - 30. 11. 1971",
+      "title": "Haushaltsplan des AStA vom 1.12.1970 - 30.11.1971",
       "date": "",
       "start_page": 64,
       "end_page": 64,
@@ -2107,6 +2378,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2116,14 +2389,11 @@
       "date_blocks": [
         "64-2"
       ],
-      "date_text": "1. 12. 1970 - 30. 11. 1971",
+      "date_text": "1.12.1970 - 30.11.1971",
       "date_iso": "1970-12-01",
       "date_type": "issued",
       "doc_type": "protokoll",
-      "confidence": 0.9,
-      "_retried_issuer": [
-        "HAUSHALTSPLAN des ASTA"
-      ],
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -2150,6 +2420,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2190,6 +2462,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2232,6 +2506,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2243,7 +2519,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.75,
       "_grounding": []
     },
     {
@@ -2270,6 +2546,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2310,18 +2588,18 @@
     },
     {
       "id": 49,
-      "title": "Presseerklärung. Gestern, am 26. November 1970 sind die Wahlen zum ...",
+      "title": "Presseerklärung",
       "date": "",
       "start_page": 73,
       "end_page": 74,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Presseerklärung",
       "title_blocks": [
         "73-5"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -2333,11 +2611,13 @@
           ],
           "surface": "Allgemeiner Studentenausschuß",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ],
           "_merged": [
-            "AStA"
+            "AStA-Kollektiv"
           ]
         }
       ],
@@ -2349,7 +2629,11 @@
       "date_iso": "1970-11-27",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.95,
+      "_foreign_blocks": [
+        "71-5",
+        "71-14"
+      ],
       "_grounding": []
     },
     {
@@ -2374,10 +2658,12 @@
           "blocks": [
             "75-2"
           ],
-          "surface": "Studentenschaft der Universität Regensburg",
+          "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
-            "studentenschaft_der_universit_t_regensburg"
+            "asta"
           ]
         }
       ],
@@ -2416,6 +2702,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2462,6 +2750,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2506,6 +2796,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2551,10 +2843,12 @@
           "blocks": [
             "80-2"
           ],
-          "surface": "Studentenschaft der Universität Regensburg",
+          "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
-            "studentenschaft_der_universit_t_regensburg"
+            "asta"
           ]
         }
       ],
@@ -2564,7 +2858,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.8,
       "received_date": "1970-10-29",
       "received_evidence": "29. OKT 1970",
       "received_blocks": [
@@ -2575,18 +2869,18 @@
     },
     {
       "id": 55,
-      "title": "Faschismus in den USA?",
+      "title": "23.7.70",
       "date": "",
       "start_page": 82,
       "end_page": 83,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "Faschismus in den USA ?",
+      "title_evidence": "23. 7. 70",
       "title_blocks": [
-        "82-12"
+        "82-3"
       ],
-      "title_type": "original",
+      "title_type": "incipit",
       "series": "AStA-Info",
       "issue": "",
       "issuers": [
@@ -2597,6 +2891,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2610,7 +2906,7 @@
       "date_iso": "1970-07-23",
       "date_type": "issued",
       "doc_type": "einladung",
-      "confidence": 0.9,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -2638,6 +2934,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2651,7 +2949,7 @@
       "date_iso": "1970-07-17",
       "date_type": "issued",
       "doc_type": "einladung",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -2678,6 +2976,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2718,6 +3018,8 @@
           ],
           "surface": "Die Studentenvertreter des FB PPP",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -2729,7 +3031,7 @@
       "date_iso": "1970-07-09",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.75,
       "_grounding": []
     },
     {
@@ -2756,6 +3058,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2797,20 +3101,22 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
         }
       ],
-      "date_evidence": "vom\n22. - 24. Juni",
+      "date_evidence": "HEUTE 13 00 c.t.",
       "date_blocks": [
-        "88-6"
+        "88-4"
       ],
-      "date_text": "22. - 24. Juni",
-      "date_iso": "1970-06-22",
+      "date_text": "heute 13.00 Uhr",
+      "date_iso": "",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.85,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -2837,6 +3143,8 @@
           ],
           "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2871,14 +3179,16 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Studentenschaft der Universität Regensburg",
+          "evidence": "AStA - Info",
           "blocks": [
-            "90-2"
+            "90-1"
           ],
-          "surface": "Studentenschaft der Universität Regensburg",
+          "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
-            "studentenschaft_der_universit_t_regensburg"
+            "asta"
           ]
         }
       ],
@@ -2915,6 +3225,8 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -2957,6 +3269,8 @@
           ],
           "surface": "ASTA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3005,6 +3319,8 @@
           ],
           "surface": "ASTA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3043,6 +3359,8 @@
           ],
           "surface": "ASTA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3055,7 +3373,7 @@
       "date_text": "26. Juni 1970",
       "date_iso": "1970-06-26",
       "date_type": "event",
-      "doc_type": "einladung",
+      "doc_type": "flugblatt",
       "confidence": 0.9,
       "_grounding": []
     },
@@ -3083,6 +3401,8 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3145,6 +3465,8 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3157,7 +3479,7 @@
       "date_text": "",
       "date_iso": "",
       "date_type": "event",
-      "doc_type": "einladung",
+      "doc_type": "flugblatt",
       "confidence": 0.8,
       "_grounding": []
     },
@@ -3185,6 +3507,8 @@
           ],
           "surface": "ASTA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3225,20 +3549,22 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
         }
       ],
-      "date_evidence": "9. Juni 1970",
+      "date_evidence": "Heute, Dienstag, 9. Juni",
       "date_blocks": [
-        "103-3"
+        "103-10"
       ],
       "date_text": "9. Juni 1970",
       "date_iso": "1970-06-09",
-      "date_type": "issued",
+      "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.95,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
@@ -3289,6 +3615,8 @@
           ],
           "surface": "Asta-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3329,6 +3657,8 @@
           ],
           "surface": "Asta-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3363,14 +3693,16 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Studentenschaft der Universität Regensburg",
+          "evidence": "ASTA-Info...ASTA-Info...ASTA-Info...ASTA-Info...ASTA-Info...",
           "blocks": [
-            "109-3"
+            "109-6"
           ],
-          "surface": "Studentenschaft der Universität Regensburg",
+          "surface": "ASTA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
-            "studentenschaft_der_universit_t_regensburg"
+            "asta"
           ]
         }
       ],
@@ -3409,6 +3741,8 @@
           ],
           "surface": "Asa-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -3445,6 +3779,8 @@
           ],
           "surface": "ASTA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3485,6 +3821,8 @@
           ],
           "surface": "Asta-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3525,6 +3863,8 @@
           ],
           "surface": "Asta-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3559,12 +3899,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "verantwortlich astakollektiv",
+          "evidence": "eigendruckimselbstverlagverantwortlichastakollektiv",
           "blocks": [
             "120-10"
           ],
           "surface": "astakollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -3577,7 +3919,9 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.9,
-      "_grounding": []
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'astakollektiv'"
+      ]
     },
     {
       "id": 81,
@@ -3603,6 +3947,8 @@
           ],
           "surface": "astakollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -3641,6 +3987,8 @@
           ],
           "surface": "ASTA der Universität Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3679,6 +4027,8 @@
           ],
           "surface": "als - Aktionsgemeinschaft liberaler Studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -3687,7 +4037,9 @@
             "124-8"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
@@ -3695,7 +4047,9 @@
             "124-8"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
@@ -3703,7 +4057,9 @@
             "124-8"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -3735,12 +4091,18 @@
         {
           "evidence": "ASTA-KOLLEKTIV",
           "blocks": [
+            "125-1",
             "125-13"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -3773,12 +4135,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "PRESSEERKLÄRUNG DES ASTA DER UNIVERSITÄT REGENSBURG",
+          "evidence": "AStA - Info",
           "blocks": [
-            "126-6"
+            "126-1"
           ],
-          "surface": "AStA der Universität Regensburg",
+          "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -3813,14 +4177,20 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "ASTA-KOLLEKTIV",
+          "evidence": "..... ASTA-KOLLEKTIV",
           "blocks": [
+            "127-1",
             "127-13"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -3853,20 +4223,24 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantwortlich: alle Psychologiestudenten",
+          "evidence": "AStA - Info",
           "blocks": [
-            "128-10"
+            "128-1"
           ],
-          "surface": "alle Psychologiestudenten",
+          "surface": "AStA",
           "role": "issuer",
-          "org_ids": []
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
         }
       ],
       "date_evidence": "heute Donnerstag, 25 Juni",
       "date_blocks": [
         "128-9"
       ],
-      "date_text": "25. Juni 1970",
+      "date_text": "Donnerstag, 25. Juni",
       "date_iso": "1970-06-25",
       "date_type": "event",
       "doc_type": "flugblatt",
@@ -3875,16 +4249,16 @@
     },
     {
       "id": 88,
-      "title": "Quasimodo geniti infantes...",
+      "title": "Betr.: Studentenvertretung im Kleinen Senat",
       "date": "",
       "start_page": 129,
       "end_page": 130,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "\"Quasimodo geniti infantes...\"",
+      "title_evidence": "Betr.:\nStudentenvertretung im Kleinen Senat",
       "title_blocks": [
-        "129-7"
+        "129-6"
       ],
       "title_type": "original",
       "series": "AStA-Info",
@@ -3895,19 +4269,13 @@
           "blocks": [
             "130-11"
           ],
-          "surface": "AStA-Kollektiv Öffentlichkeitsarbeit",
+          "surface": "AStA",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
-        },
-        {
-          "evidence": "Asta-Kollektiv Öffentlichkeitsarbeit: Kagelmann und andere",
-          "blocks": [
-            "130-11"
-          ],
-          "surface": "Kagelmann",
-          "role": "signatory"
         }
       ],
       "date_evidence": "",
@@ -3939,12 +4307,18 @@
         {
           "evidence": "eigendruckimselbstverlagverantwortlichastakollektiv",
           "blocks": [
+            "131-1",
             "132-13"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -3979,12 +4353,18 @@
         {
           "evidence": "Eigendruck im selbstverlag verantwortlichastakollektiv",
           "blocks": [
+            "133-1",
             "134-10"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -4008,7 +4388,7 @@
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "U n r u h i g i n d i e s i e b z i g e r J a h r e :\nSTUDENTENSCHAFT KONTROLLIERT KLEINEN SENAT",
+      "title_evidence": "U n r u h i g   i n   d i e   s i e b z i g e r   J a h r e :\nSTUDENTENSCHAFT KONTROLLIERT KLEINEN SENAT",
       "title_blocks": [
         "135-5",
         "135-6"
@@ -4020,14 +4400,18 @@
         {
           "evidence": "verantwortlich: AStA-Projektgruppe Hochschulpolitik und\nAStA-Kollektiv Öffentlichkeitsarbeit",
           "blocks": [
+            "135-1",
             "136-5"
           ],
           "surface": "AStA-Kollektiv Öffentlichkeitsarbeit",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ],
           "_merged": [
+            "AStA",
             "AStA-Projektgruppe Hochschulpolitik"
           ]
         }
@@ -4064,12 +4448,18 @@
         {
           "evidence": "ASTA-Kollektiv",
           "blocks": [
+            "137-1",
             "137-20"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -4084,45 +4474,27 @@
     },
     {
       "id": 93,
-      "title": "Der Weg zur Spitze. 68 Seiten Dokumentation über Führungskräfte und Führungsnachwuchs",
+      "title": "",
       "date": "",
       "start_page": 138,
       "end_page": 139,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "Der Weg zur Spitze\n68 Seiten Dokumentation\nüber Führungskräfte\nund Führungsnachwuchs",
-      "title_blocks": [
-        "138-5",
-        "138-6"
-      ],
-      "title_type": "original",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
       "series": "",
       "issue": "",
-      "issuers": [
-        {
-          "evidence": "DIE\nWELT\nUNABHÄNGIGE TAGESZEITUNG FÜR DEUTSCHLAND",
-          "blocks": [
-            "138-1",
-            "138-2"
-          ],
-          "surface": "Die Welt",
-          "role": "issuer",
-          "org_ids": []
-        }
-      ],
-      "date_evidence": "dem 15. Januar 1970",
-      "date_blocks": [
-        "138-3"
-      ],
-      "date_text": "15. Januar 1970",
-      "date_iso": "1970-01-15",
-      "date_type": "issued",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
       "doc_type": "unklar",
-      "confidence": 0.7,
-      "_grounding": [
-        "Person als issuer: 'Die Welt' - gehoert zu signatory"
-      ]
+      "confidence": 0.3,
+      "_grounding": []
     },
     {
       "id": 94,
@@ -4148,6 +4520,8 @@
           ],
           "surface": "Bayerische Wählerinitiative",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "bayerische_w_hlerinitiative"
           ]
@@ -4158,7 +4532,9 @@
             "140-15"
           ],
           "surface": "Peter Dreessen",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die Wählerinitiative Regensburg"
         },
         {
           "evidence": "Für die Erstwählerinitiative Regensburg\nIngrid Seitz",
@@ -4166,7 +4542,9 @@
             "140-16"
           ],
           "surface": "Ingrid Seitz",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die Erstwählerinitiative Regensburg"
         }
       ],
       "date_evidence": "",
@@ -4202,12 +4580,18 @@
         {
           "evidence": "ASTA-Kollektiv",
           "blocks": [
+            "141-1",
             "141-27"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -4240,12 +4624,18 @@
         {
           "evidence": "Verantwortlich: Asta-Kollektiv",
           "blocks": [
+            "142-1",
             "142-14"
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
+          ],
+          "_merged": [
+            "AStA"
           ]
         }
       ],
@@ -4256,8 +4646,8 @@
       "date_text": "2.1.1970",
       "date_iso": "1970-01-02",
       "date_type": "issued",
-      "doc_type": "einladung",
-      "confidence": 0.9,
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -4269,7 +4659,7 @@
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "In einem Augenblick, in dem die Studentenbewegung die Notwendigkeit",
       "title_blocks": [
         "143-4"
       ],
@@ -4284,6 +4674,8 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -4293,11 +4685,11 @@
       "date_blocks": [
         "144-9"
       ],
-      "date_text": "heute 14:00",
+      "date_text": "heute 14.00 Uhr H 01",
       "date_iso": "",
       "date_type": "event",
       "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "confidence": 0.7,
       "_grounding": []
     },
     {
@@ -4318,12 +4710,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantwortlich: Pressestelle der BEGEFOGREGETZ\nEigendruck im Selbstverlag",
+          "evidence": "BEGEFOGREGETZ",
           "blocks": [
-            "146-12"
+            "146-11"
           ],
-          "surface": "Pressestelle der BEGEFOGREGETZ",
+          "surface": "BEGEFOGREGETZ",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "begefogregetz"
           ]
@@ -4340,30 +4734,36 @@
     },
     {
       "id": 99,
-      "title": "Erlass Nr. 9",
+      "title": "Erlass Nr. 9. Pro bono - contra malum! Erste und letzte Warnung",
       "date": "",
       "start_page": 147,
       "end_page": 147,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "E r l a s s   N r .   9",
+      "title_evidence": "E r l a s s   N r .   9\nPRO   BONO   -   CONTRA   MALUM !\nErste   und   letzte\nWARNUNG",
       "title_blocks": [
-        "147-3"
+        "147-3",
+        "147-4",
+        "147-5",
+        "147-6"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantw.:\nDas Präsidium der Kolossen, J. O. Achim Randzio",
+          "evidence": "BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ",
           "blocks": [
-            "147-15",
-            "147-16"
+            "147-1"
           ],
-          "surface": "Das Präsidium der Kolossen",
+          "surface": "BEGEFOGREGETZ",
           "role": "issuer",
-          "org_ids": []
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "begefogregetz"
+          ]
         },
         {
           "evidence": "Verantw.:\nDas Präsidium der Kolossen, J. O. Achim Randzio",
@@ -4372,18 +4772,21 @@
             "147-16"
           ],
           "surface": "J. O. Achim Randzio",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "Das Präsidium der Kolossen",
+          "marker": "Verantw."
         }
       ],
-      "date_evidence": "heute 13\n30\n00\nin HO3\nA\n1",
-      "date_blocks": [
-        "147-10"
-      ],
-      "date_text": "heute 13:30",
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
       "date_iso": "",
-      "date_type": "event",
+      "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.7,
+      "confidence": 0.75,
+      "_retried_issuer": [
+        "BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ BEGEFOGREGETZ"
+      ],
       "_grounding": []
     },
     {
@@ -4430,19 +4833,10 @@
           "blocks": [
             "149-21"
           ],
-          "surface": "Liste BEGEFOGREGETZ",
-          "role": "issuer",
-          "org_ids": [
-            "begefogregetz"
-          ]
-        },
-        {
-          "evidence": "Verantw. Liste BEGEFOGREGETZ, Kolossen J. Randzio, Rainer Schmidt, Liz Schmucker, Seppl Hingerl",
-          "blocks": [
-            "149-21"
-          ],
           "surface": "J. Randzio",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw. Liste BEGEFOGREGETZ, Kolossen J. Randzio, Rainer Schmidt, Liz Schmucker, Seppl Hingerl",
@@ -4450,7 +4844,9 @@
             "149-21"
           ],
           "surface": "Rainer Schmidt",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw. Liste BEGEFOGREGETZ, Kolossen J. Randzio, Rainer Schmidt, Liz Schmucker, Seppl Hingerl",
@@ -4458,7 +4854,9 @@
             "149-21"
           ],
           "surface": "Liz Schmucker",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw. Liste BEGEFOGREGETZ, Kolossen J. Randzio, Rainer Schmidt, Liz Schmucker, Seppl Hingerl",
@@ -4466,18 +4864,18 @@
             "149-21"
           ],
           "surface": "Seppl Hingerl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         }
       ],
-      "date_evidence": "Montag, den 24.11.",
-      "date_blocks": [
-        "149-14"
-      ],
-      "date_text": "Montag, 24.11.1970",
-      "date_iso": "1970-11-24",
-      "date_type": "event",
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
       "doc_type": "einladung",
-      "confidence": 0.75,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
@@ -4506,16 +4904,16 @@
     },
     {
       "id": 103,
-      "title": "Feststundenprogramm",
+      "title": "Ehrenerlaß Nr. 3",
       "date": "",
       "start_page": 151,
       "end_page": 152,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "FESTSTUNDENPROGRAMM",
+      "title_evidence": "Ehrenerlaß Nr. 3",
       "title_blocks": [
-        "151-7"
+        "151-3"
       ],
       "title_type": "original",
       "series": "",
@@ -4526,18 +4924,20 @@
           "blocks": [
             "152-1"
           ],
-          "surface": "Feststundenausschuß der Pressestelle der BEGEFOGREGETZ",
+          "surface": "BEGEFOGREGETZ",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "begefogregetz"
           ]
         }
       ],
-      "date_evidence": "D O N N E R S T A G , d e n 22.1.1970 i n H O 6 u m 14.15 U h r",
+      "date_evidence": "D O N N E R S T A G , d e n 22.1.1970",
       "date_blocks": [
         "151-11"
       ],
-      "date_text": "Donnerstag, 22.1.1970, 14:15 Uhr",
+      "date_text": "Donnerstag, den 22.1.1970",
       "date_iso": "1970-01-22",
       "date_type": "event",
       "doc_type": "einladung",
@@ -4546,16 +4946,16 @@
     },
     {
       "id": 104,
-      "title": "Schumann macht Schule!",
+      "title": "Erlaß Nr. 14",
       "date": "",
       "start_page": 153,
       "end_page": 154,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "Schumann macht Schule!",
+      "title_evidence": "Erlaß Nr. 14",
       "title_blocks": [
-        "153-4"
+        "153-2"
       ],
       "title_type": "original",
       "series": "",
@@ -4566,8 +4966,10 @@
           "blocks": [
             "153-13"
           ],
-          "surface": "Pressestelle der BEGEFOGREGETZ",
+          "surface": "BEGEFOGREGETZ",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "begefogregetz"
           ]
@@ -4579,7 +4981,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -4604,12 +5006,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantwortlich Pressestelle der BEGEFOGREGETZ",
+          "evidence": "Verantwortlich Pressestelle der BEGEFOGREGETZ\nEigendruck im Selbstverlag",
           "blocks": [
             "156-6"
           ],
           "surface": "BEGEFOGREGETZ",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "begefogregetz"
           ]
@@ -4626,18 +5030,18 @@
     },
     {
       "id": 106,
-      "title": "zur Feuerzangen bowlle! Sie finden uns: Corps Franconia Jena zu ...",
+      "title": "Zur Feuerzangenbowlle!",
       "date": "",
       "start_page": 157,
       "end_page": 157,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "zur\nFeuerzangen\nbowlle!",
       "title_blocks": [
         "157-6"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -4648,6 +5052,8 @@
           ],
           "surface": "Corps Franconia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -4661,7 +5067,7 @@
       "date_iso": "1970-11-19",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.75,
+      "confidence": 0.9,
       "_grounding": [
         "Person als issuer: 'Corps Franconia' - gehoert zu signatory"
       ]
@@ -4690,6 +5096,8 @@
           ],
           "surface": "Corps Franconia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -4703,14 +5111,14 @@
       "date_iso": "1970-11-12",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.8,
+      "confidence": 0.9,
       "_grounding": [
         "Person als issuer: 'Corps Franconia' - gehoert zu signatory"
       ]
     },
     {
       "id": 108,
-      "title": "kommt zu unserer veranstaltung",
+      "title": "Kommt zu unserer Veranstaltung",
       "date": "",
       "start_page": 159,
       "end_page": 159,
@@ -4726,12 +5134,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "F! Franconia",
+          "evidence": "donnerstag donnerstag ACHTUNG STUDANFÄNGER donnerstag donnerstag",
           "blocks": [
-            "159-1"
+            "159-5"
           ],
           "surface": "Franconia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "franconia"
           ]
@@ -4778,18 +5188,22 @@
           ],
           "surface": "Corps Franconia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
         }
       ],
-      "date_evidence": "",
-      "date_blocks": [],
-      "date_text": "",
-      "date_iso": "",
-      "date_type": "undated",
-      "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "date_evidence": "Mittwoch, 4. November",
+      "date_blocks": [
+        "160-2"
+      ],
+      "date_text": "Mittwoch, 4. November",
+      "date_iso": "1970-11-04",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
       "received_date": "1970-11-03",
       "received_evidence": "3. NOV 1970",
       "received_blocks": [
@@ -4819,12 +5233,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "E! Franconia",
+          "evidence": "(landsmannschaft franconia)",
           "blocks": [
-            "161-4"
+            "161-14"
           ],
-          "surface": "Franconia",
+          "surface": "Landsmannschaft Franconia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "franconia"
           ]
@@ -4834,11 +5250,11 @@
       "date_blocks": [
         "161-6"
       ],
-      "date_text": "Mittwoch 11.11.70",
+      "date_text": "Mittwoch, 11.11.1970",
       "date_iso": "1970-11-11",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "received_date": "1970-11-01",
       "received_evidence": "1. NOV 1970",
       "received_blocks": [
@@ -4852,16 +5268,17 @@
     },
     {
       "id": 111,
-      "title": "Kommilitoninnen, Kommilitonen! Wir sind nicht bereit, Machenschaften wie jene von ...",
+      "title": "Kommilitoninnen, Kommilitonen! Wir sind nicht bereit, Machenschaften wie jene von Herrn ...",
       "date": "",
       "start_page": 163,
       "end_page": 163,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Kommilitoninnen, Kommilitonen !\nWir sind nicht bereit, Machenschaften wie jene von Herrn",
       "title_blocks": [
-        "163-5"
+        "163-5",
+        "163-6"
       ],
       "title_type": "incipit",
       "series": "",
@@ -4872,8 +5289,10 @@
           "blocks": [
             "163-13"
           ],
-          "surface": "Liste \"DRITTE KRAFT\"",
+          "surface": "Liste \"Dritte Kraft\"",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dk"
           ]
@@ -4884,7 +5303,9 @@
             "163-13"
           ],
           "surface": "Burkhard Stoyke",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -4926,6 +5347,8 @@
           ],
           "surface": "Dritte Kraft",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dk"
           ]
@@ -4936,7 +5359,9 @@
             "164-31"
           ],
           "surface": "k.Puszkajler",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: k.Puszkajler, E.Kiesel, B.Stoyke, C.Wolter",
@@ -4944,7 +5369,9 @@
             "164-31"
           ],
           "surface": "E.Kiesel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: k.Puszkajler, E.Kiesel, B.Stoyke, C.Wolter",
@@ -4952,7 +5379,9 @@
             "164-31"
           ],
           "surface": "B.Stoyke",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: k.Puszkajler, E.Kiesel, B.Stoyke, C.Wolter",
@@ -4960,7 +5389,9 @@
             "164-31"
           ],
           "surface": "C.Wolter",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -4969,23 +5400,27 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "_grounding": []
     },
     {
       "id": 113,
-      "title": "Heute Abend spricht um 20.00 Uhr Gaststätte Augustiner Neupfarrplatz, Großer Saal ...",
+      "title": "Heute Abend spricht um 20.00 Uhr Gaststätte Augustiner Neupfarrplatz, Großer Saal Staatssekretär Wolfram Dorn F.D.P.",
       "date": "",
       "start_page": 165,
       "end_page": 165,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Heute Abend spricht um\n20.00 Uhr\nGaststätte Augustiner\nNeupfarrplatz, Großer Saal\nStaatssekretär Wolfram Dorn F.D.P.",
       "title_blocks": [
-        "165-2"
+        "165-2",
+        "165-3",
+        "165-4",
+        "165-5",
+        "165-6"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -4996,6 +5431,8 @@
           ],
           "surface": "Deutsche Jungdemokraten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "deutsche_jungdemokraten"
           ]
@@ -5007,25 +5444,25 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "einladung",
-      "confidence": 0.75,
+      "confidence": 0.8,
       "_grounding": [
         "Person als issuer: 'Deutsche Jungdemokraten' - gehoert zu signatory"
       ]
     },
     {
       "id": 114,
-      "title": "STUDENTINNEN UND STUDENTEN DER UNIVERSITÄT REGENSBURG Als mögliches Ergebnis der ...",
+      "title": "Als mögliches Ergebnis der Landtagswahlen am 22. November droht eine absolute Mehrheit der CSU!",
       "date": "",
       "start_page": 166,
       "end_page": 166,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Als mögliches Ergebnis der Landtagswahlen am 22. November droht eine absolute Mehrheit der CSU !",
       "title_blocks": [
-        "166-1"
+        "166-2"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -5036,6 +5473,8 @@
           ],
           "surface": "Deutsche Jungdemokraten Arbeitsgemeinschaft Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "deutsche_jungdemokraten"
           ]
@@ -5047,7 +5486,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -5068,12 +5507,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "DM - DM - DM - DM -DEMOKRATISCHE MITTE - DM - DM - DM - DM 24.11.",
+          "evidence": "DM - DM - DM - DM -DEMOKRATISCHE MITTE - DM - DM - DM - DM",
           "blocks": [
             "167-1"
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5087,23 +5528,23 @@
       "date_iso": "1970-11-24",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
       "id": 116,
-      "title": "Kommilitoninnen, Kommilitonen! Die diesjährige Wahl zum Studentenparlament der Universität Regensburg ...",
+      "title": "\"Man soll die Stimmen wägen und nicht - nur - zählen.\" (Dimitrius)",
       "date": "",
       "start_page": 168,
       "end_page": 168,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "\"Man soll die Stimmen wägen und nicht - nur - zählen.\"\n(Dimitrius)",
       "title_blocks": [
-        "168-4"
+        "168-3"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -5114,81 +5555,11 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Josef Lange",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Evelyn Berger",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Franz Reger",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Franz Reindl",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Hermann Röttger",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Monika Pielorz",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Brigitte Wohner",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Hans-Georg Seidl",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Josef Lange, Evelyn Berger, Franz Reger, Franz Reindl, Hermann Röttger, Monika Pielorz, Brigitte Wohner, Hans-Georg Seidl, Felix Bergenthal",
-          "blocks": [
-            "168-19"
-          ],
-          "surface": "Felix Bergenthal",
-          "role": "signatory"
         }
       ],
       "date_evidence": "30.11.1970",
@@ -5220,31 +5591,37 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "DM - DM - DM - DM - DEMOKRATISCHE MITTE - DM - DM - DM - DM 17.11.1970",
+          "evidence": "DM - DM - DM - DM - DEMOKRATISCHE MITTE - DM - DM - DM - DM",
           "blocks": [
             "169-1"
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
         },
         {
-          "evidence": "Verantwortlich: Josef Lange, Hermann Röttger",
+          "evidence": "Verantwortlich: Josef Lange, Hermann Röttger\nEigendruck im Selbstverlag",
           "blocks": [
             "169-13"
           ],
           "surface": "Josef Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Verantwortlich: Josef Lange, Hermann Röttger",
+          "evidence": "Verantwortlich: Josef Lange, Hermann Röttger\nEigendruck im Selbstverlag",
           "blocks": [
             "169-13"
           ],
           "surface": "Hermann Röttger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "17.11.1970",
@@ -5276,31 +5653,37 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "DM - DM - DM - DM - DEMOKRATISCHE MITTE - DM - DM - DM - DM 10.11.70",
+          "evidence": "DM - DM - DM - DM - DEMOKRATISCHE MITTE - DM - DM - DM - DM",
           "blocks": [
             "170-1"
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
         },
         {
-          "evidence": "Verantwortlich: Josef Lange, Evelyn Berger",
+          "evidence": "Verantwortlich: Josef Lange, Evelyn Berger\nEigendruck im Selbstverlag",
           "blocks": [
             "170-13"
           ],
           "surface": "Josef Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Verantwortlich: Josef Lange, Evelyn Berger",
+          "evidence": "Verantwortlich: Josef Lange, Evelyn Berger\nEigendruck im Selbstverlag",
           "blocks": [
             "170-13"
           ],
           "surface": "Evelyn Berger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "10.11.70",
@@ -5338,6 +5721,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5348,7 +5733,9 @@
             "171-18"
           ],
           "surface": "Josef Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Josef Lange, Felix Bergenthal",
@@ -5356,7 +5743,9 @@
             "171-18"
           ],
           "surface": "Felix Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "6.11.70",
@@ -5395,17 +5784,22 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
         },
         {
-          "evidence": "(Josef Lange)",
+          "evidence": "Für die \"Demokratische Mitte\"\n(Josef Lange)",
           "blocks": [
+            "172-14",
             "172-15"
           ],
           "surface": "Josef Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "Regensburg, den 2.11.1970",
@@ -5421,18 +5815,19 @@
     },
     {
       "id": 121,
-      "title": "Nach diesem Motto, Kommilitoninnen und Kommilitonen, hat sich die Demaskierung ...",
+      "title": "\"Ich hab' getan, was ich nicht lassen konnte.\" Friedrich v. Schiller, W. Tell I,",
       "date": "",
       "start_page": 173,
       "end_page": 173,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "\" Ich hab' getan, was ich nicht lassen konnte.\"\nFriedrich v. Schiller, W. Tell I,",
       "title_blocks": [
-        "173-4"
+        "173-2",
+        "173-3"
       ],
-      "title_type": "incipit",
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -5443,6 +5838,8 @@
           ],
           "surface": "DM",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5453,7 +5850,9 @@
             "173-10"
           ],
           "surface": "Josef Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: Josef Lange, Hartmut Nottebohm",
@@ -5461,7 +5860,9 @@
             "173-10"
           ],
           "surface": "Hartmut Nottebohm",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -5470,12 +5871,12 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
       "id": 122,
-      "title": "Verrat studentischer Interessen !!!",
+      "title": "Verrat studentischer Interessen!!!",
       "date": "",
       "start_page": 174,
       "end_page": 175,
@@ -5498,6 +5899,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5538,6 +5941,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5548,7 +5953,9 @@
             "176-13"
           ],
           "surface": "F. Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -5584,6 +5991,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5594,7 +6003,9 @@
             "177-10"
           ],
           "surface": "Peter Schubert",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: Peter Schubert, Felix Bergenthal",
@@ -5602,7 +6013,9 @@
             "177-10"
           ],
           "surface": "Felix Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -5638,6 +6051,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5648,7 +6063,9 @@
             "178-12"
           ],
           "surface": "K.P. Gaschik",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: K.P. Gaschik, F. Bergenthal, H. Nottebohm",
@@ -5656,7 +6073,9 @@
             "178-12"
           ],
           "surface": "F. Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: K.P. Gaschik, F. Bergenthal, H. Nottebohm",
@@ -5664,7 +6083,9 @@
             "178-12"
           ],
           "surface": "H. Nottebohm",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -5678,7 +6099,7 @@
     },
     {
       "id": 126,
-      "title": "Daß Huber am Freitag anläßlich einer Schuleinweihung in Kelheim weilte ...",
+      "title": "Daß Huber am Freitag anläßlich einer Schuleinweihung in Kelheim weilte hat sich ...",
       "date": "",
       "start_page": 179,
       "end_page": 179,
@@ -5700,6 +6121,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5710,7 +6133,9 @@
             "179-8"
           ],
           "surface": "Hans Georg Seidl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         }
       ],
       "date_evidence": "",
@@ -5720,7 +6145,9 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.8,
-      "_grounding": []
+      "_grounding": [
+        "title: Incipit ohne Beleg"
+      ]
     },
     {
       "id": 127,
@@ -5748,6 +6175,8 @@
           ],
           "surface": "Demokratische Mitte",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "dm"
           ]
@@ -5758,7 +6187,9 @@
             "181-9"
           ],
           "surface": "Hans-Georg Seidl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         },
         {
           "evidence": "verantwortlich: Hans-Georg Seidl, 84 Regensburg, Karthauserstraße 35\nFelix Bergenthal, -\"- , Weiherweg 6, Tel. 0941/92241",
@@ -5766,7 +6197,9 @@
             "181-9"
           ],
           "surface": "Felix Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "15.1.1970",
@@ -5803,7 +6236,9 @@
             "188-7"
           ],
           "surface": "J. Munder",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw. J. Munder - J. Randzio",
@@ -5811,7 +6246,9 @@
             "188-7"
           ],
           "surface": "J. Randzio",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         }
       ],
       "date_evidence": "28. 1. 70",
@@ -5840,7 +6277,7 @@
       ],
       "title_type": "original",
       "series": "Informationen aus dem Fachbereich Wirtschaftswissenschaft",
-      "issue": "nummer 4\njuni 1970",
+      "issue": "nummer 4",
       "issuers": [
         {
           "evidence": "verantwortlich: fachschaft - klar",
@@ -5849,7 +6286,19 @@
           ],
           "surface": "Fachschaft",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
+        },
+        {
+          "evidence": "verantwortlich: fachschaft - klar",
+          "blocks": [
+            "189-4"
+          ],
+          "surface": "Klar",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "juni 1970",
@@ -5865,7 +6314,7 @@
     },
     {
       "id": 130,
-      "title": "",
+      "title": "Liebe Studentinnen und Studenten! Wir laden Sie sehr herzlich ein zur Vollversammlung ...",
       "date": "",
       "start_page": 202,
       "end_page": 203,
@@ -5873,8 +6322,10 @@
       "no_content": false,
       "note": "",
       "title_evidence": "",
-      "title_blocks": [],
-      "title_type": "",
+      "title_blocks": [
+        "202-5"
+      ],
+      "title_type": "incipit",
       "series": "",
       "issue": "",
       "issuers": [
@@ -5885,6 +6336,8 @@
           ],
           "surface": "Katholische Studentengemeinde Albertus Magnus",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "katholische_studentengemeinde_albertus_magnus"
           ]
@@ -5895,7 +6348,9 @@
             "203-12"
           ],
           "surface": "Herbert Lünke",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "Regensburg, 8. Juli 1970",
@@ -5907,7 +6362,9 @@
       "date_type": "issued",
       "doc_type": "einladung",
       "confidence": 0.9,
-      "_grounding": []
+      "_grounding": [
+        "title: Incipit ohne Beleg"
+      ]
     },
     {
       "id": 131,
@@ -5933,6 +6390,8 @@
           ],
           "surface": "Corps Franconia Jena",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -5975,6 +6434,8 @@
           ],
           "surface": "Corps Franconia Jena",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -6017,6 +6478,8 @@
           ],
           "surface": "Corps Franconia Jena",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -6037,18 +6500,18 @@
     },
     {
       "id": 134,
-      "title": "Das Studentenwerk in der Hochschule",
+      "title": "Wissen Sie wirklich genau Bescheid über das Studentenwerk? Vor allem: Wissen Sie, ...",
       "date": "",
       "start_page": 207,
       "end_page": 207,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "\"Das Studentenwerk in der Hochschule\"",
+      "title_evidence": "",
       "title_blocks": [
-        "207-3"
+        "207-1"
       ],
-      "title_type": "original",
+      "title_type": "incipit",
       "series": "",
       "issue": "",
       "issuers": [
@@ -6059,6 +6522,8 @@
           ],
           "surface": "Corps Franconia Jena",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -6074,6 +6539,7 @@
       "doc_type": "einladung",
       "confidence": 0.85,
       "_grounding": [
+        "title: Incipit ohne Beleg",
         "Person als issuer: 'Corps Franconia Jena' - gehoert zu signatory"
       ]
     },
@@ -6101,6 +6567,8 @@
           ],
           "surface": "Corps Franconia Jena",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "corps_franconia"
           ]
@@ -6121,7 +6589,7 @@
     },
     {
       "id": 136,
-      "title": "Die Studentenschaft der katholischen deutschen Studentenverbindung Rupertia im CV ...",
+      "title": "Die Studentenschaft der katholischen deutschen Studentenverbindung Rupertia im CV zu Regensburg hat ...",
       "date": "",
       "start_page": 209,
       "end_page": 209,
@@ -6143,6 +6611,8 @@
           ],
           "surface": "K.D.St.V. Rupertia",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rupertia"
           ]
@@ -6155,7 +6625,9 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.75,
-      "_grounding": []
+      "_grounding": [
+        "title: Incipit ohne Beleg"
+      ]
     },
     {
       "id": 137,
@@ -6182,6 +6654,8 @@
           ],
           "surface": "KHG",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "khg"
           ]
@@ -6192,7 +6666,9 @@
             "210-8"
           ],
           "surface": "Josef Hoffmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "25.11.70",
@@ -6208,16 +6684,16 @@
     },
     {
       "id": 138,
-      "title": "Sind Glaube und Frömmigkeit sprachlos geworden?",
+      "title": "Einladung",
       "date": "",
       "start_page": 211,
       "end_page": 211,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "Sind Glaube und Frömmigkeit sprachlos geworden?",
+      "title_evidence": "E i n l a d u n g",
       "title_blocks": [
-        "211-8"
+        "211-6"
       ],
       "title_type": "original",
       "series": "",
@@ -6230,6 +6706,8 @@
           ],
           "surface": "Katholische und Evangelische Studenten- und Hochschulgemeinde",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -6268,9 +6746,41 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
+        },
+        {
+          "evidence": "Für die linke Liste: Klaus Grenzheuser\nIrene Wittmann\nJochen Wesel",
+          "blocks": [
+            "213-6"
+          ],
+          "surface": "Klaus Grenzheuser",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Für die linke Liste: Klaus Grenzheuser\nIrene Wittmann\nJochen Wesel",
+          "blocks": [
+            "213-6"
+          ],
+          "surface": "Irene Wittmann",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Für die linke Liste: Klaus Grenzheuser\nIrene Wittmann\nJochen Wesel",
+          "blocks": [
+            "213-6"
+          ],
+          "surface": "Jochen Wesel",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -6311,6 +6821,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6321,7 +6833,9 @@
             "215-16"
           ],
           "surface": "Joachim Wesel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Joachim Wesel, Wolf Schmidt.",
@@ -6329,14 +6843,15 @@
             "215-16"
           ],
           "surface": "Wolf Schmidt",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
-      "date_evidence": "HEUTE,\nDienstag, 17.11.70,\n14 Uhr",
+      "date_evidence": "HEUTE,\nDienstag, 17.11.70,",
       "date_blocks": [
         "214-2",
-        "214-3",
-        "214-4"
+        "214-3"
       ],
       "date_text": "17.11.1970",
       "date_iso": "1970-11-17",
@@ -6369,6 +6884,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6379,7 +6896,9 @@
             "217-9"
           ],
           "surface": "Roland Asanger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die linke liste :     Roland Asanger\nKonrad Hecker\nKarin Übelhack\nReinhold Zech",
@@ -6387,7 +6906,9 @@
             "217-9"
           ],
           "surface": "Konrad Hecker",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die linke liste :     Roland Asanger\nKonrad Hecker\nKarin Übelhack\nReinhold Zech",
@@ -6395,7 +6916,9 @@
             "217-9"
           ],
           "surface": "Karin Übelhack",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die linke liste :     Roland Asanger\nKonrad Hecker\nKarin Übelhack\nReinhold Zech",
@@ -6403,7 +6926,9 @@
             "217-9"
           ],
           "surface": "Reinhold Zech",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -6446,6 +6971,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6456,7 +6983,9 @@
             "219-8"
           ],
           "surface": "Holger Ambrosius",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Holger Ambrosius, Hermann Brammerts, Hans Jürgen Kagelmann.",
@@ -6464,7 +6993,9 @@
             "219-8"
           ],
           "surface": "Hermann Brammerts",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Holger Ambrosius, Hermann Brammerts, Hans Jürgen Kagelmann.",
@@ -6472,7 +7003,9 @@
             "219-8"
           ],
           "surface": "Hans Jürgen Kagelmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -6508,6 +7041,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6518,7 +7053,9 @@
             "221-5"
           ],
           "surface": "Brannerts",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Linke Liste - Brannerts, Ambrosius, Kegelmann, Asanger, Schmidt",
@@ -6526,7 +7063,9 @@
             "221-5"
           ],
           "surface": "Ambrosius",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Linke Liste - Brannerts, Ambrosius, Kegelmann, Asanger, Schmidt",
@@ -6534,7 +7073,9 @@
             "221-5"
           ],
           "surface": "Kegelmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Linke Liste - Brannerts, Ambrosius, Kegelmann, Asanger, Schmidt",
@@ -6542,7 +7083,9 @@
             "221-5"
           ],
           "surface": "Asanger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Linke Liste - Brannerts, Ambrosius, Kegelmann, Asanger, Schmidt",
@@ -6550,7 +7093,9 @@
             "221-5"
           ],
           "surface": "Schmidt",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -6559,7 +7104,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -6587,6 +7132,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6597,7 +7144,9 @@
             "223-8"
           ],
           "surface": "Holger Ambrosius",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Linke Liste: Holger Ambrosius, Hermann Brammerts.",
@@ -6605,7 +7154,9 @@
             "223-8"
           ],
           "surface": "Hermann Brammerts",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -6614,7 +7165,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.9,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -6641,6 +7192,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6657,7 +7210,7 @@
     },
     {
       "id": 146,
-      "title": "Kann der AStA nicht rechnen? 2/3 von 1/4 = 2/(3·4) = 2/12 = 1/6 !!",
+      "title": "Kann der AStA nicht rechnen? 2/3 von 1/4 = 2/(3·4) = 2/12 = 1/6!!",
       "date": "",
       "start_page": 225,
       "end_page": 229,
@@ -6679,6 +7232,8 @@
           ],
           "surface": "Linke Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "linke_liste"
           ]
@@ -6689,7 +7244,9 @@
             "226-9"
           ],
           "surface": "H. Ambrosius",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw.: H. Ambrosius, W. Schmidt, K. Ubelhack, B. Zubler",
@@ -6697,7 +7254,9 @@
             "226-9"
           ],
           "surface": "W. Schmidt",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw.: H. Ambrosius, W. Schmidt, K. Ubelhack, B. Zubler",
@@ -6705,7 +7264,9 @@
             "226-9"
           ],
           "surface": "K. Ubelhack",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "Verantw.: H. Ambrosius, W. Schmidt, K. Ubelhack, B. Zubler",
@@ -6713,7 +7274,9 @@
             "226-9"
           ],
           "surface": "B. Zubler",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         },
         {
           "evidence": "verantw.: P. Rothammer",
@@ -6721,7 +7284,9 @@
             "228-8"
           ],
           "surface": "P. Rothammer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         },
         {
           "evidence": "Verantwortlich: Linke Liste, Hermann Brammerts, Uni-Str. 31/V",
@@ -6729,7 +7294,9 @@
             "229-11"
           ],
           "surface": "Hermann Brammerts",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -6737,8 +7304,8 @@
       "date_text": "",
       "date_iso": "",
       "date_type": "undated",
-      "doc_type": "unklar",
-      "confidence": 0.7,
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
       "_retried_signatory": true,
       "_grounding": []
     },
@@ -6757,19 +7324,19 @@
         "230-3"
       ],
       "title_type": "original",
-      "series": "",
-      "issue": "",
+      "series": "L.U.ST.",
+      "issue": "II",
       "issuers": [
         {
-          "evidence": "L.U.ST. -- Liste Unabhängiger Studenten -- L.U.ST. -- Liste Unab",
+          "evidence": "-- L.U.ST. - II - L.U.ST. - II - L.U.ST. - II - L.U.ST. - II --",
           "blocks": [
-            "232-11"
+            "230-1"
           ],
-          "surface": "L.U.ST. - Liste Unabhängiger Studenten",
+          "surface": "L.U.ST.",
           "role": "issuer",
-          "org_ids": [
-            "lust"
-          ]
+          "function": "",
+          "marker": "",
+          "org_ids": []
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
@@ -6777,25 +7344,29 @@
             "231-7"
           ],
           "surface": "Forstner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
           "blocks": [
-            "231-7",
-            "232-10"
+            "231-7"
           ],
           "surface": "Hecker",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
           "blocks": [
-            "231-7",
-            "232-10"
+            "231-7"
           ],
           "surface": "Lange",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
@@ -6803,16 +7374,19 @@
             "231-7"
           ],
           "surface": "Lerch",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
           "blocks": [
-            "231-7",
-            "232-10"
+            "231-7"
           ],
           "surface": "Meixner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
@@ -6820,7 +7394,9 @@
             "231-7"
           ],
           "surface": "Stephinger",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Forstner, Hecker, Lange, Lerch, Meixner, Stephinger, Wöstmann",
@@ -6828,31 +7404,9 @@
             "231-7"
           ],
           "surface": "Wöstmann",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Glossner/Hecker/Hoffmann/Lange/Mayer/Meixner",
-          "blocks": [
-            "232-10"
-          ],
-          "surface": "Glossner",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Glossner/Hecker/Hoffmann/Lange/Mayer/Meixner",
-          "blocks": [
-            "232-10"
-          ],
-          "surface": "Hoffmann",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Glossner/Hecker/Hoffmann/Lange/Mayer/Meixner",
-          "blocks": [
-            "232-10"
-          ],
-          "surface": "Mayer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -6862,21 +7416,23 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.85,
-      "_retried_issuer": [
-        "L.U.ST. -- Liste Unabhängiger Studenten -- L.U.ST. -- Liste Unab"
+      "_foreign_blocks": [
+        "227-1",
+        "228-8",
+        "228-7"
       ],
       "_grounding": []
     },
     {
       "id": 148,
-      "title": "Wir vom RCDS haben uns ganz klar dazu bekannt, was ...",
+      "title": "Wir vom RCDS haben uns ganz klar dazu bekannt, was wir sind und wollen: ...",
       "date": "",
       "start_page": 233,
       "end_page": 233,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Wir vom RCDS haben uns ganz klar dazu bekannt, was wir sind und wollen:",
       "title_blocks": [
         "233-4"
       ],
@@ -6887,12 +7443,18 @@
         {
           "evidence": "Verantwortlich: RCDS-Uni-Regensburg e.V.",
           "blocks": [
+            "233-1",
             "233-7"
           ],
           "surface": "RCDS-Uni-Regensburg e.V.",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rcds"
+          ],
+          "_merged": [
+            "RCDS"
           ]
         }
       ],
@@ -6902,7 +7464,12 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "229-2",
+        "229-1",
+        "229-11"
+      ],
       "_grounding": []
     },
     {
@@ -6923,14 +7490,20 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantwortlich: RCDS-Uni-Regensburg e.V.",
+          "evidence": "Verantwortlich: RCDS-Uni-Regensburg e.V. Eigendruck im Selbstverlag",
           "blocks": [
+            "234-2",
             "234-17"
           ],
           "surface": "RCDS-Uni-Regensburg e.V.",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rcds"
+          ],
+          "_merged": [
+            "RCDS"
           ]
         }
       ],
@@ -6941,6 +7514,15 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.9,
+      "_foreign_blocks": [
+        "231-7",
+        "231-7",
+        "231-7",
+        "231-7",
+        "231-7",
+        "231-7",
+        "231-7"
+      ],
       "_grounding": []
     },
     {
@@ -6952,7 +7534,7 @@
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "L i n k e r  P a p i e r k r i e g",
+      "title_evidence": "L i n k e r   P a p i e r k r i e g",
       "title_blocks": [
         "235-5"
       ],
@@ -6967,6 +7549,8 @@
           ],
           "surface": "RCDS",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rcds"
           ]
@@ -6977,7 +7561,9 @@
             "235-13"
           ],
           "surface": "Höcherl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Höcherl, Wetzel",
@@ -6985,7 +7571,9 @@
             "235-13"
           ],
           "surface": "Wetzel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -6995,9 +7583,14 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.9,
-      "_retried_issuer": [
-        "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS",
-        "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS"
+      "_foreign_blocks": [
+        "232-2",
+        "232-10",
+        "232-10",
+        "232-10",
+        "232-10",
+        "232-10",
+        "232-10"
       ],
       "received_date": "1970-11-24",
       "received_evidence": "24. NOV. 1970",
@@ -7027,12 +7620,18 @@
         {
           "evidence": "Verantwortlich: RCDS - Uni - Regensburg e.V.",
           "blocks": [
+            "236-2",
             "236-11"
           ],
           "surface": "RCDS - Uni - Regensburg e.V.",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rcds"
+          ],
+          "_merged": [
+            "RCDS"
           ]
         }
       ],
@@ -7043,6 +7642,11 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.9,
+      "_foreign_blocks": [
+        "233-4",
+        "233-1",
+        "233-7"
+      ],
       "_grounding": []
     },
     {
@@ -7063,55 +7667,70 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "für das Studentenparlament",
+          "evidence": "für das Studentenparlament\nFelix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
           "blocks": [
-            "237-10"
-          ],
-          "surface": "Studentenparlament",
-          "role": "issuer",
-          "org_ids": [
-            "studentenparlament"
-          ]
-        },
-        {
-          "evidence": "Felix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
-          "blocks": [
+            "237-10",
             "237-11"
           ],
           "surface": "Felix Bergenthal",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
-          "evidence": "Felix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
+          "evidence": "für das Studentenparlament\nFelix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
           "blocks": [
+            "237-10",
             "237-11"
           ],
           "surface": "Christoph Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
-          "evidence": "Felix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
+          "evidence": "für das Studentenparlament\nFelix Bergenthal (DM)\nChristoph Bettermann (als)\nJoachim Randzio (ZBW)",
           "blocks": [
+            "237-10",
             "237-11"
           ],
           "surface": "Joachim Randzio",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
-          "evidence": "Karin Übelhack\nAlfons Schild\nJoachim Randzio",
+          "evidence": "Karin Übelhack\nAlfons Schild\nJoachim Randzio\n(Präsidium des SP)",
           "blocks": [
-            "237-12"
+            "237-12",
+            "237-13"
           ],
           "surface": "Karin Übelhack",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "Präsidium des SP",
+          "marker": ""
         },
         {
-          "evidence": "Karin Übelhack\nAlfons Schild\nJoachim Randzio",
+          "evidence": "Karin Übelhack\nAlfons Schild\nJoachim Randzio\n(Präsidium des SP)",
           "blocks": [
-            "237-12"
+            "237-12",
+            "237-13"
           ],
           "surface": "Alfons Schild",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "Präsidium des SP",
+          "marker": ""
+        },
+        {
+          "evidence": "Karin Übelhack\nAlfons Schild\nJoachim Randzio\n(Präsidium des SP)",
+          "blocks": [
+            "237-12",
+            "237-13"
+          ],
+          "surface": "Joachim Randzio",
+          "role": "signatory",
+          "function": "Präsidium des SP",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -7121,6 +7740,11 @@
       "date_type": "undated",
       "doc_type": "offener_brief",
       "confidence": 0.9,
+      "_foreign_blocks": [
+        "234-3",
+        "234-2",
+        "234-17"
+      ],
       "_grounding": []
     },
     {
@@ -7147,6 +7771,8 @@
           ],
           "surface": "RCDS",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rcds"
           ]
@@ -7157,7 +7783,9 @@
             "239-5"
           ],
           "surface": "H. Höcherl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: H. Höcherl, H. Fexer",
@@ -7165,7 +7793,9 @@
             "239-5"
           ],
           "surface": "H. Fexer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -7175,8 +7805,11 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.9,
-      "_retried_issuer": [
-        "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-"
+      "_foreign_blocks": [
+        "235-5",
+        "235-4",
+        "235-13",
+        "235-13"
       ],
       "_grounding": []
     },
@@ -7191,7 +7824,8 @@
       "note": "",
       "title_evidence": "Betreff:\nMensa",
       "title_blocks": [
-        "240-7"
+        "240-7",
+        "240-8"
       ],
       "title_type": "original",
       "series": "",
@@ -7204,6 +7838,8 @@
           ],
           "surface": "Studentenwerk Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "studentenwerk_regensburg"
           ]
@@ -7218,6 +7854,11 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.9,
+      "_foreign_blocks": [
+        "236-5",
+        "236-2",
+        "236-11"
+      ],
       "_grounding": []
     },
     {
@@ -7245,32 +7886,47 @@
           ],
           "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
         }
       ],
-      "date_evidence": "heute, Donnerstag, 2.7., 18.00 Uhr",
+      "date_evidence": "heute, Donnerstag, 2.7.",
       "date_blocks": [
         "243-6"
       ],
-      "date_text": "2.7.1970",
+      "date_text": "Donnerstag, 2.7.1970",
       "date_iso": "1970-07-02",
       "date_type": "event",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_foreign_blocks": [
+        "237-1",
+        "237-10",
+        "237-11",
+        "237-10",
+        "237-11",
+        "237-10",
+        "237-11",
+        "237-12",
+        "237-13",
+        "237-12",
+        "237-13"
+      ],
       "_grounding": []
     },
     {
       "id": 156,
-      "title": "Nachfolgend wird der Wortlaut des heute beim Rektor der Universität ...",
+      "title": "Nachfolgend wird der Wortlaut des heute beim Rektor der Universität Regensburg eingegangenen Telegramms des Herrn Bundesministers für Bildung und Wissenschaft, Prof. Dr. Leussink, bekanntgegeben: ...",
       "date": "",
       "start_page": 244,
       "end_page": 244,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Nachfolgend wird der Wortlaut des heute beim Rektor der Universität Regensburg eingegangenen Telegramms des Herrn Bundesministers für Bildung und Wissenschaft, Prof. Dr. Leussink, bekanntgegeben:",
       "title_blocks": [
         "244-6"
       ],
@@ -7283,8 +7939,10 @@
           "blocks": [
             "244-3"
           ],
-          "surface": "Der Rektor der Universität Regensburg",
+          "surface": "Der Rektor",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rektor"
           ]
@@ -7299,53 +7957,143 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.9,
-      "_grounding": []
+      "_foreign_blocks": [
+        "238-3",
+        "238-2",
+        "239-5",
+        "239-5"
+      ],
+      "_grounding": [
+        "Person als issuer: 'Der Rektor' - gehoert zu signatory"
+      ]
     },
     {
       "id": 157,
-      "title": "Für Mittwoch, den 10. Juni 1970, ist die Wahl des ...",
+      "title": "Für Mittwoch, den 10. Juni 1970, ist die Wahl des Rektors für das Amtsjahr 1970/71 vorgesehen. Auf Grund der Vorläufigen Satzung ...",
       "date": "",
       "start_page": 245,
       "end_page": 245,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Für Mittwoch, den 10. Juni 1970, ist die Wahl des Rektors für das Amtsjahr 1970/71 vorgesehen. Auf Grund der Vorläufigen Satzung der Universität Regensburg findet bei der Wahlversammlung keine Aussprache statt.",
       "title_blocks": [
         "245-2"
       ],
       "title_type": "incipit",
       "series": "",
       "issue": "",
-      "issuers": [],
+      "issuers": [
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "245-5"
+          ],
+          "surface": "Rektor",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rektor"
+          ]
+        },
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "245-5"
+          ],
+          "surface": "Vereinigung der wissenschaftlichen Mitarbeiter",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "245-5"
+          ],
+          "surface": "AStA der Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
       "date_evidence": "Dienstag, den 26. Mai 1970, 20 Uhr",
       "date_blocks": [
         "245-4"
       ],
-      "date_text": "26. Mai 1970",
+      "date_text": "26. Mai 1970, 20 Uhr",
       "date_iso": "1970-05-26",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.8,
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "240-1",
+        "240-2",
+        "240-1"
+      ],
       "_grounding": []
     },
     {
       "id": 158,
-      "title": "Für Mittwoch, den 1. Juli 1970, ist die Wahl des ...",
+      "title": "Für Mittwoch, den 1. Juli 1970, ist die Wahl des Prorektors für das Amtsjahr 1970/71 (nachdem der Prorektor mit Schreiben vom 10.6.1970 sein definitives Ausscheiden zum 30.9.1970 mitgeteilt hat) vorgesehen. Auf Grund der ...",
       "date": "",
       "start_page": 246,
       "end_page": 246,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Für Mittwoch, den 1. Juli 1970, ist die Wahl des Prorektors für das Amtsjahr 1970/71 (nachdem der Prorektor mit Schreiben vom 10.6.1970 sein definitives Ausscheiden zum 30.9.1970 mitgeteilt hat) vorgesehen. Auf Grund der Vorläufigen Satzung der Universität findet bei der Wahlversammlung keine Aussprache statt. Zur Vorbereitung der Wahl ist eine Versammlung ...",
       "title_blocks": [
-        "246-1"
+        "246-1",
+        "246-2"
       ],
       "title_type": "incipit",
       "series": "",
       "issue": "",
-      "issuers": [],
+      "issuers": [
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "246-4"
+          ],
+          "surface": "Rektor",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rektor"
+          ]
+        },
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "246-4"
+          ],
+          "surface": "Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "246-4"
+          ],
+          "surface": "AStA der Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
       "date_evidence": "Montag, den 29. Juni 1970, 20 Uhr",
       "date_blocks": [
         "246-3"
@@ -7354,19 +8102,25 @@
       "date_iso": "1970-06-29",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.8,
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "242-2",
+        "242-3",
+        "243-6",
+        "243-9"
+      ],
       "_grounding": []
     },
     {
       "id": 159,
-      "title": "Das hat doch alles keinen Sinn, das ist Papierverschwendung; die ...",
+      "title": "Das hat doch alles keinen Sinn, das ist Papierverschwendung; die da oben ...",
       "date": "",
       "start_page": 247,
       "end_page": 247,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "\"Das hat doch alles keinen Sinn, das ist Papierverschwendung; die da oben machen",
       "title_blocks": [
         "247-6"
       ],
@@ -7375,13 +8129,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "STUDENTENWERK REGENSBURG\nAnstalt des öffentlichen Rechts",
+          "evidence": "STUDENTENWERK REGENSBURG",
           "blocks": [
-            "247-3",
-            "247-4"
+            "247-3"
           ],
           "surface": "Studentenwerk Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "studentenwerk_regensburg"
           ]
@@ -7396,25 +8151,44 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_foreign_blocks": [
+        "244-4",
+        "244-3"
+      ],
       "_grounding": []
     },
     {
       "id": 160,
-      "title": "Für Mittwoch, den 3. Juni 1970, ist die Wahl des ...",
+      "title": "Für Mittwoch, den 3. Juni 1970, ist die Wahl des Rektors für das Amtsjahr 1970/71 vorgesehen. ...",
       "date": "",
       "start_page": 248,
       "end_page": 248,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Für Mittwoch, den 3. Juni 1970, ist die Wahl des Rektors für das Amtsjahr 1970/71 vorgesehen. Auf Grund der Vorläufigen Satzung der Universität Regensburg findet bei der Wahlversammlung keine Aussprache statt. Zur Vorbereitung der Wahl ist eine Versammlung aller Mitglieder der Universität für",
       "title_blocks": [
-        "248-5"
+        "248-5",
+        "248-6"
       ],
       "title_type": "incipit",
       "series": "",
       "issue": "",
-      "issuers": [],
+      "issuers": [
+        {
+          "evidence": "Hierzu laden der Rektor, der Sprecher der Vereinigung der wissenschaftlichen Mitarbeiter und der AStA der Universität ein.",
+          "blocks": [
+            "248-8"
+          ],
+          "surface": "AStA der Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
       "date_evidence": "Dienstag, den 26. Mai 1970, 20 Uhr",
       "date_blocks": [
         "248-7"
@@ -7423,21 +8197,27 @@
       "date_iso": "1970-05-26",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.8,
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "245-2",
+        "245-4"
+      ],
       "_grounding": []
     },
     {
       "id": 161,
-      "title": "Sehr geehrte Damen und Herren, liebe Kommilitoninnen und Kommilitonen! Wie Sie ...",
+      "title": "An alle Mitglieder und Bediensteten der Universität Regensburg",
       "date": "",
       "start_page": 249,
       "end_page": 249,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
-      "title_blocks": [],
-      "title_type": "incipit",
+      "title_evidence": "An alle\nMitglieder und Bediensteten\nder Universität Regensburg",
+      "title_blocks": [
+        "249-7"
+      ],
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -7448,9 +8228,31 @@
           ],
           "surface": "Der Rektor der Universität Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rektor"
           ]
+        },
+        {
+          "evidence": "gez. Übelhack",
+          "blocks": [
+            "249-17"
+          ],
+          "surface": "Übelhack",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        },
+        {
+          "evidence": "gez. Pasternack",
+          "blocks": [
+            "249-18"
+          ],
+          "surface": "Pasternack",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
         },
         {
           "evidence": "gez. Pollok",
@@ -7458,7 +8260,20 @@
             "249-19"
           ],
           "surface": "Pollok",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        },
+        {
+          "evidence": "Pollok\n(Prof. Dr. K.-H. Pollok)",
+          "blocks": [
+            "249-24",
+            "249-25"
+          ],
+          "surface": "Prof. Dr. K.-H. Pollok",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "Regensburg, 26. Mai 1970",
@@ -7470,14 +8285,16 @@
       "date_type": "issued",
       "doc_type": "offener_brief",
       "confidence": 0.9,
+      "_foreign_blocks": [
+        "246-1",
+        "246-3"
+      ],
       "_retried_signatory": true,
-      "_grounding": [
-        "Unterzeichner fehlt (Verantwortlich-Zeile): Übelhack, Pasternack"
-      ]
+      "_grounding": []
     },
     {
       "id": 162,
-      "title": "Gespräche des Rektors mit allen Gruppen:",
+      "title": "Gespräche des Rektors mit allen Gruppen",
       "date": "",
       "start_page": 250,
       "end_page": 250,
@@ -7498,7 +8315,9 @@
             "250-7"
           ],
           "surface": "Prof. Dr. K.-H. Pollok",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
         }
       ],
       "date_evidence": "",
@@ -7507,7 +8326,12 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.75,
+      "_foreign_blocks": [
+        "247-5",
+        "247-3",
+        "247-4"
+      ],
       "_retried_issuer": [
         "Gespräche des Rektors mit allen Gruppen:"
       ],
@@ -7531,46 +8355,60 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "a l s - Aktionsgemeinschaft liberaler Studenten\nVerantwortlich: Bettermann - Müllner - Pöllath",
+          "evidence": "a l s - Aktionsgemeinschaft liberaler Studenten",
           "blocks": [
             "251-12"
           ],
           "surface": "als - Aktionsgemeinschaft liberaler Studenten",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
-          "evidence": "a l s - Aktionsgemeinschaft liberaler Studenten\nVerantwortlich: Bettermann - Müllner - Pöllath",
+          "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
           "blocks": [
             "251-12"
           ],
           "surface": "Bettermann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "a l s - Aktionsgemeinschaft liberaler Studenten\nVerantwortlich: Bettermann - Müllner - Pöllath",
+          "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
           "blocks": [
             "251-12"
           ],
           "surface": "Müllner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "a l s - Aktionsgemeinschaft liberaler Studenten\nVerantwortlich: Bettermann - Müllner - Pöllath",
+          "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
           "blocks": [
             "251-12"
           ],
           "surface": "Pöllath",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
-      "date_evidence": "",
-      "date_blocks": [],
-      "date_text": "",
-      "date_iso": "",
-      "date_type": "undated",
+      "date_evidence": "am Mittwoch, den 4.2. um 13.00 Uhr c.t. in H 01",
+      "date_blocks": [
+        "251-12"
+      ],
+      "date_text": "4.2.1970",
+      "date_iso": "1970-02-04",
+      "date_type": "event",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_foreign_blocks": [
+        "248-5",
+        "248-7"
+      ],
       "_grounding": []
     },
     {
@@ -7597,7 +8435,9 @@
             "252-8"
           ],
           "surface": "Martin Hartl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -7608,7 +8448,10 @@
       "doc_type": "einladung",
       "confidence": 0.75,
       "_foreign_blocks": [
-        "251-12"
+        "249-2",
+        "249-1",
+        "249-24",
+        "249-25"
       ],
       "_grounding": []
     },
@@ -7635,7 +8478,9 @@
             "254-5"
           ],
           "surface": "Prof. Dr. K.-H. Pollok",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
         }
       ],
       "date_evidence": "Regensburg, den 4. Februar 1970",
@@ -7672,8 +8517,10 @@
             "255-11",
             "255-12"
           ],
-          "surface": "Vereinigung Wissenschaftlichen Mitarbeiter der Universität Regensburg",
+          "surface": "Vereinigung wissenschaftlichen Mitarbeiter der Universität Regensburg",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -7682,7 +8529,9 @@
             "255-12"
           ],
           "surface": "Pasternack",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
         }
       ],
       "date_evidence": "",
@@ -7696,16 +8545,18 @@
     },
     {
       "id": 167,
-      "title": "Der Rektor teilt mit: Am 26. Januar 1970 ...",
+      "title": "Der Rektor teilt mit:",
       "date": "",
       "start_page": 256,
       "end_page": 256,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
-      "title_blocks": [],
-      "title_type": "incipit",
+      "title_evidence": "Der Rektor teilt mit:",
+      "title_blocks": [
+        "256-1"
+      ],
+      "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [
@@ -7716,6 +8567,8 @@
           ],
           "surface": "Der Rektor",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rektor"
           ]
@@ -7729,7 +8582,7 @@
       "date_iso": "1970-01-26",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.75,
+      "confidence": 0.85,
       "_retried_issuer": [
         "Der Rektor teilt mit:"
       ],
@@ -7740,35 +8593,36 @@
     },
     {
       "id": 168,
-      "title": "\"Freiheit\" der Wissenschaft! \"Freiheit\" der Forschung! \"Freiheit\" der Lehre! \"Freiheit\" der Wahl des Berufs! \"Freiheit\" der Wahl des Arbeitsplatzes! \"Freiheit\" der Wahl der Ausbildungsstätte!",
+      "title": "\"Freiheit\" der Wissenschaft! \"Freiheit\" der Forschung! \"Freiheit\" der Lehre! \"Freiheit\" der Wahl des Berufs! \"Freiheit\" der Wahl des Arbeitsplatzes! \"Freiheit\" der Wahl der Ausbildungsstätte! In der \"freiheitlich - demokratischen\" Grundordnung! Des \"Frei\"staates Bayern!",
       "date": "",
       "start_page": 257,
       "end_page": 258,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "\"FREIHEIT\" DER WISSENSCHAFT!\n\"FREIHEIT\" DER FORSCHUNG!\n\"FREIHEIT\" DER LEHRE!\n\"FREIHEIT\" DER WAHL DES BERUFS!\n\"FREIHEIT\" DER WAHL DES ARBEITSPLATZES!\n\"FREIHEIT\" DER WAHL DER AUSBILDUNGSSTÄTTE!",
+      "title_evidence": "\"FREIHEIT\" DER WISSENSCHAFT!\n\"FREIHEIT\" DER FORSCHUNG!\n\"FREIHEIT\" DER LEHRE!\n\"FREIHEIT\" DER WAHL DES BERUFS!\n\"FREIHEIT\" DER WAHL DES ARBEITSPLATZES!\n\"FREIHEIT\" DER WAHL DER AUSBILDUNGSSTÄTTE!\nIN DER \"FREIHEITLICH - DEMOKRATISCHEN\" GRUNDORDNUNG!\nDES \"FREI\"STAATES BAYERN!",
       "title_blocks": [
         "257-5",
         "257-6",
         "257-7",
         "257-8",
         "257-9",
-        "257-10"
+        "257-10",
+        "257-11"
       ],
       "title_type": "original",
       "series": "ROTZEPS-Info",
       "issue": "2",
       "issuers": [
         {
-          "evidence": "Rote Zelle Psychologie\nRote Zelle Psychologie\nRote Zelle Psychol",
+          "evidence": "Rote Zelle Psychologie",
           "blocks": [
-            "257-1",
-            "257-2",
-            "257-3"
+            "257-1"
           ],
           "surface": "Rote Zelle Psychologie",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rote_zelle_psychologie"
           ]
@@ -7801,14 +8655,14 @@
       "issue": "4",
       "issuers": [
         {
-          "evidence": "Rote Zelle Psychologie\nRote Zelle Psychologie\nRote Zelle Psychol",
+          "evidence": "Rote Zelle Psychologie",
           "blocks": [
-            "259-1",
-            "259-2",
-            "259-3"
+            "259-1"
           ],
           "surface": "Rote Zelle Psychologie",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rote_zelle_psychologie"
           ]
@@ -7820,7 +8674,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
@@ -7847,6 +8701,8 @@
           ],
           "surface": "Rote Zelle Psychologie",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rote_zelle_psychologie"
           ]
@@ -7858,7 +8714,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
@@ -7886,6 +8742,8 @@
           ],
           "surface": "Rote Zelle Psychologie",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "rote_zelle_psychologie"
           ]
@@ -7897,7 +8755,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
@@ -7946,6 +8804,8 @@
           ],
           "surface": "SAK",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "sak"
           ]
@@ -7968,19 +8828,19 @@
     },
     {
       "id": 174,
-      "title": "Wollen Sie, wie der Großteil unserer Bevölkerung, es ...",
+      "title": "Wollen Sie, wie der Großteil unserer Bevölkerung, es nicht wahrhaben ...",
       "date": "",
       "start_page": 267,
       "end_page": 267,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "W o l l e n S i e, wie der Großteil unserer Bevölkerung, es nicht wahrhaben, daß die soziale Schichtung unseres Wohlfahrtsstaates eine unterste Klasse erzeugt, deren Existenz möglichst aus dem Bewußtsein verdrängt wird, tabu ist?",
       "title_blocks": [
         "267-3"
       ],
       "title_type": "incipit",
-      "series": "SAK",
+      "series": "",
       "issue": "",
       "issuers": [
         {
@@ -7990,6 +8850,8 @@
           ],
           "surface": "Der Soziale Arbeitskreis der Hochschulgemeinden",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -8001,7 +8863,7 @@
       "date_iso": "1970-11-11",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.8,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -8022,13 +8884,14 @@
       "issue": "7/70",
       "issuers": [
         {
-          "evidence": "Faschismusarbeitskreis im AUS\nVerantw.: A. Kujawa",
+          "evidence": "Faschismusarbeitskreis im AUS",
           "blocks": [
-            "268-9",
-            "268-10"
+            "268-9"
           ],
           "surface": "Faschismusarbeitskreis im AUS",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -8037,7 +8900,9 @@
             "268-10"
           ],
           "surface": "A. Kujawa",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
         }
       ],
       "date_evidence": "Mittwoch, 5. November 1970",
@@ -8069,13 +8934,14 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verntw.: UNABHÄNGIGE LIBERALE LISTE (Liste 3) mit den Kandidaten:\nRainer Wallerius - Elfriede Kiesel - Rainer Franke - Walter Dirnberger - Reingard Vath - Wolfgang Lenzen - Helmut Peez - Michael Suchan - Helmut Mader - Maria Grimm - Dieter Leupold-Mark Sittler)",
+          "evidence": "Verntw.: UNABHÄNGIGE LIBERALE LISTE (Liste 3)",
           "blocks": [
-            "270-13",
-            "270-14"
+            "270-13"
           ],
           "surface": "Unabhängige Liberale Liste",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "unabh_ngige_liberale_liste"
           ]
@@ -8114,7 +8980,7 @@
     },
     {
       "id": 178,
-      "title": "Mit dem Latein am Ende? oder: wie die Listen 1 u. 2 Demokratie verstehen",
+      "title": "Mit dem Latein am Ende? Oder: wie die Listen 1 u. 2 Demokratie verstehen",
       "date": "",
       "start_page": 272,
       "end_page": 273,
@@ -8131,14 +8997,15 @@
       "issue": "",
       "issuers": [
         {
-          "evidence": "Verantw.:\nUnabhängige liberale Liste im Fb P-P-P\n(Wallerius - Kiesel - Franke - Sittler - Dirnberger - Vath -\nSuchan - Grimm - Peez - Lenzen - Mader - Leupold)",
+          "evidence": "Verantw.:\nUnabhängige liberale Liste im Fb P-P-P",
           "blocks": [
             "273-4",
-            "273-5",
-            "273-6"
+            "273-5"
           ],
           "surface": "Unabhängige liberale Liste im Fb P-P-P",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "unabh_ngige_liberale_liste"
           ]
@@ -8150,7 +9017,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -8178,6 +9045,8 @@
           ],
           "surface": "Vereinigung Deutscher Studenten Markomannen",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "vereinigung_deutscher_studenten_markomannen"
           ]
@@ -8194,14 +9063,14 @@
     },
     {
       "id": 180,
-      "title": "Wer am lautesten von Aktivitäten schreit, tut selbst am ...",
+      "title": "Wer am lautesten von Aktivitäten schreit, tut selbst am wenigsten! ...",
       "date": "",
       "start_page": 275,
       "end_page": 275,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Wer am lautesten von Aktivitäten schreit, tut selbst am wenigsten!",
       "title_blocks": [
         "275-3"
       ],
@@ -8216,6 +9085,8 @@
           ],
           "surface": "ZBW",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "zbw"
           ]
@@ -8226,7 +9097,9 @@
             "275-10"
           ],
           "surface": "Marxreiter",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die ZBW: Marxreiter, Abeling, Jung, Witzel",
@@ -8234,7 +9107,9 @@
             "275-10"
           ],
           "surface": "Abeling",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die ZBW: Marxreiter, Abeling, Jung, Witzel",
@@ -8242,7 +9117,9 @@
             "275-10"
           ],
           "surface": "Jung",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
           "evidence": "Für die ZBW: Marxreiter, Abeling, Jung, Witzel",
@@ -8250,7 +9127,9 @@
             "275-10"
           ],
           "surface": "Witzel",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "",
@@ -8285,7 +9164,9 @@
             "277-7"
           ],
           "surface": "M. Gohary",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: M. Gohary 8000München 25, Krünerstr. 12\nM. Dinnés 8400Regensburg, Minoritenweg 29\nF. Nerb 8400Regensburg, Landsh.-Str. 14",
@@ -8293,7 +9174,9 @@
             "277-7"
           ],
           "surface": "M. Dinnés",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: M. Gohary 8000München 25, Krünerstr. 12\nM. Dinnés 8400Regensburg, Minoritenweg 29\nF. Nerb 8400Regensburg, Landsh.-Str. 14",
@@ -8301,10 +9184,12 @@
             "277-7"
           ],
           "surface": "F. Nerb",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
-      "date_evidence": "vom 19.2.1970",
+      "date_evidence": "Presseerklärung des Münchner Palästina-Komitees vom 19.2.1970",
       "date_blocks": [
         "276-1"
       ],
@@ -8312,19 +9197,19 @@
       "date_iso": "1970-02-19",
       "date_type": "issued",
       "doc_type": "flugblatt",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
       "id": 182,
-      "title": "Ach was muß man oft von bösen Professoren hören ...",
+      "title": "Ach was muß man oft von bösen Professoren hören oder lesen ...",
       "date": "",
       "start_page": 278,
       "end_page": 278,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Ach was muß man oft von bösen\nProfessoren hören oder lesen.",
       "title_blocks": [
         "278-4"
       ],
@@ -8340,6 +9225,8 @@
           ],
           "surface": "Fachschaftsrat für Geographie",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -8360,7 +9247,7 @@
     },
     {
       "id": 183,
-      "title": "Machen uns gelbe Wände glücklich? Oder:",
+      "title": "Machen uns gelbe Wände glücklich? Oder",
       "date": "",
       "start_page": 279,
       "end_page": 279,
@@ -8382,6 +9269,8 @@
           ],
           "surface": "Fachschaft Mathematik",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
@@ -8391,39 +9280,49 @@
           ],
           "surface": "Fachschaft Physik",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         },
         {
-          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl. Für die Fachschaft Physik: Ihlefeld, Strauß.",
+          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl.",
           "blocks": [
             "279-13"
           ],
           "surface": "Wessoly",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl. Für die Fachschaft Physik: Ihlefeld, Strauß.",
+          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl.",
           "blocks": [
             "279-13"
           ],
           "surface": "Ascherl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
-          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl. Für die Fachschaft Physik: Ihlefeld, Strauß.",
+          "evidence": "Für die Fachschaft Physik: Ihlefeld, Strauß.",
           "blocks": [
             "279-13"
           ],
           "surface": "Ihlefeld",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         },
         {
-          "evidence": "Verantwortlich: Für die Fachschaft Mathematik: Wessoly,\nAscherl. Für die Fachschaft Physik: Ihlefeld, Strauß.",
+          "evidence": "Für die Fachschaft Physik: Ihlefeld, Strauß.",
           "blocks": [
             "279-13"
           ],
           "surface": "Strauß",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": ""
         }
       ],
       "date_evidence": "Dienstag, 11. 17., 11\n00",
@@ -8431,22 +9330,22 @@
         "279-12"
       ],
       "date_text": "Dienstag, 11.17., 11 Uhr",
-      "date_iso": "1970",
+      "date_iso": "1970-11-17",
       "date_type": "event",
-      "doc_type": "flugblatt",
+      "doc_type": "einladung",
       "confidence": 0.75,
       "_grounding": []
     },
     {
       "id": 184,
-      "title": "Zur Fachbereichs-Wahl wollen wir uns hiermit den Kommilitonen vorstellen, ...",
+      "title": "Zur Fachbereichs-Wahl wollen wir uns hiermit den Kommilitonen vorstellen, die ...",
       "date": "",
       "start_page": 280,
       "end_page": 281,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "",
+      "title_evidence": "Zur Fachbereichs-Wahl wollen wir uns hiermit den Kommilitonen vorstellen, die uns noch nicht kennen.",
       "title_blocks": [
         "280-7"
       ],
@@ -8460,7 +9359,9 @@
             "281-5"
           ],
           "surface": "Renate Dworsky",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         },
         {
           "evidence": "verantw.: Renate Dworsky - Stephan Goldner - Brigitte Hoffmann - Theo Schneider - Michael Stefan",
@@ -8468,7 +9369,9 @@
             "281-5"
           ],
           "surface": "Stephan Goldner",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         },
         {
           "evidence": "verantw.: Renate Dworsky - Stephan Goldner - Brigitte Hoffmann - Theo Schneider - Michael Stefan",
@@ -8476,7 +9379,9 @@
             "281-5"
           ],
           "surface": "Brigitte Hoffmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         },
         {
           "evidence": "verantw.: Renate Dworsky - Stephan Goldner - Brigitte Hoffmann - Theo Schneider - Michael Stefan",
@@ -8484,7 +9389,9 @@
             "281-5"
           ],
           "surface": "Theo Schneider",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         },
         {
           "evidence": "verantw.: Renate Dworsky - Stephan Goldner - Brigitte Hoffmann - Theo Schneider - Michael Stefan",
@@ -8492,7 +9399,9 @@
             "281-5"
           ],
           "surface": "Michael Stefan",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
         }
       ],
       "date_evidence": "",
@@ -8533,7 +9442,9 @@
             "282-7"
           ],
           "surface": "Kaufmann",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Kaufmann, Möller, Schirmer, Vergho, Wallhofen",
@@ -8541,7 +9452,9 @@
             "282-7"
           ],
           "surface": "Möller",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Kaufmann, Möller, Schirmer, Vergho, Wallhofen",
@@ -8549,7 +9462,9 @@
             "282-7"
           ],
           "surface": "Schirmer",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Kaufmann, Möller, Schirmer, Vergho, Wallhofen",
@@ -8557,7 +9472,9 @@
             "282-7"
           ],
           "surface": "Vergho",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         },
         {
           "evidence": "Verantwortlich: Kaufmann, Möller, Schirmer, Vergho, Wallhofen",
@@ -8565,7 +9482,9 @@
             "282-7"
           ],
           "surface": "Wallhofen",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
         }
       ],
       "date_evidence": "",
@@ -8574,7 +9493,7 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.85,
       "_grounding": []
     },
     {
@@ -8628,7 +9547,9 @@
             "284-11"
           ],
           "surface": "Konrad Schießl",
-          "role": "signatory"
+          "role": "signatory",
+          "function": "stud. FB-Sprecher Theologie",
+          "marker": "verantw."
         }
       ],
       "date_evidence": "",
@@ -8664,6 +9585,8 @@
           ],
           "surface": "Studentenvertreter im Fachbereich Wirtschaftswissenschaft",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": []
         }
       ],
@@ -8673,26 +9596,49 @@
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "flugblatt",
-      "confidence": 0.8,
+      "confidence": 0.9,
       "_grounding": []
     },
     {
       "id": 189,
-      "title": "Niederschrift",
+      "title": "Niederschrift über die Sitzung der Pflegesatzkommission am Dienstag, den 2.6.1970, vorm. 11 Uhr, in Regensburg, Altes Rathaus",
       "date": "",
       "start_page": 286,
-      "end_page": 287,
-      "confirmed": false,
+      "end_page": 288,
+      "confirmed": true,
       "no_content": false,
       "note": "",
-      "title_evidence": "Niederschrift",
+      "title_evidence": "Niederschrift\nüber die Sitzung der Pflegesatzkommission\nam Dienstag, den 2.6.1970, vorm.11 Uhr, in\nRegensburg, Altes Rathaus",
       "title_blocks": [
-        "286-4"
+        "286-4",
+        "286-5"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
-      "issuers": [],
+      "issuers": [
+        {
+          "evidence": "(Schneider)\nStadtoberamtmann",
+          "blocks": [
+            "288-8"
+          ],
+          "surface": "Schneider",
+          "role": "signatory",
+          "function": "Stadtoberamtmann",
+          "marker": ""
+        },
+        {
+          "evidence": "Der Vorsitzende:\n\n(Dr. Silbereisen)\nBürgermeister",
+          "blocks": [
+            "288-10",
+            "288-11"
+          ],
+          "surface": "Dr. Silbereisen",
+          "role": "signatory",
+          "function": "Bürgermeister",
+          "marker": "Der Vorsitzende"
+        }
+      ],
       "date_evidence": "am Dienstag, den 2.6.1970",
       "date_blocks": [
         "286-5"
@@ -8712,55 +9658,6 @@
     },
     {
       "id": 190,
-      "title": "Spitzenverband Anschrift des Heimes Rechtsträger Pflegesatz Gruppe neuer Pflege ...",
-      "date": "",
-      "start_page": 288,
-      "end_page": 288,
-      "confirmed": false,
-      "no_content": false,
-      "note": "",
-      "title_evidence": "",
-      "title_blocks": [
-        "288-1"
-      ],
-      "title_type": "incipit",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "Für die Niederschrift\n(Schneider)\nStadtoberamtmann",
-          "blocks": [
-            "288-7",
-            "288-8"
-          ],
-          "surface": "Schneider",
-          "role": "signatory"
-        },
-        {
-          "evidence": "Der Vorsitzende:\n(Dr. Silbereisen)\nBürgermeister",
-          "blocks": [
-            "288-10",
-            "288-11"
-          ],
-          "surface": "Dr. Silbereisen",
-          "role": "signatory"
-        }
-      ],
-      "date_evidence": "Regensburg, den 2.6.1970",
-      "date_blocks": [
-        "288-9"
-      ],
-      "date_text": "2.6.1970",
-      "date_iso": "1970-06-02",
-      "date_type": "issued",
-      "doc_type": "protokoll",
-      "confidence": 0.9,
-      "_grounding": [
-        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich kein Erscheinungsdatum"
-      ]
-    },
-    {
-      "id": 191,
       "title": "Onanie - Onaja",
       "date": "",
       "start_page": 289,
@@ -8781,8 +9678,10 @@
           "blocks": [
             "289-15"
           ],
-          "surface": "AStA",
+          "surface": "AStA-Kollektiv",
           "role": "issuer",
+          "function": "",
+          "marker": "",
           "org_ids": [
             "asta"
           ]
@@ -8800,7 +9699,7 @@
       "_grounding": []
     },
     {
-      "id": 192,
+      "id": 191,
       "title": "Obsigarten",
       "date": "",
       "start_page": 291,
@@ -8826,24 +9725,25 @@
       "_grounding": []
     },
     {
-      "id": 193,
-      "title": "Stadttheater Rechnungsung \"Die Katakomben\"",
+      "id": 192,
+      "title": "Stadttheater Rechnungsung \"Die Katakomben\" Frankfurter Kellertheater",
       "date": "",
       "start_page": 292,
       "end_page": 292,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "STADTTHEATER RECHNUNGSUNG\n\"DIE KATAKOMBEN\"",
+      "title_evidence": "STADTTHEATER RECHNUNGSUNG\n\"DIE KATAKOMBEN\"\nFrankfurter Kellertheater",
       "title_blocks": [
         "292-4",
-        "292-5"
+        "292-5",
+        "292-6"
       ],
       "title_type": "original",
       "series": "",
       "issue": "",
       "issuers": [],
-      "date_evidence": "am Donnerstag, 4. Juni",
+      "date_evidence": "am Donnerstag, 4. Juni um 20 Uhr",
       "date_blocks": [
         "292-9"
       ],
@@ -8851,11 +9751,11 @@
       "date_iso": "1970-06-04",
       "date_type": "event",
       "doc_type": "einladung",
-      "confidence": 0.75,
+      "confidence": 0.8,
       "_grounding": []
     },
     {
-      "id": 194,
+      "id": 193,
       "title": "Meinungsumfrage zur Musikerziehung im Raum Regensburg",
       "date": "",
       "start_page": 293,
@@ -8870,17 +9770,7 @@
       "title_type": "original",
       "series": "",
       "issue": "",
-      "issuers": [
-        {
-          "evidence": "Bitte, senden Sie den Fragebogen an die Städt. Singschule, Amt 40, 84 Regensburg, Postfach 145 bis zum 25. Mai 1970 zurück.",
-          "blocks": [
-            "293-5"
-          ],
-          "surface": "Städt. Singschule",
-          "role": "issuer",
-          "org_ids": []
-        }
-      ],
+      "issuers": [],
       "date_evidence": "",
       "date_blocks": [],
       "date_text": "",
@@ -8897,17 +9787,17 @@
       "_grounding": []
     },
     {
-      "id": 195,
-      "title": "Honnef",
+      "id": 194,
+      "title": "Hinweis:",
       "date": "",
       "start_page": 294,
       "end_page": 294,
       "confirmed": false,
       "no_content": false,
       "note": "",
-      "title_evidence": "HONNEF",
+      "title_evidence": "HINWEIS:",
       "title_blocks": [
-        "294-5"
+        "294-6"
       ],
       "title_type": "original",
       "series": "",

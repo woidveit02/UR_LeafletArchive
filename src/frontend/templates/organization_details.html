@@ -38,14 +38,17 @@
             <dd>{{ org.notes if org.notes else 'n.a.' }}</dd>
         </dl>
 
-        <h2>Flugblätter</h2>
-        <ul>
-            {% for leaflet in org.leaflets %}
-            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.display_title if leaflet.display_title else '*kein Titel*' }}</a></li>
-            {% else %}
-            <li>Keine Flugblätter gefunden.</li>
-            {% endfor %}
-        </ul>
+        {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards %}
+        <div class="section-head" id="flugblaetter">
+            <h2>Flugblätter</h2>
+            {% if org.has_thumbs %}{{ view_switch('/organizations/' ~ org.id, org.view,
+                [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
+        </div>
+        {% if org.view == 'kacheln' %}
+        {{ leaflet_cards(org.leaflets, fields=('date', 'count')) }}
+        {% else %}
+        {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count')) }}
+        {% endif %}
     </div>
 </body>
 </html>

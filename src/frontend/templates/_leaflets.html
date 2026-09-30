@@ -1,0 +1,83 @@
+{# `items` come from leaflet_items() in app.py. `fields`: pages, count, date,
+   issuers, series; in leaflet_list, date and count become columns. #}
+
+{% macro title(leaflet) -%}
+{% if leaflet.display_title %}{{ leaflet.display_title }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}
+{%- endmacro %}
+
+{% macro issuer_list(issuers) -%}
+{% for short, full in issuers %}{% if full %}<abbr title="{{ full }}">{{ short }}</abbr>{% else %}{{ short }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{%- endmacro %}
+
+{% macro count(leaflet) -%}
+{% set n = leaflet.end_page - leaflet.start_page + 1 %}{{ n }} {{ 'Seite' if n == 1 else 'Seiten' }}
+{%- endmacro %}
+
+{# Lucide icons (ISC license, lucide.dev): menu, layout-grid, gallery-horizontal-end #}
+{% set ICONS = {
+    'liste': '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
+    'kacheln': '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+    'bandseiten': '<path d="M2 7v10"/><path d="M6 5v14"/><rect width="12" height="18" x="10" y="3" rx="2"/>',
+} %}
+
+{% macro view_switch(base, current, views) %}
+<nav class="view-switch" aria-label="Ansicht">
+    {% for key, label in views %}
+    <a href="{{ base }}{% if not loop.first %}?ansicht={{ key }}{% endif %}#flugblaetter"{% if key == current %} aria-current="page"{% endif %}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">{{ ICONS[key] | safe }}</svg>{{ label }}</a>
+    {% endfor %}
+</nav>
+{% endmacro %}
+
+{% macro meta(item, fields) %}
+{% set l = item.leaflet %}
+{%- set parts = [] -%}
+{%- for f in fields -%}
+    {%- if f == 'pages' %}{% set _ = parts.append(page_range(l.start_page, l.end_page)) %}
+    {%- elif f == 'count' %}{% set _ = parts.append(count(l)) %}
+    {%- elif f == 'date' and item.date %}{% set _ = parts.append(item.date ~ (' (' ~ item.date_label ~ ')' if item.date_label else '')) %}
+    {%- elif f == 'issuers' and item.issuers %}{% set _ = parts.append(issuer_list(item.issuers)) %}
+    {#- a series already shown as title is not repeated -#}
+    {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
+    {%- endif -%}
+{%- endfor -%}
+<span class="meta">{{ parts | join(' · ') }}</span>
+{%- endmacro %}
+
+{% macro leaflet_list(items, fields) %}
+{% set rest = fields | reject('in', ['date', 'count']) | list %}
+<ul class="leaflet-list">
+    {% for item in items %}
+    <li>
+        {% if 'date' in fields %}<span class="row-date">{{ item.date }}{% if item.date_label %}<small>{{ item.date_label }}</small>{% endif %}</span>{% endif %}
+        <span class="row-main">
+            <a class="row-title" href="/leaflets/{{ item.leaflet.id }}">{{ title(item.leaflet) }}</a>
+            {{ meta(item, rest) }}
+        </span>
+        {% if 'count' in fields %}<span class="row-count">{{ count(item.leaflet) }}</span>{% endif %}
+    </li>
+    {% else %}
+    <li>Keine Flugblätter gefunden.</li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro leaflet_cards(items, fields=('pages', 'date')) %}
+<div class="doc-grid">
+    {% for item in items %}{% set l = item.leaflet %}
+    <figure class="doc-card">
+        {% if item.thumb %}
+        {% set n = l.end_page - l.start_page + 1 %}
+        <a class="doc-stack{% if n == 2 %} doc-stack-two{% elif n > 2 %} doc-stack-more{% endif %}" href="/leaflets/{{ l.id }}" tabindex="-1" aria-hidden="true">
+            <img src="/volumes/{{ item.vz }}/pages/{{ l.start_page }}.jpg" alt="" loading="lazy">
+        </a>
+        {% endif %}
+        <figcaption>
+            <a class="doc-title" href="/leaflets/{{ l.id }}" title="{{ l.display_title }}">{{ title(l) }}</a>
+            <span class="doc-issuers">{{ issuer_list(item.issuers) }}</span>
+            {{ meta(item, fields) }}
+        </figcaption>
+    </figure>
+    {% endfor %}
+</div>
+{% endmacro %}

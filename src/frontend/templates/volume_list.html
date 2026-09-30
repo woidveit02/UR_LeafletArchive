@@ -15,11 +15,12 @@
             (<a href="https://www.archivportal-d.de/item/NFTD57JPRHJOTMAI46F4P3EQ6NA5DKLZ" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
         {% for group in volumes | groupby('group', default='') | sort(attribute='list.0.label') %}
         <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }}</h2>
-        <ul class="volume-list">
+        <ul class="leaflet-list leaflet-list-plain">
             {% for volume in group.list %}
             <li>
-                <a href="/volumes/{{ volume.vz }}">{{ volume.label }}</a>{% if volume.collection %} <span class="meta">· nur {{ volume.collection }}</span>{% endif %}<br>
-                <span class="meta">{{ volume.status }}</span>
+                <span class="row-main"><a class="row-title" href="/volumes/{{ volume.vz }}">{{ volume.label }}</a>
+                    {% if volume.collection %}<span class="meta">nur {{ volume.collection }}</span>{% endif %}</span>
+                <span class="row-count">{{ volume.status }}</span>
             </li>
             {% endfor %}
         </ul>

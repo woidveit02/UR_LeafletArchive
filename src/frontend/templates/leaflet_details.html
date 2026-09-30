@@ -38,7 +38,7 @@
         </span>
         {%- endif -%}
     {%- endmacro %}
-	    <h1>{{ leaflet.title if leaflet.title else '*kein Titel*' }} {{ beleg('Titel') if leaflet.title }}</h1>
+	    <h1>{% if leaflet.title %}{{ leaflet.title }} {{ beleg('Titel') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
 
         {% set total = leaflet.page_list | length %}
         <div class="viewer">
@@ -78,10 +78,12 @@
                     </dd>
                     <dt>Datum</dt>
                     <dd>
-                        {% if leaflet.date_text %}{{ leaflet.date_text }}
-                        {% if leaflet.date_type == 'issued' %}<span class="meta">(Erscheinungsdatum)</span>{% elif leaflet.date_type == 'event' %}<span class="meta">(Datum der angekündigten Veranstaltung)</span>{% endif %}
+                        {% if leaflet.date %}<time datetime="{{ leaflet.date_iso }}">{{ leaflet.date }}</time>
+                        {% if leaflet.date_type == 'issued' %}<span class="meta">(Erscheinungsdatum)</span>{% elif leaflet.date_type == 'event' and leaflet.doc_type == 'Protokoll' %}<span class="meta">(Sitzungsdatum)</span>{% elif leaflet.date_type == 'event' %}<span class="meta">(Datum der angekündigten Veranstaltung)</span>{% endif %}
                         {{ beleg('Datum') }}
-                        {% else %}undatiert{% if leaflet.volume_year %} <span class="meta">(im Band {{ leaflet.volume_year }} abgelegt)</span>{% endif %}{% endif %}
+                        {% elif leaflet.date_text and leaflet.volume_year %}{{ leaflet.volume_year }} <span class="meta">(Jahr des Bandes; auf dem Blatt: „{{ leaflet.date_text }}“)</span>
+                        {{ beleg('Datum') }}
+                        {% elif leaflet.volume_year %}{{ leaflet.volume_year }} <span class="meta">(Jahr des Bandes, das Blatt ist undatiert)</span>{% else %}undatiert{% endif %}
                     </dd>
                     {% if leaflet.received %}
                     <dt>Eingang im Archiv</dt>
@@ -91,17 +93,17 @@
                     </dd>
                     {% endif %}
                     <dt>Reihe</dt>
-                    <dd>{% if leaflet.series %}{{ leaflet.series }}{% if leaflet.title_from_series %} <span class="meta">(das Blatt hat keine eigene Überschrift)</span>{% endif %}{% else %}keine erkannt{% endif %}</dd>
+                    <dd>{% if leaflet.series %}{{ leaflet.series }}{% if leaflet.title_from_series %} <span class="meta">(das Blatt hat keine eigene Überschrift)</span>{% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</dd>
                     <dt>Textsorte</dt>
-                    <dd>{{ leaflet.doc_type if leaflet.doc_type else 'n.a.' }}</dd>
+                    <dd>{% if leaflet.doc_type and leaflet.doc_type != 'unklar' %}{{ leaflet.doc_type }}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</dd>
                     <dt>Herausgeber</dt>
                     <dd>
-                        {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
+                        {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% elif i.other_institution %}<abbr title="Auf dem Blatt: „{{ i.printed }}“">{{ i.surface }}</abbr> <span class="unresolved" title="Nicht der gleichnamigen Regensburger Organisation zugeordnet, weil das Blatt eine andere Hochschule nennt.">(andere Hochschule)</span>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
                         {{ beleg('Herausgeber') }}
                     </dd>
                     <dt>Unterzeichnende</dt>
                     <dd>
-                        {{ leaflet.signatories | join(', ') if leaflet.signatories else 'n.a.' }}
+                        {% for s in leaflet.signatories %}{{ s.name }}{% if s.details %} <span class="meta">({{ s.details }})</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
                         {{ beleg('Unterzeichnende') }}
                     </dd>
                 </dl>

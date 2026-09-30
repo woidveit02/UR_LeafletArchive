@@ -94,3 +94,6 @@ class LeafletIssuer(Base):
     org_id = Column(String, ForeignKey("organizations.id"), nullable=True)
     blocks = Column(JSON)
     quote = Column(String)
+    function = Column(String)
+    marker = Column(String)  # e.g. "V.i.S.d.P.", "gez."
+    other_institution = Column(String)  # e.g. "asta" for the AStA Würzburg

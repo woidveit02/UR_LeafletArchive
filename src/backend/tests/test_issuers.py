@@ -16,6 +16,11 @@ def test_unknown_org_ids_stay_unresolved():
     assert issuer_org_ids({"surface": "X", "org_ids": ["gibt_es_nicht"]}, VARIANTS, KNOWN) == [None]
 
 
+# Tests if a signatory whose name matches an organization stays unlinked.
+def test_signatory_not_linked():
+    assert issuer_org_ids({"surface": "RCDS", "role": "signatory"}, VARIANTS, KNOWN) == [None]
+
+
 # Tests if older metadata without org_ids falls back to the variant lookup.
 def test_variant_lookup_for_older_metadata():
     assert issuer_org_ids({"surface": " RCDS "}, VARIANTS, KNOWN) == ["rcds"]

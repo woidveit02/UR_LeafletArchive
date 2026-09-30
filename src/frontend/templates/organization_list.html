@@ -11,11 +11,11 @@
     {% include '_navigation.html' %}
 	<div class="app">
 		<h1>Organisationen</h1>
-        <ul id="organization-list">
+        <ul class="leaflet-list leaflet-list-plain">
             {% for org in organizations %}
-            <li>
-                <a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a><br>
-                <span class="meta">{{ org.count }} {{ 'Flugblatt' if org.count == 1 else 'Flugblätter' }}</span>
+            <li{% if not org.count %} class="row-empty"{% endif %}>
+                <span class="row-main"><a class="row-title" href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a></span>
+                <span class="row-count">{{ org.count }} {{ 'Flugblatt' if org.count == 1 else 'Flugblätter' }}</span>
             </li>
             {% else %}
             <li>Keine Organisationen gefunden.</li>

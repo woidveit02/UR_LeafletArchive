@@ -26,6 +26,23 @@ def render_page(pdf_path, page_no, dpi=110):
     return page.get_pixmap(dpi=dpi).tobytes("png")
 
 
+THUMB_DIR = Path("/tmp/leaflet-thumbs")
+
+
+def render_thumb(pdf_path, page_no, height=300):
+    """JPEG of the page, `height` pixels high, cached on disk because decoding
+    the full-resolution scan takes about half a second."""
+    cached = THUMB_DIR / Path(pdf_path).stem / f"{page_no}-{height}.jpg"
+    if cached.is_file():
+        return cached.read_bytes()
+    page = get_document(pdf_path)[page_no - 1]
+    dpi = round(height * 72 / page.rect.height)
+    jpg = page.get_pixmap(dpi=dpi).tobytes("jpeg", jpg_quality=75)
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(jpg)
+    return jpg
+
+
 def render_clip(pdf_path, page_no, box, dpi=200):
     """box: [left, top, width, height] in percent of the page."""
     page = get_document(pdf_path)[page_no - 1]

@@ -42,6 +42,14 @@ def evidence_items(pairs):
     return items
 
 
+def page_range(start, end):
+    """Position in the digitized volume: 'Bandseite 90' or 'Bandseiten 6–7'."""
+    return f"Bandseite {start}" if start == end else f"Bandseiten {start}–{end}"
+
+
+templates.env.globals['page_range'] = page_range
+
+
 def german_date(iso):
     """'1973-06-26' -> '26.06.1973'"""
     try:
@@ -49,6 +57,37 @@ def german_date(iso):
         return f"{d}.{m}.{y}"
     except (AttributeError, ValueError):
         return iso or ""
+
+
+MONTHS = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.',
+          'Nov.', 'Dez.']
+
+
+def iso_to_text(iso):
+    """'1968-11-14' -> '14. Nov. 1968', '1968-02' -> 'Feb. 1968'; None if malformed."""
+    parts = (iso or '').split('-')
+    try:
+        text = str(int(parts[0]))
+        if len(parts) > 1:
+            text = f"{MONTHS[int(parts[1]) - 1]} {text}"
+        if len(parts) > 2:
+            text = f"{int(parts[2])}. {text}"
+    except (ValueError, IndexError):
+        return None
+    return text
+
+
+def list_date(leaflet, fallback_year=None):
+    """(date, label) for lists: the leaflet's date, else the archive stamp
+    (unless its year is uncertain), else the volume year."""
+    text = iso_to_text(leaflet.date_iso)
+    if text:
+        is_event = leaflet.date_type == 'event' and leaflet.doc_type != 'protokoll'
+        return text, 'Veranstaltung' if is_event else ''
+    received = None if leaflet.received_uncertain else iso_to_text(leaflet.received_date)
+    if received:
+        return received, 'Eingang'
+    return (str(fallback_year) if fallback_year else ''), ''
 
 
 def provenance(volume):
@@ -111,33 +150,15 @@ def leaflet_list(request: Request, org: str | None = None):
 
     leaflets = query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all()
 
-    volumes = {v.id: v.label for v in session.query(Volume).all()}
-    orgs = {o.id: o.name for o in session.query(Organization).all()}
-
     organizations = sorted(session.query(Organization), key=org_sort_key)
     org_options = [{
         'id': o.id,
         'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
     } for o in organizations]
 
-    issuers_by_leaflet = {}
-    for i in session.query(LeafletIssuer).filter_by(role='issuer').all():
-        name = orgs[i.org_id] if i.org_id else i.surface
-        names = issuers_by_leaflet.setdefault(i.leaflet_id, [])
-        if name not in names:
-            names.append(name)
-
-    rows = [{
-        'id': leaflet.id,
-        'title': leaflet.display_title,
-        'volume': volumes.get(leaflet.volume_id, ''),
-        'date_text': leaflet.date_text,
-        'issuers': ', '.join(issuers_by_leaflet.get(leaflet.id, [])),
-    } for leaflet in leaflets]
-
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": rows, "org_options": org_options, "selected_org": org})
+        {"leaflets": leaflet_items(leaflets), "org_options": org_options, "selected_org": org})
 
 
 @app.get("/leaflets/{leaflet_id}")
@@ -164,13 +185,13 @@ def leaflet_detail(request: Request, leaflet_id: int):
             org = session.get(Organization, i.org_id)
             name = f"{org.full_name} ({org.name})" if org.full_name else org.name
             issuer_display.append({'surface': name, 'org_id': i.org_id})
+        elif i.other_institution and session.get(Organization, i.other_institution):
+            issuer_display.append({'surface': session.get(Organization, i.other_institution).name,
+                                   'org_id': None, 'other_institution': True, 'printed': i.surface})
         else:
             issuer_display.append({'surface': i.surface, 'org_id': None})
 
-    if leaflet.start_page == leaflet.end_page:
-        pages = f'Bandseite {leaflet.start_page}'
-    else:
-        pages = f'Bandseiten {leaflet.start_page}–{leaflet.end_page}'
+    pages = page_range(leaflet.start_page, leaflet.end_page)
 
     page_rows = session.query(Page).filter_by(leaflet_id=leaflet_id) \
         .order_by(Page.page_no).all()
@@ -205,6 +226,8 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'volume_title': volume.title if volume else '',
         'volume_collection': volume.collection if volume else None,
         'date_text': leaflet.date_text,
+        'date_iso': leaflet.date_iso,
+        'date': iso_to_text(leaflet.date_iso),
         'date_type': leaflet.date_type,
         'received': german_date(leaflet.received_date),
         'received_uncertain': leaflet.received_uncertain,
@@ -218,7 +241,9 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'doc_type': DOC_TYPES.get(leaflet.doc_type, leaflet.doc_type),
         'pages': pages,
         'issuers': issuer_display,
-        'signatories': [i.surface for i in signatories],
+        'signatories': [{'name': i.surface,
+                         'details': '; '.join(d for d in (i.function, i.marker) if d)}
+                        for i in signatories],
         'page_list': page_list,
         'has_pdf': has_pdf,
     }
@@ -308,13 +333,66 @@ def volume_by_vz(vz):
     return volume
 
 
+THUMB_HEIGHT = 150
+
+
+def issuer_names(leaflet_ids):
+    """{leaflet id: [("AStA", "Allgemeiner Studentenausschuss"), ...]}; unresolved
+    issuers as printed, with an empty full name."""
+    orgs = {o.id: (o.name, o.full_name or '') for o in session.query(Organization)}
+    names = {}
+    for i in session.query(LeafletIssuer).filter(LeafletIssuer.leaflet_id.in_(leaflet_ids),
+                                                 LeafletIssuer.role == 'issuer'):
+        name = orgs.get(i.org_id, (i.surface, ''))
+        if name not in names.setdefault(i.leaflet_id, []):
+            names[i.leaflet_id].append(name)
+    return names
+
+
+def leaflet_items(leaflets):
+    """Leaflets -> dicts for the macros in _leaflets.html."""
+    volumes = {v.id: v for v in session.query(Volume).filter(
+        Volume.id.in_({lf.volume_id for lf in leaflets}))}
+    has_pdf = {vid: volume_pdf(v).is_file() for vid, v in volumes.items()}
+    issuers = issuer_names([lf.id for lf in leaflets])
+    items = []
+    for lf in leaflets:
+        date, date_label = list_date(lf, volumes[lf.volume_id].year)
+        items.append({'leaflet': lf, 'vz': volumes[lf.volume_id].vz,
+                      'date': date, 'date_label': date_label,
+                      'thumb': has_pdf[lf.volume_id],
+                      'issuers': issuers.get(lf.id, [])})
+    return items
+
+
+def page_groups(volume, leaflets):
+    """Consecutive pages of the volume, grouped by leaflet (None = no leaflet)."""
+    pdf_path = volume_pdf(volume)
+    by_id = {leaflet.id: leaflet for leaflet in leaflets}
+    issuers = issuer_names(by_id)
+    groups = []
+    for p in session.query(Page).filter_by(volume_id=volume.id).order_by(Page.page_no):
+        width, height = pdf_service.page_size(pdf_path, p.page_no)
+        thumb = {'no': p.page_no, 'height': THUMB_HEIGHT,
+                 'width': round(THUMB_HEIGHT * width / height)}
+        if groups and groups[-1]['leaflet_id'] == p.leaflet_id:
+            groups[-1]['pages'].append(thumb)
+        else:
+            groups.append({'leaflet_id': p.leaflet_id, 'leaflet': by_id.get(p.leaflet_id),
+                           'issuers': ', '.join(short for short, _ in issuers.get(p.leaflet_id, [])),
+                           'pages': [thumb]})
+    return groups
+
+
 @app.get("/volumes/{vz}")
-def volume_detail(request: Request, vz: int):
+def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
     logger.info('Opening volume details')
 
     volume = volume_by_vz(vz)
     leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
         .order_by(Leaflet.start_page).all()
+    has_scans = bool(leaflets) and volume_pdf(volume).is_file()
+    view = ansicht if has_scans and ansicht in ('kacheln', 'bandseiten') else 'liste'
     orgs = sorted((o for o in session.query(Organization)
                    if volume.vz in (o.vz or [])), key=org_sort_key)
 
@@ -336,11 +414,25 @@ def volume_detail(request: Request, vz: int):
         'status': volume_status(volume, len(leaflets)),
         'provenance': provenance(volume),
         'organizations': orgs,
-        'leaflets': leaflets,
+        'leaflets': leaflet_items(leaflets),
+        'has_scans': has_scans,
+        'view': view,
+        'page_groups': page_groups(volume, leaflets) if view == 'bandseiten' else [],
     }
 
     return templates.TemplateResponse(
         request, "volume_details.html", {"volume": data})
+
+
+@app.get("/volumes/{vz}/pages/{page_no}.jpg")
+def volume_page_thumb(vz: int, page_no: int):
+    volume = volume_by_vz(vz)
+    pdf_path = volume_pdf(volume)
+    if not pdf_path.is_file() or not 1 <= page_no <= (volume.n_pages or 0):
+        raise HTTPException(404)
+    jpg = pdf_service.render_thumb(pdf_path, page_no, height=2 * THUMB_HEIGHT)
+    return Response(content=jpg, media_type="image/jpeg",
+                    headers={"Cache-Control": "max-age=86400"})
 
 
 @app.get("/volumes/{vz}/{start_page}")
@@ -389,7 +481,7 @@ def organization_list(request: Request):
 
 
 @app.get("/organizations/{org_id}")
-def organization_detail(request: Request, org_id: str):
+def organization_detail(request: Request, org_id: str, ansicht: str = "liste"):
     logger.info('Opening organization details')
 
     org = session.get(Organization, org_id)
@@ -399,8 +491,10 @@ def organization_detail(request: Request, org_id: str):
 
     issuer_rows = session.query(LeafletIssuer).filter_by(org_id=org_id).all()
     leaflet_ids = {i.leaflet_id for i in issuer_rows}
-    leaflets = session.query(Leaflet) \
-        .filter(Leaflet.id.in_(leaflet_ids)).all()
+    leaflets = leaflet_items(
+        session.query(Leaflet).join(Volume, Leaflet.volume_id == Volume.id)
+        .filter(Leaflet.id.in_(leaflet_ids)).order_by(Volume.vz, Leaflet.start_page).all())
+    has_thumbs = any(item['thumb'] for item in leaflets)
 
     org_ids = [o.id for o in sorted(
         session.query(Organization), key=org_sort_key)]
@@ -421,6 +515,8 @@ def organization_detail(request: Request, org_id: str):
         'gnd_id': org.gnd_id,
         'notes': org.notes,
         'leaflets': leaflets,
+        'view': 'kacheln' if ansicht == 'kacheln' and has_thumbs else 'liste',
+        'has_thumbs': has_thumbs,
     }
 
     return templates.TemplateResponse(

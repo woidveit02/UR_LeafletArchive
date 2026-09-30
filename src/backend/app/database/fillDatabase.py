@@ -23,6 +23,8 @@ def load_json(name):
 
 
 def issuer_org_ids(issuer, orgs_by_variant, known_ids):
+    if issuer.get("role") == "signatory":
+        return [None]
     # newer metadata carries org_ids, older only the surface form
     if "org_ids" in issuer:
         return [i for i in issuer["org_ids"] if i in known_ids] or [None]
@@ -217,6 +219,9 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None):
                     org_id=org_id,
                     blocks=own_blocks(issuer.get("blocks"), r, f"issuer {issuer['surface']!r}"),
                     quote=issuer.get("evidence", ""),
+                    function=(issuer.get("function") or "").strip(),
+                    marker=(issuer.get("marker") or "").strip(),
+                    other_institution=(issuer.get("_other_institution") or [None])[0],
                 ))
         for page_no in range(r["start_page"], r["end_page"] + 1):
             leaflet_by_page[page_no] = leaflet.id
