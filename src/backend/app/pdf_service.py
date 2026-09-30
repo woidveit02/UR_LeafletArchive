@@ -24,3 +24,13 @@ def render_page(pdf_path, page_no, dpi=110):
     doc = get_document(pdf_path)
     page = doc[page_no - 1]
     return page.get_pixmap(dpi=dpi).tobytes("png")
+
+
+def render_clip(pdf_path, page_no, box, dpi=200):
+    """box: [left, top, width, height] in percent of the page."""
+    page = get_document(pdf_path)[page_no - 1]
+    w, h = page.rect.width, page.rect.height
+    left, top, width, height = box
+    clip = pymupdf.Rect(left / 100 * w, top / 100 * h,
+                        (left + width) / 100 * w, (top + height) / 100 * h)
+    return page.get_pixmap(dpi=dpi, clip=clip & page.rect).tobytes("png")

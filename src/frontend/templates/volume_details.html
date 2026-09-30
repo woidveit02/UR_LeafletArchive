@@ -47,7 +47,7 @@
         <ul id="leaflet-list">
             {% for leaflet in volume.leaflets %}
             <li>
-                <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a><br>
+                <a href="/leaflets/{{ leaflet.id }}">{{ leaflet.display_title if leaflet.display_title else '*kein Titel*' }}</a><br>
                 <span class="meta">{% if leaflet.start_page == leaflet.end_page %}Bandseite {{ leaflet.start_page }}{% else %}Bandseiten {{ leaflet.start_page }}–{{ leaflet.end_page }}{% endif %}{% if leaflet.date_text %} · {{ leaflet.date_text }}{% endif %}</span>
             </li>
             {% endfor %}

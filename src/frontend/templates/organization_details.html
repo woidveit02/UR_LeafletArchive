@@ -41,7 +41,7 @@
         <h2>Flugblätter</h2>
         <ul>
             {% for leaflet in org.leaflets %}
-            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.title if leaflet.title else '*kein Titel*' }}</a></li>
+            <li><a href="/leaflets/{{ leaflet.id }}">{{ leaflet.display_title if leaflet.display_title else '*kein Titel*' }}</a></li>
             {% else %}
             <li>Keine Flugblätter gefunden.</li>
             {% endfor %}

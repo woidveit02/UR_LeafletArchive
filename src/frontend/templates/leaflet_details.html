@@ -9,15 +9,36 @@
 
 <body>
     {% include '_navigation.html' %}
+    {% macro sibling(id, text) -%}
+        {% if id %}<a href="/leaflets/{{ id }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
+    {%- endmacro %}
     <div class="app app-wide">
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {{ leaflet.volume }}</span>
+            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / Band {{ leaflet.volume }}</span>
             <span>
-                {% if leaflet.prev_id %}<a href="/leaflets/{{ leaflet.prev_id }}">‹ Vorheriges</a>{% else %}<span class="disabled">‹ Vorheriges</span>{% endif %}
-                {% if leaflet.next_id %}<a href="/leaflets/{{ leaflet.next_id }}">Nächstes ›</a>{% else %}<span class="disabled">Nächstes ›</span>{% endif %}
+                {{ sibling(leaflet.prev_id, '‹ Voriges Flugblatt') }}
+                {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
             </span>
         </nav>
-	    <h1>{{ leaflet.title if leaflet.title else '*kein Titel*' }}</h1>
+    {% macro beleg(label) -%}
+        {%- set items = leaflet.evidence[label] -%}
+        {%- if items and leaflet.has_pdf -%}
+        <span class="beleg-wrap">
+            <button type="button" class="beleg" aria-expanded="false"
+                    data-evidence="{{ items | map(attribute='blocks') | sum(start=[]) | unique | join(' ') }}">Beleg</button>
+            <span class="beleg-pop" role="dialog" aria-label="Zugeordnete Textstelle: {{ label }}" hidden>
+                <span class="beleg-head">Zugeordnete Textstelle: {{ label }}
+                    <button type="button" class="beleg-close" aria-label="Schließen">×</button></span>
+                {% for item in items %}
+                <img data-src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ item.blocks | join(',') }}" alt="Ausschnitt aus dem Scan">
+                {% if item.quote %}<span class="beleg-quote">Erkannter Wortlaut: „{{ item.quote }}“</span>{% endif %}
+                {% endfor %}
+                <button type="button" class="beleg-scan">Zur Stelle im Scan</button>
+            </span>
+        </span>
+        {%- endif -%}
+    {%- endmacro %}
+	    <h1>{{ leaflet.title if leaflet.title else '*kein Titel*' }} {{ beleg('Titel') if leaflet.title }}</h1>
 
         {% set total = leaflet.page_list | length %}
         <div class="viewer">
@@ -29,7 +50,7 @@
                 </div>
                 {% endif %}
                 {% for page in leaflet.page_list if leaflet.has_pdf %}
-                <a href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" title="Vergrößern" class="page-frame" id="scan-{{ page.no }}">
+                <div class="page-frame" id="scan-{{ page.no }}">
                     <img src="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png" alt="Seite {{ page.no }}" class="leaflet-page"
                          {% if page.width %}width="{{ page.width }}" height="{{ page.height }}"{% endif %}
                          loading="{{ 'eager' if loop.first else 'lazy' }}"
@@ -38,14 +59,12 @@
                     <span class="ocr-box" data-block="{{ page.no }}-{{ loop.index }}"
                           style="left: {{ block.box[0] }}%; top: {{ block.box[1] }}%; width: {{ block.box[2] }}%; height: {{ block.box[3] }}%;"></span>
                     {% endfor %}
-                </a>
+                </div>
                 <div class="page-caption">
                     {% if total > 1 %}
-                    {% if page.blocks %}<a href="#text-{{ page.no }}" title="Zur Transkription dieser Seite">S. {{ page.index }} / {{ total }}</a>{% else %}S. {{ page.index }} / {{ total }}{% endif %}
-                    · Bandseite {{ page.no }}
-                    {% else %}
-                    Bandseite {{ page.no }}
+                    {% if page.blocks %}<a href="#text-{{ page.no }}" title="Zur Transkription dieser Seite">Blattseite {{ page.index }} von {{ total }}</a>{% else %}Blattseite {{ page.index }} von {{ total }}{% endif %} ·
                     {% endif %}
+                    <a href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" rel="noopener" title="Scan in hoher Auflösung">Scan in neuem Tab öffnen ↗</a>
                 </div>
                 {% endfor %}
             </div>
@@ -55,43 +74,54 @@
                     <dt>Band</dt>
                     <dd>
                         <a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}
-                        {% if leaflet.volume_title %}<br><span class="meta">{{ leaflet.volume_title }}{% if leaflet.volume_collection %} (Organisationsband){% endif %}</span>{% endif %}
+                        {% if leaflet.volume_collection %}<br><span class="meta">{{ leaflet.volume_title }} (Organisationsband)</span>{% endif %}
                     </dd>
                     <dt>Datum</dt>
                     <dd>
                         {% if leaflet.date_text %}{{ leaflet.date_text }}
                         {% if leaflet.date_type == 'issued' %}<span class="meta">(Erscheinungsdatum)</span>{% elif leaflet.date_type == 'event' %}<span class="meta">(Datum der angekündigten Veranstaltung)</span>{% endif %}
-                        {% else %}undatiert{% endif %}
+                        {{ beleg('Datum') }}
+                        {% else %}undatiert{% if leaflet.volume_year %} <span class="meta">(im Band {{ leaflet.volume_year }} abgelegt)</span>{% endif %}{% endif %}
                     </dd>
+                    {% if leaflet.received %}
+                    <dt>Eingang im Archiv</dt>
+                    <dd>
+                        {{ leaflet.received }} <span class="meta">(laut Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher gelesen{% endif %})</span>
+                        {{ beleg('Eingang im Archiv') }}
+                    </dd>
+                    {% endif %}
+                    <dt>Reihe</dt>
+                    <dd>{% if leaflet.series %}{{ leaflet.series }}{% if leaflet.title_from_series %} <span class="meta">(das Blatt hat keine eigene Überschrift)</span>{% endif %}{% else %}keine erkannt{% endif %}</dd>
                     <dt>Textsorte</dt>
                     <dd>{{ leaflet.doc_type if leaflet.doc_type else 'n.a.' }}</dd>
                     <dt>Herausgeber</dt>
                     <dd>
                         {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
+                        {{ beleg('Herausgeber') }}
                     </dd>
-                    <dt>Unterzeichner</dt>
-                    <dd>{{ leaflet.signatories | join(', ') if leaflet.signatories else 'n.a.' }}</dd>
-                    {% if leaflet.provenance %}
-                    <dt>Erschließung</dt>
-                    <dd>automatisch extrahiert <span class="meta">({{ leaflet.provenance }})</span></dd>
-                    {% endif %}
-                    <dt>Zitiervorschlag</dt>
-                    <dd>{{ leaflet.citation }}</dd>
+                    <dt>Unterzeichnende</dt>
+                    <dd>
+                        {{ leaflet.signatories | join(', ') if leaflet.signatories else 'n.a.' }}
+                        {{ beleg('Unterzeichnende') }}
+                    </dd>
                 </dl>
+                {% if leaflet.provenance_model %}
+                <p class="review-note">Automatisch erschlossen mit {{ leaflet.provenance_model }} ({{ leaflet.provenance_date }}). „Beleg“ zeigt die Textstelle, auf die sich eine Angabe stützt.</p>
+                {% endif %}
 
-                <h2>Transkription <span class="heading-note">OCR, automatisch erkannt</span></h2>
+                <h2>Transkription <span class="heading-note">OCR mit Datalab Convert, nicht korrigiert</span></h2>
                 {% for page in leaflet.page_list | selectattr('blocks') %}
                 {% if total > 1 %}
                 <div class="page-divider" id="text-{{ page.no }}">
-                    <a href="#scan-{{ page.no }}" title="Zum Scan dieser Seite">S. {{ page.index }} / {{ total }}</a>
+                    <a href="#scan-{{ page.no }}" title="Zum Scan dieser Seite">Blattseite {{ page.index }} von {{ total }} · Bandseite {{ page.no }}</a>
                 </div>
                 {% endif %}
                 <div class="ocr-page">
                     {% for block in page.blocks %}
                     {% if block.type == 'Picture' and block.image and leaflet.has_pdf %}
-                    <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}"><img src="/volumes/{{ leaflet.volume_vz }}/images/{{ block.image }}" alt="Abbildung" loading="lazy"></div>
+                    <figure class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}"><img src="/volumes/{{ leaflet.volume_vz }}/images/{{ block.image }}" alt="{{ block.description or 'Abbildung' }}" loading="lazy">{% if block.description %}<figcaption>{{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span></figcaption>{% endif %}</figure>
                     {% elif block.type == 'Picture' %}
-                    <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung]</div>
+                    <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung{% if block.description %}: {{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span>{% endif %}]</div>
                     {% else %}
                     <div class="ocr-block ocr-{{ block.type | lower }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>
                     {% endif %}
@@ -100,19 +130,65 @@
                 {% else %}
                 <p class="meta">Kein OCR-Text vorhanden.</p>
                 {% endfor %}
+
+                <nav class="detail-nav detail-nav-bottom">
+                    {{ sibling(leaflet.prev_id, '‹ Voriges Flugblatt') }}
+                    <a href="/leaflets">Zur Übersicht</a>
+                    {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
+                </nav>
             </div>
         </div>
     </div>
 
     <script>
+        const highlight = (els, on) => els.forEach((el) => el.classList.toggle('active', on));
+        const flash = (els) => {
+            els[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            highlight(els, true);
+            setTimeout(() => highlight(els, false), 1500);
+        };
+
         document.querySelectorAll('.ocr-block[data-block]').forEach((block) => {
             const box = document.querySelector(`.ocr-box[data-block="${block.dataset.block}"]`);
             if (!box) return;
-            const set = (on) => { box.classList.toggle('active', on); block.classList.toggle('active', on); };
             for (const el of [block, box]) {
-                el.addEventListener('mouseenter', () => set(true));
-                el.addEventListener('mouseleave', () => set(false));
+                el.addEventListener('mouseenter', () => highlight([block, box], true));
+                el.addEventListener('mouseleave', () => highlight([block, box], false));
             }
+            box.addEventListener('click', () => flash([block]));
+        });
+
+        // evidence: hover highlights the scan, click opens a detail popup
+        const closeAll = () => document.querySelectorAll('.beleg').forEach((b) => {
+            b.nextElementSibling.hidden = true;
+            b.setAttribute('aria-expanded', 'false');
+        });
+        document.querySelectorAll('.beleg').forEach((btn) => {
+            const pop = btn.nextElementSibling;
+            const targets = btn.dataset.evidence.split(' ')
+                .flatMap((id) => [...document.querySelectorAll(`[data-block="${id}"]`)]);
+            btn.addEventListener('mouseenter', () => highlight(targets, true));
+            btn.addEventListener('mouseleave', () => highlight(targets, false));
+            btn.addEventListener('click', () => {
+                const opening = pop.hidden;
+                closeAll();
+                if (!opening) return;
+                pop.querySelectorAll('img[data-src]').forEach((img) => { img.src = img.dataset.src; });
+                pop.hidden = false;
+                btn.setAttribute('aria-expanded', 'true');
+            });
+            pop.querySelector('.beleg-close').addEventListener('click', () => { closeAll(); btn.focus(); });
+            pop.querySelector('.beleg-scan').addEventListener('click', () => {
+                closeAll();
+                flash(targets);
+            });
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.beleg-wrap')) closeAll(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            const open = document.querySelector('.beleg[aria-expanded="true"]');
+            closeAll();
+            open?.focus();
         });
     </script>
 </body>

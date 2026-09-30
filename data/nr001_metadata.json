@@ -1,0 +1,292 @@
+{
+  "source_pdf": "0118_0001.pdf",
+  "created": "2026-09-30T01:09:28.231575",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r9",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 6,
+    "flagged": 5,
+    "rate_percent": 16.7
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [],
+  "segments": [
+    {
+      "id": 1,
+      "title": "",
+      "date": "",
+      "start_page": 1,
+      "end_page": 4,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "original",
+      "series": "AStA-Information",
+      "issue": "Nr. 5",
+      "issuers": [
+        {
+          "evidence": "AStA-Information Nr. 5, Juli 1967, herausgegeben für den AStA von Michael Zöllner p. Adr. AStA, Jahnstr. 1",
+          "blocks": [
+            "1-43"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Michael Stanislaus, 1. AStA-Vors.",
+          "blocks": [
+            "1-42"
+          ],
+          "surface": "Michael Stanislaus",
+          "role": "signatory"
+        },
+        {
+          "evidence": "AStA-Information Nr. 5, Juli 1967, herausgegeben für den AStA von Michael Zöllner",
+          "blocks": [
+            "1-43"
+          ],
+          "surface": "Michael Zöllner",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "Juli 1967",
+      "date_blocks": [
+        "1-43"
+      ],
+      "date_text": "Juli 1967",
+      "date_iso": "1967-07",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.85,
+      "_grounding": [
+        "title_type=original ohne Belegzitat",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 23%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Heute: Letzte Gelegenheit!",
+      "date": "",
+      "start_page": 5,
+      "end_page": 5,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HEUTE\n: LETZTE GELEGENHEIT!",
+      "title_blocks": [
+        "5-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE MITTE",
+          "blocks": [
+            "5-1"
+          ],
+          "surface": "Demokratische Mitte",
+          "role": "issuer",
+          "org_ids": [
+            "dm"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Hubert Fexer, Rgbg. Weiherweg 6",
+          "blocks": [
+            "5-7"
+          ],
+          "surface": "Hubert Fexer",
+          "role": "signatory"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "DEMOKRATISCHE MITTE"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "",
+      "date": "",
+      "start_page": 6,
+      "end_page": 7,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "INFORMATIONSB Blatt FÜR DOZENTEN UND STUDENTEN DER BAYERISCHEN JULIUS-MAXIMILIANS-UNIVERSITÄT: Herausgeber: Allg. Studentenausschuß der Universität, 2. Vorsitzender (z.Zt. Heinrich Fuchs).",
+          "blocks": [
+            "6-14"
+          ],
+          "surface": "Allgemeiner Studentenausschuß der Universität",
+          "role": "issuer",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "13. JANUAR 1967",
+      "date_blocks": [
+        "6-20"
+      ],
+      "date_text": "13. Januar 1967",
+      "date_iso": "1967-01-13",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.9,
+      "_grounding": [
+        "title_type=original ohne Belegzitat",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 23%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "",
+      "date": "",
+      "start_page": 8,
+      "end_page": 9,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "INFORMATIONSBLATT FÜR DOZENTEN UND STUDENTEN DER BAYERISCHEN JULIUS-MAXIMILIANS-UNIVERSITÄT\nWÜRZBURG:\nErscheint alle 14 Tage. Herausgeber: AStA und Universitätspresseamt.",
+          "blocks": [
+            "8-13",
+            "8-14"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "_other_institution": [
+            "asta"
+          ],
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "27. Januar 67",
+      "date_blocks": [
+        "8-21"
+      ],
+      "date_text": "27. Januar 1967",
+      "date_iso": "1967-01-27",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.9,
+      "_grounding": [
+        "title_type=original ohne Belegzitat",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 29%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "",
+      "date": "",
+      "start_page": 10,
+      "end_page": 11,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "INFORMATIONSBLATT FÜR DOZENTEN UND STUDENTEN DER BAYERISCHEN JULIUS-MAXIMILIANS-UNIVERSITÄT WÜRZBURG: Erscheint alle 14 Tage im Semester. Herausgeber: AStA und Universitätspresseamt.",
+          "blocks": [
+            "10-10"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "_other_institution": [
+            "asta"
+          ],
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "10.Februar 1967",
+      "date_blocks": [
+        "10-16"
+      ],
+      "date_text": "10. Februar 1967",
+      "date_iso": "1967-02-10",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.9,
+      "_grounding": [
+        "title_type=original ohne Belegzitat",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 34%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "",
+      "date": "",
+      "start_page": 12,
+      "end_page": 13,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "INFORMATIONSBLATT FÜR DOZENTEN UND STUDENTEN DER BAYERISCHEN JULIUS-MAXIMILIANS-UNIVERSITÄT WÜRZBURG: Erscheint alle 14 Tage im Semester. Herausgeber: ASTA und Universitätspressamt.",
+          "blocks": [
+            "12-18"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "_other_institution": [
+            "asta"
+          ],
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "23.februar 1967",
+      "date_blocks": [
+        "12-24"
+      ],
+      "date_text": "23. Februar 1967",
+      "date_iso": "1967-02-23",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.9,
+      "_grounding": [
+        "title_type=original ohne Belegzitat",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 26%) - vermutlich kein Erscheinungsdatum"
+      ]
+    }
+  ]
+}

@@ -45,8 +45,29 @@ class Leaflet(Base):
     date_text = Column(String)
     date_iso = Column(String)
     date_type = Column(String)
+    series = Column(String)
+    issue = Column(String)
+    received_date = Column(String)  # archive stamp
+    received_uncertain = Column(Boolean)
     doc_type = Column(String)
     confidence = Column(Float)
+    # evidence: OCR block ids (e.g. ["5-1"]) and the quoted text
+    title_blocks = Column(JSON)
+    date_blocks = Column(JSON)
+    received_blocks = Column(JSON)
+    title_quote = Column(String)
+    date_quote = Column(String)
+    received_quote = Column(String)
+
+    @property
+    def series_label(self):
+        if not self.series:
+            return ""
+        return f"{self.series}, {self.issue}" if self.issue else self.series
+
+    @property
+    def display_title(self):
+        return self.title or self.series_label
 
 
 class Organization(Base):
@@ -71,3 +92,5 @@ class LeafletIssuer(Base):
     surface = Column(String)
     role = Column(String)
     org_id = Column(String, ForeignKey("organizations.id"), nullable=True)
+    blocks = Column(JSON)
+    quote = Column(String)

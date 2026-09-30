@@ -1,15 +1,18 @@
 from backend.app.database.fillDatabase import VOLUMES, check_data_dir, load_json
 
+STEMS = {v["label"]: load_json(v["metadata_file"])["source_pdf"].removesuffix(".pdf")
+         for v in VOLUMES}
 LABEL = VOLUMES[0]["label"]
-STEM = load_json(VOLUMES[0]["metadata_file"])["source_pdf"].removesuffix(".pdf")
+STEM = STEMS[LABEL]
 
 
+# Builds a data folder with all imported volumes; returns the first volume's folder.
 def make_volume(root):
-    vol_dir = root / LABEL
-    (vol_dir / STEM).mkdir(parents=True)
-    (vol_dir / f"{STEM}.pdf").touch()
-    (vol_dir / STEM / f"{STEM}.json").write_text("{}")
-    return vol_dir
+    for label, stem in STEMS.items():
+        (root / label / stem).mkdir(parents=True)
+        (root / label / f"{stem}.pdf").touch()
+        (root / label / stem / f"{stem}.json").write_text("{}")
+    return root / LABEL
 
 
 # A correctly linked data folder produces no warnings.

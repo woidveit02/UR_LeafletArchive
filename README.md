@@ -30,7 +30,7 @@ Ohne Datenordner läuft die Anwendung auch, zeigt aber keine Scans und keinen OC
 | Seite | Route | Inhalt |
 |-------|-------|--------|
 | Flugblätter | `/leaflets` | Liste mit Band, Datum und Herausgeber |
-| Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten, Zitiervorschlag |
+| Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten mit Fundstellen |
 | Organisationen | `/organizations` | Normdatei der herausgebenden Gruppen |
 | Organisation | `/organizations/{id}` | Angaben laut Findmittel, Bände, Flugblätter |
 | Bände | `/volumes` | Verzeichnungseinheiten 1967–1973, gegliedert wie im Findmittel |

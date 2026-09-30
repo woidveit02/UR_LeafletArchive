@@ -2,6 +2,7 @@ import html
 import json
 import os
 import re
+from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -19,6 +20,38 @@ PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 def load_json(name):
     with open(DATA_DIR / name, encoding="utf-8") as f:
         return json.load(f)
+
+
+def issuer_org_ids(issuer, orgs_by_variant, known_ids):
+    # newer metadata carries org_ids, older only the surface form
+    if "org_ids" in issuer:
+        return [i for i in issuer["org_ids"] if i in known_ids] or [None]
+    return [orgs_by_variant.get(issuer["surface"].strip().lower())]
+
+
+def series_key(name):
+    return re.sub(r"[^a-z0-9äöüß]", "", (name or "").lower())
+
+
+def series_names(configs):
+    """Most frequent spelling per series across all volumes."""
+    counts = {}
+    for cfg in configs:
+        for r in load_json(cfg["metadata_file"])["segments"]:
+            name = (r.get("series") or "").strip()
+            if name:
+                counts.setdefault(series_key(name), Counter())[name] += 1
+    return {key: c.most_common(1)[0][0] for key, c in counts.items()}
+
+
+def own_blocks(block_ids, record, label=None):
+    """Block ids on the leaflet's pages; none if the pipeline's grounding check
+    found the quote missing from them (label as in check_block_ids)."""
+    if label and any(p.startswith(f"{label}:") and ("nicht in den genannten" in p or "unbekannt" in p)
+                     for p in record.get("_grounding") or []):
+        return []
+    pages = range(record["start_page"], record["end_page"] + 1)
+    return [b for b in block_ids or [] if b.split("-")[0].isdigit() and int(b.split("-")[0]) in pages]
 
 
 def fill_organizations():
@@ -56,8 +89,12 @@ def fill_volumes():
 
 
 VOLUMES = [
+    {"metadata_file": "nr001_metadata.json",
+     "label": "Nr. 001 (1967)", "year": 1967},
     {"metadata_file": "nr002_metadata.json",
      "label": "Nr. 002 (1968)", "year": 1968},
+    {"metadata_file": "nr004_metadata.json",
+     "label": "Nr. 004 (1970)", "year": 1970},
 ]
 
 
@@ -111,8 +148,10 @@ def load_pages(volume_label, stem):
                    round((y1 - y0) / ph * 100, 2)]
             if block_type == "Picture":
                 src = re.search(r'src="([^"]+)"', b.get("html", ""))
+                alt = re.search(r'alt="([^"]*)"', b.get("html", ""))  # Datalab image caption
                 blocks.append({"type": block_type, "html": "", "box": box,
-                               "image": src.group(1) if src else None})
+                               "image": src.group(1) if src else None,
+                               "description": html.unescape(alt.group(1)) if alt else ""})
                 continue
             clean = sanitize(b.get("html", ""))
             blocks.append({"type": block_type, "html": clean, "box": box})
@@ -122,7 +161,7 @@ def load_pages(volume_label, stem):
     return pages
 
 
-def fill_volume(cfg, orgs_by_variant, volumes):
+def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
@@ -139,6 +178,7 @@ def fill_volume(cfg, orgs_by_variant, volumes):
     volume.meta_created = meta.get("created", "")[:10]
     session.commit()
 
+    known_ids = {org_id for (org_id,) in session.query(Organization.id)}
     leaflet_by_page = {}
     for r in records:
         if r.get("no_content"):
@@ -152,18 +192,32 @@ def fill_volume(cfg, orgs_by_variant, volumes):
             date_text=r.get("date_text", ""),
             date_iso=r.get("date_iso", ""),
             date_type=r.get("date_type", ""),
+            series=(series_by_key or {}).get(series_key(r.get("series")),
+                                             (r.get("series") or "").strip()),
+            issue=(r.get("issue") or "").strip(),
+            received_date=r.get("received_date", ""),
+            received_uncertain=bool(r.get("received_year_uncertain")),
             doc_type=r.get("doc_type", ""),
             confidence=r.get("confidence", 0),
+            title_blocks=own_blocks(r.get("title_blocks"), r, "title"),
+            date_blocks=own_blocks(r.get("date_blocks"), r, "date"),
+            received_blocks=own_blocks(r.get("received_blocks"), r),
+            title_quote=r.get("title_evidence", ""),
+            date_quote=r.get("date_evidence", ""),
+            received_quote=r.get("received_evidence", ""),
         )
         session.add(leaflet)
         session.flush()
         for issuer in r.get("issuers", []):
-            session.add(LeafletIssuer(
-                leaflet_id=leaflet.id,
-                surface=issuer["surface"],
-                role=issuer["role"],
-                org_id=orgs_by_variant.get(issuer["surface"].strip().lower()),
-            ))
+            for org_id in issuer_org_ids(issuer, orgs_by_variant, known_ids):
+                session.add(LeafletIssuer(
+                    leaflet_id=leaflet.id,
+                    surface=issuer["surface"],
+                    role=issuer["role"],
+                    org_id=org_id,
+                    blocks=own_blocks(issuer.get("blocks"), r, f"issuer {issuer['surface']!r}"),
+                    quote=issuer.get("evidence", ""),
+                ))
         for page_no in range(r["start_page"], r["end_page"] + 1):
             leaflet_by_page[page_no] = leaflet.id
     session.commit()
@@ -235,5 +289,6 @@ def fill_database():
         return
     orgs_by_variant = fill_organizations()
     volumes = fill_volumes()
+    series_by_key = series_names(VOLUMES)
     for cfg in VOLUMES:
-        fill_volume(cfg, orgs_by_variant, volumes)
+        fill_volume(cfg, orgs_by_variant, volumes, series_by_key)
