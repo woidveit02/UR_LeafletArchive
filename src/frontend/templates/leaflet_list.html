@@ -37,6 +37,14 @@
                         {% endfor %}
                     </select>
                 </label>
+                <label>Reihe
+                    <select name="reihe" onchange="this.form.submit()">
+                        <option value="">alle</option>
+                        {% for s in series_options %}
+                        <option {% if s==selected_series %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
             </div>
             {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
             {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}

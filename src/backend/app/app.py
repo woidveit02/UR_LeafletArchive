@@ -170,7 +170,7 @@ def index(request: Request):
 @app.get("/leaflets")
 def leaflet_list(request: Request, org: str | None = None,
                  jahr: str | None = None, typ: str | None = None,
-                 ansicht: str = "liste"):
+                 reihe: str | None = None, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
 
     query = (
@@ -189,6 +189,9 @@ def leaflet_list(request: Request, org: str | None = None,
     if typ:
         query = query.filter(Leaflet.doc_type == typ)
 
+    if reihe:
+        query = query.filter(Leaflet.series == reihe)
+
     items = leaflet_items(
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
     if jahr:
@@ -200,11 +203,15 @@ def leaflet_list(request: Request, org: str | None = None,
         'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
     } for o in organizations]
 
-    used_types = {t for (t,) in session.query(Leaflet.doc_type).distinct() if t}
+    used_types = {t for (t,) in session.query(
+        Leaflet.doc_type).distinct() if t}
     type_options = [{
-        'id': key, 
+        'id': key,
         'label': label
     } for key, label in DOC_TYPES.items() if key in used_types]
+
+    series_options = sorted({s for (s,) in session.query(
+        Leaflet.series).distinct() if s}, key=str.casefold)
 
     # years of all leaflets, so the options stay while a filter is set
     volume_years = {v.id: v.year for v in session.query(Volume)}
@@ -218,8 +225,9 @@ def leaflet_list(request: Request, org: str | None = None,
         request, "leaflet_list.html",
         {"leaflets": items, "org_options": org_options, "selected_org": org,
          "type_options": type_options, "selected_type": typ,
+         "series_options": series_options, "selected_series": reihe,
          "years": years, "selected_year": jahr,
-         "filtered": any((org, jahr, typ)),
+         "filtered": any((org, jahr, typ, reihe)),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
          "switch_base": '/leaflets' + query_string})
 
