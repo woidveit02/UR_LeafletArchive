@@ -1,4 +1,4 @@
-// Keep the scroll position when a view switch or filter reloads the same page.
+// Keep the scroll position when a view switch, filter or edit reloads the same page.
 (() => {
     const key = 'keep-scroll';
     try {
@@ -13,6 +13,7 @@
             sessionStorage.setItem(key, JSON.stringify({ path: location.pathname, y: scrollY }));
         } catch (e) { /* ignore */ }
     };
-    document.querySelectorAll('.view-switch a').forEach((a) => a.addEventListener('click', keep));
+    document.querySelectorAll('.view-switch a, a.keep-scroll').forEach((a) => a.addEventListener('click', keep));
+    document.querySelectorAll('form.keep-scroll').forEach((f) => f.addEventListener('submit', keep));
     document.querySelectorAll('form.filter').forEach((f) => f.addEventListener('change', keep));
 })();

@@ -45,9 +45,9 @@
                 [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
         </div>
         {% if org.view == 'kacheln' %}
-        {{ leaflet_cards(org.leaflets, fields=('date', 'count')) }}
+        {{ leaflet_cards(org.leaflets, fields=('date', 'count'), qs='?org=' ~ org.id) }}
         {% else %}
-        {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count')) }}
+        {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count'), qs='?org=' ~ org.id) }}
         {% endif %}
     </div>
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>

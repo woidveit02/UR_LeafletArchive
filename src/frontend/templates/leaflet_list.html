@@ -39,9 +39,9 @@
             </div>
         </form>
         {% if leaflets and view == 'kacheln' %}
-        {{ leaflet_cards(leaflets, fields=('date', 'count')) }}
+        {{ leaflet_cards(leaflets, fields=('date', 'count'), qs=detail_qs) }}
         {% elif leaflets %}
-        {{ leaflet_list(leaflets, fields=('date', 'issuers', 'series', 'count')) }}
+        {{ leaflet_list(leaflets, fields=('date', 'issuers', 'series', 'count'), qs=detail_qs) }}
         {% endif %}
     </div>
 

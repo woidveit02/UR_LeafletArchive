@@ -1,16 +1,21 @@
 import logging
 import re
 from collections import Counter
+import datetime
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, urlencode
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
+from .database import corrections
+from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
+                                    automatic_values, reset_leaflet, series_names)
 from .database.session import session
 from .database.models import Leaflet, LeafletIssuer, Volume, Organization, Page
 from .app_helper import setup_logging
@@ -31,6 +36,8 @@ DOC_TYPES = {
     'broschuere': 'Broschüre', 'zeitschrift': 'Zeitschrift', 'protokoll': 'Protokoll',
     'unklar': 'unklar',
 }
+DATE_TYPES = {'issued': 'Erscheinungsdatum', 'event': 'Datum einer Veranstaltung',
+              'undated': 'undatiert'}
 
 
 def evidence_items(pairs):
@@ -55,12 +62,24 @@ templates.env.globals['FONDS_URL'] = \
 
 
 def german_date(iso):
-    """'1973-06-26' -> '26.06.1973'"""
+    """'1973-06-26' -> '26.06.1973', '1969-12' -> '12.1969', '1969' -> '1969'"""
+    return '.'.join(reversed((iso or '').split('-')))
+
+
+def german_to_iso(text):
+    """'17.12.1969', '12.1969', '1969' (or ISO) -> ISO date; None if invalid."""
+    parts = text.split('-') if '-' in text else text.split('.')[::-1]
+    if not 1 <= len(parts) <= 3 or not all(p.isdigit() for p in parts) or len(parts[0]) != 4:
+        return None
+    nums = [int(p) for p in parts]
     try:
-        y, m, d = iso.split("-")
-        return f"{d}.{m}.{y}"
-    except (AttributeError, ValueError):
-        return iso or ""
+        datetime.date(*nums, *[1] * (3 - len(nums)))  # checks month and day
+    except ValueError:
+        return None
+    return '-'.join([parts[0]] + [f"{n:02d}" for n in nums[1:]])
+
+
+templates.env.globals['german_date'] = german_date
 
 
 MONTHS = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.',
@@ -117,6 +136,26 @@ def leaflet_pdf(leaflet):
     return pdf_path
 
 
+def org_label(org):
+    return f"{org.full_name} ({org.name})" if org.full_name else org.name
+
+
+def automatic_text(leaflet):
+    """Corrected field -> value as extracted automatically, for display."""
+    if not leaflet.corrected:
+        return {}
+    r = automatic_record(leaflet)
+    auto = automatic_values(r, series_names(VOLUMES))
+    names = lambda role: ', '.join(i['surface'] for i in r.get('issuers', [])
+                                   if i['role'] == role)
+    text = {'title': auto['title'],
+            'date': german_date(auto['date_iso']) or auto['date_text'],
+            'series': ', '.join(v for v in (auto['series'], auto['issue']) if v),
+            'doc_type': DOC_TYPES.get(auto['doc_type'], auto['doc_type']),
+            'issuers': names('issuer'), 'signatories': names('signatory')}
+    return {f: text[f] for f in leaflet.corrected if f in text}
+
+
 def org_sort_key(org):
     # full name first, umlauts sorted like their base letters
     name = (org.full_name or org.name).casefold()
@@ -132,7 +171,7 @@ async def not_found(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
         return templates.TemplateResponse(
             request, "404.html", {}, status_code=404)
-    raise exc
+    return await http_exception_handler(request, exc)
 
 
 # (volume vz, start page): stable across database rebuilds, unlike ids
@@ -170,24 +209,7 @@ def index(request: Request):
 def leaflet_list(request: Request, org: str | None = None,
                  jahr: str | None = None, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
-
-    query = (
-        session.query(Leaflet)
-        .join(Volume, Leaflet.volume_id == Volume.id)
-    )
-
-    if org:
-        matching_ids = (
-            session.query(LeafletIssuer.leaflet_id)
-            .filter(LeafletIssuer.org_id == org,
-                    LeafletIssuer.role == 'issuer')
-        )
-        query = query.filter(Leaflet.id.in_(matching_ids))
-
-    items = leaflet_items(
-        query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
-    if jahr:
-        items = [item for item in items if item['year'] == jahr]
+    items = filtered_items(org, jahr)
 
     organizations = sorted(session.query(Organization), key=org_sort_key)
     org_options = [{
@@ -208,18 +230,44 @@ def leaflet_list(request: Request, org: str | None = None,
         {"leaflets": items, "org_options": org_options, "selected_org": org,
          "years": years, "selected_year": jahr, "filtered": any((org, jahr)),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
-         "switch_base": '/leaflets' + query_string})
+         "switch_base": '/leaflets' + query_string,
+         "detail_qs": '?' + urlencode({k: v for k, v in (('org', org), ('jahr', jahr)) if v})
+         if org or jahr else ''})
+
+
+def filtered_items(org=None, jahr=None):
+    query = (
+        session.query(Leaflet)
+        .join(Volume, Leaflet.volume_id == Volume.id)
+    )
+
+    if org:
+        matching_ids = (
+            session.query(LeafletIssuer.leaflet_id)
+            .filter(LeafletIssuer.org_id == org,
+                    LeafletIssuer.role == 'issuer')
+        )
+        query = query.filter(Leaflet.id.in_(matching_ids))
+
+    items = leaflet_items(
+        query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
+    if jahr:
+        items = [item for item in items if item['year'] == jahr]
+    return items
 
 
 @app.get("/leaflets/{leaflet_id}")
-def leaflet_detail(request: Request, leaflet_id: int):
+def leaflet_detail(request: Request, leaflet_id: int,
+                   bearbeiten: str | None = None):
     logger.info('Opening leaflet details')
+    leaflet = leaflet_or_404(leaflet_id)
+    edit = current_values(leaflet) if bearbeiten is not None else None
+    return detail_page(request, leaflet, edit)
 
-    leaflet = session.get(Leaflet, leaflet_id)
 
-    if leaflet is None:
-        raise HTTPException(404)
-
+def detail_page(request, leaflet, edit=None, error=None):
+    """Detail page; with `edit` (form values) the fields become inputs."""
+    leaflet_id = leaflet.id
     rows = session.query(LeafletIssuer).filter_by(leaflet_id=leaflet_id).all()
     issuers = [i for i in rows if i.role == 'issuer']
     signatories = [i for i in rows if i.role == 'signatory']
@@ -233,8 +281,8 @@ def leaflet_detail(request: Request, leaflet_id: int):
                 continue
             seen_org_ids.add(i.org_id)
             org = session.get(Organization, i.org_id)
-            name = f"{org.full_name} ({org.name})" if org.full_name else org.name
-            issuer_display.append({'surface': name, 'org_id': i.org_id})
+            issuer_display.append({'surface': org_label(org), 'short': org.name,
+                                   'full': org.full_name, 'org_id': i.org_id})
         elif i.other_institution and session.get(Organization, i.other_institution):
             issuer_display.append({'surface': session.get(Organization, i.other_institution).name,
                                    'org_id': None, 'other_institution': True, 'printed': i.surface})
@@ -265,10 +313,17 @@ def leaflet_detail(request: Request, leaflet_id: int):
                    f"{page_range(lf.start_page, lf.end_page)}"}
                   for lf, vol in rows]
 
-    siblings = [row.id for row in session.query(Leaflet.id)
-                .filter_by(volume_id=leaflet.volume_id)
-                .order_by(Leaflet.start_page)]
+    # coming from a filtered list: page through that selection, else through the volume
+    selection = {k: request.query_params[k] for k in ('org', 'jahr')
+                 if request.query_params.get(k)}
+    siblings = [i['leaflet'].id for i in filtered_items(**selection)] if selection else []
+    if leaflet.id not in siblings:
+        selection = {}
+        siblings = [row.id for row in session.query(Leaflet.id)
+                    .filter_by(volume_id=leaflet.volume_id)
+                    .order_by(Leaflet.start_page)]
     pos = siblings.index(leaflet.id)
+    org = session.get(Organization, selection['org']) if 'org' in selection else None
 
     data = {
         'id': leaflet.id,
@@ -280,6 +335,11 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'provenance_date': german_date(volume.meta_created),
         'prev_id': siblings[pos - 1] if pos > 0 else None,
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
+        'position': pos + 1,
+        'in_volume': len(siblings),
+        'qs': '?' + urlencode(selection) if selection else '',
+        'selection': ' · '.join(([org_label(org)] if org else [])
+                                + ([selection['jahr']] if 'jahr' in selection else [])),
         'volume': volume.label if volume else '',
         'volume_year': volume.year if volume else None,
         'volume_title': volume.title if volume else '',
@@ -288,11 +348,12 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'date_iso': leaflet.date_iso,
         'date': iso_to_text(leaflet.date_iso),
         'date_type': leaflet.date_type,
-        'received': german_date(leaflet.received_date),
+        'received': iso_to_text(leaflet.received_date),
         'received_uncertain': leaflet.received_uncertain,
         'evidence': {
             'Titel': evidence_items([(leaflet.title_blocks, leaflet.title_quote)]),
             'Datum': evidence_items([(leaflet.date_blocks, leaflet.date_quote)]),
+            'Reihe': evidence_items([(leaflet.series_blocks, leaflet.series_quote)]),
             'Eingang im Archiv': evidence_items([(leaflet.received_blocks, leaflet.received_quote)]),
             'Herausgeber': evidence_items([(i.blocks, i.quote) for i in issuers]),
             'Unterzeichnende': evidence_items([(i.blocks, i.quote) for i in signatories]),
@@ -306,10 +367,173 @@ def leaflet_detail(request: Request, leaflet_id: int):
         'page_list': page_list,
         'has_pdf': has_pdf,
         'copies': copies,
+        'corrected': leaflet.corrected or [],
+        'automatic': automatic_text(leaflet),
     }
 
+    org_names = [org_label(o) for o in sorted(session.query(Organization), key=org_sort_key)
+                 ] if edit else []
     return templates.TemplateResponse(
-        request, "leaflet_details.html", {"leaflet": data})
+        request, "leaflet_details.html",
+        {"leaflet": data, "edit": edit, "error": error, "doc_types": DOC_TYPES,
+         "date_types": DATE_TYPES, "org_names": org_names,
+         "series_names": sorted({s for (s,) in session.query(Leaflet.series) if s})
+         if edit else []},
+        status_code=400 if error else 200)
+
+
+def leaflet_or_404(leaflet_id):
+    leaflet = session.get(Leaflet, leaflet_id)
+    if leaflet is None:
+        raise HTTPException(404)
+    return leaflet
+
+
+def current_values(leaflet):
+    issuers, seen = [], set()
+    for i in session.query(LeafletIssuer).filter_by(
+            leaflet_id=leaflet.id, role='issuer').order_by(LeafletIssuer.id):
+        if i.org_id and i.org_id not in seen:
+            seen.add(i.org_id)
+            issuers.append({'org': i.org_id, 'name': org_label(session.get(Organization, i.org_id)),
+                            'blocks': list(i.blocks or [])})
+    signatories = [{'name': i.surface,
+                    'details': '; '.join(d for d in (i.function, i.marker) if d),
+                    'blocks': list(i.blocks or [])}
+                   for i in session.query(LeafletIssuer).filter_by(
+                       leaflet_id=leaflet.id, role='signatory').order_by(LeafletIssuer.id)]
+    return {'title': leaflet.title or '', 'title_blocks': list(leaflet.title_blocks or []),
+            'date_iso': leaflet.date_iso or '', 'date_type': leaflet.date_type or 'undated',
+            'date_blocks': list(leaflet.date_blocks or []),
+            'series': leaflet.series or '', 'issue': leaflet.issue or '',
+            'series_blocks': list(leaflet.series_blocks or []),
+            'doc_type': leaflet.doc_type or 'unklar', 'issuers': issuers,
+            'signatories': signatories}
+
+
+def segment(leaflet):
+    """Key of a correction line: the leaflet's exact page range."""
+    return {'volume': session.get(Volume, leaflet.volume_id).stem,
+            'start_page': leaflet.start_page, 'end_page': leaflet.end_page}
+
+
+def save_corrections(leaflet, changes):
+    """Append (field, value, evidence blocks) to corrections.jsonl and apply them."""
+    entries = [{**segment(leaflet), 'field': f, 'value': v,
+                **({'blocks': blocks} if blocks else {})}
+               for f, v, blocks in changes]
+    corrections.append(CORRECTIONS, entries)
+    corrections.apply(leaflet, entries)
+    session.commit()
+
+
+@app.post("/leaflets/{leaflet_id}/bearbeiten")
+async def leaflet_save(request: Request, leaflet_id: int):
+    leaflet = leaflet_or_404(leaflet_id)
+    raw = parse_qs((await request.body()).decode(), keep_blank_values=True)
+
+    def blocks(value):
+        # evidence picked in the scan: block ids on this leaflet's pages only
+        return [b for b in value.split()
+                if re.fullmatch(r"\d+-\d+", b)
+                and leaflet.start_page <= int(b.split('-')[0]) <= leaflet.end_page]
+
+    def rows(*names):
+        # repeated row fields arrive as parallel lists; rows without a first value are dropped
+        return [[v.strip() for v in row] for row in zip(*(raw.get(n, []) for n in names))
+                if row[0].strip()]
+
+    form = {k: raw.get(k, [''])[0].strip()
+            for k in ('title', 'date', 'date_type', 'series', 'issue', 'doc_type')}
+    for k in ('title', 'date', 'series'):
+        form[f'{k}_blocks'] = blocks(raw.get(f'{k}_blocks', [''])[0])
+    org_ids = {org_label(o): o.id for o in session.query(Organization)}
+    form['issuers'] = [{'org': org_ids.get(name), 'name': name, 'blocks': blocks(b)}
+                       for name, b in rows('issuer', 'issuer_blocks')]
+    form['signatories'] = [{'name': name, 'details': details, 'blocks': blocks(b)}
+                           for name, details, b in rows('signatory_name', 'signatory_details',
+                                                        'signatory_blocks')]
+    form['date_iso'] = german_to_iso(form['date']) if form['date'] else ''
+    if not form['date']:
+        form['date_type'] = 'undated'
+
+    unknown = [i['name'] for i in form['issuers'] if not i['org']]
+    if form['date_iso'] is None:
+        error = "Datum bitte als TT.MM.JJJJ, MM.JJJJ oder JJJJ angeben, z. B. 17.12.1969."
+    elif form['date_iso'] and form['date_type'] == 'undated':
+        error = "Bitte die Art des Datums wählen."
+    elif unknown:
+        error = f"Nicht im Register: {', '.join(unknown)}. Bitte einen Eintrag aus der Liste wählen."
+    elif form['date_type'] not in DATE_TYPES or form['doc_type'] not in DOC_TYPES:
+        error = "Ungültige Auswahl."
+    else:
+        error = None
+    if error:
+        return detail_page(request, leaflet, form, error)
+
+    # a field counts as corrected when its value or its evidence changed
+    old = current_values(leaflet)
+    changes = []
+    for field, keys in (('title', ['title']), ('date', ['date_iso', 'date_type']),
+                        ('series', ['series', 'issue'])):
+        keys = keys + [f'{field}_blocks']
+        if [form[k] for k in keys] != [old[k] for k in keys]:
+            value = {'date': {'iso': form['date_iso'], 'type': form['date_type']},
+                     'series': {'name': form['series'], 'issue': form['issue']}
+                     }.get(field, form[field])
+            changes.append((field, value, form[f'{field}_blocks']))
+    if form['doc_type'] != old['doc_type']:
+        changes.append(('doc_type', form['doc_type'], []))
+    issuers = lambda items: {i['org']: i['blocks'] for i in items}
+    if issuers(form['issuers']) != issuers(old['issuers']):
+        changes.append(('issuers', [{'org': o, 'blocks': b}
+                                    for o, b in issuers(form['issuers']).items()], []))
+    if form['signatories'] != old['signatories']:
+        changes.append(('signatories', form['signatories'], []))
+    if changes:
+        save_corrections(leaflet, changes)
+    return back_to(request, leaflet_id)
+
+
+@app.post("/leaflets/{leaflet_id}/zuruecksetzen")
+async def leaflet_revert(request: Request, leaflet_id: int):
+    """Back to the automatic values, for one field or all ("revert" line)."""
+    leaflet = leaflet_or_404(leaflet_id)
+    field = parse_qs((await request.body()).decode()).get('field', ['all'])[0]
+    if field != 'all' and field not in corrections.FIELDS:
+        raise HTTPException(400)
+    key = segment(leaflet)
+    corrections.append(CORRECTIONS, [{**key, 'field': 'revert', 'value': field}])
+    reset_leaflet(leaflet)
+    corrections.apply(leaflet, corrections.by_segment(corrections.load(CORRECTIONS)).get(
+        tuple(key.values()), []))
+    session.commit()
+    return back_to(request, leaflet_id)
+
+
+def back_to(request, leaflet_id):
+    query = request.url.query
+    return RedirectResponse(f"/leaflets/{leaflet_id}" + (f"?{query}" if query else ''),
+                            status_code=303)
+
+
+@app.get("/korrekturen")
+def correction_list(request: Request):
+    """Corrections whose page range no longer matches a segment."""
+    volumes = {v.stem: v for v in session.query(Volume) if v.stem}
+    rows = []
+    for (stem, start, end), entries in corrections.by_segment(
+            corrections.load(CORRECTIONS)).items():
+        volume = volumes.get(stem)
+        overlaps = session.query(Leaflet).filter(
+            Leaflet.volume_id == volume.id, Leaflet.start_page <= end,
+            Leaflet.end_page >= start).order_by(Leaflet.start_page).all() if volume else []
+        if any((lf.start_page, lf.end_page) == (start, end) for lf in overlaps):
+            continue
+        rows.append({'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
+                     'entries': entries, 'overlaps': overlaps})
+    return templates.TemplateResponse(
+        request, "corrections.html", {"rows": rows, "fields": corrections.FIELDS})
 
 
 @app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")

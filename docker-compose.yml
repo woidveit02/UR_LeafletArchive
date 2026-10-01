@@ -7,6 +7,7 @@ services:
       - LEAFLET_DATA_DIR=/app/data
       - LEAFLET_PDF_DIR=/data/pdfs
       - LEAFLET_PDF_HOST_DIR=${LEAFLET_PDF_HOST_DIR:-}
+      - LEAFLET_CORRECTIONS=${LEAFLET_CORRECTIONS:-}  # other file, e.g. for UI tests
     volumes:
       - ./src/backend:/app
       - ./src/frontend/templates:/app/app/templates

@@ -7,6 +7,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
+from . import corrections
 from .session import session
 from .models import Volume, Page, Leaflet, Organization, LeafletIssuer
 
@@ -16,6 +17,7 @@ else:
     DATA_DIR = Path(__file__).resolve().parents[4] / "data"
 
 PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
+CORRECTIONS = Path(os.environ.get("LEAFLET_CORRECTIONS") or DATA_DIR / "corrections.jsonl")
 
 
 def load_json(name):
@@ -67,8 +69,14 @@ def own_blocks(block_ids, record, label=None):
     return [b for b in block_ids or [] if b.split("-")[0].isdigit() and int(b.split("-")[0]) in pages]
 
 
+def variant_index():
+    """Lower-cased spelling -> org id, from organizations.json."""
+    return {variant.strip().lower(): org["org_id"]
+            for org in load_json("organizations.json")
+            for variant in org.get("variants", [])}
+
+
 def fill_organizations():
-    orgs_by_variant = {}
     for org in load_json("organizations.json"):
         session.add(Organization(
             id=org["org_id"],
@@ -81,10 +89,8 @@ def fill_organizations():
             gnd_id=org.get("gnd_id", ""),
             notes=org.get("notes", ""),
         ))
-        for variant in org.get("variants", []):
-            orgs_by_variant[variant.strip().lower()] = org["org_id"]
     session.commit()
-    return orgs_by_variant
+    return variant_index()
 
 
 def fill_volumes():
@@ -176,7 +182,64 @@ def load_pages(volume_label, stem):
     return pages
 
 
-def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None, copies=None):
+def automatic_values(r, series_by_key):
+    return dict(
+        title=r.get("title", ""),
+        title_type=r.get("title_type", ""),
+        date_text=r.get("date_text", ""),
+        date_iso=r.get("date_iso", ""),
+        date_type=r.get("date_type", ""),
+        series=(series_by_key or {}).get(series_key(r.get("series")),
+                                         (r.get("series") or "").strip()),
+        issue=(r.get("issue") or "").strip(),
+        received_date=r.get("received_date", ""),
+        received_uncertain=bool(r.get("received_year_uncertain")),
+        doc_type=r.get("doc_type", ""),
+        confidence=r.get("confidence", 0),
+        title_blocks=own_blocks(r.get("title_blocks"), r, "title"),
+        date_blocks=own_blocks(r.get("date_blocks"), r, "date"),
+        received_blocks=own_blocks(r.get("received_blocks"), r),
+        title_quote=r.get("title_evidence", ""),
+        date_quote=r.get("date_evidence", ""),
+        received_quote=r.get("received_evidence", ""),
+        series_blocks=[], series_quote="", corrected=[],
+    )
+
+
+def add_issuers(leaflet, r, orgs_by_variant, known_ids):
+    for issuer in r.get("issuers", []):
+        for org_id in issuer_org_ids(issuer, orgs_by_variant, known_ids):
+            session.add(LeafletIssuer(
+                leaflet_id=leaflet.id,
+                surface=issuer["surface"],
+                role=issuer["role"],
+                org_id=org_id,
+                blocks=own_blocks(issuer.get("blocks"), r, f"issuer {issuer['surface']!r}"),
+                quote=issuer.get("evidence", ""),
+                function=(issuer.get("function") or "").strip(),
+                marker=(issuer.get("marker") or "").strip(),
+                other_institution=(issuer.get("_other_institution") or [None])[0],
+            ))
+
+
+def automatic_record(leaflet):
+    volume = session.get(Volume, leaflet.volume_id)
+    cfg = next(c for c in VOLUMES if c["label"] == volume.label)
+    return next(r for r in load_json(cfg["metadata_file"])["segments"]
+                if (r["start_page"], r["end_page"]) == (leaflet.start_page, leaflet.end_page))
+
+
+def reset_leaflet(leaflet):
+    """Back to the values of the metadata file, as before any manual correction."""
+    r = automatic_record(leaflet)
+    for column, value in automatic_values(r, series_names(VOLUMES)).items():
+        setattr(leaflet, column, value)
+    session.query(LeafletIssuer).filter_by(leaflet_id=leaflet.id).delete()
+    add_issuers(leaflet, r, variant_index(),
+                {org_id for (org_id,) in session.query(Organization.id)})
+
+
+def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
@@ -195,6 +258,7 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None, copies=None):
 
     known_ids = {org_id for (org_id,) in session.query(Organization.id)}
     leaflet_by_page = {}
+    corrected = []
     for r in records:
         if r.get("no_content"):
             continue
@@ -202,41 +266,13 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None, copies=None):
             volume_id=volume.id,
             start_page=r["start_page"],
             end_page=r["end_page"],
-            title=r.get("title", ""),
-            title_type=r.get("title_type", ""),
-            date_text=r.get("date_text", ""),
-            date_iso=r.get("date_iso", ""),
-            date_type=r.get("date_type", ""),
-            series=(series_by_key or {}).get(series_key(r.get("series")),
-                                             (r.get("series") or "").strip()),
-            issue=(r.get("issue") or "").strip(),
-            received_date=r.get("received_date", ""),
-            received_uncertain=bool(r.get("received_year_uncertain")),
-            doc_type=r.get("doc_type", ""),
-            confidence=r.get("confidence", 0),
-            title_blocks=own_blocks(r.get("title_blocks"), r, "title"),
-            date_blocks=own_blocks(r.get("date_blocks"), r, "date"),
-            received_blocks=own_blocks(r.get("received_blocks"), r),
-            title_quote=r.get("title_evidence", ""),
-            date_quote=r.get("date_evidence", ""),
-            received_quote=r.get("received_evidence", ""),
-            copy_group=(copies or {}).get((cfg["label"], r["start_page"])),
+            copy_group=copies.get((cfg["label"], r["start_page"])),
+            **automatic_values(r, series_by_key),
         )
         session.add(leaflet)
         session.flush()
-        for issuer in r.get("issuers", []):
-            for org_id in issuer_org_ids(issuer, orgs_by_variant, known_ids):
-                session.add(LeafletIssuer(
-                    leaflet_id=leaflet.id,
-                    surface=issuer["surface"],
-                    role=issuer["role"],
-                    org_id=org_id,
-                    blocks=own_blocks(issuer.get("blocks"), r, f"issuer {issuer['surface']!r}"),
-                    quote=issuer.get("evidence", ""),
-                    function=(issuer.get("function") or "").strip(),
-                    marker=(issuer.get("marker") or "").strip(),
-                    other_institution=(issuer.get("_other_institution") or [None])[0],
-                ))
+        add_issuers(leaflet, r, orgs_by_variant, known_ids)
+        corrected.append((leaflet, fixes.get((stem, r["start_page"], r["end_page"]), [])))
         for page_no in range(r["start_page"], r["end_page"] + 1):
             leaflet_by_page[page_no] = leaflet.id
     session.commit()
@@ -250,6 +286,11 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key=None, copies=None):
             blocks=ocr.get("blocks", []),
             leaflet_id=leaflet_by_page.get(page_no),
         ))
+    session.commit()
+
+    # after the pages: manual evidence takes its wording from their OCR text
+    for leaflet, entries in corrected:
+        corrections.apply(leaflet, entries)
     session.commit()
 
 
@@ -310,5 +351,6 @@ def fill_database():
     volumes = fill_volumes()
     series_by_key = series_names(VOLUMES)
     copies = copy_groups()
+    fixes = corrections.by_segment(corrections.load(CORRECTIONS))
     for cfg in VOLUMES:
-        fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies)
+        fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes)

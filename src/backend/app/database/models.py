@@ -30,7 +30,7 @@ class Page(Base):
     page_no = Column(Integer)
     text = Column(Text, default="")
     blocks = Column(JSON, default=list)
-    leaflet_id = Column(Integer, ForeignKey("leaflets.id"), nullable=True)
+    leaflet_id = Column(Integer, ForeignKey("leaflets.id"), nullable=True, index=True)
 
 
 class Leaflet(Base):
@@ -58,8 +58,11 @@ class Leaflet(Base):
     title_quote = Column(String)
     date_quote = Column(String)
     received_quote = Column(String)
+    series_blocks = Column(JSON)  # only from manual corrections
+    series_quote = Column(String)
     # possible copies of the same leaflet share a group (find_copies.py, unreviewed)
     copy_group = Column(Integer)
+    corrected = Column(JSON, default=list)  # field names corrected by hand
 
     @property
     def series_label(self):
@@ -90,7 +93,7 @@ class LeafletIssuer(Base):
     __tablename__ = "leaflet_issuers"
 
     id = Column(Integer, primary_key=True)
-    leaflet_id = Column(Integer, ForeignKey("leaflets.id"))
+    leaflet_id = Column(Integer, ForeignKey("leaflets.id"), index=True)
     surface = Column(String)
     role = Column(String)
     org_id = Column(String, ForeignKey("organizations.id"), nullable=True)

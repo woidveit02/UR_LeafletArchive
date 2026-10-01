@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Korrekturen prüfen – UR Leaflet Archive</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
+</head>
+
+<body>
+    {% include '_navigation.html' %}
+    <div class="app">
+        <h1>Korrekturen prüfen</h1>
+        <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
+            Sie werden nicht angewendet. Zum Übernehmen in <code>data/corrections.jsonl</code> Anfangs- und Endseite anpassen.</p>
+        {% for row in rows %}
+        <h2>{{ row.segment }}</h2>
+        <ul class="leaflet-list leaflet-list-plain">
+            {% for e in row.entries %}
+            {% if e.field == 'date' %}{% set value = e.value.iso ~ ' (' ~ e.value.type ~ ')' %}
+            {% elif e.field == 'series' %}{% set value = [e.value.name, e.value.issue] | select | join(', ') %}
+            {% elif e.field == 'issuers' %}{% set value = e.value | map(attribute='org') | join(', ') %}
+            {% elif e.field == 'signatories' %}{% set value = e.value | map(attribute='name') | join(', ') %}
+            {% elif e.field == 'revert' %}{% set value = 'alle früheren Zeilen' if e.value == 'all' else 'frühere Zeilen für ' ~ fields.get(e.value, e.value) %}
+            {% else %}{% set value = e.value %}{% endif %}
+            <li><span class="row-main">{{ fields.get(e.field, 'Handkorrektur entfernt') }}: {{ value }}
+                <span class="meta">{{ e.at }}{% if e.reason %} · {{ e.reason }}{% endif %}</span></span></li>
+            {% endfor %}
+        </ul>
+        <p class="meta">Überlappende Flugblätter jetzt:
+            {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
+        {% else %}
+        <p>Alle Korrekturen passen zu einem Flugblatt.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

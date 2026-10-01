@@ -5,8 +5,6 @@ import pathlib
 
 logger = logging.getLogger(__name__)
 
-# Helper functions for app logic
-
 # https://www.youtube.com/watch?v=9L77QExPmI0
 def setup_logging():
     config_file = pathlib.Path(__file__).resolve().parent / 'logs' / 'config.json'
