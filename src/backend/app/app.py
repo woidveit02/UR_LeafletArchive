@@ -200,6 +200,12 @@ def leaflet_list(request: Request, org: str | None = None,
         'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
     } for o in organizations]
 
+    used_types = {t for (t,) in session.query(Leaflet.doc_type).distinct() if t}
+    type_options = [{
+        'id': key, 
+        'label': label
+    } for key, label in DOC_TYPES.items() if key in used_types]
+
     # years of all leaflets, so the options stay while a filter is set
     volume_years = {v.id: v.year for v in session.query(Volume)}
     years = sorted({leaflet_year(lf, volume_years[lf.volume_id])
@@ -211,7 +217,9 @@ def leaflet_list(request: Request, org: str | None = None,
     return templates.TemplateResponse(
         request, "leaflet_list.html",
         {"leaflets": items, "org_options": org_options, "selected_org": org,
-         "years": years, "selected_year": jahr, "filtered": any((org, jahr)),
+         "type_options": type_options, "selected_type": typ,
+         "years": years, "selected_year": jahr,
+         "filtered": any((org, jahr, typ)),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
          "switch_base": '/leaflets' + query_string})
 
