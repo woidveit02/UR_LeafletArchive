@@ -94,7 +94,8 @@ def list_date(leaflet, fallback_year=None):
     if text:
         is_event = leaflet.date_type == 'event' and leaflet.doc_type != 'protokoll'
         return text, 'Veranstaltung' if is_event else ''
-    received = None if leaflet.received_uncertain else iso_to_text(leaflet.received_date)
+    received = None if leaflet.received_uncertain else iso_to_text(
+        leaflet.received_date)
     if received:
         return received, 'Eingang'
     return (str(fallback_year) if fallback_year else ''), ''
@@ -168,7 +169,8 @@ def index(request: Request):
 
 @app.get("/leaflets")
 def leaflet_list(request: Request, org: str | None = None,
-                 jahr: str | None = None, ansicht: str = "liste"):
+                 jahr: str | None = None, typ: str | None = None,
+                 ansicht: str = "liste"):
     logger.info('Opening leaflet list')
 
     query = (
@@ -183,6 +185,9 @@ def leaflet_list(request: Request, org: str | None = None,
                     LeafletIssuer.role == 'issuer')
         )
         query = query.filter(Leaflet.id.in_(matching_ids))
+
+    if typ:
+        query = query.filter(Leaflet.doc_type == typ)
 
     items = leaflet_items(
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
@@ -399,7 +404,8 @@ THUMB_HEIGHT = 150
 def issuer_names(leaflet_ids):
     """{leaflet id: [("AStA", "Allgemeiner Studentenausschuss"), ...]}; unresolved
     issuers as printed, with an empty full name."""
-    orgs = {o.id: (o.name, o.full_name or '') for o in session.query(Organization)}
+    orgs = {o.id: (o.name, o.full_name or '')
+            for o in session.query(Organization)}
     names = {}
     for i in session.query(LeafletIssuer).filter(LeafletIssuer.leaflet_id.in_(leaflet_ids),
                                                  LeafletIssuer.role == 'issuer'):
@@ -458,7 +464,8 @@ def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
     leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
         .order_by(Leaflet.start_page).all()
     has_scans = bool(leaflets) and volume_pdf(volume).is_file()
-    view = ansicht if has_scans and ansicht in ('kacheln', 'bandseiten') else 'liste'
+    view = ansicht if has_scans and ansicht in (
+        'kacheln', 'bandseiten') else 'liste'
     orgs = sorted((o for o in session.query(Organization)
                    if volume.vz in (o.vz or [])), key=org_sort_key)
 
