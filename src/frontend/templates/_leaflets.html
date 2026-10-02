@@ -45,14 +45,14 @@
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 
-{% macro leaflet_list(items, fields) %}
+{% macro leaflet_list(items, fields, qs='') %}
 {% set rest = fields | reject('in', ['date', 'count']) | list %}
 <ul class="leaflet-list">
     {% for item in items %}
     <li>
         {% if 'date' in fields %}<span class="row-date">{{ item.date }}{% if item.date_label %}<small>{{ item.date_label }}</small>{% endif %}</span>{% endif %}
         <span class="row-main">
-            <a class="row-title" href="/leaflets/{{ item.leaflet.id }}">{{ title(item.leaflet) }}</a>
+            <a class="row-title" href="/leaflets/{{ item.leaflet.id }}{{ qs }}">{{ title(item.leaflet) }}</a>
             {{ meta(item, rest) }}
         </span>
         {% if 'count' in fields %}<span class="row-count">{{ count(item.leaflet) }}</span>{% endif %}
@@ -63,20 +63,20 @@
 </ul>
 {% endmacro %}
 
-{% macro leaflet_cards(items, fields=('pages', 'date')) %}
+{% macro leaflet_cards(items, fields=('pages', 'date'), qs='') %}
 <div class="doc-grid">
     {% for item in items %}{% set l = item.leaflet %}
     <figure class="doc-card">
         {% if item.thumb %}
         {% set n = l.end_page - l.start_page + 1 %}
-        <a class="doc-thumb" href="/leaflets/{{ l.id }}" tabindex="-1" aria-hidden="true">
+        <a class="doc-thumb" href="/leaflets/{{ l.id }}{{ qs }}" tabindex="-1" aria-hidden="true">
             <span class="doc-sheet{% if n == 2 %} doc-sheet-two{% elif n > 2 %} doc-sheet-more{% endif %}">
                 <img src="/volumes/{{ item.vz }}/pages/{{ l.start_page }}.jpg" alt="" loading="lazy">
             </span>
         </a>
         {% endif %}
         <figcaption>
-            <a class="doc-title" href="/leaflets/{{ l.id }}" title="{{ l.display_title }}">{{ title(l) }}</a>
+            <a class="doc-title" href="/leaflets/{{ l.id }}{{ qs }}" title="{{ l.display_title }}">{{ title(l) }}</a>
             <span class="doc-issuers">{{ issuer_list(item.issuers) }}</span>
             {{ meta(item, fields) }}
         </figcaption>

@@ -10,21 +10,64 @@
 <body>
     {% include '_navigation.html' %}
     {% macro sibling(id, text) -%}
-        {% if id %}<a href="/leaflets/{{ id }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
+        {% if id %}<a href="/leaflets/{{ id }}{{ leaflet.qs }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
     {%- endmacro %}
     <div class="app app-wide">
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / Band {{ leaflet.volume }}</span>
-            <span>
-                {{ sibling(leaflet.prev_id, '‹ Voriges Flugblatt') }}
-                {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
+            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>
+            <span class="pager">
+                {{ sibling(leaflet.prev_id, '‹ Voriges') }}
+                <span class="meta">{{ leaflet.position }} von {{ leaflet.in_volume }}</span>
+                {{ sibling(leaflet.next_id, 'Nächstes ›') }}
             </span>
         </nav>
+    {% macro pick(name, blocks, label) -%}
+        <input type="hidden" name="{{ name }}" value="{{ blocks | join(' ') }}">
+        <button type="button" class="pick-evidence" data-label="{{ label }}" aria-pressed="false">{% if not blocks %}Beleg wählen{% elif blocks | length == 1 %}Beleg: 1 Textstelle{% else %}Beleg: {{ blocks | length }} Textstellen{% endif %}</button>
+    {%- endmacro %}
+    {# date and issuers: shown in the metadata box and in its folded line #}
+    {% macro date_value() -%}
+                {% if leaflet.date %}<time datetime="{{ leaflet.date_iso }}">{{ leaflet.date }}</time>
+                {% if leaflet.date_type == 'issued' %}<span class="meta">(Erscheinungsdatum)</span>{% elif leaflet.date_type == 'event' and leaflet.doc_type == 'Protokoll' %}<span class="meta">(Sitzungsdatum)</span>{% elif leaflet.date_type == 'event' %}<span class="meta">(angekündigte Veranstaltung)</span>{% endif %}
+                {% elif leaflet.date_text and leaflet.volume_year %}„{{ leaflet.date_text }}“ <span class="meta">(ohne Jahr; Band von {{ leaflet.volume_year }})</span>
+                {% elif leaflet.volume_year %}undatiert <span class="meta">(Band von {{ leaflet.volume_year }})</span>{% else %}<span class="meta">nicht erkannt</span>{% endif %}
+    {%- endmacro %}
+    {% macro issuer_value() -%}
+                {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% elif i.other_institution %}<abbr title="Auf dem Blatt: „{{ i.printed }}“">{{ i.surface }}</abbr> <span class="unresolved" title="Nicht der gleichnamigen Regensburger Organisation zugeordnet, weil das Blatt eine andere Hochschule nennt.">(andere Hochschule)</span>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
+    {%- endmacro %}
+    {% macro issuer_short() -%}
+        {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}"{% if i.full %} title="{{ i.full }}"{% endif %}>{{ i.short }}</a>{% elif i.other_institution %}<abbr title="Auf dem Blatt: „{{ i.printed }}“">{{ i.surface }}</abbr> <span class="unresolved">(andere Hochschule)</span>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
+    {%- endmacro %}
+    {% macro fixed(field) -%}
+        {%- if field in leaflet.corrected %} <span class="fixed-tag">von Hand korrigiert</span>{% endif -%}
+    {%- endmacro %}
+    {% macro automatic(field) -%}
+        {%- if field in leaflet.automatic %}<span class="meta note">Automatisch erkannt: {{ leaflet.automatic[field] or 'nichts' }}
+            <button type="submit" form="revert" name="field" value="{{ field }}" class="button-plain">wiederherstellen</button></span>{% endif -%}
+    {%- endmacro %}
+    {% macro row_tools(what) -%}
+        <button type="button" class="button-plain row-remove" aria-label="{{ what }} entfernen" title="Zeile entfernen">×</button>
+    {%- endmacro %}
+    {% macro issuer_row(i) -%}
+        <span class="edit-row">
+            <input type="text" name="issuer" value="{{ i.name }}" list="org-names" placeholder="Organisation suchen …" aria-label="Herausgeber" autocomplete="off">
+            {{ pick('issuer_blocks', i.blocks, 'Herausgeber ' ~ (i.name or '(neu)')) }}
+            {{ row_tools('Herausgeber') }}
+        </span>
+    {%- endmacro %}
+    {% macro signatory_row(s) -%}
+        <span class="edit-row">
+            <input type="text" name="signatory_name" value="{{ s.name }}" placeholder="Name" aria-label="Name">
+            <input type="text" name="signatory_details" value="{{ s.details }}" placeholder="Funktion, z. B. verantwortlich" aria-label="Funktion">
+            {{ pick('signatory_blocks', s.blocks, 'Unterzeichnende ' ~ (s.name or '(neu)')) }}
+            {{ row_tools('Unterzeichnende') }}
+        </span>
+    {%- endmacro %}
     {% macro beleg(label) -%}
         {%- set items = leaflet.evidence[label] -%}
         {%- if items and leaflet.has_pdf -%}
         <span class="beleg-wrap">
-            <button type="button" class="beleg" aria-expanded="false"
+            <button type="button" class="beleg" aria-expanded="false" title="Textstelle im Scan, auf die sich die Angabe stützt"
                     data-evidence="{{ items | map(attribute='blocks') | sum(start=[]) | unique | join(' ') }}">Beleg</button>
             <span class="beleg-pop" role="dialog" aria-label="Zugeordnete Textstelle: {{ label }}" hidden>
                 <span class="beleg-head">Zugeordnete Textstelle: {{ label }}
@@ -38,118 +81,288 @@
         </span>
         {%- endif -%}
     {%- endmacro %}
-	    <h1>{% if leaflet.title %}{{ leaflet.title }} {{ beleg('Titel') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
+        {% set unknown = '<span class="meta">nicht erkannt</span>' | safe %}
+        <div class="meta-area">
+        {% if edit %}
+        <form method="post" action="/leaflets/{{ leaflet.id }}/bearbeiten{{ leaflet.qs }}" class="meta-form keep-scroll">
+        <div class="edit-row title-edit">
+            <input type="text" id="title" name="title" value="{{ edit.title }}" aria-label="Titel" placeholder="Titel; leer lassen, wenn das Blatt keine eigene Überschrift hat">
+            {{ pick('title_blocks', edit.title_blocks, 'Titel') }}
+        </div>
+        {{ automatic('title') }}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% else %}
+        {# last word and "Beleg" wrap together #}
+        <h1>{% if leaflet.title %}{% set words = leaflet.title.rsplit(' ', 1) %}{{ words[0] if words | length > 1 }} <span class="nowrap">{{ words[-1] }} {{ beleg('Titel') }}</span>{{ fixed('title') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
+        {% if leaflet.title_from_series %}<p class="meta title-note">Das Blatt hat keine eigene Überschrift; als Titel stehen Reihe und Nummer.</p>{% endif %}
+        {% endif %}
 
-        {% set total = leaflet.page_list | length %}
-        <div class="viewer">
-            <div class="viewer-pages">
-                {% if not leaflet.has_pdf %}
-                <div class="scan-missing">
-                    <strong>Scans nicht verfügbar</strong><br>
-                    Der PDF-Ordner ist nicht eingebunden (siehe README, Abschnitt „Daten &amp; Synchronisation“).
-                </div>
+        {% if not edit %}
+        {# open state is kept per browser #}
+        <details class="meta-details" open>
+            <summary title="Angaben aufklappen">
+                <span class="fold-main">
+                <span class="fold-date">{{ date_value() }}{% if leaflet.date or leaflet.date_text %} {{ beleg('Datum') }}{% endif %}</span>
+                <span class="fold-issuers">{{ issuer_short() }} {{ beleg('Herausgeber') }}</span>
+                {% if leaflet.signatories %}<span class="fold-signers"><span class="meta">Unterzeichnet:</span> {{ leaflet.signatories | map(attribute='name') | join(', ') }} {{ beleg('Unterzeichnende') }}</span>{% endif %}
+                {% if leaflet.series %}<span class="fold-series"><span class="meta">Reihe</span> {{ leaflet.series }} {{ beleg('Reihe') }}</span>{% endif %}
+                </span>
+                <span class="fold-toggle">{% if leaflet.corrected %}<span class="fixed-tag">von Hand korrigiert</span>{% endif %}<span class="toggle-pill">Angaben ausklappen ▾</span></span>
+            </summary>
+        {% endif %}
+        <div class="meta-box{% if edit %} editing{% endif %}">
+        {# left: what the leaflet says; right: where it sits in the archive #}
+        <dl class="meta-list">
+            <dt>{% if edit %}<label for="date">Datum</label>{% else %}Datum{% endif %}</dt>
+            <dd>
+                {% if edit %}
+                <span class="edit-row">
+                    <input type="text" id="date" name="date" value="{{ edit.date if edit.date is defined else german_date(edit.date_iso) }}" placeholder="TT.MM.JJJJ" aria-describedby="date-hint">
+                    <select name="date_type" aria-label="Art des Datums">
+                        {% for key, label in date_types.items() %}<option value="{{ key }}"{% if key == edit.date_type %} selected{% endif %}>{{ label }}</option>{% endfor %}
+                    </select>
+                    {{ pick('date_blocks', edit.date_blocks, 'Datum') }}
+                </span>
+                <span class="meta note" id="date-hint">z. B. 17.12.1969, 12.1969 oder 1969; leer lassen, wenn das Blatt undatiert ist</span>
+                {{ automatic('date') }}
+                {% else %}{{ date_value() }}{% if leaflet.date or leaflet.date_text %} {{ beleg('Datum') }}{% endif %}{% endif %}
+                {%- if not edit %}{{ fixed('date') }}{% endif %}
+            </dd>
+            <dt>Herausgeber</dt>
+            <dd>
+                {% if edit %}
+                <span class="edit-rows">{% for i in edit.issuers + [{'name': '', 'blocks': []}] %}{{ issuer_row(i) }}{% endfor %}</span>
+                <template>{{ issuer_row({'name': '', 'blocks': []}) }}</template>
+                <button type="button" class="button-plain row-add">+ Herausgeber</button>
+                <datalist id="org-names">{% for name in org_names %}<option value="{{ name }}">{% endfor %}</datalist>
+                <span class="meta note">Nur Organisationen aus dem Register. Die Liste ersetzt alle bisherigen Herausgeber.</span>
+                {{ automatic('issuers') }}
+                {% else %}
+                {{ issuer_value() }}
+                {{ beleg('Herausgeber') }}{{ fixed('issuers') }}
                 {% endif %}
-                {% for page in leaflet.page_list if leaflet.has_pdf %}
-                <div class="page-frame" id="scan-{{ page.no }}">
-                    <img src="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png" alt="Seite {{ page.no }}" class="leaflet-page"
+            </dd>
+            <dt>Unterzeichnende</dt>
+            <dd>
+                {% if edit %}
+                <span class="edit-rows">{% for s in edit.signatories + [{'name': '', 'details': '', 'blocks': []}] %}{{ signatory_row(s) }}{% endfor %}</span>
+                <template>{{ signatory_row({'name': '', 'details': '', 'blocks': []}) }}</template>
+                <button type="button" class="button-plain row-add">+ Unterzeichnende</button>
+                {{ automatic('signatories') }}
+                {% else %}
+                {% for s in leaflet.signatories %}{{ s.name }}{% if s.details %} <span class="meta">({{ s.details }})</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}{{ unknown }}{% endfor %}
+                {{ beleg('Unterzeichnende') }}{{ fixed('signatories') }}
+                {% endif %}
+            </dd>
+            <dt>{% if edit %}<label for="series">Reihe</label>{% else %}Reihe{% endif %}</dt>
+            <dd>{% if edit %}<span class="edit-row"><input type="text" id="series" name="series" value="{{ edit.series }}" list="series-names" autocomplete="off">
+                <input type="text" name="issue" value="{{ edit.issue }}" class="issue-input" placeholder="Nr., z. B. Nr. 5" aria-label="Nummer in der Reihe">{{ pick('series_blocks', edit.series_blocks, 'Reihe') }}</span>
+                <datalist id="series-names">{% for name in series_names %}<option value="{{ name }}">{% endfor %}</datalist>
+                {{ automatic('series') }}
+                {% elif leaflet.series %}{{ leaflet.series }} {{ beleg('Reihe') }}{{ fixed('series') }}{% else %}{{ unknown }}{% endif %}</dd>
+        </dl>
+        <dl class="meta-list">
+            <dt>{% if edit %}<label for="doc_type">Textsorte</label>{% else %}Textsorte{% endif %}</dt>
+            <dd>{% if edit %}<select id="doc_type" name="doc_type">
+                {% for key, label in doc_types.items() %}<option value="{{ key }}"{% if key == edit.doc_type %} selected{% endif %}>{{ label }}</option>{% endfor %}
+            </select>{{ automatic('doc_type') }}{% elif leaflet.doc_type and leaflet.doc_type != 'unklar' %}{{ leaflet.doc_type }}{{ fixed('doc_type') }}{% else %}{{ unknown }}{% endif %}</dd>
+            {% if not edit %}
+            <dt>Band</dt>
+            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>
+            {# only 1970 has archive stamps so far; an empty row would read as "missed" #}
+            {% if leaflet.received %}
+            <dt>Eingang im Archiv</dt>
+            <dd>{{ leaflet.received }} <span class="meta">(Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher{% endif %})</span>
+                {{ beleg('Eingang im Archiv') }}</dd>
+            {% endif %}
+            <dt>Weitere Exemplare</dt>
+            {% if leaflet.copies %}
+            <dd>{% for c in leaflet.copies %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
+                <span class="meta note">dasselbe Blatt an anderer Stelle im Bestand; automatisch am Text erkannt, nicht geprüft</span></dd>
+            {% else %}
+            <dd><span class="meta">keine erkannt</span></dd>
+            {% endif %}
+            {% endif %}
+        </dl>
+        {% if edit %}
+        <div class="edit-actions">
+            <span class="review-actions">
+                <button type="submit" class="button-small">Speichern</button>
+                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs }}" class="keep-scroll">Abbrechen</a>
+            </span>
+            <span class="meta note">„Beleg wählen“, dann Textblöcke im Scan oder in der Transkription anklicken; ein zweiter Klick entfernt sie. Geänderte Felder gelten als von Hand korrigiert.</span>
+        </div>
+        {% else %}
+        <aside class="meta-side">
+            <button type="button" class="toggle-pill" data-fold>Angaben einklappen ▴</button>
+            <div class="side-actions">
+                {% if leaflet.provenance_model %}<p><span class="side-label">Automatisch erschlossen</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
+                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button-outline" data-swap="edit">Angaben korrigieren</a>
+                {% if leaflet.corrected %}<button type="submit" form="revert" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
+            </div>
+        </aside>
+        {% endif %}
+        </div>
+        {% if not edit %}
+        </details>
+        <script>
+            try { if (localStorage.getItem('meta-open') === '0') document.querySelector('.meta-details').open = false; } catch (e) {}
+        </script>
+        {% endif %}
+        {% if edit %}
+        </form>
+        {% endif %}
+        <form id="revert" class="keep-scroll" method="post" action="/leaflets/{{ leaflet.id }}/zuruecksetzen{{ leaflet.qs }}" hidden
+              onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen dieses Flugblatts entfernen? Es gelten dann wieder die automatisch erkannten Angaben.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
+        </div>
+
+        {% if not leaflet.has_pdf %}
+        <div class="scan-missing">
+            <strong>Scans nicht verfügbar</strong><br>
+            Der PDF-Ordner ist nicht eingebunden (siehe README, Abschnitt „Daten &amp; Synchronisation“).
+        </div>
+        {% endif %}
+        {% set total = leaflet.page_list | length %}
+        {% for page in leaflet.page_list %}
+        <section class="page-pair" id="page-{{ page.no }}" aria-label="Bandseite {{ page.no }}"{% if page.width %} style="--ratio: {{ page.width / page.height }}"{% endif %}>
+            <div class="pair-head">
+                <span>{% if total > 1 %}Blattseite {{ page.index }} von {{ total }} · {% endif %}Bandseite {{ page.no }}</span>
+                {% if leaflet.has_pdf %}<a href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" rel="noopener">Vergrößern ↗</a>{% endif %}
+            </div>
+            <div class="pair-head">Transkription, erzeugt von Datalab Convert</div>
+            <div class="pair-scan">
+                {% if leaflet.has_pdf %}
+                <div class="page-frame">
+                    <a class="scan-link" href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img
+                         src="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png" alt="Scan der Bandseite {{ page.no }}" class="leaflet-page"
                          {% if page.width %}width="{{ page.width }}" height="{{ page.height }}"{% endif %}
                          loading="{{ 'eager' if loop.first else 'lazy' }}"
-                         onload="this.classList.add('loaded')">
+                         onload="this.classList.add('loaded')"></a>
                     {% for block in page.blocks %}
                     <span class="ocr-box" data-block="{{ page.no }}-{{ loop.index }}"
                           style="left: {{ block.box[0] }}%; top: {{ block.box[1] }}%; width: {{ block.box[2] }}%; height: {{ block.box[3] }}%;"></span>
                     {% endfor %}
                 </div>
-                <div class="page-caption">
-                    {% if total > 1 %}
-                    {% if page.blocks %}<a href="#text-{{ page.no }}" title="Zur Transkription dieser Seite">Blattseite {{ page.index }} von {{ total }}</a>{% else %}Blattseite {{ page.index }} von {{ total }}{% endif %} ·
-                    {% endif %}
-                    <a href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" rel="noopener" title="Scan in hoher Auflösung">Scan in neuem Tab öffnen ↗</a>
-                </div>
-                {% endfor %}
+                {% endif %}
             </div>
-
-            <div class="viewer-info">
-                <dl class="meta-list">
-                    <dt>Band</dt>
-                    <dd>
-                        <a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}
-                        {% if leaflet.volume_collection %}<br><span class="meta">{{ leaflet.volume_title }} (Organisationsband)</span>{% endif %}
-                    </dd>
-                    <dt>Datum</dt>
-                    <dd>
-                        {% if leaflet.date %}<time datetime="{{ leaflet.date_iso }}">{{ leaflet.date }}</time>
-                        {% if leaflet.date_type == 'issued' %}<span class="meta">(Erscheinungsdatum)</span>{% elif leaflet.date_type == 'event' and leaflet.doc_type == 'Protokoll' %}<span class="meta">(Sitzungsdatum)</span>{% elif leaflet.date_type == 'event' %}<span class="meta">(Datum der angekündigten Veranstaltung)</span>{% endif %}
-                        {{ beleg('Datum') }}
-                        {% elif leaflet.date_text and leaflet.volume_year %}{{ leaflet.volume_year }} <span class="meta">(Jahr des Bandes; auf dem Blatt: „{{ leaflet.date_text }}“)</span>
-                        {{ beleg('Datum') }}
-                        {% elif leaflet.volume_year %}{{ leaflet.volume_year }} <span class="meta">(Jahr des Bandes, das Blatt ist undatiert)</span>{% else %}undatiert{% endif %}
-                    </dd>
-                    {% if leaflet.received %}
-                    <dt>Eingang im Archiv</dt>
-                    <dd>
-                        {{ leaflet.received }} <span class="meta">(laut Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher gelesen{% endif %})</span>
-                        {{ beleg('Eingang im Archiv') }}
-                    </dd>
-                    {% endif %}
-                    <dt>Reihe</dt>
-                    <dd>{% if leaflet.series %}{{ leaflet.series }}{% if leaflet.title_from_series %} <span class="meta">(das Blatt hat keine eigene Überschrift)</span>{% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</dd>
-                    <dt>Textsorte</dt>
-                    <dd>{% if leaflet.doc_type and leaflet.doc_type != 'unklar' %}{{ leaflet.doc_type }}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</dd>
-                    <dt>Herausgeber</dt>
-                    <dd>
-                        {% for i in leaflet.issuers %}{% if i.org_id %}<a href="/organizations/{{ i.org_id }}">{{ i.surface }}</a>{% elif i.other_institution %}<abbr title="Auf dem Blatt: „{{ i.printed }}“">{{ i.surface }}</abbr> <span class="unresolved" title="Nicht der gleichnamigen Regensburger Organisation zugeordnet, weil das Blatt eine andere Hochschule nennt.">(andere Hochschule)</span>{% else %}{{ i.surface }} <span class="unresolved">(nicht zugeordnet)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
-                        {{ beleg('Herausgeber') }}
-                    </dd>
-                    <dt>Unterzeichnende</dt>
-                    <dd>
-                        {% for s in leaflet.signatories %}{{ s.name }}{% if s.details %} <span class="meta">({{ s.details }})</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}<span class="meta">nicht erkannt</span>{% endfor %}
-                        {{ beleg('Unterzeichnende') }}
-                    </dd>
-                    {% if leaflet.copies %}
-                    <dt>Mögliche weitere Exemplare</dt>
-                    <dd>
-                        {% for c in leaflet.copies %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
-                        <br><span class="meta">automatisch erkannt am Textvergleich, nicht geprüft</span>
-                    </dd>
-                    {% endif %}
-                </dl>
-                {% if leaflet.provenance_model %}
-                <p class="review-note">Automatisch erschlossen mit {{ leaflet.provenance_model }} ({{ leaflet.provenance_date }}). „Beleg“ zeigt die Textstelle, auf die sich eine Angabe stützt.</p>
-                {% endif %}
-
-                <h2>Transkription <span class="heading-note">OCR mit Datalab Convert, nicht korrigiert</span></h2>
-                {% for page in leaflet.page_list | selectattr('blocks') %}
-                {% if total > 1 %}
-                <div class="page-divider" id="text-{{ page.no }}">
-                    <a href="#scan-{{ page.no }}" title="Zum Scan dieser Seite">Blattseite {{ page.index }} von {{ total }} · Bandseite {{ page.no }}</a>
-                </div>
-                {% endif %}
-                <div class="ocr-page">
-                    {% for block in page.blocks %}
-                    {% if block.type == 'Picture' and block.image and leaflet.has_pdf %}
-                    <figure class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}"><img src="/volumes/{{ leaflet.volume_vz }}/images/{{ block.image }}" alt="{{ block.description or 'Abbildung' }}" loading="lazy">{% if block.description %}<figcaption>{{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span></figcaption>{% endif %}</figure>
-                    {% elif block.type == 'Picture' %}
-                    <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung{% if block.description %}: {{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span>{% endif %}]</div>
-                    {% else %}
-                    <div class="ocr-block ocr-{{ block.type | lower }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
+            <div class="pair-text ocr-page">
+                {% for block in page.blocks %}
+                {% if block.type == 'Picture' and block.image and leaflet.has_pdf %}
+                <figure class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}"><img src="/volumes/{{ leaflet.volume_vz }}/images/{{ block.image }}" alt="{{ block.description or 'Abbildung' }}" loading="lazy">{% if block.description %}<figcaption>{{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span></figcaption>{% endif %}</figure>
+                {% elif block.type == 'Picture' %}
+                <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung{% if block.description %}: {{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span>{% endif %}]</div>
                 {% else %}
-                <p class="meta">Kein OCR-Text vorhanden.</p>
+                <div class="ocr-block ocr-{{ block.type | lower }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>
+                {% endif %}
+                {% else %}
+                <p class="meta">Kein OCR-Text auf dieser Seite.</p>
                 {% endfor %}
-
-                <nav class="detail-nav detail-nav-bottom">
-                    {{ sibling(leaflet.prev_id, '‹ Voriges Flugblatt') }}
-                    <a href="/leaflets">Zur Übersicht</a>
-                    {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
-                </nav>
             </div>
-        </div>
+        </section>
+        {% endfor %}
+
+        <nav class="detail-nav detail-nav-bottom">
+            {{ sibling(leaflet.prev_id, '‹ Voriges Flugblatt') }}
+            <a href="/leaflets{{ leaflet.qs }}">Zur Übersicht</a>
+            {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
+        </nav>
     </div>
 
+    <div class="pick-bar" role="status" hidden>
+        <span>Beleg für <strong class="pick-field"></strong>: <span class="pick-n"></span></span>
+        <button type="button" class="button-small" data-pick="done">Fertig</button>
+        <button type="button" class="button-plain" data-pick="cancel">Abbrechen</button>
+    </div>
+
+    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
     <script>
+        // evidence picking: a field's button starts pick mode, clicks on OCR blocks add or remove them;
+        // the floating bar shows the field while the form is scrolled out of view
+        const bar = document.querySelector('.pick-bar');
+        let picking = null;
+        const pickedIds = () => picking.input.value.split(' ').filter(Boolean);
+        const showPicked = () => {
+            document.querySelectorAll('[data-block].picked').forEach((el) => el.classList.remove('picked'));
+            if (!picking) return;
+            const ids = pickedIds();
+            ids.forEach((id) => document.querySelectorAll(`[data-block="${id}"]`).forEach((el) => el.classList.add('picked')));
+            const n = ids.length === 1 ? '1 Textstelle' : `${ids.length} Textstellen`;
+            picking.btn.textContent = ids.length ? `Beleg: ${n}` : 'Beleg wählen';
+            bar.querySelector('.pick-n').textContent = `${n} gewählt`;
+        };
+        const stopPicking = (restore) => {
+            if (!picking) return;
+            if (restore) picking.input.value = picking.before;
+            showPicked();
+            picking.btn.setAttribute('aria-pressed', 'false');
+            picking = null;
+            bar.hidden = true;
+            document.body.classList.remove('picking');
+            showPicked();
+        };
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pick-evidence');
+            if (!btn) return;
+            const again = picking?.btn === btn;
+            stopPicking(false);
+            if (again) return;
+            const input = btn.previousElementSibling;
+            picking = { btn, input, before: input.value };
+            btn.setAttribute('aria-pressed', 'true');
+            bar.querySelector('.pick-field').textContent = btn.dataset.label;
+            bar.hidden = false;
+            document.body.classList.add('picking');
+            showPicked();
+        });
+        bar.querySelector('[data-pick="done"]').addEventListener('click', () => stopPicking(false));
+        bar.querySelector('[data-pick="cancel"]').addEventListener('click', () => stopPicking(true));
+        document.addEventListener('click', (e) => {
+            const block = picking && e.target.closest('.ocr-box[data-block], .ocr-block[data-block]');
+            if (!block) return;
+            e.preventDefault();
+            e.stopPropagation();  // capture phase: the usual scroll-to-block handlers stay quiet
+            const ids = pickedIds(), id = block.dataset.block;
+            picking.input.value = (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]).join(' ');
+            showPicked();
+        }, true);
+
+        document.addEventListener('click', (e) => {
+            // evidence popups inside the folded row must not unfold it
+            if (e.target.closest('summary .beleg-pop')) e.preventDefault();
+            if (e.target.matches('[data-fold]')) e.target.closest('details').open = false;
+        });
+        document.addEventListener('toggle', (e) => {
+            if (!e.target.matches?.('.meta-details')) return;
+            try { localStorage.setItem('meta-open', e.target.open ? '1' : '0'); } catch (err) {}
+        }, true);
+
+        // edit in place: fetch the edit version and swap only title and metadata box
+        document.addEventListener('click', async (e) => {
+            const link = e.target.closest('a[data-swap="edit"]');
+            if (!link) return;
+            e.preventDefault();
+            try {
+                const page = new DOMParser().parseFromString(await (await fetch(link.href)).text(), 'text/html');
+                document.querySelector('.meta-area').replaceWith(page.querySelector('.meta-area'));
+                document.getElementById('title')?.focus({ preventScroll: true });
+            } catch (err) {
+                location.href = link.href;  // fall back to loading the edit page
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            const add = e.target.closest('.row-add');
+            const remove = e.target.closest('.row-remove');
+            if (add) {
+                const rows = add.parentElement.querySelector('.edit-rows');
+                rows.append(add.previousElementSibling.content.cloneNode(true));
+                rows.lastElementChild.querySelector('input').focus();
+            } else if (remove) {
+                if (picking && remove.parentElement.contains(picking.btn)) stopPicking(false);
+                remove.parentElement.remove();
+            }
+        });
+
         const highlight = (els, on) => els.forEach((el) => el.classList.toggle('active', on));
         const flash = (els) => {
             els[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -167,7 +380,6 @@
             box.addEventListener('click', () => flash([block]));
         });
 
-        // evidence: hover highlights the scan, click opens a detail popup
         const closeAll = () => document.querySelectorAll('.beleg').forEach((b) => {
             b.nextElementSibling.hidden = true;
             b.setAttribute('aria-expanded', 'false');
@@ -195,6 +407,7 @@
         document.addEventListener('click', (e) => { if (!e.target.closest('.beleg-wrap')) closeAll(); });
         document.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
+            if (picking) { stopPicking(false); return; }
             const open = document.querySelector('.beleg[aria-expanded="true"]');
             closeAll();
             open?.focus();
