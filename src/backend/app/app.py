@@ -235,17 +235,17 @@ def leaflet_list(request: Request, org: str | None = None,
     years = sorted({leaflet_year(lf, volume_years[lf.volume_id])
                     for lf in session.query(Leaflet)})
 
-    params = {k: v for k, v in request.query_params.items()
-              if v and k != 'ansicht'}
+    params = [(k, v) for k, v in request.query_params.multi_items()
+              if v and k != 'ansicht']
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
         {"leaflets": items, "org_options": org_options, "selected_org": org,
          "type_options": type_options, "selected_type": typ,
          "series_options": series_options, "selected_series": reihe,
-         "selected_sort": sortierung,
+         "selected_sort": sortierung, "selected_dates": datum,
          "years": years, "selected_year": jahr,
-         "filtered": any((org, jahr, typ, reihe)),
+         "filtered": any((org, jahr, typ, reihe, datum)),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
          "switch_base": '/leaflets' + query_string})
 

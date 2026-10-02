@@ -57,6 +57,17 @@
                         </option>
                     </select>
                 </label>
+                <fieldset class="filter-checks">
+                    <legend>Datumsart</legend>
+                    {% for key, label in [('issued', 'Ausgabedatum'), ('event', 'Veranstaltung'), ('undated', 'ohne
+                    Datum')] %}
+                    <label>
+                        <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{%
+                            endif %} onchange="this.form.submit()">
+                        {{ label }}
+                    </label>
+                    {% endfor %}
+                </fieldset>
             </div>
             {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
             {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
