@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-	<meta charset="UTF-8">
-	<title>{{ leaflet.title if leaflet.title else 'Flugblatt' }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
+{% extends "base.html" %}
+{% block title %}{{ leaflet.title if leaflet.title else 'Flugblatt' }} – UR Leaflet Archive{% endblock %}
+{% block app_class %} app-wide{% endblock %}
+{% block content %}
     {% macro sibling(id, text) -%}
         {% if id %}<a href="/leaflets/{{ id }}{{ leaflet.qs }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
     {%- endmacro %}
-    <div class="app app-wide">
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>
             <span class="pager">
@@ -93,7 +85,7 @@
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% else %}
         {# last word and "Beleg" wrap together #}
-        <h1>{% if leaflet.title %}{% set words = leaflet.title.rsplit(' ', 1) %}{{ words[0] if words | length > 1 }} <span class="nowrap">{{ words[-1] }} {{ beleg('Titel') }}</span>{{ fixed('title') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
+        <h1 class="document-title">{% if leaflet.title %}{% set words = leaflet.title.rsplit(' ', 1) %}{{ words[0] if words | length > 1 }} <span class="nowrap">{{ words[-1] }} {{ beleg('Titel') }}</span>{{ fixed('title') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
         {% if leaflet.title_from_series %}<p class="meta title-note">Das Blatt hat keine eigene Überschrift; als Titel stehen Reihe und Nummer.</p>{% endif %}
         {% endif %}
 
@@ -266,14 +258,14 @@
             <a href="/leaflets{{ leaflet.qs }}">Zur Übersicht</a>
             {{ sibling(leaflet.next_id, 'Nächstes Flugblatt ›') }}
         </nav>
-    </div>
-
     <div class="pick-bar" role="status" hidden>
         <span>Beleg für <strong class="pick-field"></strong>: <span class="pick-n"></span></span>
         <button type="button" class="button-small" data-pick="done">Fertig</button>
         <button type="button" class="button-plain" data-pick="cancel">Abbrechen</button>
     </div>
 
+{% endblock %}
+{% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
     <script>
         // evidence picking: a field's button starts pick mode, clicks on OCR blocks add or remove them;
@@ -413,5 +405,4 @@
             open?.focus();
         });
     </script>
-</body>
-</html>
+{% endblock %}

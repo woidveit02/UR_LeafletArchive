@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Seite nicht gefunden</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-	<div class="app">
+{% extends "base.html" %}
+{% block title %}Seite nicht gefunden – UR Leaflet Archive{% endblock %}
+{% block content %}
+	<div class="empty-state empty-state-page">
 		<h1>Seite nicht gefunden</h1>
         <p>Unter dieser Adresse gibt es nichts.</p>
         <p><a href="/">Zurück zur Startseite</a></p>
 	</div>
-</body>
-
-</html>
+{% endblock %}

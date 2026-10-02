@@ -1,22 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app">
-        <h1>Flugblätter aus dem Universitätsarchiv Regensburg</h1>
+{% extends "base.html" %}
+{% block app_class %} home-page{% endblock %}
+{% block content %}
+        <header class="page-head page-head-home">
+            <h1>Flugblätter aus dem Universitätsarchiv Regensburg</h1>
         <div class="intro">
             <p>Die Flugblattsammlung (Bestand Rep.&nbsp;118) wird seit 1968 an der Universität zusammengetragen.</p>        </div>
+        </header>
 
         <p class="stats-line">
-            <a href="/leaflets">{{ stats.leaflets }} Flugblätter</a> ·
-            <a href="/organizations">{{ stats.organizations }} Organisationen</a> ·
+            <a href="/leaflets">{{ stats.leaflets }} Flugblätter</a><span aria-hidden="true">·</span>
+            <a href="/organizations">{{ stats.organizations }} Organisationen</a><span aria-hidden="true">·</span>
             <a href="/volumes">{{ stats.volumes_done }} Bände erschlossen</a>
         </p>
 
@@ -54,7 +47,4 @@
             Wo ein Beleg vorliegt, lässt sich die Angabe auf der Detailseite im Scan prüfen.</p>
         </section>
         </div>
-    </div>
-</body>
-
-</html>
+{% endblock %}

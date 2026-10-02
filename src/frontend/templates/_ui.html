@@ -1,0 +1,30 @@
+{# Lucide icons (ISC license, lucide.dev): menu, layout-grid, gallery-horizontal-end #}
+{% set ICONS = {
+    'liste': '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
+    'kacheln': '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+    'bandseiten': '<path d="M2 7v10"/><path d="M6 5v14"/><rect width="12" height="18" x="10" y="3" rx="2"/>',
+} %}
+
+{% macro view_switch(base, current, views) %}
+<nav class="view-switch" aria-label="Ansicht">
+    {% for key, label in views %}
+    <a href="{{ base }}{% if not loop.first %}{{ '&' if '?' in base else '?' }}ansicht={{ key }}{% endif %}"{% if key == current %} aria-current="page"{% endif %}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">{{ ICONS[key] | safe }}</svg>{{ label }}</a>
+    {% endfor %}
+</nav>
+{% endmacro %}
+
+{% macro sort_link(base, current, key, label, first, default='') -%}
+{% set active = current.startswith(key) %}
+{% set next = key ~ ('_ab' if current == key ~ '_auf' else '_auf' if active else first) %}
+<a class="sort-link{% if active %} active{% endif %}"
+   href="{{ base }}{% if next != default %}{{ '&' if '?' in base else '?' }}sortierung={{ next }}{% endif %}"
+   aria-label="{{ label }}: {{ 'aufsteigend' if next.endswith('_auf') else 'absteigend' }} sortieren">
+    {{ label }}
+    <svg class="sort-icon" viewBox="0 0 24 24" aria-hidden="true">
+        {% if active %}
+        {% if current.endswith('_auf') %}<path d="M12 19V5m-5 5 5-5 5 5"/>{% else %}<path d="M12 5v14m-5-5 5 5 5-5"/>{% endif %}
+        {% else %}<path d="M8 20V4m-4 4 4-4 4 4M16 4v16m-4-4 4 4 4-4"/>{% endif %}
+    </svg>
+</a>
+{%- endmacro %}

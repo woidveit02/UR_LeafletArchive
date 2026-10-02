@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Bände – UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app">
-        <h1>Bände</h1>
+{% extends "base.html" %}
+{% block title %}Bände – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head">
+            <h1>Bände</h1>
         <p class="meta">Verzeichnungseinheiten 1967–1973 im Bestand Rep. 118 laut Findmittel des Universitätsarchivs
             (<a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
+        </header>
         {% for group in volumes | groupby('group', default='') | sort(attribute='list.0.label') %}
         <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }}</h2>
         <ul class="leaflet-list leaflet-list-plain">
@@ -25,6 +18,4 @@
             {% endfor %}
         </ul>
         {% endfor %}
-    </div>
-</body>
-</html>
+{% endblock %}

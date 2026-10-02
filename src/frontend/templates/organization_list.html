@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-	<div class="app">
-		<h1>Organisationen</h1>
+{% extends "base.html" %}
+{% block title %}Organisationen – UR Leaflet Archive{% endblock %}
+{% block content %}
+        {% from '_ui.html' import sort_link %}
+        <header class="page-head">
+		    <h1>Organisationen</h1>
+            <p class="page-intro">Körperschaften, Gruppen und Initiativen, die als Herausgeber erschlossener Flugblätter auftreten.</p>
+        </header>
+        <div class="list-head">
+            {{ sort_link('/organizations', sort, 'name', 'Organisation', '_auf', 'anzahl_ab') }}
+            {{ sort_link('/organizations', sort, 'anzahl', 'Flugblätter', '_ab', 'anzahl_ab') }}
+        </div>
         <ul class="leaflet-list leaflet-list-plain">
             {% for org in organizations %}
             <li{% if not org.count %} class="row-empty"{% endif %}>
                 <span class="row-main"><a class="row-title" href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a></span>
-                <span class="row-count">{{ org.count }} {{ 'Flugblatt' if org.count == 1 else 'Flugblätter' }}</span>
+                <span class="row-count">{{ org.count }}</span>
             </li>
             {% else %}
             <li>Keine Organisationen gefunden.</li>
             {% endfor %}
         </ul>
-	</div>
-
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app">
-        <h1>Flugblätter</h1>
-        {% from '_leaflets.html' import leaflet_list, leaflet_cards, view_switch %}
+{% extends "base.html" %}
+{% block title %}Flugblätter – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head page-head-list">
+            <h1>Flugblätter</h1>
+            <p class="page-intro">Titel, Datierungen und verantwortliche Organisationen der erschlossenen Blätter.</p>
+        </header>
+        {% from '_leaflets.html' import leaflet_list, leaflet_cards %}
+        {% from '_ui.html' import view_switch %}
         <form method="get" action="/leaflets" class="filter">
             {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
-            <details class="filter-details" open>
+            <details class="filter-details filter-panel" open>
             <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
             <div class="filter-fields">
                 <label>Herausgeber
@@ -48,11 +43,12 @@
                     </select>
                 </label>
                 <fieldset class="filter-checks">
-                    <legend>Datumsart (ohne Auswahl: alle)</legend>
+                    <legend>Datumsart</legend>
+                    <a class="filter-chip{% if not selected_dates %} active{% endif %}" href="{{ date_reset_url }}">Alle</a>
                     {% for key, label, hint in [('issued', 'Erscheinungsdatum', 'Datum, an dem das Blatt erschienen ist'),
                                                 ('event', 'Veranstaltungsdatum', 'Angekündigter Termin, nicht das Erscheinungsdatum'),
                                                 ('undated', 'Undatiert', 'Kein Datum auf dem Blatt')] %}
-                    <label title="{{ hint }}">
+                    <label class="filter-chip" title="{{ hint }}">
                         <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{% endif %} onchange="this.form.submit()">
                         {{ label }}
                     </label>
@@ -72,7 +68,7 @@
                     {%- else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
                 <label class="sort">Sortiert nach
                     <select name="sortierung" onchange="this.form.submit()">
-                        <option value="" title="So, wie die Blätter in den Bänden abgelegt sind">Reihenfolge im Archiv</option>
+                        <option value="" {% if not selected_sort %}selected{% endif %}>Reihenfolge im Archiv</option>
                         <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
                         <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
                         <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>
@@ -80,7 +76,7 @@
                     </select>
                 </label>
                 {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
-                <noscript><button type="submit">Filtern</button></noscript>
+                <noscript><button type="submit" class="button-small">Filtern</button></noscript>
             </div>
         </form>
         {% if leaflets and view == 'kacheln' %}
@@ -88,10 +84,7 @@
         {% elif leaflets %}
         {{ leaflet_list(leaflets, fields=('date', 'issuers', 'series', 'count'), qs=detail_qs) }}
         {% endif %}
-    </div>
-
-
+{% endblock %}
+{% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}

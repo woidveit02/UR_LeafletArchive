@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Organization Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app">
+{% extends "base.html" %}
+{% block title %}{{ org.name }} – UR Leaflet Archive{% endblock %}
+{% block content %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/organizations">Organisationen</a></span>
             <span>
@@ -17,9 +8,11 @@
                 {% if org.next_id %}<a href="/organizations/{{ org.next_id }}">Nächste ›</a>{% else %}<span class="disabled">Nächste ›</span>{% endif %}
             </span>
         </nav>
-        <h1>{{ org.name }}</h1>
+        <header class="page-head page-head-detail">
+            <h1>{{ org.name }}</h1>
+        </header>
 
-        <dl class="meta-list">
+        <dl class="meta-list facts-panel">
             <dt>Vollständiger Name</dt>
             <dd>{{ org.full_name if org.full_name else 'n.a.' }}</dd>
             <dt>Typ</dt>
@@ -38,8 +31,9 @@
             <dd>{{ org.notes if org.notes else 'n.a.' }}</dd>
         </dl>
 
-        {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards %}
-        <div class="section-head">
+        {% from '_leaflets.html' import leaflet_list, leaflet_cards %}
+        {% from '_ui.html' import view_switch %}
+        <div class="section-head section-head-table">
             <h2>Flugblätter</h2>
             {% if org.has_thumbs %}{{ view_switch('/organizations/' ~ org.id, org.view,
                 [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
@@ -49,7 +43,7 @@
         {% else %}
         {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count'), qs='?org=' ~ org.id) }}
         {% endif %}
-    </div>
+{% endblock %}
+{% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-</body>
-</html>
+{% endblock %}

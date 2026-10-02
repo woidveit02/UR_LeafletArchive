@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}UR Leaflet Archive{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
+</head>
+<body>
+    <a class="skip-link" href="#content">Zum Inhalt</a>
+    {% include '_navigation.html' %}
+    <main id="content" class="app{% block app_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

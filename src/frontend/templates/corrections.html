@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Korrekturen prüfen – UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app">
-        <h1>Korrekturen prüfen</h1>
+{% extends "base.html" %}
+{% block title %}Korrekturen prüfen – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head">
+            <h1>Korrekturen prüfen</h1>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
             Sie werden nicht angewendet. Zum Übernehmen in <code>data/corrections.jsonl</code> Anfangs- und Endseite anpassen.</p>
+        </header>
         {% for row in rows %}
         <h2>{{ row.segment }}</h2>
         <ul class="leaflet-list leaflet-list-plain">
@@ -30,8 +23,6 @@
         <p class="meta">Überlappende Flugblätter jetzt:
             {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
         {% else %}
-        <p>Alle Korrekturen passen zu einem Flugblatt.</p>
+        <div class="empty-state">Alle Korrekturen passen zu einem Flugblatt.</div>
         {% endfor %}
-    </div>
-</body>
-</html>
+{% endblock %}

@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ volume.label }} – UR Leaflet Archive</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
-</head>
-
-<body>
-    {% include '_navigation.html' %}
-    <div class="app{% if volume.view == 'seiten' %} app-wide{% endif %}">
+{% extends "base.html" %}
+{% block title %}{{ volume.label }} – UR Leaflet Archive{% endblock %}
+{% block app_class %}{% if volume.view == 'seiten' %} app-wide{% endif %}{% endblock %}
+{% block content %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
             <span>
@@ -17,9 +9,11 @@
                 {% if volume.next_vz %}<a href="/volumes/{{ volume.next_vz }}">Nächster ›</a>{% else %}<span class="disabled">Nächster ›</span>{% endif %}
             </span>
         </nav>
-        <h1>{{ volume.label }}</h1>
+        <header class="page-head page-head-detail">
+            <h1>{{ volume.label }}</h1>
+        </header>
 
-        <dl class="meta-list">
+        <dl class="meta-list facts-panel">
             <dt>Titel im Findmittel</dt>
             <dd>{{ volume.title }}</dd>
             <dt>Art</dt>
@@ -43,7 +37,8 @@
         {% endif %}
 
         {% if volume.leaflets %}
-        {% from '_leaflets.html' import view_switch, leaflet_list, leaflet_cards, title %}
+        {% from '_leaflets.html' import leaflet_list, leaflet_cards, title %}
+        {% from '_ui.html' import view_switch %}
         <div class="section-head">
             <h2>Flugblätter</h2>
             {% if volume.has_scans %}{{ view_switch('/volumes/' ~ volume.vz, volume.view,
@@ -74,7 +69,7 @@
         {{ leaflet_list(volume.leaflets, fields=('pages', 'date', 'issuers')) }}
         {% endif %}
         {% endif %}
-    </div>
+{% endblock %}
+{% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-</body>
-</html>
+{% endblock %}

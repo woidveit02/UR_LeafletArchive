@@ -251,6 +251,9 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     years = [{'id': y, 'label': f"{y} ({n})"} for y, n in sorted(year_counts.items())]
 
     query_string = '?' + urlencode(params) if params else ''
+    date_reset_params = [(k, v) for k, v in params if k != 'datum']
+    if ansicht == 'kacheln':
+        date_reset_params.append(('ansicht', 'kacheln'))
     return templates.TemplateResponse(
         request, "leaflet_list.html",
         {"leaflets": items, "total": len(leaflets), "org_options": org_options, "selected_org": selected.get('org'),
@@ -258,6 +261,8 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
          "series_options": series_options, "selected_series": selected.get('reihe'),
          "selected_sort": selected.get('sortierung'),
          "selected_dates": [v for k, v in params if k == 'datum'],
+         "date_reset_url": '/leaflets' + ('?' + urlencode(date_reset_params)
+                                           if date_reset_params else ''),
          "years": years, "selected_year": selected.get('jahr'),
          "filtered": sum(k != 'sortierung' for k, _ in params),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
@@ -271,7 +276,8 @@ LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'datum', 'sortierung')
 
 def list_params(request):
     """List parameters of the request, repeated ones (datum) included."""
-    return [(k, v) for k, v in request.query_params.multi_items() if k in LIST_PARAMS and v]
+    return [(key, value) for key, value in request.query_params.multi_items()
+            if key in LIST_PARAMS and value]
 
 
 def filtered_items(params):
@@ -800,7 +806,7 @@ def volume_image(vz: int, name: str):
 
 
 @app.get("/organizations")
-def organization_list(request: Request):
+def organization_list(request: Request, sortierung: str = ''):
     logger.info('Opening organization list')
 
     organizations = sorted(session.query(Organization), key=org_sort_key)
@@ -817,9 +823,14 @@ def organization_list(request: Request):
         'full_name': org.full_name,
         'count': len(leaflet_ids_by_org.get(org.id, set())),
     } for org in organizations]
+    sort = sortierung if sortierung in ('anzahl_auf', 'name_auf', 'name_ab') else 'anzahl_ab'
+    if sort.startswith('anzahl'):
+        rows.sort(key=lambda r: r['count'], reverse=sort == 'anzahl_ab')  # stable: ties stay by name
+    elif sort == 'name_ab':
+        rows.reverse()
 
     return templates.TemplateResponse(
-        request, "organization_list.html", {"organizations": rows})
+        request, "organization_list.html", {"organizations": rows, "sort": sort})
 
 
 @app.get("/organizations/{org_id}")
