@@ -94,8 +94,7 @@ def list_date(leaflet, fallback_year=None):
     if text:
         is_event = leaflet.date_type == 'event' and leaflet.doc_type != 'protokoll'
         return text, 'Veranstaltung' if is_event else ''
-    received = None if leaflet.received_uncertain else iso_to_text(
-        leaflet.received_date)
+    received = None if leaflet.received_uncertain else iso_to_text(leaflet.received_date)
     if received:
         return received, 'Eingang'
     return (str(fallback_year) if fallback_year else ''), ''
@@ -166,8 +165,9 @@ def index(request: Request):
          "featured": leaflet_items([lf for lf in featured if lf]),
          "max_count": max(per_year.values(), default=1)})
 
-# checks, which source of date is available (date, receiving date, year) for each leaflet
+
 def date_sort_key(item):
+    """Sort by the leaflet's date, else the archive stamp, else the year."""
     lf = item['leaflet']
     if iso_to_text(lf.date_iso):
         return lf.date_iso
@@ -438,8 +438,7 @@ THUMB_HEIGHT = 150
 def issuer_names(leaflet_ids):
     """{leaflet id: [("AStA", "Allgemeiner Studentenausschuss"), ...]}; unresolved
     issuers as printed, with an empty full name."""
-    orgs = {o.id: (o.name, o.full_name or '')
-            for o in session.query(Organization)}
+    orgs = {o.id: (o.name, o.full_name or '') for o in session.query(Organization)}
     names = {}
     for i in session.query(LeafletIssuer).filter(LeafletIssuer.leaflet_id.in_(leaflet_ids),
                                                  LeafletIssuer.role == 'issuer'):
@@ -498,8 +497,7 @@ def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
     leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
         .order_by(Leaflet.start_page).all()
     has_scans = bool(leaflets) and volume_pdf(volume).is_file()
-    view = ansicht if has_scans and ansicht in (
-        'kacheln', 'bandseiten') else 'liste'
+    view = ansicht if has_scans and ansicht in ('kacheln', 'bandseiten') else 'liste'
     orgs = sorted((o for o in session.query(Organization)
                    if volume.vz in (o.vz or [])), key=org_sort_key)
 

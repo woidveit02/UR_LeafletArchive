@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
     <meta charset="UTF-8">
     <title>UR Leaflet Archive</title>
@@ -27,16 +26,14 @@
                 <label>Jahr
                     <select name="jahr" onchange="this.form.submit()">
                         <option value="">alle</option>
-                        {% for y in years %}<option {% if y==selected_year %}selected{% endif %}>{{ y }}</option>{%
-                        endfor %}
+                        {% for y in years %}<option {% if y == selected_year %}selected{% endif %}>{{ y }}</option>{% endfor %}
                     </select>
                 </label>
                 <label>Textsorte
                     <select name="typ" onchange="this.form.submit()">
                         <option value="">alle</option>
                         {% for t in type_options %}
-                        <option value="{{ t.id }}" {% if t.id==selected_type %}selected{% endif %}>{{ t.label }}
-                        </option>
+                        <option value="{{ t.id }}" {% if t.id == selected_type %}selected{% endif %}>{{ t.label }}</option>
                         {% endfor %}
                     </select>
                 </label>
@@ -44,26 +41,22 @@
                     <select name="reihe" onchange="this.form.submit()">
                         <option value="">alle</option>
                         {% for s in series_options %}
-                        <option {% if s==selected_series %}selected{% endif %}>{{ s }}</option>
+                        <option {% if s == selected_series %}selected{% endif %}>{{ s }}</option>
                         {% endfor %}
                     </select>
                 </label>
                 <label>Sortierung
                     <select name="sortierung" onchange="this.form.submit()">
                         <option value="">Standard (Band, Seite)</option>
-                        <option value="datum_auf" {% if selected_sort=='datum_auf' %}selected{% endif %}>Datum
-                            aufsteigend</option>
-                        <option value="datum_ab" {% if selected_sort=='datum_ab' %}selected{% endif %}>Datum absteigend
-                        </option>
+                        <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
+                        <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
                     </select>
                 </label>
                 <fieldset class="filter-checks">
                     <legend>Datumsart</legend>
-                    {% for key, label in [('issued', 'Ausgabedatum'), ('event', 'Veranstaltung'), ('undated', 'ohne
-                    Datum')] %}
+                    {% for key, label in [('issued', 'Erscheinungsdatum'), ('event', 'Veranstaltung'), ('undated', 'undatiert')] %}
                     <label>
-                        <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{%
-                            endif %} onchange="this.form.submit()">
+                        <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{% endif %} onchange="this.form.submit()">
                         {{ label }}
                     </label>
                     {% endfor %}
@@ -72,8 +65,7 @@
             {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
             {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
             <div class="filter-bar">
-                <p class="filter-result">{% if leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length ==
-                    1 else 'Flugblätter' }}{% else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
+                <p class="filter-result">{% if leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}{% else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
                 {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
                 <noscript><button type="submit">Filtern</button></noscript>
             </div>
