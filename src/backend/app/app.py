@@ -166,11 +166,21 @@ def index(request: Request):
          "featured": leaflet_items([lf for lf in featured if lf]),
          "max_count": max(per_year.values(), default=1)})
 
+# checks, which source of date is available (date, receiving date, year) for each leaflet
+def date_sort_key(item):
+    lf = item['leaflet']
+    if iso_to_text(lf.date_iso):
+        return lf.date_iso
+    if not lf.received_uncertain and iso_to_text(lf.received_date):
+        return lf.received_date
+    return item['year']
+
 
 @app.get("/leaflets")
 def leaflet_list(request: Request, org: str | None = None,
                  jahr: str | None = None, typ: str | None = None,
-                 reihe: str | None = None, ansicht: str = "liste"):
+                 reihe: str | None = None, sortierung: str | None = None,
+                 ansicht: str = "liste"):
     logger.info('Opening leaflet list')
 
     query = (
@@ -196,6 +206,9 @@ def leaflet_list(request: Request, org: str | None = None,
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
     if jahr:
         items = [item for item in items if item['year'] == jahr]
+
+    if sortierung in ('datum_auf', 'datum_ab'):
+        items.sort(key=date_sort_key, reverse=(sortierung == 'datum_ab'))
 
     organizations = sorted(session.query(Organization), key=org_sort_key)
     org_options = [{
