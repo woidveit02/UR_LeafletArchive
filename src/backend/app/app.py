@@ -4,7 +4,7 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import urlencode
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -180,6 +180,7 @@ def date_sort_key(item):
 def leaflet_list(request: Request, org: str | None = None,
                  jahr: str | None = None, typ: str | None = None,
                  reihe: str | None = None, sortierung: str | None = None,
+                 datum: list[str] = Query(default=[]),
                  ansicht: str = "liste"):
     logger.info('Opening leaflet list')
 
@@ -201,6 +202,9 @@ def leaflet_list(request: Request, org: str | None = None,
 
     if reihe:
         query = query.filter(Leaflet.series == reihe)
+
+    if datum:
+        query = query.filter(Leaflet.date_type.in_(datum))
 
     items = leaflet_items(
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
