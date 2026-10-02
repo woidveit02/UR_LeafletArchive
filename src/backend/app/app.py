@@ -205,11 +205,22 @@ def index(request: Request):
          "max_count": max(per_year.values(), default=1)})
 
 
+def date_sort_key(item):
+    """Sort by the leaflet's date, else the archive stamp, else the year."""
+    lf = item['leaflet']
+    if iso_to_text(lf.date_iso):
+        return lf.date_iso
+    if not lf.received_uncertain and iso_to_text(lf.received_date):
+        return lf.received_date
+    return item['year']
+
+
 @app.get("/leaflets")
-def leaflet_list(request: Request, org: str | None = None,
-                 jahr: str | None = None, ansicht: str = "liste"):
+def leaflet_list(request: Request, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
-    items = filtered_items(org, jahr)
+    params = list_params(request)
+    selected = dict(params)
+    items = filtered_items(params)
 
     organizations = sorted(session.query(Organization), key=org_sort_key)
     org_options = [{
@@ -217,42 +228,73 @@ def leaflet_list(request: Request, org: str | None = None,
         'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
     } for o in organizations]
 
+    used_types = {t for (t,) in session.query(
+        Leaflet.doc_type).distinct() if t}
+    type_options = [{
+        'id': key,
+        'label': label
+    } for key, label in DOC_TYPES.items() if key in used_types]
+
+    series_options = sorted({s for (s,) in session.query(
+        Leaflet.series).distinct() if s}, key=str.casefold)
+
     # years of all leaflets, so the options stay while a filter is set
     volume_years = {v.id: v.year for v in session.query(Volume)}
     years = sorted({leaflet_year(lf, volume_years[lf.volume_id])
                     for lf in session.query(Leaflet)})
 
-    params = {k: v for k, v in request.query_params.items()
-              if v and k != 'ansicht'}
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "org_options": org_options, "selected_org": org,
-         "years": years, "selected_year": jahr, "filtered": any((org, jahr)),
+        {"leaflets": items, "org_options": org_options, "selected_org": selected.get('org'),
+         "type_options": type_options, "selected_type": selected.get('typ'),
+         "series_options": series_options, "selected_series": selected.get('reihe'),
+         "selected_sort": selected.get('sortierung'),
+         "selected_dates": [v for k, v in params if k == 'datum'],
+         "years": years, "selected_year": selected.get('jahr'),
+         "filtered": any(k != 'sortierung' for k, _ in params),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
          "switch_base": '/leaflets' + query_string,
-         "detail_qs": '?' + urlencode({k: v for k, v in (('org', org), ('jahr', jahr)) if v})
-         if org or jahr else ''})
+         "detail_qs": query_string})
 
 
-def filtered_items(org=None, jahr=None):
+# filters and sorting of the leaflet list; the detail page pages through the same selection
+LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'datum', 'sortierung')
+
+
+def list_params(request):
+    """List parameters of the request, repeated ones (datum) included."""
+    return [(k, v) for k, v in request.query_params.multi_items() if k in LIST_PARAMS and v]
+
+
+def filtered_items(params):
+    one = dict(params)
     query = (
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
     )
 
-    if org:
+    if one.get('org'):
         matching_ids = (
             session.query(LeafletIssuer.leaflet_id)
-            .filter(LeafletIssuer.org_id == org,
+            .filter(LeafletIssuer.org_id == one['org'],
                     LeafletIssuer.role == 'issuer')
         )
         query = query.filter(Leaflet.id.in_(matching_ids))
+    if one.get('typ'):
+        query = query.filter(Leaflet.doc_type == one['typ'])
+    if one.get('reihe'):
+        query = query.filter(Leaflet.series == one['reihe'])
+    datum = [v for k, v in params if k == 'datum']
+    if datum:
+        query = query.filter(Leaflet.date_type.in_(datum))
 
     items = leaflet_items(
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
-    if jahr:
-        items = [item for item in items if item['year'] == jahr]
+    if one.get('jahr'):
+        items = [item for item in items if item['year'] == one['jahr']]
+    if one.get('sortierung') in ('datum_auf', 'datum_ab'):
+        items.sort(key=date_sort_key, reverse=one['sortierung'] == 'datum_ab')
     return items
 
 
@@ -314,16 +356,16 @@ def detail_page(request, leaflet, edit=None, error=None):
                   for lf, vol in rows]
 
     # coming from a filtered list: page through that selection, else through the volume
-    selection = {k: request.query_params[k] for k in ('org', 'jahr')
-                 if request.query_params.get(k)}
-    siblings = [i['leaflet'].id for i in filtered_items(**selection)] if selection else []
+    selection = list_params(request)
+    siblings = [i['leaflet'].id for i in filtered_items(selection)] if selection else []
     if leaflet.id not in siblings:
-        selection = {}
+        selection = []
         siblings = [row.id for row in session.query(Leaflet.id)
                     .filter_by(volume_id=leaflet.volume_id)
                     .order_by(Leaflet.start_page)]
     pos = siblings.index(leaflet.id)
-    org = session.get(Organization, selection['org']) if 'org' in selection else None
+    chosen = dict(selection)
+    org = session.get(Organization, chosen['org']) if 'org' in chosen else None
 
     data = {
         'id': leaflet.id,
@@ -338,8 +380,9 @@ def detail_page(request, leaflet, edit=None, error=None):
         'position': pos + 1,
         'in_volume': len(siblings),
         'qs': '?' + urlencode(selection) if selection else '',
-        'selection': ' · '.join(([org_label(org)] if org else [])
-                                + ([selection['jahr']] if 'jahr' in selection else [])),
+        'selection': ' · '.join(filter(None, [DOC_TYPES.get(chosen.get('typ')),
+                                              org_label(org) if org else None,
+                                              chosen.get('reihe'), chosen.get('jahr')])),
         'volume': volume.label if volume else '',
         'volume_year': volume.year if volume else None,
         'volume_title': volume.title if volume else '',
