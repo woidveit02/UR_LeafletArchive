@@ -14,6 +14,8 @@
         {% from '_leaflets.html' import leaflet_list, leaflet_cards, view_switch %}
         <form method="get" action="/leaflets" class="filter">
             {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
+            <details class="filter-details" open>
+            <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
             <div class="filter-fields">
                 <label>Herausgeber
                     <select name="org" onchange="this.form.submit()">
@@ -23,10 +25,10 @@
                         {% endfor %}
                     </select>
                 </label>
-                <label>Jahr
+                <label title="Jahr des Datums auf dem Blatt, bei undatierten Blättern das Jahr des Bandes">Jahr
                     <select name="jahr" onchange="this.form.submit()">
                         <option value="">alle</option>
-                        {% for y in years %}<option {% if y == selected_year %}selected{% endif %}>{{ y }}</option>{% endfor %}
+                        {% for y in years %}<option value="{{ y.id }}" {% if y.id == selected_year %}selected{% endif %}>{{ y.label }}</option>{% endfor %}
                     </select>
                 </label>
                 <label>Textsorte
@@ -41,31 +43,42 @@
                     <select name="reihe" onchange="this.form.submit()">
                         <option value="">alle</option>
                         {% for s in series_options %}
-                        <option {% if s == selected_series %}selected{% endif %}>{{ s }}</option>
+                        <option value="{{ s.id }}" {% if s.id == selected_series %}selected{% endif %}>{{ s.label }}</option>
                         {% endfor %}
                     </select>
                 </label>
-                <label>Sortierung
-                    <select name="sortierung" onchange="this.form.submit()">
-                        <option value="">Standard (Band, Seite)</option>
-                        <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
-                        <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
-                    </select>
-                </label>
                 <fieldset class="filter-checks">
-                    <legend>Datumsart</legend>
-                    {% for key, label in [('issued', 'Erscheinungsdatum'), ('event', 'Veranstaltung'), ('undated', 'undatiert')] %}
-                    <label>
+                    <legend>Datumsart (ohne Auswahl: alle)</legend>
+                    {% for key, label, hint in [('issued', 'Erscheinungsdatum', 'Datum, an dem das Blatt erschienen ist'),
+                                                ('event', 'Veranstaltungsdatum', 'Angekündigter Termin, nicht das Erscheinungsdatum'),
+                                                ('undated', 'Undatiert', 'Kein Datum auf dem Blatt')] %}
+                    <label title="{{ hint }}">
                         <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{% endif %} onchange="this.form.submit()">
                         {{ label }}
                     </label>
                     {% endfor %}
                 </fieldset>
             </div>
+            </details>
+            <script>
+                if (matchMedia('(max-width: 600px)').matches) document.querySelector('.filter-details').open = false;
+            </script>
             {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
             {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
             <div class="filter-bar">
-                <p class="filter-result">{% if leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}{% else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
+                <p class="filter-result">
+                    {%- if leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
+                    {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
+                    {%- else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
+                <label class="sort">Sortiert nach
+                    <select name="sortierung" onchange="this.form.submit()">
+                        <option value="" title="So, wie die Blätter in den Bänden abgelegt sind">Reihenfolge im Archiv</option>
+                        <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
+                        <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
+                        <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>
+                        <option value="titel_ab" {% if selected_sort == 'titel_ab' %}selected{% endif %}>Titel Z–A</option>
+                    </select>
+                </label>
                 {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
                 <noscript><button type="submit">Filtern</button></noscript>
             </div>

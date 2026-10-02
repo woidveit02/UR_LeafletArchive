@@ -410,8 +410,54 @@ button:hover {
 
 .filter-fields {
     display: grid;
-    grid-template-columns: minmax(0, 24em) 8em;
+    grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
     gap: 12px;
+}
+
+.filter-details > summary {
+    margin-bottom: 8px;
+    color: #2563eb;
+    cursor: pointer;
+}
+
+@media (min-width: 601px) {
+    .filter-details > summary {
+        display: none;
+    }
+}
+
+.filter .sort {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.filter-checks {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 0.85em;
+    color: #6b7280;
+}
+
+.filter-checks legend {
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 0;
+}
+
+.filter .filter-checks label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    color: #111827;
+    cursor: pointer;
 }
 
 .filter label {
@@ -450,7 +496,7 @@ button:hover {
 
 @media (max-width: 600px) {
     .filter-fields {
-        grid-template-columns: minmax(0, 1fr) 6em;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 

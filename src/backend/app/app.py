@@ -1,5 +1,6 @@
 import logging
 import re
+import unicodedata
 from collections import Counter
 import datetime
 from pathlib import Path
@@ -215,6 +216,12 @@ def date_sort_key(item):
     return item['year']
 
 
+def title_sort_key(item):
+    """Title without leading quotes or dashes, case-insensitive, Ä sorted as A."""
+    title = unicodedata.normalize('NFD', re.sub(r'^\W+', '', item['leaflet'].display_title or ''))
+    return ''.join(c for c in title if not unicodedata.combining(c)).casefold()
+
+
 @app.get("/leaflets")
 def leaflet_list(request: Request, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
@@ -222,37 +229,37 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     selected = dict(params)
     items = filtered_items(params)
 
-    organizations = sorted(session.query(Organization), key=org_sort_key)
+    # counts over all leaflets, so the options stay while a filter is set
+    leaflets = session.query(Leaflet).all()
+    volume_years = {v.id: v.year for v in session.query(Volume)}
+    org_counts = Counter(org for _, org in session.query(LeafletIssuer.leaflet_id, LeafletIssuer.org_id)
+                         .filter(LeafletIssuer.role == 'issuer', LeafletIssuer.org_id.isnot(None))
+                         .distinct())
+    type_counts = Counter(lf.doc_type for lf in leaflets)
+    series_counts = Counter(lf.series for lf in leaflets if lf.series)
+    year_counts = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in leaflets)
+
     org_options = [{
         'id': o.id,
-        'label': f"{o.full_name} ({o.name})" if o.full_name else o.name,
-    } for o in organizations]
-
-    used_types = {t for (t,) in session.query(
-        Leaflet.doc_type).distinct() if t}
-    type_options = [{
-        'id': key,
-        'label': label
-    } for key, label in DOC_TYPES.items() if key in used_types]
-
-    series_options = sorted({s for (s,) in session.query(
-        Leaflet.series).distinct() if s}, key=str.casefold)
-
-    # years of all leaflets, so the options stay while a filter is set
-    volume_years = {v.id: v.year for v in session.query(Volume)}
-    years = sorted({leaflet_year(lf, volume_years[lf.volume_id])
-                    for lf in session.query(Leaflet)})
+        'label': (f"{o.name} – {o.full_name}" if o.full_name else o.name) + f" ({org_counts[o.id]})",
+    } for o in sorted(session.query(Organization), key=org_sort_key)
+        if org_counts[o.id] or o.id == selected.get('org')]
+    type_options = [{'id': key, 'label': f"{label} ({type_counts[key]})"}
+                    for key, label in DOC_TYPES.items() if type_counts[key]]
+    series_options = [{'id': s, 'label': f"{s} ({n})"}
+                      for s, n in sorted(series_counts.items(), key=lambda x: x[0].casefold())]
+    years = [{'id': y, 'label': f"{y} ({n})"} for y, n in sorted(year_counts.items())]
 
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "org_options": org_options, "selected_org": selected.get('org'),
+        {"leaflets": items, "total": len(leaflets), "org_options": org_options, "selected_org": selected.get('org'),
          "type_options": type_options, "selected_type": selected.get('typ'),
          "series_options": series_options, "selected_series": selected.get('reihe'),
          "selected_sort": selected.get('sortierung'),
          "selected_dates": [v for k, v in params if k == 'datum'],
          "years": years, "selected_year": selected.get('jahr'),
-         "filtered": any(k != 'sortierung' for k, _ in params),
+         "filtered": sum(k != 'sortierung' for k, _ in params),
          "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
          "switch_base": '/leaflets' + query_string,
          "detail_qs": query_string})
@@ -293,8 +300,10 @@ def filtered_items(params):
         query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
     if one.get('jahr'):
         items = [item for item in items if item['year'] == one['jahr']]
-    if one.get('sortierung') in ('datum_auf', 'datum_ab'):
-        items.sort(key=date_sort_key, reverse=one['sortierung'] == 'datum_ab')
+    sort = one.get('sortierung', '')
+    if sort.startswith(('datum_', 'titel_')):
+        key = date_sort_key if sort.startswith('datum_') else title_sort_key
+        items.sort(key=key, reverse=sort.endswith('_ab'))
     return items
 
 
