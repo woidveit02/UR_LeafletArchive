@@ -1,0 +1,7171 @@
+{
+  "source_pdf": "0118_0008.pdf",
+  "created": "2026-10-02T15:32:18.613489",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r12",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 163,
+    "flagged": 9,
+    "rate_percent": 94.5
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [],
+  "segments": [
+    {
+      "id": 1,
+      "title": "Wahl-Info Nr. II",
+      "date": "",
+      "start_page": 1,
+      "end_page": 2,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHL-INFO\nNr. II",
+      "title_blocks": [
+        "1-1",
+        "1-2"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "Nr. II",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "1-3",
+            "1-4"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "Ende Nov 72",
+      "date_blocks": [
+        "1-5"
+      ],
+      "date_text": "Ende November 1972",
+      "date_iso": "1972-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Wahlinfo",
+      "date": "",
+      "start_page": 3,
+      "end_page": 4,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHLINFO",
+      "title_blocks": [
+        "3-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "3-2",
+            "3-3"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "28.11.72",
+      "date_blocks": [
+        "3-4"
+      ],
+      "date_text": "28.11.1972",
+      "date_iso": "1972-11-28",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Bedingungen unserer Politik. Das Programm der LFS/LAF",
+      "date": "",
+      "start_page": 5,
+      "end_page": 8,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Bedingungen unserer Politik\nDas Programm der LFS/LAF",
+      "title_blocks": [
+        "5-4",
+        "5-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "5-2",
+            "5-3"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "Freitag 24.11.",
+      "date_blocks": [
+        "5-1"
+      ],
+      "date_text": "Freitag 24.11.1972",
+      "date_iso": "1972-11-24",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 4,
+      "title": "",
+      "date": "",
+      "start_page": 9,
+      "end_page": 10,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "9-1",
+            "9-2"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "23.11.72",
+      "date_blocks": [
+        "9-3"
+      ],
+      "date_text": "23.11.1972",
+      "date_iso": "1972-11-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 5,
+      "title": "Wahl-Info III",
+      "date": "",
+      "start_page": 11,
+      "end_page": 12,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHL - INFO\nIII",
+      "title_blocks": [
+        "11-1",
+        "11-2"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "III",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "11-3",
+            "11-4"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "21.11.72",
+      "date_blocks": [
+        "11-5"
+      ],
+      "date_text": "21.11.1972",
+      "date_iso": "1972-11-21",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Wahl Info Nr. I",
+      "date": "",
+      "start_page": 13,
+      "end_page": 16,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHL INFO\nNR. I",
+      "title_blocks": [
+        "13-1",
+        "13-2"
+      ],
+      "title_type": "original",
+      "series": "Wahl Info",
+      "issue": "NR. I",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "13-3",
+            "13-4",
+            "16-5"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "Wahl-Info Nr. II",
+      "date": "",
+      "start_page": 17,
+      "end_page": 18,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHL-INFO\nNr. II",
+      "title_blocks": [
+        "17-1"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "Nr. II",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "17-2",
+            "17-3"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Schwierigkeiten wie auf Kommando. Chiles Krise hat ihre Ursachen in der Politik Washingtons",
+      "date": "",
+      "start_page": 19,
+      "end_page": 20,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Schwierigkeiten wie auf Kommando\nChiles Krise hat ihre Ursachen in der Politik Washingtons",
+      "title_blocks": [
+        "19-3",
+        "19-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "19-1",
+            "19-2"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "The Carneval is Over",
+      "date": "",
+      "start_page": 21,
+      "end_page": 22,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "THE CARNEVAL is OVER",
+      "title_blocks": [
+        "21-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "21-1",
+            "21-2"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "",
+      "date": "",
+      "start_page": 23,
+      "end_page": 24,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "23-1",
+            "23-2"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Bedingungen unserer Politik. Das Programm der LFS/LAF",
+      "date": "",
+      "start_page": 25,
+      "end_page": 27,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Bedingungen unserer Politik\nDas Programm der LFS/LAF",
+      "title_blocks": [
+        "25-4",
+        "25-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "25-2",
+            "25-3"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "Freitag 24.11.",
+      "date_blocks": [
+        "25-1"
+      ],
+      "date_text": "Freitag 24.11.1972",
+      "date_iso": "1972-11-24",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 12,
+      "title": "",
+      "date": "",
+      "start_page": 28,
+      "end_page": 28,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Wahl-Info III",
+      "date": "",
+      "start_page": 29,
+      "end_page": 30,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHL - INFO\nIII",
+      "title_blocks": [
+        "29-1",
+        "29-2"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "III",
+      "issuers": [
+        {
+          "evidence": "LFS / LAF\nListe der Fachschaften der LINKEN ASTA FRAKTION",
+          "blocks": [
+            "29-3",
+            "29-4"
+          ],
+          "surface": "LFS/LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "lfs_laf"
+          ]
+        }
+      ],
+      "date_evidence": "21.11.72",
+      "date_blocks": [
+        "29-5"
+      ],
+      "date_text": "21.11.1972",
+      "date_iso": "1972-11-21",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Nötige 2/3 Mehrheit bei Assistentenurabstimmung zum \"Dienst nach Vorschrift\" nicht erreicht!",
+      "date": "",
+      "start_page": 31,
+      "end_page": 31,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NÖTIGE 2/3 MEHRHEIT BEI ASSISTENTENURABSTIMMUNG ZUM \"DIENST NACH VORSCHRIFT\" NICHT ERREICHT!",
+      "title_blocks": [
+        "31-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "31-1",
+            "31-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "",
+      "date": "",
+      "start_page": 32,
+      "end_page": 32,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 16,
+      "title": "Aufruf zur Wahl / Aufruf zur Urabstimmung über die Fortsetzung des Streiks",
+      "date": "",
+      "start_page": 33,
+      "end_page": 34,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Aufruf zur Wahl / Aufruf zur Urabstimmung\nüber die Fortsetzung des Streiks",
+      "title_blocks": [
+        "33-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "33-1",
+            "33-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27.11.72",
+      "date_blocks": [
+        "33-3"
+      ],
+      "date_text": "27.11.1972",
+      "date_iso": "1972-11-27",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 17,
+      "title": "Streik-Info",
+      "date": "",
+      "start_page": 35,
+      "end_page": 39,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STREIK - INFO",
+      "title_blocks": [
+        "35-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "35-1",
+            "35-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "1. Tu 12.11.",
+      "date_blocks": [
+        "35-3"
+      ],
+      "date_text": "Dienstag 12.11.1972",
+      "date_iso": "1972-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "",
+      "date": "",
+      "start_page": 40,
+      "end_page": 40,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 19,
+      "title": "Beschluß der VV: Urabstimmung",
+      "date": "",
+      "start_page": 41,
+      "end_page": 42,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Beschluß der VV: Urabstimmung",
+      "title_blocks": [
+        "41-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "41-1",
+            "41-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "LAF - LINKE-ASTA-FRAKTION - LAF - LINKE-ASTA-FRAKTION",
+          "blocks": [
+            "42-6"
+          ],
+          "surface": "LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "Programm- und Kandidaten-Vorstellung zu den SP-Wahlen",
+      "date": "",
+      "start_page": 43,
+      "end_page": 43,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "PROGRAMM- UND\nKANDIDATEN-VORSTELLUNG\nZU DEN SP-WAHLEN",
+      "title_blocks": [
+        "43-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "43-1",
+            "43-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "HEUTE , DO. 23.11.",
+      "date_blocks": [
+        "43-5"
+      ],
+      "date_text": "Donnerstag 23.11.1972",
+      "date_iso": "1972-11-23",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 21,
+      "title": "Wahlaufruf zur SP-Wahl",
+      "date": "",
+      "start_page": 44,
+      "end_page": 44,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahlaufruf zur SP-Wahl",
+      "title_blocks": [
+        "44-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "44-1",
+            "44-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den Ältestenrat:\nCh. Bettermann\n(Christoph Bettermann)",
+          "blocks": [
+            "44-7",
+            "44-8"
+          ],
+          "surface": "Christoph Bettermann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für den Ältestenrat"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "AStA-Rechenschaftsbericht: Di 14h, H4 (ehm. PH). Wahlvollversammlung: Do 13h H05",
+      "date": "",
+      "start_page": 45,
+      "end_page": 45,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AStA - Rechen-\nschaftsbericht:\nDi 14h, H4 (ehm. PH)\nWahl vollver-\nsammlung:\nDo 13h H05",
+      "title_blocks": [
+        "45-4",
+        "45-5",
+        "45-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "45-1",
+            "45-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Gegen Berufsverbote im öffentlichen Dienst",
+      "date": "",
+      "start_page": 46,
+      "end_page": 49,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen Berufsverbote im öffentlichen Dienst",
+      "title_blocks": [
+        "46-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA\nAK-Fraktion",
+          "blocks": [
+            "47-5",
+            "47-7"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "AStA\nAK-Fraktion",
+          "blocks": [
+            "47-5",
+            "47-7"
+          ],
+          "surface": "AK-Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ak"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: Michael Horn, 8 Mü 4o, Leopoldstr.15",
+          "blocks": [
+            "49-18"
+          ],
+          "surface": "Michael Horn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "DONNERSTAG 9. NOVEMBER",
+      "date_blocks": [
+        "47-6"
+      ],
+      "date_text": "Donnerstag 9. November 1972",
+      "date_iso": "1972-11-09",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'AStA'",
+        "issuer-evidence nicht im Text: 'AK-Fraktion'"
+      ]
+    },
+    {
+      "id": 24,
+      "title": "Wahlaufruf zur SP-Wahl 1.11/12.11.",
+      "date": "",
+      "start_page": 50,
+      "end_page": 50,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahlaufruf zur SP-Wahl\n1.11/12.11.",
+      "title_blocks": [
+        "50-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "50-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den Ältestenrat:\nCh. Bettermann\n(Christoph Bettermann)",
+          "blocks": [
+            "50-9",
+            "50-10",
+            "50-11"
+          ],
+          "surface": "Christoph Bettermann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für den Ältestenrat"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-11-16",
+      "received_evidence": "16. NOV. 1972",
+      "received_blocks": [
+        "50-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Entschieden demokratisch: politische Disziplinierung durch Berufsverbote",
+      "date": "",
+      "start_page": 51,
+      "end_page": 51,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "entschieden demokratisch:\npolitische DISZIPLINIERUNG durch\nBERUFSVERBOTE",
+      "title_blocks": [
+        "51-4",
+        "51-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "51-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "VERANSTALTER : LAF : Linke-AStA-Fraktion",
+          "blocks": [
+            "51-12"
+          ],
+          "surface": "LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "VERANSTALTER : LAF : Linke-AStA-Fraktion",
+          "blocks": [
+            "51-12"
+          ],
+          "surface": "Linke-AStA-Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "Die 14.11. 13\nct\nin Ho1",
+      "date_blocks": [
+        "51-11"
+      ],
+      "date_text": "14.11.1972 13 Uhr c.t. in H01",
+      "date_iso": "1972-11-14",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Perspektive des überregionalen Kampfes gegen das BHG",
+      "date": "",
+      "start_page": 52,
+      "end_page": 53,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "PERSPEKTIVE des ÜBERREGIONALEN\nKAMPFES gegen das BHG",
+      "title_blocks": [
+        "52-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "52-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "DER LANDESVORSTAND DER\nSTUDENTENSCHAFT DES FREISTAATES\nBAYERN\nLANDESVERBAND IM VDS",
+          "blocks": [
+            "52-4"
+          ],
+          "surface": "Landesvorstand der Studentenschaft des Freistaates Bayern",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft"
+          ]
+        },
+        {
+          "evidence": "Für den Vorstand\ngez. Anselm Kreuzhage",
+          "blocks": [
+            "53-11",
+            "53-12"
+          ],
+          "surface": "Anselm Kreuzhage",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        }
+      ],
+      "date_evidence": "14. Nov. 1972",
+      "date_blocks": [
+        "52-6"
+      ],
+      "date_text": "14. November 1972",
+      "date_iso": "1972-11-14",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Heute 13.00 h Teach-in zum Berufsverbot! Gast: Gerhard Schmid",
+      "date": "",
+      "start_page": 54,
+      "end_page": 54,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Heute 13\n00\nh TEACH-IN zum\nBerufsverbot! Gast:\nGerhard Schmid",
+      "title_blocks": [
+        "54-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "54-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Heute: 14h in H06 ASTA-VV zum BHG",
+      "date": "",
+      "start_page": 55,
+      "end_page": 55,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Heute: 14h in H06\nASTA-VV zum BHG",
+      "title_blocks": [
+        "55-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Heute: 14h in H06\nASTA-VV zum BHG",
+          "blocks": [
+            "55-1"
+          ],
+          "surface": "ASTA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.75,
+      "_retried_issuer": [
+        "Heute: 14h in H06 ASTA-VV zum BHG",
+        "politik des ASTA"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Wichtig! Teach-In zum Berufs- und Ausbildungsverbot",
+      "date": "",
+      "start_page": 56,
+      "end_page": 56,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wichtig!\nTeach-In\nzum\nBerufs-\nund\nAusbildungsverbot",
+      "title_blocks": [
+        "56-3",
+        "56-4",
+        "56-5",
+        "56-6",
+        "56-7"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "56-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Do. 11.",
+      "date_blocks": [
+        "56-8"
+      ],
+      "date_text": "Donnerstag, 11.",
+      "date_iso": "1972-11",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Heute: Demonstration gegen das Berufsverbot",
+      "date": "",
+      "start_page": 57,
+      "end_page": 58,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Heute: Demonstration\ngegen das Berufsverbot",
+      "title_blocks": [
+        "57-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "57-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Donnerstag, 9.11. 72",
+      "date_blocks": [
+        "57-4"
+      ],
+      "date_text": "Donnerstag, 9.11.1972",
+      "date_iso": "1972-11-09",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Wir, das BHG, die CSU, der RCDS - wer mit wem gegen wen?",
+      "date": "",
+      "start_page": 59,
+      "end_page": 59,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIR, DAS BHG, DIE CSU, DER RCDS -\nWER MIT WEM GEGEN WEN ?",
+      "title_blocks": [
+        "59-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "3.11.1972\nAStA",
+          "blocks": [
+            "59-14",
+            "59-15"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "3.11.1972",
+      "date_blocks": [
+        "59-14"
+      ],
+      "date_text": "3.11.1972",
+      "date_iso": "1972-11-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-11-08",
+      "received_evidence": "8. NOV. 1972",
+      "received_blocks": [
+        "59-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "",
+      "date": "",
+      "start_page": 60,
+      "end_page": 60,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Grüss Gott, liebe DM",
+      "date": "",
+      "start_page": 61,
+      "end_page": 62,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GRÜSS GOTT, LIEBE DM",
+      "title_blocks": [
+        "61-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "II",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "61-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "7.11.72",
+      "date_blocks": [
+        "61-4"
+      ],
+      "date_text": "7.11.1972",
+      "date_iso": "1972-11-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "AStA-VV Mi 11 h H05 mit Rektor Obermair 12 h Günter Grass in H05",
+      "date": "",
+      "start_page": 63,
+      "end_page": 64,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA-VV Mi 11\nh\nHOS\nmit Rektor Obermair\n12\nh\nGünter Graß in HOS",
+      "title_blocks": [
+        "63-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "63-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "7. NOV. 1972",
+      "date_blocks": [
+        "63-3"
+      ],
+      "date_text": "7. November 1972",
+      "date_iso": "1972-11-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Regensburger Streik-Report",
+      "date": "",
+      "start_page": 65,
+      "end_page": 82,
+      "confirmed": false,
+      "no_content": false,
+      "note": "Seite 66 ohne Inhalt",
+      "title_evidence": "Kegensburger\nStreik-Report",
+      "title_blocks": [
+        "65-1",
+        "65-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "www.ASTA Uni 2.11.72",
+          "blocks": [
+            "65-3"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "2.11.72",
+      "date_blocks": [
+        "65-3"
+      ],
+      "date_text": "2.11.1972",
+      "date_iso": "1972-11-02",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Rechtsstaatlichkeit an der Uni Regensburg",
+      "date": "",
+      "start_page": 83,
+      "end_page": 83,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rechtsstaatlichkeit an der\nUni Regensburg",
+      "title_blocks": [
+        "83-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "PRESSESTELLE DER UNIVERSITÄT · 84 REGENSBURG · UNIVERSITÄTSSTR. 31 · TEL. (0941) 943-2441",
+          "blocks": [
+            "83-4"
+          ],
+          "surface": "Pressestelle der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "I / 3.11.'72",
+      "date_blocks": [
+        "83-5"
+      ],
+      "date_text": "3.11.1972",
+      "date_iso": "1972-11-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "",
+      "date": "",
+      "start_page": 84,
+      "end_page": 84,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.2,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Streik-Info",
+      "date": "",
+      "start_page": 85,
+      "end_page": 89,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STREIK - INFO",
+      "title_blocks": [
+        "85-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "85-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-11-02",
+      "received_evidence": "Stamp: UB Regensburg eingelaufen am: 2. NOV. 1972",
+      "received_blocks": [
+        "85-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Wir, das BHG, die CSU, der RCDS - wer mit wem gegen wen?",
+      "date": "",
+      "start_page": 90,
+      "end_page": 90,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIR, DAS BHG, DIE CSU, DER RCDS -\nWER HIT WEM GEGEN WEN ?",
+      "title_blocks": [
+        "90-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "3.11.1972\nAStA",
+          "blocks": [
+            "90-11",
+            "90-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "3.11.1972",
+      "date_blocks": [
+        "90-11"
+      ],
+      "date_text": "3.11.1972",
+      "date_iso": "1972-11-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "AStA Teach-In für Erstsemester aller Fächer",
+      "date": "",
+      "start_page": 91,
+      "end_page": 91,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA\nTEACH-IN\nFÜR ERSTSEMESTER ALLER FÄCHER",
+      "title_blocks": [
+        "91-4",
+        "91-5",
+        "91-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LAF-LINKE•ASTA-FRAKTION - LAF",
+          "blocks": [
+            "91-9"
+          ],
+          "surface": "LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "LAF-LINKE•ASTA-FRAKTION - LAF",
+          "blocks": [
+            "91-9"
+          ],
+          "surface": "Linke-AStA-Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "DO. 2.11. 15UHR H05",
+      "date_blocks": [
+        "91-7"
+      ],
+      "date_text": "Donnerstag, 2.11. 15 Uhr H05",
+      "date_iso": "1972-11-02",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Streik-Info",
+      "date": "",
+      "start_page": 92,
+      "end_page": 96,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STREIK - INFO",
+      "title_blocks": [
+        "92-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "92-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-11-02",
+      "received_evidence": "A purple rectangular stamp from the University Library of Regensburg (UB Regensburg) with the text 'eingelaufen am: 2. NOV. 1972'.",
+      "received_blocks": [
+        "92-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "AStA Vollversammlung",
+      "date": "",
+      "start_page": 97,
+      "end_page": 97,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AStA\nVollversammlung",
+      "title_blocks": [
+        "97-4",
+        "97-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "97-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Aktiver Widerstand gegen das bayr. Hochschulgesetz!",
+      "date": "",
+      "start_page": 98,
+      "end_page": 100,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AKTIVER WIDERSTAND\nGEGEN DAS bayr. Hoch-\nschulgesetz !",
+      "title_blocks": [
+        "98-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "98-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-10-30",
+      "received_evidence": "eingeliefert am 30. OKT. 1972",
+      "received_blocks": [
+        "98-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "",
+      "date": "",
+      "start_page": 101,
+      "end_page": 101,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "AStA-Vollversammlung zum \"veränderten\" BHG-Entwurf, morgen, Donnerstag 14.00 H05",
+      "date": "",
+      "start_page": 102,
+      "end_page": 105,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA-Vollversammlung zum \"veränderten\"\nBHG-Entwurf,\nmorgen\n,\nDonnerstag\n14\n00\nH05",
+      "title_blocks": [
+        "102-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "102-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "LAF - Linke AStA Fraktion -- LAF Linke AStA Fraktion - LAF",
+          "blocks": [
+            "105-4"
+          ],
+          "surface": "LAF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "LAF - Linke AStA Fraktion -- LAF Linke AStA Fraktion - LAF",
+          "blocks": [
+            "105-4"
+          ],
+          "surface": "Linke AStA Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Kampf gegen das BHG wird fortgesetzt! Streik! (Warnstreik ab Montag in allen Vorlesungen)",
+      "date": "",
+      "start_page": 106,
+      "end_page": 107,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "KAMPF GEGEN DAS BHG WIRD FORTGESETZT !\nSTREIK!\n(WARNSTREIK AB MONTAG IN ALLEN VORLESUNGEN)",
+      "title_blocks": [
+        "106-6",
+        "106-7",
+        "106-8"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "106-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "106-5"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "1. Juli 1972",
+      "date_blocks": [
+        "106-2"
+      ],
+      "date_text": "1. Juli 1972",
+      "date_iso": "1972-07-01",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Jetzt ist es soweit! Maier will die Uni überrumpeln!",
+      "date": "",
+      "start_page": 108,
+      "end_page": 109,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "JETZT IST ES SOWEIT!\nMaier will die Uni überrumpeln!",
+      "title_blocks": [
+        "108-4",
+        "108-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "108-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "108-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        },
+        {
+          "evidence": "LAF - Linke AStA Fraktion - LAF - Linke AStA Fraktion - LAF",
+          "blocks": [
+            "108-11"
+          ],
+          "surface": "LAF - Linke AStA Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "24. Oktober 1972",
+      "date_blocks": [
+        "108-3"
+      ],
+      "date_text": "24. Oktober 1972",
+      "date_iso": "1972-10-24",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Nötige 2/3 Mehrheit bei Assistentenurabstimmung zum \"Dienst nach Vorschrift\" nicht erreicht!",
+      "date": "",
+      "start_page": 110,
+      "end_page": 110,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NÖTIGE 2/3 MEHRHEIT BEI ASSISTENTENURABSTIMMUNG ZUM \"DIENST NACH\nVORSCHRIFT\" NICHT ERREICHT!",
+      "title_blocks": [
+        "110-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "110-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "110-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1977-10-20",
+      "received_evidence": "eingelaufen am: 20. OKT 1977",
+      "received_blocks": [
+        "110-4"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "",
+      "date": "",
+      "start_page": 111,
+      "end_page": 111,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Assistenten wollen sich aktiv am Kampf gegen das BHG beteiligen!",
+      "date": "",
+      "start_page": 112,
+      "end_page": 113,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASSISTENTEN WOLLEN SICH AKTIV AM\nKAMPF GEGEN DAS BHG BETEILIGEN!",
+      "title_blocks": [
+        "112-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "112-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "112-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "16.10.72",
+      "date_blocks": [
+        "112-3"
+      ],
+      "date_text": "16.10.1972",
+      "date_iso": "1972-10-16",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "AStA-VV Mi 11h H05 mit Rektor Obermair. 12h Günter Graß in H05",
+      "date": "",
+      "start_page": 114,
+      "end_page": 115,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA-VV Mi 11\nh\nH05\nmit Rektor Obermair\n12\nh\nGünter Graß in H05",
+      "title_blocks": [
+        "114-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "114-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "114-3"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "AStA Vollversammlung. Heute, 1400 HO5",
+      "date": "",
+      "start_page": 116,
+      "end_page": 116,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AStA\nVollversammlung\nHeute, 14\n00\nHO5",
+      "title_blocks": [
+        "116-3",
+        "116-4",
+        "116-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "116-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "116-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 53,
+      "title": "",
+      "date": "",
+      "start_page": 117,
+      "end_page": 117,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 54,
+      "title": "Beschluß der VV: Urabstimmung",
+      "date": "",
+      "start_page": 118,
+      "end_page": 119,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Beschluß der VV: Urabstimmung",
+      "title_blocks": [
+        "118-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "118-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "118-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        },
+        {
+          "evidence": "LAF - LINKE-ASTA-FRAKTION - LAF - LINKE-ASTA-FRAKTION",
+          "blocks": [
+            "119-6"
+          ],
+          "surface": "LAF - Linke-AStA-Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "AStA-Vollversammlung zum \"veränderten\" BHG-Entwurf, morgen, Donnerstag 1400 H05",
+      "date": "",
+      "start_page": 120,
+      "end_page": 123,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AStA-Vollversammlung zum \"veränderten\"\nBHG-Entwurf,\nmorgen\n,\nDonnerstag\n14\n00\nH05",
+      "title_blocks": [
+        "120-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "120-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "120-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        },
+        {
+          "evidence": "LAF - Linke AStA Fraktion - LAF Linke AStA Fraktion - LAF",
+          "blocks": [
+            "123-4"
+          ],
+          "surface": "LAF - Linke AStA Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 56,
+      "title": "Kampf gegen das BHG wird fortgesetzt! Streik! (Warnstreik ab Montag in allen Vorlesungen)",
+      "date": "",
+      "start_page": 124,
+      "end_page": 125,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "KAMPF GEGEN DAS BHG WIRD FORTGESETZ !\nSTREIK !\n(WARNSTREIK AB MONTAG IN ALLEN VORLESUNGEN)",
+      "title_blocks": [
+        "124-3",
+        "124-4",
+        "124-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "124-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "124-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Aktiver Widerstand gegen das bayr. Hochschulgesetz!",
+      "date": "",
+      "start_page": 126,
+      "end_page": 128,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AKTIVER WIDERSTAND\nGEGEN DAS bayr. Hoch-\nschulgesetz !",
+      "title_blocks": [
+        "126-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "126-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "126-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 58,
+      "title": "Informationen von CISNU",
+      "date": "",
+      "start_page": 129,
+      "end_page": 131,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "INFORMATIONEN von CISNU",
+      "title_blocks": [
+        "129-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "INFORMATIONEN von CISNU",
+          "blocks": [
+            "129-1"
+          ],
+          "surface": "CISNU",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "cisnu"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Wir, das BHG, die CSU, der RCDS - Wer hit wem gegen wen?",
+      "date": "",
+      "start_page": 132,
+      "end_page": 132,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIR, DAS BHG, DIE CSU, DER RCDS -\nWER HIT WEM GEGEN WEN ?",
+      "title_blocks": [
+        "132-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "132-1",
+            "132-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "132-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "3.11.1972",
+      "date_blocks": [
+        "132-11"
+      ],
+      "date_text": "3.11.1972",
+      "date_iso": "1972-11-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 60,
+      "title": "Über den RCDS und die \"Regensburger Allgemeine Studentenzeitung\" im besonderen",
+      "date": "",
+      "start_page": 133,
+      "end_page": 134,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Über den RCDS und\ndie \"Regensburger Allgemeine Studentenzeitung\" im besonderen",
+      "title_blocks": [
+        "133-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "133-1",
+            "134-8"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "133-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "29.11.71",
+      "date_blocks": [
+        "133-3"
+      ],
+      "date_text": "29.11.1971",
+      "date_iso": "1971-11-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_iso 1971-11-29 passt nicht zum Jahrgang 1972"
+      ]
+    },
+    {
+      "id": 61,
+      "title": "Beteiligt euch masseschaft an den Aktionen gegen die Fahrpreiserhöhung!",
+      "date": "",
+      "start_page": 135,
+      "end_page": 135,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BETEILIGT EUCH MASSESCHAFT AN DEN\nAKTIONEN GEGEN DIE FAHRPREISERHÖHUNG!",
+      "title_blocks": [
+        "135-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "135-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "135-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "SA. 16.12.72",
+      "date_blocks": [
+        "135-9"
+      ],
+      "date_text": "16.12.1972",
+      "date_iso": "1972-12-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "",
+      "date": "",
+      "start_page": 136,
+      "end_page": 136,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Es hat sich wohl mittlerweile herumgesprochen, daß Anfang nächsten Jahres ...",
+      "date": "",
+      "start_page": 137,
+      "end_page": 138,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Es hat sich wohl mittlerweile herumgesprochen, daß Anfang nächsten Jahres drastische",
+      "title_blocks": [
+        "137-1"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 64,
+      "title": "Hochschulkomitee Aktion Roter Punkt",
+      "date": "",
+      "start_page": 139,
+      "end_page": 141,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HOCHSCHULKOMITEE\nAKTION ROTER PUNKT",
+      "title_blocks": [
+        "139-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "139-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "139-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 65,
+      "title": "Öffentliche Auszählung der SP-Wahl",
+      "date": "",
+      "start_page": 142,
+      "end_page": 142,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "öffentliche\nAuszählung der\nSP-Wahl",
+      "title_blocks": [
+        "142-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "142-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "142-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 66,
+      "title": "Die Wahlen zum Studentenparlament im WS 72/73 haben folgendes ...",
+      "date": "",
+      "start_page": 143,
+      "end_page": 143,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Wahlen zum Studentenparlament im WS 72/73 haben folgendes Ergebnis:",
+      "title_blocks": [
+        "143-3"
+      ],
+      "title_type": "incipit",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "143-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "143-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        },
+        {
+          "evidence": "Ältestenrat",
+          "blocks": [
+            "143-9"
+          ],
+          "surface": "Ältestenrat",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "Hochschul Komitee Aktion Roter Punkt",
+      "date": "",
+      "start_page": 144,
+      "end_page": 144,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Hochschul Komitee\nAktion Roter Punkt",
+      "title_blocks": [
+        "144-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "144-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "144-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "Samstag 16.12.",
+      "date_blocks": [
+        "144-5"
+      ],
+      "date_text": "16.12.1972",
+      "date_iso": "1972-12-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 68,
+      "title": "Heute 1400 H06. Teach-in zum Berufsverbot mit Claudia Eisinger",
+      "date": "",
+      "start_page": 145,
+      "end_page": 146,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Heute 14\n00\nH06\nTEACH-IN ZUM\nBerufsverbot mit\nClaudia Eisinger",
+      "title_blocks": [
+        "145-3",
+        "145-4",
+        "145-5",
+        "145-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "145-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Studentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "145-2"
+          ],
+          "surface": "Studentenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "studentenschaft_der_universit_t_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 69,
+      "title": "30000 in München - Kampf dem BHG",
+      "date": "",
+      "start_page": 147,
+      "end_page": 148,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "30000 in München - Kampf dem BHG",
+      "title_blocks": [
+        "147-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA - INFO\nUNI REGENSBURG",
+          "blocks": [
+            "147-1",
+            "147-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 70,
+      "title": "Öffentlich! Konstituierende Sitzung des neugewählten Studentenparlament Mi. 13.12.72 20 Uhr Kleiner Mensasaal",
+      "date": "",
+      "start_page": 149,
+      "end_page": 149,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ÖFFENTLICH!\nKONSTITUIERENDE SITZUNG\nDES NEUGEWÄHLTEN STUDENTENPARLAMENT\nMI. 13.12.72 20 UHR\nKLEINER MENSASAAL",
+      "title_blocks": [
+        "149-4",
+        "149-5",
+        "149-6",
+        "149-7",
+        "149-8"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "149-1",
+            "149-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "MI. 13.12.72",
+      "date_blocks": [
+        "149-7"
+      ],
+      "date_text": "13.12.1972",
+      "date_iso": "1972-12-13",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "received_date": "1972-12-14",
+      "received_evidence": "A rectangular blue ink stamp from the University Library of Regensburg. The text inside the stamp reads: 'UB Regensburg', 'eingelaufen', and 'am: 14. DEZ. 1972'.",
+      "received_blocks": [
+        "149-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 71,
+      "title": "Öffentlich! Konstituierende Sitzung des neugewählten Studentenparlament Mi. 13.12.72 20 Uhr Kleiner Mensasaal",
+      "date": "",
+      "start_page": 150,
+      "end_page": 150,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ÖFFENTLICH!\nKONSTITUIERENDE SITZUNG\nDES NEUGEWÄHLTEN STUDENTENPARLAMENT\nMI. 13.12.72 20 UHR\nKLEINER MENSASAAL",
+      "title_blocks": [
+        "150-3",
+        "150-4",
+        "150-5",
+        "150-6",
+        "150-7"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "150-1",
+            "150-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "MI. 13.12.72",
+      "date_blocks": [
+        "150-6"
+      ],
+      "date_text": "13.12.1972",
+      "date_iso": "1972-12-13",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 72,
+      "title": "Treffpunkt: Heute 13 Uhr R 007. Demonstration gegen die Fahrpreiserhöhungen Samstag 16. 12. 13 Uhr Fußgängerzone",
+      "date": "",
+      "start_page": 151,
+      "end_page": 151,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Treffpunkt: Heute 13 Uhr\nR 007\nDemonstration gegen die\nFahrpreiserhöhungen\nSamstag 16. 12. 13 Uhr\nFußgängerzone",
+      "title_blocks": [
+        "151-5",
+        "151-6",
+        "151-7"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "151-1",
+            "151-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Hochschul Komitee\nAktion Roter Punkt",
+          "blocks": [
+            "151-3"
+          ],
+          "surface": "Hochschul Komitee Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "Samstag 16. 12.",
+      "date_blocks": [
+        "151-7"
+      ],
+      "date_text": "16.12.1972",
+      "date_iso": "1972-12-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 73,
+      "title": "Hochschulkomitee Aktion Roter Punkt",
+      "date": "",
+      "start_page": 152,
+      "end_page": 154,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "HOCHSCHULKOMITEE\nAKTION ROTER PUNKT",
+      "title_blocks": [
+        "152-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "152-1",
+            "152-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "HOCHSCHULKOMITEE\nAKTION ROTER PUNKT",
+          "blocks": [
+            "152-3"
+          ],
+          "surface": "Hochschulkomitee Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 74,
+      "title": "Die Wahlen zum Studentenparlament im WS 72/73 haben folgendes Ergebnis:",
+      "date": "",
+      "start_page": 155,
+      "end_page": 155,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Wahlen zum Studentenparlament im WS 72/73 haben\nfolgendes Ergebnis:",
+      "title_blocks": [
+        "155-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "155-1",
+            "155-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-12-01",
+      "received_evidence": "1. DEZ 1973",
+      "received_blocks": [
+        "155-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 75,
+      "title": "Die Wahlen zum Studentenparlament im WS 72/73 haben folgendes Ergebnis:",
+      "date": "",
+      "start_page": 156,
+      "end_page": 156,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Wahlen zum Studentenparlament im WS 72/73 haben\nfolgendes Ergebnis:",
+      "title_blocks": [
+        "156-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "156-1",
+            "156-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 76,
+      "title": "Thesen zur Demokratisierung",
+      "date": "",
+      "start_page": 157,
+      "end_page": 158,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Thesen zur Demokratisierung",
+      "title_blocks": [
+        "158-2"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS Theoriepaper Nr. 1",
+          "blocks": [
+            "158-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "157-8"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "157-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "resserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "157-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "resserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 77,
+      "title": "Solidarität mit den kämpfenden Völkern am arabisch-persischen Golf",
+      "date": "",
+      "start_page": 159,
+      "end_page": 160,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOLIDARITÄT MIT DEN KÄMPFENDEN\nVÖLKERN AM ARABISCH-PERSISCHEN GOLF",
+      "title_blocks": [
+        "159-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "159-1",
+            "159-2",
+            "160-9"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "November 1972",
+      "date_blocks": [
+        "159-4"
+      ],
+      "date_text": "November 1972",
+      "date_iso": "1972-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 78,
+      "title": "Es hat sich wohl mittlerweile herumgesprochen, daß Anfang nächsten Jahres ...",
+      "date": "",
+      "start_page": 161,
+      "end_page": 162,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Es hat sich wohl mittlerweile herumgesprochen, daß Anfang nächsten Jahres",
+      "title_blocks": [
+        "161-1"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 79,
+      "title": "Beteiligt euch masseschaft an den Aktionen gegen die Fahrpreiserhöhung!",
+      "date": "",
+      "start_page": 163,
+      "end_page": 163,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BETEILIGT EUCH MASSESCHAFT AN DEN\nAKTIONEN GEGEN DIE FAHRPREISERHÖHUNG!",
+      "title_blocks": [
+        "163-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "163-1",
+            "163-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "SA. 16.12.72",
+      "date_blocks": [
+        "163-8"
+      ],
+      "date_text": "16.12.1972",
+      "date_iso": "1972-12-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 80,
+      "title": "Die Verfolgung und Ermordung der allgemeinen Kopulation, dargestellt am Beispiel der Regensburger Inszenierung von Peter Weiss' Marat",
+      "date": "",
+      "start_page": 164,
+      "end_page": 164,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Verfolgung und Ermordung der allgemeinen Kopulation,\ndargestellt am Beispiel der Regensburger Inszenierung\nvon Peter Weiss' M A R A T",
+      "title_blocks": [
+        "164-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "164-1",
+            "164-2",
+            "164-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "29. Sept. 1972",
+      "date_blocks": [
+        "164-13"
+      ],
+      "date_text": "29. September 1972",
+      "date_iso": "1972-09-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 81,
+      "title": "Dokumentation zur Abschiebung von Palästinensern. Zum Verbot von GUPS und GUPA",
+      "date": "",
+      "start_page": 165,
+      "end_page": 165,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DOKUMENTATION\nZUR ABSCHIEBUNG VON\nPALÄSTINENSERN\nZUM VERBOT VON\nGUPS UND GUPA",
+      "title_blocks": [
+        "165-2",
+        "165-3",
+        "165-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-",
+          "blocks": [
+            "165-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.75,
+      "_grounding": [
+        "title_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 82,
+      "title": "Nach dem Attentat von München - erste \"Vergeltungsaktionen\" gegen arabische Studenten",
+      "date": "",
+      "start_page": 166,
+      "end_page": 168,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Nach dem Attentat von\nMünchen —\nerste \"Vergeltungs-\naktionen\" gegen\narabische Studenten",
+      "title_blocks": [
+        "166-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "166-1",
+            "166-2"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 83,
+      "title": "Ergebnis der Urabstimmung",
+      "date": "",
+      "start_page": 169,
+      "end_page": 169,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "E R G E B N I S     D E R     U R A B S T I M M U N G",
+      "title_blocks": [
+        "169-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "169-1",
+            "169-2",
+            "169-14"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 84,
+      "title": "Imperialismus und antiimperialistischer Protest",
+      "date": "",
+      "start_page": 170,
+      "end_page": 171,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "IMPERIALISMUS UND\nANTIIMPERIALISTISCHER\nPROTEST",
+      "title_blocks": [
+        "170-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: Linke AStA-Fraktion",
+          "blocks": [
+            "171-6"
+          ],
+          "surface": "Linke AStA-Fraktion",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "linke_asta_fraktion"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 85,
+      "title": "Ergebnisse der Fachbereichs- und Fakultätsrat Wahlen",
+      "date": "",
+      "start_page": 172,
+      "end_page": 173,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERGEBNISSE DER FACHBEREICHS- UND FAKULTÄTSRAT WAHLEN",
+      "title_blocks": [
+        "172-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "172-1",
+            "172-2",
+            "173-3",
+            "173-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "5. Juli 1972",
+      "date_blocks": [
+        "172-4"
+      ],
+      "date_text": "5. Juli 1972",
+      "date_iso": "1972-07-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 86,
+      "title": "Gegen die Machtergreifung der CSU im Bay. Rundfunk!",
+      "date": "",
+      "start_page": 174,
+      "end_page": 175,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen die Machtergreifung der CSU im Bay. Rundfunk !",
+      "title_blocks": [
+        "174-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "174-1",
+            "174-4",
+            "175-26"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'AStA'"
+      ]
+    },
+    {
+      "id": 87,
+      "title": "Prorektor - Wahl",
+      "date": "",
+      "start_page": 176,
+      "end_page": 177,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Prorektor - Wahl",
+      "title_blocks": [
+        "176-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info\nStudentenschaft der\nUniversität Regensburg",
+          "blocks": [
+            "176-1",
+            "176-2",
+            "176-14"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 88,
+      "title": "Vollzug der Rechnungslegungsordnung; hier: Feststellungsbefugnis",
+      "date": "",
+      "start_page": 178,
+      "end_page": 180,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Vollzug der Rechnungslegungsordnung;\nhier: Feststellungsbefugnis",
+      "title_blocks": [
+        "178-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Universität Regensburg\nDER KANZLER",
+          "blocks": [
+            "178-1"
+          ],
+          "surface": "Der Kanzler",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "kanzler"
+          ]
+        },
+        {
+          "evidence": "Zorger\n(Zorger)",
+          "blocks": [
+            "180-6"
+          ],
+          "surface": "Zorger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "29. Juni 1972",
+      "date_blocks": [
+        "178-2"
+      ],
+      "date_text": "29. Juni 1972",
+      "date_iso": "1972-06-29",
+      "date_type": "issued",
+      "doc_type": "unklar",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "76 Universität Regensburg DER KANZLER"
+      ],
+      "_grounding": [
+        "Person als issuer: 'Der Kanzler' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 89,
+      "title": "",
+      "date": "",
+      "start_page": 181,
+      "end_page": 181,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.1,
+      "_grounding": []
+    },
+    {
+      "id": 90,
+      "title": "Vietnam kämpft weiter",
+      "date": "",
+      "start_page": 182,
+      "end_page": 187,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Vietnam kämpft\nweiter",
+      "title_blocks": [
+        "182-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "182-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-06-28",
+      "received_evidence": "28. JUNI 1972",
+      "received_blocks": [
+        "182-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 91,
+      "title": "AStA-Vollversammlung",
+      "date": "",
+      "start_page": 188,
+      "end_page": 188,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA\nV V\nOLL- ERSAMMLG.",
+      "title_blocks": [
+        "188-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "188-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Dienstag, 27.6. 13\n00\nh",
+      "date_blocks": [
+        "188-6"
+      ],
+      "date_text": "Dienstag, 27.6.",
+      "date_iso": "1972-06-27",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 92,
+      "title": "",
+      "date": "",
+      "start_page": 189,
+      "end_page": 189,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA und Arbeitskreis Bildungspolitik",
+          "blocks": [
+            "189-3"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Entw. AK Bildungspolitik",
+          "blocks": [
+            "189-17"
+          ],
+          "surface": "AK Bildungspolitik",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ak"
+          ]
+        }
+      ],
+      "date_evidence": "Mittwoch, 28. Juni, um 19\n30",
+      "date_blocks": [
+        "189-4"
+      ],
+      "date_text": "Mittwoch, 28. Juni, 19.30",
+      "date_iso": "1972-06-28",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 93,
+      "title": "Erneuter Beweis der Unfähigkeit des RCDS!",
+      "date": "",
+      "start_page": 190,
+      "end_page": 191,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERNEUTER BEWEIS DER UNFÄHIGKEIT DES RCDS!",
+      "title_blocks": [
+        "190-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "190-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "190-4"
+          ],
+          "surface": "Hans-Bodo Reimann",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "190-4"
+          ],
+          "surface": "Burkhard Stoyke",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "23. Juni 1972",
+      "date_blocks": [
+        "191-8"
+      ],
+      "date_text": "23. Juni 1972",
+      "date_iso": "1972-06-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 94,
+      "title": "Nepper Schlepper Bauernfänger",
+      "date": "",
+      "start_page": 192,
+      "end_page": 193,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NEPPER\nSCHLEPPER\nBAUERNFÄNGER",
+      "title_blocks": [
+        "192-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "192-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-06-27",
+      "received_evidence": "A blue rectangular stamp with the text 'UB Regensburg eingelaufen am: 27. JUNI 1972'.",
+      "received_blocks": [
+        "192-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 95,
+      "title": "Erneuter Beweis der Unfähigkeit des RCDS!",
+      "date": "",
+      "start_page": 194,
+      "end_page": 195,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERNEUTER BEWEIS DER UNFÄHIGKEIT DES RCDS!",
+      "title_blocks": [
+        "194-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "194-5"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "194-5"
+          ],
+          "surface": "Hans-Bodo Reimann",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "194-5"
+          ],
+          "surface": "Burkhard Stoyke",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "23. Juni 1972",
+      "date_blocks": [
+        "195-8"
+      ],
+      "date_text": "23. Juni 1972",
+      "date_iso": "1972-06-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-06-26",
+      "received_evidence": "Blue rectangular stamp from UB Regensburg, dated 26. JUNI 1972, with the text 'eingelaufen'.",
+      "received_blocks": [
+        "194-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 96,
+      "title": "Vietnam kämpft weiter",
+      "date": "",
+      "start_page": 196,
+      "end_page": 201,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Vietnam kämpft\nweiter",
+      "title_blocks": [
+        "196-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "196-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 97,
+      "title": "Erneuter Beweis der Unfähigkeit des RCDS!",
+      "date": "",
+      "start_page": 202,
+      "end_page": 203,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERNEUTER BEWEIS DER UNFÄHIGKEIT DES RCDS!",
+      "title_blocks": [
+        "202-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "202-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "202-4"
+          ],
+          "surface": "Hans-Bodo Reimann",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "202-4"
+          ],
+          "surface": "Burkhard Stoyke",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "23. Juni 1972",
+      "date_blocks": [
+        "203-7"
+      ],
+      "date_text": "23. Juni 1972",
+      "date_iso": "1972-06-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 98,
+      "title": "Kultur-Referat",
+      "date": "",
+      "start_page": 204,
+      "end_page": 204,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "KULTUR-REFERAT",
+      "title_blocks": [
+        "204-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "204-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "23.6.72",
+      "date_blocks": [
+        "204-3"
+      ],
+      "date_text": "23.6.1972",
+      "date_iso": "1972-06-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 42%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 99,
+      "title": "Urabstimmung über die Fachschaftsatzungsentwürfe",
+      "date": "",
+      "start_page": 205,
+      "end_page": 205,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "URABSTIMMUNG\nÜBER DIE FACHSCHAFTSATZUNGSENTWÜRFE",
+      "title_blocks": [
+        "205-3",
+        "205-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "205-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 100,
+      "title": "Erneuter Beweis der Unfähigkeit des RCDS!",
+      "date": "",
+      "start_page": 206,
+      "end_page": 207,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERNEUTER BEWEIS DER UNFÄHIGKEIT DES RCDS!",
+      "title_blocks": [
+        "206-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "206-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "206-4"
+          ],
+          "surface": "Hans-Bodo Reimann",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        },
+        {
+          "evidence": "Für den AStA geben die Finanzreferenten Hans-Bodo Reimann (als) und Burkhard Stoyke (LiLi) folgende Stellungnahme ab:",
+          "blocks": [
+            "206-4"
+          ],
+          "surface": "Burkhard Stoyke",
+          "role": "signatory",
+          "function": "Finanzreferent",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "22. 6. 72",
+      "date_blocks": [
+        "206-2"
+      ],
+      "date_text": "22.6.1972",
+      "date_iso": "1972-06-22",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 101,
+      "title": "Teach-in zur Lage in Persien",
+      "date": "",
+      "start_page": 208,
+      "end_page": 208,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Teach-in zur Lage in Persien",
+      "title_blocks": [
+        "208-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "208-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "MONTAG, 19.6.72 - 15\n00\nh",
+      "date_blocks": [
+        "208-8"
+      ],
+      "date_text": "Montag, 19.6.1972, 15.00 h",
+      "date_iso": "1972-06-19",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 102,
+      "title": "Obermair bleibt Rektor",
+      "date": "",
+      "start_page": 209,
+      "end_page": 209,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "OBERMAIR\nBLEIBT REKTOR",
+      "title_blocks": [
+        "209-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Der AStA sieht in diesem Sieg einen Erfolg über die hochschulpolitischen Kräfte um den Bund Freiheit der Wissenschaft und den RCDS und beglückwünscht Obermair zu seiner Wahl.\nAStA",
+          "blocks": [
+            "209-10",
+            "209-11"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "14.6.72, 15.30 UHR",
+      "date_blocks": [
+        "209-5"
+      ],
+      "date_text": "14.6.1972, 15.30 Uhr",
+      "date_iso": "1972-06-14",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 103,
+      "title": "Zur morgigen Rektorwahl",
+      "date": "",
+      "start_page": 210,
+      "end_page": 211,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZUR MORGIGEN REKTORWAHL",
+      "title_blocks": [
+        "210-9"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "211-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "13.6.72",
+      "date_blocks": [
+        "210-7"
+      ],
+      "date_text": "13.6.1972",
+      "date_iso": "1972-06-13",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 104,
+      "title": "Zur morgigen Rektorwahl",
+      "date": "",
+      "start_page": 212,
+      "end_page": 213,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZUR MORGIGEN REKTORWAHL",
+      "title_blocks": [
+        "212-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "213-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "13.6.72",
+      "date_blocks": [
+        "212-3"
+      ],
+      "date_text": "13.6.1972",
+      "date_iso": "1972-06-13",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 105,
+      "title": "Obermair – kein Einzelgänger",
+      "date": "",
+      "start_page": 214,
+      "end_page": 215,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "„Obermair – kein Einzelgänger",
+      "title_blocks": [
+        "214-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "214-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "received_date": "1972-06-13",
+      "received_evidence": "Ablage 120 43 13. JUNI 1972",
+      "received_blocks": [
+        "214-13"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 106,
+      "title": "Obermair – kein Einzelgänger",
+      "date": "",
+      "start_page": 216,
+      "end_page": 217,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "„Obermair – kein Einzelgänger",
+      "title_blocks": [
+        "216-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "216-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 107,
+      "title": "Brüno!",
+      "date": "",
+      "start_page": 218,
+      "end_page": 218,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Brüno!",
+      "title_blocks": [
+        "218-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "218-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.5,
+      "_grounding": []
+    },
+    {
+      "id": 108,
+      "title": "",
+      "date": "",
+      "start_page": 219,
+      "end_page": 219,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "219-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.4,
+      "_grounding": []
+    },
+    {
+      "id": 109,
+      "title": "",
+      "date": "",
+      "start_page": 220,
+      "end_page": 220,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "220-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_grounding": []
+    },
+    {
+      "id": 110,
+      "title": "",
+      "date": "",
+      "start_page": 221,
+      "end_page": 221,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "221-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_grounding": []
+    },
+    {
+      "id": 111,
+      "title": "Zur morgigen Rektorwahl",
+      "date": "",
+      "start_page": 222,
+      "end_page": 223,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZUR MORGIGEN REKTORWAHL",
+      "title_blocks": [
+        "222-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "222-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "13.6.72",
+      "date_blocks": [
+        "222-3"
+      ],
+      "date_text": "13.6.1972",
+      "date_iso": "1972-06-13",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 112,
+      "title": "Zur morgigen Rektorwahl",
+      "date": "",
+      "start_page": 224,
+      "end_page": 225,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZUR MORGIGEN REKTORWAHL",
+      "title_blocks": [
+        "224-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "225-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "13.6.72",
+      "date_blocks": [
+        "224-3"
+      ],
+      "date_text": "13.6.1972",
+      "date_iso": "1972-06-13",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 113,
+      "title": "Aufm Asta Ball gehts rund",
+      "date": "",
+      "start_page": 226,
+      "end_page": 226,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AUFM\nASTA\nBALL\nGEHTS\nRUND",
+      "title_blocks": [
+        "226-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "226-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 114,
+      "title": "",
+      "date": "",
+      "start_page": 227,
+      "end_page": 227,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 115,
+      "title": "Gegen die Machtergreifung der CSU im Bay. Rundfunk!",
+      "date": "",
+      "start_page": 228,
+      "end_page": 229,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen die Machtergreifung der CSU im Bay. Rundfunk !",
+      "title_blocks": [
+        "228-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "A St A",
+          "blocks": [
+            "229-26"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 116,
+      "title": "Erneuter Beweis der Unfähigkeit des RCDS!",
+      "date": "",
+      "start_page": 230,
+      "end_page": 231,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ERNEUTER BEWEIS DER UNFÄHIGKEIT DES RCDS!",
+      "title_blocks": [
+        "230-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "230-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "23. Juni 1972",
+      "date_blocks": [
+        "231-8"
+      ],
+      "date_text": "23. Juni 1972",
+      "date_iso": "1972-06-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 117,
+      "title": "Free Music + projections mit ars nova",
+      "date": "",
+      "start_page": 232,
+      "end_page": 232,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FREE MUSIC + projections\nmit\nars nova",
+      "title_blocks": [
+        "232-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - KULTURREFERAT präsentiert im großen Mensasaal",
+          "blocks": [
+            "232-5"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Mittwoch, 31.5.",
+      "date_blocks": [
+        "232-16"
+      ],
+      "date_text": "31.5.1972",
+      "date_iso": "1972-05-31",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 118,
+      "title": "",
+      "date": "",
+      "start_page": 233,
+      "end_page": 233,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 119,
+      "title": "Asla VV Mittwoch 31.5. 13 00 HO 1",
+      "date": "",
+      "start_page": 234,
+      "end_page": 235,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASLA VV Mittwoch 31.5. 13\n00\nHO 1",
+      "title_blocks": [
+        "234-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "234-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Mittwoch 31.5.",
+      "date_blocks": [
+        "234-5"
+      ],
+      "date_text": "31.5.1972",
+      "date_iso": "1972-05-31",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 120,
+      "title": "Besetzung des Lehrstuhls Politologie II: Totaler Triumph der Reaktion?",
+      "date": "",
+      "start_page": 236,
+      "end_page": 236,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Besetzung des Lehrstuhls Politologie II:\nTotaler Triumph der Reaktion ?",
+      "title_blocks": [
+        "236-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "236-15"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27.5.71",
+      "date_blocks": [
+        "236-4"
+      ],
+      "date_text": "27.5.1971",
+      "date_iso": "1971-05-27",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "date_iso 1971-05-27 passt nicht zum Jahrgang 1972"
+      ]
+    },
+    {
+      "id": 121,
+      "title": "Kundgebung gegen die Eskalierung des Krieges in Vietnam",
+      "date": "",
+      "start_page": 237,
+      "end_page": 239,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kundgebung\ngegen die Eskalierung\ndes Krieges in Vietnam",
+      "title_blocks": [
+        "237-7",
+        "237-8"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "237-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "19.5.72",
+      "date_blocks": [
+        "237-4"
+      ],
+      "date_text": "19.5.1972",
+      "date_iso": "1972-05-19",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 122,
+      "title": "Aufruf zur Aktionswoche gegen das reaktionäre BHG",
+      "date": "",
+      "start_page": 240,
+      "end_page": 240,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AUFRUF ZUR AKTIONSWOCHE\nGEGEN DAS REAKTIONÄRE BHG",
+      "title_blocks": [
+        "240-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "240-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "10.5.72",
+      "date_blocks": [
+        "240-6"
+      ],
+      "date_text": "10.5.1972",
+      "date_iso": "1972-05-10",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 123,
+      "title": "Aufruf zur Aktionswoche gegen das reaktionäre BHE",
+      "date": "",
+      "start_page": 241,
+      "end_page": 241,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "AUFRUF ZUR AKTIONSWOCHE\nGEGEN DAS REAKTIONÄRE BHE",
+      "title_blocks": [
+        "241-18",
+        "241-17"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "241-19"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": [
+        "title_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 124,
+      "title": "Die Wohsituation als Beispiel für Sozialpolitik im Kapitalismus",
+      "date": "",
+      "start_page": 242,
+      "end_page": 248,
+      "confirmed": false,
+      "no_content": false,
+      "note": "Seite 243 ohne Inhalt",
+      "title_evidence": "DIE WOHSITUATION ALS BEISPIEL FÜR SOZIALPOLITIK IM KAPITALISMUS",
+      "title_blocks": [
+        "244-1"
+      ],
+      "title_type": "original",
+      "series": "asta sozial-info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a s t a\nsozial - info",
+          "blocks": [
+            "242-2",
+            "242-3"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "April 1972",
+      "date_blocks": [
+        "242-4"
+      ],
+      "date_text": "April 1972",
+      "date_iso": "1972-04",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "received_date": "1972-03-03",
+      "received_evidence": "A small, rectangular purple stamp in the top right corner. The text inside is faint but appears to say 'UB 100', 'Eingel.', and 'am 3. MAR 1972'.",
+      "received_blocks": [
+        "242-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 125,
+      "title": "",
+      "date": "",
+      "start_page": 249,
+      "end_page": 249,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 126,
+      "title": "Warum wir der Mensapreis-Erhöhung zugestimmt haben",
+      "date": "",
+      "start_page": 250,
+      "end_page": 250,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WARUM WIR DER MENSAPREIS - ERHÖHUNG ZUGESTIMMT HABEN",
+      "title_blocks": [
+        "250-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "250-9"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "issuer 'AStA': Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 127,
+      "title": "",
+      "date": "",
+      "start_page": 251,
+      "end_page": 251,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 128,
+      "title": "Vergünstigungen und Einrichtungen des Sozialreferats",
+      "date": "",
+      "start_page": 252,
+      "end_page": 255,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "VERGÜNSTIGUNGEN UND EINRICHTUNGEN DES SOZIALREFERATS",
+      "title_blocks": [
+        "252-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Studentenschaft\nder Universität Regensburg\nAllgemeiner Studentenausschuß",
+          "blocks": [
+            "252-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "APRIL 1972",
+      "date_blocks": [
+        "252-3"
+      ],
+      "date_text": "April 1972",
+      "date_iso": "1972-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 129,
+      "title": "Kampf der politischen Disziplinierung!",
+      "date": "",
+      "start_page": 256,
+      "end_page": 257,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kampf der politischen Disziplinierung!",
+      "title_blocks": [
+        "256-3"
+      ],
+      "title_type": "original",
+      "series": "ASTA INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "257-9"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-05-03",
+      "received_evidence": "eingelaufen am: - 3. MAI 1972",
+      "received_blocks": [
+        "256-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 130,
+      "title": "Erklärung der habilitierten Mitglieder des Kleinen Senats",
+      "date": "",
+      "start_page": 258,
+      "end_page": 260,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "E r k l ä r u n g\nder habilitierten Mitglieder des Kleinen Senats",
+      "title_blocks": [
+        "258-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Hochschulverband\nHochschulverbandsgruppe Regensburg",
+          "blocks": [
+            "258-1",
+            "258-2"
+          ],
+          "surface": "Hochschulverbandsgruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1972-05-03",
+      "received_evidence": "Th 2. K F. 4.5.72 Ud Regensburg eingelaufen am: 3. MAI 1972",
+      "received_blocks": [
+        "258-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 131,
+      "title": "Kampf der politischen Disziplinierung!",
+      "date": "",
+      "start_page": 261,
+      "end_page": 262,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kampf der politischen Disziplinierung!",
+      "title_blocks": [
+        "261-2"
+      ],
+      "title_type": "original",
+      "series": "ASTA INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "262-9"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 132,
+      "title": "Nepper Schlepper Bauernfänger: RCDS",
+      "date": "",
+      "start_page": 263,
+      "end_page": 264,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NEPPER\nSCHLEPPER\nBAUERNFÄNGER :\nRCDS",
+      "title_blocks": [
+        "263-3",
+        "263-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "263-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 133,
+      "title": "Sensation! Zu einem außerplanmäßigen Gastspiel hat der AStA die deutsch-ungarische Wander-Theatergruppe Schubert engagieren können! Aus dem reichhaltigen Repertoire dieser seit 300 Jahren im ganzen deutschsprachigen Raum beliebten Bühne gelangt zur Aufführung: das bekannte Volksstück Förster-Liesl",
+      "date": "",
+      "start_page": 265,
+      "end_page": 265,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Sensation!\nZu einem außerplanmäßigen Gastspiel hat der AStA die deutsch-ungarische Wander-Theatergruppe Schubert engagieren können! Aus dem reichhaltigen Repertoire dieser seit 300 Jahren im ganzen deutschsprachigen Raum beliebten Bühne gelangt zur Aufführung:\ndas bekannte Volksstück\nFörster - Liesl",
+      "title_blocks": [
+        "265-1",
+        "265-2",
+        "265-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Kulturreferat",
+          "blocks": [
+            "265-11"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 134,
+      "title": "",
+      "date": "",
+      "start_page": 266,
+      "end_page": 266,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 135,
+      "title": "Vollversammlung",
+      "date": "",
+      "start_page": 267,
+      "end_page": 268,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "VOLLVERSAMMLUNG",
+      "title_blocks": [
+        "267-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA",
+          "blocks": [
+            "267-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Do., den 27. April um 12\n30",
+      "date_blocks": [
+        "268-2"
+      ],
+      "date_text": "27. April 1972 um 12:30",
+      "date_iso": "1972-04-27",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "received_date": "1972-04-26",
+      "received_evidence": "26. APR. 1972",
+      "received_blocks": [
+        "267-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 136,
+      "title": "AStA-Vollversammlung",
+      "date": "",
+      "start_page": 269,
+      "end_page": 270,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTAVOLLVERSAMMLUNG",
+      "title_blocks": [
+        "269-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Kommt deshalb alle zur AStA Vollversammlung - Do., den\n27. April",
+          "blocks": [
+            "270-3"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Do., den\n27. April",
+      "date_blocks": [
+        "270-3"
+      ],
+      "date_text": "27. April 1972",
+      "date_iso": "1972-04-27",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 137,
+      "title": "Vietnamkrieg contra Allgemeine Dienstordnung (ADO)",
+      "date": "",
+      "start_page": 271,
+      "end_page": 273,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Vietnamkrieg contra Allgemeine Dienstordnung (ADO)",
+      "title_blocks": [
+        "271-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "271-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 138,
+      "title": "",
+      "date": "",
+      "start_page": 274,
+      "end_page": 274,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 139,
+      "title": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "date": "",
+      "start_page": 275,
+      "end_page": 276,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "title_blocks": [
+        "275-6"
+      ],
+      "title_type": "original",
+      "series": "AStA Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA INFO",
+          "blocks": [
+            "275-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "14.4.72",
+      "date_blocks": [
+        "275-4"
+      ],
+      "date_text": "14.4.1972",
+      "date_iso": "1972-04-14",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 140,
+      "title": "Zur Ausbildungssituation für alle, die Politologie bzw Sozialkunde im Haupt- o. Nebenfach studieren oder studieren wollen: Es stinkt zum Himmel!!",
+      "date": "",
+      "start_page": 277,
+      "end_page": 277,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Zur Ausbildungssituation für alle, die Politologie bzw Sozialkunde im Haupt- o. Nebenfach studieren oder studieren wollen:\nE S STINKT Z U M H I M M E L ! !",
+      "title_blocks": [
+        "277-4",
+        "277-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: Sektion Sozpol des MSB SPARTAKUS in der\nFachschaft Soziologie-Politologie-Sozialkunde",
+          "blocks": [
+            "277-1",
+            "277-12"
+          ],
+          "surface": "Sektion Sozpol des MSB Spartakus in der Fachschaft Soziologie-Politologie-Sozialkunde",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ],
+          "_merged": [
+            "MSB Spartakus"
+          ]
+        }
+      ],
+      "date_evidence": "Dienstag 18. April 16 Uhr Glashaus (bei H 09)",
+      "date_blocks": [
+        "277-10"
+      ],
+      "date_text": "18. April 1972 16 Uhr",
+      "date_iso": "1972-04-18",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "received_date": "1972-04-18",
+      "received_evidence": "18. APR. 1972",
+      "received_blocks": [
+        "277-15"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 141,
+      "title": "Sozial-Info",
+      "date": "",
+      "start_page": 278,
+      "end_page": 283,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "sozial - info",
+      "title_blocks": [
+        "278-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a s t a",
+          "blocks": [
+            "278-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "April 1972",
+      "date_blocks": [
+        "278-3"
+      ],
+      "date_text": "April 1972",
+      "date_iso": "1972-04",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 142,
+      "title": "",
+      "date": "",
+      "start_page": 284,
+      "end_page": 284,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 143,
+      "title": "Warum wir der Mensapreis-Erhöhung zugestimmt haben",
+      "date": "",
+      "start_page": 285,
+      "end_page": 285,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WARUM WIR DER MENSAPREIS - ERHÖHUNG ZUGESTIMMT HABEN",
+      "title_blocks": [
+        "285-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Anmerkung zur Abendmensa\nDie entgegen dem Vorstandsbeschuß vorgenommene Erhöhung der Abendmensapreise (Aufschnittplatte) wurde auf Protest des AStA rückgängig gemacht.",
+          "blocks": [
+            "285-9",
+            "285-10"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Zum 1. April trat eine Erhöhung der Mensapreise in Kraft.",
+      "date_blocks": [
+        "285-2"
+      ],
+      "date_text": "1. April 1972",
+      "date_iso": "1972-04-01",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 144,
+      "title": "",
+      "date": "",
+      "start_page": 286,
+      "end_page": 286,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 145,
+      "title": "Vergünstigungen und Einrichtungen des Sozialreferats",
+      "date": "",
+      "start_page": 287,
+      "end_page": 290,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "VERGÜNSTIGUNGEN UND EINRICHTUNGEN DES SOZIALREFERATS",
+      "title_blocks": [
+        "287-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-SOZIALREFERAT",
+          "blocks": [
+            "287-1",
+            "287-3"
+          ],
+          "surface": "AStA-Sozialreferat",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ],
+          "_merged": [
+            "AStA"
+          ]
+        }
+      ],
+      "date_evidence": "APRIL 1972",
+      "date_blocks": [
+        "287-4"
+      ],
+      "date_text": "April 1972",
+      "date_iso": "1972-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 146,
+      "title": "Andreas Kraus und die Regensburger Rechte",
+      "date": "",
+      "start_page": 291,
+      "end_page": 292,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Andreas Kraus und die\nRegensburger Rechte",
+      "title_blocks": [
+        "291-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA - INFO",
+          "blocks": [
+            "291-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "FEB. 1972",
+      "date_blocks": [
+        "291-5"
+      ],
+      "date_text": "Februar 1972",
+      "date_iso": "1972-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 147,
+      "title": "Solidaritätsadresse des AStA der Universität und des AStA der PH Regensburg",
+      "date": "",
+      "start_page": 293,
+      "end_page": 294,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Solidaritätsadresse des ASTA der Universität und des ASTA der PH Regensburg",
+      "title_blocks": [
+        "293-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA Universität",
+          "blocks": [
+            "293-14"
+          ],
+          "surface": "AStA Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "ASTA Pädagogische Hochschule",
+          "blocks": [
+            "293-16"
+          ],
+          "surface": "AStA Pädagogische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "_other_institution": [
+            "asta"
+          ],
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Regensburg, den 23.3.72",
+      "date_blocks": [
+        "293-13"
+      ],
+      "date_text": "23.3.1972",
+      "date_iso": "1972-03-23",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 148,
+      "title": "Todesurteile im Iran",
+      "date": "",
+      "start_page": 295,
+      "end_page": 296,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Todesurteile im Iran",
+      "title_blocks": [
+        "295-2"
+      ],
+      "title_type": "original",
+      "series": "A+A-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "296-4"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 149,
+      "title": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "date": "",
+      "start_page": 297,
+      "end_page": 298,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "title_blocks": [
+        "297-2"
+      ],
+      "title_type": "original",
+      "series": "AStA Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA INFO",
+          "blocks": [
+            "297-1",
+            "298-14"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "4.4.72",
+      "date_blocks": [
+        "298-13"
+      ],
+      "date_text": "4.4.1972",
+      "date_iso": "1972-04-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 150,
+      "title": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "date": "",
+      "start_page": 299,
+      "end_page": 300,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rechte Ordinarien stimmen mit den Füßen ab",
+      "title_blocks": [
+        "299-2"
+      ],
+      "title_type": "original",
+      "series": "AStA Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA INFO",
+          "blocks": [
+            "299-1",
+            "300-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "4.4.72",
+      "date_blocks": [
+        "300-11"
+      ],
+      "date_text": "4.4.1972",
+      "date_iso": "1972-04-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 151,
+      "title": "Bayer. HS-Gesetz-Entwurf: Der Gipfel der Reaktion",
+      "date": "",
+      "start_page": 301,
+      "end_page": 302,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BAYER. HS-GESETZ-ENTWURF:\nDER GIPFEL DER REAKTION",
+      "title_blocks": [
+        "301-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "302-11"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27. März 72",
+      "date_blocks": [
+        "301-2"
+      ],
+      "date_text": "27. März 1972",
+      "date_iso": "1972-03-27",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 152,
+      "title": "Bayer. HS-Gesetz-Entwurf: Der Gipfel der Reaktion",
+      "date": "",
+      "start_page": 303,
+      "end_page": 304,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BAYER. HS-GESETZ-ENTWURF:\nDER GIPFEL DER REAKTION",
+      "title_blocks": [
+        "303-5"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "304-11"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27. März 72",
+      "date_blocks": [
+        "303-3"
+      ],
+      "date_text": "27. März 1972",
+      "date_iso": "1972-03-27",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 153,
+      "title": "Wird Uni-Pressereferent entlassen?",
+      "date": "",
+      "start_page": 305,
+      "end_page": 306,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIRD UNI-PRESSEREFERENT\nENTLASSEN?",
+      "title_blocks": [
+        "305-6"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-Info",
+          "blocks": [
+            "305-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "REGENSBURG 20. MÄRZ 72",
+      "date_blocks": [
+        "305-2"
+      ],
+      "date_text": "20. März 1972",
+      "date_iso": "1972-03-20",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "308-8"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 154,
+      "title": "Wird Uni-Pressereferent entlassen?",
+      "date": "",
+      "start_page": 307,
+      "end_page": 308,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIRD UNI-PRESSEREFERENT\nENTLASSEN?",
+      "title_blocks": [
+        "307-3"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AS TA",
+          "blocks": [
+            "308-8"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "REGENSBURG 20.MÄRZ 72",
+      "date_blocks": [
+        "307-2"
+      ],
+      "date_text": "20. März 1972",
+      "date_iso": "1972-03-20",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 155,
+      "title": "Wird Uni-Pressereferent entlassen? Aufruf zur Unterschriftensammlung",
+      "date": "",
+      "start_page": 309,
+      "end_page": 310,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIRD UNI-PRESSEREFERENT\nENTLASSEN?\nAuf ruf zur Unterschriften-\nsammlung",
+      "title_blocks": [
+        "309-3",
+        "309-4"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-Info",
+          "blocks": [
+            "309-1",
+            "310-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Regensburg, 21. März 1972",
+      "date_blocks": [
+        "309-2"
+      ],
+      "date_text": "21. März 1972",
+      "date_iso": "1972-03-21",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.95,
+      "_foreign_blocks": [
+        "312-12"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 156,
+      "title": "Sensation! Zu einem außerplanmäßigen Gastspiel hat der AStA die deutsch-ungarische Wander-Theatergruppe Schubert engagieren können! Aus dem reichhaltigen Repertoire dieser seit 300 Jahren im ganzen deutschsprachigen Raum beliebten Bühne gelangt zur Aufführung: das bekannte Volksstück Förster-Liesl",
+      "date": "",
+      "start_page": 311,
+      "end_page": 311,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Sensation!\nZu einem außerplanmäßigen Gastspiel hat der AStA die deutsch-ungarische Wander-Theatergruppe Schubert engagieren können! Aus dem reichhaltigen Repertoire dieser seit 300 Jahren im ganzen deutschsprachigen Raum beliebten Bühne gelangt zur Aufführung:\ndas bekannte Volksstück\nFörster - Liesl",
+      "title_blocks": [
+        "311-1",
+        "311-3",
+        "311-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA - Kulturreferat",
+          "blocks": [
+            "311-12"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "am Freitag abend, ab 19.30 h.in die Mensa",
+      "date_blocks": [
+        "311-9"
+      ],
+      "date_text": "Freitag abend, ab 19.30 h",
+      "date_iso": "",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 157,
+      "title": "AStA-Teach-In: Innenministerkonferenz, 27.1.72 - Ministerpräsidentenkonferenz, 28.1.72 in Hamburg! Betrifft: Berufsverbot für Demokraten und Sozialisten",
+      "date": "",
+      "start_page": 312,
+      "end_page": 312,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AStA-TEACH-IN\nINNENMINISTERKONFERENZ, 27.1.72 - MINISTERPRÄSIDENTENKONFERENZ, 28.1.72\nin Hamburg!\nBETRIFFT:\nBERUFSVERBOT FÜR DEMOKRATEN UND SOZIALISTEN",
+      "title_blocks": [
+        "312-1",
+        "312-2",
+        "312-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA-TEACH-IN",
+          "blocks": [
+            "312-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27.1.72 - MINISTERPRÄSIDENTENKONFERENZ, 28.1.72",
+      "date_blocks": [
+        "312-2"
+      ],
+      "date_text": "27.1.1972 - 28.1.1972",
+      "date_iso": "1972-01-27",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 158,
+      "title": "AStA-Teach-In: Innenministerkonferenz 27.1.72 - Ministerpräsidentenkonferenz 28.1.72 in Hamburg! Betrifft: Berufsverbot für Demokraten und Sozialisten",
+      "date": "",
+      "start_page": 313,
+      "end_page": 313,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA - TEACH - JN\nINNENMINISTERKONFERENZ 27.1.72 - MINISTERPRÄSIDENTENKONFERENZ 28.1.72\nin Hamburg!\nBETRIFFT: BERUFSVERBOT FÜR DEMOKRATEN UND SOZIALISTEN",
+      "title_blocks": [
+        "313-1",
+        "313-2",
+        "313-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA - TEACH - JN",
+          "blocks": [
+            "313-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "27.1.72 - MINISTERPRÄSIDENTENKONFERENZ 28.1.72",
+      "date_blocks": [
+        "313-2"
+      ],
+      "date_text": "27.1.1972 - 28.1.1972",
+      "date_iso": "1972-01-27",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-01-27",
+      "received_evidence": "Blue rectangular stamp from the University Library of Regensburg (UB Regensburg) with the text 'eingeliefert am: 27. JAN. 1972'.",
+      "received_blocks": [
+        "313-9"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 159,
+      "title": "Philosophische und Gesellschaftliche Grundlagen Naturwissenschaftlichen Denkens",
+      "date": "",
+      "start_page": 314,
+      "end_page": 314,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Philosophische und Gesellschaftliche Grundlagen Naturwissenschaftlichen Denkens",
+      "title_blocks": [
+        "314-4"
+      ],
+      "title_type": "original",
+      "series": "ASTA Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "314-7"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 160,
+      "title": "AStA Neuwahl",
+      "date": "",
+      "start_page": 315,
+      "end_page": 316,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA NEUWAHL ASTA NEUWAHL ASTA NEUWAHL ASTA NEUWAHL",
+      "title_blocks": [
+        "315-4"
+      ],
+      "title_type": "original",
+      "series": "ASTA INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AStA",
+          "blocks": [
+            "316-13"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 161,
+      "title": "\"Demokraten\" und Faschisten gemeinsam auf Kommunistenjagd",
+      "date": "",
+      "start_page": 317,
+      "end_page": 317,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "\"Demokraten\" und Faschisten\ngemeinsam auf Kommunistenjagd:",
+      "title_blocks": [
+        "317-2",
+        "317-3"
+      ],
+      "title_type": "original",
+      "series": "ASTA INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA INFO",
+          "blocks": [
+            "317-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 162,
+      "title": "Andreas Kraus und die Regensburger Rechte",
+      "date": "",
+      "start_page": 318,
+      "end_page": 319,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Andreas Kraus und die Regensburger Rechte",
+      "title_blocks": [
+        "318-2"
+      ],
+      "title_type": "original",
+      "series": "ASTA - INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA - INFO",
+          "blocks": [
+            "318-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 163,
+      "title": "Kulturpolitiker in Regensburg",
+      "date": "",
+      "start_page": 320,
+      "end_page": 325,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kulturpolitiker in Regensburg",
+      "title_blocks": [
+        "321-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "1.2.1972",
+      "date_blocks": [
+        "320-1"
+      ],
+      "date_text": "1.2.1972",
+      "date_iso": "1972-02-01",
+      "date_type": "issued",
+      "doc_type": "unklar",
+      "confidence": 0.6,
+      "_grounding": []
+    }
+  ]
+}

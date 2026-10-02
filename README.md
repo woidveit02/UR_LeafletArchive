@@ -53,13 +53,13 @@ Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien s
 
 | Datei | Inhalt | Herkunft |
 |-------|--------|----------|
-| `nr001_metadata.json` … `nr004_metadata.json` | Titel, Datum, Textsorte, Herausgeber je Flugblatt | LLM-Extraktion im Pipeline-Repo |
+| `nr001_metadata.json`, `nr002_metadata.json`, … | Titel, Datum, Textsorte, Herausgeber je Flugblatt. Jeder Band mit einer solchen Datei wird importiert | LLM-Extraktion im Pipeline-Repo |
 | [`copies.tsv`](data/copies.tsv) | Mögliche weitere Exemplare desselben Blatts | Textvergleich im Pipeline-Repo (`find_copies.py`) |
 | `corrections.jsonl` | Handkorrekturen | Bearbeiten in der App |
 | [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
 | [`volumes.json`](data/volumes.json) | Bände mit Titel, Signatur, Link ins Archivportal-D | Findmittel |
 
-Bisher sind Nr. 001 bis Nr. 004 (1967–1970) mit Flugblättern importiert. Die übrigen Bände erscheinen nur in der Bandliste.
+Importiert sind Nr. 001 bis Nr. 014 (1967–1973). Nr. 015 ist nicht digitalisiert und erscheint nur in der Bandliste.
 
 Ändert ein Pull etwas in `data/` oder am Datenbankschema, oder wurde der Datenordner erst nachträglich eingebunden, dann `src/backend/leaflet_database.db` löschen und neu starten.
 

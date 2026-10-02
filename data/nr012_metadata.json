@@ -1,0 +1,6573 @@
+{
+  "source_pdf": "0118_0012.pdf",
+  "created": "2026-10-02T16:09:41.632955",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r12",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 132,
+    "flagged": 15,
+    "rate_percent": 88.6
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [
+    {
+      "segment": 84,
+      "page": 201,
+      "relation": "vorige Seite",
+      "continuation_mark": false
+    },
+    {
+      "segment": 105,
+      "page": 238,
+      "relation": "vorige Seite",
+      "continuation_mark": false
+    }
+  ],
+  "segments": [
+    {
+      "id": 1,
+      "title": "Bildungsplanung - Bildungskonzeptionen. Podiumsdiskussion",
+      "date": "",
+      "start_page": 1,
+      "end_page": 1,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BILDUNGSPLANUNG - BILDUNGSKONZEPTIONEN\nPODIUMSDISKUSSIO - PODIUMSDISKUSSTON - PODIUMSDISKUSSION - PODIUMSDISKU",
+      "title_blocks": [
+        "1-1",
+        "1-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "●rganisation: AIESEC",
+          "blocks": [
+            "1-13"
+          ],
+          "surface": "AIESEC",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aiesec"
+          ]
+        },
+        {
+          "evidence": "Veranstalter: ASTA",
+          "blocks": [
+            "1-14"
+          ],
+          "surface": "ASTA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "Mittwoch, 27.6. 16.30 Uhr",
+      "date_blocks": [
+        "1-6"
+      ],
+      "date_text": "Mittwoch, 27.6.1973, 16.30 Uhr",
+      "date_iso": "1973-06-27",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Lektürekurs zu W. Kaupen: Bevölkerung und Recht. Analyse von Strafgerichtsverhandlungen",
+      "date": "",
+      "start_page": 2,
+      "end_page": 3,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Lektürekurs zu\nW. KAUPEN\nBEVÖLKERUNG UND RECHT\nAnalyse von Strafgerichtsverhandlungen",
+      "title_blocks": [
+        "2-1",
+        "2-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AKKJ und SHB",
+          "blocks": [
+            "2-9"
+          ],
+          "surface": "AKKJ",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "akkj"
+          ]
+        },
+        {
+          "evidence": "AKKJ und SHB",
+          "blocks": [
+            "2-9"
+          ],
+          "surface": "SHB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        }
+      ],
+      "date_evidence": "Do. 24. 5. 73",
+      "date_blocks": [
+        "2-3"
+      ],
+      "date_text": "Do. 24.5.1973",
+      "date_iso": "1973-05-24",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Sozialkundler Unterschriftensammlung. Für die Zuweisung einer Fachdidaktik-Stelle für Sozialkunde!",
+      "date": "",
+      "start_page": 4,
+      "end_page": 5,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZIAL- UNTERSCHRIFTEN-\nKUNDLER SAMMLUNG\nFür die Zuweisung einer Fachdidaktik-Stelle für Sozialkunde!",
+      "title_blocks": [
+        "4-7",
+        "4-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AK SOZIALKUNDE",
+          "blocks": [
+            "4-1"
+          ],
+          "surface": "AK Sozialkunde",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ak_sozialkunde"
+          ]
+        },
+        {
+          "evidence": "verantwortl. PH. Bierlmeier, 84 R. Griesbacherstr.20",
+          "blocks": [
+            "5-13"
+          ],
+          "surface": "PH. Bierlmeier",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "AK SOZIALKUNDE"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 4,
+      "title": "Die Vorstellungen und Interessen hinsichtlich eines neuen \"zeitgemäßen\" Bildungswesens sind äußerst widersprüchlich. Dennoch steht die Notwendigkeit ...",
+      "date": "",
+      "start_page": 6,
+      "end_page": 6,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Vorstellungen und Interessen hinsichtlich eines neuen \"zeitgemäßen\" Bildungswesens sind äußerst widersprüchlich. Dennoch steht die Notwendigkeit einer Reform des Bildungswesens außer Frage.",
+      "title_blocks": [
+        "6-4"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AK-SOZIALKUNDE\n(Ausschuß der FS Sozpol)",
+          "blocks": [
+            "6-1",
+            "6-2"
+          ],
+          "surface": "AK-Sozialkunde",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ak_sozialkunde"
+          ]
+        }
+      ],
+      "date_evidence": "18. JULI 1973",
+      "date_blocks": [
+        "6-3"
+      ],
+      "date_text": "18. Juli 1973",
+      "date_iso": "1973-07-18",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "AK-SOZIALKUNDE"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 5,
+      "title": "Gemeinsame Erklärung zum Bayerischen Hochschulgesetz (BHG)",
+      "date": "",
+      "start_page": 7,
+      "end_page": 14,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GEMEINSAME ERKLÄRUNG ZUM BAYERISCHEN HOCHSCHULGESETZ (BHG)",
+      "title_blocks": [
+        "8-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktion Demokratische\nHochschule",
+          "blocks": [
+            "7-1"
+          ],
+          "surface": "Aktion Demokratische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_demokratische_hochschule"
+          ]
+        },
+        {
+          "evidence": "GEW Kreisverband Regensburg",
+          "blocks": [
+            "7-2"
+          ],
+          "surface": "GEW Kreisverband Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gew"
+          ]
+        },
+        {
+          "evidence": "Verantw.: H. Kohmann, 8 München 40, Grasmeierstr. 19, Eigendruck",
+          "blocks": [
+            "14-10"
+          ],
+          "surface": "H. Kohmann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "received_date": "1973-03-01",
+      "received_evidence": "am: 1. MRZ. 1973",
+      "received_blocks": [
+        "7-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Demokraten gegen CSU-Hochschulgesetz",
+      "date": "",
+      "start_page": 15,
+      "end_page": 17,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DEMOKRATEN\nGEGEN\nCSU-HOCHSCHULGESETZ",
+      "title_blocks": [
+        "15-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktion Demokratische Hochschule",
+          "blocks": [
+            "15-9"
+          ],
+          "surface": "Aktion Demokratische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_demokratische_hochschule"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: K. Käufel, München 2, Arcisstraße 16",
+          "blocks": [
+            "17-6"
+          ],
+          "surface": "K. Käufel",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "Donnerstag, 25. 1. 1973",
+      "date_blocks": [
+        "15-6"
+      ],
+      "date_text": "Donnerstag, 25.1.1973",
+      "date_iso": "1973-01-25",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "Informationen zur Wahlvollversammlung",
+      "date": "",
+      "start_page": 18,
+      "end_page": 21,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "INFORMATIONEN\nzur\nWAHLVOLLVERSAMMLUNG",
+      "title_blocks": [
+        "18-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "18-4"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Hartmut Paulsen, a l s",
+          "blocks": [
+            "18-26"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Informationen zur Wahlvollversammlung",
+      "date": "",
+      "start_page": 22,
+      "end_page": 25,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "INFORMATIONEN zur WAHLVOLLVERSAMMLUNG",
+      "title_blocks": [
+        "22-9"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "22-4",
+            "22-5",
+            "22-6"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Hartmut Paulsen, a l s",
+          "blocks": [
+            "22-30"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Alle Mitglieder der oben genannten Gruppen und ein großer Teil der Studenten wissen, daß die Bildung dieser Asta-Koalition ...",
+      "date": "",
+      "start_page": 26,
+      "end_page": 27,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "alle mitglieder der oben genannten gruppen und ein großer teil der studenten wissen, daß die\nbildung dieser asta-koalition",
+      "title_blocks": [
+        "26-6"
+      ],
+      "title_type": "incipit",
+      "series": "Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a l s - aktionsgemeinschaft liberaler studenten",
+          "blocks": [
+            "26-1"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "S H B - SOZIALISTISCHER HOCHSCHULBUND",
+          "blocks": [
+            "26-2"
+          ],
+          "surface": "SHB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "M S B - Marxistischer Studentenbund SPARTAKUS",
+          "blocks": [
+            "26-3"
+          ],
+          "surface": "MSB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "received_date": "1973-12-13",
+      "received_evidence": "13. DEZ. 1973",
+      "received_blocks": [
+        "26-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "Informationspolitik - oder der schlechte Verlierer!",
+      "date": "",
+      "start_page": 28,
+      "end_page": 29,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Informationspolitik -\noder der schlechte Verlierer !",
+      "title_blocks": [
+        "28-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\nS t u d e n t e n",
+          "blocks": [
+            "28-4",
+            "28-5",
+            "28-6"
+          ],
+          "surface": "aktionsgemeinschaft liberaler Studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Hartmut Paulsen, a l s, studentisches Mitglied im Kleinen Senat",
+          "blocks": [
+            "28-20"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "studentisches Mitglied im Kleinen Senat",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-11-21",
+      "received_evidence": "21. NOV. 1973",
+      "received_blocks": [
+        "28-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Gerd Langguth - Grals- oder Ladenhüter?",
+      "date": "",
+      "start_page": 30,
+      "end_page": 31,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GERD LANGGUTH\n- GRALS- ODER\nLADENHÜTER?",
+      "title_blocks": [
+        "30-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "30-5"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "für die Aktionsgemeinschaft liberaler Studenten (ALS)\nRainer Linke",
+          "blocks": [
+            "31-5",
+            "31-6"
+          ],
+          "surface": "Rainer Linke",
+          "role": "signatory",
+          "function": "",
+          "marker": "für"
+        }
+      ],
+      "date_evidence": "Regensburg, 16.11.73",
+      "date_blocks": [
+        "31-4"
+      ],
+      "date_text": "16.11.1973",
+      "date_iso": "1973-11-16",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-11-20",
+      "received_evidence": "eingelaufen am: 20. NOV. 1973",
+      "received_blocks": [
+        "30-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 12,
+      "title": "Verfassungsjuristische Stellungnahme zum sog. \"Radikalenbeschluß\" der Länderministerpräsidenten",
+      "date": "",
+      "start_page": 32,
+      "end_page": 35,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Verfassungsjuristische Stellungnahme zum sog. \"Radikalenbeschluß\" der\nLänderministerpräsidenten.",
+      "title_blocks": [
+        "32-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "32-4",
+            "32-5",
+            "32-6"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-11-02",
+      "received_evidence": "eingelaufen am: 2. NOV. 1973",
+      "received_blocks": [
+        "32-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Wie vor jeder SP-Wahl veröffentlichen wir die Erklärung des Sprechers der a l s bei der Wahlvollversammlung ...",
+      "date": "",
+      "start_page": 36,
+      "end_page": 39,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wie vor jeder SP-Wahl veröffentlichen wir die Erklärung des Sprechers der a l s bei der Wahlvollversammlung",
+      "title_blocks": [
+        "36-2"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "36-1"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "issuer 'aktionsgemeinschaft liberaler studenten': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'aktionsgemeinschaft liberaler studenten'"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Die Profil-Liberalen im Profil-Dilemma",
+      "date": "",
+      "start_page": 40,
+      "end_page": 41,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIE PROFIL - LIBERALEN IM PROFIL- DILEMMA",
+      "title_blocks": [
+        "40-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: egon greipl, 84 R. dechbettener str. 20",
+          "blocks": [
+            "41-11"
+          ],
+          "surface": "egon greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "DF - entschieden demokratisch?",
+      "date": "",
+      "start_page": 42,
+      "end_page": 43,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DF - entschieden demokratisch ?",
+      "title_blocks": [
+        "42-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionsgemeinschaft\nliberaler\nStudenten",
+          "blocks": [
+            "42-1"
+          ],
+          "surface": "Aktionsgemeinschaft liberaler Studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantwortl.:\nHans - Bodo Reimann (als)",
+          "blocks": [
+            "43-9",
+            "43-10"
+          ],
+          "surface": "Hans - Bodo Reimann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "issuer 'Aktionsgemeinschaft liberaler Studenten': Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Informationspolitik - oder der schlechte Verlierer!",
+      "date": "",
+      "start_page": 44,
+      "end_page": 45,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Informationspolitik -\noder der schlechte Verlierer !",
+      "title_blocks": [
+        "44-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\nS t u d e n t e n",
+          "blocks": [
+            "44-3"
+          ],
+          "surface": "aktionsgemeinschaft liberaler Studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Hartmut Paulsen, a l s, studentisches Mitglied im Kleinen Senat",
+          "blocks": [
+            "44-16"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "studentisches Mitglied im Kleinen Senat",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer 'aktionsgemeinschaft liberaler Studenten': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'aktionsgemeinschaft liberaler Studenten'"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Der Boden des Grundgesetzes",
+      "date": "",
+      "start_page": 46,
+      "end_page": 47,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der BODEN Des GRUNDGESETZES",
+      "title_blocks": [
+        "46-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "46-4"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Presser. verantwortl.: W. Heinrich",
+          "blocks": [
+            "46-19"
+          ],
+          "surface": "W. Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presser. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "Gerd Langguth - Grals- oder Ladenhüter?",
+      "date": "",
+      "start_page": 48,
+      "end_page": 49,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GERD LANGGUTH\n- GRALS- ODER\nLADENHÜTER?",
+      "title_blocks": [
+        "48-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nstudenten",
+          "blocks": [
+            "48-2"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "für die Aktionsgemeinschaft liberaler Studenten (ALS)\nRainer Linke",
+          "blocks": [
+            "49-5",
+            "49-6"
+          ],
+          "surface": "Rainer Linke",
+          "role": "signatory",
+          "function": "",
+          "marker": "für"
+        }
+      ],
+      "date_evidence": "Regensburg, 16.11.73",
+      "date_blocks": [
+        "49-4"
+      ],
+      "date_text": "16.11.1973",
+      "date_iso": "1973-11-16",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 19,
+      "title": "Der Boden des Grundgesetzes",
+      "date": "",
+      "start_page": 50,
+      "end_page": 50,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der BODEN des GRUNDGESETZES",
+      "title_blocks": [
+        "50-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nstudenten",
+          "blocks": [
+            "50-4"
+          ],
+          "surface": "aktionsgemeinschaft liberaler studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Presser. verantwortl.: W. Heinrich",
+          "blocks": [
+            "50-20"
+          ],
+          "surface": "W. Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presser. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-10-18",
+      "received_evidence": "18. OKT 1973",
+      "received_blocks": [
+        "50-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "Wahl-Info - Jura",
+      "date": "",
+      "start_page": 51,
+      "end_page": 57,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahl - Info - J u r a - Wahl - Info - J u r a - Wahl - Info - J u r a - Wahl - Info -",
+      "title_blocks": [
+        "51-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nStudenten",
+          "blocks": [
+            "51-4",
+            "51-5",
+            "51-6"
+          ],
+          "surface": "aktionsgemeinschaft liberaler Studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 21,
+      "title": "Wahl-Info Jura zu den Fachschafts-, Fachbereichs-, Fakultätsrats-Wahlen vom Dienstag, dem 3.7.73 bis Donnerstag, dem 5.7.73. Zum letzten Mal: Wahlen nach dem Regensburger Modell! Zum letzten Mal: Viertelparität! Zum letzten Mal: studentische Mitbestimmung!",
+      "date": "",
+      "start_page": 58,
+      "end_page": 63,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahl - Info - J u r a - Wahl - Info - J u r a - Wahl - Info - J u r a - Wahl - Info -\nzu den Fachschafts -\nFachbereichs -\nFakultätsrats - Wahlen vom Dienstag, dem 3.7.73 bis Donnerstag, dem 5.7.73;\nZum letzten Mal: Wahlen nach dem\nRegensburger Modell\n!\nZum letzten Mal:\nViertelparität\n!\nZum letzten Mal: studentische\nMitbestimmung !",
+      "title_blocks": [
+        "58-6",
+        "58-7",
+        "58-8",
+        "58-9",
+        "58-10",
+        "58-11",
+        "58-12",
+        "58-13"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info Jura",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "liberaler\nStudenten",
+          "blocks": [
+            "58-4",
+            "58-5"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "vom Dienstag, dem 3.7.73 bis Donnerstag, dem 5.7.73",
+      "date_blocks": [
+        "58-9"
+      ],
+      "date_text": "3.7.1973 bis 5.7.1973",
+      "date_iso": "1973-07-03",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Ohne weiteren Kommentar: Kann man die Taktik des RCDS besser beschreiben als mit folgendem Gedicht von Bernhard Katsch?",
+      "date": "",
+      "start_page": 64,
+      "end_page": 66,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Ohne weiteren Kommentar:\nKann man die Taktik des RCDS besser beschreiben als mit folgendem Gedicht von Bernhard Katsch ?",
+      "title_blocks": [
+        "64-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nStudenten",
+          "blocks": [
+            "64-1"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: Gerhard Rampp,\n84 Regensburg, Alex.-Ferd.-Str. 4",
+          "blocks": [
+            "64-1"
+          ],
+          "surface": "Gerhard Rampp",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "issuer 'als': Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 23,
+      "title": "Gesucht: Libitale Scheisser und Scheisserinnen",
+      "date": "",
+      "start_page": 67,
+      "end_page": 68,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gesucht:\nLibitale Scheisser\nund\nScheisserinnen",
+      "title_blocks": [
+        "67-1",
+        "67-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Die aktionsgemeinschaft liberaler studenten ( a l s )",
+          "blocks": [
+            "68-2"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Henrich - die Alternative?",
+      "date": "",
+      "start_page": 69,
+      "end_page": 70,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Henrich - die Alternative?",
+      "title_blocks": [
+        "69-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "69-4"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        }
+      ],
+      "date_evidence": "Dienstag, 19.6.73",
+      "date_blocks": [
+        "70-5"
+      ],
+      "date_text": "19.6.1973",
+      "date_iso": "1973-06-19",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Wir von der als haben uns wiederholt gegen das BHG, aber auch gegen einen Streik ausgesprochen, mit guten Gründen, wie wir meinen!",
+      "date": "",
+      "start_page": 71,
+      "end_page": 71,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wir von der a l s haben uns wiederholt gegen das BHG, aber auch gegen einen Streik ausgesprochen, mit guten Gründen, wie wir meinen !",
+      "title_blocks": [
+        "71-5"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft liberaler Studenten - a l s\nVerantwortlich: Hartmut Paulsen",
+          "blocks": [
+            "71-15"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "aktionsgemeinschaft liberaler Studenten - a l s\nVerantwortlich: Hartmut Paulsen",
+          "blocks": [
+            "71-15"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "SHB oder HB?",
+      "date": "",
+      "start_page": 72,
+      "end_page": 72,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SHB oder HB?",
+      "title_blocks": [
+        "72-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionsgemeinschaft\nliberaler\nStudenten - a l s",
+          "blocks": [
+            "72-4"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Aktionsgemeinschaft liberaler Studenten - a l s\nVerantwortlich: Schmid/Pöllath",
+          "blocks": [
+            "72-8"
+          ],
+          "surface": "Schmid",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Aktionsgemeinschaft liberaler Studenten - a l s\nVerantwortlich: Schmid/Pöllath",
+          "blocks": [
+            "72-8"
+          ],
+          "surface": "Pöllath",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "RCDS - was is?",
+      "date": "",
+      "start_page": 73,
+      "end_page": 74,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS — was is ?",
+      "title_blocks": [
+        "73-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "a k t i o n s g e m e i n s c h a f t\nl i b e r a l e r\ns t u d e n t e n",
+          "blocks": [
+            "73-4"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: W. Heinrich",
+          "blocks": [
+            "74-4"
+          ],
+          "surface": "W. Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Wahl-Info",
+      "date": "",
+      "start_page": 75,
+      "end_page": 78,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahl-Info",
+      "title_blocks": [
+        "75-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "liberaler\nstudenten\nals",
+          "blocks": [
+            "75-1",
+            "75-2",
+            "75-3"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: vogel\nturjanica",
+          "blocks": [
+            "77-5"
+          ],
+          "surface": "vogel",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: vogel\nturjanica",
+          "blocks": [
+            "77-5"
+          ],
+          "surface": "turjanica",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-02-09",
+      "received_evidence": "A purple rectangular stamp with the text 'UP KÖLN-BURG einheben am: 9. FEB. 1973'.",
+      "received_blocks": [
+        "75-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Per aspera ad AStA!",
+      "date": "",
+      "start_page": 79,
+      "end_page": 80,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Per aspera ad AStA !",
+      "title_blocks": [
+        "79-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nstudenten",
+          "blocks": [
+            "79-4"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff .",
+          "blocks": [
+            "80-9"
+          ],
+          "surface": "Wolfram Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff .",
+          "blocks": [
+            "80-9"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff .",
+          "blocks": [
+            "80-9"
+          ],
+          "surface": "Richard Schmid",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff .",
+          "blocks": [
+            "80-9"
+          ],
+          "surface": "Gilbert Wolff",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-01-19",
+      "received_evidence": "19. JAN. 1973",
+      "received_blocks": [
+        "79-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Per aspera ad AStA!",
+      "date": "",
+      "start_page": 81,
+      "end_page": 82,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Per aspera ad AStA !",
+      "title_blocks": [
+        "81-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "aktionsgemeinschaft\nliberaler\nstudenten",
+          "blocks": [
+            "81-4"
+          ],
+          "surface": "als",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "als"
+          ]
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff",
+          "blocks": [
+            "82-9"
+          ],
+          "surface": "Wolfram Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff",
+          "blocks": [
+            "82-9"
+          ],
+          "surface": "Hartmut Paulsen",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff",
+          "blocks": [
+            "82-9"
+          ],
+          "surface": "Richard Schmid",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        },
+        {
+          "evidence": "Für die a l s: Wolfram Heinrich, Hartmut Paulsen, Richard Schmid, Gilbert Wolff",
+          "blocks": [
+            "82-9"
+          ],
+          "surface": "Gilbert Wolff",
+          "role": "signatory",
+          "function": "",
+          "marker": "Für die a l s"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Gegen die Verfolgung fortschrittlicher ausländischer Kommilitonen und ihrer Organisationen",
+      "date": "",
+      "start_page": 83,
+      "end_page": 84,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen die Verfolgung fortschrittlicher ausländischer\nKommilitonen und ihrer Organisationen",
+      "title_blocks": [
+        "83-5"
+      ],
+      "title_type": "original",
+      "series": "Erläuterungen zum Aktionsprogramm",
+      "issue": "Blatt...9...",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: Demokrat. Aktionsbündnis/chem. FS\npresserechtl. verantw: Eggerdinger",
+          "blocks": [
+            "84-8"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Demokrat. Aktionsbündnis/chem. FS\npresserechtl. verantw: Eggerdinger",
+          "blocks": [
+            "84-8"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "received_date": "1973-02-06",
+      "received_evidence": "A rectangular stamp from the University of Regensburg (UB Regensburg) with the text 'UB Regensburg eingeleiten am: 6. FEB. 1973'.",
+      "received_blocks": [
+        "83-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "Aktionsprogramm zum demokratischen Kampf am Fachbereich Wirtschaftswissenschaft",
+      "date": "",
+      "start_page": 85,
+      "end_page": 87,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AKTIONSPROGRAMM ZUM DEMOKRATISCHEN KAMPF AM FACHBEREICH\nWIRTSCHAFTSWISSENSCHAFT",
+      "title_blocks": [
+        "85-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Vorgelegt vom demokratischen Aktionsbündnis/ehemalige Fachschaft\nWiWi.",
+          "blocks": [
+            "85-4"
+          ],
+          "surface": "demokratisches Aktionsbündnis/ehemalige Fachschaft WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Regensburg, den 15.1.73",
+      "date_blocks": [
+        "85-2"
+      ],
+      "date_text": "15.1.1973",
+      "date_iso": "1973-01-15",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-06",
+      "received_evidence": "A rectangular stamp from the University of Regensburg (UB Regensburg) with the text 'UB Regensburg', 'eingelaufen', 'am: 6. FEB. 1973'.",
+      "received_blocks": [
+        "85-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Gegen die undemokratischen Berufs- und Ausbildungsverbote für Demokraten und Sozialisten",
+      "date": "",
+      "start_page": 88,
+      "end_page": 89,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GEGEN DIE UNDEMOKRATISCHEN BERUFS- u. AUSBILDUNGSVERBOTE\nFÜR DEMOKRATEN UND SOZIALISTEN",
+      "title_blocks": [
+        "88-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 5",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM!FS",
+          "blocks": [
+            "88-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: Sepp Aigner, 84 Rgbg,\nMüllerstr. 1",
+          "blocks": [
+            "89-4"
+          ],
+          "surface": "Sepp Aigner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-02-26",
+      "received_evidence": "A purple rectangular stamp from the 'UB Regensburg' (University Library of Regensburg) with the date '26. FEB. 1973'. A large handwritten number '5' is superimposed over the stamp. To the right of the stamp is a blue handwritten letter 'F'.",
+      "received_blocks": [
+        "88-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "Wählen!",
+      "date": "",
+      "start_page": 90,
+      "end_page": 91,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wählen!",
+      "title_blocks": [
+        "90-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "90-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "91-5"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "91-5"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "91-5"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 92,
+      "end_page": 93,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "92-6"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 1",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUNDNIS/EHEM: FS",
+          "blocks": [
+            "92-2"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Demokratisches Aktionsbündnis/ eheml. FS WiWi\nPresserechtl.: Eggerdinger",
+          "blocks": [
+            "93-10"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-01-31",
+      "received_evidence": "A rectangular stamp from the University of Regensburg (UB Regensburg) with the text 'eingelaufen' and the date 'am: 31. JAN. 1973'.",
+      "received_blocks": [
+        "92-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 94,
+      "end_page": 95,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "94-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 1",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM: FS",
+          "blocks": [
+            "94-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "verantwortlich. Demokratisches Aktionsbündnis/ eheml. FS WiWi\nPresserechtl.: Eggerdinger",
+          "blocks": [
+            "95-10"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 96,
+      "end_page": 97,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "96-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 1",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSbÜNDNIS/EHEM: FS",
+          "blocks": [
+            "96-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Demokratisches Aktionsbündnis/ eheml. FS WiWi\nPresserechtl.: Eggerdinger",
+          "blocks": [
+            "97-10"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Folgende Kandidaten des demokratischen Aktionsbündnisses/ehem. FS stellen sich bei den Fachschaftsratswahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
+      "date": "",
+      "start_page": 98,
+      "end_page": 99,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Folgende Kandidaten des demokratischen Aktionsbünd-\nnisses/ehem. FS stellen sich bei den Fachschaftsrats-\nwahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
+      "title_blocks": [
+        "98-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUÑDNIS/EHEM. FS\nAM FB WiWi",
+          "blocks": [
+            "98-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: demokratisches Aktionsbündnis/ehem. FS\npresserechtlich: Lux",
+          "blocks": [
+            "98-5"
+          ],
+          "surface": "Lux",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Für verbesserte Ausbildungsbedingungen der Wirtschaftsphilologen",
+      "date": "",
+      "start_page": 100,
+      "end_page": 101,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Für verbesserte Ausbildungsbedingungen der\nWirtschaftsphilologen",
+      "title_blocks": [
+        "100-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 3",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSbündnis/EHEM! FS",
+          "blocks": [
+            "100-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "Folgende Kandidaten des demokratischen Aktionsbündnisses/ehem. FS stellen sich bei den Fachschaftsratswahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
+      "date": "",
+      "start_page": 102,
+      "end_page": 103,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Folgende Kandidaten des demokratischen Aktionsbünd-\nnisses/ehem. FS stellen sich bei den Fachschaftsrats-\nwahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
+      "title_blocks": [
+        "102-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM. FS\nAM FB WiWi",
+          "blocks": [
+            "102-3"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "demokratisches_aktionsb_ndnis_ehemalige_fs"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: demokratisches Aktionsbündnis/ehem. FS\npresserechtlich: Lux",
+          "blocks": [
+            "102-6"
+          ],
+          "surface": "Lux",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Für verbesserte Ausbildungsbedingungen der Wirtschaftsphilologen",
+      "date": "",
+      "start_page": 104,
+      "end_page": 105,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Für verbesserte Ausbildungsbedingungen der\nWirtschaftsphilologen",
+      "title_blocks": [
+        "104-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 3",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM. FS",
+          "blocks": [
+            "104-2"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "Kommilitonen! Die Ausbildungssituation stellt sich im Augenblick folgendermaßen dar:",
+      "date": "",
+      "start_page": 106,
+      "end_page": 107,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!\nDie\nAusbildungssituation\nstellt sich im Augenblick folgendermaßen dar:",
+      "title_blocks": [
+        "106-6",
+        "106-7"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 4",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSbÜNDNIS/EHEM. FS",
+          "blocks": [
+            "106-2"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1976-01-31",
+      "received_evidence": "eingelaufen am: 31. JAN. 1976",
+      "received_blocks": [
+        "106-1"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Gegen die undemokratischen Berufs- und Ausbildungsverbote für Demokraten und Sozialisten",
+      "date": "",
+      "start_page": 108,
+      "end_page": 109,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GEGEN DIE UNDEMOKRATISCHEN BERUFS- u. AUSBILDUNGSVERBOTE\nFÜR DEMOKRATEN UND SOZIALISTEN",
+      "title_blocks": [
+        "108-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 5",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBU\nN\nDNIS/EHEM!FS",
+          "blocks": [
+            "108-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: Sepp Aigner, 84 Rgbg,\nMüllerstr. 1",
+          "blocks": [
+            "109-4"
+          ],
+          "surface": "Sepp Aigner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Gegen die undemokratischen Berufs- und Ausbildungsverbote für Demokraten und Sozialisten",
+      "date": "",
+      "start_page": 110,
+      "end_page": 111,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GEGEN DIE UNDEMOKRATISCHEN BERUFS- u. AUSBILDUNGSVERBOTE\nFÜR DEMOKRATEN UND SOZIALISTEN",
+      "title_blocks": [
+        "110-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 5",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBU\nN\nDNIS/EHEM!FS",
+          "blocks": [
+            "110-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: Sepp Aigner, 84 Rgbg,\nMüllerstr. 1",
+          "blocks": [
+            "111-4"
+          ],
+          "surface": "Sepp Aigner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 112,
+      "end_page": 113,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "112-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 6",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUND/ EHEM. FB Regensburg",
+          "blocks": [
+            "112-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich: Demokratisches Aktionsbündnis/ehemalige FS WiWi\nPresserechtl.: Köpnick",
+          "blocks": [
+            "113-7"
+          ],
+          "surface": "Köpnick",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 114,
+      "end_page": 115,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "114-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 6",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBDNIS/EHEM. FS",
+          "blocks": [
+            "114-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich: Demokratisches Aktionsbündnis/ehemalige FS WiWi\nPresserechtl.: Köpnick",
+          "blocks": [
+            "115-7"
+          ],
+          "surface": "Köpnick",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 116,
+      "end_page": 117,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "116-5"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zum Aktionsprogramm",
+      "issue": "Blatt Nr. 6",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSZENTRUM/EBEN. FB",
+          "blocks": [
+            "116-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich: Demokratisches Aktionsbündnis/ehemalige FS WiWi\nPresserechtl.: Köpnick",
+          "blocks": [
+            "117-7"
+          ],
+          "surface": "Köpnick",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Nomen est omen, in der Tat. Messerscharf schließt der RCDS ...",
+      "date": "",
+      "start_page": 118,
+      "end_page": 119,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "'Nomen est omen', in der Tat. Messerscharf schließt der RCDS",
+      "title_blocks": [
+        "118-5"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONS-BÜNDNIS/\nEHEMALIGE FACHSCHAFT",
+          "blocks": [
+            "118-2"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige Fachschaft",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Nomen est omen, in der Tat. Messerscharf schließt der RCDS ...",
+      "date": "",
+      "start_page": 120,
+      "end_page": 121,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "'Nomen est omen', in der Tat. Messerscharf schließt der RCDS",
+      "title_blocks": [
+        "120-4"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUÑDNIS/\nEHEMALIGE FACHSCHAFT",
+          "blocks": [
+            "120-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige Fachschaft",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Nomen est omen, in der Tat. Messerscharf schließt der RCDS ...",
+      "date": "",
+      "start_page": 122,
+      "end_page": 122,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "'Nomen est omen', in der Tat. Messerscharf schließt der RCDS",
+      "title_blocks": [
+        "122-4"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBU\nnd\nNIS/\nEHEMALIGE FACHSCHAFT",
+          "blocks": [
+            "122-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehemalige Fachschaft",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "Für die verfassten Studentenschaften und ihr politisches Mandat!",
+      "date": "",
+      "start_page": 123,
+      "end_page": 124,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR DIE VERFASSTEN STUDENTENSCHAFTEN UND IHR\nPOLITISCHES MANDAT !",
+      "title_blocks": [
+        "123-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zu den Fachschaftsratswahlen",
+      "issue": "8",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM.FS",
+          "blocks": [
+            "123-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presserechtlich: E. Herzog",
+          "blocks": [
+            "124-7"
+          ],
+          "surface": "E. Herzog",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "Für die verfassten Studentenschaften und ihr politisches Mandat!",
+      "date": "",
+      "start_page": 125,
+      "end_page": 126,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR DIE VERFASSTEN STUDENTENSCHAFTEN UND IHR\nPOLITISCHES MANDAT !",
+      "title_blocks": [
+        "125-6"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zu den Fachschaftsratswahlen",
+      "issue": "8",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSBUENDNIS/EHEM. DS",
+          "blocks": [
+            "125-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presserechtlich: E. Herzog",
+          "blocks": [
+            "126-7"
+          ],
+          "surface": "E. Herzog",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-02-06",
+      "received_evidence": "am: 6. FEB. 1973",
+      "received_blocks": [
+        "125-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 53,
+      "title": "Für die verfassten Studentenschaften und ihr politisches Mandat!",
+      "date": "",
+      "start_page": 127,
+      "end_page": 128,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR DIE VERFASSTEN STUDENTENSCHAFTEN UND IHR\nPOLITISCHES MANDAT !",
+      "title_blocks": [
+        "127-4"
+      ],
+      "title_type": "original",
+      "series": "Veröffentlichungen zu den Fachschaftsratswahlen",
+      "issue": "8",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHES AKTIONSbündnis/EHEM.FS",
+          "blocks": [
+            "127-1"
+          ],
+          "surface": "Demokratisches Aktionsbündnis/ehem. FS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presserechtlich: E. Herzog",
+          "blocks": [
+            "128-7"
+          ],
+          "surface": "E. Herzog",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 54,
+      "title": "Frieden und Freundschaft zwischen unseren Völkern",
+      "date": "",
+      "start_page": 129,
+      "end_page": 130,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Frieden und Freundschaft\nzwischen unseren Völkern",
+      "title_blocks": [
+        "129-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DFU Deutsche Friedens-Union",
+          "blocks": [
+            "130-19"
+          ],
+          "surface": "DFU Deutsche Friedens-Union",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dfu"
+          ]
+        },
+        {
+          "evidence": "Herausgeber: DFU, 5 Köln 30, Venloer Straße 383, Verantwortlich: Horst Trapp, Druck: Offset-Marketing-Druck, Duisburg",
+          "blocks": [
+            "130-21"
+          ],
+          "surface": "Horst Trapp",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "am 19. Mai 1973",
+      "date_blocks": [
+        "129-10"
+      ],
+      "date_text": "19. Mai 1973",
+      "date_iso": "1973-05-19",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "Interessenvertretung??? Interessenvertretung!!!",
+      "date": "",
+      "start_page": 131,
+      "end_page": 132,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Interessenvertretung??? Interessenvertretung !!!",
+      "title_blocks": [
+        "131-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DM - DM - DEMOKRATISCHE MITTE - DM - DM",
+          "blocks": [
+            "131-1"
+          ],
+          "surface": "Demokratische Mitte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dm"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: M.Röttger",
+          "blocks": [
+            "131-13"
+          ],
+          "surface": "M. Röttger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "2.2.73",
+      "date_blocks": [
+        "131-1"
+      ],
+      "date_text": "2.2.1973",
+      "date_iso": "1973-02-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer 'M. Röttger': Name 'M. Röttger' nicht im Beleg"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "FB Mathematik: 15 HiWi-Stellen in Gefahr",
+      "date": "",
+      "start_page": 133,
+      "end_page": 134,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FB Mathematik: 15 HiWi-Stellen in Gefahr",
+      "title_blocks": [
+        "133-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Der Fachschaftsrat Mathematik und Physik",
+          "blocks": [
+            "134-4"
+          ],
+          "surface": "Fachschaftsrat Mathematik und Physik",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Regensburg, 29. 11.73",
+      "date_blocks": [
+        "133-1"
+      ],
+      "date_text": "29.11.1973",
+      "date_iso": "1973-11-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Fachschafts-Info",
+      "date": "",
+      "start_page": 135,
+      "end_page": 146,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FACHSCHAFTS\nINFO",
+      "title_blocks": [
+        "135-3"
+      ],
+      "title_type": "original",
+      "series": "Fachschafts-Info",
+      "issue": "MAI '73",
+      "issuers": [],
+      "date_evidence": "MAI '73",
+      "date_blocks": [
+        "135-4"
+      ],
+      "date_text": "Mai 1973",
+      "date_iso": "1973-05",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.85,
+      "received_date": "1973-05-25",
+      "received_evidence": "A purple rectangular stamp from the University of Regensburg. The text inside reads 'UB Regensburg', 'Eingelaufen', and 'am 25. MAI 1973'.",
+      "received_blocks": [
+        "135-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 58,
+      "title": "Persönliche Bekanntschaft gibt Ausschlag bei Assistentenstellenbesetzung",
+      "date": "",
+      "start_page": 147,
+      "end_page": 148,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Persönliche Bekanntschaft\ngibt Ausslag bei\nAssistentenstellenbesetzung",
+      "title_blocks": [
+        "147-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 149,
+      "end_page": 152,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Kommilitonen!",
+      "title_blocks": [
+        "149-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaftsrat Psychologie",
+          "blocks": [
+            "149-1",
+            "150-11"
+          ],
+          "surface": "Fachschaftsrat Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "am Mittwoch den 28.11.",
+      "date_blocks": [
+        "149-3"
+      ],
+      "date_text": "28.11.1973",
+      "date_iso": "1973-11-28",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 60,
+      "title": "Psychologische Testverfahren in der Kritik",
+      "date": "",
+      "start_page": 153,
+      "end_page": 153,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "\" P S Y C H O L O G I S C H E   T E S T V E R F A H R E N\nI N   D E R   K R I T I K \"",
+      "title_blocks": [
+        "153-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "12. - 17. Juni 1973",
+      "date_blocks": [
+        "153-8"
+      ],
+      "date_text": "12.-17. Juni 1973",
+      "date_iso": "1973-06-12",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 61,
+      "title": "Weg mit dem Berufsverbot für Fred Karl",
+      "date": "",
+      "start_page": 154,
+      "end_page": 154,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WEG\nMIT DEM\nBERUFS-\nVERBOT\nFÜR\nFRED\nKARL",
+      "title_blocks": [
+        "154-7"
+      ],
+      "title_type": "original",
+      "series": "Sozpol Info",
+      "issue": "29",
+      "issuers": [
+        {
+          "evidence": "Herausgeber Fachschaftsrat",
+          "blocks": [
+            "154-4"
+          ],
+          "surface": "Fachschaftsrat",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich\nUli Brendgens",
+          "blocks": [
+            "154-5",
+            "154-6"
+          ],
+          "surface": "Uli Brendgens",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "23. Oktober 73",
+      "date_blocks": [
+        "154-1"
+      ],
+      "date_text": "23. Oktober 1973",
+      "date_iso": "1973-10-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "4 Beispiele - 1 Zusammenhang",
+      "date": "",
+      "start_page": 155,
+      "end_page": 156,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "4 Beispiele - 1 Zusammenhang",
+      "title_blocks": [
+        "155-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.5,
+      "_date_dropped": "12. November 1973",
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Der Skandal um Thomas Neumann",
+      "date": "",
+      "start_page": 157,
+      "end_page": 157,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der Skandal um Thomas Neumann",
+      "title_blocks": [
+        "157-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DETLEV STANKIEWICZ",
+          "blocks": [
+            "157-20"
+          ],
+          "surface": "Detlev Stankiewicz",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "zeitschrift",
+      "confidence": 0.7,
+      "_date_dropped": "20. September 1973",
+      "_grounding": []
+    },
+    {
+      "id": 64,
+      "title": "Berufsverbot für F. Karl?",
+      "date": "",
+      "start_page": 158,
+      "end_page": 159,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Berufsverbot für F. Karl?",
+      "title_blocks": [
+        "158-18"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "26",
+      "issuers": [
+        {
+          "evidence": "Hrsg.: FS-Rat Sozpol",
+          "blocks": [
+            "158-26"
+          ],
+          "surface": "FS-Rat Sozpol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich:\nHelga Karl",
+          "blocks": [
+            "158-26"
+          ],
+          "surface": "Helga Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "23/24. Juli 73",
+      "date_blocks": [
+        "158-3"
+      ],
+      "date_text": "23./24. Juli 1973",
+      "date_iso": "1973-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 65,
+      "title": "Heute, Dienstag 3, Juli findet um 15.00 eine Wahl-Vollversammlung statt in H 02",
+      "date": "",
+      "start_page": 160,
+      "end_page": 161,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Heute, Dienstag 3, Juli findet um 15.00 eine\nWahl - Vollversammlung statt in H 02",
+      "title_blocks": [
+        "160-3",
+        "160-4"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "24",
+      "issuers": [
+        {
+          "evidence": "Verantw.: Helga Karl",
+          "blocks": [
+            "160-19"
+          ],
+          "surface": "Helga Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "Juli 73",
+      "date_blocks": [
+        "160-2"
+      ],
+      "date_text": "Juli 1973",
+      "date_iso": "1973-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "series nicht im Text: 'Sozpol-Info'"
+      ]
+    },
+    {
+      "id": 66,
+      "title": "Sozialkunde und das BHG oder: Anpassung versus Kritik",
+      "date": "",
+      "start_page": 162,
+      "end_page": 163,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZIALKUNDE\nUND DAS BHG\nODER:\nANPASSUNG versus KRITIK",
+      "title_blocks": [
+        "162-4"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "22",
+      "issuers": [
+        {
+          "evidence": "Franz Laferton",
+          "blocks": [
+            "163-9"
+          ],
+          "surface": "Franz Laferton",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "4.6.73",
+      "date_blocks": [
+        "162-2"
+      ],
+      "date_text": "4. Juni 1973",
+      "date_iso": "1973-06-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "Offener Brief an RCDS / DM bitte wenden (S. 2)",
+      "date": "",
+      "start_page": 164,
+      "end_page": 165,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Offener Brief an RCDS / DM bitte wenden (S. 2)",
+      "title_blocks": [
+        "164-1"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "21",
+      "issuers": [
+        {
+          "evidence": "SOZPOL - INFO 21\nInformationen aus der Fachschaft Soziologie - Politologie -\nSozialkunde 21. Mai 73",
+          "blocks": [
+            "164-2",
+            "164-3"
+          ],
+          "surface": "Fachschaft Soziologie - Politologie - Sozialkunde",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Helga Karl (vom FSR Sozpol\nbeauftragt)",
+          "blocks": [
+            "165-12"
+          ],
+          "surface": "Helga Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "vom FSR Sozpol beauftragt"
+        }
+      ],
+      "date_evidence": "21. Mai 73",
+      "date_blocks": [
+        "164-3"
+      ],
+      "date_text": "21. Mai 1973",
+      "date_iso": "1973-05-21",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "Offener Brief an RCDS / DM bitte wenden (S. 2)"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 68,
+      "title": "Gegen den totalen Numerus Clausus für Soziologen und Sozialkundler",
+      "date": "",
+      "start_page": 166,
+      "end_page": 167,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen den totalen Numerus Clausus\nfür Soziologen und Sozialkundler",
+      "title_blocks": [
+        "166-9"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "19",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich verantwortlich: Philippin. Biedenkamp 84A, Giesbachtstr 20",
+          "blocks": [
+            "167-10"
+          ],
+          "surface": "Philippin. Biedenkamp",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "Mai 73",
+      "date_blocks": [
+        "166-3"
+      ],
+      "date_text": "Mai 1973",
+      "date_iso": "1973-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-05-08",
+      "received_evidence": "Stamp: UB Regensburg, am: 8. MAI 1973",
+      "received_blocks": [
+        "166-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 69,
+      "title": "Gegen den totalen Numerus Clausus für Soziologen und Sozialkundler",
+      "date": "",
+      "start_page": 168,
+      "end_page": 169,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen den totalen Numerus Clausus\nfür Soziologen und Sozialkundler",
+      "title_blocks": [
+        "168-8"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "19",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich verantwortlich: Philippine Bickelmeier 84 R, Grisesbacherstr 20",
+          "blocks": [
+            "169-11"
+          ],
+          "surface": "Philippine Bickelmeier",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "Mai 73",
+      "date_blocks": [
+        "168-3"
+      ],
+      "date_text": "Mai 1973",
+      "date_iso": "1973-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 70,
+      "title": "Lehrauftrag für NC-bedrohtes Fach Soziologie abgelehnt!",
+      "date": "",
+      "start_page": 170,
+      "end_page": 171,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Lehrauftrag für NC-bedrohtes Fach Soziologie abgelehnt!",
+      "title_blocks": [
+        "170-9"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "12",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich verantwortlich: Helga Karl 8401 Pentling, Weichselmühle",
+          "blocks": [
+            "171-20"
+          ],
+          "surface": "Helga Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "Mai 73",
+      "date_blocks": [
+        "170-3"
+      ],
+      "date_text": "Mai 1973",
+      "date_iso": "1973-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 71,
+      "title": "Sozpol-Info 17",
+      "date": "",
+      "start_page": 172,
+      "end_page": 178,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZPOL-INFO 17",
+      "title_blocks": [
+        "172-1"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "17",
+      "issuers": [
+        {
+          "evidence": "Sozpol-Info, hrsg. vom Fachschafts-\nrat der FS Sozpol:\nRia Brenner, Angela Hüttermann,\nHelga Karl, Hans Ernst Klapproth,\nFranz Laferton, Reinhard Würkner.",
+          "blocks": [
+            "172-26",
+            "172-27"
+          ],
+          "surface": "Fachschaftsrat der FS Sozpol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "APRIL / MAI 1973",
+      "date_blocks": [
+        "172-2"
+      ],
+      "date_text": "April/Mai 1973",
+      "date_iso": "1973",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 72,
+      "title": "Sozpol-Info 16",
+      "date": "",
+      "start_page": 179,
+      "end_page": 184,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZPOL-INFO 16",
+      "title_blocks": [
+        "179-1"
+      ],
+      "title_type": "original",
+      "series": "Sozpol-Info",
+      "issue": "16",
+      "issuers": [],
+      "date_evidence": "Januar 1973",
+      "date_blocks": [
+        "179-3"
+      ],
+      "date_text": "Januar 1973",
+      "date_iso": "1973-01",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 73,
+      "title": "Vollversammlung",
+      "date": "",
+      "start_page": 185,
+      "end_page": 185,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Vollversammlung Vollversammlung Vollversammlung\nVollversammlung Vollversammlung Vollversammlung\nVollversammlung Vollversammlung Vollversammlung",
+      "title_blocks": [
+        "185-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS - Sozpol",
+          "blocks": [
+            "185-1"
+          ],
+          "surface": "FS Sozpol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Mi, 24.1, 11oo",
+      "date_blocks": [
+        "185-16"
+      ],
+      "date_text": "Mittwoch, 24. Januar, 11 Uhr",
+      "date_iso": "1973-01-24",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 74,
+      "title": "In den Fächern Soziologie, Politologie, Sozialkunde werden alle Veranstaltungen bestreikt!",
+      "date": "",
+      "start_page": 186,
+      "end_page": 186,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "In den Fächern Soziologie, Politologie, Sozialkunde werden\nalle\nVeranstaltungen bestreikt!",
+      "title_blocks": [
+        "186-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS-Sozpol",
+          "blocks": [
+            "186-1"
+          ],
+          "surface": "FS Sozpol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Presserechtlich: Helga Karl, Weichselmühle",
+          "blocks": [
+            "186-13"
+          ],
+          "surface": "Helga Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": [
+        "title: Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 75,
+      "title": "Die Politik dieses AStA: Liquidation der FS-Arbeit",
+      "date": "",
+      "start_page": 187,
+      "end_page": 189,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Politik dieses AStA: Liquidation der FS-Arbeit",
+      "title_blocks": [
+        "187-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS Sprach-Lit",
+          "blocks": [
+            "188-11"
+          ],
+          "surface": "FS Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "10. Mai 19...",
+      "date_blocks": [
+        "187-2"
+      ],
+      "date_text": "10. Mai 1973",
+      "date_iso": "1973-05-10",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 76,
+      "title": "",
+      "date": "",
+      "start_page": 190,
+      "end_page": 190,
+      "confirmed": true,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 77,
+      "title": "Semesterplanung für das WS 73/74 bereits abgeschlossen!",
+      "date": "",
+      "start_page": 191,
+      "end_page": 192,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Semesterplanung für das WS 73/74\nbereits abgeschlossen!",
+      "title_blocks": [
+        "191-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: FS Sprach.-Lit.",
+          "blocks": [
+            "192-2"
+          ],
+          "surface": "FS Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 78,
+      "title": "Die Politik dieses AStA: Liquidation der FS Arbeit",
+      "date": "",
+      "start_page": 193,
+      "end_page": 195,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die Politik dieses AStA: Liquidation der FS Arbeit",
+      "title_blocks": [
+        "194-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS Sprach-Lit",
+          "blocks": [
+            "193-12"
+          ],
+          "surface": "FS Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 79,
+      "title": "AStA-Info: BFdW - Ein Kampfbund für wessen Freiheit?",
+      "date": "",
+      "start_page": 196,
+      "end_page": 196,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ASTA - INFOBFdW*: Ein Kampf-\nbund für\nwessen\nFreiheit?",
+      "title_blocks": [
+        "196-1"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA - INFOBFdW*: Ein Kampf-\nbund für\nwessen\nFreiheit?",
+          "blocks": [
+            "196-1"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "ASTA - INFOBFdW*: Ein Kampf- bund für wessen Freiheit?"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 80,
+      "title": "Gegen das BHG im SS",
+      "date": "",
+      "start_page": 197,
+      "end_page": 197,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Gegen das BHG im SS",
+      "title_blocks": [
+        "197-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "17.V.73",
+      "date_blocks": [
+        "197-4"
+      ],
+      "date_text": "17. Mai 1973",
+      "date_iso": "1973-05-17",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-05-21",
+      "received_evidence": "am: 21. MAI 1973",
+      "received_blocks": [
+        "197-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 81,
+      "title": "Fachschaftsrats-Wahlen",
+      "date": "",
+      "start_page": 198,
+      "end_page": 198,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Fachschaftsrats - Wahlen",
+      "title_blocks": [
+        "198-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: Fachschaft Sprach-Lit.",
+          "blocks": [
+            "198-11"
+          ],
+          "surface": "Fachschaft Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 82,
+      "title": "Semesterplanung für das WS 73/74 bereits abgeschlossen!",
+      "date": "",
+      "start_page": 199,
+      "end_page": 200,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Semesterplanung für das WS 73/74\nbereits abgeschlossen!",
+      "title_blocks": [
+        "199-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS Sprach - Lit.",
+          "blocks": [
+            "199-1",
+            "199-2",
+            "199-3",
+            "199-4"
+          ],
+          "surface": "FS Sprach-Lit.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 83,
+      "title": "Fachbereichsratswahlen im Fachbereich Sprach- und Literaturwissenschaft Juli 73",
+      "date": "",
+      "start_page": 201,
+      "end_page": 201,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FACHBEREICHSRATSWAHLEN\nIM FACHBEREICH\nSPRACH- UND LITERATURWISSENSCHAFT\nJULI 73",
+      "title_blocks": [
+        "201-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LISTE 2\nDEMOKRATISCHE UND SOZIALISTISCHE\nLEHRERSTUDENTEN",
+          "blocks": [
+            "201-4"
+          ],
+          "surface": "Liste 2 Demokratische und Sozialistische Lehrerstudenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "JULI 73",
+      "date_blocks": [
+        "201-1"
+      ],
+      "date_text": "Juli 1973",
+      "date_iso": "1973-07",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-07-02",
+      "received_evidence": "A purple rectangular stamp, oriented upside down. The text inside reads 'Wien, 2. Juli 1973' and 'Fakultät für Germanistik'.",
+      "received_blocks": [
+        "201-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 84,
+      "title": "Grundsätzliches zu den Gremien",
+      "date": "",
+      "start_page": 202,
+      "end_page": 205,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GRUNDSÄTZLICHES ZU DEN\nGREMIEN",
+      "title_blocks": [
+        "202-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_foreign_blocks": [
+        "201-4"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 85,
+      "title": "Rechenschaftsbericht",
+      "date": "",
+      "start_page": 206,
+      "end_page": 206,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rechenenschaftsbericht",
+      "title_blocks": [
+        "206-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 86,
+      "title": "Für die Liste demokratischer und sozialistischer Lehrerstudenten kandidieren zum Fachbereichsrat",
+      "date": "",
+      "start_page": 207,
+      "end_page": 207,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR DIE LISTE DEMOKRATISCHER UND SOZIALISTISCHER LEHRER-\nSTUDENTEN KANDIDIEREN ZUM FACHBEREICHSRAT:",
+      "title_blocks": [
+        "207-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "WÄHLT LISTE 2",
+          "blocks": [
+            "207-3"
+          ],
+          "surface": "Liste 2",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 87,
+      "title": "Semesterplanung für das WS 73/74 bereits abgeschlossen!",
+      "date": "",
+      "start_page": 208,
+      "end_page": 209,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Semesterplanung für das WS 73/74\nbereits abgeschlossen!",
+      "title_blocks": [
+        "208-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: FS Sprach.-Lit.",
+          "blocks": [
+            "209-1"
+          ],
+          "surface": "FS Sprach.-Lit.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 88,
+      "title": "Wählt die Kandidaten des gewerkschaftlich orientierten Bündnisses in Fachschafts- und Fachbereichsrat von Sprach/Lit",
+      "date": "",
+      "start_page": 210,
+      "end_page": 211,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WÄHLT DIE KANDIDATEN DES GEWERKSCHAFTLICH ORIENTIERTEN\nBÜNDNISSES IN FACHSCHAFTS- UND FACHBEREICHSRAT VON",
+      "title_blocks": [
+        "210-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "GOB",
+          "blocks": [
+            "210-6",
+            "210-9"
+          ],
+          "surface": "GOB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gob"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 89,
+      "title": "Anglisten-Info",
+      "date": "",
+      "start_page": 212,
+      "end_page": 213,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ANGLISTEN-\nINFO",
+      "title_blocks": [
+        "212-2",
+        "212-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Hg: FSR-SprachLit (Mafag/GEW)",
+          "blocks": [
+            "212-7"
+          ],
+          "surface": "FSR-SprachLit (Mafag/GEW)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gew",
+            "mafag"
+          ]
+        }
+      ],
+      "date_evidence": "Jüni 73",
+      "date_blocks": [
+        "212-4"
+      ],
+      "date_text": "Juni 1973",
+      "date_iso": "1973-06",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 90,
+      "title": "3.1.5 Englisch",
+      "date": "",
+      "start_page": 214,
+      "end_page": 215,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "3.1.5 Englisch",
+      "title_blocks": [
+        "214-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 91,
+      "title": "3.1.5/5",
+      "date": "",
+      "start_page": 216,
+      "end_page": 218,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "3.1.5/5",
+      "title_blocks": [
+        "216-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 92,
+      "title": "Proseminare",
+      "date": "",
+      "start_page": 219,
+      "end_page": 220,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Proseminare:",
+      "title_blocks": [
+        "219-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 93,
+      "title": "Interessenvertretung",
+      "date": "",
+      "start_page": 221,
+      "end_page": 223,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Interessenvertretung",
+      "title_blocks": [
+        "221-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FSR - Sprach Lit\nMHG - GEW",
+          "blocks": [
+            "223-14",
+            "223-15"
+          ],
+          "surface": "FSR-Sprach Lit (MHG-GEW)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gew",
+            "mhg"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 94,
+      "title": "Gewerkschaft Erziehung und Wissenschaft - Fachschaftsratswahlen im Fachbereich Sprach- und Literaturwissenschaften",
+      "date": "",
+      "start_page": 224,
+      "end_page": 224,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "G GEWERKSCHAFT ERZIEHUNG UND WISSENSCHAFT - FACHSCHAFTSRATS-\nE WAHLEN IM FACHBEREICH SPRACH-UND LITERATURWISSENSCHAFTEN\nW",
+      "title_blocks": [
+        "224-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "G GEW",
+          "blocks": [
+            "224-2"
+          ],
+          "surface": "GEW",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gew"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 95,
+      "title": "Professoren unfähig zu Gremienarbeit - 8 P. boykottieren Fachbereichsrat Sprache/Liter.",
+      "date": "",
+      "start_page": 225,
+      "end_page": 226,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Professoren unfähig zu Gremienarbeit -\n8P. boykottieren Fachbereichsrat Sprache/Liter.",
+      "title_blocks": [
+        "225-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FSR - Sprach - Lit\nGEW - Mafag",
+          "blocks": [
+            "226-11"
+          ],
+          "surface": "FSR-Sprach-Lit (GEW-Mafag)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "gew",
+            "mafag"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 96,
+      "title": "Ab heute wird gestreikt!",
+      "date": "",
+      "start_page": 227,
+      "end_page": 227,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Ab heute wird gestreikt !",
+      "title_blocks": [
+        "227-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: FS Sprach-Lit",
+          "blocks": [
+            "227-9"
+          ],
+          "surface": "FS Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 97,
+      "title": "Ab heute wird gestreikt!",
+      "date": "",
+      "start_page": 228,
+      "end_page": 228,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Ab heute wird gestreikt !",
+      "title_blocks": [
+        "228-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: FS Sprach-Lit",
+          "blocks": [
+            "228-9"
+          ],
+          "surface": "FS Sprach-Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 98,
+      "title": "Info zum Entwurf eines Bayerischen Hochschulgesetzes (BHG)",
+      "date": "",
+      "start_page": 229,
+      "end_page": 229,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "INFO ZUM ENTWURF EINES BAYERISCHEN HOCHSCHULGESETZES (BHG)",
+      "title_blocks": [
+        "229-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS theol",
+          "blocks": [
+            "229-1"
+          ],
+          "surface": "FS theol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 99,
+      "title": "Streikaufruf",
+      "date": "",
+      "start_page": 230,
+      "end_page": 231,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STREIKAUFRUF",
+      "title_blocks": [
+        "230-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Flugblatt des Kommunistischen Hochschulbundes (Marxisten-Leninisten)\nfür die Wirtschaftsstudenten der Uni Regensburg 21.5.73",
+          "blocks": [
+            "230-3"
+          ],
+          "surface": "Kommunistischer Hochschulbund (Marxisten-Leninisten)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "khb"
+          ]
+        }
+      ],
+      "date_evidence": "21.5.73",
+      "date_blocks": [
+        "230-3"
+      ],
+      "date_text": "21.5.1973",
+      "date_iso": "1973-05-21",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 100,
+      "title": "Referat: Politik",
+      "date": "",
+      "start_page": 232,
+      "end_page": 232,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Referat:\nPolitik",
+      "title_blocks": [
+        "232-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 101,
+      "title": "Referat: Lehrerbildung",
+      "date": "",
+      "start_page": 233,
+      "end_page": 233,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Referat: Lehrerbildung",
+      "title_blocks": [
+        "233-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 102,
+      "title": "Wahlen zu den Akademischen Gremien der Universität Regensburg für das Amtsjahr 1973/74",
+      "date": "",
+      "start_page": 234,
+      "end_page": 235,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHLEN\nzu den Akademischen Gremien der Universität Regensburg für das\nAMTSJAHR 1973/74",
+      "title_blocks": [
+        "234-11",
+        "234-12",
+        "234-13"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DER REKTOR",
+          "blocks": [
+            "234-2"
+          ],
+          "surface": "Der Rektor",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rektor"
+          ]
+        },
+        {
+          "evidence": "(Prof. Dr. G. M. Obermair)",
+          "blocks": [
+            "235-7"
+          ],
+          "surface": "Prof. Dr. G. M. Obermair",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "26. JUNI 1973",
+      "date_blocks": [
+        "234-4"
+      ],
+      "date_text": "26. Juni 1973",
+      "date_iso": "1973-06-26",
+      "date_type": "issued",
+      "doc_type": "einladung",
+      "confidence": 0.95,
+      "received_date": "1973-07-02",
+      "received_evidence": "2. JULI 1973",
+      "received_blocks": [
+        "234-14"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "Person als issuer: 'Der Rektor' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 103,
+      "title": "Wichtiger Hinweis zur Parkregelung!",
+      "date": "",
+      "start_page": 236,
+      "end_page": 236,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WICHTIGER HINWEIS ZUR PARKREGELUNG!",
+      "title_blocks": [
+        "236-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "UNIVERSITÄT REGENSBURG\nDER REKTOR\n(Prof. Dr. Gustav M. Obermair)",
+          "blocks": [
+            "236-10",
+            "236-11",
+            "236-12"
+          ],
+          "surface": "Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "UNIVERSITÄT REGENSBURG\nDER REKTOR\n(Prof. Dr. Gustav M. Obermair)",
+          "blocks": [
+            "236-10",
+            "236-11",
+            "236-12"
+          ],
+          "surface": "Prof. Dr. Gustav M. Obermair",
+          "role": "signatory",
+          "function": "Der Rektor",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-06-18",
+      "received_evidence": "18. JUNI 1973",
+      "received_blocks": [
+        "236-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 104,
+      "title": "Rengsburg, den heutigen. Werther Freint und Schbäzi'!",
+      "date": "",
+      "start_page": 237,
+      "end_page": 238,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rengsburg, den heutigen\nWerther Freint und Schbäzi'!",
+      "title_blocks": [
+        "237-1",
+        "237-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "herausgegeben vom RCDS-Uni-Regensburg e. V. Bocksbergerstr. 5",
+          "blocks": [
+            "238-8"
+          ],
+          "surface": "RCDS-Uni-Regensburg e. V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: H. Schaidinger",
+          "blocks": [
+            "238-7"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 105,
+      "title": "Richtigstellung",
+      "date": "",
+      "start_page": 239,
+      "end_page": 239,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Richtigstellung",
+      "title_blocks": [
+        "239-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantw : Schaidinger",
+          "blocks": [
+            "239-15"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "presser.: Alois Karl, Rgbg, Schwandorferstr. 27",
+          "blocks": [
+            "239-16"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "238-8"
+      ],
+      "received_date": "1973-02-17",
+      "received_evidence": "17. FEB. 1973",
+      "received_blocks": [
+        "239-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 106,
+      "title": "Flohrock de Rakete Cologne. Lucky Streik",
+      "date": "",
+      "start_page": 240,
+      "end_page": 241,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FLOHROCK\nDE RAKETE\nCOLOGNE\n• LUCKY STREIK •",
+      "title_blocks": [
+        "240-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SDAJ Sozialistische Deutsche Arbeiterjugend\nMSB SPARTAKUS Marxistischer Studentenbund",
+          "blocks": [
+            "240-9"
+          ],
+          "surface": "SDAJ Sozialistische Deutsche Arbeiterjugend",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sdaj"
+          ]
+        },
+        {
+          "evidence": "SDAJ Sozialistische Deutsche Arbeiterjugend\nMSB SPARTAKUS Marxistischer Studentenbund",
+          "blocks": [
+            "240-9"
+          ],
+          "surface": "MSB SPARTAKUS Marxistischer Studentenbund",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        },
+        {
+          "evidence": "Verantw. f. d. Inh.: Sozialistische Deutsche Arbeiter-Jugend, LV Bayern, 8 Mü. 2\nAlthheimer Eck 5; Tel.: 268052 W. Listl",
+          "blocks": [
+            "241-26"
+          ],
+          "surface": "W. Listl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw. f. d. Inh."
+        }
+      ],
+      "date_evidence": "a m D i e n s t a g d e n 13.3.73",
+      "date_blocks": [
+        "240-4"
+      ],
+      "date_text": "Dienstag den 13.3.73",
+      "date_iso": "1973-03-13",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 107,
+      "title": "14. o. Bundesdelegiertenversammlung des S H B 17./18. 11. 73 in Bonn",
+      "date": "",
+      "start_page": 242,
+      "end_page": 243,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "14. o. Bundesdelegiertenversammlung des S H B 17./18. 11. 73 in Bonn",
+      "title_blocks": [
+        "242-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Sozialdemokratischer Hochschulbund S H B Sozialistischer Hochschulbund",
+          "blocks": [
+            "242-1"
+          ],
+          "surface": "SHB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: hans ernst klapproth, Peter Strieder (Delegierte ddes S H B Regensburg bei der Bundesedelegiertenversammlung des S H B).",
+          "blocks": [
+            "243-12"
+          ],
+          "surface": "hans ernst klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: hans ernst klapproth, Peter Strieder (Delegierte ddes S H B Regensburg bei der Bundesedelegiertenversammlung des S H B).",
+          "blocks": [
+            "243-12"
+          ],
+          "surface": "Peter Strieder",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 108,
+      "title": "Jura-Forum 2",
+      "date": "",
+      "start_page": 244,
+      "end_page": 245,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "J U R A - F O R U M 2",
+      "title_blocks": [
+        "244-1"
+      ],
+      "title_type": "original",
+      "series": "Jura-Forum",
+      "issue": "2",
+      "issuers": [
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "245-5"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB), Gruppe Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "245-5"
+          ],
+          "surface": "Fritz Schindele",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "4.7.1973",
+      "date_blocks": [
+        "245-5"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 109,
+      "title": "Studienreform - in wessen Interesse?",
+      "date": "",
+      "start_page": 246,
+      "end_page": 246,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STUDIENREFORM - IN WESSEN\nINTERESSE ?",
+      "title_blocks": [
+        "246-2"
+      ],
+      "title_type": "original",
+      "series": "SHB-Forum",
+      "issue": "5",
+      "issuers": [
+        {
+          "evidence": "SHB-FORUM 5",
+          "blocks": [
+            "246-1"
+          ],
+          "surface": "SHB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "verantwortl.: hgu ernst klapproth",
+          "blocks": [
+            "246-20"
+          ],
+          "surface": "Ernst Klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortl."
+        }
+      ],
+      "date_evidence": "MO., 25. 6.",
+      "date_blocks": [
+        "246-19"
+      ],
+      "date_text": "Montag, 25. Juni 1973",
+      "date_iso": "1973-06-25",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "SHB-FORUM 5",
+        "MO., 25. 6., 16 00 W 114 : SHB-AK Hochschulpolitik"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 110,
+      "title": "Für antiimperialistische Solidarität - Frieden und Freundschaft",
+      "date": "",
+      "start_page": 247,
+      "end_page": 247,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR ANTIIMPERIALISTISCHE SOLIDARITÄT\n- FRIEDEN UND FREUNDSCHAFT",
+      "title_blocks": [
+        "247-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SOZIALDEMOKRATISCHER\nHOCHSCHULBUND\nOrtsgruppe Regensburg",
+          "blocks": [
+            "247-1",
+            "247-3",
+            "247-4"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund, Ortsgruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "presser.\nReinhard A. Würkner",
+          "blocks": [
+            "247-4",
+            "247-5"
+          ],
+          "surface": "Reinhard A. Würkner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser."
+        }
+      ],
+      "date_evidence": "25.6.73",
+      "date_blocks": [
+        "247-5"
+      ],
+      "date_text": "25.6.73",
+      "date_iso": "1973-06-25",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 111,
+      "title": "Zur materiellen Hochschulmisere: Das BHG schreibt den Bildungsnotstand fort!",
+      "date": "",
+      "start_page": 248,
+      "end_page": 248,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Zur materiellen Hochschulmisere:\nDAS B H G SCHREIBT DEN BILDUNGSNOTSTAND FORT !",
+      "title_blocks": [
+        "248-2",
+        "248-3"
+      ],
+      "title_type": "original",
+      "series": "SHB-Forum",
+      "issue": "4",
+      "issuers": [
+        {
+          "evidence": "SHB-FORUM 4",
+          "blocks": [
+            "248-1"
+          ],
+          "surface": "SHB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "(verantwortl.: hans ernst klapproth)",
+          "blocks": [
+            "248-17"
+          ],
+          "surface": "hans ernst klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "SHB-FORUM 4"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 112,
+      "title": "Sozialdemokratischer Hochschulbund. Arbeitskreis zur Hochschulpolitik",
+      "date": "",
+      "start_page": 249,
+      "end_page": 250,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZIALDEMOKRATISCHER\nHOCHSCHULBUND\nArbeitskreis                      zur\nHochschulpolitik",
+      "title_blocks": [
+        "249-1",
+        "249-3",
+        "249-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SOZIALDEMOKRATISCHER HOCHSCHULBUND",
+          "blocks": [
+            "250-1"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "(verantw. Thomas Lärm)",
+          "blocks": [
+            "250-8"
+          ],
+          "surface": "Thomas Lärm",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "Di., 19.6., 16\n00\nvor W114",
+      "date_blocks": [
+        "249-5"
+      ],
+      "date_text": "Di., 19.6.",
+      "date_iso": "1973-06-19",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 113,
+      "title": "Fachschaft Jura. Mitteilungen und Informationen des Fachschaftsrats",
+      "date": "",
+      "start_page": 251,
+      "end_page": 251,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FACHSCHAFT JURA\nMITTEILUNGEN und INFORMATIONEN des FACHSCHAFTS -\nRATS.",
+      "title_blocks": [
+        "251-1",
+        "251-2",
+        "251-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Für den FS-Rat: Gilbert Wolff, FS-Sprecher",
+          "blocks": [
+            "251-21"
+          ],
+          "surface": "Gilbert Wolff",
+          "role": "signatory",
+          "function": "FS-Sprecher",
+          "marker": "Für den FS-Rat"
+        }
+      ],
+      "date_evidence": "am Dienstag, 30. 10. 73",
+      "date_blocks": [
+        "251-13"
+      ],
+      "date_text": "Dienstag, 30. 10. 73",
+      "date_iso": "1973-10-30",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 114,
+      "title": "Jura-Forum 2",
+      "date": "",
+      "start_page": 252,
+      "end_page": 253,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "J U R A - F O R U M 2",
+      "title_blocks": [
+        "252-1"
+      ],
+      "title_type": "original",
+      "series": "Jura-Forum",
+      "issue": "2",
+      "issuers": [
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "253-5"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB), Gruppe Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "253-5"
+          ],
+          "surface": "Fritz Schindele",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "4.7.1973",
+      "date_blocks": [
+        "253-5"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 115,
+      "title": "Jura-Forum 2",
+      "date": "",
+      "start_page": 254,
+      "end_page": 255,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "JURA - FORUM 2",
+      "title_blocks": [
+        "254-1"
+      ],
+      "title_type": "original",
+      "series": "Jura-Forum",
+      "issue": "2",
+      "issuers": [
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "255-6"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB), Gruppe Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "255-6"
+          ],
+          "surface": "Fritz Schindele",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "4.7.1973",
+      "date_blocks": [
+        "255-6"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-07-14",
+      "received_evidence": "14. JULI 1973",
+      "received_blocks": [
+        "254-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 116,
+      "title": "Jura-Forum 2",
+      "date": "",
+      "start_page": 256,
+      "end_page": 257,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "J U R A - F O R U M 2",
+      "title_blocks": [
+        "256-1"
+      ],
+      "title_type": "original",
+      "series": "Jura-Forum",
+      "issue": "2",
+      "issuers": [
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "257-5"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB), Gruppe Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "JURA-FORUM, hersg. vom Sozialdemokratischen Hochschulbund (SHB), Gruppe Uni Regensburg. Nr. 2, 4.7.1973. Verantwortlich: Fritz Schindele.",
+          "blocks": [
+            "257-5"
+          ],
+          "surface": "Fritz Schindele",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "4.7.1973",
+      "date_blocks": [
+        "257-5"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 82%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 117,
+      "title": "Sozialdemokratischer Hochschulbund SHB Sozialdemokratischer Hochsc",
+      "date": "",
+      "start_page": 258,
+      "end_page": 258,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Sozialdemokratischer Hochschulbund S H B Sozialdemokratischer Hochsc",
+      "title_blocks": [
+        "258-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Sozialdemokratischer Hochschulbund S H B",
+          "blocks": [
+            "258-1"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich: Wilfried R. Seuberth, hans ernst klapproth",
+          "blocks": [
+            "258-17"
+          ],
+          "surface": "Wilfried R. Seuberth",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Wilfried R. Seuberth, hans ernst klapproth",
+          "blocks": [
+            "258-17"
+          ],
+          "surface": "hans ernst klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-05-30",
+      "received_evidence": "30. MAI 1973",
+      "received_blocks": [
+        "258-18"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 118,
+      "title": "Ein Gespenst geht um ... bei den Marxisten",
+      "date": "",
+      "start_page": 259,
+      "end_page": 260,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "EIN GESPENST GEHTUM\n..... bei den Marxisten",
+      "title_blocks": [
+        "259-3",
+        "259-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SIG kandidiert:\nFachbereichsrat - GGP\nListe 1\nFachschaftsrat - Geschichte\nListe 1\nFachschaftsrat - Geographie\nListe 1\nFachbereichsrat - Sprach.-Lit.\nListe 3\nFakultätsrat - Phil.Fak.\nListe 3",
+          "blocks": [
+            "260-6",
+            "260-7"
+          ],
+          "surface": "SIG",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sig"
+          ]
+        },
+        {
+          "evidence": "verantwortlich.: E.Greipl, Rgbg.",
+          "blocks": [
+            "260-8"
+          ],
+          "surface": "E. Greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich."
+        }
+      ],
+      "date_evidence": "9. JULI 1973",
+      "date_blocks": [
+        "259-1"
+      ],
+      "date_text": "9. Juli 1973",
+      "date_iso": "1973-07-09",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "SIG kandidiert:"
+      ],
+      "_grounding": [
+        "issuer 'E. Greipl': Name 'E. Greipl' nicht im Beleg"
+      ]
+    },
+    {
+      "id": 119,
+      "title": "Ein Gespenst geht um bei den Marxisten",
+      "date": "",
+      "start_page": 261,
+      "end_page": 261,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "EIN GESPENST GEHT UM\nbei den Marxisten",
+      "title_blocks": [
+        "261-1",
+        "261-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 120,
+      "title": "Für SIG Liste 1",
+      "date": "",
+      "start_page": 262,
+      "end_page": 262,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "FÜR\nSIG\nLISTE 1",
+      "title_blocks": [
+        "262-1",
+        "262-2",
+        "262-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Studentische Interessenvertretung Geschichte Gesellschaft Politik",
+          "blocks": [
+            "262-4"
+          ],
+          "surface": "Studentische Interessenvertretung Geschichte Gesellschaft Politik",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sig"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 121,
+      "title": "Dichtung und Wahrheit",
+      "date": "",
+      "start_page": 263,
+      "end_page": 263,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DICHTUNG UND WAHRHEIT",
+      "title_blocks": [
+        "263-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "resspektlich verantwortlich: Egon Greipl, 84 R. Dechbettener Str. 20",
+          "blocks": [
+            "263-13"
+          ],
+          "surface": "Egon Greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "resspektlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 122,
+      "title": "Dichtung und Wahrheit",
+      "date": "",
+      "start_page": 264,
+      "end_page": 264,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DICHTUNG UND WAHRHEIT",
+      "title_blocks": [
+        "264-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "SIG\ns\ntudentische\ni\nteressenvertretung\ng\neschichte",
+          "blocks": [
+            "264-7",
+            "264-8"
+          ],
+          "surface": "SIG",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sig"
+          ]
+        },
+        {
+          "evidence": "rechtlich verantwortlich: Egon Greipl, 84 R. Dechbettener Str. 20",
+          "blocks": [
+            "264-13"
+          ],
+          "surface": "Egon Greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "rechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'SIG'"
+      ]
+    },
+    {
+      "id": 123,
+      "title": "Overture",
+      "date": "",
+      "start_page": 265,
+      "end_page": 265,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "OVERTURE",
+      "title_blocks": [
+        "265-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "S I G studentische Interessenvertretung Geschichte S I G",
+          "blocks": [
+            "265-13"
+          ],
+          "surface": "SIG",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sig"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantw.: e.greipl, 84R.dechbettener str. 20",
+          "blocks": [
+            "265-20"
+          ],
+          "surface": "e.greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-18",
+      "received_evidence": "A rectangular blue stamp from the University Library of Regensburg. The text inside the stamp reads: 'UB Regensburg eingelaufen am: 18. JUNI 1973'. There is a small blue mark resembling a capital 'F' to the right of the stamp.",
+      "received_blocks": [
+        "265-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 124,
+      "title": "Gemeinsame Erklärung: Stoppt die Putschgeneräle in Chile! Solidarität mit der Unidad Popular jetzt!",
+      "date": "",
+      "start_page": 266,
+      "end_page": 266,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "G E M E I N S A M E E R K L Ä R U N G\nSTOPPT DIE PUTSCHGENERÄLE IN CHILE !\nSOLIDARITÄT MIT DER UNIDAD POPULAR JETZT !",
+      "title_blocks": [
+        "266-4",
+        "266-5",
+        "266-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Deutsche Jungdemokraten (DJD)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "deutsche_jungdemokraten"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Evangelische Jugend Deutschlands",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Jungsozialisten in der SPD",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "spd"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Marxistischer Studentenbund SPARTAKUS (MSB)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Naturfreundejugend Deutschlands",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Sozialistische Deutsche-Arbeiterjugend (SDAJ)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sdaj"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Sozialistische Jugend Deutschlands (SJD) - Die Falken",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "266-17"
+          ],
+          "surface": "Verband Deutscher Studentenschaften (vds)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "vds"
+          ]
+        }
+      ],
+      "date_evidence": "Bonn, 12. 9. 73",
+      "date_blocks": [
+        "266-1"
+      ],
+      "date_text": "12.9.1973",
+      "date_iso": "1973-09-12",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 125,
+      "title": "Gemeinsame Erklärung: Stoppt die Putschgeneräle in Chile! Solidarität mit der Unidad Popular jetzt!",
+      "date": "",
+      "start_page": 267,
+      "end_page": 267,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "G E M E I N S A M E E R K L Ä R U N G\n=====\nSTOPPT DIE PUTSCHGENERÄLE IN CHILE !\nSOLIDARITÄT MIT DER UNIDAD POPULAR JETZT !",
+      "title_blocks": [
+        "267-2",
+        "267-3",
+        "267-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Deutsche Jungdemokraten (DJD)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "deutsche_jungdemokraten"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Evangelische Jugend Deutschlands",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Jungsozialisten in der SPD",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "spd"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Marxistischer Studentenbund SPARTAKUS (MSB)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Naturfreundejugend Deutschlands",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Sozialistische Deutsche-Arbeiterjugend (SDAJ)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sdaj"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Sozialistische Jugend Deutschlands (SJD) - Die Falken",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Sozialdemokratischer Hochschulbund (SHB)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "shb"
+          ]
+        },
+        {
+          "evidence": "Deutsche Jungdemokraten (DJD)\nEvangelische Jugend Deutschlands\nJungsozialisten in der SPD\nMarxistischer Studentenbund SPARTAKUS (MSB)\nNaturfreundejugend Deutschlands\nSozialistische Deutsche-Arbeiterjugend (SDAJ)\nSozialistische Jugend Deutschlands (SJD) - Die Falken\nSozialdemokratischer Hochschulbund (SHB)\nVerband Deutscher Studentenschaften (vds)",
+          "blocks": [
+            "267-15"
+          ],
+          "surface": "Verband Deutscher Studentenschaften (vds)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "vds"
+          ]
+        }
+      ],
+      "date_evidence": "Bonn, 12. 9. 73",
+      "date_blocks": [
+        "267-1"
+      ],
+      "date_text": "12.9.1973",
+      "date_iso": "1973-09-12",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 126,
+      "title": "Öffentliche Erklärung",
+      "date": "",
+      "start_page": 268,
+      "end_page": 269,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ÖFFENTLICHE ERKLÄRUNG",
+      "title_blocks": [
+        "268-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Bobby Rudoletzky",
+          "blocks": [
+            "269-3"
+          ],
+          "surface": "Bobby Rudoletzky",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "Regensburg, den 23.7.1973",
+      "date_blocks": [
+        "269-2"
+      ],
+      "date_text": "23.7.1973",
+      "date_iso": "1973-07-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 127,
+      "title": "Öffentliche Erklärung",
+      "date": "",
+      "start_page": 270,
+      "end_page": 271,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ÖFFENTLICHE ERKLÄRUNG",
+      "title_blocks": [
+        "270-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Bobby Rudolphetzky",
+          "blocks": [
+            "271-3"
+          ],
+          "surface": "Bobby Rudolphetzky",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "Regensburg, den 23.7.1973",
+      "date_blocks": [
+        "271-2"
+      ],
+      "date_text": "23.7.1973",
+      "date_iso": "1973-07-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 128,
+      "title": "Ausschuss des Fachschaftsrates für Studien- und Prüfungsbedingungen",
+      "date": "",
+      "start_page": 272,
+      "end_page": 275,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ca 10.12.\n73\nAUSSCHUSS DES FACHSCHAFTSRATES FÜR STUDIEN- UND\nPRÜFUNGSBEDINGUNGEN",
+      "title_blocks": [
+        "272-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Ausschuß für Studien- und Prüfungsbedingungen",
+          "blocks": [
+            "275-3"
+          ],
+          "surface": "Ausschuß für Studien- und Prüfungsbedingungen",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: der FS-Sprecher Bernd Weber",
+          "blocks": [
+            "275-4"
+          ],
+          "surface": "Bernd Weber",
+          "role": "signatory",
+          "function": "FS-Sprecher",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "ca 10.12.\n73",
+      "date_blocks": [
+        "272-1"
+      ],
+      "date_text": "ca. 10.12.1973",
+      "date_iso": "1973-12-10",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 129,
+      "title": "Wichtiger Hinweis zur Parkregelung!",
+      "date": "",
+      "start_page": 276,
+      "end_page": 276,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WICHTIGER HINWEIS ZUR PARKREGELUNG!",
+      "title_blocks": [
+        "276-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "UNIVERSITÄT REGENSBURG\nDER REKTOR\n(Prof. Dr. D. Henrich)",
+          "blocks": [
+            "276-10",
+            "276-11",
+            "276-13"
+          ],
+          "surface": "Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "UNIVERSITÄT REGENSBURG\nDER REKTOR\n(Prof. Dr. D. Henrich)",
+          "blocks": [
+            "276-10",
+            "276-11",
+            "276-13"
+          ],
+          "surface": "Prof. Dr. D. Henrich",
+          "role": "signatory",
+          "function": "Der Rektor",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 130,
+      "title": "Offener Brief an den Fachschaftsrat (FSR) Sozpol 21.5.73",
+      "date": "",
+      "start_page": 277,
+      "end_page": 277,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "OFFENER BRIEF AN DEN FACHSCHAFTSRAT (FSR) SOZPOL 21.5.73",
+      "title_blocks": [
+        "277-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "D. Weidner\n(D. Weidner)\nRCDS",
+          "blocks": [
+            "277-9"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "D. Weidner\n(D. Weidner)\nRCDS",
+          "blocks": [
+            "277-9"
+          ],
+          "surface": "D. Weidner",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "H. Röttger\n(H. Röttger)\nDM",
+          "blocks": [
+            "277-10"
+          ],
+          "surface": "DM",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dm"
+          ]
+        },
+        {
+          "evidence": "H. Röttger\n(H. Röttger)\nDM",
+          "blocks": [
+            "277-10"
+          ],
+          "surface": "H. Röttger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "offener_brief",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 131,
+      "title": "Demokratie(-sierung)",
+      "date": "",
+      "start_page": 278,
+      "end_page": 281,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Demokratie(-sierung)",
+      "title_blocks": [
+        "278-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich: A. Karl, 84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "281-11"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 132,
+      "title": "Information Nr. 2 und Dokumentation zur Streiksituation",
+      "date": "",
+      "start_page": 282,
+      "end_page": 286,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Information Nr. 2 und\nDokumentation zur Streiksituation",
+      "title_blocks": [
+        "282-2",
+        "282-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Allgemeiner Studentenausschuß\nder Universität Regensburg,\ngez.: Scherl Max",
+          "blocks": [
+            "285-1"
+          ],
+          "surface": "Allgemeiner Studentenausschuß der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Allgemeiner Studentenausschuß\nder Universität Regensburg,\ngez.: Scherl Max",
+          "blocks": [
+            "285-1"
+          ],
+          "surface": "Scherl Max",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        },
+        {
+          "evidence": "RLLV-Hochschulgruppe\ngez.: G. Jobst",
+          "blocks": [
+            "285-1"
+          ],
+          "surface": "RLLV-Hochschulgruppe",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "RLLV-Hochschulgruppe\ngez.: G. Jobst",
+          "blocks": [
+            "285-1"
+          ],
+          "surface": "G. Jobst",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        },
+        {
+          "evidence": "Professor Dr. G. N. Obermaier\nRektor der Universität Regensburg",
+          "blocks": [
+            "286-5"
+          ],
+          "surface": "G. N. Obermaier",
+          "role": "signatory",
+          "function": "Rektor der Universität Regensburg",
+          "marker": ""
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "H. Berger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "K. Fahn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "H. Glehr",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "H. Hofmann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "J. Hofmeier",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "H. Maier",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "K. E. Maier",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "J. Reiter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "C. Reng",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "G. Rüdiger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "W. Träger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "J. F. Ullmann",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        },
+        {
+          "evidence": "Ges.:\nProfessoren der Erziehungswissenschaftlichen Fakultät\nProfessor Dr. H. Berger\nProfessor Dr. K. Fahn\nProfessor Dr. H. Glehr\nProfessor Dr. H. Hofmann\nProfessor Dr. J. Hofmeier\nProfessor Dr. H. Maier\nProf. Dr. K. E. Maier\nProf. Dr. J. Reiter\nProfessor Dr. C. Reng\nProfessor Dr. G. Rüdiger\nProfessor Dr. W. Träger\nProfessor Dr. J. F. Ullmann\nProfessor Dr. F. Ulrich",
+          "blocks": [
+            "286-12",
+            "286-13"
+          ],
+          "surface": "F. Ulrich",
+          "role": "signatory",
+          "function": "",
+          "marker": "Ges."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.7,
+      "_retried_signatory": true,
+      "_grounding": []
+    }
+  ]
+}

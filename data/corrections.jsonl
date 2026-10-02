@@ -14,3 +14,4 @@
 {"volume": "0118_0001", "start_page": 6, "end_page": 7, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzburg", "issue": "Nr. 1"}, "at": "2026-10-01"}
 {"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 3"}, "at": "2026-10-01"}
 {"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 4"}, "at": "2026-10-01"}
+{"volume": "0118_0002", "start_page": 2, "end_page": 3, "field": "series", "value": {"name": "Argumente zur Sache", "issue": "I"}, "blocks": ["2-3"], "at": "2026-10-02"}

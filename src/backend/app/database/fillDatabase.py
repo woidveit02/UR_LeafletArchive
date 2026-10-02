@@ -107,16 +107,10 @@ def fill_volumes():
     return volumes
 
 
-VOLUMES = [
-    {"metadata_file": "nr001_metadata.json",
-     "label": "Nr. 001 (1967)", "year": 1967},
-    {"metadata_file": "nr002_metadata.json",
-     "label": "Nr. 002 (1968)", "year": 1968},
-    {"metadata_file": "nr003_metadata.json",
-     "label": "Nr. 003 (1969)", "year": 1969},
-    {"metadata_file": "nr004_metadata.json",
-     "label": "Nr. 004 (1970)", "year": 1970},
-]
+# every volume with a metadata file in data/ is imported
+VOLUMES = [{"metadata_file": f"nr{v['vz']:03d}_metadata.json", "label": v["label"], "year": v["year"]}
+           for v in load_json("volumes.json")
+           if (DATA_DIR / f"nr{v['vz']:03d}_metadata.json").is_file()]
 
 
 ALLOWED_TAGS = {"p", "br", "u", "b", "i", "strong", "em",

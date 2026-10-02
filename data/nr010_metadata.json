@@ -1,0 +1,4199 @@
+{
+  "source_pdf": "0118_0010.pdf",
+  "created": "2026-10-02T15:57:54.573562",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r12",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 75,
+    "flagged": 12,
+    "rate_percent": 84.0
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [
+    {
+      "segment": 30,
+      "page": 76,
+      "relation": "folgende Seite",
+      "continuation_mark": false
+    }
+  ],
+  "segments": [
+    {
+      "id": 1,
+      "title": "Eindeutig gegen dieses BHG",
+      "date": "",
+      "start_page": 1,
+      "end_page": 1,
+      "confirmed": true,
+      "title_evidence": "eindeutig gegen dieses BHG",
+      "title_blocks": [
+        "1-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "↑ RCDS",
+          "blocks": [
+            "1-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Alois Karl",
+          "blocks": [
+            "1-3"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-12-10",
+      "received_evidence": "Stamp: UB Regensburg eingelaufen am: 10. DEZ. 1973",
+      "received_blocks": [
+        "1-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Eindeutig gegen dieses BHG",
+      "date": "",
+      "start_page": 2,
+      "end_page": 2,
+      "confirmed": true,
+      "title_evidence": "eindeutig gegen dieses BHG",
+      "title_blocks": [
+        "2-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "↑ rcds",
+          "blocks": [
+            "2-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl",
+          "blocks": [
+            "2-2"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "RCDS: Gegen Numerus Clausus – Für wirksame Studienreform",
+      "date": "",
+      "start_page": 3,
+      "end_page": 4,
+      "confirmed": true,
+      "title_evidence": "RCDS:\nGegen Numerus Clausus –\nFür wirksame Studienreform",
+      "title_blocks": [
+        "3-2",
+        "3-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantw.: RCDS Bundesvorstand, 53 Bonn, Jagdweg 7",
+          "blocks": [
+            "3-1",
+            "4-25"
+          ],
+          "surface": "RCDS Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "issuer 'RCDS Bundesvorstand': Stichwort bei Organisation"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Studentenservice III WS 73/74",
+      "date": "",
+      "start_page": 5,
+      "end_page": 6,
+      "confirmed": true,
+      "title_evidence": "STUDENTENSERVICE Ⅲ WS 73/74",
+      "title_blocks": [
+        "5-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber :\nRCDS - Uni Regensburg e.V.",
+          "blocks": [
+            "5-1",
+            "5-9",
+            "5-10"
+          ],
+          "surface": "RCDS - Uni Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 5,
+      "title": "Zur sozialen Lage der Studenten",
+      "date": "",
+      "start_page": 7,
+      "end_page": 10,
+      "confirmed": true,
+      "title_evidence": "ZUR SOZIALEN LAGE DER STUDENTEN",
+      "title_blocks": [
+        "7-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS",
+          "blocks": [
+            "7-3"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "29-13",
+        "29-13",
+        "29-13"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Bildungspolitische Grundsätze des RCDS",
+      "date": "",
+      "start_page": 11,
+      "end_page": 13,
+      "confirmed": true,
+      "title_evidence": "BILDUNGSPOLITISCHE\nGRUNDSÄTZE DES RCDS",
+      "title_blocks": [
+        "11-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "BILDUNGSPOLITISCHE\nGRUNDSÄTZE DES RCDS",
+          "blocks": [
+            "11-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "3-1"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "RCDS - SP - Kandidaten in den Fachbereichen",
+      "date": "",
+      "start_page": 14,
+      "end_page": 14,
+      "confirmed": true,
+      "title_evidence": "RCDS - SP - KANDIDATEN JN DEN\nFACHBEREICHEN :",
+      "title_blocks": [
+        "14-1",
+        "14-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - SP - KANDIDATEN JN DEN\nFACHBEREICHEN :",
+          "blocks": [
+            "14-1",
+            "14-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Information über die FBR-Sitzung vom 5.12.",
+      "date": "",
+      "start_page": 15,
+      "end_page": 16,
+      "confirmed": true,
+      "title_evidence": "INFORMATION ÜBER DIE FBR-SITZUNG VOM 5.12.",
+      "title_blocks": [
+        "15-2"
+      ],
+      "title_type": "original",
+      "series": "rcds aktuell FBR Jura",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds aktuellFBR JURA",
+          "blocks": [
+            "15-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich : Josef Gevatter, Hermann Fellner, Alois Karl,\nHerbert Peter",
+          "blocks": [
+            "16-8"
+          ],
+          "surface": "Josef Gevatter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : Josef Gevatter, Hermann Fellner, Alois Karl,\nHerbert Peter",
+          "blocks": [
+            "16-8"
+          ],
+          "surface": "Hermann Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : Josef Gevatter, Hermann Fellner, Alois Karl,\nHerbert Peter",
+          "blocks": [
+            "16-8"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : Josef Gevatter, Hermann Fellner, Alois Karl,\nHerbert Peter",
+          "blocks": [
+            "16-8"
+          ],
+          "surface": "Herbert Peter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Für eine offene Gesellschaft - Alternative zur reaktionären Linken",
+      "date": "",
+      "start_page": 17,
+      "end_page": 20,
+      "confirmed": true,
+      "title_evidence": "Für eine offene Gesellschaft\n— Alternative zur reaktionären Linken",
+      "title_blocks": [
+        "17-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "17-2"
+          ],
+          "surface": "W. Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "17-2"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "17-2"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "RCDS Uni Regensburg\n84 Regensburg\nBocksbergerstr. 5",
+          "blocks": [
+            "20-26",
+            "20-27",
+            "20-28"
+          ],
+          "surface": "RCDS Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "RCDS- Treff : Jeden Mittwoch 20 Uhr"
+      ],
+      "received_date": "1973-11-23",
+      "received_evidence": "A rectangular stamp from the 'UB Regensburg' (University Library of Regensburg) with the text 'einbezogen am: 23. NOV. 1973'.",
+      "received_blocks": [
+        "17-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "Für eine offene Gesellschaft - Alternative zur reaktionären Linken",
+      "date": "",
+      "start_page": 21,
+      "end_page": 24,
+      "confirmed": true,
+      "title_evidence": "Für eine offene Gesellschaft\n— Alternative zur reaktionären Linken",
+      "title_blocks": [
+        "21-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "21-2"
+          ],
+          "surface": "W. Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "21-2"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "21-2"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "RCDS Uni Regensburg\n84 Regensburg\nBocksbergerstr.5",
+          "blocks": [
+            "24-26",
+            "24-27",
+            "24-28"
+          ],
+          "surface": "RCDS Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "RCDS- Treff : Jeden Mittwoch 20 Uhr"
+      ],
+      "received_date": "1973-11-23",
+      "received_evidence": "A rectangular stamp from the 'UB Regensburg' (University Library) with the text 'Einzelheiten' and the date '23. NOV. 1973'.",
+      "received_blocks": [
+        "21-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Walter Ulbricht: Kämpfer für Frieden und Demokratie?",
+      "date": "",
+      "start_page": 25,
+      "end_page": 26,
+      "confirmed": true,
+      "title_evidence": "Walter Ulbricht\nKämpfer für Frieden und Demokratie?",
+      "title_blocks": [
+        "25-4",
+        "25-5"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantw.: RCDS Bundesvorstand, 53 Bonn, Jagdweg 7",
+          "blocks": [
+            "25-1",
+            "26-25"
+          ],
+          "surface": "RCDS Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-11-20",
+      "received_evidence": "Stamp: UB Regionalkultur, am: 20. NOV. 1973",
+      "received_blocks": [
+        "25-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'RCDS Bundesvorstand': Stichwort bei Organisation"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Heute",
+      "date": "",
+      "start_page": 27,
+      "end_page": 27,
+      "confirmed": true,
+      "title_evidence": "Heute",
+      "title_blocks": [
+        "27-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds",
+          "blocks": [
+            "27-11"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "Do, 15. Nov.",
+      "date_blocks": [
+        "27-9"
+      ],
+      "date_text": "15. November 1973",
+      "date_iso": "1973-11-15",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Wählt! Alle!",
+      "date": "",
+      "start_page": 28,
+      "end_page": 29,
+      "confirmed": true,
+      "title_evidence": "WÄHLT!\nALLE!",
+      "title_blocks": [
+        "28-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantw.: Scheidinger, Kuhn, Karl\nherausgegeben vom RCDS-Uni-Regensburg e. V. Bocksbergerstr. 5",
+          "blocks": [
+            "28-1",
+            "29-13"
+          ],
+          "surface": "RCDS-Uni-Regensburg e. V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantw.: Scheidinger, Kuhn, Karl",
+          "blocks": [
+            "29-13"
+          ],
+          "surface": "Scheidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw.: Scheidinger, Kuhn, Karl",
+          "blocks": [
+            "29-13"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw.: Scheidinger, Kuhn, Karl",
+          "blocks": [
+            "29-13"
+          ],
+          "surface": "Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Neues von der Ölfront!",
+      "date": "",
+      "start_page": 30,
+      "end_page": 31,
+      "confirmed": true,
+      "title_evidence": "Neues von der\nÖlfront!",
+      "title_blocks": [
+        "30-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: Schaidinger, Markl\nherausgegeben von der RCDS-FB--Gruppe WiWi",
+          "blocks": [
+            "30-2",
+            "30-6"
+          ],
+          "surface": "RCDS-FB-Gruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Markl",
+          "blocks": [
+            "30-6"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Markl",
+          "blocks": [
+            "30-6"
+          ],
+          "surface": "Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "Werther Freint und Schlägt!",
+      "date": "",
+      "start_page": 32,
+      "end_page": 33,
+      "confirmed": true,
+      "title_evidence": "WERTHER Freint und Schlägt!",
+      "title_blocks": [
+        "32-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: H. Schaidinger\nherausgegeben vom RCDS-Uni-Regensburg e. V. Bocksbergerstr. 5",
+          "blocks": [
+            "33-6",
+            "33-7"
+          ],
+          "surface": "RCDS-Uni-Regensburg e. V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: H. Schaidinger",
+          "blocks": [
+            "33-6"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "Rengsburg, den heutigen",
+      "date_blocks": [
+        "32-1"
+      ],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 16,
+      "title": "Nach den Wahlen",
+      "date": "",
+      "start_page": 34,
+      "end_page": 35,
+      "confirmed": true,
+      "title_evidence": "Nach den WAHLEN",
+      "title_blocks": [
+        "34-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-R",
+          "blocks": [
+            "34-1",
+            "34-12"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantw.: Herbert Peter, Alois Karl",
+          "blocks": [
+            "34-12"
+          ],
+          "surface": "Herbert Peter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        },
+        {
+          "evidence": "Verantw.: Herbert Peter, Alois Karl",
+          "blocks": [
+            "34-12"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 17,
+      "title": "Für Meinungspluralismus - Gegen Plakatterror",
+      "date": "",
+      "start_page": 36,
+      "end_page": 37,
+      "confirmed": true,
+      "title_evidence": "FÜR MEINUNGS -\n-PLURALISMUS - GEGEN „PLAKATTERROR",
+      "title_blocks": [
+        "36-3",
+        "36-4"
+      ],
+      "title_type": "original",
+      "series": "rcds aktuell",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds aktuell",
+          "blocks": [
+            "36-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtl.:A.Karl,W.Kuhn,\nH.Fellner,H.Schaidinger",
+          "blocks": [
+            "36-2"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.:A.Karl,W.Kuhn,\nH.Fellner,H.Schaidinger",
+          "blocks": [
+            "36-2"
+          ],
+          "surface": "W.Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.:A.Karl,W.Kuhn,\nH.Fellner,H.Schaidinger",
+          "blocks": [
+            "36-2"
+          ],
+          "surface": "H.Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.:A.Karl,W.Kuhn,\nH.Fellner,H.Schaidinger",
+          "blocks": [
+            "36-2"
+          ],
+          "surface": "H.Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "Konsequente studentische Interessenvertretung",
+      "date": "",
+      "start_page": 38,
+      "end_page": 39,
+      "confirmed": true,
+      "title_evidence": "Konsequente studentische Interessenvertretung",
+      "title_blocks": [
+        "38-7"
+      ],
+      "title_type": "original",
+      "series": "rcds aktuell",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds aktuell",
+          "blocks": [
+            "38-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: A.Karl,W.Kuhn,H.Fellner",
+          "blocks": [
+            "38-2"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: A.Karl,W.Kuhn,H.Fellner",
+          "blocks": [
+            "38-2"
+          ],
+          "surface": "W.Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: A.Karl,W.Kuhn,H.Fellner",
+          "blocks": [
+            "38-2"
+          ],
+          "surface": "H.Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-11-16",
+      "received_evidence": "16. NOV. 1973",
+      "received_blocks": [
+        "38-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'RCDS': Block-id unbekannt oder Abbildung: 38-1",
+        "issuer-evidence nicht im Text: 'RCDS'",
+        "series nicht im Text: 'rcds aktuell'"
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Für eine offene Gesellschaft — Alternative zur reaktionären Linken",
+      "date": "",
+      "start_page": 40,
+      "end_page": 43,
+      "confirmed": true,
+      "title_evidence": "Für eine\noffene\nGesellschaft\n— Alternative zur reaktionären Linken",
+      "title_blocks": [
+        "40-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "40-2"
+          ],
+          "surface": "W. Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "40-2"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: W. Kuhn, A. Karl,\nH. Schaidinger",
+          "blocks": [
+            "40-2"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1971-11-26",
+      "received_evidence": "26. NOV 1971",
+      "received_blocks": [
+        "40-4"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "Bericht von der Sitzung des Kleinen Senats am 14. 11. 73",
+      "date": "",
+      "start_page": 44,
+      "end_page": 45,
+      "confirmed": true,
+      "title_evidence": "Bericht von der Sitzung des Kleinen Senats am 14. 11. 73",
+      "title_blocks": [
+        "44-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS",
+          "blocks": [
+            "44-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "von Josef Markl (RCDS), Mitglied des Kl. Senats",
+          "blocks": [
+            "44-2"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "Mitglied des Kl. Senats",
+          "marker": "von"
+        },
+        {
+          "evidence": "Verantwortlich: Josef Markl, 84 Rgbg., Bocksbergerstraße 5",
+          "blocks": [
+            "45-17"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "protokoll",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 21,
+      "title": "Öffentliche Veranstaltung mit Gerd Langguth — RCDS Bundesvorsitzender — zum Thema „RCDS: Alternative zur reaktionären Linken",
+      "date": "",
+      "start_page": 46,
+      "end_page": 46,
+      "confirmed": true,
+      "title_evidence": "Öffentliche Veranstaltung mit\nGERD LANGGUTH\n— RCDS Bundesvorsitzender —\nzum Thema\n„RCDS: Alternative zur\nreaktionären Linken",
+      "title_blocks": [
+        "46-4",
+        "46-5",
+        "46-6",
+        "46-7",
+        "46-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds",
+          "blocks": [
+            "46-11"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "Do, 15. Nov.,\n13\n30",
+      "date_blocks": [
+        "46-10"
+      ],
+      "date_text": "Donnerstag, 15. November, 13.30 Uhr",
+      "date_iso": "1973-11-15",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "received_date": "1973-11-15",
+      "received_evidence": "15. NOV. 1973",
+      "received_blocks": [
+        "46-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Informationen zur Sozialpolitik: Wohngeld für Studenten",
+      "date": "",
+      "start_page": 47,
+      "end_page": 48,
+      "confirmed": true,
+      "title_evidence": "Informationen zur Sozialpolitik\nWohngeld für Studenten",
+      "title_blocks": [
+        "47-3",
+        "47-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich:\nRCDS-Bundesvorstand\n53 Bonn, Jagdweg 7\nTel.: 22 70 70",
+          "blocks": [
+            "47-1",
+            "48-34"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Gegen Numerus Clausus – Für wirksame Studienreform",
+      "date": "",
+      "start_page": 49,
+      "end_page": 49,
+      "confirmed": true,
+      "title_evidence": "Gegen Numerus Clausus –\nFür wirksame Studienreform",
+      "title_blocks": [
+        "49-6"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - INFO - RCDS - INFO - RCDS",
+          "blocks": [
+            "49-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-11-14",
+      "received_evidence": "14. NOV. 1973",
+      "received_blocks": [
+        "49-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Unsere Alternative",
+      "date": "",
+      "start_page": 50,
+      "end_page": 50,
+      "confirmed": true,
+      "title_evidence": "● UNSERE ALTERNATIVE ●",
+      "title_blocks": [
+        "50-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantw.: RCDS Bundesvorstand, 53 Bonn, Jagdweg 7",
+          "blocks": [
+            "50-1",
+            "50-25"
+          ],
+          "surface": "RCDS Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Studentservice II / WS 73/74: Informationen - Kommentare",
+      "date": "",
+      "start_page": 51,
+      "end_page": 64,
+      "confirmed": true,
+      "title_evidence": "Studentservice II / WS 73/74\nInformationen - Kommentare",
+      "title_blocks": [
+        "51-1"
+      ],
+      "title_type": "original",
+      "series": "Studentservice",
+      "issue": "II",
+      "issuers": [
+        {
+          "evidence": "Herausgeber :\nRCDS - Uni Regensburg e.V.\n84 Regensburg, Bocksberger Str. 5",
+          "blocks": [
+            "51-1"
+          ],
+          "surface": "RCDS - Uni Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Resolution zum Einstellungsverbot von Fred Karl",
+      "date": "",
+      "start_page": 65,
+      "end_page": 65,
+      "confirmed": true,
+      "title_evidence": "Resolution zum Einstellungsverbot von Fred Karl",
+      "title_blocks": [
+        "65-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Daheim, Sack (Lehrstühle für Soziologie,), Fachschaftsrat Sprach/Lit, Fachschaft SozPol.",
+          "blocks": [
+            "65-10"
+          ],
+          "surface": "Daheim",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Daheim, Sack (Lehrstühle für Soziologie,), Fachschaftsrat Sprach/Lit, Fachschaft SozPol.",
+          "blocks": [
+            "65-10"
+          ],
+          "surface": "Sack",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Daheim, Sack (Lehrstühle für Soziologie,), Fachschaftsrat Sprach/Lit, Fachschaft SozPol.",
+          "blocks": [
+            "65-10"
+          ],
+          "surface": "Fachschaftsrat Sprach/Lit",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Daheim, Sack (Lehrstühle für Soziologie,), Fachschaftsrat Sprach/Lit, Fachschaft SozPol.",
+          "blocks": [
+            "65-10"
+          ],
+          "surface": "Fachschaft SozPol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Regensburg, den 16.Okt. 1973",
+      "date_blocks": [
+        "65-9"
+      ],
+      "date_text": "16. Oktober 1973",
+      "date_iso": "1973-10-16",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Ihre Rechte als Mieter!",
+      "date": "",
+      "start_page": 66,
+      "end_page": 67,
+      "confirmed": true,
+      "title_evidence": "Ihre Rechte als Mieter!",
+      "title_blocks": [
+        "66-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich:\nRCDS-Bundesvorstand\n53 Bonn, Jagdweg 7\nTel.: 02221 / 227070",
+          "blocks": [
+            "66-1",
+            "67-10",
+            "67-11"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-10-26",
+      "received_evidence": "am: 26. OKT. 1972",
+      "received_blocks": [
+        "66-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Kleiner Senat hat entschieden!",
+      "date": "",
+      "start_page": 68,
+      "end_page": 69,
+      "confirmed": true,
+      "title_evidence": "KLEINER SENAT\nHAT ENTSCHIEDEN!",
+      "title_blocks": [
+        "68-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Ring Christlich-Demokratischer Studenten",
+          "blocks": [
+            "68-1",
+            "68-10"
+          ],
+          "surface": "Ring Christlich-Demokratischer Studenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS- Fachbereichsgruppe WiWi"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Kuhn, Markl, Schaumeier\nHerausgeber: RCDS- Fachbereichsgruppe WiWi",
+          "blocks": [
+            "68-10"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Kuhn, Markl, Schaumeier\nHerausgeber: RCDS- Fachbereichsgruppe WiWi",
+          "blocks": [
+            "68-10"
+          ],
+          "surface": "Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Kuhn, Markl, Schaumeier\nHerausgeber: RCDS- Fachbereichsgruppe WiWi",
+          "blocks": [
+            "68-10"
+          ],
+          "surface": "Schaumeier",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1974-10-19",
+      "received_evidence": "A blue rectangular stamp with the text 'US... am: 19. OKT. 1974'.",
+      "received_blocks": [
+        "68-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Studentenservice - Informationen - Kommentare",
+      "date": "",
+      "start_page": 70,
+      "end_page": 71,
+      "confirmed": true,
+      "title_evidence": "Studentenservice - Informationen - Kommentare",
+      "title_blocks": [
+        "70-2"
+      ],
+      "title_type": "original",
+      "series": "Studentenservice",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber\n: RCDS - Uni Regensburg e.V.\n84 Regensburg, Bocksberger Str. 5",
+          "blocks": [
+            "70-1",
+            "70-8"
+          ],
+          "surface": "RCDS - Uni Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "received_date": "1973-10-16",
+      "received_evidence": "UB Regensburg eingeliefert am: 16. OKT. 1973 Postal stamp from UB Regensburg dated 16. OKT. 1973",
+      "received_blocks": [
+        "70-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Zu Beginn des WS 1973/74 stellt sich der Ring Christlich-Demokratischer Studenten ...",
+      "date": "",
+      "start_page": 72,
+      "end_page": 75,
+      "confirmed": true,
+      "title_evidence": "Zu Beginn des WS 1973/74 stellt sich der Ring Christlich-Demokratischer Studenten an der Universität Regensburg den Studienanfängern vor.",
+      "title_blocks": [
+        "72-2"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Zu Beginn des WS 1973/74 stellt sich der Ring Christlich-Demokratischer Studenten an der Universität Regensburg den Studienanfängern vor.",
+          "blocks": [
+            "72-2"
+          ],
+          "surface": "Ring Christlich-Demokratischer Studenten an der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "76-1",
+        "76-2"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "",
+      "date": "",
+      "start_page": 76,
+      "end_page": 80,
+      "confirmed": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "Tips für Erstsemester",
+      "date": "",
+      "start_page": 81,
+      "end_page": 81,
+      "confirmed": true,
+      "title_evidence": "TIPS für Erstsemester",
+      "title_blocks": [
+        "81-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Euer RCDS",
+          "blocks": [
+            "81-9"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Du gehörst doch nicht zu denen....",
+      "date": "",
+      "start_page": 82,
+      "end_page": 82,
+      "confirmed": true,
+      "title_evidence": "DU GEHÖRST DOCH NICHT ZU DENEN....",
+      "title_blocks": [
+        "82-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS ALTERNATIVE\nZUR REAKTIONÄREN LINKEN",
+          "blocks": [
+            "82-7"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "Für Meinungspluralismus - gegen „Plakatterror",
+      "date": "",
+      "start_page": 83,
+      "end_page": 83,
+      "confirmed": true,
+      "title_evidence": "FÜR MEINUNGS-\n-PLURALISMUS-GEGEN „PLAKATTERROR",
+      "title_blocks": [
+        "83-6",
+        "83-7"
+      ],
+      "title_type": "original",
+      "series": "rcds aktuell",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds aktuell",
+          "blocks": [
+            "83-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtl.: A. Karl, W. Kuhn,\nH. Fellner, H. Schaidinger",
+          "blocks": [
+            "83-3",
+            "83-4"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: A. Karl, W. Kuhn,\nH. Fellner, H. Schaidinger",
+          "blocks": [
+            "83-3",
+            "83-4"
+          ],
+          "surface": "W. Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: A. Karl, W. Kuhn,\nH. Fellner, H. Schaidinger",
+          "blocks": [
+            "83-3",
+            "83-4"
+          ],
+          "surface": "H. Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        },
+        {
+          "evidence": "presserechtl.: A. Karl, W. Kuhn,\nH. Fellner, H. Schaidinger",
+          "blocks": [
+            "83-3",
+            "83-4"
+          ],
+          "surface": "H. Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "rcds aktuell"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Konsequente studentische Interessenvertretung",
+      "date": "",
+      "start_page": 84,
+      "end_page": 85,
+      "confirmed": true,
+      "title_evidence": "Konsequente studentische Interessenvertretung",
+      "title_blocks": [
+        "84-3"
+      ],
+      "title_type": "original",
+      "series": "rcds aktuell",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "rcds\ndie Alternative zur reaktionären Linken",
+          "blocks": [
+            "85-6"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: A.Karl, W.Kuhn, H.Fellner",
+          "blocks": [
+            "84-2"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: A.Karl, W.Kuhn, H.Fellner",
+          "blocks": [
+            "84-2"
+          ],
+          "surface": "W.Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: A.Karl, W.Kuhn, H.Fellner",
+          "blocks": [
+            "84-2"
+          ],
+          "surface": "H.Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "Vom 9.bis 11.November",
+      "date_blocks": [
+        "84-4"
+      ],
+      "date_text": "9. bis 11. November 1973",
+      "date_iso": "1973-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "rcds die Alternative zur reaktionären Linken"
+      ],
+      "_grounding": [
+        "series nicht im Text: 'rcds aktuell'"
+      ]
+    },
+    {
+      "id": 36,
+      "title": "Bundesausbildungsförderungsgesetz (BAFöG) zementiert Bildungsschranken",
+      "date": "",
+      "start_page": 86,
+      "end_page": 87,
+      "confirmed": true,
+      "title_evidence": "Bundesausbildungsförderungsgesetz (BAFöG) zementiert Bildungsschranken",
+      "title_blocks": [
+        "86-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich:\nRCDS-Bundesvorstand\n53 Bonn, Jagdweg 7\nTel. 0 2221/22 70 70",
+          "blocks": [
+            "86-1",
+            "87-41"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-10-18",
+      "received_evidence": "18. OKT. 1972",
+      "received_blocks": [
+        "86-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "Fachbereichsrats- und Fachschaftsratswahlen: Die Kandidaten des RCDS",
+      "date": "",
+      "start_page": 88,
+      "end_page": 88,
+      "confirmed": true,
+      "title_evidence": "FACHBEREICHSRATS ~ und\nFACHSCHAFTSRATSWAHLEN\nDIE KANDIDATEN DES RCDS",
+      "title_blocks": [
+        "88-1",
+        "88-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DIE KANDIDATEN DES RCDS",
+          "blocks": [
+            "88-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Fachbereichsrats- und Fachschaftsratswahlen: Die Kandidaten des RCDS",
+      "date": "",
+      "start_page": 89,
+      "end_page": 89,
+      "confirmed": true,
+      "title_evidence": "FACHBEREICHSRATS - und\nFACHSCHAFTSRATSWAHLEN\nDIE KANDIDATEN DES RCDS",
+      "title_blocks": [
+        "89-1",
+        "89-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DIE KANDIDATEN DES RCDS",
+          "blocks": [
+            "89-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Fachbereichsrats- und Fachschaftsratswahlen: Die Kandidaten des RCDS",
+      "date": "",
+      "start_page": 90,
+      "end_page": 90,
+      "confirmed": true,
+      "title_evidence": "FACHBEREICHSRATS ~ und\nFACHSCHAFTSRATSWAHLEN\nDIE KANDIDATEN DES RCDS",
+      "title_blocks": [
+        "90-1",
+        "90-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DIE KANDIDATEN DES RCDS",
+          "blocks": [
+            "90-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "In Kürze",
+      "date": "",
+      "start_page": 91,
+      "end_page": 92,
+      "confirmed": true,
+      "title_evidence": "IN KÜRZE",
+      "title_blocks": [
+        "91-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - Liste 1",
+          "blocks": [
+            "92-13"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Weg mit dem verfassungswidrigen Berufsverbot! Für freie politische Betätigung in Ausbildung und Beruf!",
+      "date": "",
+      "start_page": 93,
+      "end_page": 94,
+      "confirmed": true,
+      "title_evidence": "Weg mit dem verfassungswidrigen Berufsverbot!\nFür freie politische Betätigung in Ausbildung und Beruf!",
+      "title_blocks": [
+        "93-1",
+        "93-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.65,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "Wes die Galle...",
+      "date": "",
+      "start_page": 95,
+      "end_page": 96,
+      "confirmed": true,
+      "title_evidence": "Wes die Galle . . .",
+      "title_blocks": [
+        "95-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "herausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg, Josef-Adler-Str. 7 a",
+          "blocks": [
+            "95-1",
+            "95-12"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger\nherausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg, Josef-Adler-Str. 7 a",
+          "blocks": [
+            "95-12"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Zu den Wahlen. Jura Service",
+      "date": "",
+      "start_page": 97,
+      "end_page": 102,
+      "confirmed": true,
+      "title_evidence": "Zu den Wahlen\nF\nJURA\nSERVICE",
+      "title_blocks": [
+        "97-2",
+        "97-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "97-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl, J.Gevatter,\nH.Fellner, Max Pausenberger",
+          "blocks": [
+            "97-4"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl, J.Gevatter,\nH.Fellner, Max Pausenberger",
+          "blocks": [
+            "97-4"
+          ],
+          "surface": "J.Gevatter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl, J.Gevatter,\nH.Fellner, Max Pausenberger",
+          "blocks": [
+            "97-4"
+          ],
+          "surface": "H.Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl, J.Gevatter,\nH.Fellner, Max Pausenberger",
+          "blocks": [
+            "97-4"
+          ],
+          "surface": "Max Pausenberger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "vom 3.-5.7.73",
+      "date_blocks": [
+        "98-4"
+      ],
+      "date_text": "3.-5.7.1973",
+      "date_iso": "1973-07-03",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Maier kommt",
+      "date": "",
+      "start_page": 103,
+      "end_page": 104,
+      "confirmed": true,
+      "title_evidence": "MAIER KOMMT",
+      "title_blocks": [
+        "103-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "103-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: A. Karl , 84 Regensburg, Bocksbergerstr.5",
+          "blocks": [
+            "103-9"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-29",
+      "received_evidence": "eingelaufen am: 29. JUNI 1973",
+      "received_blocks": [
+        "103-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "Die Regensburger Hochschule 2.7.1970. Wahlqualen",
+      "date": "",
+      "start_page": 105,
+      "end_page": 106,
+      "confirmed": true,
+      "title_evidence": "Die Regensburger\nHochschule\n2. 7. 1970\nWAHLQALEN",
+      "title_blocks": [
+        "105-2",
+        "105-3"
+      ],
+      "title_type": "original",
+      "series": "Die Regensburger Hochschule",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "105-1",
+            "106-6"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Scheidinger, Kuhn\nHerausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "106-6"
+          ],
+          "surface": "Scheidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Scheidinger, Kuhn\nHerausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "106-6"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "2. 7. 1970",
+      "date_blocks": [
+        "105-2"
+      ],
+      "date_text": "2.7.1970",
+      "date_iso": "1970-07-02",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.75,
+      "_grounding": [
+        "date_iso 1970-07-02 passt nicht zum Jahrgang 1973"
+      ]
+    },
+    {
+      "id": 46,
+      "title": "RCDS studentenservice - information - kommentear in Zusammenarbeit mit dem RCDS-WiWi-Service",
+      "date": "",
+      "start_page": 107,
+      "end_page": 107,
+      "confirmed": true,
+      "title_evidence": "RCDS\nstudentenservice - information - kommentear\nin Zusammenarbeit mit dem RCDS-WiWi-Service",
+      "title_blocks": [
+        "107-2",
+        "107-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber:\nRCDS-Uni-Regensburg e.V. , 84 Rgb. Bocksbergerstraße 5",
+          "blocks": [
+            "107-1",
+            "107-7"
+          ],
+          "surface": "RCDS-Uni-Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "107-6"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "107-6"
+          ],
+          "surface": "H. Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "107-6"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "107-6"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "107-6"
+          ],
+          "surface": "Keil",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "zeitschrift",
+      "confidence": 0.8,
+      "received_date": "1973-06-26",
+      "received_evidence": "Stamp from UB Regensburg: eingegangen am: 26. JUNI 1973, with handwritten letter 'F' in blue ink.",
+      "received_blocks": [
+        "107-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Was nun?",
+      "date": "",
+      "start_page": 108,
+      "end_page": 109,
+      "confirmed": true,
+      "title_evidence": "WAS NUN ?",
+      "title_blocks": [
+        "108-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "18.6.-28.6.",
+      "date_blocks": [
+        "109-6"
+      ],
+      "date_text": "18.6.-28.6.1973",
+      "date_iso": "1973-06-18",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Faschismus",
+      "date": "",
+      "start_page": 110,
+      "end_page": 117,
+      "confirmed": true,
+      "title_evidence": "FASCHISMUS",
+      "title_blocks": [
+        "110-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Wahlqualen",
+      "date": "",
+      "start_page": 118,
+      "end_page": 119,
+      "confirmed": true,
+      "title_evidence": "WAHLQUALEN F",
+      "title_blocks": [
+        "118-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "118-2",
+            "119-6"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn\nHerausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "119-6"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn\nHerausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "119-6"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1975-06-27",
+      "received_evidence": "am 27. JUNI 1975",
+      "received_blocks": [
+        "118-1"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Zum Scheitern des DAB",
+      "date": "",
+      "start_page": 120,
+      "end_page": 121,
+      "confirmed": true,
+      "title_evidence": "ZUM SCHEITERN\nDES\nDAB",
+      "title_blocks": [
+        "120-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aigner Sepp\nBiehler Hermann\nMaren Bracker\nHarles Bernd\nKöpnick Herbert",
+          "blocks": [
+            "121-2"
+          ],
+          "surface": "Aigner Sepp",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Aigner Sepp\nBiehler Hermann\nMaren Bracker\nHarles Bernd\nKöpnick Herbert",
+          "blocks": [
+            "121-2"
+          ],
+          "surface": "Biehler Hermann",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Aigner Sepp\nBiehler Hermann\nMaren Bracker\nHarles Bernd\nKöpnick Herbert",
+          "blocks": [
+            "121-2"
+          ],
+          "surface": "Maren Bracker",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Aigner Sepp\nBiehler Hermann\nMaren Bracker\nHarles Bernd\nKöpnick Herbert",
+          "blocks": [
+            "121-2"
+          ],
+          "surface": "Harles Bernd",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Aigner Sepp\nBiehler Hermann\nMaren Bracker\nHarles Bernd\nKöpnick Herbert\nKrengel Heinrich\nWeber Bernhard\nWiesner Gerhard\nZeise Lucas",
+          "blocks": [
+            "121-2",
+            "121-3"
+          ],
+          "surface": "Köpnick Herbert",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Krengel Heinrich\nWeber Bernhard\nWiesner Gerhard\nZeise Lucas",
+          "blocks": [
+            "121-3"
+          ],
+          "surface": "Krengel Heinrich",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Krengel Heinrich\nWeber Bernhard\nWiesner Gerhard\nZeise Lucas",
+          "blocks": [
+            "121-3"
+          ],
+          "surface": "Weber Bernhard",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Krengel Heinrich\nWeber Bernhard\nWiesner Gerhard\nZeise Lucas",
+          "blocks": [
+            "121-3"
+          ],
+          "surface": "Wiesner Gerhard",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Krengel Heinrich\nWeber Bernhard\nWiesner Gerhard\nZeise Lucas",
+          "blocks": [
+            "121-3"
+          ],
+          "surface": "Zeise Lucas",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_retried_issuer": [
+        "ZUM SCHEITERN DES DAB"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "RCDS studentenservice-information-kommentar",
+      "date": "",
+      "start_page": 122,
+      "end_page": 129,
+      "confirmed": true,
+      "title_evidence": "RCDS\nstudentenservice-information-kommentar",
+      "title_blocks": [
+        "122-2",
+        "122-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "122-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl 84 Rgbg, Bocksbergerstr.5",
+          "blocks": [
+            "122-4"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "Am 20.Juni",
+      "date_blocks": [
+        "122-6"
+      ],
+      "date_text": "20. Juni 1973",
+      "date_iso": "1973-06-20",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "title: Block-id unbekannt oder Abbildung: 122-2"
+      ]
+    },
+    {
+      "id": 52,
+      "title": "RCDS studentenservice-information-kommentar",
+      "date": "",
+      "start_page": 130,
+      "end_page": 137,
+      "confirmed": true,
+      "title_evidence": "RCDS\nstudentenservice-information-kommentar",
+      "title_blocks": [
+        "130-2",
+        "130-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "130-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl 84 Rgbg, Bocksbergerstr.5",
+          "blocks": [
+            "130-5"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "Am 20.Juni",
+      "date_blocks": [
+        "130-7"
+      ],
+      "date_text": "20. Juni 1973",
+      "date_iso": "1973-06-20",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-06-26",
+      "received_evidence": "A purple rectangular stamp with the text 'Regensburg Laufen' and 'am: 26. JUNI 1973'.",
+      "received_blocks": [
+        "130-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "title: Block-id unbekannt oder Abbildung: 130-2"
+      ]
+    },
+    {
+      "id": 53,
+      "title": "RCDS studentenserice - information - kommentear in Zusammenarbeit mit dem RCDS-WiWi-Service",
+      "date": "",
+      "start_page": 138,
+      "end_page": 151,
+      "confirmed": true,
+      "title_evidence": "RCDS\nF\nstudentenserice - information - kommentear\nin Zusammenarbeit mit dem RCDS-WiWi-Service",
+      "title_blocks": [
+        "138-2",
+        "138-3",
+        "138-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber:\nRCDS-Uni-Regensburg e.V. , 84 Rgb. Bocksbergerstraße 5",
+          "blocks": [
+            "138-1",
+            "138-8"
+          ],
+          "surface": "RCDS-Uni-Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "138-7"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "138-7"
+          ],
+          "surface": "H. Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "138-7"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "138-7"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nA. Karl, H. Fellner,\nSchaidinger, Kuhn, Keil",
+          "blocks": [
+            "138-7"
+          ],
+          "surface": "Keil",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "zeitschrift",
+      "confidence": 0.8,
+      "_retried_signatory": true,
+      "received_date": "1973-06-07",
+      "received_evidence": "eingetroffen am: - 7. JUNI 1973",
+      "received_blocks": [
+        "138-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "Unterzeichner fehlt (Verantwortlich-Zeile): J. Gevatter"
+      ]
+    },
+    {
+      "id": 54,
+      "title": "",
+      "date": "",
+      "start_page": 152,
+      "end_page": 155,
+      "confirmed": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "RCDS studentenserice-information-kommentar",
+      "date": "",
+      "start_page": 156,
+      "end_page": 163,
+      "confirmed": true,
+      "title_evidence": "RCDS\nstudentenserice-information-kommentar",
+      "title_blocks": [
+        "156-5",
+        "156-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "156-4"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich : A.Karl 84 Rgbg, Bocksbergerstr.5",
+          "blocks": [
+            "156-7"
+          ],
+          "surface": "A.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "Am 20.Juni",
+      "date_blocks": [
+        "156-9"
+      ],
+      "date_text": "20. Juni 1973",
+      "date_iso": "1973-06-20",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "title: Block-id unbekannt oder Abbildung: 156-5"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "Schon wieder zum BHG!!",
+      "date": "",
+      "start_page": 164,
+      "end_page": 165,
+      "confirmed": true,
+      "title_evidence": "Schon wieder zum BHG !!",
+      "title_blocks": [
+        "164-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: A. Karl, W. Kuhn\n84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "165-7"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: A. Karl, W. Kuhn\n84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "165-7"
+          ],
+          "surface": "W. Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "vom 24. Mai",
+      "date_blocks": [
+        "164-3"
+      ],
+      "date_text": "24. Mai 1973",
+      "date_iso": "1973-05-24",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Jura-Service",
+      "date": "",
+      "start_page": 166,
+      "end_page": 167,
+      "confirmed": true,
+      "title_evidence": "JURA-SERVICE",
+      "title_blocks": [
+        "166-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber:\nRCDS-Fachbereichsgruppe Jura, 84 Regensburg,\nBocksbergerstr. 5",
+          "blocks": [
+            "166-1",
+            "166-5"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe Jura",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nAlois Karl, Josef Lukas, Herbert Peter",
+          "blocks": [
+            "166-6"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nAlois Karl, Josef Lukas, Herbert Peter",
+          "blocks": [
+            "166-6"
+          ],
+          "surface": "Josef Lukas",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nAlois Karl, Josef Lukas, Herbert Peter",
+          "blocks": [
+            "166-6"
+          ],
+          "surface": "Herbert Peter",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 58,
+      "title": "Vorlesungsplan für das WS 1973/74",
+      "date": "",
+      "start_page": 168,
+      "end_page": 170,
+      "confirmed": true,
+      "title_evidence": "VORLESUNGSPLAN für das WS 1973/74",
+      "title_blocks": [
+        "168-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Wahlen 72 Studenten Parlament",
+      "date": "",
+      "start_page": 171,
+      "end_page": 179,
+      "confirmed": true,
+      "title_evidence": "WAHLEN 72\nSTUDENTEN\nPARLAMENT",
+      "title_blocks": [
+        "171-1",
+        "171-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 60,
+      "title": "Erhöhung der Bustarife für Studenten ist durch Finanzierungstrick ersetzbar!",
+      "date": "",
+      "start_page": 180,
+      "end_page": 181,
+      "confirmed": true,
+      "title_evidence": "Erhöhung der Bustarife\nfür Studenten ist durch\nFinanzierungstrick er-\nsetzbar !",
+      "title_blocks": [
+        "180-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "180-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich:\nJosef Markl",
+          "blocks": [
+            "181-7"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "vom 12.12.1972",
+      "date_blocks": [
+        "180-6"
+      ],
+      "date_text": "12.12.1972",
+      "date_iso": "1972-12-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "date_iso 1972-12-12 passt nicht zum Jahrgang 1973",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 21%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 61,
+      "title": "RCDS rettet ASTA-Chef",
+      "date": "",
+      "start_page": 182,
+      "end_page": 183,
+      "confirmed": true,
+      "title_evidence": "RCDS rettet ASTA- Chef •-• RCDS rettet ASTA - Chef",
+      "title_blocks": [
+        "182-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-",
+          "blocks": [
+            "182-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: H. Fellner, Josef Markl,\nA. Karl 84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "183-14"
+          ],
+          "surface": "H. Fellner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: H. Fellner, Josef Markl,\nA. Karl 84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "183-14"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        },
+        {
+          "evidence": "presserechtlich: H. Fellner, Josef Markl,\nA. Karl 84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "183-14"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "Demokratie(-sierung)",
+      "date": "",
+      "start_page": 184,
+      "end_page": 187,
+      "confirmed": true,
+      "title_evidence": "Demokratie(-sierung)",
+      "title_blocks": [
+        "184-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich: A. Karl, 84 Regensburg, Bocksbergerstr. 5",
+          "blocks": [
+            "187-10"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Reale Chance Der Studenten",
+      "date": "",
+      "start_page": 188,
+      "end_page": 188,
+      "confirmed": true,
+      "title_evidence": "Reale\nChance\nDer\nStudenten",
+      "title_blocks": [
+        "188-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: RCDS - LV Bayern, 8 Mü. 22, Kaulbachstraße 29",
+          "blocks": [
+            "188-4"
+          ],
+          "surface": "RCDS - LV Bayern",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: M. Hecke",
+          "blocks": [
+            "188-4"
+          ],
+          "surface": "M. Hecke",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "received_date": "1973-05-02",
+      "received_evidence": "2. MAI 1973",
+      "received_blocks": [
+        "188-11"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "title: Beleg steht nicht in den genannten Blöcken",
+        "title_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 64,
+      "title": "GEW-Landesvorstand zurückgetreten",
+      "date": "",
+      "start_page": 189,
+      "end_page": 189,
+      "confirmed": true,
+      "title_evidence": "GEW-Landesvorstand zurückgetreten",
+      "title_blocks": [
+        "189-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS\nINFO",
+          "blocks": [
+            "189-16"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich:\nJosef Markl",
+          "blocks": [
+            "189-17",
+            "189-18"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 65,
+      "title": "Wählen!",
+      "date": "",
+      "start_page": 190,
+      "end_page": 191,
+      "confirmed": true,
+      "title_evidence": "Wählen!",
+      "title_blocks": [
+        "190-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "190-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "191-5"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "191-5"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: RCDS-Fachbereichsgruppe WiWi: Schaidinger, Kuhn, Viehbeck.",
+          "blocks": [
+            "191-5"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-09",
+      "received_evidence": "A rectangular stamp with the text 'Münster' at the top, '9. FEB. 1973' in the middle, and '... Burg' and '... sionen' partially visible on the right side.",
+      "received_blocks": [
+        "190-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 66,
+      "title": "Fachschaftsratswahlen. Die Kandidaten des RCDS",
+      "date": "",
+      "start_page": 192,
+      "end_page": 192,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFTSRATSWAHLEN\nDIE KANDIDATEN DES RCDS",
+      "title_blocks": [
+        "192-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFTSRATSWAHLEN\nDIE KANDIDATEN DES RCDS",
+          "blocks": [
+            "192-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_foreign_blocks": [
+        "190-1"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "WiWi-Service",
+      "date": "",
+      "start_page": 193,
+      "end_page": 196,
+      "confirmed": true,
+      "title_evidence": "WIWI -\nSERVICE",
+      "title_blocks": [
+        "193-2"
+      ],
+      "title_type": "original",
+      "series": "WiWi-Service",
+      "issue": "Wahl-Spezial Nr. 2",
+      "issuers": [
+        {
+          "evidence": "Herausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg, Josef-Adler-Str. 7 a",
+          "blocks": [
+            "193-1",
+            "193-8"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger",
+          "blocks": [
+            "193-9"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-02-01",
+      "received_evidence": "UB Regensburg eingelaufen am 1. FEB. 1973 F Library accession stamp: UB Regensburg eingelaufen am 1. FEB. 1973, with letter F written in blue ink",
+      "received_blocks": [
+        "193-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 68,
+      "title": "Dank",
+      "date": "",
+      "start_page": 197,
+      "end_page": 198,
+      "confirmed": true,
+      "title_evidence": "DANK",
+      "title_blocks": [
+        "197-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-",
+          "blocks": [
+            "197-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn, Ablöscher, Viehbeck\npresserechtlich : RCDS-FB-Gruppe WiWi, Rgbg, Josef-Adlerstr. 7a",
+          "blocks": [
+            "197-10"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn, Ablöscher, Viehbeck\npresserechtlich : RCDS-FB-Gruppe WiWi, Rgbg, Josef-Adlerstr. 7a",
+          "blocks": [
+            "197-10"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn, Ablöscher, Viehbeck\npresserechtlich : RCDS-FB-Gruppe WiWi, Rgbg, Josef-Adlerstr. 7a",
+          "blocks": [
+            "197-10"
+          ],
+          "surface": "Ablöscher",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn, Ablöscher, Viehbeck\npresserechtlich : RCDS-FB-Gruppe WiWi, Rgbg, Josef-Adlerstr. 7a",
+          "blocks": [
+            "197-10"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-02-09",
+      "received_evidence": "9. FEB. 1973",
+      "received_blocks": [
+        "197-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'RCDS': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'RCDS'"
+      ]
+    },
+    {
+      "id": 69,
+      "title": "Jura-Service",
+      "date": "",
+      "start_page": 199,
+      "end_page": 203,
+      "confirmed": true,
+      "title_evidence": "JURA-SERVICE",
+      "title_blocks": [
+        "199-2"
+      ],
+      "title_type": "original",
+      "series": "Jura-Service",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RC",
+          "blocks": [
+            "199-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Erwin Richter",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Josef Lukas",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Anton Regler",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Erwin Arldt",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Erwin Richter, Josef Lukas, Anton Regler\nAlois Karl, Erwin Arldt, Walter Möbius",
+          "blocks": [
+            "199-5"
+          ],
+          "surface": "Walter Möbius",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "FEB 73",
+      "date_blocks": [
+        "199-3"
+      ],
+      "date_text": "Februar 1973",
+      "date_iso": "1973-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 70,
+      "title": "Wunder - oh Wunder",
+      "date": "",
+      "start_page": 204,
+      "end_page": 204,
+      "confirmed": true,
+      "title_evidence": "Wunder - oh\nWunder",
+      "title_blocks": [
+        "204-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "204-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "204-11"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "204-11"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1978-01-31",
+      "received_evidence": "eingelaufen am: 31. JAN. 1978",
+      "received_blocks": [
+        "204-3"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 71,
+      "title": "Wunder - oh Wunder",
+      "date": "",
+      "start_page": 205,
+      "end_page": 205,
+      "confirmed": true,
+      "title_evidence": "Wunder - oh\nWunder",
+      "title_blocks": [
+        "205-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "205-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "205-11"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "205-11"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 72,
+      "title": "WiWi-Service Wahl-Spezial",
+      "date": "",
+      "start_page": 206,
+      "end_page": 211,
+      "confirmed": true,
+      "title_evidence": "WIWI-SER-\nVICE WAHL -\nSPEZIAL",
+      "title_blocks": [
+        "206-3"
+      ],
+      "title_type": "original",
+      "series": "WiWi-Service",
+      "issue": "Wahl-Spezial",
+      "issuers": [
+        {
+          "evidence": "Herausgegeben von der RCDS--Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler--Str. 7 a",
+          "blocks": [
+            "206-2",
+            "206-7"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "206-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "206-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 73,
+      "title": "Für ein besseres Hochschulgesetz",
+      "date": "",
+      "start_page": 212,
+      "end_page": 215,
+      "confirmed": true,
+      "title_evidence": "FÜR EIN BESSERES\nHOCHSCHULGESETZ",
+      "title_blocks": [
+        "212-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: Ring Christlich-Demokratischer Studenten (RCDS), Landesverband Bayern, 8 München 22, Kaulbachstraße 29. Erarbeitet mit den Fachschaftsgruppen des RCDS Uni-München.",
+          "blocks": [
+            "215-21"
+          ],
+          "surface": "Ring Christlich-Demokratischer Studenten (RCDS), Landesverband Bayern",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Tomas Bauer.",
+          "blocks": [
+            "215-21"
+          ],
+          "surface": "Tomas Bauer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 74,
+      "title": "Anstatt AStA-Info",
+      "date": "",
+      "start_page": 216,
+      "end_page": 216,
+      "confirmed": true,
+      "title_evidence": "Anstatt AStA-Info",
+      "title_blocks": [
+        "216-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "216-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Kuhn",
+          "blocks": [
+            "216-13"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "presserechtlich: A. Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "216-14"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "12. 01. 73",
+      "date_blocks": [
+        "216-3"
+      ],
+      "date_text": "12.01.1973",
+      "date_iso": "1973-01-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 75,
+      "title": "Wunder - oh Wunder",
+      "date": "",
+      "start_page": 217,
+      "end_page": 217,
+      "confirmed": true,
+      "title_evidence": "Wunder - oh\nWunder",
+      "title_blocks": [
+        "217-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "217-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "217-10"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw.: RCDS-FB-Gruppe WiWi, Kuhn, Schaidinger",
+          "blocks": [
+            "217-10"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    }
+  ]
+}

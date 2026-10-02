@@ -1,0 +1,4537 @@
+{
+  "source_pdf": "0118_0011.pdf",
+  "created": "2026-10-02T16:02:04.868512",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r12",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 92,
+    "flagged": 19,
+    "rate_percent": 79.3
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [],
+  "segments": [
+    {
+      "id": 1,
+      "title": "Einig gegen Rechts",
+      "date": "",
+      "start_page": 1,
+      "end_page": 2,
+      "confirmed": true,
+      "title_evidence": "Einig gegen Rechts",
+      "title_blocks": [
+        "1-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nABT. JURA",
+          "blocks": [
+            "1-1",
+            "1-2"
+          ],
+          "surface": "Demokratische Front Abt. Jura",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Zur AStA-Bildung",
+      "date": "",
+      "start_page": 3,
+      "end_page": 4,
+      "confirmed": true,
+      "title_evidence": "Zur AStA-Bildung:",
+      "title_blocks": [
+        "3-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "3-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantwortl.: S. Eggerdinger 84 Rgb. Universitätsstr. 31",
+          "blocks": [
+            "4-11"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Wo Drösler hinmarschiert",
+      "date": "",
+      "start_page": 5,
+      "end_page": 8,
+      "confirmed": true,
+      "title_evidence": "Wo Drösler hinmarschiert :",
+      "title_blocks": [
+        "5-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nABTEILUNG PSYCHOLOGIE",
+          "blocks": [
+            "5-1",
+            "5-3"
+          ],
+          "surface": "Demokratische Front Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Demokratische Front Abteilung Psychologie'"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Für die DF gilt nach wie vor: Ein AStA aus allen fortschrittlichen Gruppen!",
+      "date": "",
+      "start_page": 9,
+      "end_page": 10,
+      "confirmed": true,
+      "title_evidence": "Für die DF gilt nach wie vor:\nEin AStA aus allen\nfortschrittlichen Gruppen!",
+      "title_blocks": [
+        "9-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "9-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presser. S. Eggerdinger, 84 Regensburg, Universitätsstraße 31",
+          "blocks": [
+            "10-1"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presser."
+        }
+      ],
+      "date_evidence": "13. 12. 73",
+      "date_blocks": [
+        "9-3"
+      ],
+      "date_text": "13.12.1973",
+      "date_iso": "1973-12-13",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-12-14",
+      "received_evidence": "14. DEZ. 1973",
+      "received_blocks": [
+        "9-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "date: Block-id unbekannt oder Abbildung: 9-3",
+        "date_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Kommilitonen, kommt heute abend zur konstituierenden Sitzung des neugewählten Studentenparlaments",
+      "date": "",
+      "start_page": 11,
+      "end_page": 12,
+      "confirmed": true,
+      "title_evidence": "KOMMILITONEN, KOMMT HEUTE ABEND ZUR KONSTITUIERENDEN SITZUNG DES\nNEUGEWÄHLTEN STUDENTENPARLAMENTS",
+      "title_blocks": [
+        "11-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "11-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "DEZ. 1973",
+      "date_blocks": [
+        "11-3"
+      ],
+      "date_text": "Dezember 1973",
+      "date_iso": "1973-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Sieht so wirkliche \"gewerkschaftliche Orientierung\" aus?",
+      "date": "",
+      "start_page": 13,
+      "end_page": 14,
+      "confirmed": true,
+      "title_evidence": "Sieht so wirkliche\n\"gewerkschaftliche\nOrientierung\" aus ?",
+      "title_blocks": [
+        "13-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "13-3",
+            "13-4"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantwortlich: S. Eggerdinger, 84 Regensburg\nUniversitätsstr. 31",
+          "blocks": [
+            "14-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-12-13",
+      "received_evidence": "13. DEZ 1973",
+      "received_blocks": [
+        "13-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "Zur AStA-Bildung",
+      "date": "",
+      "start_page": 15,
+      "end_page": 16,
+      "confirmed": true,
+      "title_evidence": "Zur AStA-Bildung:",
+      "title_blocks": [
+        "15-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "15-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantwortl.: S. Eggerdinger 84 Rgb. Universitätsstr. 31",
+          "blocks": [
+            "16-11"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "11/11/73",
+      "date_blocks": [
+        "15-1"
+      ],
+      "date_text": "11.11.1973",
+      "date_iso": "1973-11-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Wahlplattform zur SP-Wahl im WS 73/74",
+      "date": "",
+      "start_page": 17,
+      "end_page": 22,
+      "confirmed": true,
+      "title_evidence": "WAHLPLATTFORM zur SP-Wahl\nim WS 73/74",
+      "title_blocks": [
+        "17-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "17-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Warum kandidieren wir auf der Liste I zusammen mit dem RCDS?",
+      "date": "",
+      "start_page": 23,
+      "end_page": 24,
+      "confirmed": true,
+      "title_evidence": "WARUM KANDIDIEREN WIR AUF DER LISTE I ZUSAMMEN MIT DEM RCDS?",
+      "title_blocks": [
+        "24-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "LISTE 1 RCDS und\nUNABHÄNGIGE GEMÄSSIGTE",
+          "blocks": [
+            "23-2"
+          ],
+          "surface": "RCDS und Unabhängige Gemäßigte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantwortl.: M. Hobmeier, 84 Regensburg, Habelstr. 2",
+          "blocks": [
+            "24-12"
+          ],
+          "surface": "M. Hobmeier",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "LISTE 1 RCDS und UNABHÄNGIGE GEMÄSSIGTE"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "Für die Wahlen zum Studentenparlament: Vorwärts mit der Demokratischen Front!",
+      "date": "",
+      "start_page": 25,
+      "end_page": 26,
+      "confirmed": true,
+      "title_evidence": "Für die Wahlen zum Studentenparlament\nVORWÄRTS MIT DER\nDEMOKRATISCHEN\nFRONT!",
+      "title_blocks": [
+        "25-5",
+        "25-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "25-1",
+            "25-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantwortl.: S. Eggerdinger, 84 Regensburg, Universitätstr. 31",
+          "blocks": [
+            "26-3"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Koalitionsverhandlungen: Gemeinsam für einen starken AStA!",
+      "date": "",
+      "start_page": 27,
+      "end_page": 28,
+      "confirmed": true,
+      "title_evidence": "Koalitionsverhandlungen:\nGemeinsam für einen\nstarken AStA !",
+      "title_blocks": [
+        "27-5",
+        "27-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "27-1",
+            "27-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantwortl. : S. Eggerdingen 84 Regensburg\nUniversitätsstr. 31",
+          "blocks": [
+            "27-14"
+          ],
+          "surface": "S. Eggerdingen",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 12,
+      "title": "Wichtiges aus dem Fachbereichsrat",
+      "date": "",
+      "start_page": 29,
+      "end_page": 30,
+      "confirmed": true,
+      "title_evidence": "WICHTIGES AUS DEM FACHBEREICHSRAT",
+      "title_blocks": [
+        "29-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "29-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantw.: Stefan Eggerdinger, 84 Rgb.\nUniversitätsstr. 31",
+          "blocks": [
+            "30-3"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "Sitzung vom 24.Oktober 73",
+      "date_blocks": [
+        "29-6"
+      ],
+      "date_text": "24. Oktober 1973",
+      "date_iso": "1973-10-24",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-10-26",
+      "received_evidence": "26. OKT. 1973",
+      "received_blocks": [
+        "29-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Einig gegen Rechts! Ein Vorschlag zu einer gemeinsamen Wahlplattform der fortschrittlichen Hochschulorganisationen an der Uni Regensburg zur SP-Wahl im WS 73/74, vorgelegt von der Demokratischen Front.",
+      "date": "",
+      "start_page": 31,
+      "end_page": 36,
+      "confirmed": true,
+      "title_evidence": "EINIG GEGEN RECHTS!\nEIN VORSCHLAG ZU EINER GEMEINSAMEN WAHLPLATTFORM DER FORTSCHRITTLICHEN HOCHSCHULORGANISATIONEN AN DER UNI REGENSBURG ZUR SP-WAHL IM WS 73/74, VORGELEGT VON DER DEMOKRATISCHEN FRONT.",
+      "title_blocks": [
+        "31-6",
+        "31-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "31-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "OKT. 1973",
+      "date_blocks": [
+        "31-4"
+      ],
+      "date_text": "Oktober 1973",
+      "date_iso": "1973-10",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Warum sabotieren SHB, MSB Spartakus, GEW (Fachgruppe Hochschule) und ALS/LHV ein gemeinsames Vorgehen gegen die Ultrarechten von RCDS, DM und NHB?",
+      "date": "",
+      "start_page": 37,
+      "end_page": 38,
+      "confirmed": true,
+      "title_evidence": "Warum sabotieren SHB, MSB Spartakus,\nGEW (Fachgruppe Hochschule) und ALS/LHV ein gemeinsames\nVorgehen gegen die Ultrarechten von\nRCDS, DM und NHB ?",
+      "title_blocks": [
+        "37-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "37-1",
+            "37-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantw. : Stefan Eggerdinger\nUniversitätsstrasse 33",
+          "blocks": [
+            "38-9"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "Studentische Interessen und imperatives Mandat",
+      "date": "",
+      "start_page": 39,
+      "end_page": 40,
+      "confirmed": true,
+      "title_evidence": "Studentische Interessen\nund imperatives Mandat",
+      "title_blocks": [
+        "39-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "39-1",
+            "39-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 R, Universitätsstr. 21",
+          "blocks": [
+            "40-7"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "4. 7. 73",
+      "date_blocks": [
+        "39-4"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 16,
+      "title": "Für freie politische Betätigung!",
+      "date": "",
+      "start_page": 41,
+      "end_page": 42,
+      "confirmed": true,
+      "title_evidence": "FÜR FREIE POLITISCHE BETÄTIGUNG!",
+      "title_blocks": [
+        "41-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front\nAbt. Sprach. Lit.",
+          "blocks": [
+            "41-1",
+            "41-3"
+          ],
+          "surface": "Demokratische Front Abt. Sprach. Lit.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. Verantw.: St. Eggerdinger 84 R.-Universitätsstr. 31",
+          "blocks": [
+            "42-14"
+          ],
+          "surface": "St. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. Verantw."
+        }
+      ],
+      "date_evidence": "3.8.73",
+      "date_blocks": [
+        "41-4"
+      ],
+      "date_text": "3.8.1973",
+      "date_iso": "1973-08-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Demokratische Front Abt. Sprach. Lit.'"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Kampf gegen das BHG heißt jetzt: Wahl von unabhängigen, an das Imperative Mandat gebundenen FS-Räten!",
+      "date": "",
+      "start_page": 43,
+      "end_page": 44,
+      "confirmed": true,
+      "title_evidence": "Kampf gegen das BHG\nheißt jetzt:\nWahl von unabhängigen, an das Imperative Mandat gebundenen FS-Räten!",
+      "title_blocks": [
+        "43-6",
+        "43-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "43-1",
+            "43-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "esserechtl. verantwortl: Eggerdinger Universitätsstr. 31",
+          "blocks": [
+            "44-4"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "esserechtl. verantwortl"
+        }
+      ],
+      "date_evidence": "3.7.73",
+      "date_blocks": [
+        "43-4"
+      ],
+      "date_text": "3.7.1973",
+      "date_iso": "1973-07-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "Die Demokratische Front-Abteilung Sprach/Lit. legt den Studenten dieses Fachschaftsaktionsprogramm als verbindliche Grundlage für ihre Fachschaftsarbeit vor ...",
+      "date": "",
+      "start_page": 45,
+      "end_page": 48,
+      "confirmed": true,
+      "title_evidence": "Die Demokratische Front-Abteilung Sprach/Lit. legt den Studenten dieses Fachschaftsaktionsprogramm als verbindliche Grundlage für ihre Fachschaftsarbeit vor.",
+      "title_blocks": [
+        "45-6"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front\nAbt. Sprach. Lit.",
+          "blocks": [
+            "45-1",
+            "45-3"
+          ],
+          "surface": "Demokratische Front Abt. Sprach. Lit.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantw.: Stefan Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "48-8"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-07-09",
+      "received_evidence": "A blue rectangular stamp with the text 'Regensburg eingeleiten am: 9. JULI 1973'.",
+      "received_blocks": [
+        "45-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Demokratische Front Abt. Sprach. Lit.'"
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Rechenschaftsbericht",
+      "date": "",
+      "start_page": 49,
+      "end_page": 56,
+      "confirmed": true,
+      "title_evidence": "RECHENSCHAFTS-\nBERICHT",
+      "title_blocks": [
+        "49-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nREGENSBURG\n(abt. wiwi)",
+          "blocks": [
+            "49-1",
+            "49-3"
+          ],
+          "surface": "Demokratische Front Regensburg (Abt. WiWi)",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich: S. Eggerdinger, Universitätsstr.31",
+          "blocks": [
+            "54-6"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "2.7.73",
+      "date_blocks": [
+        "49-2"
+      ],
+      "date_text": "2.7.1973",
+      "date_iso": "1973-07-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'Demokratische Front Regensburg (Abt. WiWi)'"
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Stellungnahme zur Behandlung der Gremien in der heutigen Situation und zu den BHG-Gremien",
+      "date": "",
+      "start_page": 57,
+      "end_page": 60,
+      "confirmed": true,
+      "title_evidence": "STELLUNGSNAHME ZUR BEHANDLUNG\nDER GREMIEN IN DER HEUTIGEN SITUATION\nUND ZU DEN\nBHG - GREMIEN",
+      "title_blocks": [
+        "57-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "57-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: Stefan Eggerdinger, 84 R, Universitätsstr. 31",
+          "blocks": [
+            "60-17"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "29. 6. 73",
+      "date_blocks": [
+        "57-5"
+      ],
+      "date_text": "29.6.1973",
+      "date_iso": "1973-06-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 21,
+      "title": "Fachschafts-Aktionsprogramm der Demokratischen Front Abteilung Psychologie für die Fachschaftsratswahlen SS 1973",
+      "date": "",
+      "start_page": 61,
+      "end_page": 63,
+      "confirmed": true,
+      "title_evidence": "Fachschafts-Aktionsprogramm der\nDEMOKRATISCHEN FRONT\nAbteilung Psychologie\nfür die Fachschaftsratswahlen SS 1973",
+      "title_blocks": [
+        "61-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschafts-Aktionsprogramm der\nDEMOKRATISCHEN FRONT\nAbteilung Psychologie",
+          "blocks": [
+            "61-1"
+          ],
+          "surface": "Demokratische Front Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Bericht aus dem FB-Rat über die Neuordnung des VWL-Studiums",
+      "date": "",
+      "start_page": 64,
+      "end_page": 65,
+      "confirmed": true,
+      "title_evidence": "BERICHT AUS DEM FB-RAT ÜBER DIE NEUORDNUNG DES VWL-STUDIUMS",
+      "title_blocks": [
+        "64-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DF\nAbt. VWL.",
+          "blocks": [
+            "64-1",
+            "64-2"
+          ],
+          "surface": "DF Abt. VWL",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggordinger, 84 Regensburg\nUniversitätsstr. 31",
+          "blocks": [
+            "65-8"
+          ],
+          "surface": "S. Eggordinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "26.7.73",
+      "date_blocks": [
+        "64-3"
+      ],
+      "date_text": "26.7.1973",
+      "date_iso": "1973-07-26",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Bericht aus dem FB-Rat über die Neuordnung des VWL-Studiums",
+      "date": "",
+      "start_page": 66,
+      "end_page": 67,
+      "confirmed": true,
+      "title_evidence": "BERICHT AUS DEM FB-RAT ÜBER DIE NEUORDNUNG DES VWL-STUDIUMS",
+      "title_blocks": [
+        "66-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DF\nAbt. VWL",
+          "blocks": [
+            "66-1",
+            "66-2"
+          ],
+          "surface": "DF Abt. VWL",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg\nUniversitätsstr. 31",
+          "blocks": [
+            "67-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "26.7.73",
+      "date_blocks": [
+        "66-3"
+      ],
+      "date_text": "26.7.1973",
+      "date_iso": "1973-07-26",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Kampf gegen das BHG heißt jetzt: Wahl von unabhängigen, an das Imperative Mandat gebundenen FS-Räten!",
+      "date": "",
+      "start_page": 68,
+      "end_page": 69,
+      "confirmed": true,
+      "title_evidence": "Kampf gegen das BHG\nheißt jetzt:\nWahl von unabhängigen, an das Imperative Mandat gebundenen FS-Räten!",
+      "title_blocks": [
+        "68-5",
+        "68-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nEinig gegen Rechts",
+          "blocks": [
+            "68-1",
+            "68-2",
+            "68-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "esserechtl. verantwortl: Eggerdinger Universitätsstr. 31",
+          "blocks": [
+            "69-4"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "esserechtl. verantwortl"
+        }
+      ],
+      "date_evidence": "3.7.73",
+      "date_blocks": [
+        "68-4"
+      ],
+      "date_text": "3.7.1973",
+      "date_iso": "1973-07-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Streikbericht der Demokratischen Front am Fachbereich Wirtschaft",
+      "date": "",
+      "start_page": 70,
+      "end_page": 73,
+      "confirmed": true,
+      "title_evidence": "STREIKBERICHT DER DEMOKRATISCHEN FRONT am Fachbereich\nWirtschaft",
+      "title_blocks": [
+        "70-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "STREIKBERICHT DER DEMOKRATISCHEN FRONT am Fachbereich\nWirtschaft",
+          "blocks": [
+            "70-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantw. S. Eggerdinger Universitätsstr.31",
+          "blocks": [
+            "72-5"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantw."
+        },
+        {
+          "evidence": "Presserechtlich: Eggerdinger, Universitätsstraße 21",
+          "blocks": [
+            "73-11"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Interessensvertretung des RCDS: Demagogie und Verdrehungen",
+      "date": "",
+      "start_page": 74,
+      "end_page": 75,
+      "confirmed": true,
+      "title_evidence": "INTERESSENSVERTRETUNG DES RCDS: DEMAGOGIE UND VERDREHUNGEN",
+      "title_blocks": [
+        "74-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front      ABT. W:WI",
+          "blocks": [
+            "74-1"
+          ],
+          "surface": "Demokratische Front Abt. WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantw. S. Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "74-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Rechenschaftsbericht",
+      "date": "",
+      "start_page": 76,
+      "end_page": 82,
+      "confirmed": true,
+      "title_evidence": "RECHENSCHAFTS-\nBERICHT",
+      "title_blocks": [
+        "76-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nREGENSBURG\n(abt. wiwi)",
+          "blocks": [
+            "76-1",
+            "76-3"
+          ],
+          "surface": "Demokratische Front Regensburg Abt. WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich: S. Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "81-6"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        },
+        {
+          "evidence": "Presserechtlich: Eggerdinger, Universitätsstraße 31",
+          "blocks": [
+            "82-11"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "2.7.73",
+      "date_blocks": [
+        "76-2"
+      ],
+      "date_text": "2.7.1973",
+      "date_iso": "1973-07-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "issuer 'Eggerdinger': Block-id unbekannt oder Abbildung: 82-11",
+        "issuer-evidence nicht im Text: 'Demokratische Front Regensburg Abt. WiWi'",
+        "issuer-evidence nicht im Text: 'Eggerdinger'"
+      ]
+    },
+    {
+      "id": 28,
+      "title": "Interessenvertretung des RCDS: Demagogie und Verdrehungen",
+      "date": "",
+      "start_page": 83,
+      "end_page": 83,
+      "confirmed": true,
+      "title_evidence": "INTERESSENVERTRETUNG DES RCDS: DEMAGOGIE UND VERDREHUNGEN",
+      "title_blocks": [
+        "83-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front\nAM W:WI",
+          "blocks": [
+            "83-1",
+            "83-2"
+          ],
+          "surface": "Demokratische Front am WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantw. S. Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "83-12"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-06-23",
+      "received_evidence": "A blue rectangular stamp with the text 'Wien, 23. Juni 1973' and a signature.",
+      "received_blocks": [
+        "83-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Stellungnahme zur Behandlung der Gremien in der heutigen Situation und zu den BHG-Gremien",
+      "date": "",
+      "start_page": 84,
+      "end_page": 87,
+      "confirmed": true,
+      "title_evidence": "STELLUNGNAHME ZUR BEHANDLUNG\nDER GREMIEN IN DER HEUTIGEN SITUATION\nUND ZU DEN\nBHG - GREMIEN",
+      "title_blocks": [
+        "84-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nEinig gegen Rechts",
+          "blocks": [
+            "84-1",
+            "84-2",
+            "84-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: Stefan Eggerdinger, 84 R, Universitätsstr. 31",
+          "blocks": [
+            "87-17"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "29. 6. 73",
+      "date_blocks": [
+        "84-5"
+      ],
+      "date_text": "29.6.1973",
+      "date_iso": "1973-06-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Wahl-Info Nr. 1 / G.O.B.",
+      "date": "",
+      "start_page": 88,
+      "end_page": 91,
+      "confirmed": true,
+      "title_evidence": "WAHL-INFO Nr. 1 / G.O.B.",
+      "title_blocks": [
+        "88-2"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "WAHL-INFO Nr. 1 / G.O.B.",
+          "blocks": [
+            "88-2"
+          ],
+          "surface": "G.O.B.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-26",
+      "received_evidence": "eingelaufen am: 26. JUNI 1973",
+      "received_blocks": [
+        "88-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Wahl-Info Nr. 1 / G.O.B.",
+      "date": "",
+      "start_page": 92,
+      "end_page": 95,
+      "confirmed": true,
+      "title_evidence": "WAHL-INFO Nr. 1 / G.O.B.",
+      "title_blocks": [
+        "92-1"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "WAHL-INFO Nr. 1 / G.O.B.",
+          "blocks": [
+            "92-1"
+          ],
+          "surface": "G.O.B.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-26",
+      "received_evidence": "A blue rectangular stamp from the University of Bayreuth (UB Bayreuth) with the text 'UB Bayreuth eingelaufen am: 26. JUNI 1973'.",
+      "received_blocks": [
+        "92-10"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "Im Kampf gegen das BHG: Vorwärts mit der Demokratischen Front!",
+      "date": "",
+      "start_page": 96,
+      "end_page": 97,
+      "confirmed": true,
+      "title_evidence": "im kampf gegen das BHG\nVORWÄRTS MIT DER\nDEMOKRATISCHEN\nFRONT!",
+      "title_blocks": [
+        "96-6",
+        "96-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nEinig gegen Rechts",
+          "blocks": [
+            "96-1",
+            "96-2",
+            "96-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "22.6.73",
+      "date_blocks": [
+        "96-4"
+      ],
+      "date_text": "22.6.1973",
+      "date_iso": "1973-06-22",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Wahl-Info Nr. 2/G.o.B",
+      "date": "",
+      "start_page": 98,
+      "end_page": 99,
+      "confirmed": true,
+      "title_evidence": "WAHL-INFO Nr. 2/G.o.B",
+      "title_blocks": [
+        "98-1"
+      ],
+      "title_type": "original",
+      "series": "Wahl-Info",
+      "issue": "Nr. 2",
+      "issuers": [
+        {
+          "evidence": "WAHL-INFO Nr. 2/G.o.B",
+          "blocks": [
+            "98-1"
+          ],
+          "surface": "G.o.B",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "Entwurf einer Satzung für die Demokratische Front",
+      "date": "",
+      "start_page": 100,
+      "end_page": 101,
+      "confirmed": true,
+      "title_evidence": "ENTWURF EINER SATZUNG FÜR DIE DEMOKRATISCHE FRONT",
+      "title_blocks": [
+        "100-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ENTWURF EINER SATZUNG FÜR DIE DEMOKRATISCHE FRONT",
+          "blocks": [
+            "100-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "17.6.73",
+      "date_blocks": [
+        "100-2"
+      ],
+      "date_text": "17.6.1973",
+      "date_iso": "1973-06-17",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Vorschlag für allgemeine Richtlinien der Arbeit der DF",
+      "date": "",
+      "start_page": 102,
+      "end_page": 103,
+      "confirmed": true,
+      "title_evidence": "VORSCHLAG FÜR ALLGEMEINE RICHTLINIEN DER ARBEIT DER DF",
+      "title_blocks": [
+        "102-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "VORSCHLAG FÜR ALLGEMEINE RICHTLINIEN DER ARBEIT DER DF",
+          "blocks": [
+            "102-1"
+          ],
+          "surface": "DF",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-26",
+      "received_evidence": "eingelaufen am: 26. JUNI 1973",
+      "received_blocks": [
+        "102-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Kampf für unseren Studienführer heißt: Kampf gegen das BHG!",
+      "date": "",
+      "start_page": 104,
+      "end_page": 109,
+      "confirmed": true,
+      "title_evidence": "KAMPF FÜR UNSEREN STUDIENFÜHRER\nHEISST: KAMPF GEGEN DAS BHG!",
+      "title_blocks": [
+        "104-9"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nEinig gegen Rechts\nAbteilung WiWi",
+          "blocks": [
+            "104-2",
+            "104-3",
+            "104-4",
+            "104-6"
+          ],
+          "surface": "Demokratische Front Abteilung WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantw.: S. Eggerdinger, Universitätsstraße",
+          "blocks": [
+            "105-12",
+            "108-5"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantw."
+        },
+        {
+          "evidence": "Presserechtlich: Eggerdinger, Universitätsstraße 31",
+          "blocks": [
+            "109-11"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "30.5.73",
+      "date_blocks": [
+        "104-7"
+      ],
+      "date_text": "30.5.1973",
+      "date_iso": "1973-05-30",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-06-06",
+      "received_evidence": "eingelaufen am: 6. JUNI 1973",
+      "received_blocks": [
+        "104-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "Programm der Demokratischen Front für die Wahl zum Fachschaftsrat am Fachbereich Wirtschaftswissenschaft",
+      "date": "",
+      "start_page": 110,
+      "end_page": 113,
+      "confirmed": true,
+      "title_evidence": "PROGRAMM DER DEMOKRATISCHEN FRONT FÜR DIE WAHL ZUM FACHSCHAFTSRAT\nAM FACHBEREICH WIRTSCHAFTSWISSENSCHAFT",
+      "title_blocks": [
+        "110-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "PROGRAMM DER DEMOKRATISCHEN FRONT FÜR DIE WAHL ZUM FACHSCHAFTSRAT\nAM FACHBEREICH WIRTSCHAFTSWISSENSCHAFT",
+          "blocks": [
+            "110-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Im Kampf gegen das BHG: Vorwärts mit der Demokratischen Front!",
+      "date": "",
+      "start_page": 114,
+      "end_page": 115,
+      "confirmed": true,
+      "title_evidence": "im kampf gegen das BHG\nVORWÆRTS MIT DER\nDEMOKRATISCHEN\nFRONT!",
+      "title_blocks": [
+        "114-6",
+        "114-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nEinig gegen Rechts",
+          "blocks": [
+            "114-1",
+            "114-2",
+            "114-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "22.6.73",
+      "date_blocks": [
+        "114-4"
+      ],
+      "date_text": "22.6.1973",
+      "date_iso": "1973-06-22",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Interessensvertretung des RCDS: Demagogie und Verdrehungen",
+      "date": "",
+      "start_page": 116,
+      "end_page": 116,
+      "confirmed": true,
+      "title_evidence": "INTERESSENSVERTRETUNG DES RCDS: DEMAGOGIE UND VERDREHUNGEN",
+      "title_blocks": [
+        "116-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front AM W.WI",
+          "blocks": [
+            "116-1"
+          ],
+          "surface": "Demokratische Front am WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Pressrechtl. verantw. S. Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "116-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Pressrechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "Erklärung der Selbstbindung der studentischen Gremienmitglieder an die Organe der verfassten Studentenschaft",
+      "date": "",
+      "start_page": 117,
+      "end_page": 117,
+      "confirmed": true,
+      "title_evidence": "ERKLÄRUNG DER SELBSTBINDUNG\nDER STUDENTISCHEN GREMIENMITGLIEDER\nAN DIE ORGANE\nDER VERFASSTEN STUDENTENSCHAFT",
+      "title_blocks": [
+        "117-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE FRONT",
+          "blocks": [
+            "117-8"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "26.6.73",
+      "date_blocks": [
+        "117-2"
+      ],
+      "date_text": "26.6.1973",
+      "date_iso": "1973-06-26",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Wählt die Kandidaten der DF-Abteilung Sprach./Lit.",
+      "date": "",
+      "start_page": 118,
+      "end_page": 118,
+      "confirmed": true,
+      "title_evidence": "WÄHLT DIE KANDIDATEN DER\nDF-ABTEILUNG SPRACH./LIT.",
+      "title_blocks": [
+        "118-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "118-1",
+            "118-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "Für freie politische Betätigung!",
+      "date": "",
+      "start_page": 119,
+      "end_page": 120,
+      "confirmed": true,
+      "title_evidence": "FÜR FREIE POLITISCHE BETÄTIGUNG!",
+      "title_blocks": [
+        "119-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "119-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. Verantw.: St. Eggerdinger 84 R.-Universitätsstr. 31",
+          "blocks": [
+            "120-14"
+          ],
+          "surface": "St. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. Verantw."
+        }
+      ],
+      "date_evidence": "3.5.73",
+      "date_blocks": [
+        "119-4"
+      ],
+      "date_text": "3.5.1973",
+      "date_iso": "1973-05-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Studentische Interessen und imperatives Mandat",
+      "date": "",
+      "start_page": 121,
+      "end_page": 123,
+      "confirmed": true,
+      "title_evidence": "Studentische Interessen\nund imperatives Mandat",
+      "title_blocks": [
+        "121-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "121-1",
+            "121-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 R, Universitätsstr. 21",
+          "blocks": [
+            "122-7"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "4. 7. 73",
+      "date_blocks": [
+        "121-5"
+      ],
+      "date_text": "4.7.1973",
+      "date_iso": "1973-07-04",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Wählt die Kandidaten der DF-Abteilung Sprach./Lit.",
+      "date": "",
+      "start_page": 124,
+      "end_page": 124,
+      "confirmed": true,
+      "title_evidence": "WÄHLT DIE KANDIDATEN DER\nDF-ABTEILUNG SPRACH./LIT.",
+      "title_blocks": [
+        "124-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "124-1",
+            "124-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "Fachschaftsaktionsprogramm",
+      "date": "",
+      "start_page": 125,
+      "end_page": 128,
+      "confirmed": true,
+      "title_evidence": "Fachschaftsaktionsprogramm",
+      "title_blocks": [
+        "125-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "125-1",
+            "125-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantw.: Stefan Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "128-9"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Interessenvertretung des RCDS: Demagogie und Verdrehungen",
+      "date": "",
+      "start_page": 129,
+      "end_page": 129,
+      "confirmed": true,
+      "title_evidence": "INTERESSENVERTRETUNG DES RCDS: DEMAGOGIE UND VERDREHUNGEN",
+      "title_blocks": [
+        "129-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front AM W:WI",
+          "blocks": [
+            "129-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. verantw. S. Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "129-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Liste der Demokratischen Front am Fachbereich Wirtschaftswissenschaften zu den Wahlen zum Fachschaftsrat und Fachbereichsrat",
+      "date": "",
+      "start_page": 130,
+      "end_page": 130,
+      "confirmed": true,
+      "title_evidence": "Liste der\nDEMOKRATISCHEN FRONT\nam Fachbereich Wirtschaftswissenschaften\nzu den Wahlen zum\nFACHSCHAFTSRAT\nund\nFACHBEREICHSRAT",
+      "title_blocks": [
+        "130-1",
+        "130-2",
+        "130-3",
+        "130-4",
+        "130-5",
+        "130-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Liste der\nDEMOKRATISCHEN FRONT",
+          "blocks": [
+            "130-1",
+            "130-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich: Eggerdinger, Universitätsstraße 31",
+          "blocks": [
+            "130-11"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Erklärung der Selbstbindung der studentischen Gremie Mitglieder an die Organe der verfassten Studentenschaft",
+      "date": "",
+      "start_page": 131,
+      "end_page": 131,
+      "confirmed": true,
+      "title_evidence": "ERKLÄRUNG DER SELBSTBINDUNG\nDER STUDENTISCHEN GREMIE MITGLIEDER\nAN DIE ORGANE\nDER VERFASSTEN STUDENTENSCHAFT",
+      "title_blocks": [
+        "131-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE FRONT",
+          "blocks": [
+            "131-8"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "26.6.73",
+      "date_blocks": [
+        "131-2"
+      ],
+      "date_text": "26.6.1973",
+      "date_iso": "1973-06-26",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Wählt die Kandidaten der DF-Abteilung Sprach./Lit.",
+      "date": "",
+      "start_page": 132,
+      "end_page": 132,
+      "confirmed": true,
+      "title_evidence": "WÄHLT DIE KANDIDATEN DER\nDF-ABTEILUNG SPRACH./LIT.",
+      "title_blocks": [
+        "132-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "132-1",
+            "132-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Fachschaftsaktionsprogramm",
+      "date": "",
+      "start_page": 133,
+      "end_page": 136,
+      "confirmed": true,
+      "title_evidence": "Fachschaftsaktionsprogramm",
+      "title_blocks": [
+        "133-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "133-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantw.: Stefan Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "136-9"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "Fachschaftsaktionsprogramm",
+      "date": "",
+      "start_page": 137,
+      "end_page": 140,
+      "confirmed": true,
+      "title_evidence": "Fachschaftsaktionsprogramm",
+      "title_blocks": [
+        "137-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "137-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantw.: Stefan Eggerdinger, Universitätsstr. 31",
+          "blocks": [
+            "140-9"
+          ],
+          "surface": "Stefan Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "Im Kampf gegen das BHG: Vorwärts mit der Demokratischen Front!",
+      "date": "",
+      "start_page": 141,
+      "end_page": 142,
+      "confirmed": true,
+      "title_evidence": "im kampf gegen das BHG\nVORWÆRTS MIT DER\nDEMOKRATISCHEN\nFRONT!",
+      "title_blocks": [
+        "141-6",
+        "141-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "141-1",
+            "141-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "22.6.73",
+      "date_blocks": [
+        "141-4"
+      ],
+      "date_text": "22.6.1973",
+      "date_iso": "1973-06-22",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 53,
+      "title": "Streik? Ja - aber ...",
+      "date": "",
+      "start_page": 143,
+      "end_page": 144,
+      "confirmed": true,
+      "title_evidence": "STREIK?\nJa - aber ...",
+      "title_blocks": [
+        "143-5",
+        "143-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "143-1",
+            "143-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantw. S. Eggerdinger 84 Rgbg. Universitätsstr. 31",
+          "blocks": [
+            "144-13"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "29.5.73",
+      "date_blocks": [
+        "143-4"
+      ],
+      "date_text": "29.5.1973",
+      "date_iso": "1973-05-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 54,
+      "title": "Für eine starke DF am Fachbereich WiWi!",
+      "date": "",
+      "start_page": 145,
+      "end_page": 146,
+      "confirmed": true,
+      "title_evidence": "Für eine starke DF\nam Fachbereich WiWi!",
+      "title_blocks": [
+        "145-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "145-1",
+            "145-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg, Universitätsstr. 31",
+          "blocks": [
+            "146-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "17.5.73",
+      "date_blocks": [
+        "145-3"
+      ],
+      "date_text": "17.5.1973",
+      "date_iso": "1973-05-17",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "Für eine starke DF am Fachbereich WiWi!",
+      "date": "",
+      "start_page": 147,
+      "end_page": 148,
+      "confirmed": true,
+      "title_evidence": "Für eine starke DF\nam Fachbereich WiWi!",
+      "title_blocks": [
+        "147-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "147-1",
+            "147-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg, Universitätsstr. 31",
+          "blocks": [
+            "148-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "17.5.73",
+      "date_blocks": [
+        "147-3"
+      ],
+      "date_text": "17.5.1973",
+      "date_iso": "1973-05-17",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "issuer-evidence nicht im Text: 'S. Eggerdinger'"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "Maier & CSU kämpfen - und wir?",
+      "date": "",
+      "start_page": 149,
+      "end_page": 150,
+      "confirmed": true,
+      "title_evidence": "maier & csu kämpfen -\nUND WIR?",
+      "title_blocks": [
+        "149-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "149-1",
+            "149-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: Eggerdinger, 84 Rgbg., Universitätsstraße",
+          "blocks": [
+            "150-10"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "23.5.73",
+      "date_blocks": [
+        "149-3"
+      ],
+      "date_text": "23.5.1973",
+      "date_iso": "1973-05-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Herr Schaich und der FS-Rat",
+      "date": "",
+      "start_page": 151,
+      "end_page": 152,
+      "confirmed": true,
+      "title_evidence": "Herr Schaich und der\nFS-Rat",
+      "title_blocks": [
+        "151-6",
+        "151-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "151-1",
+            "151-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg,\nUniversitätsstr. 31",
+          "blocks": [
+            "152-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-05-22",
+      "received_evidence": "A purple rectangular stamp from the University of Regensburg, dated 22. Mai 1973, with text 'UB Regensburg' and '22. MAI 1973'.",
+      "received_blocks": [
+        "151-8"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 58,
+      "title": "Für eine starke DF am Fachbereich WiWi!",
+      "date": "",
+      "start_page": 153,
+      "end_page": 154,
+      "confirmed": true,
+      "title_evidence": "Für eine starke DF\nam Fachbereich WiWi!",
+      "title_blocks": [
+        "153-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "153-1",
+            "153-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg, Universitätsstr. 31",
+          "blocks": [
+            "154-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "17.5.73",
+      "date_blocks": [
+        "153-3"
+      ],
+      "date_text": "17.5.1973",
+      "date_iso": "1973-05-17",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-05-17",
+      "received_evidence": "eingelaufen am: 17. MAI 1973",
+      "received_blocks": [
+        "153-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Streik? Ja - aber ...",
+      "date": "",
+      "start_page": 155,
+      "end_page": 156,
+      "confirmed": true,
+      "title_evidence": "STREIK?\nJa - aber ...",
+      "title_blocks": [
+        "155-6",
+        "155-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "155-2",
+            "155-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantw. S. Eggerdinger 84 Rgbg. Universitätsstr. 31",
+          "blocks": [
+            "156-13"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantw."
+        }
+      ],
+      "date_evidence": "29.5.73",
+      "date_blocks": [
+        "155-5"
+      ],
+      "date_text": "29.5.1973",
+      "date_iso": "1973-05-29",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-06-01",
+      "received_evidence": "eingelaufen am: 1. JUNI 1973",
+      "received_blocks": [
+        "155-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 60,
+      "title": "Herr Schaich und der FS-Rat",
+      "date": "",
+      "start_page": 157,
+      "end_page": 158,
+      "confirmed": true,
+      "title_evidence": "Herr Schaich und der\nFS-Rat",
+      "title_blocks": [
+        "157-6",
+        "157-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "157-1",
+            "157-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Regensburg,\nUniversitätsstr. 31",
+          "blocks": [
+            "158-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 61,
+      "title": "Maier & CSU kämpfen - und wir?",
+      "date": "",
+      "start_page": 159,
+      "end_page": 160,
+      "confirmed": true,
+      "title_evidence": "maier & csu kämpfen -\nUND WIR?",
+      "title_blocks": [
+        "159-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "159-1",
+            "159-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: Eggerdinger, 84 Rgbg., Universitätsstraße",
+          "blocks": [
+            "160-10"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "23.5.73",
+      "date_blocks": [
+        "159-3"
+      ],
+      "date_text": "23.5.1973",
+      "date_iso": "1973-05-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "Spartakus will am FB-WiWi die Aktionseinheit gegen Rechts ohne politische Begründung verlassen!",
+      "date": "",
+      "start_page": 161,
+      "end_page": 163,
+      "confirmed": true,
+      "title_evidence": "Spartakus will am FB-WiWi\ndie Aktionseinheit gegen Rechts\nohne politische Begründung verlassen!",
+      "title_blocks": [
+        "161-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "161-4",
+            "161-5"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "presserechtlich verantwortlich: S. Eggerdinger, Rgbg.\nUniversitätsstr. 31",
+          "blocks": [
+            "163-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "22.3.73",
+      "date_blocks": [
+        "161-7"
+      ],
+      "date_text": "22.3.1973",
+      "date_iso": "1973-03-22",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-03-22",
+      "received_evidence": "22. MÄRZ 1973",
+      "received_blocks": [
+        "161-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Dokumentation über das erpresserische Entlassungsdiktat des KuMi",
+      "date": "",
+      "start_page": 164,
+      "end_page": 172,
+      "confirmed": true,
+      "title_evidence": "DOKUMENTATION\nüber das\nERPRESSERISCHE\nENTLASSUNGSDIKTAT\ndes KuMi",
+      "title_blocks": [
+        "164-5",
+        "164-6",
+        "164-7",
+        "164-8",
+        "164-9"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "164-1",
+            "164-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "7.3.73",
+      "date_blocks": [
+        "164-4"
+      ],
+      "date_text": "7.3.1973",
+      "date_iso": "1973-03-07",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 64,
+      "title": "Beschluß des Fachbereichsrats vom 17.1.1973 zur Beauftragung der Lehrassistenten mit Lehre im Sommersemester 1973",
+      "date": "",
+      "start_page": 173,
+      "end_page": 174,
+      "confirmed": true,
+      "title_evidence": "Beschluß des Fachbereichsrats vom 17.1.1973 zur Beauftragung\nder Lehrassistenten mit Lehre im Sommersemester 1973",
+      "title_blocks": [
+        "173-13"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Universität Regensburg\nDER REKTOR",
+          "blocks": [
+            "173-2",
+            "173-3"
+          ],
+          "surface": "Der Rektor",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rektor"
+          ]
+        },
+        {
+          "evidence": "(G. Obermair)",
+          "blocks": [
+            "174-3"
+          ],
+          "surface": "G. Obermair",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "8400 Regensburg, den 29.1.1973",
+      "date_blocks": [
+        "173-5"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": [
+        "Person als issuer: 'Der Rektor' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 65,
+      "title": "Protokoll der Konventsitzung vom 5. 2. 1973",
+      "date": "",
+      "start_page": 175,
+      "end_page": 178,
+      "confirmed": true,
+      "title_evidence": "Protokoll der Konventsitzung vom 5. 2. 1973",
+      "title_blocks": [
+        "175-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "5. 2. 1973",
+      "date_blocks": [
+        "175-2"
+      ],
+      "date_text": "5.2.1973",
+      "date_iso": "1973-02-05",
+      "date_type": "issued",
+      "doc_type": "protokoll",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 66,
+      "title": "Protokoll",
+      "date": "",
+      "start_page": 179,
+      "end_page": 182,
+      "confirmed": true,
+      "title_evidence": "PROTOKOLL",
+      "title_blocks": [
+        "179-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "der 3. Sitzung des Fachschaftsrates WiWi am 7. 3. 1973",
+      "date_blocks": [
+        "179-4"
+      ],
+      "date_text": "7.3.1973",
+      "date_iso": "1973-03-07",
+      "date_type": "issued",
+      "doc_type": "protokoll",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "Vorschlag zu einer Plattform eines Aktionskomitees gegen die Erpressung von Demokraten/ Solidarität mit den Lehrassistenten am Fachbereich Wirtschaftswissenschaft, vorgelegt vom Fachschaftsrat am Fachbereich Wirtschaftswissenschaft",
+      "date": "",
+      "start_page": 183,
+      "end_page": 184,
+      "confirmed": true,
+      "title_evidence": "Vorschlag zu einer Plattform eines \"Aktionskomitees gegen die Erpressung von Demokraten/ Solidarität mit den Lehrassistenten am Fachbereich Wirtschaftswissenschaft\", vorgelegt vom Fachschaftsrat am Fachbereich Wirtschaftswissenschaft",
+      "title_blocks": [
+        "183-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: FS-Rat am FB WiWi Universität Regensburg\nPresserechtlich: S. Eggerdinger",
+          "blocks": [
+            "184-11"
+          ],
+          "surface": "FS-Rat am FB WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich: FS-Rat am FB WiWi Universität Regensburg\nPresserechtlich: S. Eggerdinger",
+          "blocks": [
+            "184-11"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 68,
+      "title": "Antrag an die 23. o. MV des VDS vom 23.3. - 25.3.1973",
+      "date": "",
+      "start_page": 185,
+      "end_page": 186,
+      "confirmed": true,
+      "title_evidence": "Antrag an die 23. o. MV des VDS vom 23.3. - 25.3.1973",
+      "title_blocks": [
+        "185-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaftsrat Wirtschaftswissenschaft der Universität\nRegensburg",
+          "blocks": [
+            "185-3"
+          ],
+          "surface": "Fachschaftsrat Wirtschaftswissenschaft der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Hamburg, den 26.2.1973",
+      "date_blocks": [
+        "186-8"
+      ],
+      "date_text": "26.2.1973",
+      "date_iso": "1973-02-26",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 69,
+      "title": "Dokumentation über das erpresserische Entlassungsdiktat des KuMi",
+      "date": "",
+      "start_page": 187,
+      "end_page": 195,
+      "confirmed": true,
+      "title_evidence": "DOKUMENTATION\nüber das\nERPRESSERISCHE\nENTLASSUNGSDIKTAT\ndes KuMi",
+      "title_blocks": [
+        "187-5",
+        "187-6",
+        "187-7",
+        "187-8",
+        "187-9"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "187-2",
+            "187-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "7.3.73",
+      "date_blocks": [
+        "187-4"
+      ],
+      "date_text": "7.3.1973",
+      "date_iso": "1973-03-07",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer 'Demokratische Front': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'Demokratische Front'"
+      ]
+    },
+    {
+      "id": 70,
+      "title": "Beschluß des Fachbereichsrats vom 17.1.1973 zur Beauftragung der Lehrassistenten mit Lehre im Sommersemester 1973",
+      "date": "",
+      "start_page": 196,
+      "end_page": 201,
+      "confirmed": true,
+      "title_evidence": "Beschluß des Fachbereichsrats vom 17.1.1973 zur Beauftragung\nder Lehrassistenten mit Lehre im Sommersemester 1973",
+      "title_blocks": [
+        "196-13"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Universität Regensburg\nDER REKTOR",
+          "blocks": [
+            "196-1",
+            "196-2"
+          ],
+          "surface": "Der Rektor",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rektor"
+          ]
+        },
+        {
+          "evidence": "(G. Obermair)",
+          "blocks": [
+            "197-3"
+          ],
+          "surface": "G. Obermair",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "8400 Regensburg, den 29.1.1973",
+      "date_blocks": [
+        "196-5"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": [
+        "Person als issuer: 'Der Rektor' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 71,
+      "title": "Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 202,
+      "end_page": 205,
+      "confirmed": true,
+      "title_evidence": "SOLIDARITÄT\nmit den\nLEHRASSISTENTEN:",
+      "title_blocks": [
+        "202-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "202-1",
+            "202-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich: S. Eggerdinger, 84 Rgb., Universitätsstr.31",
+          "blocks": [
+            "205-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "Mo 5.3.73",
+      "date_blocks": [
+        "202-4"
+      ],
+      "date_text": "5.3.1973",
+      "date_iso": "1973-03-05",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 72,
+      "title": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "date": "",
+      "start_page": 206,
+      "end_page": 208,
+      "confirmed": true,
+      "title_evidence": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "title_blocks": [
+        "206-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nAbteilung Psychologie",
+          "blocks": [
+            "206-1",
+            "206-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts : S. Eggerdinger, Universitätsstr.",
+          "blocks": [
+            "208-6"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-09",
+      "received_evidence": "A rectangular stamp with the text 'NR 1' at the top, 'am: 9. FEB. 1973' in the middle, and some faint, illegible text at the bottom.",
+      "received_blocks": [
+        "206-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 73,
+      "title": "Zum Aktionsprogramm",
+      "date": "",
+      "start_page": 209,
+      "end_page": 210,
+      "confirmed": true,
+      "title_evidence": "Zum\nAktionsprogramm",
+      "title_blocks": [
+        "209-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nAbteilung Psychologie",
+          "blocks": [
+            "209-1",
+            "209-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des\nPresserechts: S. Eggerdinger\nUniversitätsstr. 33",
+          "blocks": [
+            "210-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-09",
+      "received_evidence": "A purple rectangular stamp from the University Library of Regensburg (UB Regensburg). The text inside the stamp reads 'UB Regensburg', 'eingel. am: 9. FEB. 1973'.",
+      "received_blocks": [
+        "209-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'S. Eggerdinger': Beleg steht nicht in den genannten Blöcken",
+        "issuer-evidence nicht im Text: 'S. Eggerdinger'"
+      ]
+    },
+    {
+      "id": 74,
+      "title": "Kommilitonen!",
+      "date": "",
+      "start_page": 211,
+      "end_page": 212,
+      "confirmed": true,
+      "title_evidence": "Kommilitonen !",
+      "title_blocks": [
+        "211-5"
+      ],
+      "title_type": "original",
+      "series": "Wahlflugblatt",
+      "issue": "3",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront\nAbteilung\nPsychologie",
+          "blocks": [
+            "211-2",
+            "211-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "verantwortlich im Sinne des Presserechts: S. Eggerdinger\nUniversitätsstr. 31",
+          "blocks": [
+            "211-11"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-09",
+      "received_evidence": "Universität Regensburg Eingelaufen am: 9. FEB. 1973",
+      "received_blocks": [
+        "211-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 75,
+      "title": "Zur Mitbestimmung",
+      "date": "",
+      "start_page": 213,
+      "end_page": 214,
+      "confirmed": true,
+      "title_evidence": "ZUR MITBESTIMMUNG",
+      "title_blocks": [
+        "213-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nABTEILUNG\nPSYCHOLOGIE",
+          "blocks": [
+            "213-1",
+            "213-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts: S. Eggerdinger,\n84 Regensburg, Universitätsstr. 33",
+          "blocks": [
+            "214-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-09",
+      "received_evidence": "Red rectangular stamp from the University of Hamburg, dated 9. FEB. 1973.",
+      "received_blocks": [
+        "213-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 76,
+      "title": "Um allen fortschrittlichen Studenten die gemeinsame Arbeit ...",
+      "date": "",
+      "start_page": 215,
+      "end_page": 216,
+      "confirmed": true,
+      "title_evidence": "Um allen fortschrittlichen Studenten die\ngemeinsame Arbeit",
+      "title_blocks": [
+        "215-4"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT\nABTEILUNG\nPSYCHOLOGIE",
+          "blocks": [
+            "215-1",
+            "215-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantw. im Sinne d. Presserechts: S. Eggerdinger, Universitätsstr.",
+          "blocks": [
+            "215-12"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw. im Sinne d. Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-02-09",
+      "received_evidence": "am: 9. FEB. 1973",
+      "received_blocks": [
+        "215-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 77,
+      "title": "Wir fordern SHB und Spartakus auf: Macht endlich Schluß mit eurer Mauschelpolitik!",
+      "date": "",
+      "start_page": 217,
+      "end_page": 220,
+      "confirmed": true,
+      "title_evidence": "Wir fordern SHB und Spartakus auf:\nMacht endlich Schluß mit eurer\nMauschelpolitik!",
+      "title_blocks": [
+        "217-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "217-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer 'Demokratische Front': Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 78,
+      "title": "Die Kritik an der Amtsführung von Rektor Obermair",
+      "date": "",
+      "start_page": 221,
+      "end_page": 223,
+      "confirmed": true,
+      "title_evidence": "DIE KRITIK AN DER AMTSFÜHRUNG VON REKTOR OBERMAIR:",
+      "title_blocks": [
+        "221-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Gabriele Decker (DF), Ulrich Wessoly (MHG)\nStudentenvertreter\nim Kleinen Senat",
+          "blocks": [
+            "223-6"
+          ],
+          "surface": "Gabriele Decker",
+          "role": "signatory",
+          "function": "Studentenvertreter im Kleinen Senat",
+          "marker": ""
+        },
+        {
+          "evidence": "Gabriele Decker (DF), Ulrich Wessoly (MHG)\nStudentenvertreter\nim Kleinen Senat",
+          "blocks": [
+            "223-6"
+          ],
+          "surface": "Ulrich Wessoly",
+          "role": "signatory",
+          "function": "Studentenvertreter im Kleinen Senat",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "7.2.73",
+      "date_blocks": [
+        "221-4"
+      ],
+      "date_text": "7.2.1973",
+      "date_iso": "1973-02-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 79,
+      "title": "Wahlinfo Nr. 4",
+      "date": "",
+      "start_page": 224,
+      "end_page": 225,
+      "confirmed": true,
+      "title_evidence": "WAHLINFO NR. 4",
+      "title_blocks": [
+        "224-1"
+      ],
+      "title_type": "original",
+      "series": "Wahlinfo",
+      "issue": "4",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT Abteilung Psychologie",
+          "blocks": [
+            "224-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des\nPresserechts: S. Eggerdinger\nUniversitätsstr. 33",
+          "blocks": [
+            "225-9"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-06",
+      "received_evidence": "6. FEB. 1973",
+      "received_blocks": [
+        "224-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 80,
+      "title": "AStA-Koalition ernsthaft gefährdet!",
+      "date": "",
+      "start_page": 226,
+      "end_page": 227,
+      "confirmed": true,
+      "title_evidence": "ASTA-KOALITION ernsthaft\ngefährdet!",
+      "title_blocks": [
+        "226-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "226-2",
+            "226-3"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presser. verantw. S. Eggerdinger, Rgbg., Universitätsstr. 33",
+          "blocks": [
+            "227-14"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presser. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 81,
+      "title": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "date": "",
+      "start_page": 228,
+      "end_page": 230,
+      "confirmed": true,
+      "title_evidence": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "title_blocks": [
+        "228-4"
+      ],
+      "title_type": "original",
+      "series": "Demokratische Front",
+      "issue": "NR 1",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT",
+          "blocks": [
+            "228-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Abteilung Psychologie",
+          "blocks": [
+            "228-3"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts : S. Eggerdinger, Universitätsstr.",
+          "blocks": [
+            "230-6"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "Donnerstag, den 1.2.73",
+      "date_blocks": [
+        "228-4"
+      ],
+      "date_text": "1.2.1973",
+      "date_iso": "1973-02-01",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 82,
+      "title": "Wahlflugblatt Nr. 3",
+      "date": "",
+      "start_page": 231,
+      "end_page": 231,
+      "confirmed": true,
+      "title_evidence": "Wahlflugblatt Nr.\n3",
+      "title_blocks": [
+        "231-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "231-1",
+            "231-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ],
+          "_merged": [
+            "DF"
+          ]
+        },
+        {
+          "evidence": "Abteilung\nPsychologie",
+          "blocks": [
+            "231-3"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "verantwortlich im Sinne des Presserechts: S. Eggerdinger\nUniversitätsstr. 31",
+          "blocks": [
+            "231-10"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 83,
+      "title": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "date": "",
+      "start_page": 232,
+      "end_page": 234,
+      "confirmed": true,
+      "title_evidence": "Bericht von der Psychologen-Vollversammlung vom Donnerstag, den 1.2.73",
+      "title_blocks": [
+        "232-4"
+      ],
+      "title_type": "original",
+      "series": "Demokratische Front",
+      "issue": "NR 1",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT",
+          "blocks": [
+            "232-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Abteilung Psychologie",
+          "blocks": [
+            "232-3"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts : S. Eggerdinger, Universitätsstr.",
+          "blocks": [
+            "234-7"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "Donnerstag, den 1.2.73",
+      "date_blocks": [
+        "232-4"
+      ],
+      "date_text": "1.2.1973",
+      "date_iso": "1973-02-01",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 84,
+      "title": "Wahlflugblatt Nr. 3",
+      "date": "",
+      "start_page": 235,
+      "end_page": 236,
+      "confirmed": true,
+      "title_evidence": "Wahlflugblatt Nr.\n[3]",
+      "title_blocks": [
+        "235-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "235-1",
+            "235-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ],
+          "_merged": [
+            "DF"
+          ]
+        },
+        {
+          "evidence": "Abteilung\nPsychologie",
+          "blocks": [
+            "235-3"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "verantwortlich im Sinne des Presserechts: S. Eggerdinger\nUniversitätsstr. 31",
+          "blocks": [
+            "235-10"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 85,
+      "title": "Der geschlossene Kampf der Fachschaften gegen die Reaktion ist gefährdet!!!",
+      "date": "",
+      "start_page": 237,
+      "end_page": 238,
+      "confirmed": true,
+      "title_evidence": "DER GESCHLOSSENE KAMPF DER FACHSCHAFTEN GEGEN DIE\nREAKTION IST GEFAHRDET!!!",
+      "title_blocks": [
+        "237-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT",
+          "blocks": [
+            "237-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "Montag, den 29.1.",
+      "date_blocks": [
+        "237-4"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 86,
+      "title": "Aktionsprogramm zu den FSR-Wahlen im Fach Psychologie",
+      "date": "",
+      "start_page": 239,
+      "end_page": 242,
+      "confirmed": true,
+      "title_evidence": "Aktionsprogramm zu den FSR-Wahlen im Fach Psychologie",
+      "title_blocks": [
+        "239-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische Front",
+          "blocks": [
+            "239-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts: S. Eggerdinger\nUniversitätsstr. 33",
+          "blocks": [
+            "239-12"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "Regensburg, den 30.1.73",
+      "date_blocks": [
+        "239-1"
+      ],
+      "date_text": "30.1.1973",
+      "date_iso": "1973-01-30",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 87,
+      "title": "Einig gegen Rechts",
+      "date": "",
+      "start_page": 243,
+      "end_page": 246,
+      "confirmed": true,
+      "title_evidence": "Einig gegen Rechts",
+      "title_blocks": [
+        "243-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "243-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich verantwortlich:\nS.Eggerdinger, Universitätsstr. 33\nEigendruck im Selbstverlag.",
+          "blocks": [
+            "246-17"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": [
+        "issuer 'S. Eggerdinger': Name 'S. Eggerdinger' nicht im Beleg"
+      ]
+    },
+    {
+      "id": 88,
+      "title": "Der geschlossene Kampf der Fachschaft gegen die Reaktion ist gefährdet!",
+      "date": "",
+      "start_page": 247,
+      "end_page": 248,
+      "confirmed": true,
+      "title_evidence": "DER GESCHLOSSENE KAMPF DER FACH -\nSCHAFT GEGEN DIE REAKTION IST\nGEFÄHRDET!",
+      "title_blocks": [
+        "247-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DF DEMOKRATISCHE FRONT DF",
+          "blocks": [
+            "247-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "Montag, den 29.1.",
+      "date_blocks": [
+        "247-4"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 89,
+      "title": "Der geschlossene Kampf der Fachschaft gegen die Reaktion ist gefährdet!",
+      "date": "",
+      "start_page": 249,
+      "end_page": 250,
+      "confirmed": true,
+      "title_evidence": "DER GESCHLOSSENE KAMPF DER FACH-\nSCHAFT GEGEN DIE REAKTION IST\nGEFÄHRDET!",
+      "title_blocks": [
+        "249-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DF DEMOKRATISCHE FRONT DF",
+          "blocks": [
+            "249-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "Montag, den 29.1.",
+      "date_blocks": [
+        "249-3"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 90,
+      "title": "Der geschlossene Kampf der Fachschaften gegen die Reaktion ist gefährdet!!!",
+      "date": "",
+      "start_page": 251,
+      "end_page": 252,
+      "confirmed": true,
+      "title_evidence": "DER GESCHLOSSENE KAMPF DER FACHSCHAFTEN GEGEN DIE\nREAKTION IST GEFAHRDET!!!",
+      "title_blocks": [
+        "251-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT",
+          "blocks": [
+            "251-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        }
+      ],
+      "date_evidence": "Montag, den 29.1.",
+      "date_blocks": [
+        "251-4"
+      ],
+      "date_text": "29.1.1973",
+      "date_iso": "1973-01-29",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 91,
+      "title": "Zur Mitbestimmung",
+      "date": "",
+      "start_page": 253,
+      "end_page": 254,
+      "confirmed": true,
+      "title_evidence": "Z U R   M I T B E S T I M M U N G\n=====",
+      "title_blocks": [
+        "253-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEMOKRATISCHE\nFRONT",
+          "blocks": [
+            "253-1"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ]
+        },
+        {
+          "evidence": "ABTEILUNG\nPSYCHOLOGIE",
+          "blocks": [
+            "253-2"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich im Sinne des Presserechts: S. Eggerdinger,\n84 Regensburg, Universitätsstr. 33",
+          "blocks": [
+            "254-8"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    },
+    {
+      "id": 92,
+      "title": "Wahlflugblatt Nr. 3",
+      "date": "",
+      "start_page": 255,
+      "end_page": 255,
+      "confirmed": true,
+      "title_evidence": "Wahlflugblatt Nr. 3 DF DF DF DF DF DF DF DF DF DF DF",
+      "title_blocks": [
+        "255-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Demokratische\nFront",
+          "blocks": [
+            "255-1",
+            "255-2"
+          ],
+          "surface": "Demokratische Front",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "df"
+          ],
+          "_merged": [
+            "DF"
+          ]
+        },
+        {
+          "evidence": "Abteilung\nPsychologie",
+          "blocks": [
+            "255-3"
+          ],
+          "surface": "Abteilung Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "verantwortlich im Sinne des Presserechts: S. Eggerdinger\nUniversitätsstr. 31",
+          "blocks": [
+            "255-10"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich im Sinne des Presserechts"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "Person als issuer: 'Abteilung Psychologie' - gehoert zu signatory"
+      ]
+    }
+  ]
+}

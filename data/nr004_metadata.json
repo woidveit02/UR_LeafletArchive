@@ -1489,7 +1489,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "a l s Pöllath, Bettermann, Schalitzky, Wolff a l s a l s a l s",
@@ -1567,7 +1569,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich: a l s\nBettermann-Lohmann-Pöllath-Schmidt",
@@ -1649,7 +1653,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Für die a l s (Aktionsgemeinschaft liberaler Studenten):\nPöllath",
@@ -1698,7 +1704,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich für die Aktionsgemeinschaft liberaler Studenten\nAmann - Müllner",
@@ -1760,7 +1768,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich:\nMeyer - Hilpert - Pfister - Vogel - Pöllath",
@@ -1859,7 +1869,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Für die a l s : Pöllath - Müllner - Bettermann - Hof - Gensel u.a.",
@@ -2062,7 +2074,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich:\nBettermann - Müllner - Pöllath",
@@ -4029,7 +4043,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",
@@ -8363,7 +8379,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "als"
+          ]
         },
         {
           "evidence": "Verantwortlich: Bettermann - Müllner - Pöllath",

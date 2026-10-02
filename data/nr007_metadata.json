@@ -1,0 +1,4476 @@
+{
+  "source_pdf": "0118_0007.pdf",
+  "created": "2026-10-02T15:26:01.387558",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "tag": "claude-r12",
+  "prompt_version": "v2",
+  "batch_size": 20,
+  "grounding": {
+    "checked": 70,
+    "flagged": 8,
+    "rate_percent": 88.6
+  },
+  "organizations": "organizations.draft.json",
+  "segmentation_hints": [],
+  "segments": [
+    {
+      "id": 1,
+      "title": "Wahlen 72: Studentenparlament. Ihre RCDS Kandidaten",
+      "date": "",
+      "start_page": 1,
+      "end_page": 4,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WAHLEN 72\nSTUDENTEN\nPARLAMENT\nIHRE\nRCDS\nKANDIDATEN",
+      "title_blocks": [
+        "1-1",
+        "1-2",
+        "1-3",
+        "1-4",
+        "1-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS",
+          "blocks": [
+            "1-4"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 2,
+      "title": "Buh-Männer ins Studentenparlament !!!",
+      "date": "",
+      "start_page": 5,
+      "end_page": 6,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "BUH-MÄNNER INS STUDENTENPARLAMENT !!!",
+      "title_blocks": [
+        "5-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: Kuhn, Schaidinger, Viehbeck",
+          "blocks": [
+            "6-9"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Kuhn, Schaidinger, Viehbeck",
+          "blocks": [
+            "6-9"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Kuhn, Schaidinger, Viehbeck",
+          "blocks": [
+            "6-9"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "presserechtlich: Alois Karl, 84 Regensburg, Schwandorfer Str. 27",
+          "blocks": [
+            "6-10"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "12.11.",
+      "date_blocks": [
+        "5-1"
+      ],
+      "date_text": "12.11.1972",
+      "date_iso": "1972-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1972-11-24",
+      "received_evidence": "24. NOV. 1972",
+      "received_blocks": [
+        "5-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Helga Karl. 5. Semester Soziologie, VWL. 22 Jahre, studentischer Vertreter im Fachbereichsrat GGP",
+      "date": "",
+      "start_page": 7,
+      "end_page": 7,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Helga Karl\n5. Semester Soziologie, VWL\n22 Jahre, studentischer Vertreter im Fachbereichsrat GGP",
+      "title_blocks": [
+        "7-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "MSB Spartakus",
+          "blocks": [
+            "7-28"
+          ],
+          "surface": "MSB Spartakus",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 4,
+      "title": "Fakten zur Wahl",
+      "date": "",
+      "start_page": 8,
+      "end_page": 9,
+      "confirmed": true,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Fakten zur Wahl",
+      "title_blocks": [
+        "8-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: RCDS-Bundesvorstand, 53 Bonn, Jagdweg 7",
+          "blocks": [
+            "8-1",
+            "9-18"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 5,
+      "title": "Die traurige Moral der sozialistischen Moral",
+      "date": "",
+      "start_page": 10,
+      "end_page": 13,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIETRAURIGE MORAL\nDERSOZIALISTISCHEN\nMORAL",
+      "title_blocks": [
+        "10-7"
+      ],
+      "title_type": "original",
+      "series": "RCDS Info. Theoriepaper",
+      "issue": "5",
+      "issuers": [
+        {
+          "evidence": "R C D S INFO",
+          "blocks": [
+            "10-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "10-8"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "10-8"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "presser: A. Karl, 84 Rgbg, Schwandorferstr. 27",
+          "blocks": [
+            "10-9"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "received_date": "1972-11-23",
+      "received_evidence": "A purple rectangular stamp with the text 'eingelesen am: 23. NOV. 1972'.",
+      "received_blocks": [
+        "10-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Warum RCDS ???",
+      "date": "",
+      "start_page": 14,
+      "end_page": 14,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Warum RCDS ???",
+      "title_blocks": [
+        "14-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS. Theoriepapiere",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS",
+          "blocks": [
+            "14-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "23. NOV. 1972",
+      "date_blocks": [
+        "14-1"
+      ],
+      "date_text": "23. Nov. 1972",
+      "date_iso": "1972-11-23",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "",
+      "date": "",
+      "start_page": 15,
+      "end_page": 15,
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Thesen zur Demokratisierung",
+      "date": "",
+      "start_page": 16,
+      "end_page": 21,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Thesen zur Demokratisierung",
+      "title_blocks": [
+        "16-2"
+      ],
+      "title_type": "original",
+      "series": "Theoriepapier",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS Theoriepapier Nr. 1",
+          "blocks": [
+            "16-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "erantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "17-8"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "erantwortlich"
+        },
+        {
+          "evidence": "erantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "17-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "erantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: RCDS Fachbereichsgrippe WIWI; Keil, Kuhn.",
+          "blocks": [
+            "19-5"
+          ],
+          "surface": "Keil",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: RCDS Fachbereichsgrippe WIWI; Keil, Kuhn.",
+          "blocks": [
+            "19-5",
+            "20-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viehbeck, Schaidinger",
+          "blocks": [
+            "20-8"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viehbeck, Schaidinger",
+          "blocks": [
+            "20-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.75,
+      "_retried_signatory": true,
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Agitatorische Bewusstseinsveränderung. Oder: Wie kann man ohne Hirn an der Spitze des \"Fortschritts\" stehen ....",
+      "date": "",
+      "start_page": 22,
+      "end_page": 25,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AGITATORISCHE BEWUSSTSEINSVERÄN-\nDERUNG ODER: WIE KANN MAN OHNE HIRN AN DER SPITZE\nDES \"FORTSCHRITTS\" STEHEN ....",
+      "title_blocks": [
+        "22-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS. Theorie-paper",
+      "issue": "Nr. 4",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RC",
+          "blocks": [
+            "22-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Krämer",
+          "blocks": [
+            "25-3"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl 84 Regensburg Schwandorferstraße 27",
+          "blocks": [
+            "25-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "_grounding": [
+        "series nicht im Text: 'RCDS. Theorie-paper'"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Die traurige Moral der sozialistischen Moral",
+      "date": "",
+      "start_page": 26,
+      "end_page": 29,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIETRAURIGE MORAL\nDERSOZIALISTISCHEN\nMORAL",
+      "title_blocks": [
+        "26-6"
+      ],
+      "title_type": "original",
+      "series": "R.C.D.S INFO. Theoriepaper",
+      "issue": "5",
+      "issuers": [
+        {
+          "evidence": "R.C.D.S INFO",
+          "blocks": [
+            "26-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "26-7"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "26-7"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "presser: A. Karl, 84 Rgbg, Schwandorferstr. 27",
+          "blocks": [
+            "26-8"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "Gleichheit der Bildungschancen",
+      "date": "",
+      "start_page": 30,
+      "end_page": 31,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "GLEICHHEIT DER BILDUNGSCHANCEN",
+      "title_blocks": [
+        "30-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS. Theoriepaper",
+      "issue": "Nr. 6",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RC SRCDS RCDSRCDS RCDS RCDS",
+          "blocks": [
+            "30-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Viehbock, Schaidinger, Kuhn, Karl",
+          "blocks": [
+            "31-5"
+          ],
+          "surface": "Viehbock",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbock, Schaidinger, Kuhn, Karl",
+          "blocks": [
+            "31-5"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbock, Schaidinger, Kuhn, Karl",
+          "blocks": [
+            "31-5"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbock, Schaidinger, Kuhn, Karl",
+          "blocks": [
+            "31-5"
+          ],
+          "surface": "Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "presserechtlich: Alois Karl, 84 Regensburg Schwandorferstraße 27",
+          "blocks": [
+            "31-6"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 12,
+      "title": "Die traurige Moral der sozialistischen Moral",
+      "date": "",
+      "start_page": 32,
+      "end_page": 35,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "DIETRAURIGE MORAL\nDERSOZIALISTISCHEN\nMORAL",
+      "title_blocks": [
+        "32-7"
+      ],
+      "title_type": "original",
+      "series": "R C D S INFO. Theoriepaper",
+      "issue": "5",
+      "issuers": [
+        {
+          "evidence": "R C D S INFO",
+          "blocks": [
+            "32-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "32-8"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "verantw: Alois Karl, Krämer",
+          "blocks": [
+            "32-8"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw"
+        },
+        {
+          "evidence": "presser: A. Karl, 84 Rgbg, Schwandorferstr. 27",
+          "blocks": [
+            "32-9"
+          ],
+          "surface": "A. Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser"
+        }
+      ],
+      "date_evidence": "22. NOV. 1972",
+      "date_blocks": [
+        "32-4"
+      ],
+      "date_text": "22. Nov. 1972",
+      "date_iso": "1972-11-22",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Warum RCDS?",
+      "date": "",
+      "start_page": 36,
+      "end_page": 37,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Warum RCDS ?",
+      "title_blocks": [
+        "36-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Warum RCDS ?",
+          "blocks": [
+            "36-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Text: Hans Schaidinger",
+          "blocks": [
+            "36-7"
+          ],
+          "surface": "Hans Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "37-9"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "37-9"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "Warum RCDS ?"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Agitatorische Bewusstseinsveränderung. Oder: Wie kann man ohne Hirn an der Spitze des \"Fortschritts\" stehen",
+      "date": "",
+      "start_page": 38,
+      "end_page": 41,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AGITATORISCHE BEWUSSTSEINSVERÄN-\nDERUNG\nODER: WIE KANN MAN OHNE HIRN AN DER SPITZE\nDES \"FORTSCHRITTS\" STEHEN",
+      "title_blocks": [
+        "38-3",
+        "38-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS. Theoriepaper",
+      "issue": "Nr. 4",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RC",
+          "blocks": [
+            "38-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Krämer",
+          "blocks": [
+            "41-3"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl 84 Regensburg Schwandorferstraße 27",
+          "blocks": [
+            "41-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.8,
+      "_grounding": [
+        "series nicht im Text: 'RCDS. Theoriepaper'"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Warum RCDS?",
+      "date": "",
+      "start_page": 42,
+      "end_page": 43,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "Warum RCDS ?",
+      "title_blocks": [
+        "42-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Warum RCDS ?",
+          "blocks": [
+            "42-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Text: Hans Schaidinger",
+          "blocks": [
+            "42-7"
+          ],
+          "surface": "Hans Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "43-9"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "43-9"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "Warum RCDS ?"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 16,
+      "title": "Agitatorische Bewusstseinsveränderung. Oder: Wie kann man ohne Hirn an der Spitze des \"Fortschritts\" stehen ....",
+      "date": "",
+      "start_page": 44,
+      "end_page": 47,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "AGITATORISCHE BEWUSSTSEINSVERÄN-\nDERUNG ODER: WIE KANN MAN OHNE HIRN AN DER SPITZE\nDES \"FORTSCHRITTS\" STEHEN ....",
+      "title_blocks": [
+        "44-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS. Theoriepapier",
+      "issue": "Nr. 4",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RC",
+          "blocks": [
+            "44-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Krämer",
+          "blocks": [
+            "47-3"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl 84 Regensburg Schwandorferstraße 27",
+          "blocks": [
+            "47-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "21.XI.72",
+      "date_blocks": [
+        "44-1"
+      ],
+      "date_text": "21.11.1972",
+      "date_iso": "1972-11-21",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": [
+        "series nicht im Text: 'RCDS. Theoriepapier'"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Thesen zur Demokratisierung",
+      "date": "",
+      "start_page": 48,
+      "end_page": 51,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Thesen zur Demokratisierung",
+      "title_blocks": [
+        "48-2"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS Theoriepaper Nr. 1",
+          "blocks": [
+            "48-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Wichbeck, Kuhn",
+          "blocks": [
+            "49-8"
+          ],
+          "surface": "Wichbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Wichbeck, Kuhn",
+          "blocks": [
+            "49-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "resserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "49-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "resserechtlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "51-3"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "51-3"
+          ],
+          "surface": "Viechbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "51-3"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl, 84 Regensburg, Schwandorferstraße 27",
+          "blocks": [
+            "51-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.75,
+      "_retried_signatory": true,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "Wollen wir einen »demokratischen Sozialismus«?",
+      "date": "",
+      "start_page": 52,
+      "end_page": 53,
+      "confirmed": true,
+      "no_content": false,
+      "note": "Rückseite zuerst gescanned",
+      "title_evidence": "Wollen wir einen »demokratischen Sozialismus«?",
+      "title_blocks": [
+        "52-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: RCDS-Bundesvorstand, 53 Bonn, Jagdweg 7",
+          "blocks": [
+            "52-1",
+            "52-18"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 19,
+      "title": "SHB unterstützt DKP!",
+      "date": "",
+      "start_page": 54,
+      "end_page": 55,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SHB unterstützt DKP!",
+      "title_blocks": [
+        "54-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS - INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: rcds-bundesvorstand, 53 Bonn – Jagdweg 7, Tel.: 22 70 70",
+          "blocks": [
+            "54-1",
+            "55-11"
+          ],
+          "surface": "rcds-bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 20,
+      "title": "Soziale Marktwirtschaft",
+      "date": "",
+      "start_page": 56,
+      "end_page": 57,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZIALE MARKTWIRTSCHAFT",
+      "title_blocks": [
+        "56-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS - INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-Bundesvorstand\n53 Bonn, Jagdweg 7",
+          "blocks": [
+            "56-1",
+            "57-14"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 21,
+      "title": "VDS am ENDE",
+      "date": "",
+      "start_page": 58,
+      "end_page": 61,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "VDS am ENDE",
+      "title_blocks": [
+        "58-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS - INFO",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: rcds-bundesvorstand, 53 Bonn, Jagdweg 7, Tel. 02221/227070",
+          "blocks": [
+            "58-1",
+            "61-5"
+          ],
+          "surface": "rcds-bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Fakten zur Wahl: Priorität Bildungspolitik?",
+      "date": "",
+      "start_page": 62,
+      "end_page": 63,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Fakten zur Wahl\nPriorität Bildungspolitik?",
+      "title_blocks": [
+        "62-2",
+        "62-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "1. Teil",
+      "issuers": [
+        {
+          "evidence": "RCDS-INFO - RCDS-INFO - RCDS",
+          "blocks": [
+            "62-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "12.11.72",
+      "date_blocks": [
+        "62-4"
+      ],
+      "date_text": "12.11.1972",
+      "date_iso": "1972-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-11-17",
+      "received_evidence": "17. NOV 1972",
+      "received_blocks": [
+        "62-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Die politische Funktion von Wissenschaft in der Demokratie",
+      "date": "",
+      "start_page": 64,
+      "end_page": 65,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIE POLITISCHE FUNKTION VON WISSENSCHAFT IN DER DEMOKRATIE",
+      "title_blocks": [
+        "64-2"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr 3",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "64-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "65-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "65-8"
+          ],
+          "surface": "Viechbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viechbeck, Schaidinger",
+          "blocks": [
+            "65-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl, 84 Regensburg, Schwandorferstraße 27",
+          "blocks": [
+            "65-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Die marxistische Idee bietet keine Alternative",
+      "date": "",
+      "start_page": 66,
+      "end_page": 67,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "DIE MARXISTISCHE JDEE\nBIETET KEINE ALTERNATIVE",
+      "title_blocks": [
+        "66-5"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr. 2",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: RCDS Fachbereichsgrippe WIWI; Keil, Kuhn.",
+          "blocks": [
+            "66-1",
+            "67-5"
+          ],
+          "surface": "RCDS Fachbereichsgrippe WIWI",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: RCDS Fachbereichsgrippe WIWI; Keil, Kuhn.",
+          "blocks": [
+            "67-5"
+          ],
+          "surface": "Keil",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: RCDS Fachbereichsgrippe WIWI; Keil, Kuhn.",
+          "blocks": [
+            "67-5"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl, 84 Regensburg, Schwandofersstrasse 27",
+          "blocks": [
+            "67-6"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-11-14",
+      "received_evidence": "14. NOV 1972",
+      "received_blocks": [
+        "66-6"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "Thesen zur Demokratisierung",
+      "date": "",
+      "start_page": 68,
+      "end_page": 69,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Thesen zur Demokratisierung",
+      "title_blocks": [
+        "68-5"
+      ],
+      "title_type": "original",
+      "series": "Theoriepapier",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "68-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "erantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "69-8"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "erantwortlich"
+        },
+        {
+          "evidence": "erantwortlich: Viehbeck, Kuhn",
+          "blocks": [
+            "69-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "erantwortlich"
+        },
+        {
+          "evidence": "resserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "69-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "resserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1978-11-08",
+      "received_evidence": "8. NOV. 1978",
+      "received_blocks": [
+        "68-4"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Thesen zur Demokratisierung",
+      "date": "",
+      "start_page": 70,
+      "end_page": 71,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "Thesen zur Demokratisierung",
+      "title_blocks": [
+        "70-4"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS\nRCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "70-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Kuhn",
+          "blocks": [
+            "71-8"
+          ],
+          "surface": "Viechbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Kuhn",
+          "blocks": [
+            "71-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "esserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "71-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "esserechtlich"
+        }
+      ],
+      "date_evidence": "11/72",
+      "date_blocks": [
+        "70-2"
+      ],
+      "date_text": "November 1972",
+      "date_iso": "1972-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Rationales zum BHG",
+      "date": "",
+      "start_page": 72,
+      "end_page": 73,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Rationales\nZUM\nBHG",
+      "title_blocks": [
+        "72-4",
+        "72-5",
+        "72-6"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Wahlinfo",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: RCDS Uni Regensburg e. V.",
+          "blocks": [
+            "72-1",
+            "72-8"
+          ],
+          "surface": "RCDS Uni Regensburg e. V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schnidinger, Kuhn",
+          "blocks": [
+            "72-7"
+          ],
+          "surface": "Schnidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schnidinger, Kuhn",
+          "blocks": [
+            "72-7"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "presserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "72-9"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-11-02",
+      "received_evidence": "UB Regensburg eingegangen am: - 2. NOV. 1972",
+      "received_blocks": [
+        "72-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+      "date": "",
+      "start_page": 74,
+      "end_page": 79,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+      "title_blocks": [
+        "75-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+          "blocks": [
+            "75-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "72-7",
+        "72-7",
+        "72-8",
+        "72-9"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Rationales zum BHG",
+      "date": "",
+      "start_page": 80,
+      "end_page": 81,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "Rationales\nZ U M\nBHG",
+      "title_blocks": [
+        "80-5",
+        "80-6",
+        "80-7"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Wahlinfo",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: RCDS Uni Regensburg e. V.",
+          "blocks": [
+            "80-1",
+            "80-9"
+          ],
+          "surface": "RCDS Uni Regensburg e. V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "80-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "80-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "presserechtlich: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "80-10"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-10-31",
+      "received_evidence": "31. OKT. 1972",
+      "received_blocks": [
+        "80-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+      "date": "",
+      "start_page": 82,
+      "end_page": 87,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+      "title_blocks": [
+        "83-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Stellungnahme des RCDS zum derzeitigen Entwurf des BHG",
+          "blocks": [
+            "83-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "80-8",
+        "80-8",
+        "80-9",
+        "80-10"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Studenten-Service",
+      "date": "",
+      "start_page": 88,
+      "end_page": 96,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "STUDENTEN-SERVICE",
+      "title_blocks": [
+        "88-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RC\nRCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RC",
+          "blocks": [
+            "88-6"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Anton Regler",
+          "blocks": [
+            "88-11"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Anton Regler",
+          "blocks": [
+            "88-11"
+          ],
+          "surface": "Anton Regler",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "Redaktion: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "88-12"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Redaktion"
+        }
+      ],
+      "date_evidence": "OKT. 72",
+      "date_blocks": [
+        "88-8"
+      ],
+      "date_text": "Oktober 1972",
+      "date_iso": "1972-10",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "received_date": "1972-10-17",
+      "received_evidence": "17. OKT. 1972",
+      "received_blocks": [
+        "88-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 32,
+      "title": "Studenten-Service",
+      "date": "",
+      "start_page": 97,
+      "end_page": 105,
+      "confirmed": false,
+      "no_content": false,
+      "note": "doppelt",
+      "title_evidence": "STUDENTEN-SERVICE\nOKT. 72",
+      "title_blocks": [
+        "97-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RC\nRCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RC",
+          "blocks": [
+            "97-3"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Anton Regler",
+          "blocks": [
+            "97-7"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Anton Regler",
+          "blocks": [
+            "97-7"
+          ],
+          "surface": "Anton Regler",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "Redaktion: Alois Karl, 84 Regensburg, Schwandorferstr. 27",
+          "blocks": [
+            "97-8"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Redaktion"
+        }
+      ],
+      "date_evidence": "OKT. 72",
+      "date_blocks": [
+        "97-4"
+      ],
+      "date_text": "Oktober 1972",
+      "date_iso": "1972-10",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "RCDS - stärkste Fraktion",
+      "date": "",
+      "start_page": 106,
+      "end_page": 106,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS -\nstärkste fraktion",
+      "title_blocks": [
+        "106-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "106-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "WiWi-Service Wahl-Spezial",
+      "date": "",
+      "start_page": 107,
+      "end_page": 113,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WIWI-SER-\nVICE WAHL -\nSPEZIAL",
+      "title_blocks": [
+        "107-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgegeben von der RCDS-Fachbereichsgruppe WiWi, 84 Regensburg,\nJosef-Adler-Str. 7 a",
+          "blocks": [
+            "107-1",
+            "107-6"
+          ],
+          "surface": "RCDS-Fachbereichsgruppe WiWi",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "107-7"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Schaidinger, Kuhn",
+          "blocks": [
+            "107-7"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Erhöhung der Bustarife für Studenten ist durch Finanzierungstrick ersetzbar!",
+      "date": "",
+      "start_page": 114,
+      "end_page": 115,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Erhöhung der Bustarife\nfür Studenten ist durch\nFinanzierungstrick er-\nsetzbar !",
+      "title_blocks": [
+        "114-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "114-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich:\nJosef Markl",
+          "blocks": [
+            "115-7"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-12-14",
+      "received_evidence": "A blue rectangular stamp with the text '... Regensburg eingelaufen am: 14. DEZ. 1972'.",
+      "received_blocks": [
+        "114-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Studenten-Service",
+      "date": "",
+      "start_page": 116,
+      "end_page": 118,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "S T U D E N T E N - S E R V I C E\nnovember 72 - nr. 2",
+      "title_blocks": [
+        "116-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "november 72 - nr. 2",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "116-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich:\nj.markl d.weidner s.pohl",
+          "blocks": [
+            "116-7"
+          ],
+          "surface": "j.markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich:\nj.markl d.weidner s.pohl",
+          "blocks": [
+            "116-7"
+          ],
+          "surface": "d.weidner",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich:\nj.markl d.weidner s.pohl",
+          "blocks": [
+            "116-7"
+          ],
+          "surface": "s.pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "regensburg, 28.XI. 72",
+      "date_blocks": [
+        "116-6"
+      ],
+      "date_text": "28.11.1972",
+      "date_iso": "1972-11-28",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-12-05",
+      "received_evidence": "A blue rectangular stamp from the University Library of Regensburg (UB Regensburg). The text inside the stamp reads 'UB Regensburg eingelaufen am: 5. DEZ. 1972'.",
+      "received_blocks": [
+        "116-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "Hinweis: issue gesetzt, aber keine series"
+      ]
+    },
+    {
+      "id": 37,
+      "title": "RCDS - stärkste Fraktion",
+      "date": "",
+      "start_page": 119,
+      "end_page": 119,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS -\nstärkste Fraktion",
+      "title_blocks": [
+        "119-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "119-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "Marx an die Uni!",
+      "date": "",
+      "start_page": 120,
+      "end_page": 120,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "M A R X   A N   D I E   U N I   ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !",
+      "title_blocks": [
+        "120-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS_RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS",
+          "blocks": [
+            "120-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "VERANTWORTLICH: Pohl , Viehbeck",
+          "blocks": [
+            "120-12"
+          ],
+          "surface": "Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "VERANTWORTLICH"
+        },
+        {
+          "evidence": "VERANTWORTLICH: Pohl , Viehbeck",
+          "blocks": [
+            "120-12"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "VERANTWORTLICH"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Ihre Rechte als Mieter!",
+      "date": "",
+      "start_page": 121,
+      "end_page": 122,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Ihre Rechte als Mieter!",
+      "title_blocks": [
+        "121-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich:\nRCDS-Bundesvorstand\n53 Bonn, Kronprinzenstraße 29",
+          "blocks": [
+            "121-1",
+            "122-11"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "Die aktuelle Juristen-Information der RCDS",
+      "date": "",
+      "start_page": 123,
+      "end_page": 127,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die aktuelle Juristen-Information\nder RCDS",
+      "title_blocks": [
+        "123-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Die aktuelle Juristen-Information\nder RCDS",
+          "blocks": [
+            "123-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Walter Möbius, Josef Lukes, Anton Regler",
+          "blocks": [
+            "123-2"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Walter Möbius, Josef Lukes, Anton Regler",
+          "blocks": [
+            "123-2"
+          ],
+          "surface": "Walter Möbius",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Walter Möbius, Josef Lukes, Anton Regler",
+          "blocks": [
+            "123-2"
+          ],
+          "surface": "Josef Lukes",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Alois Karl, Walter Möbius, Josef Lukes, Anton Regler",
+          "blocks": [
+            "123-2"
+          ],
+          "surface": "Anton Regler",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "Walter Möbius",
+          "blocks": [
+            "125-9"
+          ],
+          "surface": "Walter Möbius",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "verantw. Kuhn, Schaidinger, Becker, Viehbeck",
+          "blocks": [
+            "126-20"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw. Kuhn, Schaidinger, Becker, Viehbeck",
+          "blocks": [
+            "126-20"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw. Kuhn, Schaidinger, Becker, Viehbeck",
+          "blocks": [
+            "126-20"
+          ],
+          "surface": "Becker",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "verantw. Kuhn, Schaidinger, Becker, Viehbeck",
+          "blocks": [
+            "126-20"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        },
+        {
+          "evidence": "Verantwortlich: Schaidinger, Kuhn, Viehbeck, Becker",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Schaidinger, Kuhn, Viehbeck, Becker",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Schaidinger, Kuhn, Viehbeck, Becker",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Schaidinger, Kuhn, Viehbeck, Becker",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Becker",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.75,
+      "_retried_signatory": true,
+      "_grounding": [
+        "Stichwort fehlt (Verantwortlich-Zeile): Walter Möbius"
+      ]
+    },
+    {
+      "id": 41,
+      "title": "Wahlen in die Fachbereichsräte",
+      "date": "",
+      "start_page": 128,
+      "end_page": 135,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wahlen\nin\ndie\nFachbereichsräte",
+      "title_blocks": [
+        "128-5",
+        "128-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS",
+          "blocks": [
+            "128-4"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "27.6. - 28.6",
+      "date_blocks": [
+        "128-2"
+      ],
+      "date_text": "27.-28.6.1972",
+      "date_iso": "1972-06-27",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-06-28",
+      "received_evidence": "28. JUNI 1972",
+      "received_blocks": [
+        "128-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "title: Block-id unbekannt oder Abbildung: 128-5",
+        "issuer 'RCDS': Block-id unbekannt oder Abbildung: 128-4",
+        "title_evidence nicht im Text"
+      ]
+    },
+    {
+      "id": 42,
+      "title": "Soziale Marktwirtschaft. Antwort des 20. Jahrhunderts auf den Sozialismus (19. Jh.)",
+      "date": "",
+      "start_page": 136,
+      "end_page": 137,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SOZIALE MARKTWIRTSCHAFT\nAntwort des 20. Jahrhunderts auf den Sozialismus (19. Jh.)",
+      "title_blocks": [
+        "136-2",
+        "136-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-Bundesvorstand\n53 Bonn, Jagdweg 7",
+          "blocks": [
+            "136-1",
+            "137-14"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "Finanzmanipulation des ASTA",
+      "date": "",
+      "start_page": 138,
+      "end_page": 139,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Finanzmanipulation des ASTA",
+      "title_blocks": [
+        "138-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS -\nInfo - Info - Info - Info - Info - Info - Info - Info -",
+          "blocks": [
+            "138-3"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: J. Deutskens",
+          "blocks": [
+            "139-6"
+          ],
+          "surface": "J. Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-06-22",
+      "received_evidence": "22. JUNI 1972",
+      "received_blocks": [
+        "138-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Obermairs Verdienste",
+      "date": "",
+      "start_page": 140,
+      "end_page": 141,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Obermairs Verdienste",
+      "title_blocks": [
+        "140-4"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "140-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Josef Markl",
+          "blocks": [
+            "140-8"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1972-06-14",
+      "received_evidence": "A rectangular stamp from the University of Regensburg. The text inside reads 'UB Regensburg eingelaufen am: 14. JUNI 1972'.",
+      "received_blocks": [
+        "140-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 45,
+      "title": "Der RCDS hat dem Kandidaten F. Blaich (Lehrstuhl f. Wirtschaftsgeschichte, Fachbereich Wirtschaftswissenschaft) für die bevorstehende Rektorwahl (14. 6. 72) einige Fragen gestellt:",
+      "date": "",
+      "start_page": 142,
+      "end_page": 143,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Der RCDS hat dem Kandidaten F. Blaich (Lehrstuhl f. Wirtschaftsgeschichte, Fachbereich Wirtschaftswissenschaft) für die bevorstehende Rektorwahl (14. 6. 72) einige Fragen gestellt :",
+      "title_blocks": [
+        "142-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "142-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Stefan Pohl",
+          "blocks": [
+            "142-16"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Betrifft: Gegendarstellung von Pöllath (ASTA-Info, 13.6.72)",
+      "date": "",
+      "start_page": 144,
+      "end_page": 145,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "betrifft: Gegendarstellung von Pöllath\n(ASTA - Info, 13.6.72)",
+      "title_blocks": [
+        "144-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "144-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Josef Markl,\nChefredakteur der RAS.",
+          "blocks": [
+            "145-8"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "Chefredakteur der RAS",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Neue Prüfungsordnung für Betriebswirte auf Eis!!",
+      "date": "",
+      "start_page": 146,
+      "end_page": 147,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NEUE PRÜFUNGSORDNUNG\nFÜR BETRIEBSWIRTE AUF EIS !!",
+      "title_blocks": [
+        "146-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO\nRCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO",
+          "blocks": [
+            "146-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "147-8"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "147-8"
+          ],
+          "surface": "Becker",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "147-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viehbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "147-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Arbeitsgruppen im Fortgeschrittenenstudium",
+      "date": "",
+      "start_page": 148,
+      "end_page": 149,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ARBEITSGRUPPEN IM FORTGESCHRITTENENSTUDIUM",
+      "title_blocks": [
+        "148-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaft im Fachbereich\nWirtschaftswissenschaft\nUni Regensburg",
+          "blocks": [
+            "148-1"
+          ],
+          "surface": "Fachschaft im Fachbereich Wirtschaftswissenschaft Uni Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Gruppe Fortgeschr. studium\npresserechtl. G. Wiesner",
+          "blocks": [
+            "149-7"
+          ],
+          "surface": "G. Wiesner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        }
+      ],
+      "date_evidence": "28.6.1972",
+      "date_blocks": [
+        "148-2"
+      ],
+      "date_text": "28.6.1972",
+      "date_iso": "1972-06-28",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1972-06-28",
+      "received_evidence": "A blue rectangular stamp from the University Library of Regensburg (UB Regensburg). The text inside the stamp reads: 'UB Regensburg eingelaufen am: 28. JUNI 1972'.",
+      "received_blocks": [
+        "148-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Wiwi-Service 4",
+      "date": "",
+      "start_page": 150,
+      "end_page": 155,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Wiwi - Service 4",
+      "title_blocks": [
+        "150-3"
+      ],
+      "title_type": "original",
+      "series": "Wiwi-Service",
+      "issue": "4",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "150-2"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Viehbeck, Becker,\nScheidinger, Kuhn.",
+          "blocks": [
+            "150-5"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbeck, Becker,\nScheidinger, Kuhn.",
+          "blocks": [
+            "150-5"
+          ],
+          "surface": "Becker",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbeck, Becker,\nScheidinger, Kuhn.",
+          "blocks": [
+            "150-5"
+          ],
+          "surface": "Scheidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Viehbeck, Becker,\nScheidinger, Kuhn.",
+          "blocks": [
+            "150-5"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "Juni '72",
+      "date_blocks": [
+        "150-1"
+      ],
+      "date_text": "Juni 1972",
+      "date_iso": "1972-06",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Stellungnahme des RCDS-Rgbg. zum Entwurf eines Bayerischen Hochschulgesetzes",
+      "date": "",
+      "start_page": 156,
+      "end_page": 159,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Stellungnahme des RCDS - Rgbg.\nzum Entwurf eines\nBayerischen Hochschulgesetzes",
+      "title_blocks": [
+        "156-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "156-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Stefan Pohl",
+          "blocks": [
+            "159-4"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 51,
+      "title": "Finanzmanipulation des ASTA",
+      "date": "",
+      "start_page": 160,
+      "end_page": 161,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Finanzmanipulation des ASTA",
+      "title_blocks": [
+        "160-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS -\nInfo - Info - Info - Info - Info - Info - Info - Info -",
+          "blocks": [
+            "160-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: J. Deutskens",
+          "blocks": [
+            "161-6"
+          ],
+          "surface": "J. Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "Dokumentation: Zu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "date": "",
+      "start_page": 162,
+      "end_page": 165,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "D O K U M E N T A T I O N\nZu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "title_blocks": [
+        "162-2",
+        "162-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRC",
+          "blocks": [
+            "162-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "162-4",
+            "162-5",
+            "162-6",
+            "162-7"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "162-4",
+            "162-5",
+            "162-6",
+            "162-7"
+          ],
+          "surface": "Josef Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "162-4",
+            "162-5",
+            "162-6",
+            "162-7"
+          ],
+          "surface": "Gerda Rainer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 53,
+      "title": "Zehn Fragen an den Spartakus. Offener Brief",
+      "date": "",
+      "start_page": 166,
+      "end_page": 167,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "ZEHN FRAGEN AN DEN SPARTAKUS\n— offener brief —",
+      "title_blocks": [
+        "166-2",
+        "166-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich: rcds-bundesvorstand, 53 bonn, kronprinzenstraße 29, tel: 02221/632218.",
+          "blocks": [
+            "166-1",
+            "167-29"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "received_date": "1972-03-03",
+      "received_evidence": "A blue rectangular stamp from the 'UB Regensburg' (University Library) with the text 'eingelaufen am: 3. MRZ. 1972'.",
+      "received_blocks": [
+        "166-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'RCDS-Bundesvorstand': Stichwort bei Organisation"
+      ]
+    },
+    {
+      "id": 54,
+      "title": "RCDS JAPO Info Januar 1972",
+      "date": "",
+      "start_page": 168,
+      "end_page": 175,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS\nJAPO\nINFO\nJANUAR 1972",
+      "title_blocks": [
+        "168-4",
+        "168-5",
+        "168-6",
+        "168-7"
+      ],
+      "title_type": "original",
+      "series": "RCDS JAPO Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "168-3"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Peter Welnhofer , stud. iur.\nHerausgeber: RCDS Uni Regensburg e. V.",
+          "blocks": [
+            "168-9",
+            "168-10"
+          ],
+          "surface": "Peter Welnhofer",
+          "role": "signatory",
+          "function": "stud. iur.",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "JANUAR 1972",
+      "date_blocks": [
+        "168-7"
+      ],
+      "date_text": "Januar 1972",
+      "date_iso": "1972-01",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "received_date": "1972-04-26",
+      "received_evidence": "26. APR. 1972",
+      "received_blocks": [
+        "168-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "Dokumentation: Zu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "date": "",
+      "start_page": 176,
+      "end_page": 179,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "D O K U M E N T A T I O N\nZu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "title_blocks": [
+        "176-5",
+        "176-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRC",
+          "blocks": [
+            "176-4"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "176-7",
+            "176-8"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "176-7",
+            "176-8"
+          ],
+          "surface": "Josef Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "176-7",
+            "176-8"
+          ],
+          "surface": "Gerda Rainer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "received_date": "1972-01-21",
+      "received_evidence": "21. JAN. 1972",
+      "received_blocks": [
+        "176-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 56,
+      "title": "WiWi-Service 1/1972",
+      "date": "",
+      "start_page": 180,
+      "end_page": 188,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "WiWi - Service 1/1972",
+      "title_blocks": [
+        "180-4"
+      ],
+      "title_type": "original",
+      "series": "WiWi-Service",
+      "issue": "1/1972",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nRCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS",
+          "blocks": [
+            "180-3"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: VIEHBECK, POHL, KEIL, MARKL",
+          "blocks": [
+            "180-8"
+          ],
+          "surface": "VIEHBECK",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: VIEHBECK, POHL, KEIL, MARKL",
+          "blocks": [
+            "180-8"
+          ],
+          "surface": "POHL",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: VIEHBECK, POHL, KEIL, MARKL",
+          "blocks": [
+            "180-8"
+          ],
+          "surface": "KEIL",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: VIEHBECK, POHL, KEIL, MARKL",
+          "blocks": [
+            "180-8"
+          ],
+          "surface": "MARKL",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "zeitschrift",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "RCDS JAPO Info Januar 1972",
+      "date": "",
+      "start_page": 189,
+      "end_page": 196,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS\nJAPO\nJNFO\nJ A N U A R   I 9 7 2",
+      "title_blocks": [
+        "189-3",
+        "189-4",
+        "189-5",
+        "189-6"
+      ],
+      "title_type": "original",
+      "series": "RCDS JAPO Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "189-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Peter Welnhofer , stud. iur.\nHerausgeber: RCDS Uni Regensburg e. V.",
+          "blocks": [
+            "189-8",
+            "189-9"
+          ],
+          "surface": "Peter Welnhofer",
+          "role": "signatory",
+          "function": "stud. iur.",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "J A N U A R   I 9 7 2",
+      "date_blocks": [
+        "189-6"
+      ],
+      "date_text": "Januar 1972",
+      "date_iso": "1972-01",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": [
+        "series nicht im Text: 'RCDS JAPO Info'"
+      ]
+    },
+    {
+      "id": 58,
+      "title": "Neue Prüfungsordnung für Betriebswirte auf Eis!!",
+      "date": "",
+      "start_page": 197,
+      "end_page": 198,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "NEUE PRÜFUNGSORDNUNG\nFÜR BETRIEBSWIRTE AUF EIS !!",
+      "title_blocks": [
+        "197-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO\nRCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO RCDS-INFO",
+          "blocks": [
+            "197-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "198-8"
+          ],
+          "surface": "Viechbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "198-8"
+          ],
+          "surface": "Becker",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "198-8"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Viechbeck, Becker, Kuhn, Schaidinger",
+          "blocks": [
+            "198-8"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Sensation: Rektor Gustav M. Obermair auf RCDS-Kurs in der Beurteilung des Bayerischen Hochschulgesetzes",
+      "date": "",
+      "start_page": 199,
+      "end_page": 200,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SENSATION-REKTOR GUSTAV M. OBERMAIR AUF RCDS-KURS IN DER\nBEURTEILUNG DES BAYERISCHEN HOCHSCHULGESETZES",
+      "title_blocks": [
+        "199-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS INFO RCDS INFO RCDS INFO RCDS INFO RCDS INFO RCDS INFO",
+          "blocks": [
+            "199-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantw. A. Viehbeck",
+          "blocks": [
+            "200-10"
+          ],
+          "surface": "A. Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 60,
+      "title": "Dokumentation: Zu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "date": "",
+      "start_page": 201,
+      "end_page": 204,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "D O K U M E N T A T I O N\nZu den Vorgängen nach den Wahlen zum Studentenparlament",
+      "title_blocks": [
+        "201-2",
+        "201-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRCDSRC",
+          "blocks": [
+            "201-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "201-4",
+            "201-5",
+            "201-6",
+            "201-7"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "201-4",
+            "201-5",
+            "201-6",
+            "201-7"
+          ],
+          "surface": "Josef Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich:\nStefan Pohl\nJosef Deutskens\nGerda Rainer",
+          "blocks": [
+            "201-4",
+            "201-5",
+            "201-6",
+            "201-7"
+          ],
+          "surface": "Gerda Rainer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 61,
+      "title": "Finanzmanipulation des ASTA",
+      "date": "",
+      "start_page": 205,
+      "end_page": 206,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Finanzmanipulation des ASTA",
+      "title_blocks": [
+        "205-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS -\nInfo - Info - Info - Info - Info - Info - Info - Info -",
+          "blocks": [
+            "205-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "presserechtlich: J. Deutskens",
+          "blocks": [
+            "206-6"
+          ],
+          "surface": "J. Deutskens",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "RCDS - stärkste Fraktion",
+      "date": "",
+      "start_page": 207,
+      "end_page": 207,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "RCDS -\nstärkste Fraktion",
+      "title_blocks": [
+        "207-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "207-1",
+            "207-9"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Ihre Rechte als Mieter!",
+      "date": "",
+      "start_page": 208,
+      "end_page": 209,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Ihre Rechte als Mieter!",
+      "title_blocks": [
+        "208-3"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantwortlich:\nRCDS-Bundesvorstand\n53 Bonn, Jagdweg 7",
+          "blocks": [
+            "208-1",
+            "209-11"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "Nov. 72",
+      "date_blocks": [
+        "208-2"
+      ],
+      "date_text": "November 1972",
+      "date_iso": "1972-11",
+      "date_type": "issued",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 64,
+      "title": "Scharfe Denker...",
+      "date": "",
+      "start_page": 210,
+      "end_page": 210,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SCHARFE DENKER...",
+      "title_blocks": [
+        "210-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS-RCDS\nINFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO-INFO",
+          "blocks": [
+            "210-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Pohl, Servais, Viehbeck",
+          "blocks": [
+            "210-12"
+          ],
+          "surface": "Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Pohl, Servais, Viehbeck",
+          "blocks": [
+            "210-12"
+          ],
+          "surface": "Servais",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Pohl, Servais, Viehbeck",
+          "blocks": [
+            "210-12"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 65,
+      "title": "Agitatorische Bewusstseinsveränderung oder: Wie kann man ohne Hirn an der Spitze des \"Fortschritts\" stehen....",
+      "date": "",
+      "start_page": 211,
+      "end_page": 214,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "AGITATORISCHE BEWUSSTSEINSVERÄNDERUNG\nODER: WIE KANN MAN OHNE HIRN AN DER SPITZE\nDES \"FORTSCHRITTS\" STEHEN ....",
+      "title_blocks": [
+        "211-3"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr. 4",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RC",
+          "blocks": [
+            "211-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Krämer",
+          "blocks": [
+            "214-3"
+          ],
+          "surface": "Krämer",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl 84 Regensburg Schwandorferstraße 27",
+          "blocks": [
+            "214-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 66,
+      "title": "SHB unterstützt DKP!",
+      "date": "",
+      "start_page": 215,
+      "end_page": 216,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "SHB unterstützt DKP!",
+      "title_blocks": [
+        "215-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Verantwortlich: rcds-bundesvorstand, 53 Bonn – Jagdweg 7, Tel.: 22 70 70",
+          "blocks": [
+            "215-1",
+            "216-11"
+          ],
+          "surface": "RCDS-Bundesvorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "Warum RCDS?",
+      "date": "",
+      "start_page": 217,
+      "end_page": 218,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Warum RCDS ?",
+      "title_blocks": [
+        "217-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Warum RCDS ?",
+          "blocks": [
+            "217-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Text: Hans Schaidinger",
+          "blocks": [
+            "217-7"
+          ],
+          "surface": "Hans Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "218-9"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Text: Kuhn, Schaidinger",
+          "blocks": [
+            "218-9"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "Warum RCDS ?"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 68,
+      "title": "Ist auch Ihnen nicht an der Genesung der Demokratie gelegen???????????????",
+      "date": "",
+      "start_page": 219,
+      "end_page": 219,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "IST AUCH IHNEN NICHT AN DER GENESUNG DER DEMOKRATIE GELEGEN ???????????????",
+      "title_blocks": [
+        "219-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtlich: RCDS-Uni-Regensburg e.V. Schwandorferstr.27",
+          "blocks": [
+            "219-1",
+            "219-19"
+          ],
+          "surface": "RCDS-Uni-Regensburg e.V.",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ],
+          "_merged": [
+            "RCDS"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Dorit Weidner, Stefan Pohl, Josef Markl",
+          "blocks": [
+            "219-19"
+          ],
+          "surface": "Dorit Weidner",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Dorit Weidner, Stefan Pohl, Josef Markl",
+          "blocks": [
+            "219-19"
+          ],
+          "surface": "Stefan Pohl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        },
+        {
+          "evidence": "verantwortlich: Dorit Weidner, Stefan Pohl, Josef Markl",
+          "blocks": [
+            "219-19"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 69,
+      "title": "Die politische Funktion von Wissenschaft in der Demokratie",
+      "date": "",
+      "start_page": 220,
+      "end_page": 221,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "DIE POLITISCHE FUNKTION VON\nWISSENSCHAFT IN DER DEMOKRATIE",
+      "title_blocks": [
+        "220-2"
+      ],
+      "title_type": "original",
+      "series": "Theoriepaper",
+      "issue": "Nr 3",
+      "issuers": [
+        {
+          "evidence": "RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS RCDS",
+          "blocks": [
+            "220-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viehbeck, Schaidinger",
+          "blocks": [
+            "221-3"
+          ],
+          "surface": "Kuhn",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viehbeck, Schaidinger",
+          "blocks": [
+            "221-3"
+          ],
+          "surface": "Viehbeck",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Verantwortlich: Kuhn, Viehbeck, Schaidinger",
+          "blocks": [
+            "221-3"
+          ],
+          "surface": "Schaidinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich"
+        },
+        {
+          "evidence": "Presserechtlich: Alois Karl, 84 Regensburg, Schwandorferstraße 27",
+          "blocks": [
+            "221-4"
+          ],
+          "surface": "Alois Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 70,
+      "title": "Die 5 1/2 Gesichter der Medusa",
+      "date": "",
+      "start_page": 222,
+      "end_page": 223,
+      "confirmed": false,
+      "no_content": false,
+      "note": "",
+      "title_evidence": "Die 5 1/2 Gesichter der Medusa",
+      "title_blocks": [
+        "222-2"
+      ],
+      "title_type": "original",
+      "series": "RCDS-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS - RCDS\nINFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO - INFO",
+          "blocks": [
+            "222-1"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        },
+        {
+          "evidence": "verantwortlich: Josef Markl",
+          "blocks": [
+            "223-9"
+          ],
+          "surface": "Josef Markl",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantwortlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    }
+  ]
+}
