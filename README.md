@@ -34,6 +34,7 @@ Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noc
 | Start | `/` | Kurze Einführung, Zahlen, ausgewählte Flugblätter, Zeitleiste |
 | Flugblätter | `/leaflets` | Liste mit Band, Datum und Herausgeber |
 | Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten mit Fundstellen |
+| Themen | `/themen` | Themen mit Flugblattanzahl und Jahresverteilung |
 | Organisationen | `/organizations` | Normdatei der herausgebenden Gruppen |
 | Organisation | `/organizations/{id}` | Angaben laut Findmittel, Bände, Flugblätter |
 | Bände | `/volumes` | Verzeichnungseinheiten 1967–1973, gegliedert wie im Findmittel |
@@ -57,11 +58,17 @@ Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien s
 | [`copies.tsv`](data/copies.tsv) | Mögliche weitere Exemplare desselben Blatts | Textvergleich im Pipeline-Repo (`find_copies.py`) |
 | `corrections.jsonl` | Handkorrekturen | Bearbeiten in der App |
 | [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
+| [`topics.json`](data/topics.json) | Themen und Zuordnungen zu Flugblättern; unsichere Zuordnungen werden markiert | Topic-Modelling |
 | [`volumes.json`](data/volumes.json) | Bände mit Titel, Signatur, Link ins Archivportal-D | Findmittel |
 
 Importiert sind Nr. 001 bis Nr. 014 (1967–1973). Nr. 015 ist nicht digitalisiert und erscheint nur in der Bandliste.
 
-Ändert ein Pull etwas in `data/` oder am Datenbankschema, oder wurde der Datenordner erst nachträglich eingebunden, dann `src/backend/leaflet_database.db` löschen und neu starten.
+Ändert ein Pull etwas in `data/` oder am Datenbankschema (`models.py`), oder wurde der Datenordner erst nachträglich eingebunden, dann die Datenbank löschen und neu starten. Ein Neubau des Images (`--build`) ist nur nötig, wenn sich die Abhängigkeiten ändern.
+
+```
+del srcackend\leaflet_database.db      # Windows (cmd/PowerShell); Git Bash: rm src/backend/leaflet_database.db
+docker compose restart
+```
 
 ## Tests & Codestil
 

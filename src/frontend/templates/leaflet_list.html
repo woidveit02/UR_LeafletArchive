@@ -42,6 +42,14 @@
                         {% endfor %}
                     </select>
                 </label>
+                <label>Thema
+                    <select name="thema" onchange="this.form.submit()">
+                        <option value="">alle</option>
+                        {% for t in topic_options %}
+                        <option value="{{ t.id }}" title="{{ t.full_title }}" {% if t.id|string == selected_topic %}selected{% endif %}>{{ t.label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
                 <fieldset class="filter-checks">
                     <legend>Datumsart</legend>
                     <a class="filter-chip{% if not selected_dates %} active{% endif %}" href="{{ date_reset_url }}">Alle</a>

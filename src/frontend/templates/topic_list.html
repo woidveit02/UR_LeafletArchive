@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Themen – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head page-head-list">
+            <h1>Themen</h1>
+            <p class="page-intro">Maschinell gruppierte Themen und ihre Verteilung über die Jahre. Die Titel hat ein Sprachmodell erzeugt. Unsichere Einzelzuordnungen sind auf den Flugblattseiten gekennzeichnet.</p>
+        </header>
+        <ul class="topic-list">
+            {% for topic in topics %}
+            <li class="topic-row">
+                <div class="topic-text">
+                <div class="topic-heading">
+                    <a href="/leaflets?thema={{ topic.id }}">{{ topic.title }}</a>
+                    <span class="meta">{{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }}</span>
+                </div>
+                {% if topic.words %}
+                <p class="topic-words"><span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}</p>
+                {% endif %}
+                </div>
+                {% if years %}
+                <div class="topic-years" aria-label="Jahresverteilung"
+                     style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">
+                    {% for year in topic.years %}
+                    {% if year.count %}
+                    <a class="topic-year" href="/leaflets?thema={{ topic.id }}&amp;jahr={{ year.year }}"
+                       title="{{ year.year }}: {{ year.count }}"
+                       aria-label="{{ year.year }}: {{ year.count }} {{ 'Flugblatt' if year.count == 1 else 'Flugblätter' }}">
+                        <span class="topic-bar-wrap"><span class="topic-bar" style="height: {{ year.height }}%"></span></span>
+                        <span class="topic-year-label">{{ year.year }}</span>
+                    </a>
+                    {% else %}
+                    <span class="topic-year" aria-hidden="true">
+                        <span class="topic-bar-wrap"></span>
+                        <span class="topic-year-label">{{ year.year }}</span>
+                    </span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </li>
+            {% else %}
+            <li class="meta">Keine Themen verfügbar.</li>
+            {% endfor %}
+        </ul>
+{% endblock %}

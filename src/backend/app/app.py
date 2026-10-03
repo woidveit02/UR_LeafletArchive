@@ -18,7 +18,8 @@ from .database import corrections
 from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
-from .database.models import Leaflet, LeafletIssuer, Volume, Organization, Page
+from .database.models import (Leaflet, LeafletIssuer, Volume, Organization, Page,
+                              Topic)
 from .app_helper import setup_logging
 
 
@@ -39,6 +40,15 @@ DOC_TYPES = {
 }
 DATE_TYPES = {'issued': 'Erscheinungsdatum', 'event': 'Datum einer Veranstaltung',
               'undated': 'undatiert'}
+TOPIC_TITLE_NOTES = {'llm_label': 'Titel von einem Sprachmodell erzeugt'}
+SHORT_TOPIC_LENGTH = 60
+
+
+def short_topic_title(title):
+    """Long model-generated titles are cut at a word boundary for compact UI."""
+    if len(title) <= SHORT_TOPIC_LENGTH:
+        return title
+    return title[:SHORT_TOPIC_LENGTH].rsplit(' ', 1)[0] + ' …'
 
 
 def evidence_items(pairs):
@@ -222,6 +232,40 @@ def title_sort_key(item):
     return ''.join(c for c in title if not unicodedata.combining(c)).casefold()
 
 
+@app.get("/themen")
+def topic_list(request: Request):
+    logger.info('Opening topic list')
+    topic_year_counts = {}
+    for leaflet, volume_year in session.query(Leaflet, Volume.year).join(
+            Volume, Leaflet.volume_id == Volume.id).filter(
+                Leaflet.topic_id.isnot(None)):
+        year = leaflet_year(leaflet, volume_year)
+        topic_year_counts.setdefault(leaflet.topic_id, Counter())[year] += 1
+
+    years = sorted(
+        {year for counts in topic_year_counts.values() for year in counts},
+        key=int)
+    topics = []
+    for topic in session.query(Topic).order_by(Topic.id):
+        year_counts = topic_year_counts.get(topic.id, Counter())
+        max_count = max(year_counts.values(), default=1)
+        topics.append({
+            'id': topic.id,
+            'title': topic.title,
+            'words': topic.words or [],
+            'title_note': TOPIC_TITLE_NOTES.get(topic.source),
+            'count': sum(year_counts.values()),
+            'years': [{
+                'year': year,
+                'count': year_counts.get(year, 0),
+                'height': round(year_counts.get(year, 0) / max_count * 100),
+            } for year in years],
+        })
+    topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    return templates.TemplateResponse(
+        request, "topic_list.html", {"topics": topics, "years": years})
+
+
 @app.get("/leaflets")
 def leaflet_list(request: Request, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
@@ -238,6 +282,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     type_counts = Counter(lf.doc_type for lf in leaflets)
     series_counts = Counter(lf.series for lf in leaflets if lf.series)
     year_counts = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in leaflets)
+    topic_counts = Counter(lf.topic_id for lf in leaflets if lf.topic_id is not None)
 
     org_options = [{
         'id': o.id,
@@ -248,6 +293,12 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
                     for key, label in DOC_TYPES.items() if type_counts[key]]
     series_options = [{'id': s, 'label': f"{s} ({n})"}
                       for s, n in sorted(series_counts.items(), key=lambda x: x[0].casefold())]
+    topic_options = [{
+        'id': topic.id,
+        'label': f"{short_topic_title(topic.title)} ({topic_counts[topic.id]})",
+        'full_title': topic.title,
+    } for topic in session.query(Topic).order_by(Topic.id)
+        if topic_counts[topic.id] or str(topic.id) == selected.get('thema')]
     years = [{'id': y, 'label': f"{y} ({n})"} for y, n in sorted(year_counts.items())]
 
     query_string = '?' + urlencode(params) if params else ''
@@ -259,6 +310,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
         {"leaflets": items, "total": len(leaflets), "org_options": org_options, "selected_org": selected.get('org'),
          "type_options": type_options, "selected_type": selected.get('typ'),
          "series_options": series_options, "selected_series": selected.get('reihe'),
+         "topic_options": topic_options, "selected_topic": selected.get('thema'),
          "selected_sort": selected.get('sortierung'),
          "selected_dates": [v for k, v in params if k == 'datum'],
          "date_reset_url": '/leaflets' + ('?' + urlencode(date_reset_params)
@@ -271,7 +323,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'datum', 'sortierung')
+LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
 
 
 def list_params(request):
@@ -298,6 +350,8 @@ def filtered_items(params):
         query = query.filter(Leaflet.doc_type == one['typ'])
     if one.get('reihe'):
         query = query.filter(Leaflet.series == one['reihe'])
+    if one.get('thema'):
+        query = query.filter(Leaflet.topic_id == one['thema'])
     datum = [v for k, v in params if k == 'datum']
     if datum:
         query = query.filter(Leaflet.date_type.in_(datum))
@@ -381,6 +435,19 @@ def detail_page(request, leaflet, edit=None, error=None):
     pos = siblings.index(leaflet.id)
     chosen = dict(selection)
     org = session.get(Organization, chosen['org']) if 'org' in chosen else None
+    chosen_topic = (session.query(Topic)
+                    .filter(Topic.id == chosen['thema']).first()
+                    if 'thema' in chosen else None)
+    topic = None
+    if leaflet.topic_id is not None:
+        topic = session.get(Topic, leaflet.topic_id)
+    selection_labels = (
+        DOC_TYPES.get(chosen.get('typ')),
+        org_label(org) if org else None,
+        chosen.get('reihe'),
+        short_topic_title(chosen_topic.title) if chosen_topic else None,
+        chosen.get('jahr'),
+    )
 
     data = {
         'id': leaflet.id,
@@ -395,9 +462,7 @@ def detail_page(request, leaflet, edit=None, error=None):
         'position': pos + 1,
         'in_volume': len(siblings),
         'qs': '?' + urlencode(selection) if selection else '',
-        'selection': ' · '.join(filter(None, [DOC_TYPES.get(chosen.get('typ')),
-                                              org_label(org) if org else None,
-                                              chosen.get('reihe'), chosen.get('jahr')])),
+        'selection': ' · '.join(filter(None, selection_labels)),
         'volume': volume.label if volume else '',
         'volume_year': volume.year if volume else None,
         'volume_title': volume.title if volume else '',
@@ -417,6 +482,9 @@ def detail_page(request, leaflet, edit=None, error=None):
             'Unterzeichnende': evidence_items([(i.blocks, i.quote) for i in signatories]),
         },
         'doc_type': DOC_TYPES.get(leaflet.doc_type, leaflet.doc_type),
+        'topic': topic.title if topic else None,
+        'topic_note': TOPIC_TITLE_NOTES.get(topic.source) if topic else None,
+        'topic_uncertain': leaflet.topic_uncertain,
         'pages': pages,
         'issuers': issuer_display,
         'signatories': [{'name': i.surface,

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from . import corrections
 from .session import session
-from .models import Volume, Page, Leaflet, Organization, LeafletIssuer
+from .models import Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
 
 if os.environ.get("LEAFLET_DATA_DIR"):
     DATA_DIR = Path(os.environ["LEAFLET_DATA_DIR"])
@@ -105,6 +105,35 @@ def fill_volumes():
         volumes[v["label"]] = volume
     session.commit()
     return volumes
+
+
+def fill_topics():
+    """Import topic labels and apply page-range assignments by volume stem."""
+    if not (DATA_DIR / "topics.json").is_file():
+        return
+
+    data = load_json("topics.json")
+    for topic in data["topics"]:
+        session.merge(Topic(
+            id=topic["id"],
+            title=topic["title"],
+            source=topic["title_source"],
+            words=topic["words"],
+        ))
+
+    assignments = {
+        (item["volume"], item["start_page"], item["end_page"]): item
+        for item in data["leaflets"]
+    }
+    leaflets = session.query(Leaflet, Volume.stem).join(Volume)
+    for leaflet, volume_stem in leaflets:
+        assignment = assignments.get(
+            (volume_stem, leaflet.start_page, leaflet.end_page))
+        topic_id = assignment.get("topic") if assignment else None
+        leaflet.topic_id = topic_id
+        leaflet.topic_uncertain = bool(
+            assignment and topic_id is not None and assignment["uncertain"])
+    session.commit()
 
 
 # every volume with a metadata file in data/ is imported
@@ -348,3 +377,4 @@ def fill_database():
     fixes = corrections.by_segment(corrections.load(CORRECTIONS))
     for cfg in VOLUMES:
         fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes)
+    fill_topics()
