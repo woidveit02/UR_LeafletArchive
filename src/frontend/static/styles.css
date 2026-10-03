@@ -318,6 +318,78 @@ a:hover {
     color: #9ca3af;
 }
 
+.topic-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.topic-row {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.topic-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.topic-words {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+.topic-years {
+    display: grid;
+    gap: 6px;
+}
+
+.topic-year {
+    min-width: 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+a.topic-year {
+    display: block;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+a.topic-year:hover,
+a.topic-year:focus-visible {
+    background: #eef3fd;
+    color: var(--ink);
+}
+
+a.topic-year:hover .topic-bar,
+a.topic-year:focus-visible .topic-bar {
+    background: #5f8bea;
+}
+
+.topic-bar-wrap {
+    height: 38px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.topic-bar {
+    width: min(100%, 28px);
+    background: #93b4f5;
+    border-radius: 2px 2px 0 0;
+}
+
+.topic-year-label {
+    display: block;
+}
+
 .leaflet-list {
     list-style: none;
     padding: 0;
