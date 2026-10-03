@@ -261,6 +261,7 @@ def topic_list(request: Request):
                 'height': round(year_counts.get(year, 0) / max_count * 100),
             } for year in years],
         })
+    topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
     return templates.TemplateResponse(
         request, "topic_list.html", {"topics": topics, "years": years})
 

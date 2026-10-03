@@ -325,8 +325,18 @@ a:hover {
 }
 
 .topic-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 8px 32px;
+    align-items: end;
     padding: 12px 0;
     border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 700px) {
+    .topic-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .topic-heading {
@@ -346,7 +356,7 @@ a:hover {
 
 .topic-years {
     display: grid;
-    gap: 6px;
+    gap: 4px;
 }
 
 .topic-year {
@@ -374,7 +384,7 @@ a.topic-year:focus-visible .topic-bar {
 }
 
 .topic-bar-wrap {
-    height: 38px;
+    height: 44px;
     display: flex;
     align-items: flex-end;
     justify-content: center;

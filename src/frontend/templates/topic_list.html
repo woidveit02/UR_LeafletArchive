@@ -3,11 +3,12 @@
 {% block content %}
         <header class="page-head page-head-list">
             <h1>Themen</h1>
-            <p class="page-intro">Maschinell gruppierte Themen und ihre Verteilung über die Erscheinungsjahre. Die Titel hat ein Sprachmodell erzeugt. Unsichere Einzelzuordnungen sind auf den Flugblattseiten gekennzeichnet.</p>
+            <p class="page-intro">Maschinell gruppierte Themen und ihre Verteilung über die Jahre. Die Titel hat ein Sprachmodell erzeugt. Unsichere Einzelzuordnungen sind auf den Flugblattseiten gekennzeichnet.</p>
         </header>
         <ul class="topic-list">
             {% for topic in topics %}
             <li class="topic-row">
+                <div class="topic-text">
                 <div class="topic-heading">
                     <a href="/leaflets?thema={{ topic.id }}">{{ topic.title }}</a>
                     <span class="meta">{{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }}</span>
@@ -15,6 +16,7 @@
                 {% if topic.words %}
                 <p class="topic-words"><span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}</p>
                 {% endif %}
+                </div>
                 {% if years %}
                 <div class="topic-years" aria-label="Jahresverteilung"
                      style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">

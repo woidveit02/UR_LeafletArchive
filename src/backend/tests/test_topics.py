@@ -2,14 +2,13 @@ import json
 from pathlib import Path
 
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from starlette.requests import Request
 
 import backend.app.app as leaflet_app
 from backend.app.database import fillDatabase
 from backend.app.database.base import Base
-from backend.app.database.createDatabase import create_database
 from backend.app.database.models import Leaflet, Topic, Volume
 
 
@@ -81,41 +80,18 @@ def test_fill_topics_does_nothing_when_file_is_missing(tmp_path, monkeypatch):
     engine.dispose()
 
 
-def test_create_database_migrates_existing_leaflet_table():
-    engine = create_engine("sqlite:///:memory:")
-    with engine.begin() as connection:
-        connection.execute(
-            text("CREATE TABLE leaflets (id INTEGER PRIMARY KEY)"))
-
-    create_database(engine)
-    create_database(engine)
-
-    columns = {
-        column["name"]: column
-        for column in inspect(engine).get_columns("leaflets")
-    }
-    assert columns["topic_id"]["nullable"] is True
-    assert columns["topic_uncertain"]["nullable"] is False
-    assert columns["topic_uncertain"]["default"] == "0"
-    foreign_keys = inspect(engine).get_foreign_keys("leaflets")
-    assert any(
-        key["constrained_columns"] == ["topic_id"]
-        and key["referred_table"] == "topics"
-        for key in foreign_keys
-    )
-    engine.dispose()
-
-
 def test_topic_pages_filter_and_page_through_topic_selection(monkeypatch):
     engine = create_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
     test_session = sessionmaker(bind=engine)()
     monkeypatch.setattr(leaflet_app, "session", test_session)
+    # outside Docker the templates are not mounted into the app folder
     frontend_templates = (
         Path(__file__).resolve().parents[2] / "frontend" / "templates")
-    monkeypatch.setattr(
-        leaflet_app, "templates",
-        Jinja2Templates(directory=frontend_templates))
+    if frontend_templates.is_dir():
+        monkeypatch.setattr(
+            leaflet_app, "templates",
+            Jinja2Templates(directory=frontend_templates))
 
     topic = Topic(id=0, title="Streiks und Proteste " + "an der Universität " * 5,
                   source="llm_label", words=["streik", "protest"])

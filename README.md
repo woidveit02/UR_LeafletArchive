@@ -63,7 +63,12 @@ Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien s
 
 Importiert sind Nr. 001 bis Nr. 014 (1967–1973). Nr. 015 ist nicht digitalisiert und erscheint nur in der Bandliste.
 
-Beim Start ergänzt die Anwendung das Topic-Schema in einer bestehenden Datenbank und importiert `topics.json`. Änderungen an anderen Quelldateien in `data/` oder ein vollständiger Neuimport erfordern weiterhin, `src/backend/leaflet_database.db` zu löschen und die Anwendung neu zu starten.
+Ändert ein Pull etwas in `data/` oder am Datenbankschema (`models.py`), oder wurde der Datenordner erst nachträglich eingebunden, dann die Datenbank löschen und neu starten. Ein Neubau des Images (`--build`) ist nur nötig, wenn sich die Abhängigkeiten ändern.
+
+```
+del srcackend\leaflet_database.db      # Windows (cmd/PowerShell); Git Bash: rm src/backend/leaflet_database.db
+docker compose restart
+```
 
 ## Tests & Codestil
 

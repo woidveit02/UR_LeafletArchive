@@ -366,7 +366,6 @@ def report_data_dir():
 def fill_database():
     data_ok = report_data_dir()
     if session.query(Leaflet).count() > 0:
-        fill_topics()
         if data_ok and session.query(Page).filter(Page.text != "").first() is None:
             print("Note: the database was built without OCR text, but the "
                   "data folder is complete now. Delete the .db and restart.")
