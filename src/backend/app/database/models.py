@@ -33,6 +33,15 @@ class Page(Base):
     leaflet_id = Column(Integer, ForeignKey("leaflets.id"), nullable=True, index=True)
 
 
+class Topic(Base):
+    __tablename__ = "topics"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    source = Column(String, nullable=False)
+    words = Column(JSON, nullable=False)
+
+
 class Leaflet(Base):
     __tablename__ = "leaflets"
 
@@ -63,6 +72,9 @@ class Leaflet(Base):
     # possible copies of the same leaflet share a group (find_copies.py, unreviewed)
     copy_group = Column(Integer)
     corrected = Column(JSON, default=list)  # field names corrected by hand
+    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=True)
+    topic_uncertain = Column(Boolean, default=False, server_default="0",
+                             nullable=False)
 
     @property
     def series_label(self):
