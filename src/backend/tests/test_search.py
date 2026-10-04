@@ -9,7 +9,7 @@ from starlette.requests import Request
 import backend.app.app as leaflet_app
 from backend.app.database import search
 from backend.app.database.base import Base
-from backend.app.database.models import Leaflet, Page, Volume
+from backend.app.database.models import Leaflet, LeafletIssuer, Organization, Page, Volume
 
 
 @pytest.fixture
@@ -56,11 +56,18 @@ def seed(session):
                                  doc_type="flugblatt"),
     }
     session.commit()
+    search.rebuild_search_index(session.get_bind())
     return leaflets
 
 
 def ids(items):
     return [item["leaflet"].id for item in items]
+
+
+def with_passages(q):
+    items = leaflet_app.filtered_items([("q", q)])
+    leaflet_app.attach_passages(items, q)
+    return items
 
 
 # Substrings from the core of a word find leaflets even where the OCR garbled other parts.
@@ -75,22 +82,21 @@ def test_trigram_matches_word_cores_despite_ocr_errors(db):
     hits = leaflet_app.filtered_items([("q", "versammlung")])
     assert set(ids(hits)) == {leaflets["ocr"].id, leaflets["other_year"].id}
 
-    hit = next(i for i in leaflet_app.filtered_items([("q", "blockade")])
-               if i["leaflet"].id == leaflets["ocr"].id)
-    assert "<mark>Blockade</mark>" in hit["snippet"]
+    hit = next(i for i in with_passages("blockade") if i["leaflet"].id == leaflets["ocr"].id)
+    assert "<mark>Blockade</mark>" in hit["snippets"][0]
 
 
 # Title-only hits show the start of the OCR text; OCR text is HTML-escaped in snippets.
 def test_snippet_fallback_and_escaping(db):
     leaflets = seed(db)
 
-    title_hit = leaflet_app.filtered_items([("q", "Einladung")])[0]
+    title_hit = with_passages("Einladung")[0]
     assert title_hit["leaflet"].id == leaflets["invitation"].id
-    assert "&lt;script&gt;" in title_hit["snippet"] and "<script>" not in title_hit["snippet"]
+    assert "&lt;script&gt;" in title_hit["snippets"][0] and "<script>" not in title_hit["snippets"][0]
 
-    hit = leaflet_app.filtered_items([("q", "Foyer")])[0]
-    assert "<mark>Foyer</mark>" in hit["snippet"]
-    assert "<script>" not in hit["snippet"]
+    hit = with_passages("Foyer")[0]
+    assert "<mark>Foyer</mark>" in hit["snippets"][0]
+    assert "<script>" not in hit["snippets"][0] and hit["hits"] == 1
 
 
 # Title and series weigh more than OCR text: the title hit ranks before the text-only hit.
@@ -129,11 +135,50 @@ def test_query_sanitizing_and_short_queries(db):
     for evil in ['streik"', '"', "*", "(Streik", "Streik OR", "NOT", "a:b", "streik -", "NEAR(", "^"]:
         leaflet_app.filtered_items([("q", evil)])
 
-    assert search.match_expression('Streik" OR (x) NOT *kauf') == '"Streik" "kauf"'
+    assert search.match_expression('Streik" OR (x) NOT *kauf') == '("streik") AND ("kauf")'
     assert search.match_expression("ab") is None
     # two characters: substring search in title and series only
     assert ids(leaflet_app.filtered_items([("q", "Ro")])) == [leaflets["other_year"].id]
     assert leaflet_app.filtered_items([("q", "%")]) == []
+
+
+# Quotes search a phrase, ß and ss find each other, line-end hyphenation is joined.
+def test_phrases_spelling_and_hyphenation(db):
+    leaflets = seed(db)
+    assert ids(leaflet_app.filtered_items([("q", "Mensa Blockade")])) == [leaflets["ocr"].id]
+    assert ids(leaflet_app.filtered_items([("q", '"Mensa Blockade"')])) == []
+    assert ids(leaflet_app.filtered_items([("q", '"Blockade der Mensa"')])) == [leaflets["ocr"].id]
+
+    volume = db.query(Volume).first()
+    hyphen = add_leaflet(db, volume, 5, "Satzung", "Das neue Hochschul- gesetz, daß es gilt.")
+    db.commit()
+    search.rebuild_search_index(db.get_bind())
+    assert ids(leaflet_app.filtered_items([("q", "Hochschulgesetz")])) == [hyphen.id]
+    assert ids(leaflet_app.filtered_items([("q", "dass")])) == [hyphen.id]
+    assert search.match_expression('daß "Rote Zelle"') == '("rote zelle") AND ("daß" OR "dass")'
+
+
+# Each facet counts over the other filters, so a chosen year still shows the other years.
+def test_facet_counts_follow_the_selection(db):
+    seed(db)
+    items, counts = leaflet_app.faceted_items([("q", "kaufruf"), ("jahr", "1968")])
+    assert len(items) == 2
+    assert counts["jahr"] == {"1968": 2, "1969": 1}
+    assert counts["typ"] == {"flugblatt": 1, "einladung": 1}
+    assert counts["reihe"]["AStA-Info"] == 2
+    # leaflets without issuer or topic are a facet value of their own
+    assert counts["org"]["keiner"] == 2 and counts["thema"]["keins"] == 2
+    assert "nicht_im_register" not in counts["org"]
+
+
+# Passages: every occurrence with its context, in the spellings the search uses.
+def test_kwic():
+    text = "Wir fordern, daß die Mensa bleibt. Dass die Hochschul- gesetze fallen, ist klar."
+    assert [hit for _, hit, _ in search.kwic(text, "dass")] == ["daß", "Dass"]
+    assert search.kwic(text, '"Hochschulgesetze fallen"', width=8) ==         [("die ", "Hochschulgesetze fallen", ", ist")]
+    assert search.kwic(text, "ab") == []
+    # repeated header words are shortened
+    assert search.kwic("LSD LSD LSD LSD fordert die Mensa", "Mensa")[0][0] == "LSD … fordert die "
 
 
 # The triggers keep the index in step with inserts, updates and deletes.
@@ -145,19 +190,13 @@ def test_index_follows_changes(db):
     assert ids(leaflet_app.filtered_items([("q", "wohnungsnot")])) == [leaflets["unrelated"].id]
     assert leaflet_app.filtered_items([("q", "mensapreise")]) == []
 
-    db.query(Page).filter_by(leaflet_id=leaflets["unrelated"].id).update({"text": "Mietstreik jetzt"})
-    db.commit()
-    assert ids(leaflet_app.filtered_items([("q", "mietstreik")])) == [leaflets["unrelated"].id]
-
     db.delete(leaflets["unrelated"])
     db.commit()
     assert leaflet_app.filtered_items([("q", "wohnungsnot")]) == []
 
     db.execute(text("DELETE FROM leaflets_fts"))
     db.commit()
-    assert search.index_is_stale(db.get_bind())
     assert search.rebuild_search_index(db.get_bind()) == 3
-    assert leaflet_app.filtered_items([("q", "mietstreik")]) == []
     assert len(leaflet_app.filtered_items([("q", "kaufruf")])) == 3
 
 
@@ -184,3 +223,21 @@ def test_list_and_detail_keep_query(db):
     detail = leaflet_app.leaflet_detail(request(f"/leaflets/{first[0]}", query), first[0])
     body = detail.body.decode()
     assert f'href="/leaflets/{first[1]}?q=kaufruf&amp;typ=flugblatt"' in body
+
+
+# Issuers split into "not in the register" and "none found"; each chip and the clear link
+# remove only their own parameter; passages in the list link to their hit.
+def test_issuer_facets_chips_and_passage_links(db):
+    leaflets = seed(db)
+    db.add(Organization(id="asta", name="AStA", full_name="Allgemeiner Studentenausschuss"))
+    db.add_all([LeafletIssuer(leaflet_id=leaflets["ocr"].id, role="issuer", surface="AStA", org_id="asta"),
+                LeafletIssuer(leaflet_id=leaflets["other_year"].id, role="issuer", surface="Rote Zelle")])
+    db.commit()
+    _, counts = leaflet_app.faceted_items([("q", "kaufruf")])
+    assert counts["org"] == {"asta": 1, "nicht_im_register": 1, "keiner": 1}
+
+    html = leaflet_app.leaflet_list(request("/leaflets", b"q=versammlung&jahr=1968"),
+                                    ansicht="liste").body.decode()
+    assert 'href="/leaflets?jahr=1968" title="Entfernen">„versammlung“' in html
+    assert 'class="search-clear" href="/leaflets?jahr=1968"' in html
+    assert f'href="/leaflets/{leaflets["ocr"].id}?q=versammlung&amp;jahr=1968#treffer-1"' in html

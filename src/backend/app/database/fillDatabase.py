@@ -366,10 +366,8 @@ def report_data_dir():
 def fill_database():
     data_ok = report_data_dir()
     engine = session.get_bind()
-    search.ensure_search_index(engine)  # the triggers index everything imported below
+    search.ensure_search_index(engine)
     if session.query(Leaflet).count() > 0:
-        if search.index_is_stale(engine):
-            print(f"Search index rebuilt: {search.rebuild_search_index(engine)} leaflets")
         if data_ok and session.query(Page).filter(Page.text != "").first() is None:
             print("Note: the database was built without OCR text, but the "
                   "data folder is complete now. Delete the .db and restart.")
@@ -382,3 +380,4 @@ def fill_database():
     for cfg in VOLUMES:
         fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes)
     fill_topics()
+    search.rebuild_search_index(engine)

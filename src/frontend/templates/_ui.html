@@ -1,14 +1,15 @@
-{# Lucide icons (ISC license, lucide.dev): menu, layout-grid, gallery-horizontal-end #}
+{# Lucide icons (ISC license, lucide.dev): menu, layout-grid, gallery-horizontal-end, text-search #}
 {% set ICONS = {
     'liste': '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
     'kacheln': '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+    'fundstellen': '<path d="M21 6H3"/><path d="M10 12H3"/><path d="M10 18H3"/><circle cx="17" cy="15" r="3"/><path d="m21 19-1.9-1.9"/>',
     'bandseiten': '<path d="M2 7v10"/><path d="M6 5v14"/><rect width="12" height="18" x="10" y="3" rx="2"/>',
 } %}
 
 {% macro view_switch(base, current, views) %}
 <nav class="view-switch" aria-label="Ansicht">
-    {% for key, label in views %}
-    <a href="{{ base }}{% if not loop.first %}{{ '&' if '?' in base else '?' }}ansicht={{ key }}{% endif %}"{% if key == current %} aria-current="page"{% endif %}>
+    {% for view in views %}{% set key, label = view[0], view[1] %}
+    <a href="{{ base }}{% if not loop.first %}{{ '&' if '?' in base else '?' }}ansicht={{ key }}{% endif %}"{% if key == current %} aria-current="page"{% endif %}{% if view | length > 2 %} title="{{ view[2] }}"{% endif %}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{{ ICONS[key] | safe }}</svg>{{ label }}</a>
     {% endfor %}
 </nav>
@@ -27,4 +28,10 @@
         {% else %}<path d="M8 20V4m-4 4 4-4 4 4M16 4v16m-4-4 4 4 4-4"/>{% endif %}
     </svg>
 </a>
+{%- endmacro %}
+
+{# a quoted piece of OCR text: search passages, evidence wording; with href it links to the spot #}
+{% macro excerpt(content, label=None, href=None) -%}
+{% set tag = 'a' if href else 'span' -%}
+<{{ tag }} class="excerpt"{% if href %} href="{{ href }}"{% endif %}>{% if label %}<span class="excerpt-label">{{ label }}</span>{% endif %}<span class="excerpt-text">{{ content }}</span></{{ tag }}>
 {%- endmacro %}
