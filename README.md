@@ -32,7 +32,7 @@ Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noc
 | Seite | Route | Inhalt |
 |-------|-------|--------|
 | Start | `/` | Kurze Einführung, Zahlen, ausgewählte Flugblätter, Zeitleiste |
-| Flugblätter | `/leaflets` | Liste mit Band, Datum und Herausgeber |
+| Flugblätter | `/leaflets` | Volltextsuche und Liste mit Filterspalte (Jahr, Herausgeber, Thema, Textsorte, Reihe, Datierung); Ansichten Liste, Kacheln und Fundstellen |
 | Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten mit Fundstellen |
 | Themen | `/themen` | Themen mit Flugblattanzahl und Jahresverteilung |
 | Organisationen | `/organizations` | Normdatei der herausgebenden Gruppen |
@@ -47,6 +47,12 @@ Jede Korrektur steht als eigene Zeile in `data/corrections.jsonl`. Beim Aufbau d
 Die Anwendung hat keine Anmeldung. Bevor sie außerhalb des eigenen Rechners erreichbar ist, muss das Bearbeiten abgesichert werden.
 
 Auf der Flugblatt-Seite sind Scan und Transkription verknüpft: Fährt man über einen Textblock, markiert die Seite die zugehörige Stelle im Scan, und umgekehrt. Bände haben ihre Vz-Nummer als Adresse (`/volumes/2` = Nr. 002), damit die Adressen beim Neuaufbau der Datenbank gleich bleiben.
+
+Die Suche auf `/leaflets` durchsucht Titel, Reihe, Herausgeber und OCR-Text (SQLite FTS5 mit Trigrammen). Sie findet auch Wortteile, „versammlung“ trifft also „Vo11versammlung“. Mehrere Wörter müssen alle vorkommen, Wörter in Anführungszeichen als Wortfolge. „daß“ und „dass“ finden sich gegenseitig, am Zeilenende getrennte Wörter werden zusammengezogen. Begriffe unter 3 Zeichen werden nur in Titel und Reihe gesucht. Auf den anderen Seiten führt das Suchfeld in der Kopfleiste dorthin.
+
+Jeder Treffer zeigt bis zu drei Fundstellen, ein Klick springt auf der Flugblatt-Seite zur markierten Stelle. Die Ansicht „Fundstellen“ listet alle Textstellen aller Treffer nach Datum, zum Beispiel um zu vergleichen, wie verschiedene Gruppen einen Begriff verwenden. Die Zahlen in der Filterspalte gelten für die aktuelle Auswahl. „nicht im Register“ sammelt Blätter mit einem Herausgeber, der keiner Organisation zugeordnet ist.
+
+Der Suchindex entsteht beim Aufbau der Datenbank. Nach Änderungen an `search.py` die Datenbank löschen und neu starten.
 
 ## Daten
 

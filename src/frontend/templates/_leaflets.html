@@ -1,3 +1,4 @@
+{% from '_ui.html' import excerpt %}
 {# `items` come from leaflet_items() in app.py. `fields`: pages, count, date,
    issuers, series. #}
 
@@ -6,7 +7,7 @@
 {%- endmacro %}
 
 {% macro issuer_list(issuers) -%}
-{% for short, full in issuers %}{% if full %}<abbr title="{{ full }}">{{ short }}</abbr>{% else %}{{ short }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% for short, full in issuers %}{% if full %}<abbr title="{{ full }}">{{ short }}</abbr>{% elif full is none %}<i title="Schreibweise auf dem Blatt, keiner Organisation zugeordnet">{{ short }}</i>{% else %}{{ short }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 {%- endmacro %}
 
 {% macro count(leaflet) -%}
@@ -47,6 +48,32 @@
 </ul>
 {% endmacro %}
 
+{# search page: metadata line, title, three passages; further passages fold out #}
+{% macro result_list(items, qs='') %}
+<ul class="result-list">
+    {% for item in items %}{% set link = '/leaflets/' ~ item.leaflet.id ~ qs %}
+    <li>
+        <a class="result-thumb" href="{{ link }}" tabindex="-1" aria-hidden="true">
+            {%- if item.thumb %}<img src="/volumes/{{ item.vz }}/pages/{{ item.leaflet.start_page }}.jpg" alt="" loading="lazy">{% endif -%}
+        </a>
+        <div class="result-body">
+        {{ meta(item, ('date', 'issuers', 'series', 'count')) }}
+        <a class="row-title" href="{{ link }}">{{ title(item.leaflet) }}</a>
+        {% for s in (item.snippets or [])[:3] if s %}{{ excerpt(s, href=link ~ ('#treffer-' ~ loop.index if item.get('hits') else '')) }}{% endfor %}
+        {% if item.get('hits', 0) > 3 %}
+        <details class="excerpt-more">
+            <summary>{{ item.hits - 3 }} weitere {{ 'Fundstelle' if item.hits == 4 else 'Fundstellen' }}</summary>
+            {% for s in item.snippets[3:] %}{{ excerpt(s, href=link ~ '#treffer-' ~ (loop.index + 3)) }}{% endfor %}
+        </details>
+        {% endif %}
+        </div>
+    </li>
+    {% else %}
+    <li>Keine Flugblätter gefunden.</li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
 {% macro leaflet_cards(items, fields=('pages', 'date'), qs='') %}
 <div class="doc-grid">
     {% for item in items %}{% set l = item.leaflet %}
@@ -63,6 +90,7 @@
             <a class="doc-title" href="/leaflets/{{ l.id }}{{ qs }}" title="{{ l.display_title }}">{{ title(l) }}</a>
             <span class="doc-issuers">{{ issuer_list(item.issuers) }}</span>
             {{ meta(item, fields) }}
+            {% if item.snippets and item.snippets[0] %}{{ excerpt(item.snippets[0], href='/leaflets/' ~ l.id ~ qs ~ ('#treffer-1' if item.get('hits') else '')) }}{% endif %}
         </figcaption>
     </figure>
     {% endfor %}

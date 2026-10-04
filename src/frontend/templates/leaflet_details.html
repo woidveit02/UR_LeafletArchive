@@ -55,6 +55,7 @@
             {{ row_tools('Unterzeichnende') }}
         </span>
     {%- endmacro %}
+    {% from '_ui.html' import excerpt %}
     {% macro beleg(label) -%}
         {%- set items = leaflet.evidence[label] -%}
         {%- if items and leaflet.has_pdf -%}
@@ -66,7 +67,7 @@
                     <button type="button" class="beleg-close" aria-label="Schließen">×</button></span>
                 {% for item in items %}
                 <img data-src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ item.blocks | join(',') }}" alt="Ausschnitt aus dem Scan">
-                {% if item.quote %}<span class="beleg-quote">Erkannter Wortlaut: „{{ item.quote }}“</span>{% endif %}
+                {% if item.quote %}{{ excerpt('„' ~ item.quote ~ '“', 'Erkannter Wortlaut') }}{% endif %}
                 {% endfor %}
                 <button type="button" class="beleg-scan">Zur Stelle im Scan</button>
             </span>
@@ -271,6 +272,34 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
+    {% if leaflet.highlight %}
+    <script>
+        // mark the search terms in the transcription and show hit #treffer-N (default: the first);
+        // picture descriptions are not OCR text, so they are left out to keep the numbering of the list
+        (() => {
+            const terms = {{ leaflet.highlight | tojson }}
+                .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '\\s+'));
+            const re = new RegExp(`(${terms.join('|')})`, 'i');
+            document.querySelectorAll('.ocr-block:not(.ocr-picture)').forEach((block) => {
+                const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+                const nodes = [];
+                while (walker.nextNode()) nodes.push(walker.currentNode);
+                nodes.forEach((node) => {
+                    const parts = node.data.split(re);
+                    if (parts.length > 1) node.replaceWith(...parts.map((p, i) => i % 2
+                        ? Object.assign(document.createElement('mark'), {textContent: p}) : p));
+                });
+            });
+            const marks = document.querySelectorAll('.ocr-block mark');
+            const n = Number((location.hash.match(/^#treffer-(\d+)$/) || [])[1] || 1);
+            const target = marks[Math.min(n, marks.length) - 1];
+            if (target) {
+                target.classList.add('current');
+                target.scrollIntoView({block: 'center'});
+            }
+        })();
+    </script>
+    {% endif %}
     <script>
         // evidence picking: a field's button starts pick mode, clicks on OCR blocks add or remove them;
         // the floating bar shows the field while the form is scrolled out of view

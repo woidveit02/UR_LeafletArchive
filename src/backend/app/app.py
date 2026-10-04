@@ -11,10 +11,11 @@ from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
-from .database import corrections
+from .database import corrections, search
 from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
@@ -271,96 +272,203 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
     params = list_params(request)
     selected = dict(params)
-    items = filtered_items(params)
+    items, counts = faceted_items(params)
+    view = ansicht if ansicht in ('kacheln', 'fundstellen') else 'liste'
+    found = passages(items, selected) if view == 'fundstellen' and selected.get('q') else []
+    if view != 'fundstellen' and search.terms(selected.get('q', '')):
+        attach_passages(items, selected['q'])
 
-    # counts over all leaflets, so the options stay while a filter is set
-    leaflets = session.query(Leaflet).all()
-    volume_years = {v.id: v.year for v in session.query(Volume)}
-    org_counts = Counter(org for _, org in session.query(LeafletIssuer.leaflet_id, LeafletIssuer.org_id)
-                         .filter(LeafletIssuer.role == 'issuer', LeafletIssuer.org_id.isnot(None))
-                         .distinct())
-    type_counts = Counter(lf.doc_type for lf in leaflets)
-    series_counts = Counter(lf.series for lf in leaflets if lf.series)
-    year_counts = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in leaflets)
-    topic_counts = Counter(lf.topic_id for lf in leaflets if lf.topic_id is not None)
+    def shown(key):
+        """Values of a facet with hits, plus the selected one."""
+        return {v for v, n in counts[key].items() if n and v} | (
+            {selected[key]} if key in selected else set())
 
-    org_options = [{
-        'id': o.id,
-        'label': (f"{o.name} – {o.full_name}" if o.full_name else o.name) + f" ({org_counts[o.id]})",
-    } for o in sorted(session.query(Organization), key=org_sort_key)
-        if org_counts[o.id] or o.id == selected.get('org')]
-    type_options = [{'id': key, 'label': f"{label} ({type_counts[key]})"}
-                    for key, label in DOC_TYPES.items() if type_counts[key]]
-    series_options = [{'id': s, 'label': f"{s} ({n})"}
-                      for s, n in sorted(series_counts.items(), key=lambda x: x[0].casefold())]
-    topic_options = [{
-        'id': topic.id,
-        'label': f"{short_topic_title(topic.title)} ({topic_counts[topic.id]})",
-        'full_title': topic.title,
-    } for topic in session.query(Topic).order_by(Topic.id)
-        if topic_counts[topic.id] or str(topic.id) == selected.get('thema')]
-    years = [{'id': y, 'label': f"{y} ({n})"} for y, n in sorted(year_counts.items())]
+    def url(pairs):
+        """List address for the parameter pairs, in the current view."""
+        pairs = pairs + ([('ansicht', view)] if view != 'liste' else [])
+        return '/leaflets' + ('?' + urlencode(pairs) if pairs else '')
+
+    def toggle_url(key, value):
+        """List address with `key` set to `value`, or without it if already chosen."""
+        rest = [(k, v) for k, v in params if k != key]
+        return url(rest + ([(key, value)] if selected.get(key) != value else []))
+
+    def facet(key, label_of, sub_of=lambda v: ''):
+        """Entries of a facet list: the selected one first, 'none' last, else by count."""
+        values = sorted(shown(key), key=lambda v: (v != selected.get(key), v in SPECIAL,
+                                                   -counts[key][v], label_of(v).casefold()))
+        return [{'label': label_of(v), 'sub': sub_of(v), 'count': counts[key][v],
+                 'url': toggle_url(key, v), 'active': v == selected.get(key),
+                 'none': v in SPECIAL} for v in values]
+
+    orgs = {o.id: o for o in session.query(Organization)}
+    topics = {str(t.id): t for t in session.query(Topic)}
+
+    labels = {
+        'org': lambda o: {NO_ORG: 'kein Herausgeber erkannt', NOT_IN_REGISTER: 'nicht im Register'}.get(
+            o, orgs[o].name if o in orgs else o),
+        'thema': lambda t: 'ohne Thema' if t == NO_TOPIC else topics[t].title if t in topics else t,
+        'typ': lambda t: DOC_TYPES.get(t, t),
+        'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
+        'q': lambda v: f"„{v}“",
+    }
+
+    axis = sorted({str(v.year) for v in session.query(Volume)} | shown('jahr'))
+    highest = max(counts['jahr'].values(), default=0) or 1
+    facets = {
+        'years': [{'year': y, 'count': counts['jahr'][y], 'url': toggle_url('jahr', y),
+                   'height': round(counts['jahr'][y] / highest * 75),
+                   'active': y == selected.get('jahr')} for y in axis],
+        'orgs': facet('org', labels['org'], lambda o: orgs[o].full_name or '' if o in orgs else ''),
+        'topics': facet('thema', labels['thema']),
+        'types': facet('typ', labels['typ']),
+        'series': facet('reihe', str),
+        'dates': facet('datum', labels['datum']),
+    }
+
+    # chips above the results, each removes its own parameter
+    active_filters = [{'label': short_topic_title(labels['thema'](v)) if k == 'thema'
+                       else labels.get(k, str)(v),
+                       'url': url([p for p in params if p != (k, v)])}
+                      for k, v in params if k != 'sortierung']
 
     query_string = '?' + urlencode(params) if params else ''
-    date_reset_params = [(k, v) for k, v in params if k != 'datum']
-    if ansicht == 'kacheln':
-        date_reset_params.append(('ansicht', 'kacheln'))
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "total": len(leaflets), "org_options": org_options, "selected_org": selected.get('org'),
-         "type_options": type_options, "selected_type": selected.get('typ'),
-         "series_options": series_options, "selected_series": selected.get('reihe'),
-         "topic_options": topic_options, "selected_topic": selected.get('thema'),
+        {"leaflets": items, "total": session.query(Leaflet).count(), "facets": facets,
+         "hidden_params": [(k, v) for k, v in params if k in FACETS],
+         "active_filters": active_filters, "reset_all_url": url([]),
+         "clear_search_url": url([(k, v) for k, v in params if k != 'q']),
          "selected_sort": selected.get('sortierung'),
-         "selected_dates": [v for k, v in params if k == 'datum'],
-         "date_reset_url": '/leaflets' + ('?' + urlencode(date_reset_params)
-                                           if date_reset_params else ''),
-         "years": years, "selected_year": selected.get('jahr'),
-         "filtered": sum(k != 'sortierung' for k, _ in params),
-         "view": 'kacheln' if ansicht == 'kacheln' else 'liste',
+         "selected_q": selected.get('q', ''),
+         "q_short": bool(selected.get('q')) and not search.terms(selected['q']),
+         "filtered": sum(k not in ('q', 'sortierung') for k, _ in params),
+         "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
          "switch_base": '/leaflets' + query_string,
          "detail_qs": query_string})
 
 
+PASSAGE_LIMIT = 500
+
+
+def passages(items, params):
+    """Occurrences of the search terms in the OCR text of the items, by date unless sorted otherwise."""
+    texts = search.ocr_texts(session, [i['leaflet'].id for i in items])
+    if not params.get('sortierung'):
+        items = sorted(items, key=date_sort_key)
+    return [{'item': item, 'n': n, 'left': left, 'hit': hit, 'right': right}
+            for item in items
+            for n, (left, hit, right) in enumerate(
+                search.kwic(texts.get(item['leaflet'].id, ''), params['q']), start=1)]
+
+
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
 
 
 def list_params(request):
-    """List parameters of the request, repeated ones (datum) included."""
-    return [(key, value) for key, value in request.query_params.multi_items()
-            if key in LIST_PARAMS and value]
+    """List parameters of the request as (key, value) pairs."""
+    params = []
+    for key, value in request.query_params.multi_items():
+        if key == 'q':
+            value = ' '.join(value.split())[:search.MAX_QUERY]
+        if key in LIST_PARAMS and value:
+            params.append((key, value))
+    return params
+
+
+def search_hits(query, q):
+    """Restricts `query` to the full-text hits for `q`.
+
+    Returns (query, ranked): with FTS hits the query also yields a rank column.
+    Queries without a word of three characters cannot use the trigram index and
+    fall back to a substring search in title and series.
+    """
+    match = search.match_expression(q)
+    if match:
+        hits = search.hits_subquery(match)
+        return (query.join(hits, hits.c.leaflet_id == Leaflet.id)
+                .add_columns(hits.c.rank), True)
+    pattern = search.like_pattern(q)
+    return query.filter(or_(Leaflet.title.ilike(pattern, escape='\\'),
+                            Leaflet.series.ilike(pattern, escape='\\'))), False
+
+
+def attach_passages(items, q):
+    """Adds 'snippets' (all passages as safe HTML) and 'hits' (their number) to the items;
+    hits outside the OCR text show its beginning."""
+    texts = search.ocr_texts(session, [i['leaflet'].id for i in items])
+    for item in items:
+        text = texts.get(item['leaflet'].id, '')
+        found = search.kwic(text, q, width=35)  # one line in the result list
+        item['snippets'] = [search.passage_html(*p) for p in found] or [search.fallback_snippet(text)]
+        item['hits'] = len(found)
+
+
+DATE_TYPE_LABELS = {'issued': 'Erscheinungsdatum', 'event': 'Veranstaltungsdatum', 'undated': 'Undatiert'}
+
+# facet filters of the list: parameter -> values of a list item
+NO_ORG, NOT_IN_REGISTER, NO_TOPIC = 'keiner', 'nicht_im_register', 'keins'
+SPECIAL = (NO_ORG, NOT_IN_REGISTER, NO_TOPIC)
+FACETS = {
+    'org': lambda item: item['orgs'],
+    'jahr': lambda item: [item['year']],
+    'typ': lambda item: [item['leaflet'].doc_type],
+    'reihe': lambda item: [item['leaflet'].series],
+    'thema': lambda item: [NO_TOPIC if item['leaflet'].topic_id is None
+                           else str(item['leaflet'].topic_id)],
+    'datum': lambda item: [item['leaflet'].date_type],
+}
 
 
 def filtered_items(params):
+    return faceted_items(params)[0]
+
+
+def faceted_items(params):
+    """(items, counts): the selection, and per facet the counts over the items that
+    match all other filters, so each option shows what choosing it would give."""
+    chosen = {k: v for k, v in params if k in FACETS}
+    items = searched_items(params)
+
+    def matches(item, skip=None):
+        return all(v in FACETS[k](item) for k, v in chosen.items() if k != skip)
+
+    counts = {key: Counter(value for item in items if matches(item, key)
+                           for value in FACETS[key](item))
+              for key in FACETS}
+    return [item for item in items if matches(item)], counts
+
+
+def searched_items(params):
+    """Items for the search and sort order of `params`; facets are left to the caller."""
     one = dict(params)
+    q = one.get('q', '')
     query = (
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
     )
 
-    if one.get('org'):
-        matching_ids = (
-            session.query(LeafletIssuer.leaflet_id)
-            .filter(LeafletIssuer.org_id == one['org'],
-                    LeafletIssuer.role == 'issuer')
-        )
-        query = query.filter(Leaflet.id.in_(matching_ids))
-    if one.get('typ'):
-        query = query.filter(Leaflet.doc_type == one['typ'])
-    if one.get('reihe'):
-        query = query.filter(Leaflet.series == one['reihe'])
-    if one.get('thema'):
-        query = query.filter(Leaflet.topic_id == one['thema'])
-    datum = [v for k, v in params if k == 'datum']
-    if datum:
-        query = query.filter(Leaflet.date_type.in_(datum))
+    ranked = False
+    if q:
+        query, ranked = search_hits(query, q)
 
-    items = leaflet_items(
-        query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
-    if one.get('jahr'):
-        items = [item for item in items if item['year'] == one['jahr']]
     sort = one.get('sortierung', '')
+    by_relevance = ranked and not sort.startswith(('datum_', 'titel_'))
+    order = [Volume.vz, Leaflet.start_page, Leaflet.id]
+    if by_relevance:
+        order = [literal_column('hits.rank')] + order
+    rows = query.order_by(*order).all()
+    if ranked:
+        rows = [row[0] for row in rows]
+    items = leaflet_items(rows)
+    # issuer facet values: register ids, NOT_IN_REGISTER for an unmatched issuer, NO_ORG for none
+    orgs = {}
+    for leaflet_id, org_id in (session.query(LeafletIssuer.leaflet_id, LeafletIssuer.org_id)
+                               .filter(LeafletIssuer.role == 'issuer')):
+        orgs.setdefault(leaflet_id, set()).add(org_id or NOT_IN_REGISTER)
+    for item in items:
+        item['orgs'] = orgs.get(item['leaflet'].id, {NO_ORG})
     if sort.startswith(('datum_', 'titel_')):
         key = date_sort_key if sort.startswith('datum_') else title_sort_key
         items.sort(key=key, reverse=sort.endswith('_ab'))
@@ -442,10 +550,12 @@ def detail_page(request, leaflet, edit=None, error=None):
     if leaflet.topic_id is not None:
         topic = session.get(Topic, leaflet.topic_id)
     selection_labels = (
+        f"„{chosen['q']}“" if 'q' in chosen else None,
         DOC_TYPES.get(chosen.get('typ')),
-        org_label(org) if org else None,
+        org_label(org) if org else {NO_ORG: 'ohne Herausgeber', NOT_IN_REGISTER: 'Herausgeber nicht im Register'}.get(chosen.get('org')),
         chosen.get('reihe'),
-        short_topic_title(chosen_topic.title) if chosen_topic else None,
+        short_topic_title(chosen_topic.title) if chosen_topic
+        else 'ohne Thema' if chosen.get('thema') == NO_TOPIC else None,
         chosen.get('jahr'),
     )
 
@@ -463,6 +573,7 @@ def detail_page(request, leaflet, edit=None, error=None):
         'in_volume': len(siblings),
         'qs': '?' + urlencode(selection) if selection else '',
         'selection': ' · '.join(filter(None, selection_labels)),
+        'highlight': [v for t in search.terms(chosen.get('q', '')) for v in search.variants(t)],
         'volume': volume.label if volume else '',
         'volume_year': volume.year if volume else None,
         'volume_title': volume.title if volume else '',
@@ -748,12 +859,12 @@ THUMB_HEIGHT = 150
 
 def issuer_names(leaflet_ids):
     """{leaflet id: [("AStA", "Allgemeiner Studentenausschuss"), ...]}; unresolved
-    issuers as printed, with an empty full name."""
+    issuers as printed, with None as full name."""
     orgs = {o.id: (o.name, o.full_name or '') for o in session.query(Organization)}
     names = {}
     for i in session.query(LeafletIssuer).filter(LeafletIssuer.leaflet_id.in_(leaflet_ids),
                                                  LeafletIssuer.role == 'issuer'):
-        name = orgs.get(i.org_id, (i.surface, ''))
+        name = orgs.get(i.org_id, (i.surface, None))
         if name not in names.setdefault(i.leaflet_id, []):
             names[i.leaflet_id].append(name)
     return names

@@ -8,5 +8,12 @@
             <a href="/volumes" {% if path.startswith('/volumes') %}class="active" aria-current="page"{% endif %}>Bände</a>
             <a href="/themen" {% if path.startswith('/themen') %}class="active" aria-current="page"{% endif %}>Themen</a>
         </nav>
+        {% if path != '/leaflets' %}{# the list has its own search field above the filters #}
+        <form class="topsearch" method="get" action="/leaflets" role="search">
+            <input type="search" name="q" maxlength="200" aria-label="Volltextsuche" placeholder="Volltext durchsuchen …"
+                   title="Sucht in Titel, Reihe, Herausgeber und Text, auch nach Wortteilen. „…“ sucht eine Wortfolge."
+                   value="{{ request.query_params.get('q', '') if path.startswith('/leaflets') else '' }}">
+        </form>
+        {% endif %}
     </div>
 </header>

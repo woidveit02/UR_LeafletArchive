@@ -3,95 +3,136 @@
 {% block content %}
         <header class="page-head page-head-list">
             <h1>Flugblätter</h1>
-            <p class="page-intro">Titel, Datierungen und verantwortliche Organisationen der erschlossenen Blätter.</p>
         </header>
-        {% from '_leaflets.html' import leaflet_list, leaflet_cards %}
+        {% from '_leaflets.html' import result_list, leaflet_cards %}
         {% from '_ui.html' import view_switch %}
+        {% macro facet_entry(e, bold) %}
+                <li{% if e.none %} class="facet-none"{% endif %}><a href="{{ e.url }}" title="{{ e.label }}{% if e.sub %} – {{ e.sub }}{% endif %}"{% if e.active %} class="active" aria-current="true"{% endif %}>
+                    <span class="facet-label">{% if bold and not e.none %}<b>{{ e.label }}</b>{% if e.sub %} <small>{{ e.sub }}</small>{% endif %}{% else %}{{ e.label }}{% endif %}</span>{% if e.active %}<span aria-label="Filter entfernen">×</span>{% endif %}</a>
+                    <span class="meta">{{ e.count }}</span></li>
+        {% endmacro %}
+        {# facet with its values; long lists scroll, the "none" values stay visible below #}
+        {% macro facet_list(head, entries, filter_label=None, bold=False) %}
+        {% set regular = entries | rejectattr('none') | list %}
+        {% set special = entries | selectattr('none') | list %}
+        <div class="facet">
+            <h2 class="facet-head">{{ head }}</h2>
+            {% if filter_label and regular | length > 10 %}
+            <input type="search" class="facet-filter" placeholder="{{ filter_label }} suchen …" aria-label="{{ filter_label }} in der Liste suchen">
+            {% endif %}
+            <ul class="facet-list{% if regular | length > 8 %} facet-scroll{% endif %}">
+                {% for e in regular %}{{ facet_entry(e, bold) }}{% else %}{% if not special %}<li class="meta">keine</li>{% endif %}{% endfor %}
+            </ul>
+            {% if special %}<ul class="facet-list facet-special">{% for e in special %}{{ facet_entry(e, bold) }}{% endfor %}</ul>{% endif %}
+        </div>
+        {% endmacro %}
         <form method="get" action="/leaflets" class="filter">
-            {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
-            <details class="filter-details filter-panel" open>
-            <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
-            <div class="filter-fields">
-                <label>Herausgeber
-                    <select name="org" onchange="this.form.submit()">
-                        <option value="">alle</option>
-                        {% for o in org_options %}
-                        <option value="{{ o.id }}" {% if o.id==selected_org %}selected{% endif %}>{{ o.label }}</option>
+            {% if view != 'liste' %}<input type="hidden" name="ansicht" value="{{ view }}">{% endif %}
+            {% for k, v in hidden_params %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+            <div class="search-layout">
+                <div class="search-box">
+                    <div class="search-row">
+                        <span class="search-field">
+                            <input type="search" name="q" value="{{ selected_q }}" maxlength="200" aria-label="Volltextsuche"
+                                   placeholder="Titel, Herausgeber, Reihe und Text durchsuchen, z. B. Berufsverbot">
+                            {% if selected_q %}<a class="search-clear" href="{{ clear_search_url }}" title="Suche löschen" aria-label="Suche löschen">×</a>{% endif %}
+                        </span>
+                        <button type="submit" class="button-small">Suchen</button>
+                    </div>
+                    <p class="search-hint">{% if q_short %}Suchbegriffe unter 3 Zeichen werden nur in Titel und Reihe gesucht.
+                        {%- else %}Findet auch Wortteile („gesetz“ trifft „Hochschulgesetz“), „…“ sucht eine Wortfolge.{% endif %}</p>
+                </div>
+                <details class="filter-details facet-column" open>
+                    <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
+                    <div class="facet">
+                        <h2 class="facet-head" title="Jahr des Datums auf dem Blatt, bei undatierten Blättern das Jahr des Bandes">Jahr</h2>
+                        <div class="facet-years">
+                            {% for y in facets.years %}
+                            {% if y.count %}
+                            <a class="topic-year{% if y.active %} active{% endif %}" href="{{ y.url }}"{% if y.active %} aria-current="true"{% endif %}
+                               aria-label="{{ y.year }}: {{ y.count }} {{ 'Flugblatt' if y.count == 1 else 'Flugblätter' }}">
+                                <span class="topic-bar-wrap"><span>{{ y.count }}</span><span class="topic-bar" style="height: {{ y.height }}%"></span></span>
+                                <span class="topic-year-label">{{ y.year[2:] }}</span>
+                            </a>
+                            {% else %}
+                            <span class="topic-year" aria-hidden="true">
+                                <span class="topic-bar-wrap"></span>
+                                <span class="topic-year-label">{{ y.year[2:] }}</span>
+                            </span>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{ facet_list('Herausgeber', facets.orgs, 'Herausgeber', bold=True) }}
+                    {{ facet_list('Thema', facets.topics) }}
+                    {{ facet_list('Textsorte', facets.types) }}
+                    {{ facet_list('Reihe', facets.series, 'Reihe') }}
+                    {{ facet_list('Datierung', facets.dates) }}
+                </details>
+                <script>
+                    if (matchMedia('(max-width: 600px)').matches) document.querySelector('.facet-column').open = false;
+                    // narrow a long facet list while typing; Enter must not submit the search form
+                    document.querySelectorAll('.facet-filter').forEach((input) => {
+                        const rows = input.nextElementSibling.querySelectorAll('li');
+                        input.addEventListener('input', () => {
+                            const text = input.value.toLowerCase();
+                            rows.forEach((li) => { li.hidden = !li.textContent.toLowerCase().includes(text); });
+                        });
+                        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') e.preventDefault(); });
+                    });
+                </script>
+                <div class="result-column">
+                    {% if active_filters %}
+                    <div class="active-filters" aria-label="Aktive Filter">
+                        {% for f in active_filters %}<a class="active-filter" href="{{ f.url }}" title="Entfernen">{{ f.label }} <span aria-hidden="true">×</span></a>{% endfor %}
+                        <a class="active-reset" href="{{ reset_all_url }}">Alle zurücksetzen</a>
+                    </div>
+                    {% endif %}
+                    <div class="filter-bar">
+                        <p class="filter-result">
+                            {%- if selected_q and leaflets %}{{ leaflets | length }} Treffer für „{{ selected_q }}“
+                            {%- elif selected_q %}Keine Treffer für „{{ selected_q }}“
+                            {%- elif leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
+                            {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
+                            {%- else %}Keine Flugblätter für diese Auswahl{% endif %}</p>
+                        <label class="sort">Sortiert nach
+                            <select name="sortierung" onchange="this.form.submit()">
+                                <option value="" {% if not selected_sort %}selected{% endif %}>{{ 'Datum' if view == 'fundstellen' else 'Relevanz' if selected_q and not q_short else 'Reihenfolge im Archiv' }}</option>
+                                <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
+                                <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
+                                <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>
+                                <option value="titel_ab" {% if selected_sort == 'titel_ab' %}selected{% endif %}>Titel Z–A</option>
+                            </select>
+                        </label>
+                        {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]
+                           + ([('fundstellen', 'Fundstellen', 'Alle Textstellen aller Treffer untereinander, nach Datum')] if selected_q else [])) }}
+                        <noscript><button type="submit" class="button-small">Filtern</button></noscript>
+                    </div>
+                    {% if view == 'fundstellen' and not selected_q %}
+                    <p class="meta">Fundstellen gibt es zu einem Suchbegriff. Gib oben einen Begriff ein.</p>
+                    {% elif view == 'fundstellen' and leaflets %}
+                    <p class="meta passage-note">{{ passage_count }} {{ 'Fundstelle' if passage_count == 1 else 'Fundstellen' }}
+                        {%- if passage_count > passages | length %}, die ersten {{ passages | length }} angezeigt{% endif %}
+                        {%- if not selected_sort %}, nach Datum{% endif %}. Nicht gezeigt werden Treffer in Titel und Herausgeber
+                        und Wörter, die über einen Zeilenumbruch getrennt sind.</p>
+                    <ol class="passages">
+                        {% for p in passages %}
+                        <li>
+                            <a class="passage-source" href="/leaflets/{{ p.item.leaflet.id }}{{ detail_qs }}#treffer-{{ p.n }}" title="{{ p.item.leaflet.display_title }}">
+                                <span>{{ p.item.date }}</span>
+                                <span class="meta">{{ p.item.issuers | map('first') | join(', ') }}</span></a>
+                            <span class="passage-left"><span>{{ p.left }}</span></span><mark>{{ p.hit }}</mark><span class="passage-right">{{ p.right }}</span>
+                        </li>
                         {% endfor %}
-                    </select>
-                </label>
-                <label title="Jahr des Datums auf dem Blatt, bei undatierten Blättern das Jahr des Bandes">Jahr
-                    <select name="jahr" onchange="this.form.submit()">
-                        <option value="">alle</option>
-                        {% for y in years %}<option value="{{ y.id }}" {% if y.id == selected_year %}selected{% endif %}>{{ y.label }}</option>{% endfor %}
-                    </select>
-                </label>
-                <label>Textsorte
-                    <select name="typ" onchange="this.form.submit()">
-                        <option value="">alle</option>
-                        {% for t in type_options %}
-                        <option value="{{ t.id }}" {% if t.id == selected_type %}selected{% endif %}>{{ t.label }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <label>Reihe
-                    <select name="reihe" onchange="this.form.submit()">
-                        <option value="">alle</option>
-                        {% for s in series_options %}
-                        <option value="{{ s.id }}" {% if s.id == selected_series %}selected{% endif %}>{{ s.label }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <label>Thema
-                    <select name="thema" onchange="this.form.submit()">
-                        <option value="">alle</option>
-                        {% for t in topic_options %}
-                        <option value="{{ t.id }}" title="{{ t.full_title }}" {% if t.id|string == selected_topic %}selected{% endif %}>{{ t.label }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <fieldset class="filter-checks">
-                    <legend>Datumsart</legend>
-                    <a class="filter-chip{% if not selected_dates %} active{% endif %}" href="{{ date_reset_url }}">Alle</a>
-                    {% for key, label, hint in [('issued', 'Erscheinungsdatum', 'Datum, an dem das Blatt erschienen ist'),
-                                                ('event', 'Veranstaltungsdatum', 'Angekündigter Termin, nicht das Erscheinungsdatum'),
-                                                ('undated', 'Undatiert', 'Kein Datum auf dem Blatt')] %}
-                    <label class="filter-chip" title="{{ hint }}">
-                        <input type="checkbox" name="datum" value="{{ key }}" {% if key in selected_dates %}checked{% endif %} onchange="this.form.submit()">
-                        {{ label }}
-                    </label>
-                    {% endfor %}
-                </fieldset>
-            </div>
-            </details>
-            <script>
-                if (matchMedia('(max-width: 600px)').matches) document.querySelector('.filter-details').open = false;
-            </script>
-            {% set reset_url = '/leaflets?ansicht=kacheln' if view == 'kacheln' else '/leaflets' %}
-            {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
-            <div class="filter-bar">
-                <p class="filter-result">
-                    {%- if leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
-                    {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
-                    {%- else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
-                <label class="sort">Sortiert nach
-                    <select name="sortierung" onchange="this.form.submit()">
-                        <option value="" {% if not selected_sort %}selected{% endif %}>Reihenfolge im Archiv</option>
-                        <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
-                        <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
-                        <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>
-                        <option value="titel_ab" {% if selected_sort == 'titel_ab' %}selected{% endif %}>Titel Z–A</option>
-                    </select>
-                </label>
-                {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
-                <noscript><button type="submit" class="button-small">Filtern</button></noscript>
+                    </ol>
+                    {% elif leaflets and view == 'kacheln' %}
+                    {{ leaflet_cards(leaflets, fields=('date', 'count'), qs=detail_qs) }}
+                    {% elif leaflets %}
+                    {{ result_list(leaflets, qs=detail_qs) }}
+                    {% endif %}
+                </div>
             </div>
         </form>
-        {% if leaflets and view == 'kacheln' %}
-        {{ leaflet_cards(leaflets, fields=('date', 'count'), qs=detail_qs) }}
-        {% elif leaflets %}
-        {{ leaflet_list(leaflets, fields=('date', 'issuers', 'series', 'count'), qs=detail_qs) }}
-        {% endif %}
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
