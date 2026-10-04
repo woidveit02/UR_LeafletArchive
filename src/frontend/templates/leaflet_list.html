@@ -9,7 +9,7 @@
 {% from '_ui.html' import view_switch %}
 <div id="results">
     <form method="get" action="/leaflets" class="filter" hx-get="/leaflets" hx-trigger="change" hx-target="#results"
-        hx-select="#results" hx-swap="outerHTML" hx-push-url="true">
+        hx-select="#results" hx-swap="outerHTML show:none scroll:none" hx-push-url="true">
         {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
         <details class="filter-details filter-panel" open>
             <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
@@ -95,7 +95,7 @@
                     <option value="titel_ab" {% if selected_sort=='titel_ab' %}selected{% endif %}>Titel Z–A</option>
                 </select>
             </label>
-            {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}
+            {{view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')], partial=true)}}
             <noscript><button type="submit" class="button-small">Filtern</button></noscript>
         </div>
     </form>
@@ -107,11 +107,11 @@
 </div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ url_for('static', path='htmx.min.js') }}"></script>
-    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-    <script>
-        let savedY = 0;
-        document.body.addEventListener('htmx:beforeRequest', () => { savedY = window.scrollY; });
-        document.body.addEventListener('htmx:afterSettle', () => { window.scrollTo({ top: savedY, behavior: 'instant' }); });
-    </script>
+<script src="{{ url_for('static', path='htmx.min.js') }}"></script>
+<script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
+<script>
+    let savedY = 0;
+    document.body.addEventListener('htmx:beforeRequest', () => { savedY = window.scrollY; });
+    document.body.addEventListener('htmx:afterSettle', () => { window.scrollTo({ top: savedY, behavior: 'instant' }); });
+</script>
 {% endblock %}
