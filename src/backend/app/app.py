@@ -11,10 +11,11 @@ from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
-from .database import corrections
+from .database import corrections, search
 from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
@@ -312,6 +313,8 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
          "series_options": series_options, "selected_series": selected.get('reihe'),
          "topic_options": topic_options, "selected_topic": selected.get('thema'),
          "selected_sort": selected.get('sortierung'),
+         "selected_q": selected.get('q', ''),
+         "q_short": bool(selected.get('q')) and not search.tokens(selected['q']),
          "selected_dates": [v for k, v in params if k == 'datum'],
          "date_reset_url": '/leaflets' + ('?' + urlencode(date_reset_params)
                                            if date_reset_params else ''),
@@ -323,22 +326,65 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
 
 
 def list_params(request):
     """List parameters of the request, repeated ones (datum) included."""
-    return [(key, value) for key, value in request.query_params.multi_items()
-            if key in LIST_PARAMS and value]
+    params = []
+    for key, value in request.query_params.multi_items():
+        if key == 'q':
+            value = ' '.join(value.split())[:search.MAX_QUERY]
+        if key in LIST_PARAMS and value:
+            params.append((key, value))
+    return params
+
+
+def search_hits(query, q):
+    """Restricts `query` to the full-text hits for `q`.
+
+    Returns (query, ranked): with FTS hits the query also yields (rank, snippet) columns.
+    Queries without a word of three characters cannot use the trigram index and
+    fall back to a substring search in title and series.
+    """
+    match = search.match_expression(q)
+    if match:
+        hits = search.hits_subquery(match)
+        return (query.join(hits, hits.c.leaflet_id == Leaflet.id)
+                .add_columns(hits.c.rank, hits.c.snippet), True)
+    pattern = search.like_pattern(q)
+    return query.filter(or_(Leaflet.title.ilike(pattern, escape='\\'),
+                            Leaflet.series.ilike(pattern, escape='\\'))), False
+
+
+def attach_snippets(items, raw_snippets):
+    """Adds 'snippet' (safe HTML) to the items; hits outside the OCR text show its beginning."""
+    missing = [lid for lid, raw in raw_snippets.items() if not search.has_match(raw)]
+    first_text = {}
+    if missing:
+        for leaflet_id, page_text in (session.query(Page.leaflet_id, Page.text)
+                                      .filter(Page.leaflet_id.in_(missing))
+                                      .order_by(Page.page_no)):
+            first_text.setdefault(leaflet_id, page_text)
+    for item in items:
+        lid = item['leaflet'].id
+        if lid in first_text:
+            item['snippet'] = search.fallback_snippet(first_text[lid])
+        elif lid in raw_snippets:
+            item['snippet'] = search.render_snippet(raw_snippets[lid])
 
 
 def filtered_items(params):
     one = dict(params)
+    q = one.get('q', '')
     query = (
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
     )
 
+    ranked = False
+    if q:
+        query, ranked = search_hits(query, q)
     if one.get('org'):
         matching_ids = (
             session.query(LeafletIssuer.leaflet_id)
@@ -356,11 +402,20 @@ def filtered_items(params):
     if datum:
         query = query.filter(Leaflet.date_type.in_(datum))
 
-    items = leaflet_items(
-        query.order_by(Volume.vz, Leaflet.start_page, Leaflet.id).all())
+    sort = one.get('sortierung', '')
+    by_relevance = ranked and not sort.startswith(('datum_', 'titel_'))
+    order = [Volume.vz, Leaflet.start_page, Leaflet.id]
+    if by_relevance:
+        order = [literal_column('hits.rank')] + order
+    rows = query.order_by(*order).all()
+    raw_snippets = {}
+    if ranked:
+        raw_snippets = {row[0].id: row.snippet for row in rows}
+        rows = [row[0] for row in rows]
+    items = leaflet_items(rows)
+    attach_snippets(items, raw_snippets)
     if one.get('jahr'):
         items = [item for item in items if item['year'] == one['jahr']]
-    sort = one.get('sortierung', '')
     if sort.startswith(('datum_', 'titel_')):
         key = date_sort_key if sort.startswith('datum_') else title_sort_key
         items.sort(key=key, reverse=sort.endswith('_ab'))
@@ -442,6 +497,7 @@ def detail_page(request, leaflet, edit=None, error=None):
     if leaflet.topic_id is not None:
         topic = session.get(Topic, leaflet.topic_id)
     selection_labels = (
+        f"„{chosen['q']}“" if 'q' in chosen else None,
         DOC_TYPES.get(chosen.get('typ')),
         org_label(org) if org else None,
         chosen.get('reihe'),

@@ -7,7 +7,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
-from . import corrections
+from . import corrections, search
 from .session import session
 from .models import Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
 
@@ -365,7 +365,11 @@ def report_data_dir():
 
 def fill_database():
     data_ok = report_data_dir()
+    engine = session.get_bind()
+    search.ensure_search_index(engine)  # the triggers index everything imported below
     if session.query(Leaflet).count() > 0:
+        if search.index_is_stale(engine):
+            print(f"Search index rebuilt: {search.rebuild_search_index(engine)} leaflets")
         if data_ok and session.query(Page).filter(Page.text != "").first() is None:
             print("Note: the database was built without OCR text, but the "
                   "data folder is complete now. Delete the .db and restart.")

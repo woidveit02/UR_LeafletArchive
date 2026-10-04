@@ -1865,3 +1865,42 @@ html {
 .pick-bar[hidden] {
     display: none;
 }
+
+.search-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    margin-bottom: 12px;
+}
+
+.search-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.search-field input {
+    width: 100%;
+    padding: 6px 8px;
+    font: inherit;
+}
+
+.filter-note {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 0.9em;
+}
+
+.row-snippet {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.9em;
+}
+
+.row-snippet mark,
+.doc-card .row-snippet mark {
+    background: #ffe58a;
+    color: inherit;
+}

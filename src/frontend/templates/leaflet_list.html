@@ -9,6 +9,15 @@
         {% from '_ui.html' import view_switch %}
         <form method="get" action="/leaflets" class="filter">
             {% if view == 'kacheln' %}<input type="hidden" name="ansicht" value="kacheln">{% endif %}
+            <div class="search-row">
+                <label class="search-field">Volltextsuche
+                    <input type="search" name="q" value="{{ selected_q }}" maxlength="200"
+                           placeholder="Suchbegriff in Titel, Reihe, Herausgeber und Text …"
+                           title="Findet auch Wortteile und Texte mit OCR-Fehlern">
+                </label>
+                <button type="submit" class="button-small">Suchen</button>
+            </div>
+            {% if q_short %}<p class="filter-note">Suchbegriffe mit weniger als 3 Zeichen werden nur in Titel und Reihe gesucht.</p>{% endif %}
             <details class="filter-details filter-panel" open>
             <summary>Filter{% if filtered %} ({{ filtered }} aktiv){% endif %}</summary>
             <div class="filter-fields">
@@ -71,12 +80,14 @@
             {% set reset = (' · <a href="' ~ reset_url ~ '">Filter zurücksetzen</a>') | safe if filtered else '' %}
             <div class="filter-bar">
                 <p class="filter-result">
-                    {%- if leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
+                    {%- if selected_q and leaflets %}{{ leaflets | length }} Treffer für „{{ selected_q }}“
+                    {%- elif selected_q %}Keine Treffer für „{{ selected_q }}“
+                    {%- elif leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
                     {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
                     {%- else %}Keine Flugblätter für diese Auswahl{% endif %}{{ reset }}</p>
                 <label class="sort">Sortiert nach
                     <select name="sortierung" onchange="this.form.submit()">
-                        <option value="" {% if not selected_sort %}selected{% endif %}>Reihenfolge im Archiv</option>
+                        <option value="" {% if not selected_sort %}selected{% endif %}>{{ 'Relevanz' if selected_q and not q_short else 'Reihenfolge im Archiv' }}</option>
                         <option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>
                         <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
                         <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>

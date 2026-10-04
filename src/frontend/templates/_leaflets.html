@@ -38,6 +38,7 @@
         <span class="row-main">
             <a class="row-title" href="/leaflets/{{ item.leaflet.id }}{{ qs }}">{{ title(item.leaflet) }}</a>
             {{ meta(item, rest) }}
+            {% if item.snippet %}<span class="row-snippet">{{ item.snippet }}</span>{% endif %}
         </span>
         {% if 'count' in fields %}<span class="row-count">{{ count(item.leaflet) }}</span>{% endif %}
     </li>
@@ -63,6 +64,7 @@
             <a class="doc-title" href="/leaflets/{{ l.id }}{{ qs }}" title="{{ l.display_title }}">{{ title(l) }}</a>
             <span class="doc-issuers">{{ issuer_list(item.issuers) }}</span>
             {{ meta(item, fields) }}
+            {% if item.snippet %}<span class="row-snippet">{{ item.snippet }}</span>{% endif %}
         </figcaption>
     </figure>
     {% endfor %}
