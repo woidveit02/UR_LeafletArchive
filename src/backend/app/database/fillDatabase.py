@@ -51,6 +51,9 @@ def copy_review():
 
 
 def fill_copies():
+    """Writes the groups into the leaflets; also used after a review, so it starts from scratch."""
+    session.query(Leaflet).update({Leaflet.copy_group: None, Leaflet.canonical_leaflet_id: None,
+                                   Leaflet.copies_checked: False, Leaflet.copy_candidate_of: None})
     groups, _, leaflets = copy_review()
     for number, group in enumerate(groups, 1):
         main = leaflets[group["canonical"]].id

@@ -40,9 +40,13 @@ Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noc
 | Bände | `/volumes` | Verzeichnungseinheiten 1967–1973, gegliedert wie im Findmittel |
 | Band | `/volumes/{vz}` | Findmittel-Titel, Signatur, Organisationen, Link ins Archivportal-D |
 | Korrigieren | `/leaflets/{id}?bearbeiten` | Titel, Datum, Textsorte, Herausgeber, Unterzeichnende sowie Reihe und Nummer von Hand korrigieren, mit Beleg im Scan |
-| Korrekturen | `/korrekturen` | Korrekturen, die nach einer Änderung der Segmentgrenzen nicht mehr angewendet werden |
+| Korrekturen | `/korrekturen` | Korrekturen und Prüfungen von Exemplaren, die nach einer Änderung der Segmentgrenzen nicht mehr angewendet werden |
+| Exemplare | `/exemplare` | Alle Gruppen von Exemplaren desselben Blatts mit dem Stand der Prüfung |
+| Exemplare vergleichen | `/leaflets/{id}/exemplare` | Das Hauptexemplar neben einem anderen Exemplar: Scans und OCR-Text mit nummerierten Abweichungen. Hauptexemplar wählen, falsche Zuordnungen entfernen, als geprüft speichern |
 
 Jede Korrektur steht als eigene Zeile in `data/corrections.jsonl`. Beim Aufbau der Datenbank werden die Korrekturen zuletzt angewendet, und zwar nur auf ein Flugblatt mit genau derselben Seitenspanne. „Alle Handkorrekturen entfernen“ und „wiederherstellen“ hängen eine Zeile mit `"field": "revert"` an, gelöscht wird dabei nichts. Diese Zeile hebt alle früheren Zeilen des Flugblatts auf (`"value": "all"`) oder nur die eines Feldes. Die Datei gehört ins Repo.
+
+Die Prüfung der Exemplare steht als eigene Zeile je Gruppe in `data/copy_decisions.jsonl` (Mitglieder, ausgeschlossene Blätter, Hauptexemplar). Blätter werden über Band und Seitenspanne angesprochen, nie über die Gruppennummer aus `copies.tsv`, denn die ändert sich bei jedem Lauf von `find_copies.py`. Ändert sich eine Segmentgrenze, wird die Prüfung nicht angewendet, sondern auf `/korrekturen` aufgeführt. „Prüfung zurücknehmen“ hängt eine Zeile mit `"revert"` an, gelöscht wird nichts. Die Datei gehört ins Repo.
 
 Die Anwendung hat keine Anmeldung. Bevor sie außerhalb des eigenen Rechners erreichbar ist, muss das Bearbeiten abgesichert werden.
 
@@ -63,6 +67,7 @@ Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien s
 | `nr001_metadata.json`, `nr002_metadata.json`, … | Titel, Datum, Textsorte, Herausgeber je Flugblatt. Jeder Band mit einer solchen Datei wird importiert | LLM-Extraktion im Pipeline-Repo |
 | [`copies.tsv`](data/copies.tsv) | Mögliche weitere Exemplare desselben Blatts | Textvergleich im Pipeline-Repo (`find_copies.py`) |
 | `corrections.jsonl` | Handkorrekturen | Bearbeiten in der App |
+| `copy_decisions.jsonl` | Geprüfte Gruppen von Exemplaren | Vergleichsseite in der App |
 | [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
 | [`topics.json`](data/topics.json) | Themen und Zuordnungen zu Flugblättern; unsichere Zuordnungen werden markiert | Topic-Modelling |
 | [`volumes.json`](data/volumes.json) | Bände mit Titel, Signatur, Link ins Archivportal-D | Findmittel |

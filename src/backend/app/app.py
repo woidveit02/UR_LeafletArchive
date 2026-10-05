@@ -1,7 +1,9 @@
 import logging
 import re
 import unicodedata
-from collections import Counter
+from collections import Counter, defaultdict
+from difflib import SequenceMatcher
+from html import unescape
 import datetime
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode
@@ -15,8 +17,9 @@ from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
-from .database import corrections, search
-from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record, copy_review,
+from .database import copy_decisions, corrections, search
+from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
+                                    fill_copies,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
 from .database.models import (Leaflet, LeafletIssuer, Volume, Organization, Page,
@@ -529,7 +532,8 @@ def detail_page(request, leaflet, edit=None, error=None):
             Leaflet.copy_group == leaflet.copy_group,
             Leaflet.id != leaflet.id).order_by(Volume.vz, Leaflet.start_page)
         copies = [{'id': lf.id, 'label': f"{vol.label}, "
-                   f"{page_range(lf.start_page, lf.end_page)}"}
+                   f"{page_range(lf.start_page, lf.end_page)}",
+                   'main': lf.id == leaflet.canonical_leaflet_id}
                   for lf, vol in rows]
 
     # coming from a filtered list: page through that selection, else through the volume
@@ -604,6 +608,9 @@ def detail_page(request, leaflet, edit=None, error=None):
         'page_list': page_list,
         'has_pdf': has_pdf,
         'copies': copies,
+        'copy_main': leaflet.canonical_leaflet_id == leaflet.id,  # the main copy of its group
+        'copies_checked': bool(leaflet.copies_checked),
+        'copy_candidate': bool(leaflet.copy_candidate_of),  # a new automatic hit for a checked group
         'corrected': leaflet.corrected or [],
         'automatic': automatic_text(leaflet),
     }
@@ -754,6 +761,274 @@ def back_to(request, leaflet_id):
                             status_code=303)
 
 
+COPY_STATES = {'offen': 'Nicht geprüft', 'geprueft': 'Geprüft', 'neu': 'Neue Treffer'}
+
+
+@app.get("/exemplare")
+def copy_list(request: Request, status: str = ''):
+    """All groups of copies with the state of their review; each opens its comparison page."""
+    groups = {}
+    for leaflet, volume in session.query(Leaflet, Volume).join(Volume).filter(or_(
+            Leaflet.copy_group.isnot(None), Leaflet.copy_candidate_of.isnot(None))).order_by(
+            Volume.vz, Leaflet.start_page):
+        if leaflet.copy_group:
+            groups.setdefault(leaflet.copy_group, {'members': [], 'new': 0})['members'].append((leaflet, volume))
+        if leaflet.copy_candidate_of:
+            groups.setdefault(leaflet.copy_candidate_of, {'members': [], 'new': 0})['new'] += 1
+    rows = []
+    for group in groups.values():
+        main = next(lf for lf, _ in group['members'] if lf.id == lf.canonical_leaflet_id)
+        rows.append({'id': main.id, 'title': main.display_title, 'new': group['new'],
+                     'state': 'neu' if group['new'] else 'geprueft' if main.copies_checked else 'offen',
+                     'labels': [f"{v.label}, {page_range(lf.start_page, lf.end_page)}" for lf, v in group['members']]})
+    counts = Counter(r['state'] for r in rows)
+    shown = [r for r in rows if r['state'] == status] if status in COPY_STATES else rows
+    return templates.TemplateResponse(
+        request, "copy_list.html",
+        {"rows": shown, "total": len(rows), "counts": counts, "states": COPY_STATES, "status": status})
+
+
+def copy_group_of(leaflet):
+    """(members, candidates) of the group the leaflet belongs to, or may join as a new hit."""
+    group = leaflet.copy_candidate_of or leaflet.copy_group
+    if not group:
+        return [], []
+
+    def rows(column):
+        return session.query(Leaflet).join(Volume).filter(column == group).order_by(
+            Volume.vz, Leaflet.start_page).all()
+    return rows(Leaflet.copy_group), rows(Leaflet.copy_candidate_of)
+
+
+def deviating(cards, key):
+    """Ids of the copies whose value differs from the most common one; all of them if two values tie.
+    A missing value contradicts nothing, so copies without one are left out."""
+    cards = [c for c in cards if c[key]]
+    counts = Counter(c[key] for c in cards).most_common()
+    if len(counts) < 2:
+        return set()
+    if counts[0][1] == counts[1][1]:
+        return {c['id'] for c in cards}
+    return {c['id'] for c in cards if c[key] != counts[0][0]}
+
+
+TAG = re.compile(r'(<[^>]*>)')
+WORD = re.compile(r'\S+')
+MAX_DIFF_WORDS = 4000  # the word comparison grows quadratically; longer texts are shown unmarked
+
+
+def block_words(html_text):
+    """The words of the text nodes of one OCR block (its html is already sanitized)."""
+    return [w for part in TAG.split(html_text) if not part.startswith('<') for w in WORD.findall(part)]
+
+
+def word_key(word):
+    """Words are compared without case and punctuation."""
+    return re.sub(r'\W+', '', unescape(word)).casefold() or word
+
+
+GAP = '<mark class="gap" data-diff="{}" title="Im anderen Exemplar nicht erkannt">∅</mark>'
+
+
+def mark_block(html_text, start, marks, gaps):
+    """The block's html with the words whose running index is in `marks` wrapped in <mark>, tagged with the
+    number of their deviation. `gaps` puts a gap marker before a word: the other copy has words here."""
+    index = start
+    out = []
+    for part in TAG.split(html_text):
+        if part.startswith('<'):
+            out.append(part)
+            continue
+
+        def wrap(match):
+            nonlocal index
+            i, index = index, index + 1
+            word = f'<mark data-diff="{marks[i]}">{match.group()}</mark>' if i in marks else match.group()
+            return (GAP.format(gaps[i]) + ' ' if i in gaps else '') + word
+        out.append(WORD.sub(wrap, part))
+    return ''.join(out), index
+
+
+def word_units(words):
+    """[(key, display indices)]: a word hyphenated at the line end joins the next word, so that
+    'Literaturwissen- schaften' and 'Literaturwissenschaften' are the same."""
+    units, i = [], 0
+    while i < len(words):
+        word = words[i]
+        if i + 1 < len(words) and len(word) > 1 and word.endswith('-') and word[-2].isalnum():
+            units.append((word_key(word[:-1]) + word_key(words[i + 1]), [i, i + 1]))
+            i += 2
+        else:
+            units.append((word_key(word), [i]))
+            i += 1
+    return units
+
+
+def ocr_pair(left, right):
+    """The OCR blocks of two copies, structured. The words of a deviation are marked on both sides and carry its
+    number; where only the other copy has words, a gap marker stands. Each block names its partner, the
+    block of the other copy that holds most of its matching words."""
+    words = [[w for _, _, b in blocks for w in block_words(b['html'])] for blocks in (left, right)]
+    units = [word_units(w) for w in words]
+    owner = [[i for i, (_, _, b) in enumerate(blocks) for _ in block_words(b['html'])] for blocks in (left, right)]
+    ids = [[f"{page_no}-{number}" for page_no, number, _ in blocks] for blocks in (left, right)]  # evidence image ids
+    marks, gaps, votes, count = [{}, {}], [{}, {}], [defaultdict(Counter), defaultdict(Counter)], 0
+
+    def first(side, n):  # the first word of a unit; the end of the text for the unit after the last
+        return units[side][n][1][0] if n < len(units[side]) else len(words[side])
+    if max(len(w) for w in words) <= MAX_DIFF_WORDS:
+        keys = [[key for key, _ in u] for u in units]
+        for tag, i1, i2, j1, j2 in SequenceMatcher(None, keys[0], keys[1], autojunk=False).get_opcodes():
+            if tag == 'equal':
+                for k in range(i2 - i1):
+                    a, b = first(0, i1 + k), first(1, j1 + k)
+                    votes[0][owner[0][a]][owner[1][b]] += 1
+                    votes[1][owner[1][b]][owner[0][a]] += 1
+                continue
+            count += 1
+            for side, (lo, hi) in enumerate(((i1, i2), (j1, j2))):
+                for n in range(lo, hi):
+                    marks[side].update({d: count for d in units[side][n][1]})
+            if i1 == i2:
+                gaps[0][first(0, i1)] = count
+            if j1 == j2:
+                gaps[1][first(1, j1)] = count
+    sides = []
+    for side, blocks in enumerate((left, right)):
+        index, rows = 0, []
+        for i, (page_no, number, block) in enumerate(blocks):
+            html_text, index = mark_block(block['html'], index, marks[side], gaps[side])
+            partner = votes[side][i].most_common(1)
+            rows.append({'page': page_no, 'type': block['type'], 'html': html_text, 'marked': '<mark' in html_text,
+                         'id': ids[side][i], 'partner': ids[1 - side][partner[0][0]] if partner else ''})
+        if index in gaps[side] and rows:  # words of the other copy at the very end
+            head, _, tail = rows[-1]['html'].rpartition('</')
+            rows[-1]['html'] = f"{head} {GAP.format(gaps[side][index])}</{tail}" if head else rows[-1]['html']
+            rows[-1]['marked'] = True
+        sides.append({'blocks': rows, 'differs': len(marks[side]), 'words': len(words[side]), 'diffs': count})
+    return sides
+
+
+def copy_blocks(leaflet):
+    """(page number, block number on the page, OCR block) of the leaflet's pages, pictures left out."""
+    pages = session.query(Page).filter_by(leaflet_id=leaflet.id).order_by(Page.page_no)  # indexed
+    return [(p.page_no, number, b) for p in pages for number, b in enumerate(p.blocks or [], 1)
+            if b.get('type') != 'Picture']
+
+
+COPY_MESSAGES = {'gespeichert': 'Prüfung gespeichert.',
+                 'zurueckgenommen': 'Prüfung zurückgenommen, es gilt wieder der automatische Vorschlag.'}
+
+
+def shorten(cards):
+    """Sets the short name: the page range alone when all copies are in one volume (said once on the page)."""
+    same = len({c['volume'] for c in cards}) == 1
+    for c in cards:
+        c['label'] = f"{c['volume']}, {c['range']}"
+        c['short'] = c['range'] if same else c['label']
+    return same
+
+
+def copy_card(leaflet, main_id):
+    volume = session.get(Volume, leaflet.volume_id)
+    return {'volume': volume.label, 'range': page_range(leaflet.start_page, leaflet.end_page), 'id': leaflet.id, 'page': leaflet.start_page, 'pages': leaflet.end_page - leaflet.start_page + 1,
+            'main': leaflet.id == main_id,
+            'title': leaflet.title or '', 'date': iso_to_text(leaflet.date_iso) or '',
+            'issuers': ', '.join(i['name'] for i in current_values(leaflet)['issuers']),
+            'received': leaflet.received_date or ''}
+
+
+@app.get("/leaflets/{leaflet_id}/exemplare")
+def copy_page(request: Request, leaflet_id: int, meldung: str = ''):
+    """Compares the copies of a group side by side: confirm, exclude, choose the main copy."""
+    leaflet = leaflet_or_404(leaflet_id)
+    members, candidates = copy_group_of(leaflet)
+    if not members:
+        raise HTTPException(404)
+    main_id = members[0].canonical_leaflet_id
+    cards = [copy_card(lf, main_id) for lf in members]
+    new = [copy_card(lf, None) for lf in candidates]
+    # the main copy is always on the left; on the right the first other copy
+    left = main_id or members[0].id
+    right = next(c['id'] for c in cards + new if c['id'] != left)
+    # what all copies share is said once; a field that varies is shown in the rows, and a copy that
+    # deviates from the usual value is where it is decided whether it is the same leaflet
+    fields = {'title': 'Titel', 'date': 'Datum', 'issuers': 'Herausgeber'}
+    values = {key: {c[key] for c in cards + new} for key in fields}
+    same_volume = shorten(cards + new)
+    shared = {key: next(iter(v)) for key, v in values.items() if len(v) == 1 and next(iter(v))}
+    facts = [shared[key] for key in ('date', 'issuers') if key in shared] + ([cards[0]['volume']] if same_volume else [])
+    varying = [(key, fields[key]) for key, v in values.items() if len(v) > 1]
+    differs = {key: deviating(cards + new, key) for key in fields}
+    return templates.TemplateResponse(
+        request, "leaflet_copies.html",
+        {"leaflet": leaflet, "cards": cards, "new": new, "differs": differs, "left": left, "right": right,
+         "title": shared.get('title'), "facts": facts, "varying": varying, "message": COPY_MESSAGES.get(meldung),
+         "pair": copy_pair(leaflet, left, right),
+         "checked": members[0].copies_checked})
+
+
+def copy_pair(leaflet, left_id, right_id):
+    """Two copies of the leaflet's group for the side-by-side view: cards with their OCR deviations."""
+    members, candidates = copy_group_of(leaflet)
+    by_id = {lf.id: lf for lf in members + candidates}
+    if left_id == right_id or not {left_id, right_id} <= by_id.keys():
+        raise HTTPException(404)
+    cards = [copy_card(by_id[i], None) for i in (left_id, right_id)]
+    shorten(cards)
+    for card, side in zip(cards, ocr_pair(copy_blocks(by_id[left_id]), copy_blocks(by_id[right_id]))):
+        card['ocr'] = side
+    return {'cards': cards, 'max_pages': max(c['pages'] for c in cards)}
+
+
+@app.get("/leaflets/{leaflet_id}/exemplare/paar")
+def copy_pair_page(request: Request, leaflet_id: int, links: int, rechts: int):
+    """The side-by-side part of the comparison page, loaded again when the copies change."""
+    pair = copy_pair(leaflet_or_404(leaflet_id), links, rechts)
+    return templates.TemplateResponse(request, "leaflet_copy_pair.html", {"pair": pair})
+
+
+def save_copy_review(leaflet, form):
+    """Appends the review of the leaflet's group (or the revert of its newest review) and
+    rebuilds the groups. form: parsed form fields; unticked new hits count as seen, not as members."""
+    members, candidates = copy_group_of(leaflet)
+    if not members:
+        raise HTTPException(404)
+
+    def ids(name):
+        return {int(v) for v in form.get(name, []) if v.isdigit()}
+    if 'revert' in form:
+        mine = {copy_decisions.anchor(segment(lf)) for lf in members + candidates}
+        lines = corrections.load(COPY_DECISIONS)
+        done = {e['revert'] for e in lines if 'revert' in e}
+        newest = [e['at'] for e in lines if 'revert' not in e and e['at'] not in done
+                  and mine & {copy_decisions.anchor(a) for a in e['members'] + e['rejected']}]
+        if newest:
+            copy_decisions.append(COPY_DECISIONS, {'revert': max(newest)})
+    else:
+        out, add = ids('out'), ids('add')
+        kept = [lf for lf in members if lf.id not in out] + [lf for lf in candidates if lf.id in add]
+        rejected = [lf for lf in members + candidates if lf not in kept]
+        main = next((lf for lf in kept if lf.id in ids('main')), None)
+        if main is None:
+            raise HTTPException(400, "Das Hauptexemplar muss zur Gruppe gehören.")
+        copy_decisions.append(COPY_DECISIONS, {
+            'members': [segment(lf) for lf in kept], 'rejected': [segment(lf) for lf in rejected],
+            'canonical': segment(main)})
+    fill_copies()
+
+
+@app.post("/leaflets/{leaflet_id}/exemplare")
+async def copy_save(request: Request, leaflet_id: int):
+    leaflet = leaflet_or_404(leaflet_id)
+    form = parse_qs((await request.body()).decode())
+    save_copy_review(leaflet, form)
+    if not copy_group_of(leaflet)[0]:  # a leaflet that was excluded no longer has a comparison page
+        return RedirectResponse(f"/leaflets/{leaflet_id}", status_code=303)
+    message = 'zurueckgenommen' if 'revert' in form else 'gespeichert'
+    return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung={message}", status_code=303)
+
+
 @app.get("/korrekturen")
 def correction_list(request: Request):
     """Corrections whose page range no longer matches a segment."""
@@ -892,7 +1167,8 @@ def leaflet_items(leaflets):
                       'thumb': has_pdf[lf.volume_id],
                       'issuers': issuers.get(lf.id, []),
                       'copies': group_sizes[lf.copy_group] - 1
-                      if lf.copy_group else 0})
+                      if lf.copy_group else 0,
+                      'copies_checked': bool(lf.copies_checked)})
     return items
 
 

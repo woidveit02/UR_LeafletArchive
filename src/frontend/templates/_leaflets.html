@@ -26,7 +26,8 @@
     {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
     {%- endif -%}
 {%- endfor -%}
-{%- if item.copies %}{% set _ = parts.append(item.copies ~ (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare')) %}{% endif -%}
+{%- if item.copies %}{% set _ = parts.append(item.copies ~ ((' weiteres Exemplar' if item.copies == 1 else ' weitere Exemplare') if item.copies_checked
+        else (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare'))) %}{% endif -%}
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 

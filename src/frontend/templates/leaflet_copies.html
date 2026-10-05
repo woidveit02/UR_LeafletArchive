@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Exemplare vergleichen – UR Leaflet Archive{% endblock %}
+{% macro field(label, value, deviates) %}
+<span class="copy-field"><span class="meta">{{ label }}:</span>
+    <span{% if deviates %} class="differs"{% endif %}>{% if value %}{{ value }}{% else %}<span class="meta">fehlt</span>{% endif %}</span></span>
+{% endmacro %}
+{% macro id_cell(c) %}
+<td class="copy-id"><a href="/leaflets/{{ c.id }}">{{ c.short }}</a>
+    {% for key, label in varying %}{{ field(label, c[key], c.id in differs[key]) }}{% endfor %}
+    {% if (cards + new) | selectattr('received') | list %}<span class="copy-field"><span class="meta">Eingang:</span> {{ c.received or '–' }}</span>{% endif %}</td>
+{% endmacro %}
+{% block content %}
+        <header class="page-head">
+            <h1>Exemplare vergleichen</h1>
+            {% if title %}<p class="copy-title">{{ title }}</p>{% endif %}
+            {% if facts %}<p class="copy-facts">{{ facts | join(' · ') }}</p>{% endif %}
+            <p class="copy-status"><span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
+                {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
+                <span class="meta"><a href="/leaflets/{{ leaflet.id }}">Zurück zum Flugblatt</a> · <a href="/exemplare">Alle Exemplare</a></span></p>
+        </header>
+        <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
+            <h2>Zuordnung prüfen</h2>
+            <p class="meta">Gehören alle Exemplare zum selben Flugblatt? Falsch zugeordnete ankreuzen. Das Hauptexemplar vertritt die Gruppe,
+                wenn nur ein Exemplar gezeigt wird; wähle dafür das mit dem besten Scan und dem vollständigsten Text. Im Vergleich steht es links.</p>
+            <table class="copy-table">
+                <thead><tr><th scope="col">Exemplar</th><th scope="col">Haupt&shy;exemplar</th><th scope="col">Falsch zugeordnet</th></tr></thead>
+                <tbody>
+                {% for c in cards %}
+                <tr>{{ id_cell(c) }}
+                    <td><input type="radio" name="main" value="{{ c.id }}" aria-label="als Hauptexemplar"{% if c.main %} checked{% endif %}></td>
+                    <td><input type="checkbox" name="out" value="{{ c.id }}" aria-label="falsch zugeordnet"></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if new %}
+            <h2>Neu gefunden, noch nicht geprüft</h2>
+            <table class="copy-table">
+                <thead><tr><th scope="col">Exemplar</th><th scope="col">Gehört dazu</th></tr></thead>
+                <tbody>
+                {% for c in new %}
+                <tr>{{ id_cell(c) }}
+                    <td><input type="checkbox" name="add" value="{{ c.id }}" aria-label="gehört dazu"></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p class="meta">Nicht angehakte neue Blätter gelten nach dem Speichern als nicht zugehörig.</p>
+            {% endif %}
+            <div class="review-actions">
+                <button type="submit" id="save" class="button-small">Als geprüft speichern</button>
+                {% if checked %}<button type="submit" name="revert" value="1" class="button-small">Prüfung zurücknehmen</button>{% endif %}
+            </div>
+        </form>
+
+        <h2>Vergleich</h2>
+        <p class="pair-pick"><label>Hauptexemplar gegen
+            <select id="pair-right">
+                {% for c in cards + new %}<option value="{{ c.id }}"{% if c.id == right %} selected{% endif %}>{{ c.short }}{% if c in new %} (neu gefunden){% endif %}</option>{% endfor %}
+            </select></label></p>
+        <section id="pair">{% include 'leaflet_copy_pair.html' %}</section>
+        <dialog id="scan-popup">
+            <div class="popup-head"><strong>Stelle im Scan</strong>
+                <span class="copy-sheets popup-switch" role="group" aria-label="Exemplar">
+                    <button type="button" data-show="0" aria-pressed="true">Hauptexemplar</button>
+                    <button type="button" data-show="1" aria-pressed="false">Vergleich</button></span>
+                <button type="button" class="button-plain" id="popup-close">Schließen</button></div>
+            <div class="popup-grid" id="popup-grid"></div>
+        </dialog>
+{% endblock %}
+{% block scripts %}
+    <script>
+        const pair = document.getElementById('pair');
+        const mains = [...document.querySelectorAll('input[name=main]')], right = document.getElementById('pair-right');
+        let left = '{{ left }}';
+        let at = -1, sheet = 1, allSheets = false, onlyDiffs = false;  // list position, sheet shown, the two options
+
+        // the numbers of the deviations in the visible part of the OCR text, in reading order
+        const diffIds = () => [...new Set([...pair.querySelectorAll('.copy-ocr mark[data-diff]')]
+            .filter((m) => m.offsetParent).map((m) => Number(m.dataset.diff)))].sort((a, b) => a - b);
+        const updateCount = () => {
+            const ids = diffIds(), count = pair.querySelector('#diff-count');
+            if (count) count.textContent = !ids.length ? 'keine Abweichung in dieser Ansicht'
+                : at < 0 ? `${ids.length} Stelle${ids.length === 1 ? '' : 'n'}` : `Abweichung ${at + 1} von ${ids.length}`;
+        };
+        // the sheet switch decides which sheet of the OCR text is shown, unless all sheets are wanted
+        const showSheets = () => {
+            pair.querySelectorAll('.sheet-row').forEach((row) => { row.hidden = !allSheets && Number(row.dataset.sheet) !== sheet; });
+            at = -1;
+            updateCount();
+        };
+
+        // the main copy is always on the left; the compared copy is chosen on the right
+        const loadPair = () => {
+            const main = mains.find((r) => r.checked && !r.disabled);
+            if (!main) return;
+            left = main.value;
+            [...right.options].forEach((o) => { o.disabled = o.value === left; });
+            if (right.value === left) right.value = [...right.options].find((o) => !o.disabled).value;
+            fetch(`/leaflets/{{ leaflet.id }}/exemplare/paar?links=${left}&rechts=${right.value}`)
+                .then((r) => r.text())
+                .then((html) => {
+                    pair.innerHTML = html;
+                    sheet = 1;
+                    ['only-diffs', 'all-sheets'].forEach((id) => {
+                        const box = pair.querySelector('#' + id);
+                        if (box) box.checked = id === 'only-diffs' ? onlyDiffs : allSheets;
+                    });
+                    showSheets();
+                });
+        };
+
+        // "gehört nicht dazu" excludes "Hauptexemplar"; the main copy moves on when it is excluded
+        const sync = () => {
+            mains.forEach((r) => { r.disabled = r.closest('tr').querySelector('input[name=out]').checked; });
+            if (!mains.some((r) => r.checked && !r.disabled)) {
+                const next = mains.find((r) => !r.disabled);
+                if (next) next.checked = true;
+            }
+            document.getElementById('save').disabled = !mains.some((r) => !r.disabled);
+            const main = mains.find((r) => r.checked && !r.disabled);
+            if (main && main.value !== left) loadPair();
+        };
+        document.querySelectorAll('input[name=out], input[name=main]').forEach((box) => box.addEventListener('change', sync));
+        right.addEventListener('change', loadPair);
+        sync();
+        [...right.options].forEach((o) => { o.disabled = o.value === left; });
+        updateCount();
+
+        pair.addEventListener('click', (e) => {
+            const picked = e.target.dataset.sheet, step = e.target.dataset.diff;
+            if (picked) {  // one sheet number for both copies, for the scans and the OCR text
+                sheet = Number(picked);
+                pair.querySelectorAll('.copy-sheets button').forEach((b) => b.setAttribute('aria-pressed', b === e.target));
+                pair.querySelectorAll('.copy-scan').forEach((scan) => {
+                    const has = sheet <= Number(scan.dataset.pages), page = Number(scan.dataset.first) + sheet - 1;
+                    const link = scan.querySelector('a'), img = scan.querySelector('img');
+                    link.hidden = !has;
+                    scan.querySelector('p').hidden = has;
+                    if (has) {
+                        const url = `/leaflets/${scan.dataset.id}/pages/${page}.png`;
+                        link.href = url + '?dpi=220';
+                        img.src = url + '?dpi=90';
+                        img.alt = `Blattseite ${sheet}`;
+                    }
+                });
+                showSheets();
+            }
+            if (step) {  // both variants of a deviation are marked and shown together
+                const ids = diffIds();
+                if (!ids.length) return;
+                at = step === 'next' ? (at + 1) % ids.length : (at <= 0 ? ids.length - 1 : at - 1);
+                pair.querySelectorAll('mark.current').forEach((m) => m.classList.remove('current'));
+                const marks = [...pair.querySelectorAll(`.copy-ocr mark[data-diff="${ids[at]}"]`)].filter((m) => m.offsetParent);
+                marks.forEach((m) => m.classList.add('current'));
+                marks[0].scrollIntoView({block: 'center'});
+                updateCount();
+            }
+        });
+
+        // a click on a passage shows its place in the scan: the clicked block and its partner in the other
+        // copy, one at a time as large as possible (the box of a block; the OCR has no boxes for single words)
+        const popup = document.getElementById('scan-popup'), grid = document.getElementById('popup-grid');
+        const shot = (column, blockId) => {
+            const [page] = blockId.split('-'), label = column.dataset.label, base = `/leaflets/${column.dataset.leaflet}`;
+            const title = label.includes('–') ? `${label}, Seite ${page}` : label;
+            return `<figure><figcaption>${title}
+                <a href="${base}/pages/${page}.png?dpi=220" target="_blank" rel="noopener">ganze Seite ↗</a></figcaption>
+                <img src="${base}/evidence.png?blocks=${blockId}" alt="Ausschnitt aus dem Scan"></figure>`;
+        };
+        const showScan = (i) => {
+            popup.querySelectorAll('.popup-switch button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.show === String(i)));
+            [...grid.children].forEach((figure, n) => { figure.hidden = n !== i; });
+        };
+        pair.addEventListener('click', (e) => {
+            const block = e.target.closest('.ocr-block[data-block]');
+            if (!block || e.target.closest('a') || String(getSelection())) return;  // keep links and text selection
+            const side = Number(block.closest('.copy-ocr').dataset.side);
+            const column = (i) => pair.querySelector(`.copy-ocr[data-side="${i}"]`);  // the label of a side
+            const pieces = [[column(side), block.dataset.block], [column(1 - side), block.dataset.partner]];
+            if (side === 1) pieces.reverse();  // the main copy stays first
+            grid.innerHTML = pieces.map(([col, id]) => id ? shot(col, id)
+                : `<figure><figcaption>${col.dataset.label}</figcaption>
+                   <p class="meta">Im anderen Text wurde kein Gegenstück zu dieser Stelle gefunden.</p></figure>`).join('');
+            showScan(side);  // the copy that was clicked comes first
+            popup.showModal();
+        });
+        popup.querySelectorAll('.popup-switch button').forEach((b) => b.addEventListener('click', () => showScan(Number(b.dataset.show))));
+        document.getElementById('popup-close').addEventListener('click', () => popup.close());
+        popup.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });  // the backdrop
+
+        pair.addEventListener('change', (e) => {
+            if (e.target.id === 'only-diffs') { onlyDiffs = e.target.checked; pair.classList.toggle('only-diffs', onlyDiffs); at = -1; updateCount(); }
+            if (e.target.id === 'all-sheets') { allSheets = e.target.checked; showSheets(); }
+        });
+    </script>
+{% endblock %}

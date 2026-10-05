@@ -173,9 +173,13 @@
                 {{ beleg('Eingang im Archiv') }}</dd>
             {% endif %}
             <dt>Weitere Exemplare</dt>
-            {% if leaflet.copies %}
-            <dd>{% for c in leaflet.copies %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
-                <span class="meta note">dasselbe Blatt an anderer Stelle im Bestand; automatisch am Text erkannt, nicht geprüft</span></dd>
+            {% if leaflet.copies or leaflet.copy_candidate %}
+            <dd>{% for c in leaflet.copies %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% if c.main %} <span class="meta">(Hauptexemplar)</span>{% endif %}{% if not loop.last %}<br>{% endif %}{% endfor %}
+                {% if leaflet.copies %}<span class="meta note">dasselbe Blatt an anderer Stelle im Bestand;
+                    {% if leaflet.copy_main %}dieses Blatt ist das Hauptexemplar; {% endif %}
+                    {% if leaflet.copies_checked %}Gruppe geprüft{% else %}automatisch am Text erkannt, nicht geprüft{% endif %}</span>{% endif %}
+                {% if leaflet.copy_candidate %}<span class="meta note">{% if leaflet.copies %}<br>{% endif %}neuer möglicher Treffer zu einer geprüften Gruppe, noch nicht geprüft</span>{% endif %}
+                <br><a href="/leaflets/{{ leaflet.id }}/exemplare">Exemplare vergleichen</a> · <a href="/exemplare">alle Exemplare</a></dd>
             {% else %}
             <dd><span class="meta">keine erkannt</span></dd>
             {% endif %}

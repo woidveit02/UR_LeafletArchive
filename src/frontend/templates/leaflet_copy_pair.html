@@ -1,0 +1,50 @@
+{% set sides = [('Hauptexemplar', pair.cards[0]), ('Vergleich', pair.cards[1])] %}
+{% if pair.max_pages > 1 %}
+<div class="copy-sheets" role="group" aria-label="Blattseite" title="gilt für beide Scans und den OCR-Text">Blattseite
+    {% for n in range(1, pair.max_pages + 1) %}<button type="button" data-sheet="{{ n }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ n }}</button>{% endfor %}</div>
+{% endif %}
+<div class="pair-grid">
+    {% for role, c in sides %}
+    <section>
+        <h3 class="facet-head">{{ role }}: <a href="/leaflets/{{ c.id }}">{{ c.short }}</a></h3>
+        <div class="copy-scan" data-id="{{ c.id }}" data-first="{{ c.page }}" data-pages="{{ c.pages }}">
+            <a href="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img src="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=90" alt="Blattseite 1, {{ c.label }}"></a>
+            <p class="meta" hidden>Dieses Exemplar hat nur {{ c.pages }} Blattseite{{ 'n' if c.pages > 1 }}.</p>
+        </div>
+        <p class="meta">Vergrößern:
+            {% for n in range(c.page, c.page + c.pages) %}<a href="/leaflets/{{ c.id }}/pages/{{ n }}.png?dpi=220" target="_blank" rel="noopener">Bandseite {{ n }} ↗</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+    </section>
+    {% endfor %}
+</div>
+<h3 class="facet-head">OCR-Text</h3>
+<div class="pair-diff meta">
+    <span><strong>{{ pair.cards[0].ocr.diffs }} abweichende Textstelle{{ 'n' if pair.cards[0].ocr.diffs != 1 }}</strong> im OCR-Text{% if pair.max_pages > 1 %} (alle Blattseiten){% endif %}.
+        Betroffene Wörter: links {{ pair.cards[0].ocr.differs }}, rechts {{ pair.cards[1].ocr.differs }}.
+        Gelb unterstrichen: Wörter einer Abweichung. ∅: hier fehlen Wörter, die im anderen Exemplar stehen. Zeilenumbrüche, Groß- und Kleinschreibung und Satzzeichen zählen nicht.</span>
+    <span class="pair-nav">
+        <button type="button" class="button-plain" data-diff="prev">← Vorherige</button>
+        <span id="diff-count">{{ pair.cards[0].ocr.diffs }} Stelle{{ 'n' if pair.cards[0].ocr.diffs != 1 }}</span>
+        <button type="button" class="button-plain" data-diff="next">Nächste →</button>
+        <label><input type="checkbox" id="only-diffs"> nur Absätze mit Abweichungen</label>
+        {% if pair.max_pages > 1 %}<label><input type="checkbox" id="all-sheets"> alle Blattseiten</label>{% endif %}
+    </span>
+</div>
+<div class="ocr-sheets">
+    {% for n in range(1, pair.max_pages + 1) %}
+    <div class="pair-grid sheet-row" data-sheet="{{ n }}"{% if n > 1 %} hidden{% endif %}>
+        {% if pair.max_pages > 1 %}<p class="meta sheet-head">Blattseite {{ n }}</p>{% endif %}
+        {% for role, c in sides %}
+        <div class="copy-ocr ocr-page" data-label="{{ c.label }}" data-leaflet="{{ c.id }}" data-side="{{ loop.index0 }}">
+            {% if n > c.pages %}<p class="meta">Dieses Exemplar hat keine Blattseite {{ n }}.</p>
+            {% else %}
+            {% for b in c.ocr.blocks | selectattr('page', 'equalto', c.page + n - 1) %}
+            <div class="ocr-block ocr-{{ b.type | lower }}{% if b.marked %} has-marks{% endif %}" data-block="{{ b.id }}" data-partner="{{ b.partner }}" title="Klick: Stelle in beiden Scans zeigen">{{ b.html | safe }}</div>
+            {% else %}
+            <p class="meta">Kein OCR-Text auf dieser Blattseite.</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
