@@ -69,10 +69,10 @@ def test_fill_copies_applies_reviews(tmp_path, monkeypatch):
     assert d.copy_candidate_of == a.copy_group and c.copy_candidate_of is None
 
 
-def page(path):
+def page(path, query=b""):
     return Request({
         "type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": "GET",
-        "scheme": "http", "path": path, "raw_path": path.encode(), "query_string": b"", "headers": [],
+        "scheme": "http", "path": path, "raw_path": path.encode(), "query_string": query, "headers": [],
         "server": ("test", 80), "client": ("test", 1), "root_path": "", "app": leaflet_app.app,
         "router": leaflet_app.app.router})
 
@@ -197,6 +197,25 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     assert c.canonical_leaflet_id == d.id and c.copies_checked
 
 
+# Tests if the start page counts a leaflet with duplicates once.
+def test_start_page_counts_duplicates_once(tmp_path, monkeypatch):
+    copy_db(tmp_path, monkeypatch)  # four leaflets in one group
+    body = leaflet_app.index(page("/")).body.decode()
+    assert "1 Flugblätter" in body and "4 Flugblätter" not in body
+
+
+# Tests if a leaflet of four sheets gets the page strip, with an outline from its headings; a short one does not.
+def test_long_leaflet_has_page_strip_and_outline(tmp_path, monkeypatch):
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    for n in (3, 4, 5):
+        leaflet_app.session.add(Page(volume_id=a.volume_id, page_no=n, leaflet_id=a.id,
+                                     blocks=[{"type": "SectionHeader", "html": f"<h2>Abschnitt {n}</h2>", "box": [0, 0, 1, 1]}]))
+    leaflet_app.session.commit()
+    detail = lambda leaflet: leaflet_app.leaflet_detail(page(f"/leaflets/{leaflet.id}"), leaflet.id).body.decode()
+    assert 'class="page-nav"' in detail(a) and 'href="#b-3-1"' in detail(a) and "Abschnitt 4" in detail(a)
+    assert 'class="page-nav"' not in detail(b)
+
+
 # Tests if the overview counts groups by review state and filters by it.
 def test_copy_overview(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
@@ -214,12 +233,16 @@ def test_review_shows_on_detail_and_list(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     detail = lambda leaflet: leaflet_app.leaflet_detail(page(f"/leaflets/{leaflet.id}"), leaflet.id).body.decode()
     listing = lambda: leaflet_app.leaflet_list(page("/leaflets"), ansicht="liste").body.decode()
-    assert 'class="dup-inline"' in detail(a) and "(dieses Blatt)" in detail(a)
+    assert 'class="dup-inline"' in detail(a) and "</span><strong>" in detail(a)  # this leaflet is set in bold
     assert "Hauptexemplar" not in detail(a) + detail(b) and "Duplikat<" not in detail(b)  # the proposal is not shown as a choice
     assert "Noch nicht geprüft" in detail(a) and "3 mögliche Duplikate" in listing()
+    assert f'href="/leaflets/{a.id}' in listing() and f'href="/leaflets/{b.id}' not in listing()  # a group is listed once
+    everything = leaflet_app.leaflet_list(page("/leaflets", b"duplikate=1"), ansicht="liste").body.decode()
+    assert f'href="/leaflets/{b.id}' in everything and "checked" in everything  # the switch brings the other copies back
+    assert f'href="/leaflets/{a.id}/exemplare">3 mögliche Duplikate</a>' in listing()  # an unchecked group links to its review
 
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
-    assert "Geprüft ·" in detail(a) and 'class="alt-note"' in detail(a) and 'class="alt-note"' not in detail(b) and 'role main">Hauptexemplar' in detail(b)
+    assert ">Geprüft</a>" in detail(a) and 'class="alt-note"' in detail(a) and 'class="alt-note"' not in detail(b) and 'role main">Hauptexemplar' in detail(b)
     assert "1 Duplikat" in listing() and "1 mögliches Duplikat" in listing()  # a and b checked, c and d not
 
     # a new automatic hit for a checked group is offered, not added (a fresh import with a review on file)

@@ -33,6 +33,8 @@
 }
 
 body {
+    display: flex;  /* the footer stays at the bottom of the window when the page is short */
+    flex-direction: column;
     margin: 0;
     min-height: 100vh;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -123,9 +125,37 @@ body {
 }
 
 .app {
+    flex: 1 0 auto;
+    box-sizing: border-box;
+    width: 100%;
     max-width: var(--content);
     margin: 0 auto;
     padding: 28px 24px 48px;
+}
+
+.site-footer {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--content-wide);
+    margin: 0 auto;
+    padding: 0 24px 32px;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.site-footer nav {
+    display: flex;
+    gap: 6px 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.site-footer a {
+    color: var(--muted);
+}
+
+.site-footer a:hover {
+    color: var(--accent);
 }
 
 .app-wide,
@@ -527,9 +557,22 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* the scan of the main copy offers its blocks while evidence is picked */
+/* every scan of the comparison reserves the same space, upright ones the same height; the frame has the scan's own shape,
+   so that the blocks offered while evidence is picked sit on the page */
 .copy-scan {
+    aspect-ratio: var(--scan-ratio, auto);
+}
+
+.scan-frame {
     position: relative;
+    width: 100%;
+}
+
+.scan-frame img {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;  /* the image fills the frame: the page shape is known to within a pixel, and the blocks sit exactly */
 }
 
 .scan-boxes {
@@ -1184,6 +1227,21 @@ select:focus {
 
 .filter-bar .filter-result {
     margin-right: auto;
+}
+
+.filter .dup-toggle {  /* above ".filter label", which is a grid */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.facet .dup-toggle input {
+    flex: none;
+    width: auto;
+    margin: 0;
 }
 
 .filter-result {
@@ -2281,6 +2339,95 @@ html {
     .pair-scan {
         position: static;
     }
+}
+
+/* a strip below the top bar for long leaflets: jump to a sheet or a heading, the sheet in view is marked */
+.page-nav {
+    position: sticky;
+    top: var(--topbar-h, 62px);
+    z-index: 9;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 18px;
+    margin: 8px 0 14px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--canvas);
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.page-nav-pages a {
+    display: inline-block;
+    min-width: 1.8em;
+    margin-left: 4px;
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink-soft);
+    text-align: center;
+    text-decoration: none;
+}
+
+.page-nav-pages a:hover {
+    border-color: var(--accent);
+}
+
+.page-nav-pages a[aria-current="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.page-outline {
+    position: relative;
+}
+
+.page-outline summary {
+    cursor: pointer;
+}
+
+.page-outline ul {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 12;
+    width: min(520px, 90vw);
+    max-height: 60vh;
+    overflow: auto;
+    margin: 0;
+    padding: 8px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    list-style: none;
+}
+
+.page-outline li {
+    padding: 3px 0;
+}
+
+.page-outline li.level-2 {
+    padding-left: 14px;
+}
+
+.page-outline li.level-3 {
+    padding-left: 28px;
+}
+
+body:has(.page-nav) .pair-scan {
+    top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) + 10px);
+}
+
+/* a sheet lands right below the strip, its separator line hidden behind it; a heading keeps a little air */
+.page-pair {
+    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) - 2px);
+}
+
+.ocr-block[id] {
+    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) + 8px);
 }
 
 .pick-bar {

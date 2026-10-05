@@ -192,7 +192,7 @@ async def not_found(request: Request, exc: StarletteHTTPException):
 
 
 # (volume vz, start page): stable across database rebuilds, unlike ids
-FEATURED = [(4, 101), (4, 234), (4, 263), (4, 180)]
+FEATURED = [(4, 101), (9, 120), (9, 498), (11, 17)]
 
 
 @app.get("/")
@@ -202,8 +202,9 @@ def index(request: Request):
                 .filter(Volume.vz == vz, Leaflet.start_page == page).first()
                 for vz, page in FEATURED]
     volume_years = {v.id: v.year for v in session.query(Volume)}
-    per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id])
-                       for lf in session.query(Leaflet))
+    # a leaflet with duplicates counts once: the other copies of its group are left out
+    unique = [lf for lf in session.query(Leaflet) if lf.copy_group is None or lf.canonical_leaflet_id == lf.id]
+    per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in unique)
     years = [int(y) for y in per_year if y.isdigit()]
     # every year in the range, so gaps in the collection stay visible
     timeline = [(str(y), per_year[str(y)])
@@ -335,19 +336,21 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     active_filters = [{'label': short_topic_title(labels['thema'](v)) if k == 'thema'
                        else labels.get(k, str)(v),
                        'url': url([p for p in params if p != (k, v)])}
-                      for k, v in params if k != 'sortierung']
+                      for k, v in params if k not in ('sortierung', 'duplikate')]
 
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "total": session.query(Leaflet).count(), "facets": facets,
+        {"leaflets": items, "facets": facets, "show_duplicates": 'duplikate' in selected,
+         "total": session.query(Leaflet).filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id)
+                                                if 'duplikate' not in selected else True).count(),
          "hidden_params": [(k, v) for k, v in params if k in FACETS],
          "active_filters": active_filters, "reset_all_url": url([]),
          "clear_search_url": url([(k, v) for k, v in params if k != 'q']),
          "selected_sort": selected.get('sortierung'),
          "selected_q": selected.get('q', ''),
          "q_short": bool(selected.get('q')) and not search.terms(selected['q']),
-         "filtered": sum(k not in ('q', 'sortierung') for k, _ in params),
+         "filtered": sum(k not in ('q', 'sortierung', 'duplikate') for k, _ in params),
          "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
          "switch_base": '/leaflets' + query_string,
          "detail_qs": query_string})
@@ -368,7 +371,7 @@ def passages(items, params):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung', 'duplikate')
 
 
 def list_params(request):
@@ -453,6 +456,8 @@ def searched_items(params):
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
     )
+    if not one.get('duplikate'):  # a group of duplicates is listed once, by its main copy, unless all copies are asked for
+        query = query.filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id))
 
     ranked = False
     if q:
@@ -527,6 +532,16 @@ def detail_page(request, leaflet, edit=None, error=None):
         page_list.append({'no': p.page_no, 'index': i,
                           'blocks': p.blocks or [],
                           'width': width, 'height': height})
+
+    # long leaflets get a page strip, and an outline if the OCR found headings
+    outline = []
+    for p in page_list:
+        for n, b in enumerate(p['blocks'], 1):
+            text = re.sub(r'\s+', ' ', unescape(re.sub(r'<[^>]+>', ' ', b.get('html', '')))).strip()
+            if b.get('type') == 'SectionHeader' and text:
+                level = re.match(r'<h([1-6])', b['html'].lstrip())
+                outline.append({'text': text if len(text) <= 90 else text[:89] + '…', 'page': p['index'],
+                                'target': f"{p['no']}-{n}", 'level': min(int(level.group(1)), 3) if level else 1})
 
     copies = []
     if leaflet.copy_group:
@@ -622,6 +637,7 @@ def detail_page(request, leaflet, edit=None, error=None):
                          'details': '; '.join(d for d in (i.function, i.marker) if d)}
                         for i in signatories],
         'page_list': page_list,
+        'outline': outline if len(outline) >= 3 and len(page_list) >= 4 else [],
         'has_pdf': has_pdf,
         'copies': copies,
         'group': group if len(group) > 1 else [],
@@ -1185,12 +1201,19 @@ def copy_compare(leaflet, ids):
     cards = [copy_card(by_id[i], main_id) for i in ids]
     shorten(cards)
     letters = copy_letters(members, candidates)
+    for card in cards:  # the page shape of each scan, to reserve its space before it has loaded
+        pdf = volume_pdf(session.get(Volume, by_id[card['id']].volume_id))
+        size = pdf_service.page_size(pdf, card['page']) if pdf.is_file() else None
+        card['ratio'] = round(size[0] / size[1], 4) if size else None
+    ratios = [c['ratio'] for c in cards if c['ratio']]
     lists = [copy_blocks(by_id[i]) for i in ids]
     sides = ocr_pair(*lists) if len(ids) == 2 else ocr_group(lists)
     for card, side in zip(cards, sides):
         card['letter'] = letters[card['id']]
         card['ocr'] = side
-    return {'cards': cards, 'max_pages': max(c['pages'] for c in cards), 'checked': checked}
+    # upright scans get the same height, that of the tallest: they all reserve the same space
+    return {'cards': cards, 'max_pages': max(c['pages'] for c in cards), 'checked': checked,
+            'ratio': min([r for r in ratios if r < 1] or ratios, default=None)}
 
 
 @app.get("/leaflets/{leaflet_id}/exemplare/paar")

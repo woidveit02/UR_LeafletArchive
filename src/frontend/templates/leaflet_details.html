@@ -133,8 +133,8 @@
             <dt>{{ 'Duplikate' if leaflet.copies_checked else 'Mögliche Duplikate' }}</dt>
             {% if leaflet.group %}
             <dd>
-                <span class="dup-inline">{% for c in leaflet.group %}<span class="dup-item"><span class="dup-letter">{{ c.letter }}</span>{% if c.self %}<strong>{{ c.label }}</strong> <span class="meta">(dieses Blatt)</span>{% else %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% endif %}{% if c.main %} <span class="role main">Hauptexemplar</span>{% elif c.new %} <span class="role">Neu gefunden</span>{% endif %}</span>{% endfor %}</span>
-                <span class="dup-status">{{ 'Geprüft' if leaflet.copies_checked else 'Noch nicht geprüft' }} · <a href="/leaflets/{{ leaflet.id }}/exemplare">prüfen</a></span></dd>
+                <span class="dup-inline">{% for c in leaflet.group %}<span class="dup-item"><span class="dup-letter">{{ c.letter }}</span>{% if c.self %}<strong>{{ c.label }}</strong>{% else %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% endif %}{% if c.main %} <span class="role main">Hauptexemplar</span>{% elif c.new %} <span class="role">Neu gefunden</span>{% endif %}</span>{% endfor %}</span>
+                <span class="dup-status"><a href="/leaflets/{{ leaflet.id }}/exemplare">{{ 'Geprüft' if leaflet.copies_checked else 'Noch nicht geprüft' }}</a></span></dd>
             {% else %}
             <dd><span class="meta">keine erkannt</span></dd>
             {% endif %}
@@ -179,6 +179,17 @@
         </div>
         {% endif %}
         {% set total = leaflet.page_list | length %}
+        {% if total >= 4 %}
+        <nav class="page-nav" aria-label="Seiten dieses Flugblatts">
+            <span class="page-nav-pages">Blattseite{% for page in leaflet.page_list %} <a href="#page-{{ page.no }}" data-page="page-{{ page.no }}">{{ page.index }}</a>{% endfor %}</span>
+            {% if leaflet.outline %}
+            <details class="page-outline">
+                <summary>Inhalt</summary>
+                <ul>{% for h in leaflet.outline %}<li class="level-{{ h.level }}"><a href="#b-{{ h.target }}">{{ h.text }}</a> <span class="meta">Seite {{ h.page }}</span></li>{% endfor %}</ul>
+            </details>
+            {% endif %}
+        </nav>
+        {% endif %}
         {% for page in leaflet.page_list %}
         <section class="page-pair" id="page-{{ page.no }}" aria-label="Bandseite {{ page.no }}"{% if page.width %} style="--ratio: {{ page.width / page.height }}"{% endif %}>
             <div class="pair-head">
@@ -208,7 +219,7 @@
                 {% elif block.type == 'Picture' %}
                 <div class="ocr-block ocr-picture" data-block="{{ page.no }}-{{ loop.index }}">[Abbildung{% if block.description %}: {{ block.description }} <span class="picture-source">(Bildbeschreibung, automatisch erzeugt)</span>{% endif %}]</div>
                 {% else %}
-                <div class="ocr-block ocr-{{ block.type | lower }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>
+                <div class="ocr-block ocr-{{ block.type | lower }}" id="b-{{ page.no }}-{{ loop.index }}" data-block="{{ page.no }}-{{ loop.index }}">{{ block.html | safe }}</div>
                 {% endif %}
                 {% else %}
                 <p class="meta">Kein OCR-Text auf dieser Seite.</p>
@@ -290,6 +301,31 @@
                 location.href = link.href;  // fall back to loading the edit page
             }
         });
+
+        // the page strip marks the sheet in view; the outline closes when a heading is chosen
+        const strip = document.querySelector('.page-nav');
+        if (strip) {
+            // the strip sticks below the top bar, the scan below the strip: both heights change with the window width
+            const topbar = document.querySelector('.topbar');
+            const measure = () => {
+                document.documentElement.style.setProperty('--topbar-h', `${topbar.offsetHeight}px`);
+                document.documentElement.style.setProperty('--strip-h', `${strip.offsetHeight}px`);
+            };
+            new ResizeObserver(measure).observe(strip);
+            new ResizeObserver(measure).observe(topbar);
+            measure();
+            const links = Object.fromEntries([...strip.querySelectorAll('[data-page]')].map((a) => [a.dataset.page, a]));
+            const spy = new IntersectionObserver((entries) => {
+                entries.filter((en) => en.isIntersecting).forEach((en) => {
+                    Object.values(links).forEach((a) => a.removeAttribute('aria-current'));
+                    links[en.target.id]?.setAttribute('aria-current', 'true');
+                });
+            }, { rootMargin: '-25% 0px -60% 0px' });
+            document.querySelectorAll('.page-pair').forEach((section) => spy.observe(section));
+            strip.querySelector('.page-outline')?.addEventListener('click', (e) => {
+                if (e.target.closest('a')) e.currentTarget.open = false;
+            });
+        }
 
         // a click on a section of the transcription shows that section of the scan, enlarged
         const popup = document.getElementById('scan-popup');

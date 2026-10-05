@@ -3,14 +3,16 @@
 <div class="copy-sheets" role="group" aria-label="Blattseite" title="gilt für alle Scans und den OCR-Text">Blattseite
     {% for n in range(1, pair.max_pages + 1) %}<button type="button" data-sheet="{{ n }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ n }}</button>{% endfor %}</div>
 {% endif %}
-<div class="pair-grid" style="--cols: {{ cols }}">
+<div class="pair-grid" style="--cols: {{ cols }}{% if pair.ratio %}; --scan-ratio: {{ pair.ratio }}{% endif %}">
     {% for c in pair.cards %}
     <section>
         <h3 class="facet-head">{{ c.letter }}: <a href="/leaflets/{{ c.id }}">{{ c.short }}</a>{% if c.main %} <span class="role main">Hauptexemplar</span>{% endif %}</h3>
         <div class="copy-scan" data-id="{{ c.id }}" data-first="{{ c.page }}" data-pages="{{ c.pages }}">
-            <a href="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img src="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=90" alt="Blattseite 1, {{ c.label }}"></a>
-            <p class="meta" hidden>Dieses Blatt hat nur {{ c.pages }} Blattseite{{ 'n' if c.pages > 1 }}.</p>
+            <div class="scan-frame page-frame"{% if c.ratio %} style="aspect-ratio: {{ c.ratio }}"{% endif %}>
+            <a href="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img class="leaflet-page" src="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=90" alt="Blattseite 1, {{ c.label }}" onload="this.classList.add('loaded')"></a>
             {% if c.main %}{% for n in range(1, c.pages + 1) %}<div class="scan-boxes" data-sheet="{{ n }}"{% if n > 1 %} hidden{% endif %}>{% for b in c.ocr.blocks | selectattr('page', 'equalto', c.page + n - 1) if b.box %}<span class="ocr-box" data-block="{{ b.id }}" style="left: {{ b.box[0] }}%; top: {{ b.box[1] }}%; width: {{ b.box[2] }}%; height: {{ b.box[3] }}%;"></span>{% endfor %}</div>{% endfor %}{% endif %}
+            </div>
+            <p class="meta" hidden>Dieses Blatt hat nur {{ c.pages }} Blattseite{{ 'n' if c.pages > 1 }}.</p>
         </div>
     </section>
     {% endfor %}

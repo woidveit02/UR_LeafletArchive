@@ -184,6 +184,7 @@
                 if (has) {
                     const url = `/leaflets/${scan.dataset.id}/pages/${page}.png`;
                     link.href = url + '?dpi=220';
+                    img.classList.remove('loaded');  // fades in again when the new sheet has loaded
                     img.src = url + '?dpi=90';
                     img.alt = `Blattseite ${sheet}`;
                 }

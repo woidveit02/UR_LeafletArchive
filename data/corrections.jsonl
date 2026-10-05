@@ -23,3 +23,4 @@
 {"volume": "0118_0002", "start_page": 38, "end_page": 38, "field": "series", "value": {"name": "Informationsblatt", "issue": "1"}, "at": "2026-10-05"}
 {"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "title", "value": "Das gestern vom AStA verteilte \"Gesetz\" zur Regelung des Hochschulordnungsrechts ...", "at": "2026-10-05"}
 {"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "revert", "value": "title", "at": "2026-10-05"}
+{"volume": "0118_0009", "start_page": 120, "end_page": 123, "field": "issuers", "value": [{"org": "fr_hjahrskampagne_72", "blocks": ["123-10"]}], "at": "2026-10-05"}
