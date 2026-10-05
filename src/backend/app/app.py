@@ -16,7 +16,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
 from .database import corrections, search
-from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
+from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
 from .database.models import (Leaflet, LeafletIssuer, Volume, Organization, Page,
@@ -769,8 +769,12 @@ def correction_list(request: Request):
             continue
         rows.append({'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
                      'entries': entries, 'overlaps': overlaps})
+    copies = [{'at': r['at'], 'members': [
+        f"{volumes[a['volume']].label if a['volume'] in volumes else a['volume']}, "
+        f"{page_range(a['start_page'], a['end_page'])}" for a in r['members']]}
+        for r in copy_review()[1]]
     return templates.TemplateResponse(
-        request, "corrections.html", {"rows": rows, "fields": corrections.FIELDS})
+        request, "corrections.html", {"rows": rows, "copies": copies, "fields": corrections.FIELDS})
 
 
 @app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")
