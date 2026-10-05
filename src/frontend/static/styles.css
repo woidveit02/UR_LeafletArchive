@@ -332,69 +332,271 @@ a:hover {
     color: var(--success);
 }
 
-.copy-status {
-    margin: 6px 0 0;
+.page-head-wide {
+    max-width: none;
 }
 
-.copy-status strong {
-    margin-left: 10px;
+.dup-more strong {
     color: var(--success);
 }
 
-.copy-title {
-    margin: 4px 0 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.copy-facts {
-    margin: 2px 0 0;
-    color: var(--ink-soft);
-}
-
-.pair-pick select {
-    width: auto;
-    min-width: 16rem;
-    max-width: 100%;
-    font: inherit;
-}
-
-.copy-table {
-    width: 100%;
-    margin: 12px 0;
-    border-collapse: collapse;
-}
-
-.copy-table th {
-    padding: 4px 10px;
-    border-bottom: 1px solid var(--line-strong);
+.role {
+    display: inline-block;
+    padding: 0 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface-muted);
     color: var(--muted);
-    font-size: 0.8rem;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: bottom;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    white-space: nowrap;
 }
 
-.copy-table th:first-child,
-.copy-table td.copy-id {
-    text-align: left;
+.role[hidden] {
+    display: none;
 }
 
-.copy-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--line);
-    text-align: center;
-    vertical-align: top;
+.role.main {
+    border-color: #a7f3d0;
+    background: #ecfdf5;
+    color: #15803d;
 }
 
-.copy-table td.copy-id {
-    width: 100%;
+.alt-note {
+    margin: 12px 0;
+    padding: 8px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface-muted);
+}
+
+body:has(#scan-popup) .pair-text .ocr-block[data-block] {
+    cursor: zoom-in;
+}
+
+.copy-edit {
+    margin: 8px 0;
+}
+
+.copy-edit summary {
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+.copy-edit .meta-list {
+    grid-template-columns: 9.5em minmax(0, 1fr);
+    margin: 8px 0 12px;
+}
+
+@media (max-width: 600px) {
+    .copy-edit .meta-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .copy-edit .edit-row input[type="text"] {
+        flex-basis: 100%;
+    }
+}
+
+.dup-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px 24px;
+    margin: 12px 0;
+}
+
+.dup-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
     font-size: 0.9rem;
 }
 
-.copy-table td.copy-id > a {
-    margin-right: 14px;
+.dup-name,
+.dup-facts {
+    margin: 0;
+}
+
+.dup-facts .copy-field {
+    display: block;
+    margin: 0 0 3px;
+}
+
+.dup-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    margin-bottom: 6px;
+}
+
+.dup-item {
+    max-width: 100%;  /* an entry wraps inside the column instead of running over it */
+}
+
+/* on the detail page the duplicates stay in the background */
+.meta-list .dup-inline,
+.meta-list .dup-status {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.meta-list .dup-inline a,
+.meta-list .dup-status a {
+    color: var(--muted);
+}
+
+.meta-list .dup-inline a:hover,
+.meta-list .dup-status a:hover {
+    color: var(--accent);
+}
+
+.meta-list .dup-inline strong {
+    color: var(--ink);
+}
+
+.meta-list .dup-letter {
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 6px;
+    background: var(--surface-muted);
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.meta-list .dup-inline .role.main {
+    border-color: var(--line);
+    background: none;
+    color: var(--muted);
+}
+
+/* a quiet option at the top of a card: hide the leaflet in the comparison below, or show it again */
+.dup-hide {
+    position: absolute;
+    z-index: 1;  /* above the faded content of a hidden card, so that "einblenden" can be clicked */
+    top: 12px;
+    right: 14px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.dup-hide + .dup-name {
+    padding-right: 4.8rem;  /* room for the option; the badge wraps below the name */
+}
+
+.dup-hide:hover {
+    text-decoration: underline;
+}
+
+.dup-hide input {
+    position: absolute;
+    opacity: 0;
+}
+
+.dup-hide span::before {
+    content: "ausblenden";
+}
+
+.dup-hide input:not(:checked) + span::before {
+    content: "einblenden";
+}
+
+.dup-hide input:disabled + span {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* a hidden leaflet's card fades, but the option to show it again stays easy to see */
+.dup-card:has(.dup-hide input:not(:checked)) > :not(.dup-hide) {
+    opacity: 0.55;
+}
+
+.dup-hide input:not(:checked) + span {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* the scan of the main copy offers its blocks while evidence is picked */
+.copy-scan {
+    position: relative;
+}
+
+.scan-boxes {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.picking .scan-boxes:not([hidden]) {
+    display: block;
+}
+
+.scan-boxes .ocr-box {
+    pointer-events: auto;
+}
+
+.picking .copy-ocr:not([data-main]) .ocr-block[data-block] {
+    cursor: not-allowed;
+}
+
+.dup-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7em;
+    height: 1.7em;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.dup-name > a {
+    margin-right: 10px;
     font-weight: 600;
+}
+
+.dup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-top: auto;
+}
+
+.dup-more {
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 4px;
+}
+
+.review-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-top: 8px;
+}
+
+.review-pager .disabled {
+    color: var(--faint);
+}
+
+.offer {
+    margin-top: 4px;
 }
 
 .copy-field {
@@ -432,7 +634,7 @@ a:hover {
 
 .pair-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
     gap: 8px 24px;
 }
 
@@ -477,11 +679,6 @@ a:hover {
     text-underline-offset: 2px;
 }
 
-.copy-ocr mark.current {
-    background: #ffd54f;
-    outline: 2px solid var(--accent);
-}
-
 .copy-ocr mark.gap {
     padding: 0 3px;
     border: 1px dashed var(--warning);
@@ -502,11 +699,6 @@ a:hover {
 .sheet-head {
     grid-column: 1 / -1;
     margin: 0 0 4px;
-}
-
-.pair-nav #diff-count {
-    min-width: 9.5em;
-    text-align: center;
 }
 
 .copy-ocr .ocr-block[data-block] {
@@ -1789,13 +1981,20 @@ html {
     text-decoration: underline;
 }
 
-/* scan column as wide as the scan at screen height, the transcription follows directly */
+/* the transcription on the left, the scan on the right, as wide as the scan at screen height */
 .page-pair {
     display: grid;
-    grid-template-columns: min(calc((100vh - 130px) * var(--ratio, 0.7)), 50%) minmax(0, 75ch);
+    grid-template-columns: minmax(0, 75ch) min(calc((100vh - 130px) * var(--ratio, 0.7)), 50%);
     gap: 0 32px;
     align-items: start;
     margin-bottom: 48px;
+}
+
+@media (min-width: 801px) {  /* heads and columns swap places; the page order is scan first, for narrow screens */
+    .page-pair > :nth-child(1) { order: 2; }
+    .page-pair > :nth-child(2) { order: 1; }
+    .page-pair > :nth-child(3) { order: 4; }
+    .page-pair > :nth-child(4) { order: 3; }
 }
 
 .page-pair + .page-pair {

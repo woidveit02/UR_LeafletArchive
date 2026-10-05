@@ -15,3 +15,11 @@
 {"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 3"}, "at": "2026-10-01"}
 {"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 4"}, "at": "2026-10-01"}
 {"volume": "0118_0002", "start_page": 2, "end_page": 3, "field": "series", "value": {"name": "Argumente zur Sache", "issue": "I"}, "blocks": ["2-3"], "at": "2026-10-02"}
+{"volume": "0118_0006", "start_page": 452, "end_page": 453, "field": "title", "value": "Stoppt Mundegruch - Haltet die Roten!", "blocks": ["452-1", "452-2"], "at": "2026-10-05"}
+{"volume": "0118_0006", "start_page": 454, "end_page": 455, "field": "title", "value": "Stoppt Mundegeruch - Haltet die Roten!", "blocks": ["454-1"], "at": "2026-10-05"}
+{"volume": "0118_0006", "start_page": 454, "end_page": 455, "field": "title", "value": "Stoppt Mundgeruch - Haltet die Roten!", "blocks": ["454-1"], "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 2, "end_page": 3, "field": "issuers", "value": [{"org": "lsd", "blocks": ["2-2"]}], "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 38, "end_page": 38, "field": "revert", "value": "series", "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 38, "end_page": 38, "field": "series", "value": {"name": "Informationsblatt", "issue": "1"}, "at": "2026-10-05"}
+{"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "title", "value": "Das gestern vom AStA verteilte \"Gesetz\" zur Regelung des Hochschulordnungsrechts ...", "at": "2026-10-05"}
+{"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "revert", "value": "title", "at": "2026-10-05"}

@@ -1,4 +1,6 @@
+import asyncio
 import json
+from urllib.parse import urlencode
 
 import pytest
 from fastapi import HTTPException
@@ -7,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from starlette.requests import Request
 
 import backend.app.app as leaflet_app
-from backend.app.database import fillDatabase
+from backend.app.database import corrections, fillDatabase
 from backend.app.database.base import Base
 from backend.app.database.models import Leaflet, Page, Volume
 from backend.app.database.session import session
@@ -75,6 +77,16 @@ def page(path):
         "router": leaflet_app.app.router})
 
 
+def post(path, body):
+    async def receive():
+        return {"type": "http.request", "body": body.encode(), "more_body": False}
+    return Request({
+        "type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": "POST",
+        "scheme": "http", "path": path, "raw_path": path.encode(), "query_string": b"", "headers": [],
+        "server": ("test", 80), "client": ("test", 1), "root_path": "", "app": leaflet_app.app,
+        "router": leaflet_app.app.router}, receive)
+
+
 # Tests if the OCR blocks stay structured and only words without a counterpart in the reference are marked.
 def test_ocr_marks_differences():
     blocks = lambda *htmls: [(1, i, {"type": "Text", "html": h}) for i, h in enumerate(htmls, 1)]
@@ -86,12 +98,24 @@ def test_ocr_marks_differences():
     assert right["blocks"][0]["html"] == '<p>der Weg zum <mark data-diff="1">Erfolge</mark></p>'
     # the second deviation: the words exist only on the right, so the left text gets a gap marker at its end
     assert right["blocks"][1]["html"] == '<p>Zweiter Absatz <mark data-diff="2">&amp;</mark> <mark data-diff="2">mehr</mark></p>'
-    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Exemplar nicht erkannt">∅</mark></p>')
+    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Duplikat nicht erkannt">∅</mark></p>')
     assert right["differs"] == 3 and right["words"] == 8 and left["diffs"] == right["diffs"] == 2
     assert [b["marked"] for b in right["blocks"]] == [True, True] and left["blocks"][1]["marked"] is True
     assert [b["id"] for b in left["blocks"]] == ["1-1", "1-2"]  # page and block number, as in the evidence image
-    assert [b["partner"] for b in left["blocks"]] == ["1-1", "1-2"]  # the block of the other copy with the same words
-    assert [b["partner"] for b in right["blocks"]] == ["1-1", "1-2"]
+    assert [b["partners"] for b in left["blocks"]] == [{1: "1-1"}, {1: "1-2"}]  # the block of the other copy with the same words
+    assert [b["partners"] for b in right["blocks"]] == [{0: "1-1"}, {0: "1-2"}]
+
+
+# Tests if with three copies the odd one out is marked, not the others, and the partner blocks lead to the reference.
+def test_ocr_group_marks_the_odd_one_out():
+    blocks = lambda html: [(1, 1, {"type": "Text", "html": html})]
+    typo, right1, right2 = ocr = [blocks("<p>Die Fachschaftvertretungen tagen</p>"), blocks("<p>Die Fachschaftsvertretungen tagen</p>"),
+                                  blocks("<p>Die Fachschaftsvertretungen tagen heute</p>")]
+    a, b, c = leaflet_app.ocr_group(ocr)
+    assert '<mark data-diff="1">Fachschaftvertretungen</mark>' in a["blocks"][0]["html"]  # only the typo is marked
+    assert "<mark" not in b["blocks"][0]["html"].replace('class="gap"', "") or b["differs"] == 0
+    assert c["blocks"][0]["html"].count("<mark") == 1 and "heute</mark>" in c["blocks"][0]["html"]  # an extra word is its own
+    assert a["differs"] == 1 and b["differs"] == 0 and a["blocks"][0]["partners"] == {1: "1-1", 2: "1-1"}
 
 
 # Tests if a word hyphenated at the line end is the same as the whole word, however it is split.
@@ -122,24 +146,55 @@ def test_comparison_page_confirm_and_revert(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     show = lambda leaflet: leaflet_app.copy_page(page(f"/leaflets/{leaflet.id}/exemplare"), leaflet.id).body.decode()
     assert show(a).count('name="main"') == 4 and "Prüfung zurücknehmen" not in show(a)
-    # the main copy (page 2) is on the left, the first other copy (page 5) on the right; the numbers differ
-    assert '<p>Text von Seite <mark data-diff="1">2</mark></p>' in show(a) and '>5</mark></p>' in show(a)
-    fragment = leaflet_app.copy_pair_page(page("/"), a.id, a.id, d.id).body.decode()
-    assert ">11</mark>" in fragment and ">8</mark>" not in fragment  # any copy can take the right side
-    assert f'data-leaflet="{d.id}"' in fragment and 'data-block="11-1" data-partner="2-1"' in fragment  # a click opens both scans
-    with pytest.raises(HTTPException):  # the left copy cannot be compared with itself
-        leaflet_app.copy_pair_page(page("/"), a.id, a.id, a.id)
+    # the first three side by side, in letter order: all three numbers differ, so each is marked; the fourth is not shown
+    assert all(f'>{n}</mark></p>' in show(a) for n in (2, 5, 8)) and '>11</mark>' not in show(a)
+    assert show(a).count('name="show"') == 4  # all four can be shown
+    fragment = leaflet_app.copy_pair_page(page("/"), a.id, f"{a.id},{d.id}").body.decode()
+    assert ">11</mark>" in fragment and ">8</mark>" not in fragment  # any leaflets can be compared
+    assert ">2</mark>" in fragment and f"A: <a" in fragment and f"D: <a" in fragment  # with two, both sides are marked; the letters stay
+    assert f'data-leaflet="{d.id}"' in fragment and 'data-block="11-1" data-partners="0:2-1"' in fragment  # a click opens the scans
+    with pytest.raises(HTTPException):  # one leaflet is not a comparison
+        leaflet_app.copy_pair_page(page("/"), a.id, f"{a.id},{a.id}")
     with pytest.raises(HTTPException):
         leaflet_app.copy_page(page("/"), a.id + 100)
 
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     assert a.copy_group == b.copy_group and a.canonical_leaflet_id == b.id and a.copies_checked
-    assert show(a).count('name="main"') == 2 and "Prüfung zurücknehmen" in show(a)
+    # a pair is judged with one button per card, not with choices
+    assert show(a).count('name="verdict" value="edit:') == 1 and 'value="main:' not in show(a)  # only the other one can become main
+    assert 'name="main"' not in show(a) and "Prüfung zurücknehmen" in show(a)
 
     leaflet_app.save_copy_review(a, {"revert": ["1"]})
     assert not a.copies_checked and len({x.copy_group for x in (a, b, c, d)}) == 1
     with pytest.raises(HTTPException):  # the main copy was excluded
         leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(b.id)]})
+
+
+# Tests if a pair is judged with one button, the review goes on with the next group that is not checked,
+# and the queue says where a group stands.
+def test_pair_verdict_and_queue(tmp_path, monkeypatch):
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})  # a and b: checked; c and d: not
+    assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1}
+    assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1}
+    assert "Gruppe 1 von 1 ungeprüft" in leaflet_app.copy_page(page("/"), c.id).body.decode()
+
+    def judge(leaflet, verdict):
+        return asyncio.run(leaflet_app.copy_save(post(f"/leaflets/{leaflet.id}/exemplare", urlencode({"verdict": verdict})), leaflet.id))
+    # on from a checked group to the group still to check
+    assert c.copy_candidate_of is None and d.copy_candidate_of is None  # a re-review does not bring back what was rejected
+    assert judge(b, f"main:{b.id}").headers["location"] == f"/leaflets/{c.id}/exemplare"
+    assert b.canonical_leaflet_id == b.id
+    # the last group: stay on the page; the pair is judged with the other card as main copy
+    assert judge(c, f"main:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert"
+    assert c.canonical_leaflet_id == d.id and c.copies_checked
+    # two different leaflets: the pair is dissolved; the next group to check comes up
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})
+    assert judge(a, "different").headers["location"] == f"/leaflets/{c.id}/exemplare" and a.copy_group is None
+    # choose the main copy and go on to its details: the page stays and opens the form
+    assert judge(c, f"edit:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert&offen=1"
+    assert c.canonical_leaflet_id == d.id and c.copies_checked
 
 
 # Tests if the overview counts groups by review state and filters by it.
@@ -149,7 +204,7 @@ def test_copy_overview(tmp_path, monkeypatch):
     assert "Nicht geprüft (1)" in show() and "Geprüft (0)" in show()
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     assert "Nicht geprüft (1)" in show() and "Geprüft (1)" in show() and "Alle (2)" in show()
-    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and f'/leaflets/{c.id}/exemplare' not in show("geprueft")
+    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 1
     assert show("unsinn").count("<li>") == 2  # an unknown filter shows everything
 
 
@@ -159,17 +214,76 @@ def test_review_shows_on_detail_and_list(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     detail = lambda leaflet: leaflet_app.leaflet_detail(page(f"/leaflets/{leaflet.id}"), leaflet.id).body.decode()
     listing = lambda: leaflet_app.leaflet_list(page("/leaflets"), ansicht="liste").body.decode()
-    assert "dieses Blatt ist das Hauptexemplar" in detail(a) and "(Hauptexemplar)" in detail(b)
-    assert "nicht geprüft" in detail(a) and "3 mögliche weitere Exemplare" in listing()
+    assert 'class="dup-inline"' in detail(a) and "(dieses Blatt)" in detail(a)
+    assert "Hauptexemplar" not in detail(a) + detail(b) and "Duplikat<" not in detail(b)  # the proposal is not shown as a choice
+    assert "Noch nicht geprüft" in detail(a) and "3 mögliche Duplikate" in listing()
 
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
-    assert "Gruppe geprüft" in detail(a) and "(Hauptexemplar)" in detail(a) and "dieses Blatt ist das Hauptexemplar" in detail(b)
-    assert "1 weiteres Exemplar" in listing() and "1 mögliches weiteres Exemplar" in listing()  # a and b checked, c and d not
+    assert "Geprüft ·" in detail(a) and 'class="alt-note"' in detail(a) and 'class="alt-note"' not in detail(b) and 'role main">Hauptexemplar' in detail(b)
+    assert "1 Duplikat" in listing() and "1 mögliches Duplikat" in listing()  # a and b checked, c and d not
 
     # a new automatic hit for a checked group is offered, not added (a fresh import with a review on file)
     reviewed = copy_db(tmp_path, monkeypatch, [{"members": [ref(2), ref(5)], "rejected": [ref(8)],
                                                   "canonical": ref(2), "at": "2026-10-05T10:00:00"}])
-    assert "neuer möglicher Treffer" in detail(reviewed[3]) and "neuer möglicher Treffer" not in detail(reviewed[0])
+    assert "Neu gefunden" in detail(reviewed[3]) and "Neu gefunden" in detail(reviewed[0])  # listed in the group of both
+    assert "Neu gefunden" not in detail(reviewed[2])  # the leaflet that was rejected is not part of the group
+
+
+# Tests if the details of a group are corrected on the comparison page: one form, at the main copy, which keeps its evidence;
+# a form without changes writes nothing, a changed title is a correction of the main copy only, a wrong date is shown again,
+# an alternative has no form of its own and points at the main copy.
+def test_copy_details(tmp_path, monkeypatch):
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    leaflet_app.save_copy_review(a, {"main": [str(a.id)]})  # the details are those of the chosen main copy
+    corrections_file = tmp_path / "corrections.jsonl"
+    monkeypatch.setattr(leaflet_app, "CORRECTIONS", corrections_file)
+    monkeypatch.setattr(corrections, "session", leaflet_app.session)
+    monkeypatch.setattr(leaflet_app, "automatic_text", lambda leaflet: {})  # these values come from the metadata files
+    a.title, a.title_blocks = "Alter Titel", ["2-1"]
+    html = leaflet_app.copy_page(page(f"/leaflets/{a.id}/exemplare"), a.id).body.decode()
+    assert f'id="title-{a.id}"' in html and f'id="title-{b.id}"' not in html
+    assert 'name="title_blocks" value="2-1"' in html and 'class="pick-evidence"' in html  # evidence is kept and can be picked
+    assert html.count(" data-main") == 1 and 'class="ocr-box"' in html  # only the main copy's column and scan offer blocks
+    edit_page = leaflet_app.leaflet_detail(page(f"/leaflets/{a.id}"), a.id, bearbeiten="").body.decode()
+    assert f'id="title-{a.id}"' in edit_page and "Beleg: 1 Textstelle" in edit_page  # the detail page picks evidence
+
+    def posted(leaflet, **changes):  # the body of its form as the browser sends it
+        v = leaflet_app.current_values(leaflet)
+        fields = {"title": v["title"], "title_blocks": " ".join(v["title_blocks"]), "date": leaflet_app.german_date(v["date_iso"]),
+                  "date_type": v["date_type"], "series": v["series"], "issue": v["issue"], "doc_type": v["doc_type"]}
+        return {k: [x] for k, x in {**fields, **changes}.items()}
+
+    form, error = leaflet_app.read_metadata_form(a, posted(a))
+    leaflet_app.save_metadata(a, form)
+    assert not error and not corrections_file.exists()  # nothing changed, nothing written
+
+    form, error = leaflet_app.read_metadata_form(a, posted(a, title="Neuer Titel", date="12.03.1969", date_type="issued"))
+    leaflet_app.save_metadata(a, form)
+    assert not error and (a.title, a.date_iso, a.corrected) == ("Neuer Titel", "1969-03-12", ["date", "title"])
+    assert a.title_blocks == ["2-1"] and b.title is None and not b.corrected  # the other copies stay as they are
+    assert len(corrections.load(corrections_file)) == 2
+
+    form, error = leaflet_app.read_metadata_form(a, posted(a, date="31.02.1969"))
+    assert "TT.MM.JJJJ" in error
+    shown = leaflet_app.copy_view(page(f"/leaflets/{a.id}/exemplare"), a, "", True, form, error)
+    assert shown.status_code == 400 and 'class="copy-edit" open' in shown.body.decode()
+    assert "31.02.1969" in shown.body.decode() and len(corrections.load(corrections_file)) == 2
+
+    body = urlencode({k: v[0] for k, v in posted(a, title="Gruppentitel").items()})
+    with pytest.raises(HTTPException):  # saved at the main copy only
+        asyncio.run(leaflet_app.copy_details_save(post(f"/leaflets/{b.id}/exemplare/angaben", body), b.id))
+    done = asyncio.run(leaflet_app.copy_details_save(post(f"/leaflets/{a.id}/exemplare/angaben", body), a.id))
+    assert done.status_code == 303 and a.title == "Gruppentitel" and b.title is None
+    b.title = "Anderer Titel"  # what a duplicate says differently is offered for taking over
+    offered = leaflet_app.copy_page(page(f"/leaflets/{a.id}/exemplare"), a.id).body.decode()
+    assert f'value="title:{b.id}"' in offered and 'value="date:' not in offered
+    body = urlencode({"take": f"title:{b.id}"})
+    asyncio.run(leaflet_app.copy_details_take(post(f"/leaflets/{a.id}/exemplare/uebernehmen", body), a.id))
+    assert a.title == "Anderer Titel" and a.title_blocks == []  # the evidence of the other leaflet is not taken
+    with pytest.raises(HTTPException):
+        asyncio.run(leaflet_app.copy_details_take(post(f"/leaflets/{a.id}/exemplare/uebernehmen", "take=title%3A99999"), a.id))
+    alternative = leaflet_app.leaflet_detail(page(f"/leaflets/{b.id}"), b.id).body.decode()
+    assert 'class="alt-note"' in alternative and f'href="/leaflets/{a.id}"' in alternative
 
 
 # Tests if, after the real import, every group has exactly one main copy that belongs to it.

@@ -5,7 +5,7 @@
             <h1>Korrekturen prüfen</h1>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
             Sie werden nicht angewendet. Zum Übernehmen in <code>data/corrections.jsonl</code> Anfangs- und Endseite anpassen.
-            Ebenso Prüfungen von Exemplaren (<code>data/copy_decisions.jsonl</code>), deren Segmente sich geändert haben.</p>
+            Ebenso Prüfungen möglicher Duplikate (<code>data/copy_decisions.jsonl</code>), deren Segmente sich geändert haben.</p>
         </header>
         {% for row in rows %}
         <h2>{{ row.segment }}</h2>
@@ -25,7 +25,7 @@
             {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
         {% endfor %}
         {% if copies %}
-        <h2>Geprüfte Exemplare, die nicht mehr passen</h2>
+        <h2>Geprüfte Duplikate, die nicht mehr passen</h2>
         <ul class="leaflet-list leaflet-list-plain">
             {% for c in copies %}
             <li><span class="row-main">{{ c.members | join(' · ') }} <span class="meta">{{ c.at }}</span></span></li>
@@ -33,6 +33,6 @@
         </ul>
         {% endif %}
         {% if not rows and not copies %}
-        <div class="empty-state">Alle Korrekturen und geprüften Exemplare passen zu einem Flugblatt.</div>
+        <div class="empty-state">Alle Korrekturen und geprüften Duplikate passen zu einem Flugblatt.</div>
         {% endif %}
 {% endblock %}
