@@ -342,7 +342,11 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
         'by_org': [{'label': names.get(o, o) if o else 'andere', 'org': o,
                     'counts': [stacks[o, b] for b in totals],
                     'urls': [year_url(b, ('org', o)) if o else year_url(b) for b in totals]} for o in ranked + [None]],
-        'months': {'labels': span, 'counts': [months[m] for m in span]},
+        # a month cannot be filtered in the list: its bar opens the year, sorted by date
+        'months': {'labels': span, 'counts': [months[m] for m in span],
+                   'urls': [list_url(('jahr', m[:4]), ('sortierung', 'datum_auf')) for m in span],
+                   # hits dated only to the year, or not at all
+                   'rest': len(items) - sum(months.values())},
         'month_dated': sum(months.values()),
         'first': dated[0] if dated else None, 'last': dated[-1] if len(dated) > 1 else None,
         'orgs': [{'label': names.get(o, o), 'count': n, 'url': list_url(('org', o))} for o, n in orgs],
@@ -392,6 +396,7 @@ def trends(request: Request, begriffe: str = ''):
     return templates.TemplateResponse(
         request, "trends.html",
         {"begriffe": ', '.join(terms), "filters": filters, "chips": chips, "rows": rows,
+         "min_org_size": MIN_ORG_SIZE,
          "together": together, "chart": chart})
 
 

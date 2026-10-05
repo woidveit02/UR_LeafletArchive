@@ -504,16 +504,14 @@ a.topic-year:focus-visible .topic-bar {
     text-align: right;
 }
 
-.trend-more {
-    margin-top: 4px;
+.trend-hint {
+    margin: 0 0 4px;
     font-size: 0.8rem;
 }
 
-.trend-time-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px;
+.trend-more {
+    margin-top: 4px;
+    font-size: 0.8rem;
 }
 
 .trend-together {
@@ -944,8 +942,7 @@ select:focus {
     stroke-linejoin: round;
 }
 
-.view-switch a,
-.view-switch button {
+.view-switch a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -956,14 +953,7 @@ select:focus {
     color: var(--ink-soft);
 }
 
-.view-switch button {
-    font: inherit;
-    background: none;
-    cursor: pointer;
-}
-
-.view-switch a[aria-current="page"],
-.view-switch button[aria-pressed="true"] {
+.view-switch a[aria-current="page"] {
     border-color: var(--accent);
     background: var(--accent);
     color: #fff;
