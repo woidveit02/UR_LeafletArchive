@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Trends – UR Leaflet Archive{% endblock %}
+{% macro top_list(head, entries, bars=True) %}
+{% if entries %}
+<h3 class="facet-head">{{ head }}</h3>
+<ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">
+    {% for e in entries %}
+    <li><a href="{{ e.url }}" title="{{ e.label }}">{{ e.label }}</a>
+        {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / entries[0].count * 100) | round }}%"></span></span>{% endif %}
+        <span class="meta" title="Anzahl der Flugblätter">{{ e.count }}</span></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}
+{% macro occurrence(label, item) %}
+{% if item %}
+<p class="trend-occurrence"><span class="meta">{{ label }}: {{ item.date }}
+    {%- if item.issuers %} · {{ item.issuers | map('first') | join(', ') }}{% endif %}</span>
+    <a class="trend-occurrence-title" href="/leaflets/{{ item.leaflet.id }}" title="{{ item.leaflet.display_title }}">{{ item.leaflet.display_title }}</a></p>
+{% endif %}
+{% endmacro %}
+{% block content %}
+        <header class="page-head page-head-list">
+            <h1>Trends</h1>
+            <p class="page-intro">Wie häufig Begriffe über die Jahre vorkommen, gemessen als Anteil der Flugblätter eines Jahres, die den Begriff enthalten. Exemplare desselben Blatts zählen einmal.</p>
+        </header>
+        <form class="search-row trend-form" method="get" action="/trends">
+            {% for k, v in filters %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+            <input type="search" name="begriffe" value="{{ begriffe }}" maxlength="400" aria-label="Begriffe"
+                   placeholder="z. B. Notstand, Berufsverbot">
+            <button type="submit" class="button-small">Vergleichen</button>
+        </form>
+        <p class="search-hint">Bis zu vier Begriffe, durch Komma getrennt. „…“ sucht eine Wortfolge.</p>
+        {% if rows or chips %}
+        <div class="active-filters" aria-label="Begriffe und Filter">
+            {% for row in rows %}<a class="active-filter" href="{{ row.remove_url }}" title="Begriff entfernen"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span>{{ row.term }} <span aria-hidden="true">×</span></a>{% endfor %}
+            {% for c in chips %}<a class="active-filter" href="{{ c.url }}" title="Entfernen">{{ c.label }} <span aria-hidden="true">×</span></a>{% endfor %}
+        </div>
+        {% endif %}
+        {% if rows %}
+        <section class="trend-section">
+            <h2 class="trend-head">Anteil der Flugblätter pro Jahr</h2>
+            <div class="trend-chart"><canvas id="trend-compare" role="img" aria-label="Anteil der Flugblätter pro Jahr je Begriff"></canvas></div>
+            <p class="meta">Die Anteile zeigen, was im Bestand liegt. Ob ein Thema damals weniger diskutiert wurde oder nur weniger überliefert ist,
+                lässt sich daraus allein nicht sagen. Jahre mit weniger als 20 Blättern sind mit dem folgenden zusammengefasst.</p>
+        </section>
+        {% for row in rows %}
+        <section class="trend-section">
+            <h2 class="trend-head"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span><a href="{{ row.url }}" title="Treffer anzeigen">{{ row.term }}</a>
+                {% if not row.short %}<span class="meta">{{ row.total }} {{ 'Flugblatt' if row.total == 1 else 'Flugblätter' }}</span>{% endif %}</h2>
+            {% if row.short %}
+            <p class="meta">Begriffe unter 3 Zeichen werden im Text nicht gesucht.</p>
+            {% elif row.total %}
+            <div class="trend-term">
+                <div class="trend-chart trend-chart-small"><canvas data-term="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Jahr mit {{ row.term }}"></canvas></div>
+                <div class="trend-facts">
+                    {{ occurrence('Frühester Treffer', row.first) }}
+                    {{ occurrence('Spätester Treffer', row.last) }}
+                    {{ top_list('Herausgeber der Treffer', row.orgs) }}
+                    {{ top_list('Themen der Treffer', row.topics, bars=False) }}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+        {% endfor %}
+        {% else %}
+        <p class="meta">Zum Beispiel: <a href="/trends?begriffe=Notstand%2C%20Hochschulgesetz%2C%20Berufsverbot">Notstand, Hochschulgesetz, Berufsverbot</a></p>
+        {% endif %}
+{% endblock %}
+{% block scripts %}
+    {% if rows %}
+    <script type="application/json" id="trend-data">{{ chart | tojson }}</script>
+    <script src="{{ url_for('static', path='chart.umd.min.js') }}"></script>
+    <script>
+        const data = JSON.parse(document.getElementById('trend-data').textContent);
+        const COLORS = ['#1e5aa8', '#c2410c', '#237a50', '#8a3fa8'];
+        const labels = data.years.map((y, i) => [y, 'n = ' + data.totals[i]]);
+        Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+        Chart.defaults.color = '#68707c';
+        Chart.defaults.maintainAspectRatio = false;
+        Chart.defaults.scale.ticks.maxRotation = 0;  // years stay readable on phones
+        document.querySelectorAll('.trend-swatch').forEach((s) => { s.style.background = COLORS[s.dataset.term]; });
+
+        const share = (t, i) => `${t.counts[i]} von ${data.totals[i]} Flugblättern · ${t.shares[i].toLocaleString('de-DE')} %`;
+        // a click on a point or bar opens the list for that term and year
+        const openList = (chart, event, urls) => {
+            const [hit] = chart.getElementsAtEventForMode(event, 'nearest', {intersect: true}, false);
+            if (hit) location.href = urls(hit)[hit.index];
+        };
+        const terms = data.terms.filter((t) => t.counts);
+
+        new Chart(document.getElementById('trend-compare'), {
+            type: 'line',
+            data: {labels, datasets: terms.map((t) => ({
+                label: t.term, data: t.shares, borderColor: COLORS[data.terms.indexOf(t)],
+                backgroundColor: COLORS[data.terms.indexOf(t)], pointRadius: 4, pointHoverRadius: 6,
+            }))},
+            options: {
+                interaction: {mode: 'index', intersect: false},
+                scales: {y: {beginAtZero: true, ticks: {callback: (v) => v + ' %'}}},
+                plugins: {tooltip: {callbacks: {
+                    title: (items) => items[0].label.join(', '),
+                    label: (c) => `${c.dataset.label}: ${share(terms[c.datasetIndex], c.dataIndex)}`,
+                }}},
+                onClick: (e, _, chart) => openList(chart, e, (hit) => terms[hit.datasetIndex].urls),
+            },
+        });
+
+        document.querySelectorAll('canvas[data-term]').forEach((canvas) => {
+            const t = data.terms[canvas.dataset.term], color = COLORS[canvas.dataset.term];
+            new Chart(canvas, {
+                type: 'bar',
+                data: {labels, datasets: [{label: 'Flugblätter', data: t.counts,
+                                           backgroundColor: color + '99', hoverBackgroundColor: color}]},
+                options: {
+                    interaction: {mode: 'index', intersect: false},
+                    scales: {y: {beginAtZero: true, ticks: {precision: 0}, title: {display: true, text: 'Flugblätter'}}},
+                    plugins: {legend: {display: false}, tooltip: {callbacks: {
+                        title: (items) => items[0].label.join(', '),
+                        label: (c) => share(t, c.dataIndex),
+                    }}},
+                    onClick: (e, _, chart) => openList(chart, e, () => t.urls),
+                },
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}

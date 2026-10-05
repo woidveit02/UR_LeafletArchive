@@ -241,3 +241,27 @@ def test_issuer_facets_chips_and_passage_links(db):
     assert 'href="/leaflets?jahr=1968" title="Entfernen">„versammlung“' in html
     assert 'class="search-clear" href="/leaflets?jahr=1968"' in html
     assert f'href="/leaflets/{leaflets["ocr"].id}?q=versammlung&amp;jahr=1968#treffer-1"' in html
+
+
+def test_trends_count_copies_once(db, monkeypatch):
+    monkeypatch.setattr(leaflet_app, "MIN_YEAR_SIZE", 1)
+    leaflets = seed(db)
+    # a copy of the 1968 call, filed in 1969: counts once, in 1968
+    copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
+                       "Stre1kaufruf zur Blockade der Mensa.", date_iso="1969-02-01")
+    leaflets["ocr"].copy_group = copy.copy_group = 7
+    db.commit()
+    search.rebuild_search_index(db.get_bind())
+
+    items = leaflet_app.unique(leaflet_app.searched_items([("q", "blockade")]))
+    assert [i["leaflet"].id for i in items] == [leaflets["ocr"].id]
+
+    html = leaflet_app.trends(request("/trends", b"typ=flugblatt"), begriffe="Blockade, xy, ").body.decode()
+    assert '"shares": [50.0, 0.0]' in html  # 1968: 1 of 2 leaflets of type "flugblatt", copy once
+    assert '"/leaflets?typ=flugblatt\\u0026q=Blockade\\u0026jahr=1968"' in html
+    assert "unter 3 Zeichen" in html and 'value="Blockade, xy"' in html
+
+
+def test_year_buckets_merge_small_years():
+    buckets = leaflet_app.year_buckets({"1967": 7, "1968": 52, "1969": 185, "1973": 3})
+    assert buckets == {"1967": "1967/68", "1968": "1967/68", "1969": "1969", "1973": "1973"}

@@ -7,6 +7,7 @@
             <a href="/organizations" {% if path.startswith('/organizations') %}class="active" aria-current="page"{% endif %}>Organisationen</a>
             <a href="/volumes" {% if path.startswith('/volumes') %}class="active" aria-current="page"{% endif %}>Bände</a>
             <a href="/themen" {% if path.startswith('/themen') %}class="active" aria-current="page"{% endif %}>Themen</a>
+            <a href="/trends" {% if path.startswith('/trends') %}class="active" aria-current="page"{% endif %}>Trends</a>
         </nav>
         {% if path != '/leaflets' %}{# the list has its own search field above the filters #}
         <form class="topsearch" method="get" action="/leaflets" role="search">

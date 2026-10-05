@@ -94,7 +94,8 @@
                             {%- elif selected_q %}Keine Treffer für „{{ selected_q }}“
                             {%- elif leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
                             {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
-                            {%- else %}Keine Flugblätter für diese Auswahl{% endif %}</p>
+                            {%- else %}Keine Flugblätter für diese Auswahl{% endif %}
+                            {%- if leaflets and selected_q and not q_short %} · <a href="{{ trends_url }}" title="Anteil der Blätter pro Jahr, mit den gesetzten Filtern">Trend über die Jahre</a>{% endif %}</p>
                         <label class="sort">Sortiert nach
                             <select name="sortierung" onchange="this.form.submit()">
                                 <option value="" {% if not selected_sort %}selected{% endif %}>{{ 'Datum' if view == 'fundstellen' else 'Relevanz' if selected_q and not q_short else 'Reihenfolge im Archiv' }}</option>
