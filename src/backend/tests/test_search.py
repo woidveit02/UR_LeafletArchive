@@ -248,7 +248,7 @@ def test_trends_count_copies_once(db, monkeypatch):
     leaflets = seed(db)
     # a copy of the 1968 call, filed in 1969: counts once, in 1968
     copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
-                       "Stre1kaufruf zur Blockade der Mensa.", date_iso="1969-02-01")
+                       "Stre1kaufruf zur Blockade der Mensa. Polizei", date_iso="1969-02-01")
     leaflets["ocr"].copy_group = copy.copy_group = 7
     db.commit()
     search.rebuild_search_index(db.get_bind())
@@ -260,6 +260,12 @@ def test_trends_count_copies_once(db, monkeypatch):
     assert '"shares": [50.0, 0.0]' in html  # 1968: 1 of 2 leaflets of type "flugblatt", copy once
     assert '"/leaflets?typ=flugblatt\\u0026q=Blockade\\u0026jahr=1968"' in html
     assert "unter 3 Zeichen" in html and 'value="Blockade, xy"' in html
+    # only the 1969 copy matches, yet the group counts with its 1968 copy, like in the totals
+    assert '"counts": [1, 0]' in leaflet_app.trends(request("/trends", b""), begriffe="Polizei").body.decode()
+    assert '"labels": ["1968-05"]' in html  # months with a hit
+
+    html = leaflet_app.trends(request("/trends", b""), begriffe="Blockade, Mensa").body.decode()
+    assert 'href="/leaflets?q=Blockade+Mensa">Blockade + Mensa</a> <span class="meta">1</span>' in html
 
 
 def test_year_buckets_merge_small_years():

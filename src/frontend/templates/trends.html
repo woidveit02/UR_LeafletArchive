@@ -7,7 +7,7 @@
     {% for e in entries %}
     <li><a href="{{ e.url }}" title="{{ e.label }}">{{ e.label }}</a>
         {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / entries[0].count * 100) | round }}%"></span></span>{% endif %}
-        <span class="meta" title="Anzahl der Flugblätter">{{ e.count }}</span></li>
+        <span class="meta" title="{{ e.title or 'Anzahl der Flugblätter' }}">{{ e.meta or e.count }}</span></li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -43,6 +43,10 @@
             <div class="trend-chart"><canvas id="trend-compare" role="img" aria-label="Anteil der Flugblätter pro Jahr je Begriff"></canvas></div>
             <p class="meta">Die Anteile zeigen, was im Bestand liegt. Ob ein Thema damals weniger diskutiert wurde oder nur weniger überliefert ist,
                 lässt sich daraus allein nicht sagen. Jahre mit weniger als 20 Blättern sind mit dem folgenden zusammengefasst.</p>
+            {% if together %}
+            <p class="trend-together"><span class="meta">Gemeinsam in einem Flugblatt:</span>
+                {% for p in together %}<a href="{{ p.url }}">{{ p.terms | join(' + ') }}</a> <span class="meta">{{ p.count }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+            {% endif %}
         </section>
         {% for row in rows %}
         <section class="trend-section">
@@ -52,11 +56,30 @@
             <p class="meta">Begriffe unter 3 Zeichen werden im Text nicht gesucht.</p>
             {% elif row.total %}
             <div class="trend-term">
-                <div class="trend-chart trend-chart-small"><canvas data-term="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Jahr mit {{ row.term }}"></canvas></div>
+                <div>
+                    <div class="trend-chart trend-chart-small"><canvas data-orgs="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Jahr mit {{ row.term }}, nach Herausgeber"></canvas></div>
+                    <p class="meta">Ein Blatt mehrerer Herausgeber zählt beim ersten aus der Legende.</p>
+                    {% if row.month_dated %}
+                    <div class="trend-time">
+                        <div class="trend-time-head">
+                            <h3 class="facet-head">Treffer im Zeitverlauf</h3>
+                            <div class="view-switch" role="group" aria-label="Einteilung">
+                                <button type="button" data-unit="months" aria-pressed="true">Monate</button>
+                                <button type="button" data-unit="years" aria-pressed="false">Jahre</button>
+                            </div>
+                        </div>
+                        <div class="trend-chart trend-chart-small"><canvas data-months="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Monat oder Jahr mit {{ row.term }}"></canvas></div>
+                        <p class="meta" data-note="months">{{ row.month_dated }} von {{ row.total }} Treffern sind auf den Monat genau datiert.</p>
+                        <p class="meta" data-note="years" hidden>Alle {{ row.total }} Treffer.</p>
+                    </div>
+                    {% endif %}
+                </div>
                 <div class="trend-facts">
                     {{ occurrence('Frühester Treffer', row.first) }}
                     {{ occurrence('Spätester Treffer', row.last) }}
                     {{ top_list('Herausgeber der Treffer', row.orgs) }}
+                    {% if row.orgs_other %}<p class="meta trend-more">Außerdem {% for o in row.orgs_other %}<a href="{{ o.url }}">{{ o.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+                    {{ top_list('Höchster Anteil am eigenen Bestand', row.org_shares) }}
                     {{ top_list('Themen der Treffer', row.topics, bars=False) }}
                 </div>
             </div>
@@ -106,22 +129,59 @@
             },
         });
 
-        document.querySelectorAll('canvas[data-term]').forEach((canvas) => {
-            const t = data.terms[canvas.dataset.term], color = COLORS[canvas.dataset.term];
+        // one color per issuer on the whole page; the two grays are not issuers
+        const ORG_COLORS = ['#4c72b0', '#dd8452', '#55a868', '#c44e52', '#8172b3',
+                            '#937860', '#da8bc3', '#ccb974', '#64b5cd', '#2f4b7c'];
+        const orgColor = {nicht_im_register: '#8a929c', null: '#c8ccd2'};
+        data.terms.flatMap((t) => t.by_org || []).forEach((o) => {
+            if (!(o.org in orgColor)) orgColor[o.org] = ORG_COLORS[Object.keys(orgColor).length % ORG_COLORS.length];
+        });
+        document.querySelectorAll('canvas[data-orgs]').forEach((canvas) => {
+            const t = data.terms[canvas.dataset.orgs];
             new Chart(canvas, {
                 type: 'bar',
-                data: {labels, datasets: [{label: 'Flugblätter', data: t.counts,
-                                           backgroundColor: color + '99', hoverBackgroundColor: color}]},
+                data: {labels, datasets: t.by_org.map((o) => ({
+                    label: o.label, data: o.counts, backgroundColor: orgColor[o.org]}))},
                 options: {
                     interaction: {mode: 'index', intersect: false},
-                    scales: {y: {beginAtZero: true, ticks: {precision: 0}, title: {display: true, text: 'Flugblätter'}}},
-                    plugins: {legend: {display: false}, tooltip: {callbacks: {
-                        title: (items) => items[0].label.join(', '),
-                        label: (c) => share(t, c.dataIndex),
-                    }}},
-                    onClick: (e, _, chart) => openList(chart, e, () => t.urls),
+                    scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0},
+                                                     title: {display: true, text: 'Flugblätter'}}},
+                    plugins: {legend: {position: 'bottom', labels: {boxWidth: 12}}, tooltip: {
+                        filter: (c) => c.raw > 0, callbacks: {
+                            title: ([c]) => [data.years[c.dataIndex], share(t, c.dataIndex)],
+                        }}},
+                    onClick: (e, _, chart) => openList(chart, e, (hit) => t.by_org[hit.datasetIndex].urls),
                 },
             });
+        });
+
+        const month = new Intl.DateTimeFormat('de-DE', {month: 'short', year: '2-digit'});
+        document.querySelectorAll('canvas[data-months]').forEach((canvas) => {
+            const t = data.terms[canvas.dataset.months], color = COLORS[canvas.dataset.months];
+            const box = canvas.closest('.trend-time');
+            const views = {
+                months: {labels: t.months.labels.map((m) => month.format(new Date(m + '-15'))), counts: t.months.counts},
+                years: {labels, counts: t.counts},
+            };
+            const chart = new Chart(canvas, {
+                type: 'bar',
+                data: {labels: views.months.labels,
+                       datasets: [{label: 'Flugblätter', data: views.months.counts, backgroundColor: color + '99'}]},
+                options: {
+                    scales: {y: {beginAtZero: true, ticks: {precision: 0}}},
+                    plugins: {legend: {display: false}},
+                    // only years can be filtered in the list
+                    onClick: (e, _, c) => box.dataset.unit === 'years' && openList(c, e, () => t.urls),
+                },
+            });
+            box.querySelectorAll('[data-unit]').forEach((button) => button.addEventListener('click', () => {
+                const unit = box.dataset.unit = button.dataset.unit;
+                box.querySelectorAll('[data-unit]').forEach((b) => b.setAttribute('aria-pressed', b === button));
+                box.querySelectorAll('[data-note]').forEach((p) => { p.hidden = p.dataset.note !== unit; });
+                chart.data.labels = views[unit].labels;
+                chart.data.datasets[0].data = views[unit].counts;
+                chart.update();
+            }));
         });
     </script>
     {% endif %}

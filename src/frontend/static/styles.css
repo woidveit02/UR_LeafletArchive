@@ -105,11 +105,13 @@ body {
 
     .topnav {
         width: 100%;
+        flex-wrap: wrap;
         justify-content: space-between;
     }
 
     .topnav a {
-        padding: 6px 8px;
+        padding: 6px 4px;
+        font-size: 0.875rem;
     }
 
     .app {
@@ -500,6 +502,23 @@ a.topic-year:focus-visible .topic-bar {
 
 .trend-bars .meta {
     text-align: right;
+}
+
+.trend-more {
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.trend-time-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.trend-together {
+    margin-top: 8px;
+    font-size: 0.875rem;
 }
 
 /* topic titles are long: two lines of text, no bar */
@@ -925,7 +944,8 @@ select:focus {
     stroke-linejoin: round;
 }
 
-.view-switch a {
+.view-switch a,
+.view-switch button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -936,7 +956,14 @@ select:focus {
     color: var(--ink-soft);
 }
 
-.view-switch a[aria-current="page"] {
+.view-switch button {
+    font: inherit;
+    background: none;
+    cursor: pointer;
+}
+
+.view-switch a[aria-current="page"],
+.view-switch button[aria-pressed="true"] {
     border-color: var(--accent);
     background: var(--accent);
     color: #fff;
