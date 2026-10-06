@@ -151,7 +151,7 @@ def test_comparison_page_confirm_and_revert(tmp_path, monkeypatch):
     assert show(a).count('name="show"') == 4  # all four can be shown
     fragment = leaflet_app.copy_pair_page(page("/"), a.id, f"{a.id},{d.id}").body.decode()
     assert ">11</mark>" in fragment and ">8</mark>" not in fragment  # any leaflets can be compared
-    assert ">2</mark>" in fragment and f"A: <a" in fragment and f"D: <a" in fragment  # with two, both sides are marked; the letters stay
+    assert ">2</mark>" in fragment  # with two, both sides are marked
     assert f'data-leaflet="{d.id}"' in fragment and 'data-block="11-1" data-partners="0:2-1"' in fragment  # a click opens the scans
     with pytest.raises(HTTPException):  # one leaflet is not a comparison
         leaflet_app.copy_pair_page(page("/"), a.id, f"{a.id},{a.id}")
@@ -161,7 +161,7 @@ def test_comparison_page_confirm_and_revert(tmp_path, monkeypatch):
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     assert a.copy_group == b.copy_group and a.canonical_leaflet_id == b.id and a.copies_checked
     # a pair is judged with one button per card, not with choices
-    assert show(a).count('name="verdict" value="edit:') == 1 and 'value="main:' not in show(a)  # only the other one can become main
+    assert show(a).count('name="verdict" value="main:') == 1 and 'value="next:' not in show(a)  # only the other one can become main
     assert 'name="main"' not in show(a) and "Prüfung zurücknehmen" in show(a)
 
     leaflet_app.save_copy_review(a, {"revert": ["1"]})
@@ -177,24 +177,30 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})  # a and b: checked; c and d: not
     assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1}
     assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1}
-    assert "Gruppe 1 von 1 ungeprüft" in leaflet_app.copy_page(page("/"), c.id).body.decode()
+    assert "1 von 1 ungeprüft" in leaflet_app.copy_page(page("/"), c.id).body.decode()
 
     def judge(leaflet, verdict):
         return asyncio.run(leaflet_app.copy_save(post(f"/leaflets/{leaflet.id}/exemplare", urlencode({"verdict": verdict})), leaflet.id))
-    # on from a checked group to the group still to check
+    # a verdict stays on the page; the next group to check is offered there
     assert c.copy_candidate_of is None and d.copy_candidate_of is None  # a re-review does not bring back what was rejected
-    assert judge(b, f"main:{b.id}").headers["location"] == f"/leaflets/{c.id}/exemplare"
+    assert judge(b, f"main:{b.id}").headers["location"] == f"/leaflets/{b.id}/exemplare?meldung=gespeichert"
     assert b.canonical_leaflet_id == b.id
-    # the last group: stay on the page; the pair is judged with the other card as main copy
+    assert f'class="button-small review-next" href="/leaflets/{c.id}/exemplare"' in leaflet_app.copy_page(page("/"), b.id).body.decode()
+    # the pair is judged with the other card as main copy
     assert judge(c, f"main:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert"
     assert c.canonical_leaflet_id == d.id and c.copies_checked
-    # two different leaflets: the pair is dissolved; the next group to check comes up
+    # two different leaflets: the pair is dissolved, the page stays and offers to take it back or go on
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})
-    assert judge(a, "different").headers["location"] == f"/leaflets/{c.id}/exemplare" and a.copy_group is None
-    # choose the main copy and go on to its details: the page stays and opens the form
-    assert judge(c, f"edit:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert&offen=1"
-    assert c.canonical_leaflet_id == d.id and c.copies_checked
+    assert judge(a, "different").headers["location"] == f"/leaflets/{a.id}/exemplare?meldung=getrennt" and a.copy_group is None
+    split = leaflet_app.copy_page(page("/"), a.id, "getrennt").body.decode()  # b stays proposed with c and d
+    assert "Als verschiedene Flugblätter gespeichert." in split and f'href="/leaflets/{b.id}"' in split and "review-next" in split
+    undo = asyncio.run(leaflet_app.copy_save(post(f"/leaflets/{a.id}/exemplare", "revert=1"), a.id))
+    assert undo.headers["location"] == f"/leaflets/{a.id}/exemplare?meldung=zurueckgenommen" and a.copy_group == b.copy_group
+    # choose the main copy and go on to the next group to check
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})
+    assert judge(a, f"next:{b.id}").headers["location"] == f"/leaflets/{c.id}/exemplare" and b.canonical_leaflet_id == b.id
 
 
 # Tests if the start page counts a leaflet with duplicates once.
@@ -222,9 +228,24 @@ def test_copy_overview(tmp_path, monkeypatch):
     show = lambda status="": leaflet_app.copy_list(page("/exemplare"), status).body.decode()
     assert "Nicht geprüft (1)" in show() and "Geprüft (0)" in show()
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
-    assert "Nicht geprüft (1)" in show() and "Geprüft (1)" in show() and "Alle (2)" in show()
-    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 1
-    assert show("unsinn").count("<li>") == 2  # an unknown filter shows everything
+    # checked: the group of a and b, and c and d, which were split off (and are still proposed as a group of their own)
+    assert "Nicht geprüft (1)" in show() and "Geprüft (3)" in show() and "Alle (4)" in show()
+    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 3
+    assert show("unsinn").count("<li>") == 4  # an unknown filter shows everything
+
+
+# Tests if the leaflets a review split off are listed as checked, sortable by review date; a reverted review is not.
+def test_separated_list(tmp_path, monkeypatch):
+    ref = lambda p: {"volume": "0118_0002", "start_page": p, "end_page": p}
+    review = lambda at, kept, out: {"members": [ref(kept)], "rejected": [ref(out)], "canonical": ref(kept), "at": at}
+    a, b, c, d = copy_db(tmp_path, monkeypatch, [
+        review("2026-10-05T10:00:00", 2, 5), review("2026-10-06T09:30:00", 8, 11),
+        review("2026-10-06T12:00:00", 11, 2), {"revert": "2026-10-06T12:00:00", "at": "2026-10-06T12:01:00"}])
+    rows = lambda sort="": [(r["id"], [f["id"] for f in r["from"]]) for r in leaflet_app.copy_list(
+        page("/exemplare"), "geprueft", sort).context["rows"] if r["state"] == "getrennt"]
+    assert rows("neu") == [(d.id, [c.id]), (b.id, [a.id])] and rows("alt") == [(b.id, [a.id]), (d.id, [c.id])]
+    html = leaflet_app.copy_list(page("/exemplare"), "geprueft").body.decode()
+    assert "06.10.2026, 09:30</span><br>Getrennt" in html
 
 
 # Tests if the detail page and the list say which copy is the main one and whether the group is checked.
@@ -295,7 +316,7 @@ def test_copy_details(tmp_path, monkeypatch):
     form, error = leaflet_app.read_metadata_form(a, posted(a, date="31.02.1969"))
     assert "TT.MM.JJJJ" in error
     shown = leaflet_app.copy_view(page(f"/leaflets/{a.id}/exemplare"), a, "", True, form, error)
-    assert shown.status_code == 400 and 'class="copy-edit" open' in shown.body.decode()
+    assert shown.status_code == 400 and 'class="form-error"' in shown.body.decode()
     assert "31.02.1969" in shown.body.decode() and len(corrections.load(corrections_file)) == 3
 
     body = urlencode({k: v[0] for k, v in posted(a, title="Gruppentitel").items()})

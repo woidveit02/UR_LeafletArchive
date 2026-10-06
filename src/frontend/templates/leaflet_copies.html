@@ -15,9 +15,9 @@
     <div class="dup-actions">
         {% if not checked %}
         <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Als Hauptexemplar wählen</button>
-        <button type="submit" name="verdict" value="edit:{{ c.id }}" class="button-plain">wählen und Angaben bearbeiten</button>
+        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button-plain">wählen und weiter</button>
         {% elif not c.main %}
-        <button type="submit" name="verdict" value="edit:{{ c.id }}" class="button-small">Zum Hauptexemplar machen</button>
+        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Zum Hauptexemplar machen</button>
         {% endif %}
     </div>
     {% elif is_new %}
@@ -42,9 +42,9 @@
         {{ lists(org_names, series_names) }}
         {% for c in cards if c.id == left %}
         {% set m = details %}
-        <details class="copy-edit" open>
-            <summary>Hauptexemplar {{ c.letter }} <span class="meta">({{ c.short }})</span>
-                <span class="meta">· {{ c.date or 'ohne Datum' }}{% if c.received %} · Eingang {{ c.received }}{% endif %}{% if m.corrected %} · von Hand korrigiert{% endif %}</span></summary>
+        <div class="copy-edit">
+            <p class="copy-edit-head">Hauptexemplar {{ c.letter }} <span class="meta">({{ c.short }})
+                · {{ c.date or 'ohne Datum' }}{% if c.received %} · Eingang {{ c.received }}{% endif %}{% if m.corrected %} · von Hand korrigiert{% endif %}</span></p>
             <form method="post" action="/leaflets/{{ c.id }}/exemplare/angaben" class="keep-scroll">
                 {% if m.error %}<p class="form-error" role="alert">{{ m.error }}</p>{% endif %}
                 <dl class="meta-list">
@@ -64,40 +64,44 @@
             <form id="take" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/uebernehmen" hidden></form>
             <form id="revert-{{ c.id }}" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/zuruecksetzen" hidden
                   onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen der Gruppe entfernen? Es gelten dann wieder die automatisch erkannten Angaben.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
-        </details>
+        </div>
         {% endfor %}
 {% endmacro %}
 {% macro compare_section() %}
         <section id="pair">{% include 'leaflet_copy_pair.html' %}</section>
 {% endmacro %}
 {% block content %}
+        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
+            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+            <span class="pager">
+                {% if queue.previous %}<a href="/leaflets/{{ queue.previous }}/exemplare">‹ Voriges</a>{% else %}<span class="disabled">‹ Voriges</span>{% endif %}
+                <span class="meta">{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}</span>
+                {% if queue.next %}<a href="/leaflets/{{ queue.next }}/exemplare">Nächstes ›</a>{% else %}<span class="disabled">Nächstes ›</span>{% endif %}
+            </span>
+        </nav>
         <header class="page-head page-head-wide">
-            <h1>Duplikate prüfen</h1>
-            <nav class="review-pager" aria-label="Ungeprüfte Gruppen">
-                {% if queue.previous %}<a href="/leaflets/{{ queue.previous }}/exemplare">‹ Voriges ungeprüftes</a>{% else %}<span class="disabled">‹ Voriges ungeprüftes</span>{% endif %}
-                <span class="meta">{% if queue.position %}Gruppe {{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} Gruppen ungeprüft{% else %}alles geprüft{% endif %}</span>
-                {% if queue.next %}<a href="/leaflets/{{ queue.next }}/exemplare">Nächstes ungeprüftes ›</a>{% else %}<span class="disabled">Nächstes ungeprüftes ›</span>{% endif %}
-                <a href="/exemplare?status=offen">Alle ungeprüften Gruppen</a>
-            </nav>
+            <div class="head-row">
+                <h1>Duplikate prüfen</h1>
+                <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
+            </div>
         </header>
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
-            <h2>Hauptexemplar wählen</h2>
             <p class="meta">Wähle das Blatt mit den richtigen Angaben, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
-                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Mit „wählen und Angaben bearbeiten“ korrigierst du danach die Angaben, sonst folgt die nächste Gruppe.</p>
+                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; „{{ 'wählen' if simple else 'speichern' }} und weiter“ führt direkt zur nächsten ungeprüften Gruppe.</p>
+            <div class="review-actions dup-more">
+                {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
+                {% if simple %}<button type="submit" name="verdict" value="different" class="button-outline">Das sind verschiedene Flugblätter</button>
+                {% elif checked %}<button type="submit" id="save" class="button-small">Änderung speichern</button>
+                {% else %}<button type="submit" id="save" class="button-small" disabled>Als geprüft speichern</button>
+                <button type="submit" id="save-next" name="next" value="1" class="button-plain" disabled>speichern und weiter</button>{% endif %}
+                {% if checked %}<button type="submit" name="revert" value="1" class="button-plain">Prüfung zurücknehmen</button>{% endif %}
+                {% if checked and queue.next %}<a class="button-small review-next" href="/leaflets/{{ queue.next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+            </div>
             <div class="dup-cards">
                 {% for c in cards %}{{ card(c, false) }}{% endfor %}
                 {% for c in new %}{{ card(c, true) }}{% endfor %}
             </div>
             {% if new %}<p class="meta">Nicht angehakte neue Blätter gelten nach dem Speichern als nicht zugehörig.</p>{% endif %}
-            <div class="review-actions dup-more">
-                <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
-                {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
-                {% if simple %}<button type="submit" name="verdict" value="different" class="button-outline">Das sind verschiedene Flugblätter</button>
-                {% elif checked %}<button type="submit" id="save" name="stay" value="1" class="button-small">Änderung speichern</button>
-                {% else %}<button type="submit" id="save" class="button-small" disabled>Als geprüft speichern und weiter</button>
-                <button type="submit" id="save-edit" name="stay" value="1" class="button-plain" disabled>speichern und Angaben bearbeiten</button>{% endif %}
-                {% if checked %}<button type="submit" name="revert" value="1" class="button-plain">Prüfung zurücknehmen</button>{% endif %}
-            </div>
         </form>
 
         {% if checked %}{{ details_section() }}{% endif %}
@@ -158,7 +162,7 @@
                 const next = mains.find((r) => !r.disabled);
                 if (next) next.checked = true;
             }
-            document.querySelectorAll('#save, #save-edit').forEach((b) => { b.disabled = !mains.some((r) => r.checked); });
+            document.querySelectorAll('#save, #save-next').forEach((b) => { b.disabled = !mains.some((r) => r.checked); });
             mains.forEach((r) => {  // the role of a card, as it will be saved
                 const badge = r.closest('.dup-card').querySelector('[data-role]'), main = r.checked && !r.disabled;
                 badge.hidden = !main && !r.disabled;  // only the main copy and an excluded one carry a badge

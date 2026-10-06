@@ -348,11 +348,11 @@ a:hover {
     color: #9ca3af;
 }
 
-.status-badge {
+.status-badge {  /* neutral: orange marks deviating details on the same page */
     padding: 2px 10px;
     border-radius: 999px;
-    background: var(--warning-soft);
-    color: var(--warning);
+    background: var(--surface-muted);
+    color: var(--muted);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -364,6 +364,23 @@ a:hover {
 
 .page-head-wide {
     max-width: none;
+}
+
+.review-next {  /* centered in the space the other actions leave */
+    margin: 0 auto;
+    text-decoration: none;
+}
+
+.review-state {
+    text-align: right;
+}
+
+.head-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
 }
 
 .dup-more strong {
@@ -408,8 +425,8 @@ body:has(#scan-popup) .pair-text .ocr-block[data-block] {
     margin: 8px 0;
 }
 
-.copy-edit summary {
-    cursor: pointer;
+.copy-edit-head {
+    margin: 0;
     padding: 6px 0;
 }
 
@@ -446,6 +463,11 @@ body:has(#scan-popup) .pair-text .ocr-block[data-block] {
     background: var(--surface);
     box-shadow: var(--shadow-sm);
     font-size: 0.9rem;
+}
+
+.dup-card:has(.role.main:not([hidden])) {  /* the main copy, also while its radio is chosen */
+    border-color: #15803d;
+    box-shadow: 0 0 0 1px #15803d;
 }
 
 .dup-name,
@@ -624,18 +646,6 @@ button:disabled {
     align-items: center;
     gap: 8px 14px;
     margin-top: 4px;
-}
-
-.review-pager {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 16px;
-    margin-top: 8px;
-}
-
-.review-pager .disabled {
-    color: var(--faint);
 }
 
 .offer {

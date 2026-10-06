@@ -831,8 +831,11 @@ def copy_rows():
     rows = []
     for key, group in groups.items():
         main = next(lf for lf, _ in group['members'] if lf.id == lf.canonical_leaflet_id)
+        first, volume = group['members'][0]
         rows.append({'group': key, 'id': main.id, 'title': main.display_title, 'new': group['new'],
                      'state': 'neu' if group['new'] else 'geprueft' if main.copies_checked else 'offen',
+                     'order': (volume.vz, first.start_page),
+                     'anchors': [(v.stem, lf.start_page, lf.end_page) for lf, v in group['members']],
                      'labels': [f"{v.label}, {page_range(lf.start_page, lf.end_page)}" + (' (Hauptexemplar)' if lf is main and main.copies_checked else '')
                                 for lf, v in group['members']]})
     return rows
@@ -851,16 +854,59 @@ def review_queue(leaflet):
             'position': len(before) + 1 if current else None, 'total': len(before) + len(after) + current}
 
 
+def latest_reviews():
+    """anchor -> the newest review in force that saw it."""
+    lines = corrections.load(COPY_DECISIONS)
+    reverted = {e['revert'] for e in lines if 'revert' in e}
+    latest = {}
+    for e in sorted((e for e in lines if 'revert' not in e and e['at'] not in reverted), key=lambda e: e['at']):
+        for a in e['members'] + e['rejected']:
+            latest[copy_decisions.anchor(a)] = e
+    return latest
+
+
+def separated_rows(latest):
+    """One row per leaflet that the review in force split off its group: the leaflet, the ones it was split from, the review date."""
+    leaflets = {(v.stem, lf.start_page, lf.end_page): (lf, v) for lf, v in session.query(Leaflet, Volume).join(Volume)}
+
+    def card(a):
+        lf, v = leaflets[a]
+        return {'id': lf.id, 'leaflet': lf, 'label': f"{v.label}, {page_range(lf.start_page, lf.end_page)}",
+                'order': (v.vz, lf.start_page)}
+    return [{**card(a), 'state': 'getrennt', 'at': e['at'],
+             'from': [card(m) for m in map(copy_decisions.anchor, e['members']) if m in leaflets]}
+            for a, e in latest.items() if a in leaflets and a in map(copy_decisions.anchor, e['rejected'])]
+
+
+def review_date(at):
+    return f"{german_date(at[:10])}, {at[11:16]}"
+
+
+REVIEW_KINDS = {**COPY_STATES, 'getrennt': 'Getrennt'}
+REVIEW_SORTS = {'': 'Reihenfolge im Archiv', 'neu': 'Prüfdatum, neueste zuerst', 'alt': 'Prüfdatum, älteste zuerst'}
+
+
 @app.get("/exemplare")
-def copy_list(request: Request, status: str = ''):
-    """All groups of copies with the state of their review; each opens its comparison page."""
+def copy_list(request: Request, status: str = '', sortierung: str = ''):
+    """All groups of copies with the state of their review; each opens its comparison page. A leaflet that a
+    review split off is listed as checked; the checked rows can be sorted by review date."""
+    latest = latest_reviews()
     rows = copy_rows()
-    counts = Counter(r['state'] for r in rows)
-    shown = [r for r in rows if r['state'] == status] if status in COPY_STATES else rows
+    for r in rows:
+        r['at'] = r['state'] == 'geprueft' and max((latest[a]['at'] for a in r['anchors'] if a in latest), default=None)
     first = next((r['id'] for r in rows if r['state'] != 'geprueft'), None)
+    rows = sorted(rows + separated_rows(latest), key=lambda r: r['order'])
+    for r in rows:
+        r['date'] = r['at'] and review_date(r['at'])
+    checked = lambda r: r['state'] in ('geprueft', 'getrennt')
+    counts = Counter('geprueft' if checked(r) else r['state'] for r in rows)
+    shown = [r for r in rows if r['state'] == status or status == 'geprueft' and checked(r)] if status in COPY_STATES else rows
+    if status == 'geprueft' and sortierung in ('neu', 'alt'):
+        shown.sort(key=lambda r: r['at'] or '', reverse=sortierung == 'neu')
     return templates.TemplateResponse(
         request, "copy_list.html",
-        {"rows": shown, "total": len(rows), "counts": counts, "states": COPY_STATES, "status": status, "first": first})
+        {"rows": shown, "total": len(rows), "counts": counts, "states": COPY_STATES, "kinds": REVIEW_KINDS,
+         "sorts": REVIEW_SORTS, "status": status, "sort": sortierung, "first": first})
 
 
 def copy_group_of(leaflet):
@@ -1036,7 +1082,8 @@ def copy_blocks(leaflet):
 
 
 COPY_MESSAGES = {'angaben': 'Angaben aktualisiert.', 'gespeichert': 'Prüfung gespeichert.',
-                 'zurueckgenommen': 'Prüfung zurückgenommen, es gilt wieder der automatische Vorschlag.'}
+                 'zurueckgenommen': 'Prüfung zurückgenommen, es gilt wieder der automatische Vorschlag.',
+                 'getrennt': 'Als verschiedene Flugblätter gespeichert.'}
 
 
 def shorten(cards):
@@ -1094,8 +1141,20 @@ def copy_card(leaflet, main_id):
 
 @app.get("/leaflets/{leaflet_id}/exemplare")
 def copy_page(request: Request, leaflet_id: int, meldung: str = '', offen: int = 0):
-    """Compares the copies of a group side by side: confirm, exclude, choose the main copy, correct the details."""
-    return copy_view(request, leaflet_or_404(leaflet_id), meldung, bool(offen))
+    """Compares the copies of a group side by side: confirm, exclude, choose the main copy, correct the details.
+    A leaflet that a review split off its group gets that review, to take it back or go on."""
+    leaflet = leaflet_or_404(leaflet_id)
+    if copy_group_of(leaflet)[0]:
+        return copy_view(request, leaflet, meldung, bool(offen))
+    split = [r for r in separated_rows(latest_reviews()) if leaflet.id in [r['id']] + [f['id'] for f in r['from']]]
+    if not split:
+        raise HTTPException(404)
+    split = max(split, key=lambda r: r['at'])
+    split['date'] = review_date(split['at'])
+    here = (session.get(Volume, leaflet.volume_id).vz, leaflet.start_page)
+    following = next((r['id'] for r in copy_rows() if r['state'] != 'geprueft' and r['order'] > here), None)
+    return templates.TemplateResponse(request, "copy_split.html", {
+        "leaflet": leaflet, "split": split, "next": following, "message": COPY_MESSAGES.get(meldung)})
 
 
 def copy_view(request, leaflet, meldung='', offen=False, form=None, error=None):
@@ -1240,12 +1299,12 @@ def save_copy_review(leaflet, form):
     """Appends the review of the leaflet's group (or the revert of its newest review) and
     rebuilds the groups. form: parsed form fields; unticked new hits count as seen, not as members."""
     members, candidates = copy_group_of(leaflet)
-    if not members:
+    if not members and 'revert' not in form:
         raise HTTPException(404)
 
     def ids(name):
         return {int(v) for v in form.get(name, []) if v.isdigit()}
-    mine = {copy_decisions.anchor(segment(lf)) for lf in members + candidates}
+    mine = {copy_decisions.anchor(segment(lf)) for lf in members + candidates or [leaflet]}  # a split-off leaflet: its own review
     lines = corrections.load(COPY_DECISIONS)
     done = {e['revert'] for e in lines if 'revert' in e}
     reviews = [e for e in lines if 'revert' not in e and e['at'] not in done  # the reviews in force for this group
@@ -1277,20 +1336,18 @@ async def copy_save(request: Request, leaflet_id: int):
     leaflet = leaflet_or_404(leaflet_id)
     form = parse_qs((await request.body()).decode())
     verdict = form.pop('verdict', [''])[0]
-    stay = verdict.startswith('edit:') or 'stay' in form  # choose the main copy and go on to its details
-    if verdict:  # a pair: "main:<id>" or "edit:<id>" chooses that main copy, "different" says these are two leaflets
+    onward = verdict.startswith('next:') or 'next' in form  # save and go on to the next group to check
+    if verdict:  # a pair: "main:<id>" or "next:<id>" chooses that main copy, "different" says these are two leaflets
         members = copy_group_of(leaflet)[0]
-        main = verdict[5:] if verdict.startswith(('main:', 'edit:')) else str(members[0].canonical_leaflet_id or members[0].id)
+        main = verdict[5:] if verdict.startswith(('main:', 'next:')) else str(members[0].canonical_leaflet_id or members[0].id)
         form['main'] = [main]
         form['out'] = [str(lf.id) for lf in members if str(lf.id) != main] if verdict == 'different' else []
-    following = None if 'revert' in form or stay else review_queue(leaflet)['next']
+    following = review_queue(leaflet)['next'] if onward else None
     save_copy_review(leaflet, form)
-    if following:  # on to the next group that is not checked
+    if following:
         return RedirectResponse(f"/leaflets/{following}/exemplare", status_code=303)
-    if not copy_group_of(leaflet)[0]:  # a leaflet that was excluded no longer has a comparison page
-        return RedirectResponse(f"/leaflets/{leaflet_id}", status_code=303)
-    message = 'zurueckgenommen' if 'revert' in form else 'gespeichert'
-    return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung={message}{'&offen=1' if stay else ''}", status_code=303)
+    message = 'zurueckgenommen' if 'revert' in form else 'gespeichert' if copy_group_of(leaflet)[0] else 'getrennt'
+    return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung={message}", status_code=303)
 
 
 @app.get("/korrekturen")

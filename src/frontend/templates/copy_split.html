@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from '_leaflets.html' import title %}
+{% block title %}Duplikate prüfen – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
+            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=geprueft">Geprüft</a></span>
+        </nav>
+        <header class="page-head page-head-wide">
+            <div class="head-row">
+                <h1>Duplikate prüfen</h1>
+                <span class="status-badge checked">Getrennt</span>
+            </div>
+        </header>
+        <p class="meta">Diese Blätter sind als verschiedene Flugblätter gespeichert ({{ split.date }}).</p>
+        <ul class="leaflet-list leaflet-list-plain">
+            {% for f in [split] + split['from'] %}
+            <li><span class="row-main"><a href="/leaflets/{{ f.id }}">{{ title(f.leaflet) }}</a>
+                <span class="meta">{{ f.label }}</span></span></li>
+            {% endfor %}
+        </ul>
+        <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare" class="review-actions dup-more">
+            {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
+            <button type="submit" name="revert" value="1" class="button-plain">Prüfung zurücknehmen</button>
+            {% if next %}<a class="button-small review-next" href="/leaflets/{{ next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+        </form>
+{% endblock %}
