@@ -1315,54 +1315,84 @@ select:focus {
     color: #fff;
 }
 
-.page-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+/* every page in a fixed cell; a leaflet runs over as many rows as it needs */
+.page-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 14px 0;
     margin-top: 16px;
 }
 
-.strip-group {
+.grid-page {
     box-sizing: border-box;
-    width: fit-content;
-    min-width: 130px;
-    max-width: 100%;
     margin: 0;
-    padding: 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    padding: 6px 3px;
+    scroll-margin-top: 90px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+.tone-1 {
     background: var(--surface-muted);
 }
 
-.strip-group:hover {
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+.group-start {
+    border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--line));
 }
 
-.strip-empty {
-    border-style: dashed;
-    background: none;
+.grid-page.hover,
+.grid-page.in-range {
+    background: color-mix(in srgb, var(--accent) 14%, var(--canvas));
 }
 
-.strip-pages {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-}
-
-.strip-pages img {
+.grid-scan img {
     display: block;
-    height: 150px;
-    width: auto;
-    background: var(--line);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 7 / 10;
+    object-fit: contain;
 }
 
-.strip-pages a:hover img {
+.left-out .grid-scan img {
+    opacity: 0.5;
+}
+
+.grid-scan:hover img {
     outline: 2px solid var(--accent);
 }
 
-.strip-empty .strip-pages img {
-    opacity: 0.45;
+.page-no {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.grid-page figcaption {
+    position: relative;  /* above the cells it runs over */
+    width: calc(var(--span, 1) * (100% + 6px) - 12px);
+    margin-top: 4px;
+    padding: 0 3px;
+    overflow-wrap: anywhere;
+}
+
+.grid-page .strip-issuers {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+.strip-dup {
+    display: block;
+    color: var(--muted);
+}
+
+.strip-dup:hover {
+    color: var(--accent);
 }
 
 .doc-grid {
@@ -1470,15 +1500,6 @@ select:focus {
     text-overflow: ellipsis;
 }
 
-/* width 0 + min-width 100%: the caption follows the images' width */
-.strip-group figcaption {
-    width: 0;
-    min-width: 100%;
-    margin-top: 6px;
-    font-size: 0.85em;
-    line-height: 1.35;
-}
-
 .strip-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -1487,8 +1508,8 @@ select:focus {
 }
 
 @media (max-width: 600px) {
-    .strip-pages img {
-        height: 110px;
+    .page-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 

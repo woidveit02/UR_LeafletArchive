@@ -564,7 +564,7 @@ def detail_page(request, leaflet, edit=None, error=None):
     group = [{'id': lf.id, 'letter': letters[lf.id], 'self': lf.id == leaflet.id, 'new': lf in candidates,
               'main': bool(lf.copies_checked) and lf.id == lf.canonical_leaflet_id,
               'label': page_range(lf.start_page, lf.end_page) if one_volume
-              else f"{short[lf.id]}, " + page_range(lf.start_page, lf.end_page).replace('Bandseiten ', 'S. ').replace('Bandseite ', 'S. ')}
+              else f"{short[lf.id]}, {short_pages(lf)}"}
              for lf in ordered]
 
     # coming from a filtered list: page through that selection, else through the volume
@@ -632,6 +632,7 @@ def detail_page(request, leaflet, edit=None, error=None):
         'topic_note': TOPIC_TITLE_NOTES.get(topic.source) if topic else None,
         'topic_uncertain': leaflet.topic_uncertain,
         'pages': pages,
+        'start_page': leaflet.start_page,
         'issuers': issuer_display,
         'signatories': [{'name': i.surface,
                          'details': '; '.join(d for d in (i.function, i.marker) if d)}
@@ -1424,34 +1425,42 @@ def leaflet_items(leaflets):
     return items
 
 
+def short_pages(leaflet):
+    return page_range(leaflet.start_page, leaflet.end_page).replace('Bandseiten ', 'S. ').replace('Bandseite ', 'S. ')
+
+
 def page_groups(volume, leaflets):
-    """Consecutive pages of the volume, grouped by leaflet (None = no leaflet)."""
-    pdf_path = volume_pdf(volume)
+    """Consecutive pages of the volume, grouped by leaflet (leaflet None: left out when splitting)."""
     by_id = {leaflet.id: leaflet for leaflet in leaflets}
     issuers = issuer_names(by_id)
+    # duplicates point to their main copy
+    mains = {lf.id: (lf, vol) for lf, vol in session.query(Leaflet, Volume).join(Volume).filter(
+        Leaflet.id.in_({lf.canonical_leaflet_id for lf in leaflets
+                        if lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id)}))}
     groups = []
     for p in session.query(Page).filter_by(volume_id=volume.id).order_by(Page.page_no):
-        width, height = pdf_service.page_size(pdf_path, p.page_no)
-        thumb = {'no': p.page_no, 'height': THUMB_HEIGHT,
-                 'width': round(THUMB_HEIGHT * width / height)}
         if groups and groups[-1]['leaflet_id'] == p.leaflet_id:
-            groups[-1]['pages'].append(thumb)
+            groups[-1]['pages'].append(p.page_no)
         else:
-            groups.append({'leaflet_id': p.leaflet_id, 'leaflet': by_id.get(p.leaflet_id),
+            leaflet = by_id.get(p.leaflet_id)
+            main = mains.get(leaflet.canonical_leaflet_id) if leaflet and leaflet.copies_checked else None
+            groups.append({'leaflet_id': p.leaflet_id, 'leaflet': leaflet,
+                           'main': {'id': main[0].id, 'label': f"{main[1].label.split(' (')[0]}, {short_pages(main[0])}"}
+                           if main else None,
                            'issuers': ', '.join(short for short, _ in issuers.get(p.leaflet_id, [])),
-                           'pages': [thumb]})
+                           'pages': [p.page_no]})
     return groups
 
 
 @app.get("/volumes/{vz}")
-def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
+def volume_detail(request: Request, vz: int, ansicht: str = ""):
     logger.info('Opening volume details')
 
     volume = volume_by_vz(vz)
     leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
         .order_by(Leaflet.start_page).all()
     has_scans = bool(leaflets) and volume_pdf(volume).is_file()
-    view = ansicht if has_scans and ansicht in ('kacheln', 'bandseiten') else 'liste'
+    view = (ansicht if ansicht in ('liste', 'kacheln') else 'bandseiten') if has_scans else 'liste'
     orgs = sorted((o for o in session.query(Organization)
                    if volume.vz in (o.vz or [])), key=org_sort_key)
 
@@ -1470,6 +1479,7 @@ def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
         'portal_url': volume.portal_url,
         'collection': volume.collection,
         'n_pages': volume.n_pages,
+        'n_excluded': session.query(Page).filter_by(volume_id=volume.id, leaflet_id=None).count(),  # left out when splitting
         'status': volume_status(volume, len(leaflets)),
         'provenance': provenance(volume),
         'organizations': orgs,

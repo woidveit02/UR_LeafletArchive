@@ -123,7 +123,7 @@
             <dd>{{ leaflet.topic }} <span class="meta">(maschinell gruppiert{% if leaflet.topic_note %}; {{ leaflet.topic_note }}{% endif %})</span>{% if leaflet.topic_uncertain %} <span class="unresolved">(unsicher)</span>{% endif %}</dd>
             {% endif %}
             <dt>Band</dt>
-            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>
+            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, <a href="/volumes/{{ leaflet.volume_vz }}#page-{{ leaflet.start_page }}" title="Im Band ansehen">{{ leaflet.pages }}</a>{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>
             {# only 1970 has archive stamps so far; an empty row would read as "missed" #}
             {% if leaflet.received %}
             <dt>Eingang im Archiv</dt>
