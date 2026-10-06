@@ -254,7 +254,8 @@ def topic_list(request: Request, sortierung: str = ''):
 
     def point(i):
         issuers = ', '.join(org_names[o] for o in i['orgs'] if o in org_names)
-        return [i['leaflet'].x, i['leaflet'].y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year']]
+        return [i['leaflet'].x, i['leaflet'].y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year'],
+               bool(i['leaflet'].topic_uncertain)]
 
     no_topic_points = [point(i) for i in items
                       if i['leaflet'].topic_id is None and i['leaflet'].x is not None]
@@ -281,6 +282,7 @@ def topic_list(request: Request, sortierung: str = ''):
             'words': topic.words or [],
             'title_note': TOPIC_TITLE_NOTES.get(topic.source),
             'count': len(topic_items),
+            'uncertain': sum(1 for i in topic_items if i['leaflet'].topic_uncertain),
             'top_orgs': [{'label': org_names.get(o, o), 'count': n,
                          'url': '/leaflets?' + urlencode([('thema', topic.id), ('org', o)])}
                         for o, n in top_orgs],

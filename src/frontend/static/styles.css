@@ -199,7 +199,6 @@ a:hover {
 }
 
 .page-head {
-    max-width: 76ch;
     margin-bottom: 24px;
 }
 
@@ -221,7 +220,6 @@ a:hover {
 }
 
 .page-intro {
-    max-width: 68ch;
     margin: 0;
     color: var(--muted);
 }
@@ -332,6 +330,7 @@ a:hover {
     gap: 6px;
     font-size: 0.85em;
     color: var(--muted);
+    white-space: nowrap;
 }
 
 .topic-sort select {
@@ -409,9 +408,21 @@ a:hover {
     background: var(--surface);
 }
 
-.topic-map-controls {
+.topic-map-search {
     position: absolute;
     top: 8px;
+    right: 22px;
+    z-index: 1;
+}
+
+.topic-map-search input {
+    max-width: 14rem;
+    font-size: 0.85rem;
+}
+
+.topic-map-zoom {
+    position: absolute;
+    bottom: 22px;
     right: 22px;
     z-index: 1;
     display: flex;
@@ -420,33 +431,67 @@ a:hover {
     gap: 4px;
 }
 
-.topic-map-controls-row {
-    display: flex;
-    gap: 4px;
-}
-
-.topic-map-controls button {
+.topic-map-zoom button {
     min-width: 2rem;
     background: var(--surface);
     color: var(--ink-soft);
     border-color: var(--line-strong);
 }
 
-.topic-map-controls button:hover {
+.topic-map-zoom button:hover {
     background: var(--surface-hover);
     color: var(--ink);
 }
 
-.topic-map-controls input {
-    max-width: 14rem;
-    font-size: 0.85rem;
-}
-
 .topic-map-pick-info {
-    margin: 0;
+    margin: 4px 0 0;
     padding: 2px 6px;
     background: var(--surface);
     border-radius: var(--radius-sm);
+}
+
+.topic-map-suggest {
+    position: fixed;
+    z-index: 10;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    width: min(26rem, 90vw);
+    max-height: 18rem;
+    overflow: auto;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+}
+
+.topic-map-suggest button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 4px 6px;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.topic-map-suggest button:hover,
+.topic-map-suggest button:focus-visible {
+    background: var(--surface-hover);
+}
+
+.topic-map-suggest .tm-swatch {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.topic-map-suggest .meta {
+    margin-left: auto;
 }
 
 .topic-map-hscroll,

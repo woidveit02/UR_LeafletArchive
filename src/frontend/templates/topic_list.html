@@ -7,16 +7,15 @@
         </header>
         {% if map_data.topics %}
         <div class="topic-map-wrap">
-            <div class="topic-map-controls">
-                <div class="topic-map-controls-row">
-                    <input type="text" id="topic-map-pick" list="topic-map-options" autocomplete="off"
-                           placeholder="Thema hervorheben …" aria-label="Thema hervorheben">
-                    <datalist id="topic-map-options">{% for topic in topics %}<option value="{{ topic.title }} ({{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }})">{% endfor %}</datalist>
-                    <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
-                    <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
-                    <button type="button" class="button-small" id="topic-map-reset">Gesamtansicht</button>
-                </div>
+            <div class="topic-map-search">
+                <input type="text" id="topic-map-pick" autocomplete="off"
+                       placeholder="Thema hervorheben …" aria-label="Thema hervorheben">
                 <p class="meta topic-map-pick-info" id="topic-map-pick-info" hidden></p>
+            </div>
+            <div class="topic-map-zoom">
+                <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
+                <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
+                <button type="button" class="button-small" id="topic-map-reset">Gesamtansicht</button>
             </div>
             <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema einfärbt"></canvas>
             <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
@@ -48,7 +47,7 @@
                 <div class="topic-text">
                 <div class="topic-heading">
                     <a href="/leaflets?thema={{ topic.id }}">{{ topic.title }}</a>
-                    <span class="meta">{{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }}</span>
+                    <span class="meta">{{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }}{% if topic.uncertain %}, davon {{ topic.uncertain }} unsicher{% endif %}</span>
                 </div>
                 {% if topic.words %}
                 <p class="topic-words"><span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}</p>
@@ -88,8 +87,8 @@
         const COLORS = ['#4c72b0', '#dd8452', '#55a868', '#c44e52', '#8172b3', '#937860', '#da8bc3',
                        '#ccb974', '#64b5cd', '#2f4b7c', '#a5d233', '#d45087', '#2ca089', '#f0a500',
                        '#7a5195', '#003f5c', '#ef5675', '#665191', '#ffa600', '#488f31'];
-        const toPoints = (rows) => rows.map(([x, y, id, title, issuers, year]) =>
-            ({x, y, url: '/leaflets/' + id, title, issuers, year}));
+        const toPoints = (rows) => rows.map(([x, y, id, title, issuers, year, uncertain]) =>
+            ({x, y, url: '/leaflets/' + id, title, issuers, year, uncertain}));
         const hitAt = (chart, event) => chart.getElementsAtEventForMode(event, 'nearest', {intersect: true}, false)[0];
 
         const picker = document.createElement('ul');
@@ -114,14 +113,15 @@
             topic.className = 'tm-topic';
             const swatch = document.createElement('span');
             swatch.className = 'tm-swatch';
-            swatch.style.background = points[0].dataset.backgroundColor;
+            swatch.style.background = points[0].dataset.color || points[0].dataset.backgroundColor;
             topic.append(swatch, document.createTextNode(points[0].dataset.label));
             tooltipEl.append(topic);
 
             const list = document.createElement('ul');
             points.forEach((p) => {
                 const li = document.createElement('li');
-                li.textContent = p.raw.title + ' · ' + [p.raw.year, p.raw.issuers].filter(Boolean).join(' · ');
+                li.textContent = p.raw.title + ' · '
+                    + [p.raw.year, p.raw.issuers, p.raw.uncertain ? 'unsicher' : null].filter(Boolean).join(' · ');
                 list.append(li);
             });
             tooltipEl.append(list);
@@ -156,13 +156,19 @@
             yRange.min -= pad; yRange.max += pad;
         }
 
+        const colorById = {};
         const chart = new Chart(document.getElementById('topic-map'), {
             type: 'scatter',
             data: {datasets: [
                 {label: 'ohne Thema', data: toPoints(mapData.no_topic),
                  backgroundColor: '#d9dce1', pointRadius: 1.5},
-                ...mapData.topics.map((t, i) => ({label: t.title, id: t.id, data: toPoints(t.points),
-                    backgroundColor: COLORS[i % COLORS.length] + 'cc', pointRadius: 2.5})),
+                ...mapData.topics.map((t, i) => {
+                    const color = COLORS[i % COLORS.length];
+                    colorById[t.id] = color;
+                    return {label: t.title, id: t.id, data: toPoints(t.points), color, pointRadius: 2.5,
+                           // unsure assignments fade out instead of standing out in full color
+                           backgroundColor: (ctx) => color + (ctx.raw && ctx.raw.uncertain ? '55' : 'cc')};
+                }),
             ]},
             options: {
                 maintainAspectRatio: false,
@@ -185,7 +191,8 @@
                     const leaflets = hits.map((h) => c.data.datasets[h.datasetIndex].data[h.index]);
                     if (leaflets.length === 1) { location.href = leaflets[0].url; return; }
                     picker.innerHTML = leaflets.map((l) =>
-                        `<li><a href="${l.url}">${l.title}<span class="meta"> · ${[l.year, l.issuers].filter(Boolean).join(' · ')}</span></a></li>`
+                        `<li><a href="${l.url}">${l.title}<span class="meta"> · ${
+                            [l.year, l.issuers, l.uncertain ? 'unsicher' : null].filter(Boolean).join(' · ')}</span></a></li>`
                     ).join('');
                     picker.style.left = event.native.clientX + 'px';
                     picker.style.top = event.native.clientY + 'px';
@@ -255,15 +262,13 @@
 
         // highlight one topic at a time: its own color, everything else dimmed
         const originalColors = chart.data.datasets.map((d) => d.backgroundColor);
-        const optionText = (t) => `${t.title} (${t.count} ${t.count === 1 ? 'Flugblatt' : 'Flugblätter'})`;
-        const topicByOption = Object.fromEntries(mapData.topics.map((t) => [optionText(t), t]));
+        const sortedTopics = [...mapData.topics].sort((a, b) => b.count - a.count);
         const pickInput = document.getElementById('topic-map-pick');
         const pickInfo = document.getElementById('topic-map-pick-info');
 
-        function highlight(value) {
-            const topic = topicByOption[value];
+        function highlight(topic) {
             chart.data.datasets.forEach((d, i) => {
-                d.backgroundColor = !value || d.id === topic?.id ? originalColors[i] : '#d9dce1';
+                d.backgroundColor = !topic || d.id === topic.id ? originalColors[i] : '#d9dce1';
             });
             chart.update();
             pickInfo.hidden = !topic;
@@ -274,14 +279,46 @@
                 clear.type = 'button';
                 clear.className = 'button-plain';
                 clear.textContent = 'Auswahl aufheben';
-                clear.addEventListener('click', () => { pickInput.value = ''; highlight(''); });
+                clear.addEventListener('click', () => { pickInput.value = ''; suggest.hidden = true; highlight(null); });
                 pickInfo.append(clear);
             }
         }
-        pickInput.addEventListener('input', (e) => {
-            const value = e.target.value;
-            if (value && !(value in topicByOption)) return;  // still typing, not an exact match yet
-            highlight(value);
+
+        // suggestions: always sorted by leaflet count, each with its map color (a native datalist can't show that)
+        const suggest = document.createElement('ul');
+        suggest.className = 'topic-map-suggest';
+        suggest.hidden = true;
+        document.body.append(suggest);
+
+        function showSuggestions() {
+            const q = pickInput.value.trim().toLowerCase();
+            const matches = sortedTopics.filter((t) => !q || t.title.toLowerCase().includes(q));
+            if (!matches.length) { suggest.hidden = true; return; }
+            suggest.innerHTML = matches.map((t) =>
+                `<li><button type="button" data-id="${t.id}"><span class="tm-swatch" style="background:${colorById[t.id]}"></span>`
+                + `${t.title} <span class="meta">${t.count} ${t.count === 1 ? 'Flugblatt' : 'Flugblätter'}</span></button></li>`
+            ).join('');
+            const rect = pickInput.getBoundingClientRect();
+            suggest.style.right = (document.documentElement.clientWidth - rect.right) + 'px';
+            suggest.style.top = rect.bottom + 4 + 'px';
+            suggest.hidden = false;
+        }
+
+        pickInput.addEventListener('focus', showSuggestions);
+        pickInput.addEventListener('input', () => {
+            showSuggestions();
+            if (!pickInput.value.trim()) highlight(null);
+        });
+        suggest.addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-id]');
+            if (!btn) return;
+            const topic = sortedTopics.find((t) => String(t.id) === btn.dataset.id);
+            pickInput.value = topic.title;
+            suggest.hidden = true;
+            highlight(topic);
+        });
+        document.addEventListener('click', (e) => {
+            if (e.target !== pickInput && !suggest.contains(e.target)) suggest.hidden = true;
         });
     </script>
     {% endif %}
