@@ -9,7 +9,7 @@ from starlette.requests import Request
 import backend.app.app as leaflet_app
 from backend.app.database import fillDatabase
 from backend.app.database.base import Base
-from backend.app.database.models import Leaflet, Topic, Volume
+from backend.app.database.models import Leaflet, LeafletIssuer, Organization, Topic, Volume
 
 
 def test_fill_topics_imports_labels_and_uncertain_assignments(
@@ -85,6 +85,7 @@ def test_topic_pages_filter_and_page_through_topic_selection(monkeypatch):
     Base.metadata.create_all(engine)
     test_session = sessionmaker(bind=engine)()
     monkeypatch.setattr(leaflet_app, "session", test_session)
+    monkeypatch.setattr(leaflet_app, "MIN_YEAR_SIZE", 1)  # keep one bucket per year with this little data
     # outside Docker the templates are not mounted into the app folder
     frontend_templates = (
         Path(__file__).resolve().parents[2] / "frontend" / "templates")
@@ -135,7 +136,8 @@ def test_topic_pages_filter_and_page_through_topic_selection(monkeypatch):
     assert "Schlüsselwörter:" in topics_html and "streik, protest" in topics_html
     assert 'href="/leaflets?thema=0&amp;jahr=1967"' in topics_html
     assert 'href="/leaflets?thema=0&amp;jahr=1968"' in topics_html
-    assert "1967: 1 Flugblatt" in topics_html
+    assert "1967: 1 von 1 Flugblättern · 100,0 %" in topics_html  # only leaflet of that year
+    assert "1968: 1 von 2 Flugblättern · 50,0 %" in topics_html  # the other topic's leaflet counts too
 
     query = b"thema=0&jahr=1967"
     year_response = leaflet_app.leaflet_list(
@@ -159,6 +161,65 @@ def test_topic_pages_filter_and_page_through_topic_selection(monkeypatch):
     assert "(unsicher)" in detail_html
     assert "Titel von einem Sprachmodell erzeugt" in detail_html
     assert f'href="/leaflets/{second.id}?thema=0"' in detail_html
+
+    test_session.close()
+    engine.dispose()
+
+
+# Tests if a topic's bars share one scale across all topics (not each on its own), a duplicate
+# copy counts once, and its top issuers leave out "no issuer" and "not in the register".
+def test_topic_bars_share_one_scale_and_list_top_issuers(monkeypatch):
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    test_session = sessionmaker(bind=engine)()
+    monkeypatch.setattr(leaflet_app, "session", test_session)
+    monkeypatch.setattr(leaflet_app, "MIN_YEAR_SIZE", 1)
+
+    big = Topic(id=10, title="Großes Thema", source="llm_label", words=[])
+    small = Topic(id=11, title="Kleines Thema", source="llm_label", words=[])
+    volume = Volume(vz=1, stem="sample", label="Band 1", year=2000)
+    asta = Organization(id="asta", name="AStA")
+    test_session.add_all([big, small, volume, asta])
+    test_session.flush()
+    # big: three leaflets of the year, one of them doubled (a copy, counts once)
+    work1 = Leaflet(volume_id=volume.id, start_page=1, end_page=1, topic_id=10, copy_group=1)
+    work1_copy = Leaflet(volume_id=volume.id, start_page=2, end_page=2, topic_id=10, copy_group=1)
+    work2 = Leaflet(volume_id=volume.id, start_page=3, end_page=3, topic_id=10)
+    work3 = Leaflet(volume_id=volume.id, start_page=4, end_page=4, topic_id=10)
+    # small: one leaflet of the year; plus one leaflet without a topic, also of the year
+    small_leaflet = Leaflet(volume_id=volume.id, start_page=5, end_page=5, topic_id=11)
+    untopiced = Leaflet(volume_id=volume.id, start_page=6, end_page=6)
+    test_session.add_all([work1, work1_copy, work2, work3, small_leaflet, untopiced])
+    test_session.flush()
+    test_session.add_all([
+        LeafletIssuer(leaflet_id=work1.id, role="issuer", surface="AStA", org_id="asta"),
+        LeafletIssuer(leaflet_id=work1_copy.id, role="issuer", surface="AStA", org_id="asta"),
+        LeafletIssuer(leaflet_id=work2.id, role="issuer", surface="AStA", org_id="asta"),
+        LeafletIssuer(leaflet_id=work3.id, role="issuer", surface="Fachschaft X"),  # not in the register
+    ])
+    test_session.commit()
+
+    def request(path):
+        return Request({
+            "type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": "GET",
+            "scheme": "http", "path": path, "raw_path": path.encode(), "query_string": b"",
+            "headers": [], "server": ("test", 80), "client": ("test", 1), "root_path": "",
+            "app": leaflet_app.app, "router": leaflet_app.app.router,
+        })
+
+    frontend_templates = (Path(__file__).resolve().parents[2] / "frontend" / "templates")
+    if frontend_templates.is_dir():
+        monkeypatch.setattr(leaflet_app, "templates", Jinja2Templates(directory=frontend_templates))
+
+    html = leaflet_app.topic_list(request("/themen")).body.decode()
+    assert "Großes Thema</a>\n                    <span class=\"meta\">3 Flugblätter" in html  # the copy counts once
+    assert "2000: 3 von 5 Flugblättern · 60,0 %" in html  # big: 3 of 5 (big, small, untopiced)
+    assert "2000: 1 von 5 Flugblättern · 20,0 %" in html  # small: 1 of 5
+    # the bigger share is the scale's 100 %, the smaller one is sized relative to it, not to its own max
+    assert 'style="height: 100%"' in html and 'style="height: 33%"' in html
+    assert "Häufigste Herausgeber:</span>\n                    <a href=\"/leaflets?thema=10&amp;org=asta\">AStA</a> (2)" in html
+    assert "Fachschaft X" not in html and "nicht im Register" not in html  # not the register's own name, the surface text
+    assert "Häufigste Herausgeber" not in html.split("Kleines Thema")[1].split("</li>")[0]
 
     test_session.close()
     engine.dispose()

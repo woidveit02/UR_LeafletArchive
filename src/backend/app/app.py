@@ -228,44 +228,70 @@ def date_sort_key(item):
     return item['year']
 
 
+def text_sort_key(text):
+    """Text without leading quotes or dashes, case-insensitive, Ä sorted as A."""
+    text = unicodedata.normalize('NFD', re.sub(r'^\W+', '', text or ''))
+    return ''.join(c for c in text if not unicodedata.combining(c)).casefold()
+
+
 def title_sort_key(item):
-    """Title without leading quotes or dashes, case-insensitive, Ä sorted as A."""
-    title = unicodedata.normalize('NFD', re.sub(r'^\W+', '', item['leaflet'].display_title or ''))
-    return ''.join(c for c in title if not unicodedata.combining(c)).casefold()
+    return text_sort_key(item['leaflet'].display_title)
 
 
 @app.get("/themen")
-def topic_list(request: Request):
+def topic_list(request: Request, sortierung: str = ''):
+    """Per topic: a bar per year bucket on one shared scale, and its top issuers."""
     logger.info('Opening topic list')
-    topic_year_counts = {}
-    for leaflet, volume_year in session.query(Leaflet, Volume.year).join(
-            Volume, Leaflet.volume_id == Volume.id).filter(
-                Leaflet.topic_id.isnot(None)):
-        year = leaflet_year(leaflet, volume_year)
-        topic_year_counts.setdefault(leaflet.topic_id, Counter())[year] += 1
+    items = unique(faceted_items([])[0])
+    buckets = year_buckets(Counter(i['year'] for i in items))
+    counts_all = Counter(buckets[i['year']] for i in items)
+    totals = {b: counts_all[b] for b in sorted(counts_all)}
+    by_topic = {}
+    for item in items:
+        by_topic.setdefault(item['leaflet'].topic_id, []).append(item)
+    org_names = {o.id: o.name for o in session.query(Organization).filter(Organization.id.in_(
+        {o for i in items for o in i['orgs'] if o not in SPECIAL}))}
 
-    years = sorted(
-        {year for counts in topic_year_counts.values() for year in counts},
-        key=int)
-    topics = []
+    def year_url(topic_id, bucket):
+        pairs = [('thema', topic_id)]
+        pairs += [('jahr', bucket)] if '/' not in bucket else [('sortierung', 'datum_auf')]
+        return '/leaflets?' + urlencode(pairs)
+
+    rows = []
     for topic in session.query(Topic).order_by(Topic.id):
-        year_counts = topic_year_counts.get(topic.id, Counter())
-        max_count = max(year_counts.values(), default=1)
+        topic_items = by_topic.get(topic.id, [])
+        counts = Counter(buckets[i['year']] for i in topic_items)
+        shares = {b: counts[b] / totals[b] for b in totals if counts[b]}
+        rows.append((topic, topic_items, counts, shares))
+    highest_share = max((s for _, _, _, shares in rows for s in shares.values()), default=1)
+
+    topics = []
+    for topic, topic_items, counts, shares in rows:
+        top_orgs = Counter(o for i in topic_items for o in i['orgs'] if o not in SPECIAL).most_common(3)
         topics.append({
             'id': topic.id,
             'title': topic.title,
             'words': topic.words or [],
             'title_note': TOPIC_TITLE_NOTES.get(topic.source),
-            'count': sum(year_counts.values()),
+            'count': len(topic_items),
+            'top_orgs': [{'label': org_names.get(o, o), 'count': n,
+                         'url': '/leaflets?' + urlencode([('thema', topic.id), ('org', o)])}
+                        for o, n in top_orgs],
             'years': [{
-                'year': year,
-                'count': year_counts.get(year, 0),
-                'height': round(year_counts.get(year, 0) / max_count * 100),
-            } for year in years],
+                'year': b,
+                'count': counts[b],
+                'total': totals[b],
+                'share': f"{shares.get(b, 0) * 100:.1f}".replace('.', ','),
+                'height': round(shares.get(b, 0) / highest_share * 100),
+                'url': year_url(topic.id, b),
+            } for b in totals],
         })
-    topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    if sortierung == 'alpha':
+        topics.sort(key=lambda t: text_sort_key(t['title']))
+    else:
+        topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
     return templates.TemplateResponse(
-        request, "topic_list.html", {"topics": topics, "years": years})
+        request, "topic_list.html", {"topics": topics, "years": list(totals), "sort": sortierung})
 
 
 TREND_TERMS = 4

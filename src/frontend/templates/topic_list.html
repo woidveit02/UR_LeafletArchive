@@ -3,9 +3,27 @@
 {% block content %}
         <header class="page-head page-head-list">
             <h1>Themen</h1>
-            <p class="page-intro">Maschinell gruppierte Themen und ihre Verteilung über die Jahre. Die Titel hat ein Sprachmodell erzeugt. Unsichere Einzelzuordnungen sind auf den Flugblattseiten gekennzeichnet.</p>
+            <p class="page-intro">Ein Sprachmodell hat die Flugblätter nach Textähnlichkeit zu {{ topics | length }} Themen gruppiert und aus den häufigsten Wörtern benannt. Das ist eine Schätzung, keine feste Einteilung. Unsichere Zuordnungen sind auf der Flugblattseite markiert, aber noch nicht korrigierbar.</p>
         </header>
+        <form method="get" action="/themen" class="topic-sort">
+            <label class="sort">Sortiert nach
+                <select name="sortierung" onchange="this.form.submit()">
+                    <option value="" {% if sort != 'alpha' %}selected{% endif %}>Anzahl Flugblätter</option>
+                    <option value="alpha" {% if sort == 'alpha' %}selected{% endif %}>Titel A–Z</option>
+                </select>
+            </label>
+            <noscript><button type="submit" class="button-small">Sortieren</button></noscript>
+        </form>
         <ul class="topic-list">
+            {% if years %}
+            <li class="topic-row topic-row-head" aria-hidden="true">
+                <div class="topic-text"><span class="meta">{{ topics | length }} Themen</span></div>
+                <div class="topic-years"
+                     style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">
+                    {% for year in years %}<span class="topic-year-label">{{ year }}</span>{% endfor %}
+                </div>
+            </li>
+            {% endif %}
             {% for topic in topics %}
             <li class="topic-row">
                 <div class="topic-text">
@@ -16,24 +34,21 @@
                 {% if topic.words %}
                 <p class="topic-words"><span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}</p>
                 {% endif %}
+                {% if topic.top_orgs %}
+                <p class="topic-words"><span class="meta">Häufigste Herausgeber:</span>
+                    {% for o in topic.top_orgs %}<a href="{{ o.url }}">{{ o.label }}</a> ({{ o.count }}){% if not loop.last %}, {% endif %}{% endfor %}</p>
+                {% endif %}
                 </div>
                 {% if years %}
-                <div class="topic-years" aria-label="Jahresverteilung"
+                <div class="topic-years" aria-label="Jahresverteilung, Anteil an allen Flugblättern des Jahres"
                      style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">
                     {% for year in topic.years %}
-                    {% if year.count %}
-                    <a class="topic-year" href="/leaflets?thema={{ topic.id }}&amp;jahr={{ year.year }}"
-                       title="{{ year.year }}: {{ year.count }}"
-                       aria-label="{{ year.year }}: {{ year.count }} {{ 'Flugblatt' if year.count == 1 else 'Flugblätter' }}">
-                        <span class="topic-bar-wrap"><span class="topic-bar" style="height: {{ year.height }}%"></span></span>
+                    <a class="topic-year" href="{{ year.url }}"
+                       title="{{ year.year }}: {{ year.count }} von {{ year.total }} Flugblättern · {{ year.share }} %"
+                       aria-label="{{ year.year }}: {{ year.count }} von {{ year.total }} Flugblättern, {{ year.share }} Prozent">
+                        <span class="topic-bar-wrap"><span class="topic-year-pct">{{ year.share }} %</span><span class="topic-bar" style="height: {{ year.height }}%"></span></span>
                         <span class="topic-year-label">{{ year.year }}</span>
                     </a>
-                    {% else %}
-                    <span class="topic-year" aria-hidden="true">
-                        <span class="topic-bar-wrap"></span>
-                        <span class="topic-year-label">{{ year.year }}</span>
-                    </span>
-                    {% endif %}
                     {% endfor %}
                 </div>
                 {% endif %}
