@@ -303,9 +303,19 @@ def topic_list(request: Request, sortierung: str = ''):
     map_data = {'no_topic': no_topic_points,
                'topics': [{'id': t['id'], 'title': t['title'], 'count': t['count'], 'points': t['points']}
                          for t in topics if t['points']]}
+    uncertain_count = sum(1 for i in items if i['leaflet'].topic_uncertain)
+    no_topic_count = len(by_topic.get(None, []))
+    overview = {
+        'uncertain': uncertain_count,
+        'uncertain_url': '/leaflets?' + urlencode([('unsicher', 'ja')]),
+        'no_topic': no_topic_count,
+        'no_topic_url': '/leaflets?' + urlencode([('thema', NO_TOPIC)]),
+        'certain': len(items) - uncertain_count - no_topic_count,
+    }
     return templates.TemplateResponse(
         request, "topic_list.html",
-        {"topics": topics, "years": list(totals), "sort": sortierung, "map_data": map_data})
+        {"topics": topics, "years": list(totals), "sort": sortierung, "map_data": map_data,
+         "overview": overview})
 
 
 TREND_TERMS = 4
@@ -452,6 +462,7 @@ def facet_labels():
         'thema': lambda t: 'ohne Thema' if t == NO_TOPIC else topics[t].title if t in topics else t,
         'typ': lambda t: DOC_TYPES.get(t, t),
         'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
+        'unsicher': lambda v: 'unsichere Themenzuordnung',
         'q': lambda v: f"„{v}“",
     }
 
@@ -504,6 +515,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
         'types': facet('typ', labels['typ']),
         'series': facet('reihe', str),
         'dates': facet('datum', labels['datum']),
+        'uncertain': facet('unsicher', labels['unsicher']),
     }
 
     # chips above the results, each removes its own parameter
@@ -545,7 +557,7 @@ def passages(items, params):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung')
 
 
 def list_params(request):
@@ -600,6 +612,7 @@ FACETS = {
     'thema': lambda item: [NO_TOPIC if item['leaflet'].topic_id is None
                            else str(item['leaflet'].topic_id)],
     'datum': lambda item: [item['leaflet'].date_type],
+    'unsicher': lambda item: ['ja'] if item['leaflet'].topic_uncertain else [],
 }
 
 

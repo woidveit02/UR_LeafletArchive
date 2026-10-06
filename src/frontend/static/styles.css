@@ -351,7 +351,7 @@ a:hover {
     grid-template-columns: minmax(0, 1fr) 18rem;
     gap: 8px 32px;
     align-items: end;
-    padding: 12px 0;
+    padding: 12px 0 12px 10px;
     border-bottom: 1px solid var(--line);
 }
 
@@ -397,27 +397,135 @@ a:hover {
     color: var(--ink-soft);
 }
 
+.topic-words .meta {
+    font-size: 1em;
+}
+
+.topic-row-highlight {
+    background: var(--surface-hover);
+    box-shadow: inset 3px 0 0 0 var(--accent);
+}
+
 .topic-map-wrap {
-    position: relative;
+    display: flex;
     box-sizing: border-box;
-    height: 800px;
+    height: 900px;
     margin: 12px 0;
-    padding: 0 14px 14px 0;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
     background: var(--surface);
+    overflow: hidden;
 }
 
-.topic-map-search {
+.topic-map-wrap.maximized {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+}
+
+.topic-map-canvas-area {
+    position: relative;
+    flex: 0 0 900px;
+    padding: 0 14px 14px 0;
+}
+
+.topic-map-wrap.maximized .topic-map-canvas-area {
+    flex: 1 1 auto;
+}
+
+.topic-map-legend {
+    flex: 1;
+    min-width: 16rem;
+    margin: 0;
+    padding: 10px;
+    list-style: none;
+    overflow-y: auto;
+    border-left: 1px solid var(--line-strong);
+}
+
+.topic-map-wrap.maximized .topic-map-legend {
+    flex: 0 0 16rem;
+}
+
+body.topic-map-lock-scroll {
+    overflow: hidden;
+}
+
+.topic-map-legend li {
+    margin: 0;
+}
+
+.topic-map-legend button {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: none;
+    font: inherit;
+    font-size: 0.85rem;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.topic-map-legend button:hover {
+    background: var(--surface-hover);
+    border-color: var(--line-strong);
+}
+
+.topic-map-legend button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.topic-map-legend button.active {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+}
+
+.topic-map-legend button.active .tm-title {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.topic-map-legend .tm-swatch {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.topic-map-legend .tm-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topic-map-filters {
     position: absolute;
     top: 8px;
-    right: 22px;
+    left: 14px;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.topic-map-search input {
-    max-width: 14rem;
+.topic-map-filter {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     font-size: 0.85rem;
+    color: var(--ink-soft);
+    cursor: pointer;
 }
 
 .topic-map-zoom {
@@ -441,57 +549,6 @@ a:hover {
 .topic-map-zoom button:hover {
     background: var(--surface-hover);
     color: var(--ink);
-}
-
-.topic-map-pick-info {
-    margin: 4px 0 0;
-    padding: 2px 6px;
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-}
-
-.topic-map-suggest {
-    position: fixed;
-    z-index: 10;
-    margin: 0;
-    padding: 4px;
-    list-style: none;
-    width: min(26rem, 90vw);
-    max-height: 18rem;
-    overflow: auto;
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
-}
-
-.topic-map-suggest button {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    width: 100%;
-    padding: 4px 6px;
-    border: none;
-    background: none;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.topic-map-suggest button:hover,
-.topic-map-suggest button:focus-visible {
-    background: var(--surface-hover);
-}
-
-.topic-map-suggest .tm-swatch {
-    flex: 0 0 auto;
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-}
-
-.topic-map-suggest .meta {
-    margin-left: auto;
 }
 
 .topic-map-hscroll,
@@ -2557,6 +2614,21 @@ a.excerpt:focus-visible {
 
 .active-reset {
     font-size: 0.85rem;
+}
+
+/* the chips are <a> on /leaflets (server-rendered links) but <button> on /themen
+   (client-side toggle); strip the button chrome so both look the same */
+button.active-filter,
+button.active-reset {
+    border: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+button.active-reset {
+    background: none;
+    padding: 0;
+    color: var(--accent);
 }
 
 .facet-head {

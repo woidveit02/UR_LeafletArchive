@@ -5,23 +5,36 @@
             <h1>Themen</h1>
             <p class="page-intro">Ein Sprachmodell hat die Flugblätter nach Textähnlichkeit zu {{ topics | length }} Themen gruppiert und aus den häufigsten Wörtern benannt. Das ist eine Schätzung, keine feste Einteilung. Unsichere Zuordnungen sind auf der Flugblattseite markiert, aber noch nicht korrigierbar.</p>
         </header>
+        <p class="stats-line">
+            <span>{{ overview.certain }} sichere Zuordnung</span><span aria-hidden="true">·</span>
+            <a href="{{ overview.uncertain_url }}">{{ overview.uncertain }} unsichere Zuordnung</a><span aria-hidden="true">·</span>
+            <a href="{{ overview.no_topic_url }}">{{ overview.no_topic }} ohne Thema</a>
+        </p>
         {% if map_data.topics %}
+        <div class="active-filters" id="topic-active-filters" hidden></div>
         <div class="topic-map-wrap">
-            <div class="topic-map-search">
-                <input type="text" id="topic-map-pick" autocomplete="off"
-                       placeholder="Thema hervorheben …" aria-label="Thema hervorheben">
-                <p class="meta topic-map-pick-info" id="topic-map-pick-info" hidden></p>
+            <div class="topic-map-canvas-area">
+                <div class="topic-map-filters">
+                    <label class="topic-map-filter">
+                        <input type="checkbox" id="topic-map-show-uncertain"> Unsichere anzeigen
+                    </label>
+                    <label class="topic-map-filter">
+                        <input type="checkbox" id="topic-map-show-no-topic"> Ohne Thema anzeigen
+                    </label>
+                </div>
+                <div class="topic-map-zoom">
+                    <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
+                    <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
+                    <button type="button" class="button-small" id="topic-map-reset">Ansicht zurücksetzen</button>
+                    <button type="button" class="button-small" id="topic-map-fullscreen">Vollbild</button>
+                </div>
+                <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema einfärbt"></canvas>
+                <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
+                <div class="topic-map-vscroll"><div class="topic-map-thumb" id="topic-map-vthumb"></div></div>
             </div>
-            <div class="topic-map-zoom">
-                <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
-                <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
-                <button type="button" class="button-small" id="topic-map-reset">Gesamtansicht</button>
-            </div>
-            <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema einfärbt"></canvas>
-            <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
-            <div class="topic-map-vscroll"><div class="topic-map-thumb" id="topic-map-vthumb"></div></div>
+            <ul class="topic-map-legend" id="topic-map-legend"></ul>
         </div>
-        <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung. Scrollen zoomt, Ziehen verschiebt den Ausschnitt.</p>
+        <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung. Scrollen zoomt, Ziehen verschiebt den Ausschnitt. In der Legende rechts lassen sich Themen zum Hervorheben an- und abwählen.</p>
         {% endif %}
         <form method="get" action="/themen" class="topic-sort">
             <label class="sort">Sortiert nach
@@ -43,7 +56,7 @@
             </li>
             {% endif %}
             {% for topic in topics %}
-            <li class="topic-row">
+            <li class="topic-row" data-id="{{ topic.id }}">
                 <div class="topic-text">
                 <div class="topic-heading">
                     <a href="/leaflets?thema={{ topic.id }}">{{ topic.title }}</a>
@@ -138,68 +151,99 @@
         }
 
         // an isotropic view: 1 UMAP unit covers the same pixel distance on both axes,
-        // otherwise a wide, short canvas visually squashes the vertical distances
+        // otherwise a wide, short canvas visually squashes the vertical distances.
+        // factored out so fullscreen (different aspect ratio) can recompute it.
         const allXY = mapData.no_topic.concat(...mapData.topics.map((t) => t.points));
         const dataXMin = Math.min(...allXY.map((p) => p[0])), dataXMax = Math.max(...allXY.map((p) => p[0]));
         const dataYMin = Math.min(...allXY.map((p) => p[1])), dataYMax = Math.max(...allXY.map((p) => p[1]));
-        const wrapEl = document.querySelector('.topic-map-wrap');
-        const wrapStyle = getComputedStyle(wrapEl);
-        const plotW = wrapEl.clientWidth - parseFloat(wrapStyle.paddingRight);
-        const plotH = wrapEl.clientHeight - parseFloat(wrapStyle.paddingBottom);
-        const dataAspect = (dataXMax - dataXMin) / (dataYMax - dataYMin), canvasAspect = plotW / plotH;
-        const xRange = {min: dataXMin, max: dataXMax}, yRange = {min: dataYMin, max: dataYMax};
-        if (canvasAspect > dataAspect) {
-            const pad = ((dataYMax - dataYMin) * canvasAspect - (dataXMax - dataXMin)) / 2;
-            xRange.min -= pad; xRange.max += pad;
-        } else {
-            const pad = ((dataXMax - dataXMin) / canvasAspect - (dataYMax - dataYMin)) / 2;
-            yRange.min -= pad; yRange.max += pad;
+        const wrapEl = document.querySelector('.topic-map-canvas-area');
+
+        function isotropicRange() {
+            const wrapStyle = getComputedStyle(wrapEl);
+            const plotW = wrapEl.clientWidth - parseFloat(wrapStyle.paddingRight);
+            const plotH = wrapEl.clientHeight - parseFloat(wrapStyle.paddingBottom);
+            const dataAspect = (dataXMax - dataXMin) / (dataYMax - dataYMin), canvasAspect = plotW / plotH;
+            const xRange = {min: dataXMin, max: dataXMax}, yRange = {min: dataYMin, max: dataYMax};
+            if (canvasAspect > dataAspect) {
+                const pad = ((dataYMax - dataYMin) * canvasAspect - (dataXMax - dataXMin)) / 2;
+                xRange.min -= pad; xRange.max += pad;
+            } else {
+                const pad = ((dataXMax - dataXMin) / canvasAspect - (dataYMax - dataYMin)) / 2;
+                yRange.min -= pad; yRange.max += pad;
+            }
+            // a touch more margin so the overview isn't cropped right at the outermost points
+            const OVERVIEW_MARGIN = 0.04;
+            const xPad = (xRange.max - xRange.min) * OVERVIEW_MARGIN;
+            const yPad = (yRange.max - yRange.min) * OVERVIEW_MARGIN;
+            xRange.min -= xPad; xRange.max += xPad;
+            yRange.min -= yPad; yRange.max += yPad;
+            return {xRange, yRange};
         }
+        const {xRange, yRange} = isotropicRange();
 
         const colorById = {};
-        const chart = new Chart(document.getElementById('topic-map'), {
-            type: 'scatter',
-            data: {datasets: [
-                {label: 'ohne Thema', data: toPoints(mapData.no_topic),
-                 backgroundColor: '#d9dce1', pointRadius: 1.5},
-                ...mapData.topics.map((t, i) => {
-                    const color = COLORS[i % COLORS.length];
-                    colorById[t.id] = color;
-                    return {label: t.title, id: t.id, data: toPoints(t.points), color, pointRadius: 2.5,
-                           // unsure assignments fade out instead of standing out in full color
-                           backgroundColor: (ctx) => color + (ctx.raw && ctx.raw.uncertain ? '55' : 'cc')};
-                }),
-            ]},
-            options: {
-                maintainAspectRatio: false,
-                interaction: {mode: 'point', intersect: true},
-                scales: {x: {display: false, ...xRange}, y: {display: false, ...yRange}},
-                plugins: {
-                    legend: {display: false},
-                    tooltip: {enabled: false, external: externalTooltip},
-                    zoom: {
-                        pan: {enabled: true, mode: 'xy', onPanComplete: ({chart: c}) => updateScrollbars(c)},
-                        zoom: {wheel: {enabled: true}, pinch: {enabled: true}, mode: 'xy',
-                              onZoomComplete: ({chart: c}) => updateScrollbars(c)},
-                        limits: {x: {min: 'original', max: 'original'}, y: {min: 'original', max: 'original'}},
+        mapData.topics.forEach((t, i) => { colorById[t.id] = COLORS[i % COLORS.length]; });
+
+        // a factory, not a one-off: rebuilt from scratch after the maximize toggle instead of
+        // resized in place, since Chart.js' own resize/ResizeObserver pipeline kept leaving the
+        // canvas's internal pixel buffer out of sync with its new CSS size on that transition
+        // (stretched/squashed, washed-out colors) no matter which resize hook it was driven from.
+        // A fresh instance always measures its container correctly at construction time.
+        function buildChart() {
+            return new Chart(document.getElementById('topic-map'), {
+                type: 'scatter',
+                data: {datasets: [
+                    {label: 'ohne Thema', data: toPoints(mapData.no_topic),
+                     backgroundColor: '#d9dce1', pointRadius: 1.5},
+                    ...mapData.topics.map((t) => {
+                        const color = colorById[t.id];
+                        return {label: t.title, id: t.id, data: toPoints(t.points), color, pointRadius: 2.5,
+                               // unsure assignments fade out instead of standing out in full color
+                               backgroundColor: (ctx) => color + (ctx.raw && ctx.raw.uncertain ? '55' : 'cc')};
+                    }),
+                ]},
+                options: {
+                    maintainAspectRatio: false,
+                    // zoom/pan redraw on every wheel tick and pointer move; animated transitions
+                    // between those (Chart.js' default) make it feel laggy instead of direct
+                    animation: false,
+                    interaction: {mode: 'point', intersect: true},
+                    scales: {x: {display: false, ...isotropicRange().xRange}, y: {display: false, ...isotropicRange().yRange}},
+                    plugins: {
+                        legend: {display: false},
+                        tooltip: {enabled: false, external: externalTooltip},
+                        zoom: {
+                            pan: {enabled: true, mode: 'xy', onPanComplete: ({chart: c}) => updateScrollbars(c)},
+                            zoom: {wheel: {enabled: true}, pinch: {enabled: true}, mode: 'xy',
+                                  onZoomComplete: ({chart: c}) => updateScrollbars(c)},
+                            limits: {x: {...isotropicRange().xRange}, y: {...isotropicRange().yRange}},
+                        },
+                    },
+                    onHover: (event, _, c) => {
+                        if (isDragging) return;
+                        const hit = hitAt(c, event);
+                        c.canvas.style.cursor = hit ? 'pointer' : 'default';
+                        const topic = hit && mapData.topics.find((t) => t.id === c.data.datasets[hit.datasetIndex].id);
+                        previewHighlight(topic || null);
+                    },
+                    onClick: (event, _, c) => {
+                        const hits = c.getElementsAtEventForMode(event, 'point', {intersect: true}, false);
+                        if (!hits.length) return;
+                        const leaflets = hits.map((h) => c.data.datasets[h.datasetIndex].data[h.index]);
+                        if (leaflets.length === 1) { location.href = leaflets[0].url; return; }
+                        picker.innerHTML = leaflets.map((l) =>
+                            `<li><a href="${l.url}">${l.title}<span class="meta"> · ${
+                                [l.year, l.issuers, l.uncertain ? 'unsicher' : null].filter(Boolean).join(' · ')}</span></a></li>`
+                        ).join('');
+                        picker.style.left = event.native.clientX + 'px';
+                        picker.style.top = event.native.clientY + 'px';
+                        picker.hidden = false;
                     },
                 },
-                onHover: (event, _, c) => { c.canvas.style.cursor = hitAt(c, event) ? 'pointer' : 'default'; },
-                onClick: (event, _, c) => {
-                    const hits = c.getElementsAtEventForMode(event, 'point', {intersect: true}, false);
-                    if (!hits.length) return;
-                    const leaflets = hits.map((h) => c.data.datasets[h.datasetIndex].data[h.index]);
-                    if (leaflets.length === 1) { location.href = leaflets[0].url; return; }
-                    picker.innerHTML = leaflets.map((l) =>
-                        `<li><a href="${l.url}">${l.title}<span class="meta"> · ${
-                            [l.year, l.issuers, l.uncertain ? 'unsicher' : null].filter(Boolean).join(' · ')}</span></a></li>`
-                    ).join('');
-                    picker.style.left = event.native.clientX + 'px';
-                    picker.style.top = event.native.clientY + 'px';
-                    picker.hidden = false;
-                },
-            },
-        });
+            });
+        }
+
+        let chart = buildChart();
 
         // scrollbar thumbs mirror the zoomed/panned extent of the original (locked) axis range
         const original = {x: {...chart.scales.x}, y: {...chart.scales.y}};
@@ -209,11 +253,19 @@
         function updateScrollbars(c) {
             const ox = original.x, oy = original.y, x = c.scales.x, y = c.scales.y;
             const xSpan = ox.max - ox.min, ySpan = oy.max - oy.min;
-            hThumb.style.left = (x.min - ox.min) / xSpan * 100 + '%';
-            hThumb.style.width = (x.max - x.min) / xSpan * 100 + '%';
-            // the y axis runs low-to-high bottom-to-top; the track runs top-to-bottom like the canvas
-            vThumb.style.top = (oy.max - y.max) / ySpan * 100 + '%';
-            vThumb.style.height = (y.max - y.min) / ySpan * 100 + '%';
+            // at the full (locked) extent there is nothing to scroll: hide the track instead of a full-width thumb
+            const xFull = x.max - x.min >= xSpan - 1e-6, yFull = y.max - y.min >= ySpan - 1e-6;
+            hThumb.parentElement.hidden = xFull;
+            vThumb.parentElement.hidden = yFull;
+            if (!xFull) {
+                hThumb.style.left = (x.min - ox.min) / xSpan * 100 + '%';
+                hThumb.style.width = (x.max - x.min) / xSpan * 100 + '%';
+            }
+            if (!yFull) {
+                // the y axis runs low-to-high bottom-to-top; the track runs top-to-bottom like the canvas
+                vThumb.style.top = (oy.max - y.max) / ySpan * 100 + '%';
+                vThumb.style.height = (y.max - y.min) / ySpan * 100 + '%';
+            }
         }
         updateScrollbars(chart);
 
@@ -228,10 +280,14 @@
                     const pos = axis === 'x' ? e.clientX : e.clientY;
                     const trackDelta = pos - lastPos;
                     lastPos = pos;
-                    // a scrollbar moves the view the same way the thumb moves: the opposite of dragging the content itself
+                    // a scrollbar moves the view the same way the thumb moves: the opposite of dragging the content itself.
+                    // the magnitude comes from the value delta (zoom-aware, via the scale's current pixel-per-value
+                    // ratio), but the sign must follow trackDelta directly: getPixelForValue() is inverted for the
+                    // y-axis (larger data value -> smaller screen pixel), which would otherwise flip only that axis
                     const scale = chart.scales[axis];
                     const valueDelta = trackDelta / trackLength * (original[axis].max - original[axis].min);
-                    const pixelDelta = scale.getPixelForValue(scale.min + valueDelta) - scale.getPixelForValue(scale.min);
+                    const pixelDelta = Math.abs(scale.getPixelForValue(scale.min + valueDelta) - scale.getPixelForValue(scale.min))
+                        * Math.sign(trackDelta);
                     chart.pan({[axis]: -pixelDelta}, undefined, 'none');
                     updateScrollbars(chart);
                 }
@@ -247,6 +303,42 @@
         dragThumb(hThumb, hThumb.parentElement, 'x');
         dragThumb(vThumb, vThumb.parentElement, 'y');
 
+        // chartjs-plugin-zoom's own drag-to-pan needs Hammer.js, which isn't loaded here
+        // (only wheel/pinch zoom use plain DOM events) - so left-button drag is done by hand
+        let dragMoved = false;
+        let isDragging = false;
+        chart.canvas.addEventListener('click', (e) => {
+            if (dragMoved) { e.stopPropagation(); dragMoved = false; }
+        }, true);
+        chart.canvas.addEventListener('pointerdown', (down) => {
+            if (down.button !== 0) return;
+            let last = {x: down.clientX, y: down.clientY};
+            dragMoved = false;
+
+            function move(e) {
+                const dx = e.clientX - last.x, dy = e.clientY - last.y;
+                last = {x: e.clientX, y: e.clientY};
+                if (!dragMoved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+                    dragMoved = true;
+                    isDragging = true;
+                    chart.canvas.style.cursor = 'grabbing';
+                }
+                if (dragMoved) {
+                    chart.pan({x: dx, y: dy}, undefined, 'none');
+                    updateScrollbars(chart);
+                }
+            }
+
+            function up() {
+                isDragging = false;
+                chart.canvas.style.cursor = 'default';
+                document.removeEventListener('pointermove', move);
+                document.removeEventListener('pointerup', up);
+            }
+            document.addEventListener('pointermove', move);
+            document.addEventListener('pointerup', up);
+        });
+
         document.getElementById('topic-map-reset').addEventListener('click', () => {
             chart.resetZoom();
             updateScrollbars(chart);
@@ -260,66 +352,135 @@
             updateScrollbars(chart);
         });
 
-        // highlight one topic at a time: its own color, everything else dimmed
-        const originalColors = chart.data.datasets.map((d) => d.backgroundColor);
-        const sortedTopics = [...mapData.topics].sort((a, b) => b.count - a.count);
-        const pickInput = document.getElementById('topic-map-pick');
-        const pickInfo = document.getElementById('topic-map-pick-info');
+        // "Vollbild" only maximizes within the browser window (position: fixed over the
+        // page), not the OS-level Fullscreen API: no browser-chrome takeover, no permission prompt.
+        const mapWrapEl = document.querySelector('.topic-map-wrap');
+        const fullscreenBtn = document.getElementById('topic-map-fullscreen');
 
-        function highlight(topic) {
+        function setMaximized(on) {
+            mapWrapEl.classList.toggle('maximized', on);
+            document.body.classList.toggle('topic-map-lock-scroll', on);
+            fullscreenBtn.textContent = on ? 'Vollbild verlassen' : 'Vollbild';
+            // double rAF: wait for the final layout, including a page scrollbar that can
+            // reappear a frame after the flex/position change (exiting unlocks body scroll)
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                chart.destroy();
+                chart = buildChart();
+                original.x = {...chart.scales.x};
+                original.y = {...chart.scales.y};
+                applyFilters();
+                updateScrollbars(chart);
+            }));
+        }
+        fullscreenBtn.addEventListener('click', () => setMaximized(!mapWrapEl.classList.contains('maximized')));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mapWrapEl.classList.contains('maximized')) setMaximized(false);
+        });
+
+        // highlighting is a legend function: click toggles a topic in/out of the active
+        // set (multiple at once), hovering a row/point/legend entry previews one topic
+        // and falls back to the active set on mouseleave.
+        const originalColors = chart.data.datasets.map((d) => d.backgroundColor);
+        const activeTopics = new Set();
+
+        function render(ids) {
+            const dim = ids && ids.size > 0;
             chart.data.datasets.forEach((d, i) => {
-                d.backgroundColor = !topic || d.id === topic.id ? originalColors[i] : '#d9dce1';
+                d.backgroundColor = !dim || ids.has(d.id) ? originalColors[i] : '#d9dce1';
             });
             chart.update();
-            pickInfo.hidden = !topic;
-            if (topic) {
-                pickInfo.innerHTML = '';
-                pickInfo.append(`${topic.count} ${topic.count === 1 ? 'Flugblatt' : 'Flugblätter'} · `);
-                const clear = document.createElement('button');
-                clear.type = 'button';
-                clear.className = 'button-plain';
-                clear.textContent = 'Auswahl aufheben';
-                clear.addEventListener('click', () => { pickInput.value = ''; suggest.hidden = true; highlight(null); });
-                pickInfo.append(clear);
+            document.querySelectorAll('.topic-row-highlight').forEach((el) => el.classList.remove('topic-row-highlight'));
+            document.querySelectorAll('.topic-map-legend button.active').forEach((el) => el.classList.remove('active'));
+            if (dim) {
+                ids.forEach((id) => {
+                    const row = document.querySelector(`.topic-row[data-id="${id}"]`);
+                    if (row) row.classList.add('topic-row-highlight');
+                    const btn = document.querySelector(`.topic-map-legend button[data-id="${id}"]`);
+                    if (btn) btn.classList.add('active');
+                });
             }
         }
 
-        // suggestions: always sorted by leaflet count, each with its map color (a native datalist can't show that)
-        const suggest = document.createElement('ul');
-        suggest.className = 'topic-map-suggest';
-        suggest.hidden = true;
-        document.body.append(suggest);
+        const refresh = () => render(activeTopics);
+        // hovering previews on top of the active selection instead of replacing it,
+        // so a multi-selection doesn't visually disappear while the mouse passes over another topic
+        const previewHighlight = (topic) => render(topic ? new Set([...activeTopics, topic.id]) : activeTopics);
 
-        function showSuggestions() {
-            const q = pickInput.value.trim().toLowerCase();
-            const matches = sortedTopics.filter((t) => !q || t.title.toLowerCase().includes(q));
-            if (!matches.length) { suggest.hidden = true; return; }
-            suggest.innerHTML = matches.map((t) =>
-                `<li><button type="button" data-id="${t.id}"><span class="tm-swatch" style="background:${colorById[t.id]}"></span>`
-                + `${t.title} <span class="meta">${t.count} ${t.count === 1 ? 'Flugblatt' : 'Flugblätter'}</span></button></li>`
-            ).join('');
-            const rect = pickInput.getBoundingClientRect();
-            suggest.style.right = (document.documentElement.clientWidth - rect.right) + 'px';
-            suggest.style.top = rect.bottom + 4 + 'px';
-            suggest.hidden = false;
+        // "aktive Themen" strip above the map, same look as the active-filter pills on /leaflets
+        const activeFiltersEl = document.getElementById('topic-active-filters');
+
+        function renderActiveChips() {
+            activeFiltersEl.hidden = activeTopics.size === 0;
+            if (!activeTopics.size) { activeFiltersEl.innerHTML = ''; return; }
+            activeFiltersEl.innerHTML = [...activeTopics].map((id) => {
+                const t = mapData.topics.find((x) => x.id === id);
+                return `<button type="button" class="active-filter" data-id="${id}" title="Entfernen">${t.title} <span aria-hidden="true">×</span></button>`;
+            }).join('') + '<button type="button" class="active-reset">Alle zurücksetzen</button>';
+            activeFiltersEl.querySelectorAll('button.active-filter').forEach((btn) => {
+                const topic = mapData.topics.find((t) => String(t.id) === btn.dataset.id);
+                btn.addEventListener('click', () => toggleTopic(topic));
+            });
+            activeFiltersEl.querySelector('.active-reset').addEventListener('click', () => {
+                activeTopics.clear();
+                document.querySelectorAll('.topic-map-legend button[aria-pressed="true"]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+                refresh();
+                renderActiveChips();
+            });
         }
 
-        pickInput.addEventListener('focus', showSuggestions);
-        pickInput.addEventListener('input', () => {
-            showSuggestions();
-            if (!pickInput.value.trim()) highlight(null);
+        function toggleTopic(topic) {
+            if (activeTopics.has(topic.id)) activeTopics.delete(topic.id);
+            else activeTopics.add(topic.id);
+            document.querySelector(`.topic-map-legend button[data-id="${topic.id}"]`)
+                ?.setAttribute('aria-pressed', String(activeTopics.has(topic.id)));
+            refresh();
+            renderActiveChips();
+        }
+
+        mapData.topics.forEach((topic) => {
+            const row = document.querySelector(`.topic-row[data-id="${topic.id}"]`);
+            if (!row) return;
+            row.addEventListener('mouseenter', () => previewHighlight(topic));
+            row.addEventListener('mouseleave', () => previewHighlight(null));
         });
-        suggest.addEventListener('click', (e) => {
-            const btn = e.target.closest('button[data-id]');
-            if (!btn) return;
-            const topic = sortedTopics.find((t) => String(t.id) === btn.dataset.id);
-            pickInput.value = topic.title;
-            suggest.hidden = true;
-            highlight(topic);
-        });
-        document.addEventListener('click', (e) => {
-            if (e.target !== pickInput && !suggest.contains(e.target)) suggest.hidden = true;
-        });
+
+        // legend next to the map: title, color, count; click toggles that topic's highlight.
+        // a real <button> gives native hover/focus/keyboard affordance for free.
+        const legendEl = document.getElementById('topic-map-legend');
+        const showUncertainEl = document.getElementById('topic-map-show-uncertain');
+        const showNoTopicEl = document.getElementById('topic-map-show-no-topic');
+        const visibleCount = (t) => t.points.filter((p) => showUncertainEl.checked || !p[6]).length;
+
+        // sorted by how many points are actually visible, so the order follows the
+        // same filters as the counts instead of staying pinned to the unfiltered total
+        function renderLegend() {
+            const order = [...mapData.topics].sort((a, b) => visibleCount(b) - visibleCount(a));
+            legendEl.innerHTML = order.map((t) =>
+                `<li><button type="button" data-id="${t.id}" aria-pressed="${activeTopics.has(t.id)}">`
+                + `<span class="tm-swatch" style="background:${colorById[t.id]}"></span>`
+                + `<span class="tm-title">${t.title}</span>`
+                + `<span class="meta tm-count">${visibleCount(t)}</span></button></li>`
+            ).join('');
+            legendEl.querySelectorAll('button').forEach((btn) => {
+                const topic = mapData.topics.find((t) => String(t.id) === btn.dataset.id);
+                btn.addEventListener('mouseenter', () => previewHighlight(topic));
+                btn.addEventListener('mouseleave', () => previewHighlight(null));
+                btn.addEventListener('click', () => toggleTopic(topic));
+            });
+            refresh();
+        }
+
+        function applyFilters() {
+            const showUncertain = showUncertainEl.checked;
+            const keep = (points) => points.filter((p) => showUncertain || !p[6]);
+            chart.data.datasets[0].data = showNoTopicEl.checked ? toPoints(keep(mapData.no_topic)) : [];
+            mapData.topics.forEach((t, i) => { chart.data.datasets[i + 1].data = toPoints(keep(t.points)); });
+            chart.update();
+            renderLegend();
+        }
+        showUncertainEl.addEventListener('change', applyFilters);
+        showNoTopicEl.addEventListener('change', applyFilters);
+        applyFilters();
     </script>
     {% endif %}
 {% endblock %}
