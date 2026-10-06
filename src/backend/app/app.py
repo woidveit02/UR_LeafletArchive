@@ -240,7 +240,7 @@ def title_sort_key(item):
 
 @app.get("/themen")
 def topic_list(request: Request, sortierung: str = ''):
-    """Per topic: a bar per year bucket on one shared scale, and its top issuers."""
+    """Per topic: a bar per year bucket on one shared scale and its top issuers, plus a shared map of all topics."""
     logger.info('Opening topic list')
     items = unique(faceted_items([])[0])
     buckets = year_buckets(Counter(i['year'] for i in items))
@@ -251,6 +251,13 @@ def topic_list(request: Request, sortierung: str = ''):
         by_topic.setdefault(item['leaflet'].topic_id, []).append(item)
     org_names = {o.id: o.name for o in session.query(Organization).filter(Organization.id.in_(
         {o for i in items for o in i['orgs'] if o not in SPECIAL}))}
+
+    def point(i):
+        issuers = ', '.join(org_names[o] for o in i['orgs'] if o in org_names)
+        return [i['leaflet'].x, i['leaflet'].y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year']]
+
+    no_topic_points = [point(i) for i in items
+                      if i['leaflet'].topic_id is None and i['leaflet'].x is not None]
 
     def year_url(topic_id, bucket):
         pairs = [('thema', topic_id)]
@@ -285,13 +292,18 @@ def topic_list(request: Request, sortierung: str = ''):
                 'height': round(shares.get(b, 0) / highest_share * 100),
                 'url': year_url(topic.id, b),
             } for b in totals],
+            'points': [point(i) for i in topic_items if i['leaflet'].x is not None],
         })
     if sortierung == 'alpha':
         topics.sort(key=lambda t: text_sort_key(t['title']))
     else:
         topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    map_data = {'no_topic': no_topic_points,
+               'topics': [{'id': t['id'], 'title': t['title'], 'count': t['count'], 'points': t['points']}
+                         for t in topics if t['points']]}
     return templates.TemplateResponse(
-        request, "topic_list.html", {"topics": topics, "years": list(totals), "sort": sortierung})
+        request, "topic_list.html",
+        {"topics": topics, "years": list(totals), "sort": sortierung, "map_data": map_data})
 
 
 TREND_TERMS = 4
@@ -387,6 +399,7 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
                        for s, n, o in shares],
         'topics': [{'label': titles.get(t, str(t)), 'count': n,
                     'url': list_url(('thema', str(t)))} for t, n in topics],
+        'points': [[i['leaflet'].x, i['leaflet'].y] for i in items if i['leaflet'].x is not None],
     }
 
 
@@ -416,8 +429,9 @@ def trends(request: Request, begriffe: str = ''):
     for row in rows:
         row['remove_url'] = '/trends?' + urlencode(
             [('begriffe', ', '.join(t for t in terms if t != row['term']))] + filters)
-    chart = {'years': list(totals), 'totals': list(totals.values()),
-             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months')}
+    cloud = [[i['leaflet'].x, i['leaflet'].y] for i in everything if i['leaflet'].x is not None]
+    chart = {'years': list(totals), 'totals': list(totals.values()), 'cloud': cloud,
+             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months', 'points')}
                        for r in rows]}
     return templates.TemplateResponse(
         request, "trends.html",

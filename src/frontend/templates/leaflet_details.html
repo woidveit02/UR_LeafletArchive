@@ -162,7 +162,10 @@
             {% if not edit %}
             {% if leaflet.topic %}
             <dt>Thema</dt>
-            <dd>{{ leaflet.topic }} <span class="meta">(maschinell gruppiert{% if leaflet.topic_note %}; {{ leaflet.topic_note }}{% endif %})</span>{% if leaflet.topic_uncertain %} <span class="unresolved">(unsicher)</span>{% endif %}</dd>
+            <dd>{{ leaflet.topic }}
+                {%- set note = "Automatisch nach Textähnlichkeit gruppiert" ~ ("; " ~ leaflet.topic_note if leaflet.topic_note else "") %}
+                {% if leaflet.topic_uncertain %} <span class="unresolved" title="{{ note }}">(unsicher)</span>
+                {% else %} <span class="meta" title="{{ note }}">(automatisch)</span>{% endif %}</dd>
             {% endif %}
             <dt>Band</dt>
             <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, {{ leaflet.pages }}{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>

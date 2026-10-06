@@ -398,6 +398,167 @@ a:hover {
     color: var(--ink-soft);
 }
 
+.topic-map-wrap {
+    position: relative;
+    box-sizing: border-box;
+    height: 800px;
+    margin: 12px 0;
+    padding: 0 14px 14px 0;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.topic-map-controls {
+    position: absolute;
+    top: 8px;
+    right: 22px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.topic-map-controls-row {
+    display: flex;
+    gap: 4px;
+}
+
+.topic-map-controls button {
+    min-width: 2rem;
+    background: var(--surface);
+    color: var(--ink-soft);
+    border-color: var(--line-strong);
+}
+
+.topic-map-controls button:hover {
+    background: var(--surface-hover);
+    color: var(--ink);
+}
+
+.topic-map-controls input {
+    max-width: 14rem;
+    font-size: 0.85rem;
+}
+
+.topic-map-pick-info {
+    margin: 0;
+    padding: 2px 6px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+}
+
+.topic-map-hscroll,
+.topic-map-vscroll {
+    position: absolute;
+    background: var(--surface-muted);
+    border-radius: 3px;
+}
+
+.topic-map-hscroll {
+    left: 0;
+    right: 14px;
+    bottom: 0;
+    height: 10px;
+}
+
+.topic-map-vscroll {
+    top: 0;
+    bottom: 14px;
+    right: 0;
+    width: 10px;
+}
+
+.topic-map-thumb {
+    position: absolute;
+    background: var(--line-strong);
+    border-radius: 3px;
+    cursor: grab;
+}
+
+.topic-map-hscroll .topic-map-thumb {
+    top: 0;
+    bottom: 0;
+}
+
+.topic-map-vscroll .topic-map-thumb {
+    left: 0;
+    right: 0;
+}
+
+.topic-map-thumb:hover,
+.topic-map-thumb:active {
+    background: var(--accent);
+}
+
+.topic-map-tooltip {
+    position: fixed;
+    z-index: 10;
+    pointer-events: none;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    max-width: 22rem;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+}
+
+.topic-map-tooltip .tm-topic {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.topic-map-tooltip .tm-swatch {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.topic-map-tooltip ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-soft);
+}
+
+.topic-map-tooltip li {
+    margin-bottom: 2px;
+}
+
+.topic-map-tooltip .meta {
+    margin: 4px 0 0;
+}
+
+.topic-map-picker {
+    position: fixed;
+    z-index: 10;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    max-width: 22rem;
+    max-height: 16rem;
+    overflow: auto;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+}
+
+.topic-map-picker li a {
+    display: block;
+    padding: 4px 6px;
+    border-radius: 3px;
+}
+
+.topic-map-picker li a:hover,
+.topic-map-picker li a:focus-visible {
+    background: var(--surface-hover);
+}
+
 .topic-years {
     display: grid;
     gap: 4px;

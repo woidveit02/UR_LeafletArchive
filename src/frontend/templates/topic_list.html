@@ -5,6 +5,25 @@
             <h1>Themen</h1>
             <p class="page-intro">Ein Sprachmodell hat die Flugblätter nach Textähnlichkeit zu {{ topics | length }} Themen gruppiert und aus den häufigsten Wörtern benannt. Das ist eine Schätzung, keine feste Einteilung. Unsichere Zuordnungen sind auf der Flugblattseite markiert, aber noch nicht korrigierbar.</p>
         </header>
+        {% if map_data.topics %}
+        <div class="topic-map-wrap">
+            <div class="topic-map-controls">
+                <div class="topic-map-controls-row">
+                    <input type="text" id="topic-map-pick" list="topic-map-options" autocomplete="off"
+                           placeholder="Thema hervorheben …" aria-label="Thema hervorheben">
+                    <datalist id="topic-map-options">{% for topic in topics %}<option value="{{ topic.title }} ({{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }})">{% endfor %}</datalist>
+                    <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
+                    <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
+                    <button type="button" class="button-small" id="topic-map-reset">Gesamtansicht</button>
+                </div>
+                <p class="meta topic-map-pick-info" id="topic-map-pick-info" hidden></p>
+            </div>
+            <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema einfärbt"></canvas>
+            <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
+            <div class="topic-map-vscroll"><div class="topic-map-thumb" id="topic-map-vthumb"></div></div>
+        </div>
+        <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung. Scrollen zoomt, Ziehen verschiebt den Ausschnitt.</p>
+        {% endif %}
         <form method="get" action="/themen" class="topic-sort">
             <label class="sort">Sortiert nach
                 <select name="sortierung" onchange="this.form.submit()">
@@ -57,4 +76,213 @@
             <li class="meta">Keine Themen verfügbar.</li>
             {% endfor %}
         </ul>
+{% endblock %}
+{% block scripts %}
+    {% if map_data.topics %}
+    <script type="application/json" id="topic-map-data">{{ map_data | tojson }}</script>
+    <script src="{{ url_for('static', path='chart.umd.min.js') }}"></script>
+    <script src="{{ url_for('static', path='chartjs-plugin-zoom.min.js') }}"></script>
+    <script>
+        Chart.register(ChartZoom);
+        const mapData = JSON.parse(document.getElementById('topic-map-data').textContent);
+        const COLORS = ['#4c72b0', '#dd8452', '#55a868', '#c44e52', '#8172b3', '#937860', '#da8bc3',
+                       '#ccb974', '#64b5cd', '#2f4b7c', '#a5d233', '#d45087', '#2ca089', '#f0a500',
+                       '#7a5195', '#003f5c', '#ef5675', '#665191', '#ffa600', '#488f31'];
+        const toPoints = (rows) => rows.map(([x, y, id, title, issuers, year]) =>
+            ({x, y, url: '/leaflets/' + id, title, issuers, year}));
+        const hitAt = (chart, event) => chart.getElementsAtEventForMode(event, 'nearest', {intersect: true}, false)[0];
+
+        const picker = document.createElement('ul');
+        picker.className = 'topic-map-picker';
+        picker.hidden = true;
+        document.body.append(picker);
+        document.addEventListener('click', (e) => { if (!picker.contains(e.target)) picker.hidden = true; });
+
+        // custom tooltip: the color belongs to the topic line, leaflets listed below it plain
+        const tooltipEl = document.createElement('div');
+        tooltipEl.className = 'topic-map-tooltip';
+        tooltipEl.hidden = true;
+        document.body.append(tooltipEl);
+
+        function externalTooltip(context) {
+            const tt = context.tooltip;
+            const points = tt.dataPoints || [];
+            if (!tt.opacity || !points.length) { tooltipEl.hidden = true; return; }
+
+            tooltipEl.innerHTML = '';
+            const topic = document.createElement('div');
+            topic.className = 'tm-topic';
+            const swatch = document.createElement('span');
+            swatch.className = 'tm-swatch';
+            swatch.style.background = points[0].dataset.backgroundColor;
+            topic.append(swatch, document.createTextNode(points[0].dataset.label));
+            tooltipEl.append(topic);
+
+            const list = document.createElement('ul');
+            points.forEach((p) => {
+                const li = document.createElement('li');
+                li.textContent = p.raw.title + ' · ' + [p.raw.year, p.raw.issuers].filter(Boolean).join(' · ');
+                list.append(li);
+            });
+            tooltipEl.append(list);
+
+            const hint = document.createElement('p');
+            hint.className = 'meta';
+            hint.textContent = points.length > 1 ? 'Klick zum Auswählen' : 'Klick zeigt das Flugblatt';
+            tooltipEl.append(hint);
+
+            const rect = context.chart.canvas.getBoundingClientRect();
+            tooltipEl.style.left = rect.left + tt.caretX + 10 + 'px';
+            tooltipEl.style.top = rect.top + tt.caretY + 10 + 'px';
+            tooltipEl.hidden = false;
+        }
+
+        // an isotropic view: 1 UMAP unit covers the same pixel distance on both axes,
+        // otherwise a wide, short canvas visually squashes the vertical distances
+        const allXY = mapData.no_topic.concat(...mapData.topics.map((t) => t.points));
+        const dataXMin = Math.min(...allXY.map((p) => p[0])), dataXMax = Math.max(...allXY.map((p) => p[0]));
+        const dataYMin = Math.min(...allXY.map((p) => p[1])), dataYMax = Math.max(...allXY.map((p) => p[1]));
+        const wrapEl = document.querySelector('.topic-map-wrap');
+        const wrapStyle = getComputedStyle(wrapEl);
+        const plotW = wrapEl.clientWidth - parseFloat(wrapStyle.paddingRight);
+        const plotH = wrapEl.clientHeight - parseFloat(wrapStyle.paddingBottom);
+        const dataAspect = (dataXMax - dataXMin) / (dataYMax - dataYMin), canvasAspect = plotW / plotH;
+        const xRange = {min: dataXMin, max: dataXMax}, yRange = {min: dataYMin, max: dataYMax};
+        if (canvasAspect > dataAspect) {
+            const pad = ((dataYMax - dataYMin) * canvasAspect - (dataXMax - dataXMin)) / 2;
+            xRange.min -= pad; xRange.max += pad;
+        } else {
+            const pad = ((dataXMax - dataXMin) / canvasAspect - (dataYMax - dataYMin)) / 2;
+            yRange.min -= pad; yRange.max += pad;
+        }
+
+        const chart = new Chart(document.getElementById('topic-map'), {
+            type: 'scatter',
+            data: {datasets: [
+                {label: 'ohne Thema', data: toPoints(mapData.no_topic),
+                 backgroundColor: '#d9dce1', pointRadius: 1.5},
+                ...mapData.topics.map((t, i) => ({label: t.title, id: t.id, data: toPoints(t.points),
+                    backgroundColor: COLORS[i % COLORS.length] + 'cc', pointRadius: 2.5})),
+            ]},
+            options: {
+                maintainAspectRatio: false,
+                interaction: {mode: 'point', intersect: true},
+                scales: {x: {display: false, ...xRange}, y: {display: false, ...yRange}},
+                plugins: {
+                    legend: {display: false},
+                    tooltip: {enabled: false, external: externalTooltip},
+                    zoom: {
+                        pan: {enabled: true, mode: 'xy', onPanComplete: ({chart: c}) => updateScrollbars(c)},
+                        zoom: {wheel: {enabled: true}, pinch: {enabled: true}, mode: 'xy',
+                              onZoomComplete: ({chart: c}) => updateScrollbars(c)},
+                        limits: {x: {min: 'original', max: 'original'}, y: {min: 'original', max: 'original'}},
+                    },
+                },
+                onHover: (event, _, c) => { c.canvas.style.cursor = hitAt(c, event) ? 'pointer' : 'default'; },
+                onClick: (event, _, c) => {
+                    const hits = c.getElementsAtEventForMode(event, 'point', {intersect: true}, false);
+                    if (!hits.length) return;
+                    const leaflets = hits.map((h) => c.data.datasets[h.datasetIndex].data[h.index]);
+                    if (leaflets.length === 1) { location.href = leaflets[0].url; return; }
+                    picker.innerHTML = leaflets.map((l) =>
+                        `<li><a href="${l.url}">${l.title}<span class="meta"> · ${[l.year, l.issuers].filter(Boolean).join(' · ')}</span></a></li>`
+                    ).join('');
+                    picker.style.left = event.native.clientX + 'px';
+                    picker.style.top = event.native.clientY + 'px';
+                    picker.hidden = false;
+                },
+            },
+        });
+
+        // scrollbar thumbs mirror the zoomed/panned extent of the original (locked) axis range
+        const original = {x: {...chart.scales.x}, y: {...chart.scales.y}};
+        const hThumb = document.getElementById('topic-map-hthumb');
+        const vThumb = document.getElementById('topic-map-vthumb');
+
+        function updateScrollbars(c) {
+            const ox = original.x, oy = original.y, x = c.scales.x, y = c.scales.y;
+            const xSpan = ox.max - ox.min, ySpan = oy.max - oy.min;
+            hThumb.style.left = (x.min - ox.min) / xSpan * 100 + '%';
+            hThumb.style.width = (x.max - x.min) / xSpan * 100 + '%';
+            // the y axis runs low-to-high bottom-to-top; the track runs top-to-bottom like the canvas
+            vThumb.style.top = (oy.max - y.max) / ySpan * 100 + '%';
+            vThumb.style.height = (y.max - y.min) / ySpan * 100 + '%';
+        }
+        updateScrollbars(chart);
+
+        function dragThumb(thumb, track, axis) {
+            thumb.addEventListener('pointerdown', (down) => {
+                down.preventDefault();
+                const trackRect = track.getBoundingClientRect();
+                const trackLength = axis === 'x' ? trackRect.width : trackRect.height;
+                let lastPos = axis === 'x' ? down.clientX : down.clientY;
+
+                function move(e) {
+                    const pos = axis === 'x' ? e.clientX : e.clientY;
+                    const trackDelta = pos - lastPos;
+                    lastPos = pos;
+                    // a scrollbar moves the view the same way the thumb moves: the opposite of dragging the content itself
+                    const scale = chart.scales[axis];
+                    const valueDelta = trackDelta / trackLength * (original[axis].max - original[axis].min);
+                    const pixelDelta = scale.getPixelForValue(scale.min + valueDelta) - scale.getPixelForValue(scale.min);
+                    chart.pan({[axis]: -pixelDelta}, undefined, 'none');
+                    updateScrollbars(chart);
+                }
+
+                function up() {
+                    document.removeEventListener('pointermove', move);
+                    document.removeEventListener('pointerup', up);
+                }
+                document.addEventListener('pointermove', move);
+                document.addEventListener('pointerup', up);
+            });
+        }
+        dragThumb(hThumb, hThumb.parentElement, 'x');
+        dragThumb(vThumb, vThumb.parentElement, 'y');
+
+        document.getElementById('topic-map-reset').addEventListener('click', () => {
+            chart.resetZoom();
+            updateScrollbars(chart);
+        });
+        document.getElementById('topic-map-in').addEventListener('click', () => {
+            chart.zoom(1.2);
+            updateScrollbars(chart);
+        });
+        document.getElementById('topic-map-out').addEventListener('click', () => {
+            chart.zoom(1 / 1.2);
+            updateScrollbars(chart);
+        });
+
+        // highlight one topic at a time: its own color, everything else dimmed
+        const originalColors = chart.data.datasets.map((d) => d.backgroundColor);
+        const optionText = (t) => `${t.title} (${t.count} ${t.count === 1 ? 'Flugblatt' : 'Flugblätter'})`;
+        const topicByOption = Object.fromEntries(mapData.topics.map((t) => [optionText(t), t]));
+        const pickInput = document.getElementById('topic-map-pick');
+        const pickInfo = document.getElementById('topic-map-pick-info');
+
+        function highlight(value) {
+            const topic = topicByOption[value];
+            chart.data.datasets.forEach((d, i) => {
+                d.backgroundColor = !value || d.id === topic?.id ? originalColors[i] : '#d9dce1';
+            });
+            chart.update();
+            pickInfo.hidden = !topic;
+            if (topic) {
+                pickInfo.innerHTML = '';
+                pickInfo.append(`${topic.count} ${topic.count === 1 ? 'Flugblatt' : 'Flugblätter'} · `);
+                const clear = document.createElement('button');
+                clear.type = 'button';
+                clear.className = 'button-plain';
+                clear.textContent = 'Auswahl aufheben';
+                clear.addEventListener('click', () => { pickInput.value = ''; highlight(''); });
+                pickInfo.append(clear);
+            }
+        }
+        pickInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value && !(value in topicByOption)) return;  // still typing, not an exact match yet
+            highlight(value);
+        });
+    </script>
+    {% endif %}
 {% endblock %}
