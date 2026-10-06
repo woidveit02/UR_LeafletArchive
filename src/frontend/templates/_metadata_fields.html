@@ -60,6 +60,15 @@
     {{ automatic(m, 'date') }}
 {%- endmacro %}
 
+{% macro received_field(m) -%}
+    <span class="edit-row">
+        <input type="text" id="received-{{ m.uid }}" name="received" value="{{ m.edit.received if m.edit.received is defined else german_date(m.edit.received_iso) }}" placeholder="TT.MM.JJJJ" aria-describedby="received-hint-{{ m.uid }}">
+        {{ evidence(m, 'received_blocks', m.edit.received_blocks, 'Eingang im Archiv') }}
+    </span>
+    <span class="meta note" id="received-hint-{{ m.uid }}">Datum des Eingangsstempels; leer lassen, wenn das Blatt keinen hat</span>
+    {{ automatic(m, 'received') }}
+{%- endmacro %}
+
 {% macro issuers_field(m) -%}
     <span class="edit-rows">{% for i in m.edit.issuers + [{'name': '', 'blocks': []}] %}{{ issuer_row(m, i) }}{% endfor %}</span>
     <template>{{ issuer_row(m, {'name': '', 'blocks': []}) }}</template>

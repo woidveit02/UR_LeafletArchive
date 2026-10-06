@@ -13,7 +13,7 @@ from .session import session
 
 FIELDS = {"title": "Titel", "date": "Datum", "series": "Reihe",
           "doc_type": "Textsorte", "issuers": "Herausgeber",
-          "signatories": "Unterzeichnende"}
+          "signatories": "Unterzeichnende", "received": "Eingang im Archiv"}
 _lock = threading.Lock()
 
 
@@ -75,6 +75,9 @@ def apply(leaflet, entries):
         elif field == "date":
             leaflet.date_iso, leaflet.date_type = value["iso"], value["type"]
             leaflet.date_blocks, leaflet.date_quote = blocks, quote(leaflet, blocks)
+        elif field == "received":  # a stamp read by hand is certain
+            leaflet.received_date, leaflet.received_uncertain = value, False
+            leaflet.received_blocks, leaflet.received_quote = blocks, quote(leaflet, blocks)
         elif field == "series":
             leaflet.series, leaflet.issue = value["name"], value["issue"]
             leaflet.series_blocks = blocks

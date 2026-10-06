@@ -169,7 +169,8 @@ def automatic_text(leaflet):
             'date': german_date(auto['date_iso']) or auto['date_text'],
             'series': ', '.join(v for v in (auto['series'], auto['issue']) if v),
             'doc_type': DOC_TYPES.get(auto['doc_type'], auto['doc_type']),
-            'issuers': names('issuer'), 'signatories': names('signatory')}
+            'issuers': names('issuer'), 'signatories': names('signatory'),
+            'received': german_date(auto['received_date'])}
     return {f: text[f] for f in leaflet.corrected if f in text}
 
 
@@ -679,6 +680,7 @@ def current_values(leaflet):
             'date_blocks': list(leaflet.date_blocks or []),
             'series': leaflet.series or '', 'issue': leaflet.issue or '',
             'series_blocks': list(leaflet.series_blocks or []),
+            'received_iso': leaflet.received_date or '', 'received_blocks': list(leaflet.received_blocks or []),
             'doc_type': leaflet.doc_type or 'unklar', 'issuers': issuers,
             'signatories': signatories}
 
@@ -721,8 +723,12 @@ def read_metadata_form(leaflet, raw):
 
     form = {k: raw.get(k, [''])[0].strip()
             for k in ('title', 'date', 'date_type', 'series', 'issue', 'doc_type')}
-    for k in ('title', 'date', 'series'):
+    for k in ('title', 'date', 'series', 'received'):
         form[f'{k}_blocks'] = blocks(raw.get(f'{k}_blocks', [''])[0])
+    form['received'] = raw.get('received', [''])[0].strip()
+    form['received_iso'] = german_to_iso(form['received']) if form['received'] else ''
+    if 'received' not in raw:  # a form without the field leaves the stamp as it is
+        form['received_iso'], form['received_blocks'] = leaflet.received_date or '', list(leaflet.received_blocks or [])
     org_ids = {org_label(o): o.id for o in session.query(Organization)}
     form['issuers'] = [{'org': org_ids.get(name), 'name': name, 'blocks': blocks(b)}
                        for name, b in rows('issuer', 'issuer_blocks')]
@@ -736,6 +742,8 @@ def read_metadata_form(leaflet, raw):
     unknown = [i['name'] for i in form['issuers'] if not i['org']]
     if form['date_iso'] is None:
         error = "Datum bitte als TT.MM.JJJJ, MM.JJJJ oder JJJJ angeben, z. B. 17.12.1969."
+    elif form['received_iso'] is None:
+        error = "Eingang bitte als TT.MM.JJJJ, MM.JJJJ oder JJJJ angeben."
     elif form['date_iso'] and form['date_type'] == 'undated':
         error = "Bitte die Art des Datums wählen."
     elif unknown:
@@ -753,12 +761,12 @@ def save_metadata(leaflet, form):
     old = current_values(leaflet)
     changes = []
     for field, keys in (('title', ['title']), ('date', ['date_iso', 'date_type']),
-                        ('series', ['series', 'issue'])):
+                        ('series', ['series', 'issue']), ('received', ['received_iso'])):
         keys = keys + [f'{field}_blocks']
         if [form[k] for k in keys] != [old[k] for k in keys]:
             value = {'date': {'iso': form['date_iso'], 'type': form['date_type']},
-                     'series': {'name': form['series'], 'issue': form['issue']}
-                     }.get(field, form[field])
+                     'series': {'name': form['series'], 'issue': form['issue']},
+                     'received': form['received_iso']}.get(field, form.get(field))
             changes.append((field, value, form[f'{field}_blocks']))
     if form['doc_type'] != old['doc_type']:
         changes.append(('doc_type', form['doc_type'], []))
@@ -1041,7 +1049,8 @@ def shorten(cards):
 
 
 TAKE_KEYS = {'title': ['title'], 'date': ['date_iso', 'date_type'], 'series': ['series', 'issue'],
-             'doc_type': ['doc_type'], 'issuers': ['issuers'], 'signatories': ['signatories']}
+             'doc_type': ['doc_type'], 'issuers': ['issuers'], 'signatories': ['signatories'],
+             'received': ['received_iso']}
 
 
 def field_text(values, field):
@@ -1051,6 +1060,8 @@ def field_text(values, field):
                                       if values['date_iso'] else '']))
     if field == 'series':
         return ' '.join(filter(None, [values['series'], values['issue']]))
+    if field == 'received':
+        return german_date(values['received_iso'])
     if field == 'doc_type':
         return '' if values['doc_type'] == 'unklar' else DOC_TYPES.get(values['doc_type'], '')
     if field in ('issuers', 'signatories'):

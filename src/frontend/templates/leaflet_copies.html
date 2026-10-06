@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Duplikate prüfen – UR Leaflet Archive{% endblock %}
-{% from '_metadata_fields.html' import title_field, date_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
+{% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
 {% macro field(label, value, deviates) %}
 <span class="copy-field"><span class="meta">{{ label }}:</span>
     <span{% if deviates %} class="differs"{% endif %}>{% if value %}{{ value }}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</span></span>
@@ -38,7 +38,7 @@
 {% macro details_section() %}
         <h2>Angaben der Gruppe</h2>
         <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Duplikat etwas
-            anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars. Der Eingangsstempel lässt sich nicht ändern.</p>
+            anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars.</p>
         {{ lists(org_names, series_names) }}
         {% for c in cards if c.id == left %}
         {% set m = details %}
@@ -54,6 +54,7 @@
                     <dt>Unterzeichnende</dt><dd>{{ signatories_field(m) }}{{ offered('signatories') }}</dd>
                     <dt><label for="series-{{ c.id }}">Reihe</label></dt><dd>{{ series_field(m) }}{{ offered('series') }}</dd>
                     <dt><label for="doc_type-{{ c.id }}">Textsorte</label></dt><dd>{{ doc_type_field(m) }}{{ offered('doc_type') }}</dd>
+                    <dt><label for="received-{{ c.id }}">Eingang im Archiv</label></dt><dd>{{ received_field(m) }}{{ offered('received') }}</dd>
                 </dl>
                 <div class="review-actions">
                     <button type="submit" class="button-small">Angaben speichern</button>

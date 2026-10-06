@@ -286,11 +286,17 @@ def test_copy_details(tmp_path, monkeypatch):
     assert a.title_blocks == ["2-1"] and b.title is None and not b.corrected  # the other copies stay as they are
     assert len(corrections.load(corrections_file)) == 2
 
+    form, error = leaflet_app.read_metadata_form(a, posted(a, received="07.04.1969", received_blocks="2-1"))
+    leaflet_app.save_metadata(a, form)  # the stamp can be corrected, with evidence; the form without the field left it alone
+    assert not error and (a.received_date, a.received_uncertain, a.received_blocks) == ("1969-04-07", False, ["2-1"]) and "received" in a.corrected
+    assert "TT.MM.JJJJ" in leaflet_app.read_metadata_form(a, posted(a, received="31.02.1969"))[1]
+    assert len(corrections.load(corrections_file)) == 3
+
     form, error = leaflet_app.read_metadata_form(a, posted(a, date="31.02.1969"))
     assert "TT.MM.JJJJ" in error
     shown = leaflet_app.copy_view(page(f"/leaflets/{a.id}/exemplare"), a, "", True, form, error)
     assert shown.status_code == 400 and 'class="copy-edit" open' in shown.body.decode()
-    assert "31.02.1969" in shown.body.decode() and len(corrections.load(corrections_file)) == 2
+    assert "31.02.1969" in shown.body.decode() and len(corrections.load(corrections_file)) == 3
 
     body = urlencode({k: v[0] for k, v in posted(a, title="Gruppentitel").items()})
     with pytest.raises(HTTPException):  # saved at the main copy only

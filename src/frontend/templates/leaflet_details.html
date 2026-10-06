@@ -19,7 +19,7 @@
             <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Angaben der Gruppe stehen dort.
             <a href="/leaflets/{{ leaflet.id }}/exemplare">Duplikate vergleichen</a></p>
     {% endif %}
-    {% from '_metadata_fields.html' import title_field, date_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
+    {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
     {% set m = {'uid': leaflet.id, 'edit': edit, 'automatic': leaflet.automatic, 'pickable': true} %}
     {# date and issuers: shown in the metadata box and in its folded line #}
     {% macro date_value() -%}
@@ -117,6 +117,10 @@
         <dl class="meta-list">
             <dt>{% if edit %}<label for="doc_type-{{ leaflet.id }}">Textsorte</label>{% else %}Textsorte{% endif %}</dt>
             <dd>{% if edit %}{{ doc_type_field(m) }}{% elif leaflet.doc_type and leaflet.doc_type != 'unklar' %}{{ leaflet.doc_type }}{{ fixed('doc_type') }}{% else %}{{ unknown }}{% endif %}</dd>
+            {% if edit %}
+            <dt><label for="received-{{ leaflet.id }}">Eingang im Archiv</label></dt>
+            <dd>{{ received_field(m) }}</dd>
+            {% endif %}
             {% if not edit %}
             {% if leaflet.topic %}
             <dt>Thema</dt>
@@ -128,7 +132,7 @@
             {% if leaflet.received %}
             <dt>Eingang im Archiv</dt>
             <dd>{{ leaflet.received }} <span class="meta">(Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher{% endif %})</span>
-                {{ beleg('Eingang im Archiv') }}</dd>
+                {{ beleg('Eingang im Archiv') }}{{ fixed('received') }}</dd>
             {% endif %}
             <dt>{{ 'Duplikate' if leaflet.copies_checked else 'Mögliche Duplikate' }}</dt>
             {% if leaflet.group %}
