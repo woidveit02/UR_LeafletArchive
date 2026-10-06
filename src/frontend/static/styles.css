@@ -107,11 +107,13 @@ body {
 
     .topnav {
         width: 100%;
+        flex-wrap: wrap;
         justify-content: space-between;
     }
 
     .topnav a {
-        padding: 6px 8px;
+        padding: 6px 4px;
+        font-size: 0.875rem;
     }
 
     .app {
@@ -896,6 +898,156 @@ a.topic-year:focus-visible .topic-bar {
 
 .topic-year-label {
     display: block;
+}
+
+/* trends page: comparison chart, then one profile per term */
+.trend-form {
+    max-width: 48rem;
+}
+
+.trend-form + .search-hint {
+    margin-bottom: 12px;
+}
+
+.trend-section {
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+}
+
+.trend-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.trend-head .meta {
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.trend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    align-self: center;
+}
+
+.trend-chart {
+    position: relative;
+    height: 300px;
+}
+
+.trend-chart-small {
+    height: 220px;
+}
+
+.trend-term {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 800px) {
+    .trend-term {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+}
+
+.trend-occurrence {
+    margin: 0 0 6px;
+    font-size: 0.875rem;
+}
+
+.trend-occurrence .meta {
+    display: block;
+    font-size: 0.8rem;
+}
+
+.trend-occurrence-title {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.trend-facts .facet-head {
+    margin-top: 14px;
+}
+
+.trend-bars {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6rem auto;  /* shared by all rows, so the bars line up */
+    column-gap: 8px;
+}
+
+.trend-bars li {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    gap: 8px;
+    align-items: center;
+}
+
+.trend-bars a {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.trend-bars .meta {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.trend-hint {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+}
+
+.trend-more {
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.trend-together {
+    margin-top: 8px;
+    font-size: 0.875rem;
+}
+
+/* topic titles are long: two lines of text, no bar */
+.trend-bars-text li {
+    grid-template-columns: minmax(0, 1fr) 2.5rem;
+    margin-bottom: 4px;
+    align-items: start;
+}
+
+.trend-bars-text a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.active-filter .trend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+}
+
+.trend-bar {
+    display: block;
+    height: 8px;
+    background: #93b4f5;
+    border-radius: 2px;
 }
 
 .passage-note {
@@ -2618,6 +2770,11 @@ a.excerpt:focus-visible {
 }
 
 @media (min-width: 801px) {
+    /* a tall facet column stretches the results row, not the search row */
+    .search-layout {
+        grid-template-rows: auto 1fr;
+    }
+
     .search-box {
         grid-column: 2;
         grid-row: 1;
@@ -2839,4 +2996,16 @@ a.topic-year.active {
 
 a.topic-year.active .topic-bar {
     background: var(--accent);
+}
+
+.trend-more-list summary {
+    cursor: pointer;
+    margin: 4px 0;
+    font-size: 0.8rem;
+    color: var(--muted, #68707c);
+}
+
+.trend-examples {
+    margin: 0;
+    padding-left: 1.2rem;
 }

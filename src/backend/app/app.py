@@ -4,6 +4,7 @@ import unicodedata
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 from html import unescape
+from itertools import combinations
 import datetime
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode
@@ -274,6 +275,151 @@ def topic_list(request: Request):
         request, "topic_list.html", {"topics": topics, "years": years})
 
 
+TREND_TERMS = 4
+MIN_YEAR_SIZE = 20  # smaller years join the next one, a single leaflet would swing their share
+MIN_ORG_SIZE = 10  # issuers with fewer leaflets get no share, "1 of 1 = 100 %" says nothing
+
+
+def copy_key(item):
+    return item['leaflet'].copy_group or -item['leaflet'].id
+
+
+def unique(items):
+    """One item per copy group (the one with the earliest year), so copies count once."""
+    first = {}
+    for item in items:
+        key = copy_key(item)
+        if key not in first or item['year'] < first[key]['year']:
+            first[key] = item
+    return list(first.values())
+
+
+def year_buckets(totals):
+    """{year: label}: a year with fewer than MIN_YEAR_SIZE leaflets joins the next ('1967/68')."""
+    buckets, pending = {}, []
+    for year in sorted(totals):
+        pending.append(year)
+        if sum(totals[y] for y in pending) >= MIN_YEAR_SIZE or year == max(totals):
+            label = year if len(pending) == 1 else f"{pending[0]}/{year[2:]}"
+            buckets.update(dict.fromkeys(pending, label))
+            pending = []
+    return buckets
+
+
+def term_profile(term, filters, buckets, totals, org_totals, chosen):
+    """Counts per year bucket, first and last dated leaflet, top issuers and topics of a term."""
+    if not search.terms(term):
+        return {'term': term, 'short': True}
+    # the copy chosen for the totals, even if only another copy matches: copies differ in issuers
+    items = list({copy_key(i): chosen[copy_key(i)] for i in faceted_items(filters + [('q', term)])[0]}.values())
+    counts = Counter(buckets[i['year']] for i in items)
+    dated = sorted((i for i in items if i['leaflet'].date_iso), key=lambda i: i['leaflet'].date_iso)
+    org_counts = Counter(o for i in items for o in i['orgs'] if o not in SPECIAL)
+    orgs = org_counts.most_common()  # the page shows the first five and folds the rest
+    unregistered = sum(NOT_IN_REGISTER in i['orgs'] for i in items)
+    no_org = sum(NO_ORG in i['orgs'] for i in items)
+    # share of the issuer's own leaflets that contain the term
+    shares = sorted(((n / org_totals[o], n, o) for o, n in org_counts.items()
+                     if org_totals[o] >= MIN_ORG_SIZE), reverse=True)
+    # issuers per year: each leaflet once, under the first of these issuers it has
+    ranked = [o for o, _ in Counter(o for i in items for o in i['orgs'] if o != NO_ORG).most_common(5)]
+    stacks = Counter((next((o for o in ranked if o in i['orgs']), None), buckets[i['year']]) for i in items)
+    months = Counter(i['leaflet'].date_iso[:7] for i in items if len(i['leaflet'].date_iso or '') >= 7)
+    first, last = min(months, default=''), max(months, default='')
+    span = [m for y in range(int(first[:4] or 0), int(last[:4] or -1) + 1)
+            for m in (f"{y}-{n:02}" for n in range(1, 13)) if first <= m <= last]
+    names = {o.id: o.name for o in session.query(Organization).filter(
+        Organization.id.in_([o for o, _ in orgs] + [o for _, _, o in shares] + ranked))}
+    names[NOT_IN_REGISTER] = 'nicht im Register'
+    topics = Counter(i['leaflet'].topic_id for i in items if i['leaflet'].topic_id).most_common(3)
+    titles = {t.id: t.title for t in session.query(Topic).filter(Topic.id.in_([t for t, _ in topics]))}
+
+    def list_url(*pairs):
+        return '/leaflets?' + urlencode(filters + [('q', term), *pairs])
+
+    def year_url(bucket, *pairs):
+        # a merged bucket cannot be a year filter: the list sorted by date starts with it
+        return list_url(('jahr', bucket) if '/' not in bucket else ('sortierung', 'datum_auf'), *pairs)
+
+    return {
+        'term': term, 'total': len(items), 'url': list_url(),
+        'counts': [counts[b] for b in totals],
+        'shares': [round(counts[b] / totals[b] * 100, 1) for b in totals],
+        'urls': [year_url(b) for b in totals],
+        'by_org': [{'label': names.get(o, o) if o else 'andere', 'org': o,
+                    'counts': [stacks[o, b] for b in totals],
+                    'urls': [year_url(b, ('org', o)) if o else year_url(b) for b in totals]} for o in ranked + [None]],
+        # a month cannot be filtered in the list: its bar opens the year, sorted by date
+        'months': {'labels': span, 'counts': [months[m] for m in span],
+                   'urls': [list_url(('jahr', m[:4]), ('sortierung', 'datum_auf')) for m in span],
+                   # hits dated only to the year, or not at all
+                   'rest': len(items) - sum(months.values())},
+        'month_dated': sum(months.values()),
+        'first': dated[0] if dated else None, 'last': dated[-1] if len(dated) > 1 else None,
+        'orgs': [{'label': names.get(o, o), 'count': n, 'url': list_url(('org', o))} for o, n in orgs],
+        # what the issuer list leaves out
+        'orgs_other': [{'label': label, 'url': url} for label, url in (
+            (f"{unregistered} nicht im Register", list_url(('org', NOT_IN_REGISTER))),
+            (f"{no_org} ohne Herausgeber", list_url(('org', NO_ORG))))
+            if not label.startswith('0 ')],
+        'org_shares': [{'label': names.get(o, o), 'count': s, 'url': list_url(('org', o)),
+                        'meta': f"{round(s * 100)} % ({n} von {org_totals[o]})", 'title': f"{n} von {org_totals[o]} Flugblättern"}
+                       for s, n, o in shares],
+        'topics': [{'label': titles.get(t, str(t)), 'count': n,
+                    'url': list_url(('thema', str(t)))} for t, n in topics],
+    }
+
+
+@app.get("/trends")
+def trends(request: Request, begriffe: str = ''):
+    """Compares up to four search terms over the years, as share of the leaflets per year."""
+    logger.info('Opening trends')
+    terms = [t for t in (' '.join(t.split())[:search.MAX_QUERY] for t in begriffe.split(','))
+             if t][:TREND_TERMS]
+    filters = [(k, v) for k, v in list_params(request) if k in FACETS and k != 'jahr']
+    everything = unique(faceted_items(filters)[0])
+    buckets = year_buckets(Counter(i['year'] for i in everything))
+    counts = Counter(buckets[i['year']] for i in everything)
+    totals = {b: counts[b] for b in sorted(counts)}
+    org_totals = Counter(o for i in everything for o in i['orgs'])
+    labels = facet_labels()
+    chips = [{'label': short_topic_title(labels.get(k, str)(v)),
+              'url': '/trends?' + urlencode([('begriffe', ', '.join(terms))]
+                                            + [p for p in filters if p != (k, v)])}
+             for k, v in filters]
+    chosen = {copy_key(i): i for i in everything}
+    rows = [term_profile(t, filters, buckets, totals, org_totals, chosen) for t in terms]
+    found = [r['term'] for r in rows if r.get('total')]
+    together = [{'terms': pair, 'url': '/leaflets?' + urlencode(filters + [('q', ' '.join(pair))]),
+                 'count': len(unique(faceted_items(filters + [('q', ' '.join(pair))])[0]))}
+                for pair in combinations(found, 2)]
+    for row in rows:
+        row['remove_url'] = '/trends?' + urlencode(
+            [('begriffe', ', '.join(t for t in terms if t != row['term']))] + filters)
+    chart = {'years': list(totals), 'totals': list(totals.values()),
+             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months')}
+                       for r in rows]}
+    return templates.TemplateResponse(
+        request, "trends.html",
+        {"begriffe": ', '.join(terms), "filters": filters, "chips": chips, "rows": rows,
+         "min_org_size": MIN_ORG_SIZE,
+         "together": together, "chart": chart})
+
+
+def facet_labels():
+    """Display label per facet parameter, shared by the list and the trends page."""
+    orgs = {o.id: o for o in session.query(Organization)}
+    topics = {str(t.id): t for t in session.query(Topic)}
+    return {
+        'org': lambda o: {NO_ORG: 'kein Herausgeber erkannt', NOT_IN_REGISTER: 'nicht im Register'}.get(
+            o, orgs[o].name if o in orgs else o),
+        'thema': lambda t: 'ohne Thema' if t == NO_TOPIC else topics[t].title if t in topics else t,
+        'typ': lambda t: DOC_TYPES.get(t, t),
+        'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
+        'q': lambda v: f"„{v}“",
+    }
+
+
 @app.get("/leaflets")
 def leaflet_list(request: Request, ansicht: str = "liste"):
     logger.info('Opening leaflet list')
@@ -309,16 +455,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
                  'none': v in SPECIAL} for v in values]
 
     orgs = {o.id: o for o in session.query(Organization)}
-    topics = {str(t.id): t for t in session.query(Topic)}
-
-    labels = {
-        'org': lambda o: {NO_ORG: 'kein Herausgeber erkannt', NOT_IN_REGISTER: 'nicht im Register'}.get(
-            o, orgs[o].name if o in orgs else o),
-        'thema': lambda t: 'ohne Thema' if t == NO_TOPIC else topics[t].title if t in topics else t,
-        'typ': lambda t: DOC_TYPES.get(t, t),
-        'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
-        'q': lambda v: f"„{v}“",
-    }
+    labels = facet_labels()
 
     axis = sorted({str(v.year) for v in session.query(Volume)} | shown('jahr'))
     highest = max(counts['jahr'].values(), default=0) or 1
@@ -353,6 +490,8 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
          "q_short": bool(selected.get('q')) and not search.terms(selected['q']),
          "filtered": sum(k not in ('q', 'sortierung', 'duplikate') for k, _ in params),
          "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
+         "trends_url": '/trends?' + urlencode([('begriffe', selected.get('q', ''))] + [
+             (k, v) for k, v in params if k in FACETS and k != 'jahr']),
          "switch_base": '/leaflets' + query_string,
          "detail_qs": query_string})
 
