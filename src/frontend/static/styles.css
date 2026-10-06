@@ -485,11 +485,15 @@ a.topic-year:focus-visible .topic-bar {
     margin: 0;
     padding: 0;
     font-size: 0.875rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6rem auto;  /* shared by all rows, so the bars line up */
+    column-gap: 8px;
 }
 
 .trend-bars li {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 6rem 2.5rem;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     gap: 8px;
     align-items: center;
 }
@@ -502,6 +506,7 @@ a.topic-year:focus-visible .topic-bar {
 
 .trend-bars .meta {
     text-align: right;
+    white-space: nowrap;
 }
 
 .trend-hint {
@@ -2361,4 +2366,16 @@ a.topic-year.active {
 
 a.topic-year.active .topic-bar {
     background: var(--accent);
+}
+
+.trend-more-list summary {
+    cursor: pointer;
+    margin: 4px 0;
+    font-size: 0.8rem;
+    color: var(--muted, #68707c);
+}
+
+.trend-examples {
+    margin: 0;
+    padding-left: 1.2rem;
 }

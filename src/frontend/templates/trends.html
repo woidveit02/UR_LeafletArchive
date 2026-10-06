@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Trends – UR Leaflet Archive{% endblock %}
-{% macro top_list(head, entries, bars=True, hint='') %}
+{% macro top_list(head, entries, bars=True, hint='', limit=0) %}
 {% if entries %}
 <h3 class="facet-head">{{ head }}</h3>
 {% if hint %}<p class="meta trend-hint">{{ hint }}</p>{% endif %}
-<ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">
-    {% for e in entries %}
+{% macro lines(items, first) %}{% for e in items %}
     <li><a href="{{ e.url }}" title="{{ e.label }}">{{ e.label }}</a>
-        {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / entries[0].count * 100) | round }}%"></span></span>{% endif %}
+        {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / first.count * 100) | round }}%"></span></span>{% endif %}
         <span class="meta" title="{{ e.title or 'Anzahl der Flugblätter' }}">{{ e.meta or e.count }}</span></li>
-    {% endfor %}
-</ul>
+    {% endfor %}{% endmacro %}
+<ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[:limit] if limit else entries, entries[0]) }}</ul>
+{% if limit and entries | length > limit %}
+<details class="trend-more-list"><summary>Alle {{ entries | length }} anzeigen</summary>
+    <ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[limit:], entries[0]) }}</ul>
+</details>
+{% endif %}
 {% endif %}
 {% endmacro %}
 {% macro occurrence(label, item) %}
@@ -31,7 +35,7 @@
                    placeholder="z. B. Notstand, Berufsverbot">
             <button type="submit" class="button-small">Vergleichen</button>
         </form>
-        <p class="search-hint">Bis zu vier Begriffe, durch Komma getrennt. „…“ sucht eine Wortfolge.</p>
+        <p class="search-hint">Bis zu vier Begriffe, durch Komma getrennt. Gefunden werden auch Wortteile („Hund“ trifft „Hundert“). Mehrere Wörter in Anführungszeichen suchen eine feste Wortfolge.</p>
         {% if rows or chips %}
         <div class="active-filters" aria-label="Begriffe und Filter">
             {% for row in rows %}<a class="active-filter" href="{{ row.remove_url }}" title="Begriff entfernen"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span>{{ row.term }} <span aria-hidden="true">×</span></a>{% endfor %}
@@ -52,13 +56,13 @@
         {% for row in rows %}
         <section class="trend-section">
             <h2 class="trend-head"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span><a href="{{ row.url }}" title="Treffer anzeigen">{{ row.term }}</a>
-                {% if not row.short %}<span class="meta">{{ row.total }} {{ 'Flugblatt' if row.total == 1 else 'Flugblätter' }}</span>{% endif %}</h2>
+                {% if not row.short %}<a class="meta" href="{{ row.url }}">Alle {{ row.total }} {{ 'Flugblatt' if row.total == 1 else 'Flugblätter' }} anzeigen</a>{% endif %}</h2>
             {% if row.short %}
             <p class="meta">Begriffe unter 3 Zeichen werden im Text nicht gesucht.</p>
             {% elif row.total %}
             <div class="trend-term">
                 <div>
-                    <h3 class="facet-head">Treffer im Zeitverlauf</h3>
+                    <h3 class="facet-head">Anteil der Flugblätter pro Jahr, nach Herausgeber</h3>
                     <div class="trend-chart trend-chart-small"><canvas data-orgs="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Jahr mit {{ row.term }}, nach Herausgeber"></canvas></div>
                     <p class="meta">Ein Blatt mehrerer Herausgeber zählt beim ersten aus der Legende.</p>
                     {% if row.month_dated %}
@@ -70,10 +74,10 @@
                 <div class="trend-facts">
                     {{ occurrence('Frühester Treffer', row.first) }}
                     {{ occurrence('Spätester Treffer', row.last) }}
-                    {{ top_list('Herausgeber der Treffer', row.orgs) }}
+                    {{ top_list('Herausgeber der Treffer', row.orgs, limit=5) }}
                     {% if row.orgs_other %}<p class="meta trend-more">Außerdem {% for o in row.orgs_other %}<a href="{{ o.url }}">{{ o.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
-                    {{ top_list('Höchster Anteil am eigenen Bestand', row.org_shares,
-                                hint='Wie viele der Flugblätter eines Herausgebers den Begriff enthalten (ab ' ~ min_org_size ~ ' Flugblättern). Zeigt, wer den Begriff besonders oft verwendet, nicht, wer die meisten Treffer hat.') }}
+                    {{ top_list('Höchster Anteil am eigenen Bestand', row.org_shares, limit=5,
+                                hint='Anteil der eigenen Flugblätter, die den Begriff enthalten (ab ' ~ min_org_size ~ ' Flugblättern).') }}
                     {{ top_list('Themen der Treffer', row.topics, bars=False) }}
                 </div>
             </div>
@@ -81,7 +85,15 @@
         </section>
         {% endfor %}
         {% else %}
-        <p class="meta">Zum Beispiel: <a href="/trends?begriffe=Notstand%2C%20Hochschulgesetz%2C%20Berufsverbot">Notstand, Hochschulgesetz, Berufsverbot</a></p>
+        <p class="meta">Zum Beispiel:</p>
+        <ul class="trend-examples">
+            <li><a href="/trends?begriffe=Notstand%2C%20Berufsverbot%2C%20Numerus">Notstand, Berufsverbot, Numerus</a></li>
+            <li><a href="/trends?begriffe=Vietnam%2C%20Chile%2C%20Griechenland">Vietnam, Chile, Griechenland</a></li>
+            <li><a href="/trends?begriffe=Kapitalismus%2C%20Imperialismus%2C%20Faschismus">Kapitalismus, Imperialismus, Faschismus</a></li>
+            <li><a href="/trends?begriffe=Marx%2C%20Lenin%2C%20Mao">Marx, Lenin, Mao</a></li>
+            <li><a href="/trends?begriffe=Mensa%2C%20Wohnheim%2C%20Baf%C3%B6g">Mensa, Wohnheim, Bafög</a></li>
+            <li><a href="/trends?begriffe=Brandt%2C%20Strau%C3%9F%2C%20Springer">Brandt, Strauß, Springer</a></li>
+        </ul>
         {% endif %}
 {% endblock %}
 {% block scripts %}
@@ -139,12 +151,14 @@
             new Chart(canvas, {
                 type: 'bar',
                 data: {labels, datasets: t.by_org.map((o) => ({
-                    label: o.label, data: o.counts, backgroundColor: orgColor[o.org]}))},
+                    label: o.label, backgroundColor: orgColor[o.org],
+                    data: o.counts.map((n, i) => n / data.totals[i] * 100)}))},  // share of the year's leaflets
                 options: {
                     interaction: {mode: 'index', intersect: false},
-                    scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true, ticks: {precision: 0}}},
+                    scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true, ticks: {callback: (v) => v + ' %'}}},
                     plugins: {legend: {position: 'bottom', labels: {boxWidth: 12}}, tooltip: {
                         filter: (c) => c.raw > 0, callbacks: {
+                            label: (c) => `${c.dataset.label}: ${t.by_org[c.datasetIndex].counts[c.dataIndex]}`,
                             title: ([c]) => c ? [data.years[c.dataIndex], share(t, c.dataIndex)] : '',  // empty column: no item left
                             footer: () => 'Klick auf einen Abschnitt zeigt dessen Flugblätter',
                         }}},

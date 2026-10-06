@@ -308,12 +308,12 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
     counts = Counter(buckets[i['year']] for i in items)
     dated = sorted((i for i in items if i['leaflet'].date_iso), key=lambda i: i['leaflet'].date_iso)
     org_counts = Counter(o for i in items for o in i['orgs'] if o not in SPECIAL)
-    orgs = org_counts.most_common(5)
+    orgs = org_counts.most_common()  # the page shows the first five and folds the rest
     unregistered = sum(NOT_IN_REGISTER in i['orgs'] for i in items)
     no_org = sum(NO_ORG in i['orgs'] for i in items)
     # share of the issuer's own leaflets that contain the term
     shares = sorted(((n / org_totals[o], n, o) for o, n in org_counts.items()
-                     if org_totals[o] >= MIN_ORG_SIZE), reverse=True)[:5]
+                     if org_totals[o] >= MIN_ORG_SIZE), reverse=True)
     # issuers per year: each leaflet once, under the first of these issuers it has
     ranked = [o for o, _ in Counter(o for i in items for o in i['orgs'] if o != NO_ORG).most_common(5)]
     stacks = Counter((next((o for o in ranked if o in i['orgs']), None), buckets[i['year']]) for i in items)
@@ -350,14 +350,13 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
         'month_dated': sum(months.values()),
         'first': dated[0] if dated else None, 'last': dated[-1] if len(dated) > 1 else None,
         'orgs': [{'label': names.get(o, o), 'count': n, 'url': list_url(('org', o))} for o, n in orgs],
-        # what the top list leaves out; the list's filter column shows every issuer
+        # what the issuer list leaves out
         'orgs_other': [{'label': label, 'url': url} for label, url in (
             (f"{unregistered} nicht im Register", list_url(('org', NOT_IN_REGISTER))),
-            (f"{no_org} ohne Herausgeber", list_url(('org', NO_ORG))),
-            (f"alle {len(org_counts)} Herausgeber" if len(org_counts) > 5 else '0 ', list_url()))
+            (f"{no_org} ohne Herausgeber", list_url(('org', NO_ORG))))
             if not label.startswith('0 ')],
         'org_shares': [{'label': names.get(o, o), 'count': s, 'url': list_url(('org', o)),
-                        'meta': f"{round(s * 100)} %", 'title': f"{n} von {org_totals[o]} Flugblättern"}
+                        'meta': f"{round(s * 100)} % ({n} von {org_totals[o]})", 'title': f"{n} von {org_totals[o]} Flugblättern"}
                        for s, n, o in shares],
         'topics': [{'label': titles.get(t, str(t)), 'count': n,
                     'url': list_url(('thema', str(t)))} for t, n in topics],
