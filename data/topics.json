@@ -3,8 +3,8 @@
   "topics": [
     {
       "id": 0,
-      "title": "Wochenendseminare und kirchliche Treffen der Hochschulgemeinde",
-      "title_source": "llm_label",
+      "title": "Hochschulgemeinde: Seminare und Treffen",
+      "title_source": "manual",
       "llm_label": "Wochenendseminare und kirchliche Treffen der Hochschulgemeinde",
       "words": [
         "randgruppe",
@@ -18,8 +18,8 @@
     },
     {
       "id": 1,
-      "title": "Informationen und Veranstaltungen des Studentenwerks und Corps Franconia an der Universität Regensburg",
-      "title_source": "llm_label",
+      "title": "Corps Franconia: Veranstaltungseinladungen",
+      "title_source": "manual",
       "llm_label": "Informationen und Veranstaltungen des Studentenwerks und Corps Franconia an der Universität Regensburg",
       "words": [
         "vitusbach",
@@ -34,8 +34,8 @@
     },
     {
       "id": 2,
-      "title": "Zulassungssperre im Psychologiestudium wegen Berufungspolitik im Fachbereich Philosophie/Psychologie",
-      "title_source": "llm_label",
+      "title": "Psychologie: Zulassung und Berufungen",
+      "title_source": "manual",
       "llm_label": "Zulassungssperre im Psychologiestudium wegen Berufungspolitik im Fachbereich Philosophie/Psychologie",
       "words": [
         "psychologie",
@@ -52,8 +52,8 @@
     },
     {
       "id": 3,
-      "title": "Protest gegen Berufung von Prof. Drösler auf Lehrstuhl für Differentielle Psychologie",
-      "title_source": "llm_label",
+      "title": "Protest gegen Berufung Drösler (Psychologie)",
+      "title_source": "manual",
       "llm_label": "Protest gegen Berufung von Prof. Drösler auf Lehrstuhl für Differentielle Psychologie",
       "words": [
         "psychologie",
@@ -69,8 +69,8 @@
     },
     {
       "id": 4,
-      "title": "Proteste und politische Repression gegen palästinensische und ausländische Organisationen in der BRD 1972",
-      "title_source": "llm_label",
+      "title": "Palästinenser und Ausländerrecht 1972",
+      "title_source": "manual",
       "llm_label": "Proteste und politische Repression gegen palästinensische und ausländische Organisationen in der BRD 1972",
       "words": [
         "araber",
@@ -86,8 +86,8 @@
     },
     {
       "id": 5,
-      "title": "Informationen und Veranstaltungen der Fachschaft Soziologie, Politologie und Sozialkunde 1973",
-      "title_source": "llm_label",
+      "title": "Fachschaft Soziologie und Politologie",
+      "title_source": "manual",
       "llm_label": "Informationen und Veranstaltungen der Fachschaft Soziologie, Politologie und Sozialkunde 1973",
       "words": [
         "soziologie",
@@ -104,8 +104,8 @@
     },
     {
       "id": 6,
-      "title": "Ergebnisse und Kandidaten der Fachbereichs- und Fakultätsratswahlen an der Universität 1972",
-      "title_source": "llm_label",
+      "title": "Fachbereichswahlen: Kandidaten und Ergebnisse",
+      "title_source": "manual",
       "llm_label": "Ergebnisse und Kandidaten der Fachbereichs- und Fakultätsratswahlen an der Universität 1972",
       "words": [
         "liste",
@@ -119,8 +119,8 @@
     },
     {
       "id": 7,
-      "title": "Diskussion und Urabstimmung über Fachschaftssatzungen und deren Funktionen an deutschen Hochschulen",
-      "title_source": "llm_label",
+      "title": "Fachschaftssatzungen und Urabstimmungen",
+      "title_source": "manual",
       "llm_label": "Diskussion und Urabstimmung über Fachschaftssatzungen und deren Funktionen an deutschen Hochschulen",
       "words": [
         "fachschaft",
@@ -135,8 +135,8 @@
     },
     {
       "id": 8,
-      "title": "Filmvorführungen und Gegenveranstaltungen zu Bildung, Gewerkschaften und politischer Bildung an Hochschulen",
-      "title_source": "llm_label",
+      "title": "AStA-Info: Kultur- und Bildungsveranstaltungen",
+      "title_source": "manual",
       "llm_label": "Filmvorführungen und Gegenveranstaltungen zu Bildung, Gewerkschaften und politischer Bildung an Hochschulen",
       "words": [
         "film",
@@ -152,8 +152,8 @@
     },
     {
       "id": 9,
-      "title": "Gewerkschaftliche Interessen und Reformen in der Lehrerbildung und Hochschulpolitik",
-      "title_source": "llm_label",
+      "title": "Lehrerbildung und Gewerkschaften",
+      "title_source": "manual",
       "llm_label": "Gewerkschaftliche Interessen und Reformen in der Lehrerbildung und Hochschulpolitik",
       "words": [
         "lehrer",
@@ -170,8 +170,8 @@
     },
     {
       "id": 10,
-      "title": "Berufsverbote und politische Diskriminierung im öffentlichen Dienst in der Bundesrepublik Deutschland",
-      "title_source": "llm_label",
+      "title": "Berufsverbote",
+      "title_source": "manual",
       "llm_label": "Berufsverbote und politische Diskriminierung im öffentlichen Dienst in der Bundesrepublik Deutschland",
       "words": [
         "berufsverbot",
@@ -187,8 +187,8 @@
     },
     {
       "id": 11,
-      "title": "Ehrenerlass und Festveranstaltung zur Rettung der Universität durch Professor Schumann",
-      "title_source": "llm_label",
+      "title": "BEGEFOGREGETZ: Satirische Ehrenerlasse gegen Schumann",
+      "title_source": "manual",
       "llm_label": "Ehrenerlass und Festveranstaltung zur Rettung der Universität durch Professor Schumann",
       "words": [
         "ehrenpräsident",
@@ -205,8 +205,8 @@
     },
     {
       "id": 12,
-      "title": "Streik der Studentenvertreter gegen Einschränkung der Mitwirkungsrechte an der Universität Regensburg",
-      "title_source": "llm_label",
+      "title": "Assistenten: Streit um Mitwirkung im Senat",
+      "title_source": "manual",
       "llm_label": "Streik der Studentenvertreter gegen Einschränkung der Mitwirkungsrechte an der Universität Regensburg",
       "words": [
         "senat",
@@ -222,8 +222,8 @@
     },
     {
       "id": 13,
-      "title": "Kampf um gemeinsame Listen und Interessenvertretung in Fachschaftsratswahlen der Psychologie",
-      "title_source": "llm_label",
+      "title": "Psychologie: Bündnislisten zur Fachschaftswahl",
+      "title_source": "manual",
       "llm_label": "Kampf um gemeinsame Listen und Interessenvertretung in Fachschaftsratswahlen der Psychologie",
       "words": [
         "politik",
@@ -239,8 +239,8 @@
     },
     {
       "id": 14,
-      "title": "Wahlkampf und politische Programme des Sozialdemokratischen Hochschulbundes 1972",
-      "title_source": "llm_label",
+      "title": "SHB, Jusos und Spartakus: Wahlkampf",
+      "title_source": "manual",
       "llm_label": "Wahlkampf und politische Programme des Sozialdemokratischen Hochschulbundes 1972",
       "words": [
         "jungsozialist",
@@ -256,8 +256,8 @@
     },
     {
       "id": 15,
-      "title": "Studentische Fachschaftswahlen und Proteste gegen Berufsverbot und Studienbeschränkungen",
-      "title_source": "llm_label",
+      "title": "Grabenkämpfe zwischen den Hochschulgruppen",
+      "title_source": "manual",
       "llm_label": "Studentische Fachschaftswahlen und Proteste gegen Berufsverbot und Studienbeschränkungen",
       "words": [
         "partei",
@@ -270,8 +270,8 @@
     },
     {
       "id": 16,
-      "title": "Wohnungsnot und finanzielle Probleme von Studenten im Zusammenhang mit BAFÖG und Miete",
-      "title_source": "llm_label",
+      "title": "Wohnungsnot, Miete und BAföG",
+      "title_source": "manual",
       "llm_label": "Wohnungsnot und finanzielle Probleme von Studenten im Zusammenhang mit BAFÖG und Miete",
       "words": [
         "mieter",
@@ -288,8 +288,8 @@
     },
     {
       "id": 17,
-      "title": "Rektorwahl und Kandidatenvorstellung an der Universität 1972",
-      "title_source": "llm_label",
+      "title": "Rektorwahl",
+      "title_source": "manual",
       "llm_label": "Rektorwahl und Kandidatenvorstellung an der Universität 1972",
       "words": [
         "rektor",
@@ -303,8 +303,8 @@
     },
     {
       "id": 18,
-      "title": "Preiserhöhung und organisatorische Probleme in der Mensa des Studentenwerks",
-      "title_source": "llm_label",
+      "title": "Mensa und Essenspreise",
+      "title_source": "manual",
       "llm_label": "Preiserhöhung und organisatorische Probleme in der Mensa des Studentenwerks",
       "words": [
         "studentenwerk",
@@ -321,8 +321,8 @@
     },
     {
       "id": 19,
-      "title": "Proteste und Aktionen gegen Fahrpreiserhöhungen im öffentlichen Nahverkehr",
-      "title_source": "llm_label",
+      "title": "Fahrpreiserhöhungen im Nahverkehr",
+      "title_source": "manual",
       "llm_label": "Proteste und Aktionen gegen Fahrpreiserhöhungen im öffentlichen Nahverkehr",
       "words": [
         "bevölkerung",
@@ -338,8 +338,8 @@
     },
     {
       "id": 20,
-      "title": "Finanzstreitigkeiten und Kritik an AStA-Haushaltsführung und Beitragsverwendung",
-      "title_source": "llm_label",
+      "title": "AStA-Haushalt und Beiträge",
+      "title_source": "manual",
       "llm_label": "Finanzstreitigkeiten und Kritik an AStA-Haushaltsführung und Beitragsverwendung",
       "words": [
         "einnahme",
@@ -354,8 +354,8 @@
     },
     {
       "id": 21,
-      "title": "Politische Auseinandersetzungen und Programmdiskussionen im westdeutschen studentischen Dachverband vds",
-      "title_source": "llm_label",
+      "title": "VDS: Programm und Mitgliederversammlungen",
+      "title_source": "manual",
       "llm_label": "Politische Auseinandersetzungen und Programmdiskussionen im westdeutschen studentischen Dachverband vds",
       "words": [
         "politik",
@@ -371,8 +371,8 @@
     },
     {
       "id": 22,
-      "title": "Streit um Besetzung der HS-3 Professur in Literaturtheorie im Fachbereich Germanistik",
-      "title_source": "llm_label",
+      "title": "Germanistik: Streit um Stellenbesetzung",
+      "title_source": "manual",
       "llm_label": "Streit um Besetzung der HS-3 Professur in Literaturtheorie im Fachbereich Germanistik",
       "words": [
         "germanistik",
@@ -388,8 +388,8 @@
     },
     {
       "id": 23,
-      "title": "Streik und Protest gegen das Bayerische Hochschulgesetz (BHG) an Universitäten",
-      "title_source": "llm_label",
+      "title": "Streik und Proteste gegen das Hochschulgesetz",
+      "title_source": "manual",
       "llm_label": "Streik und Protest gegen das Bayerische Hochschulgesetz (BHG) an Universitäten",
       "words": [
         "streik",
@@ -402,8 +402,8 @@
     },
     {
       "id": 24,
-      "title": "Proteste und Lehrenthaltung der Lehrassistenten am Fachbereich Wirtschaftswissenschaft gegen Hochschulgesetz",
-      "title_source": "llm_label",
+      "title": "Lehrenthaltung der Assistenten (WiWi)",
+      "title_source": "manual",
       "llm_label": "Proteste und Lehrenthaltung der Lehrassistenten am Fachbereich Wirtschaftswissenschaft gegen Hochschulgesetz",
       "words": [
         "lehrassistent",
@@ -419,8 +419,8 @@
     },
     {
       "id": 25,
-      "title": "Antikriegs- und Befreiungsbewegungen gegen Imperialismus und Krieg",
-      "title_source": "llm_label",
+      "title": "Krieg, Frieden und Befreiungsbewegungen",
+      "title_source": "manual",
       "llm_label": "Antikriegs- und Befreiungsbewegungen gegen Imperialismus und Krieg",
       "words": [
         "volk",
@@ -436,8 +436,8 @@
     },
     {
       "id": 26,
-      "title": "Informationen und Wahlen im Fachbereich Jura und Wirtschaftswissenschaft an Universitäten",
-      "title_source": "llm_label",
+      "title": "Jura: Studienreform und Fachbereichswahl",
+      "title_source": "manual",
       "llm_label": "Informationen und Wahlen im Fachbereich Jura und Wirtschaftswissenschaft an Universitäten",
       "words": [
         "übung",
@@ -454,8 +454,8 @@
     },
     {
       "id": 27,
-      "title": "Kritik an kapitalistischer Gesellschaftsordnung und politischem Engagement der Studenten",
-      "title_source": "llm_label",
+      "title": "Marxistische Gesellschaftskritik",
+      "title_source": "manual",
       "llm_label": "Kritik an kapitalistischer Gesellschaftsordnung und politischem Engagement der Studenten",
       "words": [
         "wissenschaft",
@@ -471,8 +471,8 @@
     },
     {
       "id": 28,
-      "title": "Diskussionen zur Demokratisierung, Freiheit und gesellschaftlichen Konfliktlösung in Deutschland",
-      "title_source": "llm_label",
+      "title": "Demokratie und Demokratisierung",
+      "title_source": "manual",
       "llm_label": "Diskussionen zur Demokratisierung, Freiheit und gesellschaftlichen Konfliktlösung in Deutschland",
       "words": [
         "demokratie",
@@ -488,8 +488,8 @@
     },
     {
       "id": 29,
-      "title": "Diskussion und Kritik zum Bayerischen Hochschulgesetz und Hochschulreformen 1973",
-      "title_source": "llm_label",
+      "title": "Hochschulgesetz und Hochschulreform: Grundsatzfragen",
+      "title_source": "manual",
       "llm_label": "Diskussion und Kritik zum Bayerischen Hochschulgesetz und Hochschulreformen 1973",
       "words": [
         "hochschule",
@@ -503,8 +503,8 @@
     },
     {
       "id": 30,
-      "title": "Hochschulpolitik und Autonomie der Universität Regensburg",
-      "title_source": "llm_label",
+      "title": "Hochschulautonomie",
+      "title_source": "manual",
       "llm_label": "Hochschulpolitik und Autonomie der Universität Regensburg",
       "words": [
         "mitte",
@@ -520,8 +520,8 @@
     },
     {
       "id": 31,
-      "title": "Programme und Forderungen der Demokratischen Front zur Stärkung studentischer Fachschaftsräte",
-      "title_source": "llm_label",
+      "title": "Demokratische Front: Programme und Forderungen",
+      "title_source": "manual",
       "llm_label": "Programme und Forderungen der Demokratischen Front zur Stärkung studentischer Fachschaftsräte",
       "words": [
         "front",
@@ -536,8 +536,8 @@
     },
     {
       "id": 32,
-      "title": "Kampf gegen reaktionäre Kräfte und Einfluss auf Hochschulpolitik in Deutschland",
-      "title_source": "llm_label",
+      "title": "Griechenland-Solidarität und Kampfaufrufe",
+      "title_source": "manual",
       "llm_label": "Kampf gegen reaktionäre Kräfte und Einfluss auf Hochschulpolitik in Deutschland",
       "words": [
         "kampf",
@@ -549,8 +549,8 @@
     },
     {
       "id": 33,
-      "title": "Wahlen zum Studentenparlament an der Universität Regensburg",
-      "title_source": "llm_label",
+      "title": "Studentenparlamentswahlen: Wahlvorschläge",
+      "title_source": "manual",
       "llm_label": "Wahlen zum Studentenparlament an der Universität Regensburg",
       "words": [
         "fakultät",
@@ -566,8 +566,8 @@
     },
     {
       "id": 34,
-      "title": "Studentische Interessenvertretung und Öffentlichkeitsfragen im Fachbereich Wirtschaftswissenschaft",
-      "title_source": "llm_label",
+      "title": "WiWi: Streit um Öffentlichkeit im Fachbereichsrat",
+      "title_source": "manual",
       "llm_label": "Studentische Interessenvertretung und Öffentlichkeitsfragen im Fachbereich Wirtschaftswissenschaft",
       "words": [
         "wiwi",
@@ -582,8 +582,8 @@
     },
     {
       "id": 35,
-      "title": "Fachschaftsrat WiWi: Anträge und Sitzungen zu Prüfungsgebühren, Studienführer und Fachbereichsangelegenheiten 1973",
-      "title_source": "llm_label",
+      "title": "Fachschaftsrat WiWi: Anträge und Sitzungen",
+      "title_source": "manual",
       "llm_label": "Fachschaftsrat WiWi: Anträge und Sitzungen zu Prüfungsgebühren, Studienführer und Fachbereichsangelegenheiten 1973",
       "words": [
         "antrag",
@@ -600,8 +600,8 @@
     },
     {
       "id": 36,
-      "title": "Liberale Hochschulpolitik und studentische Wahlbündnisse in den 1970er Jahren",
-      "title_source": "llm_label",
+      "title": "Die „als“: Programm und Wahlwerbung",
+      "title_source": "manual",
       "llm_label": "Liberale Hochschulpolitik und studentische Wahlbündnisse in den 1970er Jahren",
       "words": [
         "jura",
@@ -617,8 +617,8 @@
     },
     {
       "id": 37,
-      "title": "Koalitionsverhandlungen und Schwierigkeiten bei der AStA-Bildung an Hochschulen",
-      "title_source": "llm_label",
+      "title": "AStA-Koalitionsverhandlungen",
+      "title_source": "manual",
       "llm_label": "Koalitionsverhandlungen und Schwierigkeiten bei der AStA-Bildung an Hochschulen",
       "words": [
         "gruppe",
@@ -634,8 +634,8 @@
     },
     {
       "id": 38,
-      "title": "Studentische Interessenvertretung und AStA-Wahlkonflikte an der Universität",
-      "title_source": "llm_label",
+      "title": "Demokratische Mitte: Wahlkampf und AStA-Konflikte",
+      "title_source": "manual",
       "llm_label": "Studentische Interessenvertretung und AStA-Wahlkonflikte an der Universität",
       "words": [
         "linke",
@@ -649,8 +649,8 @@
     },
     {
       "id": 39,
-      "title": "Studentische Urabstimmung und Beitritt zum Verband VDS an der Universität Regensburg",
-      "title_source": "llm_label",
+      "title": "VDS-Beitritt: Urabstimmung",
+      "title_source": "manual",
       "llm_label": "Studentische Urabstimmung und Beitritt zum Verband VDS an der Universität Regensburg",
       "words": [
         "vollversammlung",

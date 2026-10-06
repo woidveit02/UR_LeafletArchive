@@ -53,6 +53,13 @@
                 {% for p in together %}<a href="{{ p.url }}">{{ p.terms | join(' + ') }}</a> <span class="meta">{{ p.count }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
             {% endif %}
         </section>
+        {% if chart.cloud %}
+        <section class="trend-section">
+            <h2 class="trend-head">Wo liegen die Treffer im Themenfeld?</h2>
+            <div class="trend-chart"><canvas id="trend-map" role="img" aria-label="Lage der Treffer unter allen Flugblättern nach Textähnlichkeit"></canvas></div>
+            <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung.</p>
+        </section>
+        {% endif %}
         {% for row in rows %}
         <section class="trend-section">
             <h2 class="trend-head"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span><a href="{{ row.url }}" title="Treffer anzeigen">{{ row.term }}</a>
@@ -138,6 +145,24 @@
                 onClick: (e, _, chart) => openList(chart, e, (hit) => terms[hit.datasetIndex].urls),
             },
         });
+
+        if (data.cloud && data.cloud.length) {
+            const mapTerms = terms.filter((t) => t.points && t.points.length);
+            new Chart(document.getElementById('trend-map'), {
+                type: 'scatter',
+                data: {datasets: [
+                    {label: 'alle Flugblätter', data: data.cloud.map(([x, y]) => ({x, y})),
+                     backgroundColor: '#d9dce1', pointRadius: 2},
+                    ...mapTerms.map((t) => ({label: t.term, data: t.points.map(([x, y]) => ({x, y})),
+                        backgroundColor: COLORS[data.terms.indexOf(t)] + 'cc', pointRadius: 3.5})),
+                ]},
+                options: {
+                    scales: {x: {display: false}, y: {display: false}},
+                    plugins: {legend: {position: 'bottom', labels: {filter: (item) => item.datasetIndex !== 0}},
+                              tooltip: {enabled: false}},
+                },
+            });
+        }
 
         // one color per issuer on the whole page; the two grays are not issuers
         const ORG_COLORS = ['#4c72b0', '#dd8452', '#55a868', '#c44e52', '#8172b3',

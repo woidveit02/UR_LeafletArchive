@@ -167,6 +167,21 @@ def fill_topics():
     session.commit()
 
 
+def fill_topic_map():
+    """Import the fixed 2D layout (topic_map.py) by volume stem and page range."""
+    if not (DATA_DIR / "topic_map.json").is_file():
+        return
+
+    points = {(item["stem"], item["start_page"], item["end_page"]): item
+             for item in load_json("topic_map.json")}
+    leaflets = session.query(Leaflet, Volume.stem).join(Volume)
+    for leaflet, volume_stem in leaflets:
+        point = points.get((volume_stem, leaflet.start_page, leaflet.end_page))
+        leaflet.x = point["x"] if point else None
+        leaflet.y = point["y"] if point else None
+    session.commit()
+
+
 # every volume with a metadata file in data/ is imported
 VOLUMES = [{"metadata_file": f"nr{v['vz']:03d}_metadata.json", "label": v["label"], "year": v["year"]}
            for v in load_json("volumes.json")
@@ -410,4 +425,5 @@ def fill_database():
         fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes)
     fill_copies()
     fill_topics()
+    fill_topic_map()
     search.rebuild_search_index(engine)

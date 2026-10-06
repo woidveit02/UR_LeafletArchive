@@ -235,44 +235,94 @@ def date_sort_key(item):
     return item['year']
 
 
+def text_sort_key(text):
+    """Text without leading quotes or dashes, case-insensitive, Ä sorted as A."""
+    text = unicodedata.normalize('NFD', re.sub(r'^\W+', '', text or ''))
+    return ''.join(c for c in text if not unicodedata.combining(c)).casefold()
+
+
 def title_sort_key(item):
-    """Title without leading quotes or dashes, case-insensitive, Ä sorted as A."""
-    title = unicodedata.normalize('NFD', re.sub(r'^\W+', '', item['leaflet'].display_title or ''))
-    return ''.join(c for c in title if not unicodedata.combining(c)).casefold()
+    return text_sort_key(item['leaflet'].display_title)
 
 
 @app.get("/themen")
-def topic_list(request: Request):
+def topic_list(request: Request, sortierung: str = ''):
+    """Per topic: a bar per year bucket on one shared scale and its top issuers, plus a shared map of all topics."""
     logger.info('Opening topic list')
-    topic_year_counts = {}
-    for leaflet, volume_year in session.query(Leaflet, Volume.year).join(
-            Volume, Leaflet.volume_id == Volume.id).filter(
-                Leaflet.topic_id.isnot(None)):
-        year = leaflet_year(leaflet, volume_year)
-        topic_year_counts.setdefault(leaflet.topic_id, Counter())[year] += 1
+    items = unique(faceted_items([])[0])
+    buckets = year_buckets(Counter(i['year'] for i in items))
+    counts_all = Counter(buckets[i['year']] for i in items)
+    totals = {b: counts_all[b] for b in sorted(counts_all)}
+    by_topic = {}
+    for item in items:
+        by_topic.setdefault(item['leaflet'].topic_id, []).append(item)
+    org_names = {o.id: o.name for o in session.query(Organization).filter(Organization.id.in_(
+        {o for i in items for o in i['orgs'] if o not in SPECIAL}))}
 
-    years = sorted(
-        {year for counts in topic_year_counts.values() for year in counts},
-        key=int)
-    topics = []
+    def point(i):
+        issuers = ', '.join(org_names[o] for o in i['orgs'] if o in org_names)
+        return [i['leaflet'].x, i['leaflet'].y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year'],
+               bool(i['leaflet'].topic_uncertain)]
+
+    no_topic_points = [point(i) for i in items
+                      if i['leaflet'].topic_id is None and i['leaflet'].x is not None]
+
+    def year_url(topic_id, bucket):
+        pairs = [('thema', topic_id)]
+        pairs += [('jahr', bucket)] if '/' not in bucket else [('sortierung', 'datum_auf')]
+        return '/leaflets?' + urlencode(pairs)
+
+    rows = []
     for topic in session.query(Topic).order_by(Topic.id):
-        year_counts = topic_year_counts.get(topic.id, Counter())
-        max_count = max(year_counts.values(), default=1)
+        topic_items = by_topic.get(topic.id, [])
+        counts = Counter(buckets[i['year']] for i in topic_items)
+        shares = {b: counts[b] / totals[b] for b in totals if counts[b]}
+        rows.append((topic, topic_items, counts, shares))
+    highest_share = max((s for _, _, _, shares in rows for s in shares.values()), default=1)
+
+    topics = []
+    for topic, topic_items, counts, shares in rows:
+        top_orgs = Counter(o for i in topic_items for o in i['orgs'] if o not in SPECIAL).most_common(3)
         topics.append({
             'id': topic.id,
             'title': topic.title,
             'words': topic.words or [],
             'title_note': TOPIC_TITLE_NOTES.get(topic.source),
-            'count': sum(year_counts.values()),
+            'count': len(topic_items),
+            'uncertain': sum(1 for i in topic_items if i['leaflet'].topic_uncertain),
+            'top_orgs': [{'label': org_names.get(o, o), 'count': n,
+                         'url': '/leaflets?' + urlencode([('thema', topic.id), ('org', o)])}
+                        for o, n in top_orgs],
             'years': [{
-                'year': year,
-                'count': year_counts.get(year, 0),
-                'height': round(year_counts.get(year, 0) / max_count * 100),
-            } for year in years],
+                'year': b,
+                'count': counts[b],
+                'total': totals[b],
+                'share': f"{shares.get(b, 0) * 100:.1f}".replace('.', ','),
+                'height': round(shares.get(b, 0) / highest_share * 100),
+                'url': year_url(topic.id, b),
+            } for b in totals],
+            'points': [point(i) for i in topic_items if i['leaflet'].x is not None],
         })
-    topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    if sortierung == 'alpha':
+        topics.sort(key=lambda t: text_sort_key(t['title']))
+    else:
+        topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    map_data = {'no_topic': no_topic_points,
+               'topics': [{'id': t['id'], 'title': t['title'], 'count': t['count'], 'points': t['points']}
+                         for t in topics if t['points']]}
+    uncertain_count = sum(1 for i in items if i['leaflet'].topic_uncertain)
+    no_topic_count = len(by_topic.get(None, []))
+    overview = {
+        'uncertain': uncertain_count,
+        'uncertain_url': '/leaflets?' + urlencode([('unsicher', 'ja')]),
+        'no_topic': no_topic_count,
+        'no_topic_url': '/leaflets?' + urlencode([('thema', NO_TOPIC)]),
+        'certain': len(items) - uncertain_count - no_topic_count,
+    }
     return templates.TemplateResponse(
-        request, "topic_list.html", {"topics": topics, "years": years})
+        request, "topic_list.html",
+        {"topics": topics, "years": list(totals), "sort": sortierung, "map_data": map_data,
+         "overview": overview})
 
 
 TREND_TERMS = 4
@@ -367,6 +417,7 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
                        for s, n, o in shares],
         'topics': [{'label': titles.get(t, str(t)), 'count': n,
                     'url': list_url(('thema', str(t)))} for t, n in topics],
+        'points': [[i['leaflet'].x, i['leaflet'].y] for i in items if i['leaflet'].x is not None],
     }
 
 
@@ -396,8 +447,9 @@ def trends(request: Request, begriffe: str = ''):
     for row in rows:
         row['remove_url'] = '/trends?' + urlencode(
             [('begriffe', ', '.join(t for t in terms if t != row['term']))] + filters)
-    chart = {'years': list(totals), 'totals': list(totals.values()),
-             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months')}
+    cloud = [[i['leaflet'].x, i['leaflet'].y] for i in everything if i['leaflet'].x is not None]
+    chart = {'years': list(totals), 'totals': list(totals.values()), 'cloud': cloud,
+             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months', 'points')}
                        for r in rows]}
     return templates.TemplateResponse(
         request, "trends.html",
@@ -416,6 +468,7 @@ def facet_labels():
         'thema': lambda t: 'ohne Thema' if t == NO_TOPIC else topics[t].title if t in topics else t,
         'typ': lambda t: DOC_TYPES.get(t, t),
         'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
+        'unsicher': lambda v: 'unsichere Themenzuordnung',
         'q': lambda v: f"„{v}“",
     }
 
@@ -468,6 +521,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
         'types': facet('typ', labels['typ']),
         'series': facet('reihe', str),
         'dates': facet('datum', labels['datum']),
+        'uncertain': facet('unsicher', labels['unsicher']),
     }
 
     # chips above the results, each removes its own parameter
@@ -511,7 +565,7 @@ def passages(items, params):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung', 'duplikate')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung', 'duplikate')
 
 
 def list_params(request):
@@ -566,6 +620,7 @@ FACETS = {
     'thema': lambda item: [NO_TOPIC if item['leaflet'].topic_id is None
                            else str(item['leaflet'].topic_id)],
     'datum': lambda item: [item['leaflet'].date_type],
+    'unsicher': lambda item: ['ja'] if item['leaflet'].topic_uncertain else [],
 }
 
 

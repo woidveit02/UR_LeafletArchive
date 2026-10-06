@@ -78,6 +78,9 @@ class Leaflet(Base):
     topic_id = Column(Integer, ForeignKey("topics.id"), nullable=True)
     topic_uncertain = Column(Boolean, default=False, server_default="0",
                              nullable=False)
+    # fixed 2D layout from the embeddings (topic_map.py), for the point-cloud overlay
+    x = Column(Float, nullable=True)
+    y = Column(Float, nullable=True)
 
     @property
     def series_label(self):
