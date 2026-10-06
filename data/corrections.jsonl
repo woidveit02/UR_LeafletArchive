@@ -15,3 +15,22 @@
 {"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 3"}, "at": "2026-10-01"}
 {"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximiliams-Universität Würzbug", "issue": "Nr. 4"}, "at": "2026-10-01"}
 {"volume": "0118_0002", "start_page": 2, "end_page": 3, "field": "series", "value": {"name": "Argumente zur Sache", "issue": "I"}, "blocks": ["2-3"], "at": "2026-10-02"}
+{"volume": "0118_0006", "start_page": 452, "end_page": 453, "field": "title", "value": "Stoppt Mundegruch - Haltet die Roten!", "blocks": ["452-1", "452-2"], "at": "2026-10-05"}
+{"volume": "0118_0006", "start_page": 454, "end_page": 455, "field": "title", "value": "Stoppt Mundegeruch - Haltet die Roten!", "blocks": ["454-1"], "at": "2026-10-05"}
+{"volume": "0118_0006", "start_page": 454, "end_page": 455, "field": "title", "value": "Stoppt Mundgeruch - Haltet die Roten!", "blocks": ["454-1"], "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 2, "end_page": 3, "field": "issuers", "value": [{"org": "lsd", "blocks": ["2-2"]}], "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 38, "end_page": 38, "field": "revert", "value": "series", "at": "2026-10-05"}
+{"volume": "0118_0002", "start_page": 38, "end_page": 38, "field": "series", "value": {"name": "Informationsblatt", "issue": "1"}, "at": "2026-10-05"}
+{"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "title", "value": "Das gestern vom AStA verteilte \"Gesetz\" zur Regelung des Hochschulordnungsrechts ...", "at": "2026-10-05"}
+{"volume": "0118_0003", "start_page": 103, "end_page": 103, "field": "revert", "value": "title", "at": "2026-10-05"}
+{"volume": "0118_0009", "start_page": 120, "end_page": 123, "field": "issuers", "value": [{"org": "fr_hjahrskampagne_72", "blocks": ["123-10"]}], "at": "2026-10-05"}
+{"volume": "0118_0013", "start_page": 190, "end_page": 191, "field": "title", "value": "RCDS rettet ASTA-Chef", "blocks": ["190-2"], "at": "2026-10-05"}
+{"volume": "0118_0003", "start_page": 131, "end_page": 131, "field": "issuers", "value": [{"org": "begefogregetz", "blocks": ["131-1"]}], "at": "2026-10-06"}
+{"volume": "0118_0003", "start_page": 139, "end_page": 139, "field": "title", "value": "Jedem Studenten, besonders denen, die neu nach Regenburg gekommen sind, ist es klar...", "blocks": ["139-2"], "at": "2026-10-06"}
+{"volume": "0118_0003", "start_page": 139, "end_page": 139, "field": "issuers", "value": [{"org": "dm", "blocks": ["139-1"]}], "at": "2026-10-06"}
+{"volume": "0118_0003", "start_page": 142, "end_page": 142, "field": "issuers", "value": [{"org": "dm", "blocks": ["142-1"]}], "at": "2026-10-06"}
+{"volume": "0118_0004", "start_page": 44, "end_page": 44, "field": "issuers", "value": [{"org": "als", "blocks": ["44-3"]}], "at": "2026-10-06"}
+{"volume": "0118_0004", "start_page": 44, "end_page": 44, "field": "revert", "value": "all", "at": "2026-10-06"}
+{"volume": "0118_0004", "start_page": 44, "end_page": 44, "field": "issuers", "value": [{"org": "begefogregetz", "blocks": ["44-17", "44-18"]}], "at": "2026-10-06"}
+{"volume": "0118_0004", "start_page": 43, "end_page": 43, "field": "issuers", "value": [{"org": "als", "blocks": ["43-2"]}], "at": "2026-10-06"}
+{"volume": "0118_0009", "start_page": 11, "end_page": 18, "field": "issuers", "value": [{"org": "akkj", "blocks": ["11-1"]}], "at": "2026-10-06"}

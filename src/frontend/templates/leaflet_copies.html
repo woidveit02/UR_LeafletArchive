@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block title %}Duplikate prüfen – UR Leaflet Archive{% endblock %}
+{% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
+{% macro field(label, value, deviates) %}
+<span class="copy-field"><span class="meta">{{ label }}:</span>
+    <span{% if deviates %} class="differs"{% endif %}>{% if value %}{{ value }}{% else %}<span class="meta">nicht erkannt</span>{% endif %}</span></span>
+{% endmacro %}
+{% macro card(c, is_new) %}
+<article class="dup-card">
+    {% if (cards | length) + (new | length) > 2 and not (checked and c.main) %}<label class="dup-hide" title="Im Vergleich unten aus- oder einblenden"><input type="checkbox" name="show" value="{{ c.id }}"{% if c.id in shown %} checked{% endif %}><span></span></label>{% endif %}
+    <p class="dup-name"><span class="dup-letter">{{ c.letter }}</span><a href="/leaflets/{{ c.id }}">{{ c.short }}</a>
+        {% if is_new %}<span class="role">Neu gefunden</span>{% else %}<span class="role main" data-role{% if not c.main %} hidden{% endif %}>Hauptexemplar</span>{% endif %}</p>
+    <p class="dup-facts">{% for key, label in fields.items() if key != 'received' or (cards + new) | selectattr('received') | list %}{{ field(label, c[key], c.id in differs[key]) }}{% endfor %}</p>
+    {% if simple %}
+    <div class="dup-actions">
+        {% if not checked %}
+        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Als Hauptexemplar wählen</button>
+        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button-plain">wählen und weiter</button>
+        {% elif not c.main %}
+        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Zum Hauptexemplar machen</button>
+        {% endif %}
+    </div>
+    {% elif is_new %}
+    <label><input type="checkbox" name="add" value="{{ c.id }}"> gehört dazu</label>
+    {% else %}
+    <label><input type="radio" name="main" value="{{ c.id }}"{% if c.main %} checked{% endif %}> Hauptexemplar</label>
+    <label><input type="checkbox" name="out" value="{{ c.id }}"> gehört nicht dazu</label>
+    {% endif %}
+</article>
+{% endmacro %}
+{% macro offered(field) %}
+{% for o in offers.get(field, []) %}
+<span class="meta note offer"><span class="dup-letter" title="{{ o.label }}">{{ o.letter }}</span> <mark class="differs">{{ o.value }}</mark>
+    <button type="submit" form="take" name="take" value="{{ field }}:{{ o.id }}" class="button-plain">übernehmen</button>
+    {% if o.blocks %}<a href="/leaflets/{{ o.id }}/evidence.png?blocks={{ o.blocks }}" target="_blank" rel="noopener">Beleg ↗</a>{% endif %}</span>
+{% endfor %}
+{% endmacro %}
+{% macro details_section() %}
+        <h2>Angaben der Gruppe</h2>
+        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Duplikat etwas
+            anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars.</p>
+        {{ lists(org_names, series_names) }}
+        {% for c in cards if c.id == left %}
+        {% set m = details %}
+        <div class="copy-edit">
+            <p class="copy-edit-head">Hauptexemplar {{ c.letter }} <span class="meta">({{ c.short }})
+                · {{ c.date or 'ohne Datum' }}{% if c.received %} · Eingang {{ c.received }}{% endif %}{% if m.corrected %} · von Hand korrigiert{% endif %}</span></p>
+            <form method="post" action="/leaflets/{{ c.id }}/exemplare/angaben" class="keep-scroll">
+                {% if m.error %}<p class="form-error" role="alert">{{ m.error }}</p>{% endif %}
+                <dl class="meta-list">
+                    <dt><label for="title-{{ c.id }}">Titel</label></dt><dd>{{ title_field(m) }}{{ offered('title') }}</dd>
+                    <dt><label for="date-{{ c.id }}">Datum</label></dt><dd>{{ date_field(m) }}{{ offered('date') }}</dd>
+                    <dt>Herausgeber</dt><dd>{{ issuers_field(m) }}{{ offered('issuers') }}</dd>
+                    <dt>Unterzeichnende</dt><dd>{{ signatories_field(m) }}{{ offered('signatories') }}</dd>
+                    <dt><label for="series-{{ c.id }}">Reihe</label></dt><dd>{{ series_field(m) }}{{ offered('series') }}</dd>
+                    <dt><label for="doc_type-{{ c.id }}">Textsorte</label></dt><dd>{{ doc_type_field(m) }}{{ offered('doc_type') }}</dd>
+                    <dt><label for="received-{{ c.id }}">Eingang im Archiv</label></dt><dd>{{ received_field(m) }}{{ offered('received') }}</dd>
+                </dl>
+                <div class="review-actions">
+                    <button type="submit" class="button-small">Angaben speichern</button>
+                    {% if m.corrected %}<button type="submit" form="revert-{{ c.id }}" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
+                </div>
+            </form>
+            <form id="take" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/uebernehmen" hidden></form>
+            <form id="revert-{{ c.id }}" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/zuruecksetzen" hidden
+                  onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen der Gruppe entfernen? Es gelten dann wieder die automatisch erkannten Angaben.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
+        </div>
+        {% endfor %}
+{% endmacro %}
+{% macro compare_section() %}
+        <section id="pair">{% include 'leaflet_copy_pair.html' %}</section>
+{% endmacro %}
+{% block content %}
+        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
+            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+            <span class="pager">
+                {% if queue.previous %}<a href="/leaflets/{{ queue.previous }}/exemplare">‹ Voriges</a>{% else %}<span class="disabled">‹ Voriges</span>{% endif %}
+                <span class="meta">{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}</span>
+                {% if queue.next %}<a href="/leaflets/{{ queue.next }}/exemplare">Nächstes ›</a>{% else %}<span class="disabled">Nächstes ›</span>{% endif %}
+            </span>
+        </nav>
+        <header class="page-head page-head-wide">
+            <div class="head-row">
+                <h1>Duplikate prüfen</h1>
+                <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
+            </div>
+        </header>
+        <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
+            <p class="meta">Wähle das Blatt mit den richtigen Angaben, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
+                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; „{{ 'wählen' if simple else 'speichern' }} und weiter“ führt direkt zur nächsten ungeprüften Gruppe.</p>
+            <div class="review-actions dup-more">
+                {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
+                {% if simple %}<button type="submit" name="verdict" value="different" class="button-outline">Das sind verschiedene Flugblätter</button>
+                {% elif checked %}<button type="submit" id="save" class="button-small">Änderung speichern</button>
+                {% else %}<button type="submit" id="save" class="button-small" disabled>Als geprüft speichern</button>
+                <button type="submit" id="save-next" name="next" value="1" class="button-plain" disabled>speichern und weiter</button>{% endif %}
+                {% if checked %}<button type="submit" name="revert" value="1" class="button-plain">Prüfung zurücknehmen</button>{% endif %}
+                {% if checked and queue.next %}<a class="button-small review-next" href="/leaflets/{{ queue.next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+            </div>
+            <div class="dup-cards">
+                {% for c in cards %}{{ card(c, false) }}{% endfor %}
+                {% for c in new %}{{ card(c, true) }}{% endfor %}
+            </div>
+            {% if new %}<p class="meta">Nicht angehakte neue Blätter gelten nach dem Speichern als nicht zugehörig.</p>{% endif %}
+        </form>
+
+        {% if checked %}{{ details_section() }}{% endif %}
+        {{ compare_section() }}
+        <dialog id="scan-popup">
+            <div class="popup-head"><strong>Stelle im Scan</strong>
+                <span class="copy-sheets popup-switch" role="group" aria-label="Blatt"></span>
+                <button type="button" class="button-plain" id="popup-close">Schließen</button></div>
+            <div class="popup-grid" id="popup-grid"></div>
+        </dialog>
+        {% include '_pick_bar.html' %}
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
+    <script src="{{ url_for('static', path='meta-form.js') }}"></script>
+    <script src="{{ url_for('static', path='evidence-pick.js') }}"></script>
+    <script>
+        // evidence can only be picked on the main copy: in its text and on its scan
+        const pick = initEvidencePicking('.copy-ocr[data-main] .ocr-block[data-block], .scan-boxes .ocr-box[data-block]');
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && pick.active()) pick.stop(false); });
+
+        const pair = document.getElementById('pair');
+        const mains = [...document.querySelectorAll('input[name=main]')], boxes = [...document.querySelectorAll('input[name=show]')];
+        const checkedGroup = {{ 'true' if checked else 'false' }};  // only a checked group has a main copy
+        let sheet = 1, allSheets = false, onlyDiffs = false;  // the sheet shown, the two options
+
+        // the sheet switch decides which sheet of the OCR text is shown, unless all sheets are wanted
+        const showSheets = () => {
+            pair.querySelectorAll('.sheet-row').forEach((row) => { row.hidden = !allSheets && Number(row.dataset.sheet) !== sheet; });
+            pair.querySelectorAll('.scan-boxes').forEach((boxes) => { boxes.hidden = Number(boxes.dataset.sheet) !== sheet; });
+            pair.querySelectorAll('.copy-sheets button').forEach((b) => {  // both switchers show the same sheet; "Alle" only exists for the text
+                const all = b.dataset.sheet === 'all', ofText = b.closest('.copy-sheets').classList.contains('for-text');
+                b.setAttribute('aria-pressed', all ? allSheets : Number(b.dataset.sheet) === sheet && !(ofText && allSheets));
+            });
+        };
+
+        // the leaflets that are ticked are compared side by side; at least two stay
+        const loadPair = () => {
+            const ids = boxes.filter((b) => b.checked).map((b) => b.value);
+            boxes.forEach((b) => { b.disabled = b.checked && ids.length <= 2; });
+            fetch(`/leaflets/{{ leaflet.id }}/exemplare/paar?ids=${ids.join(',')}`)
+                .then((r) => r.text())
+                .then((html) => {
+                    pair.innerHTML = html;
+                    sheet = 1;
+                    allSheets = false;
+                    const box = pair.querySelector('#only-diffs');
+                    if (box) box.checked = onlyDiffs;
+                    showSheets();
+                });
+        };
+
+        // "gehört nicht dazu" excludes "Hauptexemplar"; the main copy moves on when it is excluded
+        const sync = () => {
+            mains.forEach((r) => { r.disabled = r.closest('.dup-card').querySelector('input[name=out]').checked; });
+            mains.filter((r) => r.checked && r.disabled).forEach((r) => { r.checked = false; });
+            if (checkedGroup && !mains.some((r) => r.checked)) {  // a checked group keeps a main copy; otherwise the user chooses
+                const next = mains.find((r) => !r.disabled);
+                if (next) next.checked = true;
+            }
+            document.querySelectorAll('#save, #save-next').forEach((b) => { b.disabled = !mains.some((r) => r.checked); });
+            mains.forEach((r) => {  // the role of a card, as it will be saved
+                const badge = r.closest('.dup-card').querySelector('[data-role]'), main = r.checked && !r.disabled;
+                badge.hidden = !main && !r.disabled;  // only the main copy and an excluded one carry a badge
+                badge.className = `role ${main ? 'main' : 'alt'}`;
+                badge.textContent = main ? 'Hauptexemplar' : 'Falsch zugeordnet';
+            });
+        };
+        if (mains.length) {  // with more than two copies each card has its own choice
+            document.querySelectorAll('input[name=out], input[name=main]').forEach((box) => box.addEventListener('change', sync));
+            sync();
+        }
+        boxes.forEach((b) => b.addEventListener('change', loadPair));
+
+        pair.addEventListener('click', (e) => {
+            const picked = e.target.dataset.sheet;
+            if (!picked) return;  // one sheet number for both copies, for the scans and the OCR text
+            allSheets = picked === 'all';  // the whole text; the scans stay at the sheet shown
+            if (!allSheets) sheet = Number(picked);
+            pair.querySelectorAll('.copy-scan').forEach((scan) => {
+                const has = sheet <= Number(scan.dataset.pages), page = Number(scan.dataset.first) + sheet - 1;
+                const link = scan.querySelector('a'), img = scan.querySelector('img');
+                link.hidden = !has;
+                scan.querySelector('p').hidden = has;
+                if (has) {
+                    const url = `/leaflets/${scan.dataset.id}/pages/${page}.png`;
+                    link.href = url + '?dpi=220';
+                    img.classList.remove('loaded');  // fades in again when the new sheet has loaded
+                    img.src = url + '?dpi=90';
+                    img.alt = `Blattseite ${sheet}`;
+                }
+            });
+            showSheets();
+        });
+
+        // a click on a passage shows its place in the scan: the clicked block and its partner in the other
+        // copy, one at a time as large as possible (the box of a block; the OCR has no boxes for single words)
+        const popup = document.getElementById('scan-popup'), grid = document.getElementById('popup-grid');
+        const shot = (column, blockId) => {
+            const [page] = blockId.split('-'), label = column.dataset.label, base = `/leaflets/${column.dataset.leaflet}`;
+            const title = label.includes('–') ? `${label}, Seite ${page}` : label;
+            return `<figure><figcaption>${title}
+                <a href="${base}/pages/${page}.png?dpi=220" target="_blank" rel="noopener">ganze Seite ↗</a></figcaption>
+                <img src="${base}/evidence.png?blocks=${blockId}" alt="Ausschnitt aus dem Scan"></figure>`;
+        };
+        const showScan = (i) => {
+            popup.querySelectorAll('.popup-switch button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.show === String(i)));
+            [...grid.children].forEach((figure, n) => { figure.hidden = n !== i; });
+        };
+        // the same passage in every shown leaflet: the clicked block and its partners
+        const passage = (block) => {
+            const column = block.closest('.copy-ocr');
+            const partners = Object.fromEntries((block.dataset.partners || '').split(' ').filter(Boolean).map((p) => p.split(':')));
+            return [...column.closest('.sheet-row').querySelectorAll('.copy-ocr')]
+                .map((col) => [col, col === column ? block.dataset.block : partners[col.dataset.side]]);
+        };
+        pair.addEventListener('click', (e) => {
+            const block = e.target.closest('.ocr-block[data-block]');
+            if (!block || e.target.closest('a') || String(getSelection())) return;  // keep links and text selection
+            if (pick.active()) return;  // picking evidence: blocks of other leaflets do nothing
+            const column = block.closest('.copy-ocr');
+            const pieces = passage(block);
+            grid.innerHTML = pieces.map(([col, id]) => id ? shot(col, id)
+                : `<figure><figcaption>${col.dataset.label}</figcaption>
+                   <p class="meta">Im anderen Text wurde kein Gegenstück zu dieser Stelle gefunden.</p></figure>`).join('');
+            popup.querySelector('.popup-switch').innerHTML = pieces.map(([col], i) =>
+                `<button type="button" data-show="${i}" aria-pressed="false">${col.dataset.label.split(' · ')[0]}</button>`).join('');
+            showScan(pieces.findIndex(([col]) => col === column));  // the clicked block is shown first
+            popup.showModal();
+        });
+        popup.querySelector('.popup-switch').addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (button) showScan(Number(button.dataset.show));
+        });
+        document.getElementById('popup-close').addEventListener('click', () => popup.close());
+        popup.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });  // the backdrop
+
+        pair.addEventListener('change', (e) => {
+            if (e.target.id === 'only-diffs') { onlyDiffs = e.target.checked; pair.classList.toggle('only-diffs', onlyDiffs); }
+        });
+    </script>
+{% endblock %}

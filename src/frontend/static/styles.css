@@ -33,6 +33,8 @@
 }
 
 body {
+    display: flex;  /* the footer stays at the bottom of the window when the page is short */
+    flex-direction: column;
     margin: 0;
     min-height: 100vh;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -123,9 +125,37 @@ body {
 }
 
 .app {
+    flex: 1 0 auto;
+    box-sizing: border-box;
+    width: 100%;
     max-width: var(--content);
     margin: 0 auto;
     padding: 28px 24px 48px;
+}
+
+.site-footer {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--content-wide);
+    margin: 0 auto;
+    padding: 0 24px 32px;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.site-footer nav {
+    display: flex;
+    gap: 6px 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.site-footer a {
+    color: var(--muted);
+}
+
+.site-footer a:hover {
+    color: var(--accent);
 }
 
 .app-wide,
@@ -316,6 +346,474 @@ a:hover {
 
 .timeline li.row-empty span {
     color: #9ca3af;
+}
+
+.status-badge {  /* neutral: orange marks deviating details on the same page */
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--surface-muted);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge.checked {
+    background: var(--success-soft);
+    color: var(--success);
+}
+
+.page-head-wide {
+    max-width: none;
+}
+
+.review-next {  /* centered in the space the other actions leave */
+    margin: 0 auto;
+    text-decoration: none;
+}
+
+.review-state {
+    text-align: right;
+}
+
+.head-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+}
+
+.dup-more strong {
+    color: var(--success);
+}
+
+.role {
+    display: inline-block;
+    padding: 0 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface-muted);
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.role[hidden] {
+    display: none;
+}
+
+.role.main {
+    border-color: #a7f3d0;
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+.alt-note {
+    margin: 12px 0;
+    padding: 8px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface-muted);
+}
+
+body:has(#scan-popup) .pair-text .ocr-block[data-block] {
+    cursor: zoom-in;
+}
+
+.copy-edit {
+    margin: 8px 0;
+}
+
+.copy-edit-head {
+    margin: 0;
+    padding: 6px 0;
+}
+
+.copy-edit .meta-list {
+    grid-template-columns: 9.5em minmax(0, 1fr);
+    margin: 8px 0 12px;
+}
+
+@media (max-width: 600px) {
+    .copy-edit .meta-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .copy-edit .edit-row input[type="text"] {
+        flex-basis: 100%;
+    }
+}
+
+.dup-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px 24px;
+    margin: 12px 0;
+}
+
+.dup-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+}
+
+.dup-card:has(.role.main:not([hidden])) {  /* the main copy, also while its radio is chosen */
+    border-color: #15803d;
+    box-shadow: 0 0 0 1px #15803d;
+}
+
+.dup-name,
+.dup-facts {
+    margin: 0;
+}
+
+.dup-facts .copy-field {
+    display: block;
+    margin: 0 0 3px;
+}
+
+.dup-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    margin-bottom: 6px;
+}
+
+.dup-item {
+    max-width: 100%;  /* an entry wraps inside the column instead of running over it */
+}
+
+/* on the detail page the duplicates stay in the background */
+.meta-list .dup-inline,
+.meta-list .dup-status {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.meta-list .dup-inline a,
+.meta-list .dup-status a {
+    color: var(--muted);
+}
+
+.meta-list .dup-inline a:hover,
+.meta-list .dup-status a:hover {
+    color: var(--accent);
+}
+
+.meta-list .dup-inline strong {
+    color: var(--ink);
+}
+
+.meta-list .dup-letter {
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 6px;
+    background: var(--surface-muted);
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.meta-list .dup-inline .role.main {
+    border-color: var(--line);
+    background: none;
+    color: var(--muted);
+}
+
+/* a quiet option at the top of a card: hide the leaflet in the comparison below, or show it again */
+.dup-hide {
+    position: absolute;
+    z-index: 1;  /* above the faded content of a hidden card, so that "einblenden" can be clicked */
+    top: 12px;
+    right: 14px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.dup-hide + .dup-name {
+    padding-right: 4.8rem;  /* room for the option; the badge wraps below the name */
+}
+
+.dup-hide:hover {
+    text-decoration: underline;
+}
+
+.dup-hide input {
+    position: absolute;
+    opacity: 0;
+}
+
+.dup-hide span::before {
+    content: "ausblenden";
+}
+
+.dup-hide input:not(:checked) + span::before {
+    content: "einblenden";
+}
+
+.dup-hide input:disabled + span {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* a hidden leaflet's card fades, but the option to show it again stays easy to see */
+.dup-card:has(.dup-hide input:not(:checked)) > :not(.dup-hide) {
+    opacity: 0.55;
+}
+
+.dup-hide input:not(:checked) + span {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* every scan of the comparison reserves the same space, upright ones the same height; the frame has the scan's own shape,
+   so that the blocks offered while evidence is picked sit on the page */
+.copy-scan {
+    aspect-ratio: var(--scan-ratio, auto);
+}
+
+.scan-frame {
+    position: relative;
+    width: 100%;
+}
+
+.scan-frame img {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;  /* the image fills the frame: the page shape is known to within a pixel, and the blocks sit exactly */
+}
+
+.scan-boxes {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.picking .scan-boxes:not([hidden]) {
+    display: block;
+}
+
+.scan-boxes .ocr-box {
+    pointer-events: auto;
+}
+
+.picking .copy-ocr:not([data-main]) .ocr-block[data-block] {
+    cursor: not-allowed;
+}
+
+.dup-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7em;
+    height: 1.7em;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.dup-name > a {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.dup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-top: auto;
+}
+
+.dup-more {
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 4px;
+}
+
+.offer {
+    margin-top: 4px;
+}
+
+.copy-field {
+    margin-right: 14px;
+}
+
+.differs {
+    background: var(--warning-soft);
+    box-shadow: -4px 0 0 var(--warning-soft);
+}
+
+.copy-sheets {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+}
+
+.copy-sheets button {
+    padding: 4px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--ink-soft);
+    font: inherit;
+    cursor: pointer;
+}
+
+.copy-sheets button[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.pair-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: 8px 24px;
+}
+
+.pair-grid img {
+    width: 100%;
+    border: 1px solid var(--line);
+}
+
+.pair-diff {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 20px;
+    margin-bottom: 8px;
+}
+
+.pair-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.copy-ocr {
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+.copy-ocr.ocr-page {
+    max-width: none;  /* the transcription column is limited to a readable line; here two columns share the width */
+}
+
+.copy-ocr mark {
+    background: var(--warning-soft);
+    box-shadow: 0 0 0 1px #f0d9a8;
+    color: inherit;
+    text-decoration: underline;  /* the color alone must not carry the difference */
+    text-decoration-color: #d9a21b;
+    text-underline-offset: 2px;
+}
+
+.copy-ocr mark.gap {
+    padding: 0 3px;
+    border: 1px dashed var(--warning);
+    background: none;
+    color: var(--warning);
+    font-size: 0.85em;
+}
+
+/* a sheet is a row of the pair grid: the taller side sets the height, so the next sheet starts at the same place */
+.sheet-row {
+    margin-bottom: 14px;
+}
+
+.sheet-row[hidden] {
+    display: none;
+}
+
+.sheet-head {
+    grid-column: 1 / -1;
+    margin: 0 0 4px;
+}
+
+.copy-ocr .ocr-block[data-block] {
+    cursor: zoom-in;
+}
+
+.copy-ocr .ocr-block[data-block]:hover {
+    background: rgba(37, 99, 235, 0.06);
+}
+
+#scan-popup {
+    width: min(96vw, 1300px);
+    max-height: 94vh;
+    overflow: auto;
+    padding: 12px 16px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+}
+
+#scan-popup::backdrop {
+    background: rgba(32, 36, 43, 0.45);
+}
+
+.popup-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.popup-switch {
+    margin: 0;
+}
+
+.popup-grid figure[hidden] {
+    display: none;
+}
+
+.popup-grid figure {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.popup-grid figcaption {
+    margin-bottom: 4px;
+}
+
+.popup-grid img {
+    width: 100%;
+    border: 1px solid var(--line);
+}
+
+#pair.only-diffs .ocr-block:not(.has-marks) {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .pair-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .topic-list {
@@ -741,6 +1239,21 @@ select:focus {
     margin-right: auto;
 }
 
+.filter .dup-toggle {  /* above ".filter label", which is a grid */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.facet .dup-toggle input {
+    flex: none;
+    width: auto;
+    margin: 0;
+}
+
 .filter-result {
     margin: 0;
     color: var(--muted);
@@ -812,54 +1325,84 @@ select:focus {
     color: #fff;
 }
 
-.page-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+/* every page in a fixed cell; a leaflet runs over as many rows as it needs */
+.page-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 14px 0;
     margin-top: 16px;
 }
 
-.strip-group {
+.grid-page {
     box-sizing: border-box;
-    width: fit-content;
-    min-width: 130px;
-    max-width: 100%;
     margin: 0;
-    padding: 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    padding: 6px 3px;
+    scroll-margin-top: 90px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+.tone-1 {
     background: var(--surface-muted);
 }
 
-.strip-group:hover {
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+.group-start {
+    border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--line));
 }
 
-.strip-empty {
-    border-style: dashed;
-    background: none;
+.grid-page.hover,
+.grid-page.in-range {
+    background: color-mix(in srgb, var(--accent) 14%, var(--canvas));
 }
 
-.strip-pages {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-}
-
-.strip-pages img {
+.grid-scan img {
     display: block;
-    height: 150px;
-    width: auto;
-    background: var(--line);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 7 / 10;
+    object-fit: contain;
 }
 
-.strip-pages a:hover img {
+.left-out .grid-scan img {
+    opacity: 0.5;
+}
+
+.grid-scan:hover img {
     outline: 2px solid var(--accent);
 }
 
-.strip-empty .strip-pages img {
-    opacity: 0.45;
+.page-no {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.grid-page figcaption {
+    position: relative;  /* above the cells it runs over */
+    width: calc(var(--span, 1) * (100% + 6px) - 12px);
+    margin-top: 4px;
+    padding: 0 3px;
+    overflow-wrap: anywhere;
+}
+
+.grid-page .strip-issuers {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+.strip-dup {
+    display: block;
+    color: var(--muted);
+}
+
+.strip-dup:hover {
+    color: var(--accent);
 }
 
 .doc-grid {
@@ -967,15 +1510,6 @@ select:focus {
     text-overflow: ellipsis;
 }
 
-/* width 0 + min-width 100%: the caption follows the images' width */
-.strip-group figcaption {
-    width: 0;
-    min-width: 100%;
-    margin-top: 6px;
-    font-size: 0.85em;
-    line-height: 1.35;
-}
-
 .strip-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -984,8 +1518,8 @@ select:focus {
 }
 
 @media (max-width: 600px) {
-    .strip-pages img {
-        height: 110px;
+    .page-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
@@ -1536,13 +2070,20 @@ html {
     text-decoration: underline;
 }
 
-/* scan column as wide as the scan at screen height, the transcription follows directly */
+/* the transcription on the left, the scan on the right, as wide as the scan at screen height */
 .page-pair {
     display: grid;
-    grid-template-columns: min(calc((100vh - 130px) * var(--ratio, 0.7)), 50%) minmax(0, 75ch);
+    grid-template-columns: minmax(0, 75ch) min(calc((100vh - 130px) * var(--ratio, 0.7)), 50%);
     gap: 0 32px;
     align-items: start;
     margin-bottom: 48px;
+}
+
+@media (min-width: 801px) {  /* heads and columns swap places; the page order is scan first, for narrow screens */
+    .page-pair > :nth-child(1) { order: 2; }
+    .page-pair > :nth-child(2) { order: 1; }
+    .page-pair > :nth-child(3) { order: 4; }
+    .page-pair > :nth-child(4) { order: 3; }
 }
 
 .page-pair + .page-pair {
@@ -1829,6 +2370,95 @@ html {
     .pair-scan {
         position: static;
     }
+}
+
+/* a strip below the top bar for long leaflets: jump to a sheet or a heading, the sheet in view is marked */
+.page-nav {
+    position: sticky;
+    top: var(--topbar-h, 62px);
+    z-index: 9;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 18px;
+    margin: 8px 0 14px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--canvas);
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.page-nav-pages a {
+    display: inline-block;
+    min-width: 1.8em;
+    margin-left: 4px;
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink-soft);
+    text-align: center;
+    text-decoration: none;
+}
+
+.page-nav-pages a:hover {
+    border-color: var(--accent);
+}
+
+.page-nav-pages a[aria-current="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.page-outline {
+    position: relative;
+}
+
+.page-outline summary {
+    cursor: pointer;
+}
+
+.page-outline ul {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 12;
+    width: min(520px, 90vw);
+    max-height: 60vh;
+    overflow: auto;
+    margin: 0;
+    padding: 8px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    list-style: none;
+}
+
+.page-outline li {
+    padding: 3px 0;
+}
+
+.page-outline li.level-2 {
+    padding-left: 14px;
+}
+
+.page-outline li.level-3 {
+    padding-left: 28px;
+}
+
+body:has(.page-nav) .pair-scan {
+    top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) + 10px);
+}
+
+/* a sheet lands right below the strip, its separator line hidden behind it; a heading keeps a little air */
+.page-pair {
+    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) - 2px);
+}
+
+.ocr-block[id] {
+    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) + 8px);
 }
 
 .pick-bar {

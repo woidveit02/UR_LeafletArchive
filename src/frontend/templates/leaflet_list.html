@@ -68,6 +68,11 @@
                     {{ facet_list('Textsorte', facets.types) }}
                     {{ facet_list('Reihe', facets.series, 'Reihe') }}
                     {{ facet_list('Datierung', facets.dates) }}
+                    <div class="facet">
+                        <h2 class="facet-head">Duplikate</h2>
+                        <label class="dup-toggle" title="Zeigt auch die Blätter, die als Duplikat eines anderen Flugblatts gelten">
+                            <input type="checkbox" name="duplikate" value="1"{% if show_duplicates %} checked{% endif %} onchange="this.form.submit()"> Auch Duplikate zeigen</label>
+                    </div>
                 </details>
                 <script>
                     if (matchMedia('(max-width: 600px)').matches) document.querySelector('.facet-column').open = false;

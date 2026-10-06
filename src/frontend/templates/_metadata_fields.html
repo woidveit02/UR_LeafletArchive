@@ -1,0 +1,97 @@
+{# The editable metadata fields of a leaflet, shared by the detail page and the comparison of copies.
+   Each macro renders the inside of one form row; the page brings the layout, the <form> and the buttons.
+   m: {uid: leaflet id (keeps element ids unique), edit: form values, automatic: automatic values of the
+   corrected fields, pickable: evidence can be picked in the scan on this page}.
+   The "restore" buttons submit the form with the id revert-<uid>. Rows are added and removed by meta-form.js.
+   Render `lists` once per page: the suggestions for the issuer and series inputs. #}
+{% macro evidence(m, name, blocks, label) -%}
+    <input type="hidden" name="{{ name }}" value="{{ blocks | join(' ') }}">
+    {% if m.pickable %}<button type="button" class="pick-evidence" data-label="{{ label }}" aria-pressed="false">{% if not blocks %}Beleg wählen{% elif blocks | length == 1 %}Beleg: 1 Textstelle{% else %}Beleg: {{ blocks | length }} Textstellen{% endif %}</button>{% endif %}
+{%- endmacro %}
+
+{% macro automatic(m, field) -%}
+    {%- if field in m.automatic %}<span class="meta note">Automatisch erkannt: {{ m.automatic[field] or 'nichts' }}
+        <button type="submit" form="revert-{{ m.uid }}" name="field" value="{{ field }}" class="button-plain">wiederherstellen</button></span>{% endif -%}
+{%- endmacro %}
+
+{% macro row_tools(what) -%}
+    <button type="button" class="button-plain row-remove" aria-label="{{ what }} entfernen" title="Zeile entfernen">×</button>
+{%- endmacro %}
+
+{% macro issuer_row(m, i) -%}
+    <span class="edit-row">
+        <input type="text" name="issuer" value="{{ i.name }}" list="org-names" placeholder="Organisation suchen …" aria-label="Herausgeber" autocomplete="off">
+        {{ evidence(m, 'issuer_blocks', i.blocks, 'Herausgeber ' ~ (i.name or '(neu)')) }}
+        {{ row_tools('Herausgeber') }}
+    </span>
+{%- endmacro %}
+
+{% macro signatory_row(m, s) -%}
+    <span class="edit-row">
+        <input type="text" name="signatory_name" value="{{ s.name }}" placeholder="Name" aria-label="Name">
+        <input type="text" name="signatory_details" value="{{ s.details }}" placeholder="Funktion, z. B. verantwortlich" aria-label="Funktion">
+        {{ evidence(m, 'signatory_blocks', s.blocks, 'Unterzeichnende ' ~ (s.name or '(neu)')) }}
+        {{ row_tools('Unterzeichnende') }}
+    </span>
+{%- endmacro %}
+
+{% macro lists(org_names, series_names) -%}
+    <datalist id="org-names">{% for name in org_names %}<option value="{{ name }}">{% endfor %}</datalist>
+    <datalist id="series-names">{% for name in series_names %}<option value="{{ name }}">{% endfor %}</datalist>
+{%- endmacro %}
+
+{% macro title_field(m) -%}
+    <div class="edit-row title-edit">
+        <input type="text" id="title-{{ m.uid }}" name="title" value="{{ m.edit.title }}" aria-label="Titel" placeholder="Titel; leer lassen, wenn das Blatt keine eigene Überschrift hat">
+        {{ evidence(m, 'title_blocks', m.edit.title_blocks, 'Titel') }}
+    </div>
+    {{ automatic(m, 'title') }}
+{%- endmacro %}
+
+{% macro date_field(m) -%}
+    <span class="edit-row">
+        <input type="text" id="date-{{ m.uid }}" name="date" value="{{ m.edit.date if m.edit.date is defined else german_date(m.edit.date_iso) }}" placeholder="TT.MM.JJJJ" aria-describedby="date-hint-{{ m.uid }}">
+        <select name="date_type" aria-label="Art des Datums">
+            {% for key, label in DATE_TYPES.items() %}<option value="{{ key }}"{% if key == m.edit.date_type %} selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+        {{ evidence(m, 'date_blocks', m.edit.date_blocks, 'Datum') }}
+    </span>
+    <span class="meta note" id="date-hint-{{ m.uid }}">z. B. 17.12.1969, 12.1969 oder 1969; leer lassen, wenn das Blatt undatiert ist</span>
+    {{ automatic(m, 'date') }}
+{%- endmacro %}
+
+{% macro received_field(m) -%}
+    <span class="edit-row">
+        <input type="text" id="received-{{ m.uid }}" name="received" value="{{ m.edit.received if m.edit.received is defined else german_date(m.edit.received_iso) }}" placeholder="TT.MM.JJJJ" aria-describedby="received-hint-{{ m.uid }}">
+        {{ evidence(m, 'received_blocks', m.edit.received_blocks, 'Eingang im Archiv') }}
+    </span>
+    <span class="meta note" id="received-hint-{{ m.uid }}">Datum des Eingangsstempels; leer lassen, wenn das Blatt keinen hat</span>
+    {{ automatic(m, 'received') }}
+{%- endmacro %}
+
+{% macro issuers_field(m) -%}
+    <span class="edit-rows">{% for i in m.edit.issuers + [{'name': '', 'blocks': []}] %}{{ issuer_row(m, i) }}{% endfor %}</span>
+    <template>{{ issuer_row(m, {'name': '', 'blocks': []}) }}</template>
+    <button type="button" class="button-plain row-add">+ Herausgeber</button>
+    <span class="meta note">Nur Organisationen aus dem Register. Die Liste ersetzt alle bisherigen Herausgeber.</span>
+    {{ automatic(m, 'issuers') }}
+{%- endmacro %}
+
+{% macro signatories_field(m) -%}
+    <span class="edit-rows">{% for s in m.edit.signatories + [{'name': '', 'details': '', 'blocks': []}] %}{{ signatory_row(m, s) }}{% endfor %}</span>
+    <template>{{ signatory_row(m, {'name': '', 'details': '', 'blocks': []}) }}</template>
+    <button type="button" class="button-plain row-add">+ Unterzeichnende</button>
+    {{ automatic(m, 'signatories') }}
+{%- endmacro %}
+
+{% macro series_field(m) -%}
+    <span class="edit-row"><input type="text" id="series-{{ m.uid }}" name="series" value="{{ m.edit.series }}" list="series-names" autocomplete="off">
+        <input type="text" name="issue" value="{{ m.edit.issue }}" class="issue-input" placeholder="Nr., z. B. Nr. 5" aria-label="Nummer in der Reihe">{{ evidence(m, 'series_blocks', m.edit.series_blocks, 'Reihe') }}</span>
+    {{ automatic(m, 'series') }}
+{%- endmacro %}
+
+{% macro doc_type_field(m) -%}
+    <select id="doc_type-{{ m.uid }}" name="doc_type">
+        {% for key, label in DOC_TYPES.items() %}<option value="{{ key }}"{% if key == m.edit.doc_type %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>{{ automatic(m, 'doc_type') }}
+{%- endmacro %}

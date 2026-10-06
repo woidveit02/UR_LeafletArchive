@@ -1,0 +1,51 @@
+{% set cols = pair.cards | length %}
+{% if pair.max_pages > 1 %}
+<div class="copy-sheets" role="group" aria-label="Blattseite" title="gilt für alle Scans und den OCR-Text">Blattseite
+    {% for n in range(1, pair.max_pages + 1) %}<button type="button" data-sheet="{{ n }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ n }}</button>{% endfor %}</div>
+{% endif %}
+<div class="pair-grid" style="--cols: {{ cols }}{% if pair.ratio %}; --scan-ratio: {{ pair.ratio }}{% endif %}">
+    {% for c in pair.cards %}
+    <section>
+        <div class="copy-scan" data-id="{{ c.id }}" data-first="{{ c.page }}" data-pages="{{ c.pages }}">
+            <div class="scan-frame page-frame"{% if c.ratio %} style="aspect-ratio: {{ c.ratio }}"{% endif %}>
+            <a href="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img class="leaflet-page" src="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=90" alt="Blattseite 1, {{ c.label }}" onload="this.classList.add('loaded')"></a>
+            {% if c.main %}{% for n in range(1, c.pages + 1) %}<div class="scan-boxes" data-sheet="{{ n }}"{% if n > 1 %} hidden{% endif %}>{% for b in c.ocr.blocks | selectattr('page', 'equalto', c.page + n - 1) if b.box %}<span class="ocr-box" data-block="{{ b.id }}" style="left: {{ b.box[0] }}%; top: {{ b.box[1] }}%; width: {{ b.box[2] }}%; height: {{ b.box[3] }}%;"></span>{% endfor %}</div>{% endfor %}{% endif %}
+            </div>
+            <p class="meta" hidden>Dieses Blatt hat nur {{ c.pages }} Blattseite{{ 'n' if c.pages > 1 }}.</p>
+        </div>
+    </section>
+    {% endfor %}
+</div>
+<h3 class="facet-head">OCR-Text</h3>
+<div class="pair-diff meta">
+    <span><strong>Abweichende Textstellen{% if pair.max_pages > 1 %} (alle Blattseiten){% endif %}:</strong>
+        {% for c in pair.cards %}{{ c.letter }} {{ c.ocr.diffs }} ({{ c.ocr.differs }} Wörter){% if not loop.last %}, {% endif %}{% endfor %}.
+        Gelb unterstrichen: abweichende Wörter{% if cols > 2 %}, und zwar in dem Blatt, das von der Mehrheit der anderen abweicht{% endif %}. ∅: hier fehlen Wörter, die in {% if cols > 2 %}den anderen{% else %}dem anderen Blatt{% endif %} stehen. Zeilenumbrüche, Groß- und Kleinschreibung und Satzzeichen zählen nicht.</span>
+    <span class="pair-nav">
+        <label><input type="checkbox" id="only-diffs"> nur Absätze mit Abweichungen</label>
+    </span>
+</div>
+{% if pair.max_pages > 1 %}
+<div class="copy-sheets for-text" role="group" aria-label="Blattseite des Textes">Blattseite
+    {% for n in range(1, pair.max_pages + 1) %}<button type="button" data-sheet="{{ n }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ n }}</button>{% endfor %}
+    <button type="button" data-sheet="all" aria-pressed="false">Alle</button></div>
+{% endif %}
+<div class="ocr-sheets">
+    {% for n in range(1, pair.max_pages + 1) %}
+    <div class="pair-grid sheet-row" data-sheet="{{ n }}" style="--cols: {{ cols }}"{% if n > 1 %} hidden{% endif %}>
+        {% if pair.max_pages > 1 %}<p class="meta sheet-head">Blattseite {{ n }}</p>{% endif %}
+        {% for c in pair.cards %}
+        <div class="copy-ocr ocr-page" data-label="{{ c.letter }} · {{ c.label }}" data-leaflet="{{ c.id }}" data-side="{{ loop.index0 }}"{% if c.main %} data-main{% endif %}>
+            {% if n > c.pages %}<p class="meta">Dieses Blatt hat keine Blattseite {{ n }}.</p>
+            {% else %}
+            {% for b in c.ocr.blocks | selectattr('page', 'equalto', c.page + n - 1) %}
+            <div class="ocr-block ocr-{{ b.type | lower }}{% if b.marked %} has-marks{% endif %}" data-block="{{ b.id }}" data-partners="{% for col, id in b.partners.items() %}{{ col }}:{{ id }}{% if not loop.last %} {% endif %}{% endfor %}" title="Klick: Stelle in den Scans zeigen">{{ b.html | safe }}</div>
+            {% else %}
+            <p class="meta">Kein OCR-Text auf dieser Blattseite.</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>

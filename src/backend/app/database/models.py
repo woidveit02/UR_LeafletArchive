@@ -69,8 +69,11 @@ class Leaflet(Base):
     received_quote = Column(String)
     series_blocks = Column(JSON)  # only from manual corrections
     series_quote = Column(String)
-    # possible copies of the same leaflet share a group (find_copies.py, unreviewed)
+    # copies of the same leaflet share a group: find_copies.py proposes, copy_decisions.jsonl decides
     copy_group = Column(Integer)
+    canonical_leaflet_id = Column(Integer, ForeignKey("leaflets.id"))  # main copy of the group
+    copies_checked = Column(Boolean, default=False, server_default="0", nullable=False)
+    copy_candidate_of = Column(Integer)  # copy_group of a checked group that new automatic hit may join
     corrected = Column(JSON, default=list)  # field names corrected by hand
     topic_id = Column(Integer, ForeignKey("topics.id"), nullable=True)
     topic_uncertain = Column(Boolean, default=False, server_default="0",

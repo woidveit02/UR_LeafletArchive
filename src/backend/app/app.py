@@ -1,7 +1,9 @@
 import logging
 import re
 import unicodedata
-from collections import Counter
+from collections import Counter, defaultdict
+from difflib import SequenceMatcher
+from html import unescape
 import datetime
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode
@@ -15,8 +17,9 @@ from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import pdf_service
-from .database import corrections, search
-from .database.fillDatabase import (CORRECTIONS, VOLUMES, automatic_record,
+from .database import copy_decisions, corrections, search
+from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
+                                    fill_copies,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
 from .database.models import (Leaflet, LeafletIssuer, Volume, Organization, Page,
@@ -92,6 +95,8 @@ def german_to_iso(text):
 
 
 templates.env.globals['german_date'] = german_date
+templates.env.globals['DOC_TYPES'] = DOC_TYPES
+templates.env.globals['DATE_TYPES'] = DATE_TYPES
 
 
 MONTHS = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.',
@@ -164,7 +169,8 @@ def automatic_text(leaflet):
             'date': german_date(auto['date_iso']) or auto['date_text'],
             'series': ', '.join(v for v in (auto['series'], auto['issue']) if v),
             'doc_type': DOC_TYPES.get(auto['doc_type'], auto['doc_type']),
-            'issuers': names('issuer'), 'signatories': names('signatory')}
+            'issuers': names('issuer'), 'signatories': names('signatory'),
+            'received': german_date(auto['received_date'])}
     return {f: text[f] for f in leaflet.corrected if f in text}
 
 
@@ -187,7 +193,7 @@ async def not_found(request: Request, exc: StarletteHTTPException):
 
 
 # (volume vz, start page): stable across database rebuilds, unlike ids
-FEATURED = [(4, 101), (4, 234), (4, 263), (4, 180)]
+FEATURED = [(4, 101), (9, 120), (9, 498), (11, 17)]
 
 
 @app.get("/")
@@ -197,8 +203,9 @@ def index(request: Request):
                 .filter(Volume.vz == vz, Leaflet.start_page == page).first()
                 for vz, page in FEATURED]
     volume_years = {v.id: v.year for v in session.query(Volume)}
-    per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id])
-                       for lf in session.query(Leaflet))
+    # a leaflet with duplicates counts once: the other copies of its group are left out
+    unique = [lf for lf in session.query(Leaflet) if lf.copy_group is None or lf.canonical_leaflet_id == lf.id]
+    per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in unique)
     years = [int(y) for y in per_year if y.isdigit()]
     # every year in the range, so gaps in the collection stay visible
     timeline = [(str(y), per_year[str(y)])
@@ -330,19 +337,21 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     active_filters = [{'label': short_topic_title(labels['thema'](v)) if k == 'thema'
                        else labels.get(k, str)(v),
                        'url': url([p for p in params if p != (k, v)])}
-                      for k, v in params if k != 'sortierung']
+                      for k, v in params if k not in ('sortierung', 'duplikate')]
 
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "total": session.query(Leaflet).count(), "facets": facets,
+        {"leaflets": items, "facets": facets, "show_duplicates": 'duplikate' in selected,
+         "total": session.query(Leaflet).filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id)
+                                                if 'duplikate' not in selected else True).count(),
          "hidden_params": [(k, v) for k, v in params if k in FACETS],
          "active_filters": active_filters, "reset_all_url": url([]),
          "clear_search_url": url([(k, v) for k, v in params if k != 'q']),
          "selected_sort": selected.get('sortierung'),
          "selected_q": selected.get('q', ''),
          "q_short": bool(selected.get('q')) and not search.terms(selected['q']),
-         "filtered": sum(k not in ('q', 'sortierung') for k, _ in params),
+         "filtered": sum(k not in ('q', 'sortierung', 'duplikate') for k, _ in params),
          "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
          "switch_base": '/leaflets' + query_string,
          "detail_qs": query_string})
@@ -363,7 +372,7 @@ def passages(items, params):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung')
+LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'sortierung', 'duplikate')
 
 
 def list_params(request):
@@ -448,6 +457,8 @@ def searched_items(params):
         session.query(Leaflet)
         .join(Volume, Leaflet.volume_id == Volume.id)
     )
+    if not one.get('duplikate'):  # a group of duplicates is listed once, by its main copy, unless all copies are asked for
+        query = query.filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id))
 
     ranked = False
     if q:
@@ -523,14 +534,39 @@ def detail_page(request, leaflet, edit=None, error=None):
                           'blocks': p.blocks or [],
                           'width': width, 'height': height})
 
+    # long leaflets get a page strip, and an outline if the OCR found headings
+    outline = []
+    for p in page_list:
+        for n, b in enumerate(p['blocks'], 1):
+            text = re.sub(r'\s+', ' ', unescape(re.sub(r'<[^>]+>', ' ', b.get('html', '')))).strip()
+            if b.get('type') == 'SectionHeader' and text:
+                level = re.match(r'<h([1-6])', b['html'].lstrip())
+                outline.append({'text': text if len(text) <= 90 else text[:89] + '…', 'page': p['index'],
+                                'target': f"{p['no']}-{n}", 'level': min(int(level.group(1)), 3) if level else 1})
+
     copies = []
     if leaflet.copy_group:
         rows = session.query(Leaflet, Volume).join(Volume).filter(
             Leaflet.copy_group == leaflet.copy_group,
             Leaflet.id != leaflet.id).order_by(Volume.vz, Leaflet.start_page)
         copies = [{'id': lf.id, 'label': f"{vol.label}, "
-                   f"{page_range(lf.start_page, lf.end_page)}"}
+                   f"{page_range(lf.start_page, lf.end_page)}",
+                   'main': lf.id == leaflet.canonical_leaflet_id}
                   for lf, vol in rows]
+
+    members, candidates = copy_group_of(leaflet)  # the group with the letters of the comparison page
+    letters = copy_letters(members, candidates)
+    ordered = sorted(members + candidates, key=lambda lf: letters[lf.id])
+    volume_of = {lf.id: session.get(Volume, lf.volume_id).label for lf in ordered}
+    one_volume = len(set(volume_of.values())) == 1  # then the pages are enough: the volume stands in the row "Band"
+    short = {i: label.split(' (')[0] for i, label in volume_of.items()}  # "Nr. 002 (1968)" -> "Nr. 002", if that tells them apart
+    if len(set(short.values())) < len(set(volume_of.values())):
+        short = volume_of
+    group = [{'id': lf.id, 'letter': letters[lf.id], 'self': lf.id == leaflet.id, 'new': lf in candidates,
+              'main': bool(lf.copies_checked) and lf.id == lf.canonical_leaflet_id,
+              'label': page_range(lf.start_page, lf.end_page) if one_volume
+              else f"{short[lf.id]}, {short_pages(lf)}"}
+             for lf in ordered]
 
     # coming from a filtered list: page through that selection, else through the volume
     selection = list_params(request)
@@ -597,25 +633,25 @@ def detail_page(request, leaflet, edit=None, error=None):
         'topic_note': TOPIC_TITLE_NOTES.get(topic.source) if topic else None,
         'topic_uncertain': leaflet.topic_uncertain,
         'pages': pages,
+        'start_page': leaflet.start_page,
         'issuers': issuer_display,
         'signatories': [{'name': i.surface,
                          'details': '; '.join(d for d in (i.function, i.marker) if d)}
                         for i in signatories],
         'page_list': page_list,
+        'outline': outline if len(outline) >= 3 and len(page_list) >= 4 else [],
         'has_pdf': has_pdf,
         'copies': copies,
+        'group': group if len(group) > 1 else [],
+        'copy_main': leaflet.canonical_leaflet_id == leaflet.id,  # the main copy of its group
+        'copies_checked': bool(leaflet.copies_checked),
         'corrected': leaflet.corrected or [],
         'automatic': automatic_text(leaflet),
     }
 
-    org_names = [org_label(o) for o in sorted(session.query(Organization), key=org_sort_key)
-                 ] if edit else []
     return templates.TemplateResponse(
         request, "leaflet_details.html",
-        {"leaflet": data, "edit": edit, "error": error, "doc_types": DOC_TYPES,
-         "date_types": DATE_TYPES, "org_names": org_names,
-         "series_names": sorted({s for (s,) in session.query(Leaflet.series) if s})
-         if edit else []},
+        {"leaflet": data, "edit": edit, "error": error, **(edit_choices() if edit else {})},
         status_code=400 if error else 200)
 
 
@@ -644,8 +680,15 @@ def current_values(leaflet):
             'date_blocks': list(leaflet.date_blocks or []),
             'series': leaflet.series or '', 'issue': leaflet.issue or '',
             'series_blocks': list(leaflet.series_blocks or []),
+            'received_iso': leaflet.received_date or '', 'received_blocks': list(leaflet.received_blocks or []),
             'doc_type': leaflet.doc_type or 'unklar', 'issuers': issuers,
             'signatories': signatories}
+
+
+def edit_choices():
+    """The suggestions of the issuer and series inputs of the metadata form."""
+    return {'org_names': [org_label(o) for o in sorted(session.query(Organization), key=org_sort_key)],
+            'series_names': sorted({s for (s,) in session.query(Leaflet.series) if s})}
 
 
 def segment(leaflet):
@@ -664,10 +707,8 @@ def save_corrections(leaflet, changes):
     session.commit()
 
 
-@app.post("/leaflets/{leaflet_id}/bearbeiten")
-async def leaflet_save(request: Request, leaflet_id: int):
-    leaflet = leaflet_or_404(leaflet_id)
-    raw = parse_qs((await request.body()).decode(), keep_blank_values=True)
+def read_metadata_form(leaflet, raw):
+    """(values, error) of a submitted metadata form; raw: the parsed body, field -> list of values."""
 
     def blocks(value):
         # evidence picked in the scan: block ids on this leaflet's pages only
@@ -682,8 +723,12 @@ async def leaflet_save(request: Request, leaflet_id: int):
 
     form = {k: raw.get(k, [''])[0].strip()
             for k in ('title', 'date', 'date_type', 'series', 'issue', 'doc_type')}
-    for k in ('title', 'date', 'series'):
+    for k in ('title', 'date', 'series', 'received'):
         form[f'{k}_blocks'] = blocks(raw.get(f'{k}_blocks', [''])[0])
+    form['received'] = raw.get('received', [''])[0].strip()
+    form['received_iso'] = german_to_iso(form['received']) if form['received'] else ''
+    if 'received' not in raw:  # a form without the field leaves the stamp as it is
+        form['received_iso'], form['received_blocks'] = leaflet.received_date or '', list(leaflet.received_blocks or [])
     org_ids = {org_label(o): o.id for o in session.query(Organization)}
     form['issuers'] = [{'org': org_ids.get(name), 'name': name, 'blocks': blocks(b)}
                        for name, b in rows('issuer', 'issuer_blocks')]
@@ -697,6 +742,8 @@ async def leaflet_save(request: Request, leaflet_id: int):
     unknown = [i['name'] for i in form['issuers'] if not i['org']]
     if form['date_iso'] is None:
         error = "Datum bitte als TT.MM.JJJJ, MM.JJJJ oder JJJJ angeben, z. B. 17.12.1969."
+    elif form['received_iso'] is None:
+        error = "Eingang bitte als TT.MM.JJJJ, MM.JJJJ oder JJJJ angeben."
     elif form['date_iso'] and form['date_type'] == 'undated':
         error = "Bitte die Art des Datums wählen."
     elif unknown:
@@ -705,19 +752,21 @@ async def leaflet_save(request: Request, leaflet_id: int):
         error = "Ungültige Auswahl."
     else:
         error = None
-    if error:
-        return detail_page(request, leaflet, form, error)
+    return form, error
 
+
+def save_metadata(leaflet, form):
+    """Appends the fields that differ from the current values to corrections.jsonl and applies them."""
     # a field counts as corrected when its value or its evidence changed
     old = current_values(leaflet)
     changes = []
     for field, keys in (('title', ['title']), ('date', ['date_iso', 'date_type']),
-                        ('series', ['series', 'issue'])):
+                        ('series', ['series', 'issue']), ('received', ['received_iso'])):
         keys = keys + [f'{field}_blocks']
         if [form[k] for k in keys] != [old[k] for k in keys]:
             value = {'date': {'iso': form['date_iso'], 'type': form['date_type']},
-                     'series': {'name': form['series'], 'issue': form['issue']}
-                     }.get(field, form[field])
+                     'series': {'name': form['series'], 'issue': form['issue']},
+                     'received': form['received_iso']}.get(field, form.get(field))
             changes.append((field, value, form[f'{field}_blocks']))
     if form['doc_type'] != old['doc_type']:
         changes.append(('doc_type', form['doc_type'], []))
@@ -729,14 +778,20 @@ async def leaflet_save(request: Request, leaflet_id: int):
         changes.append(('signatories', form['signatories'], []))
     if changes:
         save_corrections(leaflet, changes)
+
+
+@app.post("/leaflets/{leaflet_id}/bearbeiten")
+async def leaflet_save(request: Request, leaflet_id: int):
+    leaflet = leaflet_or_404(leaflet_id)
+    form, error = read_metadata_form(leaflet, parse_qs((await request.body()).decode(), keep_blank_values=True))
+    if error:
+        return detail_page(request, leaflet, form, error)
+    save_metadata(leaflet, form)
     return back_to(request, leaflet_id)
 
 
-@app.post("/leaflets/{leaflet_id}/zuruecksetzen")
-async def leaflet_revert(request: Request, leaflet_id: int):
+def revert_metadata(leaflet, field):
     """Back to the automatic values, for one field or all ("revert" line)."""
-    leaflet = leaflet_or_404(leaflet_id)
-    field = parse_qs((await request.body()).decode()).get('field', ['all'])[0]
     if field != 'all' and field not in corrections.FIELDS:
         raise HTTPException(400)
     key = segment(leaflet)
@@ -745,6 +800,12 @@ async def leaflet_revert(request: Request, leaflet_id: int):
     corrections.apply(leaflet, corrections.by_segment(corrections.load(CORRECTIONS)).get(
         tuple(key.values()), []))
     session.commit()
+
+
+@app.post("/leaflets/{leaflet_id}/zuruecksetzen")
+async def leaflet_revert(request: Request, leaflet_id: int):
+    leaflet = leaflet_or_404(leaflet_id)
+    revert_metadata(leaflet, parse_qs((await request.body()).decode()).get('field', ['all'])[0])
     return back_to(request, leaflet_id)
 
 
@@ -752,6 +813,541 @@ def back_to(request, leaflet_id):
     query = request.url.query
     return RedirectResponse(f"/leaflets/{leaflet_id}" + (f"?{query}" if query else ''),
                             status_code=303)
+
+
+COPY_STATES = {'offen': 'Nicht geprüft', 'geprueft': 'Geprüft', 'neu': 'Neue Treffer'}
+
+
+def copy_rows():
+    """One row per group of copies in archive order: its main copy's id, title, review state and members."""
+    groups = {}
+    for leaflet, volume in session.query(Leaflet, Volume).join(Volume).filter(or_(
+            Leaflet.copy_group.isnot(None), Leaflet.copy_candidate_of.isnot(None))).order_by(
+            Volume.vz, Leaflet.start_page):
+        if leaflet.copy_group:
+            groups.setdefault(leaflet.copy_group, {'members': [], 'new': 0})['members'].append((leaflet, volume))
+        if leaflet.copy_candidate_of:
+            groups.setdefault(leaflet.copy_candidate_of, {'members': [], 'new': 0})['new'] += 1
+    rows = []
+    for key, group in groups.items():
+        main = next(lf for lf, _ in group['members'] if lf.id == lf.canonical_leaflet_id)
+        first, volume = group['members'][0]
+        rows.append({'group': key, 'id': main.id, 'title': main.display_title, 'new': group['new'],
+                     'state': 'neu' if group['new'] else 'geprueft' if main.copies_checked else 'offen',
+                     'order': (volume.vz, first.start_page),
+                     'anchors': [(v.stem, lf.start_page, lf.end_page) for lf, v in group['members']],
+                     'labels': [f"{v.label}, {page_range(lf.start_page, lf.end_page)}" + (' (Hauptexemplar)' if lf is main and main.copies_checked else '')
+                                for lf, v in group['members']]})
+    return rows
+
+
+def review_queue(leaflet):
+    """The groups still to check, seen from the leaflet's group: the main copies of the previous and the next
+    one, the position of this group among them (None if it is checked) and their number."""
+    rows = copy_rows()
+    key = leaflet.copy_candidate_of or leaflet.copy_group
+    here = next((i for i, r in enumerate(rows) if r['group'] == key), len(rows))
+    todo = lambda r: r['state'] != 'geprueft'
+    before, after = [r for r in rows[:here] if todo(r)], [r for r in rows[here + 1:] if todo(r)]
+    current = here < len(rows) and todo(rows[here])
+    return {'previous': before[-1]['id'] if before else None, 'next': after[0]['id'] if after else None,
+            'position': len(before) + 1 if current else None, 'total': len(before) + len(after) + current}
+
+
+def latest_reviews():
+    """anchor -> the newest review in force that saw it."""
+    lines = corrections.load(COPY_DECISIONS)
+    reverted = {e['revert'] for e in lines if 'revert' in e}
+    latest = {}
+    for e in sorted((e for e in lines if 'revert' not in e and e['at'] not in reverted), key=lambda e: e['at']):
+        for a in e['members'] + e['rejected']:
+            latest[copy_decisions.anchor(a)] = e
+    return latest
+
+
+def separated_rows(latest):
+    """One row per leaflet that the review in force split off its group: the leaflet, the ones it was split from, the review date."""
+    leaflets = {(v.stem, lf.start_page, lf.end_page): (lf, v) for lf, v in session.query(Leaflet, Volume).join(Volume)}
+
+    def card(a):
+        lf, v = leaflets[a]
+        return {'id': lf.id, 'leaflet': lf, 'label': f"{v.label}, {page_range(lf.start_page, lf.end_page)}",
+                'order': (v.vz, lf.start_page)}
+    return [{**card(a), 'state': 'getrennt', 'at': e['at'],
+             'from': [card(m) for m in map(copy_decisions.anchor, e['members']) if m in leaflets]}
+            for a, e in latest.items() if a in leaflets and a in map(copy_decisions.anchor, e['rejected'])]
+
+
+def review_date(at):
+    return f"{german_date(at[:10])}, {at[11:16]}"
+
+
+REVIEW_KINDS = {**COPY_STATES, 'getrennt': 'Getrennt'}
+REVIEW_SORTS = {'': 'Reihenfolge im Archiv', 'neu': 'Prüfdatum, neueste zuerst', 'alt': 'Prüfdatum, älteste zuerst'}
+
+
+@app.get("/exemplare")
+def copy_list(request: Request, status: str = '', sortierung: str = ''):
+    """All groups of copies with the state of their review; each opens its comparison page. A leaflet that a
+    review split off is listed as checked; the checked rows can be sorted by review date."""
+    latest = latest_reviews()
+    rows = copy_rows()
+    for r in rows:
+        r['at'] = r['state'] == 'geprueft' and max((latest[a]['at'] for a in r['anchors'] if a in latest), default=None)
+    first = next((r['id'] for r in rows if r['state'] != 'geprueft'), None)
+    rows = sorted(rows + separated_rows(latest), key=lambda r: r['order'])
+    for r in rows:
+        r['date'] = r['at'] and review_date(r['at'])
+    checked = lambda r: r['state'] in ('geprueft', 'getrennt')
+    counts = Counter('geprueft' if checked(r) else r['state'] for r in rows)
+    shown = [r for r in rows if r['state'] == status or status == 'geprueft' and checked(r)] if status in COPY_STATES else rows
+    if status == 'geprueft' and sortierung in ('neu', 'alt'):
+        shown.sort(key=lambda r: r['at'] or '', reverse=sortierung == 'neu')
+    return templates.TemplateResponse(
+        request, "copy_list.html",
+        {"rows": shown, "total": len(rows), "counts": counts, "states": COPY_STATES, "kinds": REVIEW_KINDS,
+         "sorts": REVIEW_SORTS, "status": status, "sort": sortierung, "first": first})
+
+
+def copy_group_of(leaflet):
+    """(members, candidates) of the group the leaflet belongs to, or may join as a new hit."""
+    group = leaflet.copy_candidate_of or leaflet.copy_group
+    if not group:
+        return [], []
+
+    def rows(column):
+        return session.query(Leaflet).join(Volume).filter(column == group).order_by(
+            Volume.vz, Leaflet.start_page).all()
+    return rows(Leaflet.copy_group), rows(Leaflet.copy_candidate_of)
+
+
+def deviating(cards, key):
+    """Ids of the copies whose value differs from the most common one; all of them if two values tie.
+    A missing value contradicts nothing, so copies without one are left out."""
+    cards = [c for c in cards if c[key]]
+    counts = Counter(c[key] for c in cards).most_common()
+    if len(counts) < 2:
+        return set()
+    if counts[0][1] == counts[1][1]:
+        return {c['id'] for c in cards}
+    return {c['id'] for c in cards if c[key] != counts[0][0]}
+
+
+TAG = re.compile(r'(<[^>]*>)')
+WORD = re.compile(r'\S+')
+MAX_DIFF_WORDS = 4000  # the word comparison grows quadratically; longer texts are shown unmarked
+
+
+def block_words(html_text):
+    """The words of the text nodes of one OCR block (its html is already sanitized)."""
+    return [w for part in TAG.split(html_text) if not part.startswith('<') for w in WORD.findall(part)]
+
+
+def word_key(word):
+    """Words are compared without case and punctuation."""
+    return re.sub(r'\W+', '', unescape(word)).casefold() or word
+
+
+GAP = '<mark class="gap" data-diff="{}" title="Im anderen Duplikat nicht erkannt">∅</mark>'
+
+
+def mark_block(html_text, start, marks, gaps):
+    """The block's html with the words whose running index is in `marks` wrapped in <mark>, tagged with the
+    number of their deviation. `gaps` puts a gap marker before a word: the other copy has words here."""
+    index = start
+    out = []
+    for part in TAG.split(html_text):
+        if part.startswith('<'):
+            out.append(part)
+            continue
+
+        def wrap(match):
+            nonlocal index
+            i, index = index, index + 1
+            word = f'<mark data-diff="{marks[i]}">{match.group()}</mark>' if i in marks else match.group()
+            return (GAP.format(gaps[i]) + ' ' if i in gaps else '') + word
+        out.append(WORD.sub(wrap, part))
+    return ''.join(out), index
+
+
+def word_units(words):
+    """[(key, display indices)]: a word hyphenated at the line end joins the next word, so that
+    'Literaturwissen- schaften' and 'Literaturwissenschaften' are the same."""
+    units, i = [], 0
+    while i < len(words):
+        word = words[i]
+        if i + 1 < len(words) and len(word) > 1 and word.endswith('-') and word[-2].isalnum():
+            units.append((word_key(word[:-1]) + word_key(words[i + 1]), [i, i + 1]))
+            i += 2
+        else:
+            units.append((word_key(word), [i]))
+            i += 1
+    return units
+
+
+def prepare_words(blocks):
+    """The words of one leaflet's OCR blocks: their units (see word_units), the block of each word, the evidence ids."""
+    words = [w for _, _, b in blocks for w in block_words(b['html'])]
+    return {'blocks': blocks, 'words': words, 'units': word_units(words),
+            'owner': [i for i, (_, _, b) in enumerate(blocks) for _ in block_words(b['html'])],
+            'ids': [f"{page_no}-{number}" for page_no, number, _ in blocks]}  # evidence image ids
+
+
+def word_diff(left, right):
+    """Compares two prepared leaflets: per side the words of a deviation and the places where only the other has words
+    (word index -> number of the deviation), the number of deviations, and per side which block of the other leaflet
+    holds most of the matching words of each block."""
+    sides = (left, right)
+    marks, gaps, votes, count = [{}, {}], [{}, {}], [defaultdict(Counter), defaultdict(Counter)], 0
+
+    def first(side, n):  # the first word of a unit; the end of the text for the unit after the last
+        units = sides[side]['units']
+        return units[n][1][0] if n < len(units) else len(sides[side]['words'])
+    if max(len(left['words']), len(right['words'])) <= MAX_DIFF_WORDS:
+        keys = [[key for key, _ in s['units']] for s in sides]
+        for tag, i1, i2, j1, j2 in SequenceMatcher(None, keys[0], keys[1], autojunk=False).get_opcodes():
+            if tag == 'equal':
+                for k in range(i2 - i1):
+                    a, b = first(0, i1 + k), first(1, j1 + k)
+                    votes[0][left['owner'][a]][right['owner'][b]] += 1
+                    votes[1][right['owner'][b]][left['owner'][a]] += 1
+                continue
+            count += 1
+            for side, (lo, hi) in enumerate(((i1, i2), (j1, j2))):
+                for n in range(lo, hi):
+                    marks[side].update({d: count for d in sides[side]['units'][n][1]})
+            if i1 == i2:
+                gaps[0][first(0, i1)] = count
+            if j1 == j2:
+                gaps[1][first(1, j1)] = count
+    return marks, gaps, votes, count
+
+
+def render_blocks(prep, marks, gaps, partners):
+    """The blocks of a prepared leaflet as rows: the marked words in the html, the gap markers, and for each other
+    leaflet (`partners`: column, its evidence ids, the votes) the block that holds most of the matching words."""
+    index, rows = 0, []
+    for i, (page_no, number, block) in enumerate(prep['blocks']):
+        html_text, index = mark_block(block['html'], index, marks, gaps)
+        rows.append({'page': page_no, 'type': block['type'], 'html': html_text, 'marked': '<mark' in html_text,
+                     'id': prep['ids'][i], 'box': block.get('box'), 'partners': {col: ids[top[0][0]] for col, ids, votes in partners
+                                                        if (top := votes[i].most_common(1))}})
+    if index in gaps and rows:  # words of the other copy at the very end
+        head, _, tail = rows[-1]['html'].rpartition('</')
+        rows[-1]['html'] = f"{head} {GAP.format(gaps[index])}</{tail}" if head else rows[-1]['html']
+        rows[-1]['marked'] = True
+    return rows
+
+
+def ocr_pair(left, right):
+    """The OCR blocks of two copies, structured. The words of a deviation are marked on both sides and carry its
+    number; where only the other copy has words, a gap marker stands. Each block names its partner, the
+    block of the other copy that holds most of its matching words."""
+    a, b = prepare_words(left), prepare_words(right)
+    marks, gaps, votes, count = word_diff(a, b)
+    return [{'blocks': render_blocks(prep, marks[side], gaps[side], [(1 - side, other['ids'], votes[side])]),
+             'differs': len(marks[side]), 'words': len(prep['words']), 'diffs': count}
+            for side, (prep, other) in enumerate(((a, b), (b, a)))]
+
+
+def ocr_group(block_lists):
+    """The OCR blocks of three or more copies. Every pair is compared; a word is marked in a copy if it deviates there from
+    more than half of the others, so the odd one out is marked and not the rest (likewise a gap). A block names its partner
+    block in each of the other copies."""
+    preps = [prepare_words(blocks) for blocks in block_lists]
+    n = len(preps)
+    marked, gapped, votes = [Counter() for _ in preps], [Counter() for _ in preps], {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            marks, gaps, pair_votes, _ = word_diff(preps[i], preps[j])
+            for side, k in enumerate((i, j)):
+                marked[k].update(dict.fromkeys(marks[side], 1))
+                gapped[k].update(dict.fromkeys(gaps[side], 1))
+            votes[i, j], votes[j, i] = pair_votes
+    sides = []
+    for i, prep in enumerate(preps):
+        marks = {k: 1 for k, c in marked[i].items() if 2 * c > n - 1}
+        gaps = {k: 1 for k, c in gapped[i].items() if 2 * c > n - 1}
+        partners = [(j, preps[j]['ids'], votes[i, j]) for j in range(n) if j != i]
+        sides.append({'blocks': render_blocks(prep, marks, gaps, partners), 'differs': len(marks), 'words': len(prep['words']),
+                      'diffs': sum(1 for k in marks if k - 1 not in marks) + len(gaps)})
+    return sides
+
+
+def copy_blocks(leaflet):
+    """(page number, block number on the page, OCR block) of the leaflet's pages, pictures left out."""
+    pages = session.query(Page).filter_by(leaflet_id=leaflet.id).order_by(Page.page_no)  # indexed
+    return [(p.page_no, number, b) for p in pages for number, b in enumerate(p.blocks or [], 1)
+            if b.get('type') != 'Picture']
+
+
+COPY_MESSAGES = {'angaben': 'Angaben aktualisiert.', 'gespeichert': 'Prüfung gespeichert.',
+                 'zurueckgenommen': 'Prüfung zurückgenommen, es gilt wieder der automatische Vorschlag.',
+                 'getrennt': 'Als verschiedene Flugblätter gespeichert.'}
+
+
+def shorten(cards):
+    """Sets the short name: the page range alone when all copies are in one volume (said once on the page)."""
+    same = len({c['volume'] for c in cards}) == 1
+    for c in cards:
+        c['label'] = f"{c['volume']}, {c['range']}"
+        c['short'] = c['range'] if same else c['label']
+    return same
+
+
+TAKE_KEYS = {'title': ['title'], 'date': ['date_iso', 'date_type'], 'series': ['series', 'issue'],
+             'doc_type': ['doc_type'], 'issuers': ['issuers'], 'signatories': ['signatories'],
+             'received': ['received_iso']}
+
+
+def field_text(values, field):
+    """A field of current_values as shown, for comparing leaflets."""
+    if field == 'date':
+        return ' '.join(filter(None, [german_date(values['date_iso']), DATE_TYPES.get(values['date_type'], '')
+                                      if values['date_iso'] else '']))
+    if field == 'series':
+        return ' '.join(filter(None, [values['series'], values['issue']]))
+    if field == 'received':
+        return german_date(values['received_iso'])
+    if field == 'doc_type':
+        return '' if values['doc_type'] == 'unklar' else DOC_TYPES.get(values['doc_type'], '')
+    if field in ('issuers', 'signatories'):
+        return ', '.join(i['name'] for i in values[field])
+    return values[field]
+
+
+def field_blocks(values, field):
+    if field in ('issuers', 'signatories'):
+        return [b for i in values[field] for b in i['blocks']]
+    return values.get(f'{field}_blocks', [])
+
+
+def copy_letters(members, candidates):
+    """A, B, C ... for the leaflets of a group in archive order, new hits last. A letter stays with its leaflet
+    when the main copy changes."""
+    return {lf.id: chr(65 + i) for i, lf in enumerate(members + candidates)}
+
+
+def copy_card(leaflet, main_id):
+    volume = session.get(Volume, leaflet.volume_id)
+    values = current_values(leaflet)
+    return {'volume': volume.label, 'range': page_range(leaflet.start_page, leaflet.end_page), 'id': leaflet.id, 'page': leaflet.start_page, 'pages': leaflet.end_page - leaflet.start_page + 1,
+            'main': leaflet.id == main_id,
+            'title': leaflet.title or '', 'date': iso_to_text(leaflet.date_iso) or '',
+            'issuers': ', '.join(i['name'] for i in values['issuers']),
+            'signatories': ', '.join(i['name'] for i in values['signatories']),
+            'series': leaflet.series_label or '', 'received': iso_to_text(leaflet.received_date) or ''}
+
+
+@app.get("/leaflets/{leaflet_id}/exemplare")
+def copy_page(request: Request, leaflet_id: int, meldung: str = '', offen: int = 0):
+    """Compares the copies of a group side by side: confirm, exclude, choose the main copy, correct the details.
+    A leaflet that a review split off its group gets that review, to take it back or go on."""
+    leaflet = leaflet_or_404(leaflet_id)
+    if copy_group_of(leaflet)[0]:
+        return copy_view(request, leaflet, meldung, bool(offen))
+    split = [r for r in separated_rows(latest_reviews()) if leaflet.id in [r['id']] + [f['id'] for f in r['from']]]
+    if not split:
+        raise HTTPException(404)
+    split = max(split, key=lambda r: r['at'])
+    split['date'] = review_date(split['at'])
+    here = (session.get(Volume, leaflet.volume_id).vz, leaflet.start_page)
+    following = next((r['id'] for r in copy_rows() if r['state'] != 'geprueft' and r['order'] > here), None)
+    return templates.TemplateResponse(request, "copy_split.html", {
+        "leaflet": leaflet, "split": split, "next": following, "message": COPY_MESSAGES.get(meldung)})
+
+
+def copy_view(request, leaflet, meldung='', offen=False, form=None, error=None):
+    """The comparison page. `offen`: the details form is open; `form`, `error`: its rejected values."""
+    members, candidates = copy_group_of(leaflet)
+    if not members:
+        raise HTTPException(404)
+    checked = bool(members[0].copies_checked)
+    main_id = members[0].canonical_leaflet_id if checked else None  # no main copy before the review
+    cards = [copy_card(lf, main_id) for lf in members]
+    new = [copy_card(lf, None) for lf in candidates]
+    letters = copy_letters(members, candidates)
+    for c in cards + new:
+        c['letter'] = letters[c['id']]
+    left = main_id or members[0].id  # the details of the group are those of its main copy
+    main = next(lf for lf in members if lf.id == left)
+    details = {'uid': main.id, 'edit': form or current_values(main), 'pickable': True,  # evidence of the main copy's pages
+               'automatic': automatic_text(main), 'corrected': main.corrected or [], 'open': offen, 'error': error}
+    ordered = [c['id'] for c in cards + new]
+    first = ordered[:3]  # the compared leaflets: the first three, the others can be shown; the main copy always is
+    if checked and left not in first:
+        first = first[:2] + [left]
+    shown = [i for i in ordered if i in first]
+    # what all copies share is said once; a field that varies is shown in the rows, and a copy that
+    # deviates from the usual value is where it is decided whether it is the same leaflet
+    fields = {'title': 'Titel', 'date': 'Datum', 'issuers': 'Herausgeber', 'signatories': 'Unterzeichnende',
+              'series': 'Reihe', 'received': 'Eingang'}
+    values = {key: {c[key] for c in cards + new} for key in fields}
+    shorten(cards + new)
+    # a field that differs between the leaflets is marked on every card: at the odd one out and where it is missing
+    differs = {key: (deviating(cards + new, key) | {c['id'] for c in cards + new if not c[key]}) if len(values[key]) > 1 else set()
+               for key in fields}
+    # what the other copies say differently than the main copy, for taking over
+    mine, offers = current_values(main), {}
+    short = {c['id']: c['short'] for c in cards}
+    for lf in members:
+        theirs = current_values(lf) if checked and lf is not main else None
+        for field in TAKE_KEYS if theirs else ():
+            text = field_text(theirs, field)
+            if text and ' '.join(text.split()).casefold() != ' '.join(field_text(mine, field).split()).casefold():
+                offers.setdefault(field, []).append({'id': lf.id, 'label': short[lf.id], 'letter': letters[lf.id], 'value': text,
+                                                     'blocks': ','.join(field_blocks(theirs, field))})
+    return templates.TemplateResponse(
+        request, "leaflet_copies.html",
+        {"leaflet": leaflet, "cards": cards, "new": new, "differs": differs, "left": left,
+         "fields": fields, "message": COPY_MESSAGES.get(meldung),
+         "pair": copy_compare(leaflet, shown), "shown": shown, "checked": checked, "details": details,
+         "offers": offers, "queue": review_queue(leaflet), "simple": len(cards) == 2 and not new, **edit_choices()},
+        status_code=400 if error else 200)
+
+
+def main_copy_or_404(leaflet_id):
+    """The leaflet if it is the main copy of its group; the details of a group are saved there."""
+    leaflet = leaflet_or_404(leaflet_id)
+    members = copy_group_of(leaflet)[0]
+    if not members or leaflet.id != (members[0].canonical_leaflet_id or members[0].id):
+        raise HTTPException(404)
+    return leaflet
+
+
+@app.post("/leaflets/{leaflet_id}/exemplare/angaben")
+async def copy_details_save(request: Request, leaflet_id: int):
+    """Saves the details of the group at its main copy."""
+    leaflet = main_copy_or_404(leaflet_id)
+    form, error = read_metadata_form(leaflet, parse_qs((await request.body()).decode(), keep_blank_values=True))
+    if error:
+        return copy_view(request, leaflet, '', True, form, error)
+    save_metadata(leaflet, form)
+    return back_to_copies(leaflet_id)
+
+
+def take_metadata(leaflet, other, field):
+    """Copies one field of another leaflet to this one. Its evidence lies on the other leaflet's pages, so none is taken."""
+    old, new = current_values(leaflet), current_values(other)
+    form = {**old, **{k: new[k] for k in TAKE_KEYS[field]}}
+    if f'{field}_blocks' in form:
+        form[f'{field}_blocks'] = []
+    if field in ('issuers', 'signatories'):
+        form[field] = [{**i, 'blocks': []} for i in new[field]]
+    save_metadata(leaflet, form)
+
+
+@app.post("/leaflets/{leaflet_id}/exemplare/uebernehmen")
+async def copy_details_take(request: Request, leaflet_id: int):
+    """Takes one field of a duplicate of the group over to its main copy."""
+    leaflet = main_copy_or_404(leaflet_id)
+    field, _, other_id = parse_qs((await request.body()).decode()).get('take', [''])[0].partition(':')
+    other = session.get(Leaflet, int(other_id)) if other_id.isdigit() else None
+    if field not in TAKE_KEYS or other is None or other.id == leaflet.id or other.copy_group != leaflet.copy_group:
+        raise HTTPException(400)
+    take_metadata(leaflet, other, field)
+    return back_to_copies(leaflet_id)
+
+
+@app.post("/leaflets/{leaflet_id}/exemplare/zuruecksetzen")
+async def copy_details_revert(request: Request, leaflet_id: int):
+    leaflet = main_copy_or_404(leaflet_id)
+    revert_metadata(leaflet, parse_qs((await request.body()).decode()).get('field', ['all'])[0])
+    return back_to_copies(leaflet_id)
+
+
+def back_to_copies(leaflet_id):
+    return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung=angaben&offen=1", status_code=303)
+
+
+def copy_compare(leaflet, ids):
+    """The leaflets `ids` of the group side by side, as columns in that order: cards with their OCR deviations (see
+    ocr_pair and ocr_group)."""
+    members, candidates = copy_group_of(leaflet)
+    by_id = {lf.id: lf for lf in members + candidates}
+    if len(ids) < 2 or len(set(ids)) != len(ids) or not set(ids) <= by_id.keys():
+        raise HTTPException(404)
+    checked = bool(members[0].copies_checked)
+    main_id = members[0].canonical_leaflet_id if checked else None
+    cards = [copy_card(by_id[i], main_id) for i in ids]
+    shorten(cards)
+    letters = copy_letters(members, candidates)
+    for card in cards:  # the page shape of each scan, to reserve its space before it has loaded
+        pdf = volume_pdf(session.get(Volume, by_id[card['id']].volume_id))
+        size = pdf_service.page_size(pdf, card['page']) if pdf.is_file() else None
+        card['ratio'] = round(size[0] / size[1], 4) if size else None
+    ratios = [c['ratio'] for c in cards if c['ratio']]
+    lists = [copy_blocks(by_id[i]) for i in ids]
+    sides = ocr_pair(*lists) if len(ids) == 2 else ocr_group(lists)
+    for card, side in zip(cards, sides):
+        card['letter'] = letters[card['id']]
+        card['ocr'] = side
+    # upright scans get the same height, that of the tallest: they all reserve the same space
+    return {'cards': cards, 'max_pages': max(c['pages'] for c in cards), 'checked': checked,
+            'ratio': min([r for r in ratios if r < 1] or ratios, default=None)}
+
+
+@app.get("/leaflets/{leaflet_id}/exemplare/paar")
+def copy_pair_page(request: Request, leaflet_id: int, ids: str):
+    """The comparison part of the page, loaded again when other leaflets are shown."""
+    shown = list(dict.fromkeys(int(i) for i in ids.split(',') if i.isdigit()))
+    pair = copy_compare(leaflet_or_404(leaflet_id), shown)
+    return templates.TemplateResponse(request, "leaflet_copy_pair.html", {"pair": pair})
+
+
+def save_copy_review(leaflet, form):
+    """Appends the review of the leaflet's group (or the revert of its newest review) and
+    rebuilds the groups. form: parsed form fields; unticked new hits count as seen, not as members."""
+    members, candidates = copy_group_of(leaflet)
+    if not members and 'revert' not in form:
+        raise HTTPException(404)
+
+    def ids(name):
+        return {int(v) for v in form.get(name, []) if v.isdigit()}
+    mine = {copy_decisions.anchor(segment(lf)) for lf in members + candidates or [leaflet]}  # a split-off leaflet: its own review
+    lines = corrections.load(COPY_DECISIONS)
+    done = {e['revert'] for e in lines if 'revert' in e}
+    reviews = [e for e in lines if 'revert' not in e and e['at'] not in done  # the reviews in force for this group
+               and mine & {copy_decisions.anchor(a) for a in e['members'] + e['rejected']}]
+    if 'revert' in form:
+        if reviews:
+            copy_decisions.append(COPY_DECISIONS, {'revert': max(e['at'] for e in reviews)})
+    else:
+        out, add = ids('out'), ids('add')
+        kept = [lf for lf in members if lf.id not in out] + [lf for lf in candidates if lf.id in add]
+        rejected = [lf for lf in members + candidates if lf not in kept]
+        main = next((lf for lf in kept if lf.id in ids('main')), None)
+        if main is None:
+            raise HTTPException(400, "Das Hauptexemplar muss zur Gruppe gehören.")
+        rejected = [segment(lf) for lf in rejected]
+        seen = {copy_decisions.anchor(a) for a in rejected + [segment(lf) for lf in kept]}
+        for e in reviews:  # what an earlier review of the group rejected stays rejected, it is not a new hit
+            for a in e['rejected']:
+                if copy_decisions.anchor(a) not in seen:
+                    seen.add(copy_decisions.anchor(a))
+                    rejected.append(a)
+        copy_decisions.append(COPY_DECISIONS, {
+            'members': [segment(lf) for lf in kept], 'rejected': rejected, 'canonical': segment(main)})
+    fill_copies()
+
+
+@app.post("/leaflets/{leaflet_id}/exemplare")
+async def copy_save(request: Request, leaflet_id: int):
+    leaflet = leaflet_or_404(leaflet_id)
+    form = parse_qs((await request.body()).decode())
+    verdict = form.pop('verdict', [''])[0]
+    onward = verdict.startswith('next:') or 'next' in form  # save and go on to the next group to check
+    if verdict:  # a pair: "main:<id>" or "next:<id>" chooses that main copy, "different" says these are two leaflets
+        members = copy_group_of(leaflet)[0]
+        main = verdict[5:] if verdict.startswith(('main:', 'next:')) else str(members[0].canonical_leaflet_id or members[0].id)
+        form['main'] = [main]
+        form['out'] = [str(lf.id) for lf in members if str(lf.id) != main] if verdict == 'different' else []
+    following = review_queue(leaflet)['next'] if onward else None
+    save_copy_review(leaflet, form)
+    if following:
+        return RedirectResponse(f"/leaflets/{following}/exemplare", status_code=303)
+    message = 'zurueckgenommen' if 'revert' in form else 'gespeichert' if copy_group_of(leaflet)[0] else 'getrennt'
+    return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung={message}", status_code=303)
 
 
 @app.get("/korrekturen")
@@ -769,8 +1365,12 @@ def correction_list(request: Request):
             continue
         rows.append({'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
                      'entries': entries, 'overlaps': overlaps})
+    copies = [{'at': r['at'], 'members': [
+        f"{volumes[a['volume']].label if a['volume'] in volumes else a['volume']}, "
+        f"{page_range(a['start_page'], a['end_page'])}" for a in r['members']]}
+        for r in copy_review()[1]]
     return templates.TemplateResponse(
-        request, "corrections.html", {"rows": rows, "fields": corrections.FIELDS})
+        request, "corrections.html", {"rows": rows, "copies": copies, "fields": corrections.FIELDS})
 
 
 @app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")
@@ -795,8 +1395,7 @@ def evidence_image(leaflet_id: int, blocks: str):
     page_no = int(ids[0][0])
     if not leaflet.start_page <= page_no <= leaflet.end_page:
         raise HTTPException(404)
-    page = session.query(Page).filter_by(
-        volume_id=leaflet.volume_id, page_no=page_no).first()
+    page = session.query(Page).filter_by(leaflet_id=leaflet.id, page_no=page_no).first()  # indexed, unlike volume and page
     boxes = [page.blocks[int(i) - 1]["box"] for p, i in ids
              if int(p) == page_no and 0 < int(i) <= len(page.blocks or [])]
     if not boxes:
@@ -888,38 +1487,48 @@ def leaflet_items(leaflets):
                       'thumb': has_pdf[lf.volume_id],
                       'issuers': issuers.get(lf.id, []),
                       'copies': group_sizes[lf.copy_group] - 1
-                      if lf.copy_group else 0})
+                      if lf.copy_group else 0,
+                      'copies_checked': bool(lf.copies_checked),
+                      'copy_alternative': bool(lf.copy_group and lf.copies_checked) and lf.canonical_leaflet_id != lf.id})
     return items
 
 
+def short_pages(leaflet):
+    return page_range(leaflet.start_page, leaflet.end_page).replace('Bandseiten ', 'S. ').replace('Bandseite ', 'S. ')
+
+
 def page_groups(volume, leaflets):
-    """Consecutive pages of the volume, grouped by leaflet (None = no leaflet)."""
-    pdf_path = volume_pdf(volume)
+    """Consecutive pages of the volume, grouped by leaflet (leaflet None: left out when splitting)."""
     by_id = {leaflet.id: leaflet for leaflet in leaflets}
     issuers = issuer_names(by_id)
+    # duplicates point to their main copy
+    mains = {lf.id: (lf, vol) for lf, vol in session.query(Leaflet, Volume).join(Volume).filter(
+        Leaflet.id.in_({lf.canonical_leaflet_id for lf in leaflets
+                        if lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id)}))}
     groups = []
     for p in session.query(Page).filter_by(volume_id=volume.id).order_by(Page.page_no):
-        width, height = pdf_service.page_size(pdf_path, p.page_no)
-        thumb = {'no': p.page_no, 'height': THUMB_HEIGHT,
-                 'width': round(THUMB_HEIGHT * width / height)}
         if groups and groups[-1]['leaflet_id'] == p.leaflet_id:
-            groups[-1]['pages'].append(thumb)
+            groups[-1]['pages'].append(p.page_no)
         else:
-            groups.append({'leaflet_id': p.leaflet_id, 'leaflet': by_id.get(p.leaflet_id),
+            leaflet = by_id.get(p.leaflet_id)
+            main = mains.get(leaflet.canonical_leaflet_id) if leaflet and leaflet.copies_checked else None
+            groups.append({'leaflet_id': p.leaflet_id, 'leaflet': leaflet,
+                           'main': {'id': main[0].id, 'label': f"{main[1].label.split(' (')[0]}, {short_pages(main[0])}"}
+                           if main else None,
                            'issuers': ', '.join(short for short, _ in issuers.get(p.leaflet_id, [])),
-                           'pages': [thumb]})
+                           'pages': [p.page_no]})
     return groups
 
 
 @app.get("/volumes/{vz}")
-def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
+def volume_detail(request: Request, vz: int, ansicht: str = ""):
     logger.info('Opening volume details')
 
     volume = volume_by_vz(vz)
     leaflets = session.query(Leaflet).filter_by(volume_id=volume.id) \
         .order_by(Leaflet.start_page).all()
     has_scans = bool(leaflets) and volume_pdf(volume).is_file()
-    view = ansicht if has_scans and ansicht in ('kacheln', 'bandseiten') else 'liste'
+    view = (ansicht if ansicht in ('liste', 'kacheln') else 'bandseiten') if has_scans else 'liste'
     orgs = sorted((o for o in session.query(Organization)
                    if volume.vz in (o.vz or [])), key=org_sort_key)
 
@@ -938,6 +1547,7 @@ def volume_detail(request: Request, vz: int, ansicht: str = "liste"):
         'portal_url': volume.portal_url,
         'collection': volume.collection,
         'n_pages': volume.n_pages,
+        'n_excluded': session.query(Page).filter_by(volume_id=volume.id, leaflet_id=None).count(),  # left out when splitting
         'status': volume_status(volume, len(leaflets)),
         'provenance': provenance(volume),
         'organizations': orgs,

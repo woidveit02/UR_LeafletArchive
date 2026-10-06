@@ -7,7 +7,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
-from . import corrections, search
+from . import copy_decisions, corrections, search
 from .session import session
 from .models import Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
 
@@ -18,6 +18,7 @@ else:
 
 PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 CORRECTIONS = Path(os.environ.get("LEAFLET_CORRECTIONS") or DATA_DIR / "corrections.jsonl")
+COPY_DECISIONS = Path(os.environ.get("LEAFLET_COPY_DECISIONS") or DATA_DIR / "copy_decisions.jsonl")
 
 
 def load_json(name):
@@ -25,14 +26,44 @@ def load_json(name):
         return json.load(f)
 
 
-def copy_groups(name="copies.tsv"):
-    """(volume label, start page) -> group id, from exemplare.tsv of find_copies.py."""
+def copy_groups(stems, name="copies.tsv"):
+    """(volume stem, start page, end page) -> (group id, proposed main copy), from copies.tsv
+    of find_copies.py. stems: volume label -> stem."""
     path = DATA_DIR / name
     if not path.is_file():
         return {}
     with open(path, encoding="utf-8") as f:
-        return {(r["band"], int(r["seiten"].split("-")[0])): int(r["gruppe"])
-                for r in csv.DictReader(f, delimiter="\t")}
+        rows = [r for r in csv.DictReader(f, delimiter="\t") if r["band"] in stems]
+    first_last = [(r, r["seiten"].partition("-")) for r in rows]
+    return {(stems[r["band"]], int(first), int(last or first)): (int(r["gruppe"]), r["kanonisch"] == "ja")
+            for r, (first, _, last) in first_last}
+
+
+def copy_review():
+    """(groups, unresolved reviews, leaflet by anchor): the automatic groups of copies.tsv
+    with the reviews of copy_decisions.jsonl applied, for the imported leaflets."""
+    leaflets = {(stem, lf.start_page, lf.end_page): lf
+                for lf, stem in session.query(Leaflet, Volume.stem).join(Volume)}
+    stems = dict(session.query(Volume.label, Volume.stem))
+    groups, unresolved = copy_decisions.resolve(
+        copy_groups(stems), corrections.load(COPY_DECISIONS), set(leaflets))
+    return groups, unresolved, leaflets
+
+
+def fill_copies():
+    """Writes the groups into the leaflets; also used after a review, so it starts from scratch."""
+    session.query(Leaflet).update({Leaflet.copy_group: None, Leaflet.canonical_leaflet_id: None,
+                                   Leaflet.copies_checked: False, Leaflet.copy_candidate_of: None})
+    groups, _, leaflets = copy_review()
+    for number, group in enumerate(groups, 1):
+        main = leaflets[group["canonical"]].id
+        for a in group["members"]:
+            leaflet = leaflets[a]
+            leaflet.copy_group, leaflet.canonical_leaflet_id = number, main
+            leaflet.copies_checked = group["checked"]
+        for a in group["candidates"]:
+            leaflets[a].copy_candidate_of = number
+    session.commit()
 
 
 def issuer_org_ids(issuer, orgs_by_variant, known_ids):
@@ -262,7 +293,7 @@ def reset_leaflet(leaflet):
                 {org_id for (org_id,) in session.query(Organization.id)})
 
 
-def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes):
+def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes):
     meta = load_json(cfg["metadata_file"])
     records = meta["segments"]
     n_pages = max(r["end_page"] for r in records)
@@ -289,7 +320,6 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes):
             volume_id=volume.id,
             start_page=r["start_page"],
             end_page=r["end_page"],
-            copy_group=copies.get((cfg["label"], r["start_page"])),
             **automatic_values(r, series_by_key),
         )
         session.add(leaflet)
@@ -375,9 +405,9 @@ def fill_database():
     orgs_by_variant = fill_organizations()
     volumes = fill_volumes()
     series_by_key = series_names(VOLUMES)
-    copies = copy_groups()
     fixes = corrections.by_segment(corrections.load(CORRECTIONS))
     for cfg in VOLUMES:
-        fill_volume(cfg, orgs_by_variant, volumes, series_by_key, copies, fixes)
+        fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes)
+    fill_copies()
     fill_topics()
     search.rebuild_search_index(engine)

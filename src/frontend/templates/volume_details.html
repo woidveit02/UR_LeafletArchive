@@ -21,7 +21,7 @@
             <dt>Signatur</dt>
             <dd>{{ volume.signature }}</dd>
             <dt>Stand</dt>
-            <dd>{{ volume.status }}{% if volume.n_pages %} · {{ volume.n_pages }} Bandseiten <span class="meta">(fortlaufend gezählt im Digitalisat)</span>{% endif %}</dd>
+            <dd>{{ volume.status }}{% if volume.n_pages %} · {{ volume.n_pages }} Bandseiten{% if volume.n_excluded %}, davon {{ volume.n_excluded }} ausgeschlossen{% endif %} <span class="meta">(fortlaufend gezählt im Digitalisat)</span>{% endif %}</dd>
             {% if volume.provenance %}
             <dt>Erschließung</dt>
             <dd>Titel, Daten und Herausgeber automatisch extrahiert <span class="meta">({{ volume.provenance }})</span></dd>
@@ -42,27 +42,28 @@
         <div class="section-head">
             <h2>Flugblätter</h2>
             {% if volume.has_scans %}{{ view_switch('/volumes/' ~ volume.vz, volume.view,
-                [('liste', 'Liste'), ('kacheln', 'Kacheln'), ('bandseiten', 'Bandseiten')]) }}{% endif %}
+                [('bandseiten', 'Bandseiten'), ('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
         </div>
         {% if volume.view == 'kacheln' %}
         {{ leaflet_cards(volume.leaflets) }}
         {% elif volume.view == 'bandseiten' %}
-        <div class="page-strip">
+        <div class="page-grid">
             {% for group in volume.page_groups %}
-            <figure class="strip-group{% if not group.leaflet %} strip-empty{% endif %}">
-                <div class="strip-pages">
-                    {% for page in group.pages %}
-                    {% set img %}<img src="/volumes/{{ volume.vz }}/pages/{{ page.no }}.jpg" alt="Bandseite {{ page.no }}" title="Bandseite {{ page.no }}"
-                       width="{{ page.width }}" height="{{ page.height }}" loading="lazy">{% endset %}
-                    {% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}#scan-{{ page.no }}">{{ img }}</a>{% else %}{{ img }}{% endif %}
-                    {% endfor %}
-                </div>
+            {% set tone = loop.index % 2 %}
+            {% for page in group.pages %}
+            <figure class="grid-page tone-{{ tone }}{% if loop.first %} group-start{% endif %}{% if not group.leaflet %} left-out{% endif %}" id="page-{{ page }}" data-leaflet="{{ group.leaflet_id or '' }}">
+                {% set img %}<img src="/volumes/{{ volume.vz }}/pages/{{ page }}.jpg" alt="Bandseite {{ page }}" title="Bandseite {{ page }}" loading="lazy">{% endset %}
+                {% if group.leaflet %}<a class="grid-scan" href="/leaflets/{{ group.leaflet.id }}#page-{{ page }}">{{ img }}</a>{% else %}<span class="grid-scan">{{ img }}</span>{% endif %}
+                <span class="page-no">{{ page }}</span>
+                {% if loop.first %}
                 <figcaption>
-                    <span class="strip-title">{% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}" title="{{ group.leaflet.display_title }}">{{ title(group.leaflet) }}</a>{% else %}kein Flugblatt{% endif %}</span>
+                    <span class="strip-title">{% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}" title="{{ group.leaflet.display_title }}">{{ title(group.leaflet) }}</a>{% else %}<span class="meta">ausgeschlossen</span>{% endif %}</span>
+                    {% if group.main %}<a class="strip-dup" href="/leaflets/{{ group.main.id }}" title="Hauptexemplar: {{ group.main.label }}">Duplikat von {{ group.main.label }}</a>{% endif %}
                     {% if group.issuers %}<span class="strip-issuers" title="{{ group.issuers }}">{{ group.issuers }}</span>{% endif %}
-                    <span class="meta">{{ page_range(group.pages[0].no, group.pages[-1].no) }}</span>
                 </figcaption>
+                {% endif %}
             </figure>
+            {% endfor %}
             {% endfor %}
         </div>
         {% else %}
@@ -72,4 +73,34 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
+    <script>
+        // a link to a page marks the whole leaflet it belongs to
+        function markRange() {
+            document.querySelectorAll('.grid-page.in-range').forEach((el) => el.classList.remove('in-range'));
+            const hit = document.getElementById(location.hash.slice(1));
+            if (hit?.dataset.leaflet) document.querySelectorAll(`.grid-page[data-leaflet="${hit.dataset.leaflet}"]`).forEach((el) => el.classList.add('in-range'));
+        }
+        markRange();
+        addEventListener('hashchange', markRange);
+
+        // a title runs over the cells of its leaflet that share its row
+        function spanTitles() {
+            document.querySelectorAll('.group-start').forEach((first) => {
+                let n = 1;
+                for (let c = first.nextElementSibling; c && !c.classList.contains('group-start') && c.offsetTop === first.offsetTop; c = c.nextElementSibling) n++;
+                first.style.setProperty('--span', n);
+            });
+        }
+        spanTitles();
+        addEventListener('resize', spanTitles);
+
+        // hovering a page marks its whole leaflet
+        const pageGrid = document.querySelector('.page-grid');
+        const mark = (el, on) => {
+            const id = el?.closest('.grid-page')?.dataset.leaflet;
+            if (id) pageGrid.querySelectorAll(`.grid-page[data-leaflet="${id}"]`).forEach((c) => c.classList.toggle('hover', on));
+        };
+        pageGrid?.addEventListener('mouseover', (e) => mark(e.target, true));
+        pageGrid?.addEventListener('mouseout', (e) => mark(e.target, false));
+    </script>
 {% endblock %}

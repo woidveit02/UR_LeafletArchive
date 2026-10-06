@@ -26,7 +26,12 @@
     {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
     {%- endif -%}
 {%- endfor -%}
-{%- if item.copies %}{% set _ = parts.append(item.copies ~ (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare')) %}{% endif -%}
+{%- if item.copy_alternative %}{% set _ = parts.append('Duplikat') %}
+{%- elif item.copies %}
+    {%- set text = item.copies ~ ((' Duplikat' if item.copies == 1 else ' Duplikate') if item.copies_checked
+            else (' mögliches Duplikat' if item.copies == 1 else ' mögliche Duplikate')) -%}
+    {#- an unchecked group links to its review -#}
+    {%- set _ = parts.append(text if item.copies_checked else ('<a href="/leaflets/' ~ l.id ~ '/exemplare">' ~ text ~ '</a>') | safe) %}{% endif -%}
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 
