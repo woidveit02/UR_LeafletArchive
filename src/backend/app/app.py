@@ -9,15 +9,15 @@ import datetime
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.exception_handlers import http_exception_handler
-from fastapi.responses import FileResponse, RedirectResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import pdf_service
+from . import importer, pdf_service
 from .database import copy_decisions, corrections, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -806,10 +806,8 @@ def detail_page(request, leaflet, edit=None, error=None):
         'qs': '?' + urlencode(selection) if selection else '',
         'selection': ' · '.join(filter(None, selection_labels)),
         'highlight': [v for t in search.terms(chosen.get('q', '')) for v in search.variants(t)],
-        'volume': volume.label if volume else '',
+        'volume': volume.name if volume else '',
         'volume_year': volume.year if volume else None,
-        'volume_title': volume.title if volume else '',
-        'volume_collection': volume.collection if volume else None,
         'date_text': leaflet.date_text,
         'date_iso': leaflet.date_iso,
         'date': iso_to_text(leaflet.date_iso),
@@ -1620,6 +1618,91 @@ def volume_status(volume, n_leaflets):
     return "nicht digitalisiert"
 
 
+@app.get("/import")
+def import_list(request: Request, error: str = ''):
+    return templates.TemplateResponse(request, "import_list.html", {
+        "volumes": [{"vz": v.vz, "label": v.name, "scans": importer.page_count(v) if v.stem else None}
+                    for v in importer.pending_volumes()],
+        "has_units": bool(importer.free_units()), "error": error})
+
+
+@app.get("/import/neu")
+def import_new(request: Request, error: str = ''):
+    """The first step of an import, before the volume exists: which unit of the archive it is."""
+    return templates.TemplateResponse(request, "import_volume.html", {
+        "volume": None, "units": importer.free_units()[:importer.OFFERED], "error": error,
+        "steps": importer.STEPS, "step": "band", "pages": None, "running": False})
+
+
+@app.post("/import/neu")
+def import_create(vz: int = Form(...), portal_url: str = Form('')):
+    try:
+        volume = importer.new_volume(vz, portal_url)
+    except ValueError as error:
+        return RedirectResponse('/import/neu?' + urlencode({'error': str(error)}), 303)
+    return RedirectResponse(f"/import/{volume.vz}?schritt=scans", 303)
+
+
+def import_volume_or_404(vz):
+    volume = session.query(Volume).filter_by(vz=vz).first()
+    if volume is None:
+        raise HTTPException(404)
+    return volume
+
+
+def import_page(request, vz, step, error='', status_code=200):
+    volume = import_volume_or_404(vz)
+    if importer.n_leaflets(volume) or step not in importer.STEPS:
+        raise HTTPException(404)
+    return templates.TemplateResponse(request, "import_volume.html", {
+        "volume": volume, "pages": importer.page_count(volume) if volume.stem else None, "error": error,
+        "steps": importer.STEPS, "step": step,
+        "running": importer.running(volume)}, status_code=status_code)
+
+
+@app.get("/import/{vz}")
+def import_volume_page(request: Request, vz: int, schritt: str = 'scans'):
+    return import_page(request, vz, schritt)
+
+
+@app.post("/import/{vz}/band")
+def import_band(vz: int, portal_url: str = Form('')):
+    volume = import_volume_or_404(vz)
+    if importer.n_leaflets(volume):
+        raise HTTPException(404)
+    importer.set_portal_url(volume, portal_url)
+    return RedirectResponse(f"/import/{vz}?schritt=scans", 303)
+
+
+@app.post("/import/{vz}/loeschen")
+def import_discard(vz: int):
+    try:
+        importer.discard(import_volume_or_404(vz))
+    except ValueError as error:
+        return RedirectResponse('/import?' + urlencode({'error': str(error)}), 303)
+    return RedirectResponse("/import", 303)
+
+
+@app.post("/import/{vz}/scans")
+def import_scans(request: Request, vz: int, scans: list[UploadFile] = File(default=[]),
+                 folder: list[UploadFile] = File(default=[])):
+    script = request.headers.get('accept') == 'application/json'  # the upload form's script, not a plain post
+    try:
+        importer.start_scans(import_volume_or_404(vz), [(f.filename, f.file) for f in scans + folder if f.filename])
+    except ValueError as error:
+        if script:
+            return JSONResponse({'error': str(error)}, status_code=400)
+        return import_page(request, vz, 'scans', str(error), 400)
+    if script:
+        return JSONResponse({'ok': True})
+    return RedirectResponse(f"/import/{vz}?schritt=scans", 303)
+
+
+@app.get("/import/{vz}/status")
+def import_status(vz: int):
+    return JSONResponse(importer.JOBS.get(vz, {'state': 'idle'}))
+
+
 @app.get("/volumes")
 def volume_list(request: Request):
     logger.info('Opening volume list')
@@ -1630,11 +1713,10 @@ def volume_list(request: Request):
 
     rows = [{
         'vz': v.vz,
-        'label': v.label,
+        'label': v.name,
         'title': v.title,
         'group': v.group,
         'anchor': group_anchor(v.group),
-        'collection': v.collection,
         'status': volume_status(v, counts.get(v.id, 0)),
     } for v in session.query(Volume).filter_by(status=RELEASED).order_by(Volume.vz)]
 
@@ -1734,14 +1816,12 @@ def volume_detail(request: Request, vz: int, ansicht: str = ""):
     data = {
         'prev_vz': vzs[pos - 1] if pos > 0 else None,
         'next_vz': vzs[pos + 1] if pos + 1 < len(vzs) else None,
-        'label': volume.label,
+        'label': volume.name,
         'vz': volume.vz,
         'group': volume.group,
         'anchor': group_anchor(volume.group),
-        'title': volume.title,
         'signature': volume.signature,
         'portal_url': volume.portal_url,
-        'collection': volume.collection,
         'n_pages': volume.n_pages,
         'n_excluded': session.query(Page).filter_by(volume_id=volume.id, leaflet_id=None).count(),  # left out when splitting
         'status': volume_status(volume, len(leaflets)),

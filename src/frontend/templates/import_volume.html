@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ volume.name if volume else 'Neuer Band' }} anlegen – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head">
+            <p class="meta"><a href="/import">← Zur Übersicht</a></p>
+            <h1>{{ volume.name if volume else 'Neuer Band' }}</h1>
+        </header>
+        {% set keys = steps.keys() | list %}
+        {% set done = (['band'] + (['scans'] if pages else [])) if volume else [] %}
+        <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}</p>
+        <nav class="view-switch step-switch" aria-label="Schritte">
+            {% for key, label in steps.items() %}
+            {% set mark = '✓ ' if key in done and key != step else '' %}
+            {% if volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
+            {% else %}<a{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
+            {% endfor %}
+        </nav>
+        {% if step == 'band' and not volume %}
+        <h2>Welcher Band des Archivs soll im Viewer angelegt werden?</h2>
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <form method="post" action="/import/neu" class="meta-form step-form">
+            <dl class="meta-list">
+                <dt><label for="vz">Nummer</label></dt>
+                <dd><select id="vz" name="vz">
+                    {% for u in units %}<option value="{{ u.vz }}" data-portal="{{ u.portal_url or '' }}">Nr. {{ '%03d' % u.vz }}, {{ u.title }}</option>{% endfor %}
+                </select>
+                <span class="meta note">Die Einheiten stammen aus dem Findmittel des Universitätsarchivs, die nächste freie ist vorgewählt, weitere folgen nach dem Anlegen.</span></dd>
+                <dt><label for="portal_url">Archivportal</label></dt>
+                <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ units[0].portal_url or '' }}" placeholder="im Archivportal noch kein Eintrag">
+                    <span class="meta note">Für die Nummern 16 bis 28 ist der Link hinterlegt, für spätere gibt es ihn im Archivportal noch nicht.</span></dd>
+            </dl>
+            <button type="submit" class="button-small">Weiter zu den Scans</button>
+        </form>
+        {% elif step == 'band' %}
+        <h2>Band</h2>
+        <form method="post" action="/import/{{ volume.vz }}/band" class="meta-form step-form">
+            <dl class="meta-list">
+                <dt>Nummer</dt><dd>Nr. {{ '%03d' % volume.vz }}</dd>
+                <dt>Jahr</dt><dd>{{ volume.year }}</dd>
+                <dt>Titel</dt><dd>{{ volume.title }}</dd>
+                <dt>Signatur</dt><dd>{{ volume.signature }}</dd>
+                <dt><label for="portal_url">Archivportal</label></dt>
+                <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ volume.portal_url or '' }}" placeholder="Link zum Band im Archivportal-D">
+                    {% if volume.portal_url %}<a class="meta note" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Link öffnen ↗</a>{% endif %}</dd>
+            </dl>
+            <button type="submit" class="button-small">Weiter zu den Scans</button>
+        </form>
+
+        {% elif step == 'scans' %}
+        <h2>Scans</h2>
+        {% if pages %}<p class="form-ok" role="status">✓ {{ pages }} Seiten hochgeladen</p>{% endif %}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <p class="form-error" id="upload-error" role="alert" hidden></p>
+        <form method="post" action="/import/{{ volume.vz }}/scans" enctype="multipart/form-data" class="meta-form step-form"
+              data-status-url="/import/{{ volume.vz }}/status"{% if running %} data-running="1"{% endif %}>
+            {% if pages %}<p><b>Die vorhandenen {{ pages }} Seiten werden ersetzt.</b></p>{% endif %}
+            <dl class="meta-list">
+                <dt>Ordner</dt>
+                <dd class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
+                    <label for="folder" class="button-outline">Ordner wählen</label>
+                    <span class="meta file-name">Nichts ausgewählt</span>
+                    <span class="meta note">Ordner mit den TIFF-Scans des Bandes</span></dd>
+                <dt>oder Dateien</dt>
+                <dd class="file-pick"><input type="file" id="scans" name="scans" accept=".pdf,.tif,.tiff" multiple>
+                    <label for="scans" class="button-outline">Dateien wählen</label>
+                    <span class="meta file-name">Nichts ausgewählt</span>
+                    <span class="meta note">ein PDF oder einzelne TIFF-Dateien</span></dd>
+            </dl>
+            <p class="meta">PDF oder TIFF-Dateien. TIFFs werden nach Dateiname sortiert und zu einem PDF zusammengefügt,
+                andere Dateien im Ordner werden übergangen.</p>
+            <div id="upload-progress" class="upload-progress" hidden>
+                <progress></progress>
+                <span class="meta upload-text"></span>
+            </div>
+            <button type="submit" class="button-small">Hochladen</button>
+        </form>
+        {% else %}
+        <h2>{{ steps[step] }}</h2>
+        <p class="meta">Dieser Schritt folgt.</p>
+        {% endif %}
+        {% if volume and step != 'band' %}
+        {% set i = keys.index(step) %}
+        <p class="step-nav">
+            {% if i > 0 %}<a class="button-outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% else %}<span></span>{% endif %}
+            {% if i + 1 < keys | length %}<a class="button-link" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}">Weiter: {{ steps[keys[i + 1]] }} →</a>{% endif %}
+        </p>
+        {% endif %}
+{% endblock %}
+{% block scripts %}
+    {% if not volume %}
+    <script>
+        // the link of the chosen unit in the findmittel, to be overwritten if needed
+        const unit = document.getElementById('vz'), link = document.getElementById('portal_url');
+        unit.addEventListener('change', () => { link.value = unit.selectedOptions[0].dataset.portal; });
+    </script>
+    {% endif %}
+    <script src="{{ url_for('static', path='import-upload.js') }}"></script>
+{% endblock %}

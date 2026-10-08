@@ -42,7 +42,7 @@ def test_draft_volume_is_hidden_until_released(monkeypatch):
 # Tests if import_volume reads one volume as a draft, refuses a second import and release_volume publishes it.
 def test_import_volume_as_draft_then_release(tmp_path, monkeypatch):
     entry = {"vz": 9, "label": "Nr. 009", "stem": "0118_0009", "year": 1972, "title": "T", "signature": "S",
-             "collection": None, "digitized": True, "group": "g"}
+             "digitized": True, "group": "g"}
     (tmp_path / "volumes.json").write_text(json.dumps([entry]), encoding="utf-8")
     (tmp_path / "organizations.json").write_text("[]", encoding="utf-8")
     (tmp_path / "nr009_metadata.json").write_text(json.dumps({

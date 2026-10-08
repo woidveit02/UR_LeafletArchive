@@ -130,7 +130,7 @@
                 {% else %} <span class="meta" title="{{ note }}">(automatisch)</span>{% endif %}</dd>
             {% endif %}
             <dt>Band</dt>
-            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, <a href="/volumes/{{ leaflet.volume_vz }}#page-{{ leaflet.start_page }}" title="Im Band ansehen">{{ leaflet.pages }}</a>{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>
+            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, <a href="/volumes/{{ leaflet.volume_vz }}#page-{{ leaflet.start_page }}" title="Im Band ansehen">{{ leaflet.pages }}</a></dd>
             {# only 1970 has archive stamps so far; an empty row would read as "missed" #}
             {% if leaflet.received %}
             <dt>Eingang im Archiv</dt>

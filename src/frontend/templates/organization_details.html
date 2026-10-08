@@ -23,7 +23,7 @@
             <dd>{{ org.jahre | join(', ') if org.jahre else 'n.a.' }}</dd>
             <dt>Bände laut Findmittel</dt>
             <dd>
-                {% for v in org.volumes %}<a href="/volumes/{{ v.vz }}">{{ v.label }}</a>{% if v.collection %} <span class="meta">(Organisationsband)</span>{% endif %}{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
+                {% for v in org.volumes %}<a href="/volumes/{{ v.vz }}">{{ v.name }}</a>{% if not loop.last %}, {% endif %}{% else %}n.a.{% endfor %}
             </dd>
             <dt>GND-ID</dt>
             <dd>{{ org.gnd_id if org.gnd_id else 'n.a.' }}</dd>

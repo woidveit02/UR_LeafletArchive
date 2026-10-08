@@ -127,7 +127,7 @@ def fill_organizations():
 def volume_from_entry(v):
     return Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
                   year=v["year"], title=v["title"], group=v["group"],
-                  signature=v["signature"], collection=v["collection"],
+                  signature=v["signature"],
                   digitized=v["digitized"],
                   portal_url=v.get("portal_url"))
 

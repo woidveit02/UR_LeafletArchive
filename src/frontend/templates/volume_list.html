@@ -11,8 +11,7 @@
         <ul class="leaflet-list leaflet-list-plain">
             {% for volume in group.list %}
             <li>
-                <span class="row-main"><a class="row-title" href="/volumes/{{ volume.vz }}">{{ volume.label }}</a>
-                    {% if volume.collection %}<span class="meta">nur {{ volume.collection }}</span>{% endif %}</span>
+                <span class="row-main"><a class="row-title" href="/volumes/{{ volume.vz }}">{{ volume.label }}</a></span>
                 <span class="row-count">{{ volume.status }}</span>
             </li>
             {% endfor %}
