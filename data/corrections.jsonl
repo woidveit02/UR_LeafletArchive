@@ -34,3 +34,43 @@
 {"volume": "0118_0004", "start_page": 44, "end_page": 44, "field": "issuers", "value": [{"org": "begefogregetz", "blocks": ["44-17", "44-18"]}], "at": "2026-10-06"}
 {"volume": "0118_0004", "start_page": 43, "end_page": 43, "field": "issuers", "value": [{"org": "als", "blocks": ["43-2"]}], "at": "2026-10-06"}
 {"volume": "0118_0009", "start_page": 11, "end_page": 18, "field": "issuers", "value": [{"org": "akkj", "blocks": ["11-1"]}], "at": "2026-10-06"}
+{"volume": "0118_0003", "start_page": 70, "end_page": 70, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["70-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 70, "end_page": 70, "field": "received", "value": "1969-05-22", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 81, "end_page": 82, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["82-9"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 81, "end_page": 82, "field": "received", "value": "1969-11-05", "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 145, "end_page": 146, "field": "title", "value": "Pro Bono - Contra Malum !", "blocks": ["145-5"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 176, "end_page": 176, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["176-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 176, "end_page": 176, "field": "received", "value": "1969-06-30", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 177, "end_page": 178, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["177-13"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 184, "end_page": 184, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["184-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 184, "end_page": 184, "field": "received", "value": "1969-11-11", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 189, "end_page": 190, "field": "signatories", "value": [{"name": "Brannerts", "details": "", "blocks": ["190-5"]}, {"name": "Ambrosius", "details": "", "blocks": ["190-5"]}, {"name": "Kegelmann", "details": "", "blocks": ["190-5"]}, {"name": "Asanger", "details": "", "blocks": ["190-5"]}, {"name": "Schmidt", "details": "", "blocks": ["190-5"]}], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 223, "end_page": 225, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["223-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 223, "end_page": 225, "field": "received", "value": "1969-05-07", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 239, "end_page": 239, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["239-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 239, "end_page": 239, "field": "received", "value": "1969-01-27", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 314, "end_page": 314, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["314-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 314, "end_page": 314, "field": "received", "value": "1969-07-21", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 313, "end_page": 313, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["313-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 313, "end_page": 313, "field": "received", "value": "1969-07-01", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 302, "end_page": 302, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["302-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 302, "end_page": 302, "field": "received", "value": "1969-07-09", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 302, "end_page": 302, "field": "signatories", "value": [{"name": "Schürr", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Asanger", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Brahmerts", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Hummel", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Metzner", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Münder", "details": "Verantwortlich", "blocks": ["302-8"]}, {"name": "Westphal", "details": "Verantwortlich", "blocks": ["302-8"]}], "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["29-4"], "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "received", "value": "1970-01-28", "at": "2026-10-07"}
+{"volume": "0118_0005", "start_page": 287, "end_page": 287, "field": "received", "value": "1971-01-14", "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 142, "end_page": 142, "field": "date", "value": {"iso": "1970-03-03", "type": "event"}, "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 142, "end_page": 142, "field": "received", "value": "1970-01-02", "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["126-5"], "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "received", "value": "1970-01-29", "at": "2026-10-07"}
+{"volume": "0118_0009", "start_page": 1, "end_page": 2, "field": "received", "value": "1971-11-26", "blocks": ["1-3"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 81, "end_page": 82, "field": "revert", "value": "received", "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 176, "end_page": 176, "field": "received", "value": "1969-06-30", "blocks": ["176-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 223, "end_page": 225, "field": "received", "value": "1969-05-07", "blocks": ["223-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 239, "end_page": 239, "field": "received", "value": "1969-01-27", "blocks": ["239-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 314, "end_page": 314, "field": "received", "value": "1969-07-21", "blocks": ["314-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 313, "end_page": 313, "field": "received", "value": "1969-07-01", "blocks": ["313-1"], "at": "2026-10-07"}
+{"volume": "0118_0003", "start_page": 302, "end_page": 302, "field": "received", "value": "1969-07-09", "blocks": ["302-1"], "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "received", "value": "1970-01-28", "blocks": ["29-4"], "at": "2026-10-07"}
+{"volume": "0118_0005", "start_page": 287, "end_page": 287, "field": "received", "value": "1971-01-14", "blocks": ["287-3"], "at": "2026-10-07"}
+{"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "received", "value": "1970-01-29", "blocks": ["126-3"], "at": "2026-10-07"}
