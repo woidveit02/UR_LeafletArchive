@@ -23,7 +23,7 @@ from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automa
                                     fill_copies,
                                     automatic_values, reset_leaflet, series_names)
 from .database.session import session
-from .database.models import (Leaflet, LeafletIssuer, Volume, Organization, Page,
+from .database.models import (RELEASED, Leaflet, LeafletIssuer, Volume, Organization, Page,
                               Topic)
 from .app_helper import setup_logging
 
@@ -197,15 +197,20 @@ async def not_found(request: Request, exc: StarletteHTTPException):
 FEATURED = [(4, 101), (9, 120), (9, 498), (11, 17)]
 
 
+def released_leaflets():
+    """Query of the leaflets of released volumes; drafts show up nowhere else."""
+    return session.query(Leaflet).join(Volume, Leaflet.volume_id == Volume.id).filter(Volume.status == RELEASED)
+
+
 @app.get("/")
 def index(request: Request):
     logger.info('Opening index page')
-    featured = [session.query(Leaflet).join(Volume)
+    featured = [released_leaflets()
                 .filter(Volume.vz == vz, Leaflet.start_page == page).first()
                 for vz, page in FEATURED]
-    volume_years = {v.id: v.year for v in session.query(Volume)}
+    volume_years = {v.id: v.year for v in session.query(Volume).filter_by(status=RELEASED)}
     # a leaflet with duplicates counts once: the other copies of its group are left out
-    unique = [lf for lf in session.query(Leaflet) if lf.copy_group is None or lf.canonical_leaflet_id == lf.id]
+    unique = [lf for lf in released_leaflets() if lf.copy_group is None or lf.canonical_leaflet_id == lf.id]
     per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in unique)
     years = [int(y) for y in per_year if y.isdigit()]
     # every year in the range, so gaps in the collection stay visible
@@ -216,7 +221,7 @@ def index(request: Request):
         'organizations': session.query(LeafletIssuer.org_id)
         .filter(LeafletIssuer.org_id.isnot(None)).distinct().count(),
         'volumes': len(volume_years),
-        'volumes_done': session.query(Leaflet.volume_id).distinct().count(),
+        'volumes_done': released_leaflets().with_entities(Leaflet.volume_id).distinct().count(),
     }
     return templates.TemplateResponse(
         request, "index.html",
@@ -510,7 +515,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     orgs = {o.id: o for o in session.query(Organization)}
     labels = facet_labels()
 
-    axis = sorted({str(v.year) for v in session.query(Volume)} | shown('jahr'))
+    axis = sorted({str(v.year) for v in session.query(Volume).filter_by(status=RELEASED)} | shown('jahr'))
     highest = max(counts['jahr'].values(), default=0) or 1
     facets = {
         'years': [{'year': y, 'count': counts['jahr'][y], 'url': toggle_url('jahr', y),
@@ -534,7 +539,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     return templates.TemplateResponse(
         request, "leaflet_list.html",
         {"leaflets": items, "facets": facets, "show_duplicates": 'duplikate' in selected,
-         "total": session.query(Leaflet).filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id)
+         "total": released_leaflets().filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id)
                                                 if 'duplikate' not in selected else True).count(),
          "hidden_params": [(k, v) for k, v in params if k in FACETS],
          "active_filters": active_filters, "reset_all_url": url([]),
@@ -647,10 +652,7 @@ def searched_items(params):
     """Items for the search and sort order of `params`; facets are left to the caller."""
     one = dict(params)
     q = one.get('q', '')
-    query = (
-        session.query(Leaflet)
-        .join(Volume, Leaflet.volume_id == Volume.id)
-    )
+    query = released_leaflets()
     if not one.get('duplikate'):  # a group of duplicates is listed once, by its main copy, unless all copies are asked for
         query = query.filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id))
 
@@ -1634,7 +1636,7 @@ def volume_list(request: Request):
         'anchor': group_anchor(v.group),
         'collection': v.collection,
         'status': volume_status(v, counts.get(v.id, 0)),
-    } for v in session.query(Volume).order_by(Volume.vz)]
+    } for v in session.query(Volume).filter_by(status=RELEASED).order_by(Volume.vz)]
 
     return templates.TemplateResponse(
         request, "volume_list.html", {"volumes": rows})
@@ -1828,7 +1830,7 @@ def organization_detail(request: Request, org_id: str, ansicht: str = "liste"):
     issuer_rows = session.query(LeafletIssuer).filter_by(org_id=org_id).all()
     leaflet_ids = {i.leaflet_id for i in issuer_rows}
     leaflets = leaflet_items(
-        session.query(Leaflet).join(Volume, Leaflet.volume_id == Volume.id)
+        released_leaflets()
         .filter(Leaflet.id.in_(leaflet_ids)).order_by(Volume.vz, Leaflet.start_page).all())
     has_thumbs = any(item['thumb'] for item in leaflets)
 

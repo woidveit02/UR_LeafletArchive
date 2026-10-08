@@ -3,10 +3,15 @@ from sqlalchemy import (Column, Integer, String, Float, Text, JSON, Boolean,
                         ForeignKey)
 
 
+RELEASED = "freigegeben"
+DRAFT = "entwurf"  # an imported volume, hidden everywhere until it is released
+
+
 class Volume(Base):
     __tablename__ = "volumes"
 
     id = Column(Integer, primary_key=True)
+    status = Column(String, nullable=False, default=RELEASED, server_default=RELEASED)
     vz = Column(Integer, unique=True)
     stem = Column(String, unique=True, nullable=True)
     label = Column(String)

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from . import copy_decisions, corrections, search
 from .session import session
-from .models import Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
+from .models import DRAFT, RELEASED, Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
 
 if os.environ.get("LEAFLET_DATA_DIR"):
     DATA_DIR = Path(os.environ["LEAFLET_DATA_DIR"])
@@ -124,14 +124,18 @@ def fill_organizations():
     return variant_index()
 
 
+def volume_from_entry(v):
+    return Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
+                  year=v["year"], title=v["title"], group=v["group"],
+                  signature=v["signature"], collection=v["collection"],
+                  digitized=v["digitized"],
+                  portal_url=v.get("portal_url"))
+
+
 def fill_volumes():
     volumes = {}
     for v in load_json("volumes.json"):
-        volume = Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
-                        year=v["year"], title=v["title"], group=v["group"],
-                        signature=v["signature"], collection=v["collection"],
-                        digitized=v["digitized"],
-                        portal_url=v.get("portal_url"))
+        volume = volume_from_entry(v)
         session.add(volume)
         volumes[v["label"]] = volume
     session.commit()
@@ -359,6 +363,38 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes):
     # after the pages: manual evidence takes its wording from their OCR text
     for leaflet, entries in corrected:
         corrections.apply(leaflet, entries)
+    session.commit()
+
+
+def import_volume(vz):
+    """Reads one volume into the existing database, as a draft until it is released.
+
+    Needs its entry in volumes.json and nrXXX_metadata.json; nothing else in the
+    database is touched. Raises ValueError if the volume already has leaflets.
+    """
+    entry = next((v for v in load_json("volumes.json") if v["vz"] == vz), None)
+    if entry is None:
+        raise ValueError(f"volumes.json has no volume {vz}")
+    cfg = {"metadata_file": f"nr{vz:03d}_metadata.json", "label": entry["label"], "year": entry["year"]}
+    volume = session.query(Volume).filter_by(vz=vz).first()
+    if volume and session.query(Leaflet).filter_by(volume_id=volume.id).count():
+        raise ValueError(f"volume {vz} is already imported")
+    if volume is None:
+        volume = volume_from_entry(entry)
+        session.add(volume)
+    volume.status = DRAFT
+    session.commit()
+    configs = [c for c in VOLUMES if c["label"] != cfg["label"]] + [cfg]
+    fill_volume(cfg, variant_index(), {cfg["label"]: volume}, series_names(configs),
+                corrections.by_segment(corrections.load(CORRECTIONS)))
+    fill_copies()
+    return volume
+
+
+def release_volume(vz):
+    """Makes a draft visible in the list, the search, the trends and the topics."""
+    volume = session.query(Volume).filter_by(vz=vz).one()
+    volume.status = RELEASED
     session.commit()
 
 
