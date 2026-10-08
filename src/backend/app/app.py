@@ -1,5 +1,6 @@
 import logging
 import re
+import time
 import unicodedata
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
@@ -17,7 +18,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import importer, pdf_service, segments
+from . import importer, ocr, pdf_service, segments
 from .database import copy_decisions, corrections, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -799,6 +800,7 @@ def detail_page(request, leaflet, edit=None, error=None):
         'volume_vz': volume.vz,
         'provenance_model': (volume.meta_model or '').split('/')[-1],
         'provenance_date': german_date(volume.meta_created),
+        'ocr_label': ocr.describe(volume.ocr_mode, volume.ocr_created),
         'prev_id': siblings[pos - 1] if pos > 0 else None,
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'position': pos + 1,
@@ -1620,8 +1622,11 @@ def volume_status(volume, n_leaflets):
 
 @app.get("/import")
 def import_list(request: Request, error: str = ''):
+    added = {e["vz"] for e in importer.load_entries() if e.get("added")}
     return templates.TemplateResponse(request, "import_list.html", {
-        "volumes": [{"vz": v.vz, "label": v.name, "scans": importer.page_count(v) if v.stem else None}
+        # an archive unit without scans has nothing to delete: it would stay in the list as "not digitized"
+        "volumes": [{"vz": v.vz, "label": v.name, "scans": importer.page_count(v) if v.stem else None,
+                     "deletable": bool(v.stem) or v.vz in added}
                     for v in importer.pending_volumes()],
         "has_units": bool(importer.free_units()), "error": error})
 
@@ -1630,8 +1635,8 @@ def import_list(request: Request, error: str = ''):
 def import_new(request: Request, error: str = ''):
     """The first step of an import, before the volume exists: which unit of the archive it is."""
     return templates.TemplateResponse(request, "import_volume.html", {
-        "volume": None, "units": importer.free_units()[:importer.OFFERED], "error": error,
-        "steps": importer.STEPS, "step": "band", "pages": None, "split": None, "running": False})
+        "volume": None, "units": importer.free_units(), "error": error,
+        "steps": importer.STEPS, "step_help": importer.STEP_HELP, "step": "band", "pages": None, "split": None, "running": False})
 
 
 @app.post("/import/neu")
@@ -1650,7 +1655,7 @@ def import_volume_or_404(vz):
     return volume
 
 
-def import_page(request, vz, step, error='', status_code=200):
+def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     volume = import_volume_or_404(vz)
     if importer.n_leaflets(volume) or step not in importer.STEPS:
         raise HTTPException(404)
@@ -1662,14 +1667,30 @@ def import_page(request, vz, step, error='', status_code=200):
              "suggesting": importer.running(volume, segments.SEGMENT_JOB), "saveUrl": f"/import/{vz}/trennen",
              "suggestUrl": f"/import/{vz}/vorschlag", "listUrl": f"/import/{vz}/liste", "name": volume.stem,
              "statusUrl": f"/import/{vz}/status?job={segments.SEGMENT_JOB}"} if step == 'trennen' and pages else None
-    return templates.TemplateResponse(request, "import_volume.html", {
-        "volume": volume, "pages": pages, "error": error, "steps": importer.STEPS, "step": step, "split": split,
-        "running": importer.running(volume)}, status_code=status_code)
+    text = ocr.status(volume)
+    waiting = {'scans': None if pages else 'Zuerst die Scans hochladen.',  # why "Weiter" does not work yet
+               'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis importieren.',
+               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Schnitte speichern.'}.get(step)
+    return templates.TemplateResponse(request, "import_volume.html", {"waiting": waiting,
+        "volume": volume, "pages": pages, "error": error, "steps": importer.STEPS, "step_help": importer.STEP_HELP, "step": step, "split": split,
+        "running": importer.running(volume), "ocr": text, "stamp": stamp, "uploaded": uploaded,
+        "ocr_job": importer.JOBS.get((vz, ocr.JOB)) if step == 'ocr' else None,
+        "ocr_key": ocr.key_info() if step == 'ocr' else None},
+        status_code=status_code)
+
+
+def resume_step(volume):
+    """The step an unfinished import goes on with: the first one that is not done yet."""
+    if not (importer.page_count(volume) if volume.stem else None):
+        return 'scans'
+    if ocr.status(volume)['state'] != 'done':
+        return 'ocr'
+    return 'angaben' if segments.status(volume)['confirmed'] else 'trennen'
 
 
 @app.get("/import/{vz}")
-def import_volume_page(request: Request, vz: int, schritt: str = 'scans'):
-    return import_page(request, vz, schritt)
+def import_volume_page(request: Request, vz: int, schritt: str = '', hochgeladen: int = 0):
+    return import_page(request, vz, schritt or resume_step(import_volume_or_404(vz)), uploaded=bool(hochgeladen))
 
 
 @app.post("/import/{vz}/band")
@@ -1707,7 +1728,8 @@ def import_scans(request: Request, vz: int, scans: list[UploadFile] = File(defau
 
 @app.get("/import/{vz}/status")
 def import_status(vz: int, job: str = 'scans'):
-    return JSONResponse(importer.JOBS.get((vz, job), {'state': 'idle'}))
+    # now: the app's clock, so the page can count elapsed times without trusting its own
+    return JSONResponse({**importer.JOBS.get((vz, job), {'state': 'idle'}), 'now': time.time()})
 
 
 @app.get("/import/{vz}/seiten/{page_no}.jpg")
@@ -1755,6 +1777,64 @@ def import_list_file(vz: int, liste: UploadFile = File(...)):
         return JSONResponse({'cuts': cuts, 'excluded': excluded})
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
+
+
+@app.post("/import/{vz}/ocr")
+def import_ocr(vz: int, mode: str = Form(ocr.DEFAULT_MODE), captions: str = Form('yes'), size: int = Form(ocr.BATCH_PAGES),
+               again: bool = Form(False)):
+    try:
+        ocr.start(import_volume_or_404(vz), mode, again, captions=captions != 'no', size=size)
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
+@app.get("/import/{vz}/ocr/seiten/{page_no}.json")
+def import_ocr_page(vz: int, page_no: int):
+    """The recognized blocks of one page, for checking them against the scan."""
+    volume = import_volume_or_404(vz)
+    blocks = ocr.page_blocks(volume, page_no) if ocr.status(volume)['state'] == 'done' else None
+    if blocks is None:
+        raise HTTPException(404)
+    return JSONResponse({'no': page_no, 'blocks': blocks})
+
+
+@app.post("/import/{vz}/ocr/abbrechen")
+def import_ocr_cancel(vz: int):
+    try:
+        ocr.cancel(import_volume_or_404(vz))
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
+@app.get("/import/{vz}/ocr.zip")
+def import_ocr_zip(vz: int):
+    volume = import_volume_or_404(vz)
+    if ocr.status(volume)['state'] != 'done':
+        raise HTTPException(404)
+    return Response(content=ocr.zip_result(volume), media_type="application/zip",
+                    headers={"Content-Disposition": f'attachment; filename="{volume.stem}-ocr.zip"'})
+
+
+@app.post("/import/{vz}/ocr-hochladen")
+def import_ocr_upload(request: Request, vz: int, ergebnis: UploadFile = File(...)):
+    volume = import_volume_or_404(vz)
+    try:
+        ocr.import_zip(volume, ergebnis.file)
+    except ValueError as error:
+        return import_page(request, vz, 'ocr', str(error), 400)
+    return RedirectResponse(f"/import/{vz}?schritt=ocr", 303)
+
+
+@app.post("/import/{vz}/schluessel")
+def import_key(request: Request, vz: int, key: str = Form(''), forget: bool = Form(False)):
+    import_volume_or_404(vz)
+    try:
+        ocr.forget_key() if forget else ocr.save_key(key)
+    except ValueError as error:
+        return import_page(request, vz, 'ocr', str(error), 400)
+    return RedirectResponse(f"/import/{vz}?schritt=ocr", 303)
 
 
 @app.post("/import/{vz}/vorschlag")

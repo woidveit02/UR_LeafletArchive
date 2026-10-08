@@ -23,6 +23,8 @@ class Volume(Base):
     portal_url = Column(String, nullable=True)
     meta_model = Column(String, nullable=True)
     meta_created = Column(String, nullable=True)
+    ocr_mode = Column(String, nullable=True)  # quality level of the text recognition, if known (ocr-lauf.json)
+    ocr_created = Column(String, nullable=True)
     n_pages = Column(Integer, nullable=True)
 
     @property

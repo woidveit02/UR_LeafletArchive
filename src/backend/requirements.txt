@@ -7,3 +7,4 @@ pycodestyle
 sqlalchemy
 python-multipart
 requests
+datalab-python-sdk

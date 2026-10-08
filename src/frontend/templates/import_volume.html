@@ -1,43 +1,43 @@
 {% extends "base.html" %}
-{% block title %}{{ volume.name if volume else 'Neuer Band' }} anlegen – UR Leaflet Archive{% endblock %}
-{% block app_class %}{% if split %} app-wide{% endif %}{% endblock %}
+{% block title %}Band hinzufügen{% if volume %}: {{ volume.name }}{% endif %} – UR Leaflet Archive{% endblock %}
+{% block app_class %}{% if split or (volume and step == 'ocr' and ocr.state == 'done') %} app-wide{% endif %}{% endblock %}
 {% block content %}
         <header class="page-head">
             <p class="meta"><a href="/import">← Zur Übersicht</a></p>
-            <h1>{{ volume.name if volume else 'Neuer Band' }}</h1>
+            <h1>Band hinzufügen{% if volume %}: {{ volume.name }}{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
-        {% set done = (['band'] + (['scans'] if pages else [])) if volume else [] %}
-        <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}</p>
+        {% set done = (['band'] + (['scans'] if pages else []) + (['ocr'] if ocr.state == 'done' else [])) if volume else [] %}
+        <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}: {{ step_help[step] }}</p>
         {% set i = keys.index(step) %}
         <div class="step-head">
         <span class="step-back">{% if volume and i > 0 %}<a class="step-button outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% endif %}</span>
         <nav class="view-switch step-switch" aria-label="Schritte">
             {% for key, label in steps.items() %}
             {% set mark = '✓ ' if key in done and key != step else '' %}
-            {% if volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
-            {% else %}<a{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
+            {% if volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}" title="{{ step_help[key] }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
+            {% else %}<a title="{{ step_help[key] }}"{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
             {% endfor %}
         </nav>
         <span class="step-next">
             {% if not volume %}<button type="submit" form="new-form" class="step-button">Weiter →</button>
             {% elif step == 'band' %}<button type="submit" form="band-form" class="step-button">Weiter →</button>
-            {% elif i + 1 < keys | length %}<a class="step-button" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}" title="{{ steps[keys[i + 1]] }}">Weiter →</a>{% endif %}
+            {% elif i + 1 < keys | length %}{% if waiting %}<span class="step-button disabled" aria-disabled="true" title="{{ waiting }}">Weiter →</span>{% else %}<a class="step-button" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}" title="{{ steps[keys[i + 1]] }}">Weiter →</a>{% endif %}{% endif %}
         </span>
         </div>
         {% if step == 'band' and not volume %}
-        <h2>Welcher Band des Archivs soll im Viewer angelegt werden?</h2>
+        <h2>Band wählen</h2>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         <form id="new-form" method="post" action="/import/neu" class="meta-form step-form">
-            <dl class="meta-list">
-                <dt><label for="vz">Nummer</label></dt>
+            <dl class="meta-list plain">
+                <dt><label for="vz">Band</label></dt>
                 <dd><select id="vz" name="vz">
                     {% for u in units %}<option value="{{ u.vz }}" data-portal="{{ u.portal_url or '' }}">Nr. {{ '%03d' % u.vz }}, {{ u.title }}</option>{% endfor %}
                 </select>
-                <span class="meta note">Die Einheiten stammen aus dem Findmittel des Universitätsarchivs, die nächste freie ist vorgewählt, weitere folgen nach dem Anlegen.</span></dd>
-                <dt><label for="portal_url">Archivportal</label></dt>
+                <span class="meta note">Angezeigt werden Bände, die noch nicht hinzugefügt wurden.</span></dd>
+                <dt><label for="portal_url">Link zum Archivportal-D (optional)</label></dt>
                 <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ units[0].portal_url or '' }}" placeholder="im Archivportal noch kein Eintrag">
-                    <span class="meta note">Für die Nummern 16 bis 28 ist der Link hinterlegt, für spätere gibt es ihn im Archivportal noch nicht.</span></dd>
+                    <span class="meta note">Falls vorhanden, ist der Link bereits eingetragen. Ohne Eintrag im Archivportal kann das Feld leer bleiben.</span></dd>
             </dl>
         </form>
         {% elif step == 'band' %}
@@ -48,39 +48,49 @@
                 <dt>Jahr</dt><dd>{{ volume.year }}</dd>
                 <dt>Titel</dt><dd>{{ volume.title }}</dd>
                 <dt>Signatur</dt><dd>{{ volume.signature }}</dd>
-                <dt><label for="portal_url">Archivportal</label></dt>
-                <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ volume.portal_url or '' }}" placeholder="Link zum Band im Archivportal-D">
-                    {% if volume.portal_url %}<a class="meta note" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Link öffnen ↗</a>{% endif %}</dd>
+                <dt>Archivportal</dt>
+                <dd class="portal-row">{% if volume.portal_url %}<a href="{{ volume.portal_url }}" target="_blank" rel="noopener">Im Archivportal-D ansehen ↗</a>{% else %}<span class="meta">noch kein Link eingetragen</span>{% endif %}
+                    <details class="inline-edit">
+                        <summary class="link-button">{{ 'Link ändern' if volume.portal_url else 'Link eintragen' }}</summary>
+                        <input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ volume.portal_url or '' }}" placeholder="Link zum Band im Archivportal-D" aria-label="Archivportal-Link">
+                    </details></dd>
             </dl>
         </form>
         {% elif step == 'scans' %}
         <h2>Scans</h2>
-        {% if pages %}<p class="form-ok" role="status">✓ {{ pages }} Seiten hochgeladen</p>{% endif %}
+        {% if uploaded and pages %}<p class="form-ok" role="status">✓ Upload abgeschlossen</p>{% endif %}
+        {% if pages %}<p class="current-scans">Aktuell gespeichert: <b>{{ pages }} Seiten</b></p>{% endif %}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         <p class="form-error" id="upload-error" role="alert" hidden></p>
+        {% if pages %}<details class="advanced"{% if running or error %} open{% endif %}><summary class="button-outline">Scans ersetzen</summary>{% endif %}
         <form method="post" action="/import/{{ volume.vz }}/scans" enctype="multipart/form-data" class="meta-form step-form"
               data-status-url="/import/{{ volume.vz }}/status"{% if running %} data-running="1"{% endif %}>
-            {% if pages %}<p><b>Die vorhandenen {{ pages }} Seiten werden ersetzt.</b></p>{% endif %}
-            <dl class="meta-list">
-                <dt>Ordner</dt>
-                <dd class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
-                    <label for="folder" class="button-outline">Ordner wählen</label>
-                    <span class="meta file-name">Nichts ausgewählt</span>
-                    <span class="meta note">Ordner mit den TIFF-Scans des Bandes</span></dd>
-                <dt>oder Dateien</dt>
-                <dd class="file-pick"><input type="file" id="scans" name="scans" accept=".pdf,.tif,.tiff" multiple>
-                    <label for="scans" class="button-outline">Dateien wählen</label>
-                    <span class="meta file-name">Nichts ausgewählt</span>
-                    <span class="meta note">ein PDF oder einzelne TIFF-Dateien</span></dd>
-            </dl>
-            <p class="meta">PDF oder TIFF-Dateien. TIFFs werden nach Dateiname sortiert und zu einem PDF zusammengefügt,
-                andere Dateien im Ordner werden übergangen.</p>
+            <div id="drop-zone" class="drop-zone">
+                <p class="drop-title">Scan-PDF hierher ziehen</p>
+                <p class="meta">Die Scans des Bandes als eine PDF-Datei</p>
+                <div class="drop-actions">
+                    <span class="file-pick"><input type="file" id="pdf" name="scans" accept=".pdf">
+                        <label for="pdf" class="button-outline">PDF-Datei wählen</label></span>
+                </div>
+                <div class="drop-alt">
+                    <p class="meta"><b>Oder einzelne TIFF-Scans:</b> Sie werden nach Dateiname sortiert und zu einem PDF zusammengefügt.</p>
+                    <div class="drop-actions">
+                        <span class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
+                            <label for="folder" class="button-outline">Ordner mit TIFFs wählen</label></span>
+                        <span class="file-pick"><input type="file" id="tiffs" name="scans" accept=".tif,.tiff" multiple>
+                            <label for="tiffs" class="button-outline">TIFF-Dateien wählen</label></span>
+                    </div>
+                </div>
+            </div>
+            <p id="pick-summary" class="pick-summary">Noch nichts ausgewählt.</p>
+            {% if pages %}<p id="replace-note" class="form-warn" hidden>Ersetzt die aktuell gespeicherten {{ pages }} Seiten.</p>{% endif %}
             <div id="upload-progress" class="upload-progress" hidden>
                 <progress></progress>
                 <span class="meta upload-text"></span>
             </div>
-            <button type="submit" class="button-small">Hochladen</button>
+            <button type="submit" id="upload-button" class="button-small upload-submit" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
         </form>
+        {% if pages %}</details>{% endif %}
         {% elif step == 'trennen' %}
         {% if not split %}
         <h2>Flugblätter trennen</h2>
@@ -173,6 +183,163 @@
         </div>
         <script type="application/json" id="split-data">{{ split | tojson }}</script>
         {% endif %}
+        {% elif step == 'ocr' %}
+        <h2>Texterkennung</h2>
+        {% if not pages %}
+        <p class="meta">Dafür müssen zuerst die Scans hochgeladen sein.</p>
+        {% else %}
+        {% set busy = ocr_job and ocr_job.state == 'running' %}
+        <div class="step-narrow"{% if ocr.state != 'done' and not busy %} data-leave-warning="Der Text ist noch nicht erkannt. Trotzdem weiter?"{% endif %}>
+        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}<details class="advanced"><summary><b data-mode-label>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).label }}</b> · etwa <span data-mode-price>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary><fieldset class="mode-choice"><legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>{% for m in ocr.modes %}<label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}><span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>{% endfor %}<small class="meta" title="Datalab-Preisliste in Dollar, in Euro umgerechnet zum EZB-Kurs vom {{ ocr.rates_from }}">Schätzung, Stand {{ ocr.rates_from }}</small></fieldset><fieldset class="mode-choice"><legend>Bildbeschreibungen</legend><label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span><span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label><label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span><span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label></fieldset><fieldset class="mode-choice"><legend>Teilgröße</legend><label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label><small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small></fieldset></details>{% endmacro %}
+        {% macro key_help() %}
+        <details class="help">
+            <summary>Wo finde ich meinen API-Key?</summary>
+            <h4>Was ist Datalab, was ein API-Key?</h4>
+            <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
+                Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
+            <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App Seiten erkennen lassen,
+                und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
+            <h4>Wie bekomme ich einen API-Key?</h4>
+            <ol>
+                <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
+                <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
+                    (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
+                <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+            </ol>
+            <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
+            <h4>Wo wird der API-Key gespeichert?</h4>
+            <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
+        </details>
+        {% endmacro %}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% if ocr_job and ocr_job.state == 'cancelled' and ocr.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
+        {% if ocr_job and ocr_job.state == 'error' and ocr.state != 'done' %}<p class="form-error" role="alert">{{ ocr_job.error }}</p>{% endif %}
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        {% if busy %}
+        <p class="meta">Der Text wird erkannt. Das dauert einige Minuten. Die Seite darf geschlossen werden, die Erkennung läuft weiter.</p>
+        {% elif ocr.state == 'done' %}
+        <p class="form-ok" role="status">{% if ocr.source == 'hochgeladen' %}✓ Texterkennung für {{ ocr.pages }} Seiten importiert (Qualitätsstufe „{{ ocr.mode_label }}“{% else %}✓ Text für {{ ocr.pages }} Seiten erkannt ({{ ocr.source }}, Qualitätsstufe „{{ ocr.mode_label }}“{% endif %}{% if ocr.seconds %}, in {{ [1, (ocr.seconds / 60) | round | int] | max }} Min{% endif %}{% if ocr.cost %}, Kosten laut Datalab etwa {{ ocr.cost }}{% endif %})</p>
+        {% elif ocr.state == 'partial' %}
+        <p class="form-warn" role="status">Unterbrochen: {{ ocr.kept }} von {{ ocr.batches }} Teilen sind schon erkannt und bezahlt (Qualitätsstufe „{{ ocr.mode_label }}“). Sie werden beim Fortsetzen nicht noch einmal angefragt.</p>
+        {% else %}
+        <p>Dafür schickt die App die {{ ocr.pages }} Seiten an den Online-Dienst Datalab. Das dauert einige Minuten,
+            die Kosten werden über dein Datalab-Konto abgerechnet.</p>
+        {% endif %}
+
+        <div id="ocr-progress" class="upload-progress" hidden>
+            <progress></progress>
+            <span class="meta upload-text"></span>
+            <ul id="ocr-parts" class="ocr-parts"></ul>
+            <button type="button" id="ocr-cancel" class="button-outline" data-url="/import/{{ volume.vz }}/ocr/abbrechen"
+                    data-confirm="Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.">Abbrechen</button>
+        </div>
+
+        {% set finished = ocr.state == 'done' and not busy %}
+        <h3>Zugang zu Datalab</h3>
+        {% if ocr_key %}
+        {% if ocr_key.from_env %}
+        <p class="key-line">✓ Datalab-Zugang eingerichtet (API-Key …{{ ocr_key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
+        {% else %}
+        <details class="key-change">
+            <summary class="key-line">✓ Datalab-Zugang eingerichtet (API-Key …{{ ocr_key.hint }}) · <span class="key-link">Ändern</span></summary>
+            <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">
+                <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
+                <button type="submit" class="button-outline">Speichern</button>
+                <button type="submit" name="forget" value="true" class="link-button" formnovalidate
+                        onclick="return confirm('Den gespeicherten API-Key entfernen?')">Entfernen</button>
+            </form>
+            {% if not finished %}{{ key_help() }}{% endif %}
+        </details>
+        {% endif %}
+        {% else %}
+        <p>Die Texterkennung läuft über ein kostenpflichtiges Datalab-Konto. Hinterlege dafür einen API-Key.</p>
+        <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">
+            <label>API-Key<input type="password" name="key" autocomplete="off"></label>
+            <button type="submit" class="button-small">API-Key speichern</button>
+        </form>
+        {% endif %}
+
+        {% if not ocr_key or finished %}{{ key_help() }}{% endif %}
+
+        {% if ocr.state != 'done' or busy %}
+        <h3>Qualität und Kosten</h3>
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
+            {% if busy %}{% elif ocr.state == 'partial' %}<input type="hidden" name="mode" value="{{ ocr.mode_key }}">{% if ocr.no_captions %}<input type="hidden" name="captions" value="no">{% endif %}<input type="hidden" name="size" value="{{ ocr.size }}"><p class="meta">Fortgesetzt wird in der Qualitätsstufe der schon erkannten Teile (Qualitätsstufe „{{ ocr.mode_label }}“).</p>{% else %}{{ mode_select('accurate') }}{% endif %}
+            {% if not busy %}<div class="start-row">
+                <button type="submit" class="button-small upload-submit"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
+                {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+            </div>
+            <p class="meta">Nach der Texterkennung kannst du mit dem nächsten Schritt fortfahren.</p>{% endif %}
+        </form>
+        {% if ocr.state == 'partial' and not busy %}
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+              data-confirm="Von vorn beginnen? Die schon erkannten Teile gehen verloren, die Texterkennung kostet dann für alle Seiten neu.">
+            <input type="hidden" name="again" value="true">
+            {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
+            <button type="submit" class="button-outline"{% if not ocr_key %} disabled{% endif %}>Von vorn beginnen</button>
+        </form>
+        {% endif %}
+        {% else %}
+        <h3>Qualität und Kosten</h3>
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+              data-confirm="Den Text noch einmal erkennen? Das kostet erneut Geld (je nach Qualitätsstufe), das jetzige Ergebnis (Qualitätsstufe „{{ ocr.mode_label }}“) geht verloren.">
+            <input type="hidden" name="again" value="true">
+            {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
+            <div class="start-row">
+                <button type="submit" class="button-outline"{% if not ocr_key %} disabled{% endif %}>Erneut erkennen</button>
+                {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+            </div>
+        </form>
+        {% endif %}
+
+        <details class="step-form zip-import">
+            <summary>Alternativ: vorhandene Texterkennung als ZIP-Datei laden (ohne API-Key)</summary>
+            <form method="post" action="/import/{{ volume.vz }}/ocr-hochladen" enctype="multipart/form-data" class="meta-form">
+                <p class="meta">Ein ZIP mit der JSON-Datei von Datalab und den Bildern, etwa der Ordner aus der Pipeline oder der Download von hier.
+                    Die Seitenzahl muss zum Scan passen.{% if ocr.state == 'done' %} Das jetzige Ergebnis wird ersetzt.{% endif %}</p>
+                <div class="zip-row">
+                    <span class="file-pick"><input type="file" id="ergebnis" name="ergebnis" accept=".zip" required>
+                        <label for="ergebnis" class="button-outline">ZIP wählen</label>
+                        <span class="meta file-name">Nichts ausgewählt</span></span>
+                    <button type="submit" class="button-small" disabled>Laden</button>
+                </div>
+            </form>
+        </details>
+
+        {% if finished %}</div>
+
+        <div class="section-head">
+            <h3>Ergebnis prüfen</h3>
+            <a class="button-outline" href="/import/{{ volume.vz }}/ocr.zip">Ergebnis als ZIP herunterladen</a>
+        </div>
+        <div id="page-check" class="page-check" data-pages="{{ ocr.pages }}" data-url="/import/{{ volume.vz }}/ocr/seiten/{n}.json"
+             data-large="/import/{{ volume.vz }}/seiten/{n}.jpg?gross=1&v={{ stamp }}" data-images="/volumes/{{ volume.vz }}/images/">
+            <p class="page-check-nav">
+                <button type="button" class="button-outline" data-go="prev" aria-label="Vorherige Seite">←</button>
+                <label>Seite <input type="number" min="1" max="{{ ocr.pages }}" value="1"> von {{ ocr.pages }}</label>
+                <button type="button" class="button-outline" data-go="next" aria-label="Nächste Seite">→</button>
+                <span class="meta">Springen zu:</span>
+                <button type="button" class="link-button" data-go="1">erste</button>
+                <button type="button" class="link-button" data-go="mid">mittlere</button>
+                <button type="button" class="link-button" data-go="last">letzte</button>
+            </p>
+            <section id="check-pair" class="page-pair">  <!-- as on the leaflet page: text and scan side by side, the scan sized to the screen -->
+                <div class="pair-head"><span id="check-title">Bandseite 1</span>
+                    <a id="check-scan-link" href="/import/{{ volume.vz }}/seiten/1.jpg?gross=1&v={{ stamp }}" target="_blank" rel="noopener">Vergrößern ↗</a></div>
+                <div class="pair-head">Transkription, erzeugt von Datalab Convert</div>
+                <div class="pair-scan">
+                    <div id="check-frame" class="page-frame">
+                        <a id="check-scan-wrap" class="scan-link" href="/import/{{ volume.vz }}/seiten/1.jpg?gross=1&v={{ stamp }}" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)">
+                            <img id="check-scan" class="leaflet-page" alt="Scan der ausgewählten Seite"></a>
+                    </div>
+                </div>
+                <div id="check-body" class="pair-text ocr-page"></div>
+            </section>
+            <noscript><p class="meta">Die Seitenansicht braucht JavaScript.</p></noscript>
+        </div>
+        {% endif %}
+        {% if not finished %}</div>{% endif %}
+        {% endif %}
         {% else %}
         <h2>{{ steps[step] }}</h2>
         <p class="meta">Dieser Schritt folgt.</p>
@@ -188,4 +355,6 @@
     {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
     {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
+    {% if step == 'ocr' %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>
+    <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}
 {% endblock %}

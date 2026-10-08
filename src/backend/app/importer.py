@@ -16,9 +16,16 @@ from .database.models import DRAFT, RELEASED, Leaflet, Volume
 logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
 JPEG_QUALITY, DPI = 75, 400  # as pipelines/01_pdf/tiff_to_pdf.py
-OFFERED = 10  # units listed for choosing: the next free ones
-STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "trennen": "Flugblätter trennen", "ocr": "Text erkennen",
-         "angaben": "Angaben ermitteln", "pruefen": "Prüfen und freigeben", "themen": "Themen zuordnen"}
+STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "ocr": "Text erkennen", "trennen": "Flugblätter trennen",
+         "angaben": "Metadaten", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
+# what a step is for, said to somebody who does not know the system: under the step bar and as its tooltips
+STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
+             "scans": "Die gescannten Seiten des Bandes hochladen.",
+             "ocr": "Der Text der Scans wird automatisch erkannt, damit er sich lesen und durchsuchen lässt.",
+             "trennen": "Festlegen, wo ein Flugblatt endet und das nächste beginnt.",
+             "angaben": "Titel, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
+             "pruefen": "Die Ergebnisse durchsehen und den Band für alle sichtbar machen.",
+             "themen": "Die Flugblätter werden Themen zugeordnet."}
 
 
 def load_entries():
@@ -47,6 +54,11 @@ def n_leaflets(volume):
 
 def scan_path(volume):
     return fillDatabase.PDF_DIR / volume.label / f"{volume.stem}.pdf"
+
+
+def ocr_dir(volume):
+    """Where the text recognition of the scan lives: <stem>.json, its pictures and the unfinished batches."""
+    return scan_path(volume).parent / volume.stem
 
 
 def pending_volumes():
@@ -111,9 +123,9 @@ def discard(volume):
     """
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen und lässt sich hier nicht löschen.")
-    if running(volume) or running(volume, "segment"):
+    if any(running(volume, kind) for kind in ("scans", "segment", "ocr")):
         raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "segment"):
+    for kind in ("scans", "segment", "ocr"):
         JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)
@@ -121,6 +133,7 @@ def discard(volume):
         target.unlink(missing_ok=True)
         target.with_name(f"{volume.stem}.segments.json").unlink(missing_ok=True)
         shutil.rmtree(target.parent / f".upload-{volume.vz}", ignore_errors=True)
+        shutil.rmtree(ocr_dir(volume), ignore_errors=True)
         drop_thumbs(volume.stem)
         try:
             target.parent.rmdir()  # only if nothing else is in it
@@ -174,8 +187,8 @@ def stage(volume, files):
     for the user if the files do not fit or the folder cannot be written."""
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen, seine Scans lassen sich nicht ersetzen.")
-    if running(volume):
-        raise ValueError("Für diesen Band läuft schon ein Upload. Bitte warten, bis er fertig ist.")
+    if running(volume) or running(volume, "ocr"):
+        raise ValueError("Für diesen Band läuft schon ein Upload oder die Texterkennung. Bitte warten, bis sie fertig ist.")
     if len(files) == 1 and Path(files[0][0]).suffix.lower() == ".pdf":
         kind = "pdf"
     else:
@@ -220,6 +233,7 @@ def build(kind, paths, target, progress=None):
         with pdf_service._lock:
             pdf_service._doc_cache.pop(str(target), None)  # a replaced scan must not stay cached
             drop_thumbs(target.stem)
+            shutil.rmtree(target.parent / target.stem, ignore_errors=True)  # the text belongs to the old scan
             result.replace(target)
     except OSError as error:
         raise ValueError(storage_problem(error, target)) from error
@@ -238,7 +252,7 @@ def save_scans(volume, files):
     return page_count(volume)
 
 
-# per (volume number, "scans" | "segment"): {"state": "running" | "done" | "error", "error": text, ...}
+# per (volume number, "scans" | "segment" | "ocr"): {"state": "running" | "done" | "error", "error": text, ...}
 JOBS = {}  # ponytail: in memory, gone after a restart; a jobs table when OCR needs one
 
 

@@ -1,11 +1,10 @@
-"""Step 3 of an import: where one leaflet ends and the next begins in the scan.
+"""Step 4 of an import: where one leaflet ends and the next begins in the scan.
 
 The result is <stem>.segments.json next to the scan PDF, the file format of flugblatt_splitter and the
 pipeline. A cut after page n means that page n + 1 starts a new leaflet.
 """
 import json
 import logging
-import os
 import re
 import threading
 import time
@@ -14,7 +13,7 @@ from datetime import datetime, timezone
 import pymupdf
 import requests
 
-from . import importer
+from . import importer, ocr
 
 logger = logging.getLogger(__name__)
 API_URL = "https://www.datalab.to/api/v1/segment"
@@ -160,10 +159,9 @@ def ask_datalab(pdf_path, api_key, job):
 
 def start_suggestion(volume):
     """Has Datalab suggest the cuts, in the background; poll importer.JOBS[(vz, "segment")]."""
-    api_key = os.getenv("DATALAB_API_KEY")
+    api_key = ocr.api_key()
     if not api_key:
-        raise ValueError("Für den Vorschlag fehlt der Zugang zu Datalab: DATALAB_API_KEY in der .env eintragen "
-                         "und die App neu starten.")
+        raise ValueError("Für den Vorschlag fehlt der Zugang zu Datalab: den API-Key im Schritt „Text erkennen“ eintragen.")
     scan = importer.scan_path(volume)
     if not scan.is_file():
         raise ValueError("Es sind noch keine Scans hochgeladen.")

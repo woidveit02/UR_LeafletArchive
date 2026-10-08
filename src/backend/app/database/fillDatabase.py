@@ -327,6 +327,11 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes):
     volume.n_pages = n_pages
     volume.meta_model = meta.get("model")
     volume.meta_created = meta.get("created", "")[:10]
+    try:  # written by the app's text recognition; volumes recognized earlier have none
+        run = json.loads((PDF_DIR / cfg["label"] / stem / "ocr-lauf.json").read_text(encoding="utf-8"))
+        volume.ocr_mode, volume.ocr_created = run.get("mode"), (run.get("at") or "")[:10]
+    except (OSError, ValueError):
+        pass
     session.commit()
 
     known_ids = {org_id for (org_id,) in session.query(Organization.id)}

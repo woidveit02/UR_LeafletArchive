@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Bände im Viewer anlegen – UR Leaflet Archive{% endblock %}
+{% block title %}Bände hinzufügen – UR Leaflet Archive{% endblock %}
 {% block content %}
         <header class="page-head">
-            <h1>Bände im Viewer anlegen</h1>
+            <h1>Bände hinzufügen</h1>
             <p class="meta">Lege hier einen Band des Archivs im Viewer an. Du brauchst seine Scans als PDF oder als
                 Ordner mit TIFF-Dateien. Der Band bleibt unsichtbar, bis du ihn freigibst. Angefangene Bände findest
                 du unten unter „Entwürfe“.</p>
         </header>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
-        {% if has_units %}<p><a class="button-link" href="/import/neu">Neuen Band im Viewer anlegen</a></p>{% endif %}
+        {% if has_units %}<p><a class="button-link" href="/import/neu">Neuen Band hinzufügen</a></p>{% endif %}
         <h2>Entwürfe</h2>
         {% if volumes %}
         <ul class="leaflet-list leaflet-list-plain draft-list">
@@ -16,9 +16,9 @@
             <li>
                 <span class="row-main"><a class="row-title" href="/import/{{ v.vz }}">{{ v.label }}</a></span>
                 <span class="row-count">{{ (v.scans ~ ' Seiten') if v.scans else 'keine Scans' }}</span>
-                <form method="post" action="/import/{{ v.vz }}/loeschen"
+                {% if v.deletable %}<form method="post" action="/import/{{ v.vz }}/loeschen"
                       onsubmit="return confirm('Den Entwurf {{ v.label }} wirklich löschen? Die im Viewer angelegten Daten und die hochgeladenen Scans gehen verloren. Der Band im Archiv bleibt unberührt.')">
-                    <button type="submit" class="button-outline">Löschen</button></form>
+                    <button type="submit" class="button-outline">Löschen</button></form>{% endif %}
             </li>
             {% endfor %}
         </ul>

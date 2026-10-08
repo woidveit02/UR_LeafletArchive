@@ -159,7 +159,8 @@
         <aside class="meta-side">
             <button type="button" class="toggle-pill" data-fold>Angaben einklappen ▴</button>
             <div class="side-actions">
-                {% if leaflet.provenance_model %}<p><span class="side-label">Automatisch erschlossen</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
+                <p><span class="side-label">Texterkennung</span>{{ leaflet.ocr_label }}</p>
+                {% if leaflet.provenance_model %}<p><span class="side-label">Metadaten</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
                 <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button-outline" data-swap="edit">Angaben korrigieren</a>
                 {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
             </div>
