@@ -17,7 +17,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import importer, pdf_service
+from . import importer, pdf_service, segments
 from .database import copy_decisions, corrections, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -1631,7 +1631,7 @@ def import_new(request: Request, error: str = ''):
     """The first step of an import, before the volume exists: which unit of the archive it is."""
     return templates.TemplateResponse(request, "import_volume.html", {
         "volume": None, "units": importer.free_units()[:importer.OFFERED], "error": error,
-        "steps": importer.STEPS, "step": "band", "pages": None, "running": False})
+        "steps": importer.STEPS, "step": "band", "pages": None, "split": None, "running": False})
 
 
 @app.post("/import/neu")
@@ -1654,9 +1654,16 @@ def import_page(request, vz, step, error='', status_code=200):
     volume = import_volume_or_404(vz)
     if importer.n_leaflets(volume) or step not in importer.STEPS:
         raise HTTPException(404)
+    pages = importer.page_count(volume) if volume.stem else None
+    stamp = importer.scan_stamp(volume)  # a new scan gets new image addresses
+    split = {"pages": pages, "thumb": f"/import/{vz}/seiten/{{n}}.jpg?v={stamp}",
+             "large": f"/import/{vz}/seiten/{{n}}.jpg?gross=1&v={stamp}",
+             **segments.status(volume),
+             "suggesting": importer.running(volume, segments.SEGMENT_JOB), "saveUrl": f"/import/{vz}/trennen",
+             "suggestUrl": f"/import/{vz}/vorschlag", "listUrl": f"/import/{vz}/liste", "name": volume.stem,
+             "statusUrl": f"/import/{vz}/status?job={segments.SEGMENT_JOB}"} if step == 'trennen' and pages else None
     return templates.TemplateResponse(request, "import_volume.html", {
-        "volume": volume, "pages": importer.page_count(volume) if volume.stem else None, "error": error,
-        "steps": importer.STEPS, "step": step,
+        "volume": volume, "pages": pages, "error": error, "steps": importer.STEPS, "step": step, "split": split,
         "running": importer.running(volume)}, status_code=status_code)
 
 
@@ -1699,8 +1706,64 @@ def import_scans(request: Request, vz: int, scans: list[UploadFile] = File(defau
 
 
 @app.get("/import/{vz}/status")
-def import_status(vz: int):
-    return JSONResponse(importer.JOBS.get(vz, {'state': 'idle'}))
+def import_status(vz: int, job: str = 'scans'):
+    return JSONResponse(importer.JOBS.get((vz, job), {'state': 'idle'}))
+
+
+@app.get("/import/{vz}/seiten/{page_no}.jpg")
+def import_page_thumb(vz: int, page_no: int, gross: bool = False):
+    """A page of the uploaded scan, for choosing the cuts (large: to read it); the volume has no leaflets yet,
+    so there is no n_pages."""
+    volume = import_volume_or_404(vz)
+    pages = importer.page_count(volume) if volume.stem else None
+    if not pages or not 1 <= page_no <= pages:
+        raise HTTPException(404)
+    jpg = pdf_service.render_thumb(importer.scan_path(volume), page_no, height=1400 if gross else 2 * THUMB_HEIGHT)
+    return Response(content=jpg, media_type="image/jpeg", headers={"Cache-Control": "max-age=86400"})
+
+
+@app.post("/import/{vz}/trennen")
+async def import_cuts(request: Request, vz: int):
+    """Saves what was chosen on the page: {"cuts": [page, ...], "excluded": [page, ...]}, each cut the last page
+    of a leaflet, each excluded page left out of every leaflet."""
+    volume = import_volume_or_404(vz)
+    pages = importer.page_count(volume) if volume.stem else None
+    body = await request.json()
+    cuts, excluded = body.get('cuts'), body.get('excluded', [])
+    fits = pages and all(isinstance(v, list) and all(isinstance(p, int) for p in v) for v in (cuts, excluded)) \
+        and all(1 <= c < pages for c in cuts) and all(1 <= p <= pages for p in excluded)
+    if not fits:
+        return JSONResponse({'error': 'Die Schnitte passen nicht zu den hochgeladenen Seiten.'}, status_code=400)
+    doc = segments.save(volume, cuts, pages, excluded=excluded)
+    return JSONResponse({'ok': True, 'count': sum(not s.get('no_content') for s in doc['segments'])})
+
+
+@app.post("/import/{vz}/liste")
+def import_list_file(vz: int, liste: UploadFile = File(...)):
+    """Reads a list of leaflets (one page range per line) and answers with the cuts, without saving them."""
+    volume = import_volume_or_404(vz)
+    pages = importer.page_count(volume) if volume.stem else None
+    if not pages:
+        return JSONResponse({'error': 'Es sind noch keine Scans hochgeladen.'}, status_code=400)
+    raw = liste.file.read(1_000_000)
+    try:
+        text = raw.decode('utf-8-sig')
+    except UnicodeDecodeError:  # a CSV saved by Excel
+        text = raw.decode('cp1252', errors='replace')
+    try:
+        cuts, excluded = segments.parse_list(text, pages)
+        return JSONResponse({'cuts': cuts, 'excluded': excluded})
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+
+
+@app.post("/import/{vz}/vorschlag")
+def import_suggest(vz: int):
+    try:
+        segments.start_suggestion(import_volume_or_404(vz))
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
 
 
 @app.get("/volumes")

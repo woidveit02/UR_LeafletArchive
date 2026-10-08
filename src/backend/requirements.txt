@@ -6,3 +6,4 @@ pytest
 pycodestyle
 sqlalchemy
 python-multipart
+requests

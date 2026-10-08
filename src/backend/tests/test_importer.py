@@ -97,7 +97,7 @@ def test_background_job_reports_progress(folders):
     _, db = folders
     volume = db.query(Volume).one()
     importer.start_scans(volume, [(f"{n}.tif", io.BytesIO(image())) for n in "abc"])
-    job = importer.JOBS[volume.vz]
+    job = importer.JOBS[(volume.vz, "scans")]
     assert job["total"] == 3
     with pytest.raises(ValueError, match="läuft schon"):
         if job["state"] != "running":
@@ -129,3 +129,23 @@ def test_discard_volume(folders, monkeypatch):
     importer.discard(added)
     assert db.query(Volume).filter_by(vz=16).count() == 0
     assert [u["vz"] for u in importer.free_units()] == [16, 17]  # number free again
+
+
+# Tests if a new upload removes the cached page images of the old scan, and the scan has a new stamp for the addresses.
+def test_new_scan_drops_the_old_thumbnails(folders, monkeypatch):
+    import os
+    from backend.app import pdf_service
+    tmp_path, db = folders
+    monkeypatch.setattr(pdf_service, "THUMB_DIR", tmp_path / "thumbs")
+    volume = db.query(Volume).one()
+    importer.save_scans(volume, [("a.tif", io.BytesIO(image()))])
+    old = tmp_path / "thumbs" / "0118_0015-1" / "1-300.jpg"
+    old.parent.mkdir(parents=True)
+    old.write_bytes(b"old page")
+    unrelated = tmp_path / "thumbs" / "0118_0016-1"
+    unrelated.mkdir()
+    before = importer.scan_stamp(volume)
+    os.utime(importer.scan_path(volume), (1, 1))  # as if the first scan had been made long ago
+    importer.save_scans(volume, [("b.tif", io.BytesIO(image(80, 60)))])
+    assert not old.parent.exists() and unrelated.exists()
+    assert importer.scan_stamp(volume) >= before > 1

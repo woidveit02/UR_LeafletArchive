@@ -1,0 +1,4 @@
+# Ein Flugblatt pro Zeile: die Seiten von-bis, danach darf eine Notiz stehen
+1-2   Erstes Flugblatt, Vorder- und Rueckseite
+3     Einseitiges Flugblatt
+4-9   Mehrseitiges Flugblatt

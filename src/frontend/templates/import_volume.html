@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ volume.name if volume else 'Neuer Band' }} anlegen – UR Leaflet Archive{% endblock %}
+{% block app_class %}{% if split %} app-wide{% endif %}{% endblock %}
 {% block content %}
         <header class="page-head">
             <p class="meta"><a href="/import">← Zur Übersicht</a></p>
@@ -8,6 +9,9 @@
         {% set keys = steps.keys() | list %}
         {% set done = (['band'] + (['scans'] if pages else [])) if volume else [] %}
         <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}</p>
+        {% set i = keys.index(step) %}
+        <div class="step-head">
+        <span class="step-back">{% if volume and i > 0 %}<a class="step-button outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% endif %}</span>
         <nav class="view-switch step-switch" aria-label="Schritte">
             {% for key, label in steps.items() %}
             {% set mark = '✓ ' if key in done and key != step else '' %}
@@ -15,10 +19,16 @@
             {% else %}<a{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
             {% endfor %}
         </nav>
+        <span class="step-next">
+            {% if not volume %}<button type="submit" form="new-form" class="step-button">Weiter →</button>
+            {% elif step == 'band' %}<button type="submit" form="band-form" class="step-button">Weiter →</button>
+            {% elif i + 1 < keys | length %}<a class="step-button" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}" title="{{ steps[keys[i + 1]] }}">Weiter →</a>{% endif %}
+        </span>
+        </div>
         {% if step == 'band' and not volume %}
         <h2>Welcher Band des Archivs soll im Viewer angelegt werden?</h2>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
-        <form method="post" action="/import/neu" class="meta-form step-form">
+        <form id="new-form" method="post" action="/import/neu" class="meta-form step-form">
             <dl class="meta-list">
                 <dt><label for="vz">Nummer</label></dt>
                 <dd><select id="vz" name="vz">
@@ -29,11 +39,10 @@
                 <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ units[0].portal_url or '' }}" placeholder="im Archivportal noch kein Eintrag">
                     <span class="meta note">Für die Nummern 16 bis 28 ist der Link hinterlegt, für spätere gibt es ihn im Archivportal noch nicht.</span></dd>
             </dl>
-            <button type="submit" class="button-small">Weiter zu den Scans</button>
         </form>
         {% elif step == 'band' %}
         <h2>Band</h2>
-        <form method="post" action="/import/{{ volume.vz }}/band" class="meta-form step-form">
+        <form id="band-form" method="post" action="/import/{{ volume.vz }}/band" class="meta-form step-form">
             <dl class="meta-list">
                 <dt>Nummer</dt><dd>Nr. {{ '%03d' % volume.vz }}</dd>
                 <dt>Jahr</dt><dd>{{ volume.year }}</dd>
@@ -43,9 +52,7 @@
                 <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ volume.portal_url or '' }}" placeholder="Link zum Band im Archivportal-D">
                     {% if volume.portal_url %}<a class="meta note" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Link öffnen ↗</a>{% endif %}</dd>
             </dl>
-            <button type="submit" class="button-small">Weiter zu den Scans</button>
         </form>
-
         {% elif step == 'scans' %}
         <h2>Scans</h2>
         {% if pages %}<p class="form-ok" role="status">✓ {{ pages }} Seiten hochgeladen</p>{% endif %}
@@ -74,16 +81,101 @@
             </div>
             <button type="submit" class="button-small">Hochladen</button>
         </form>
+        {% elif step == 'trennen' %}
+        {% if not split %}
+        <h2>Flugblätter trennen</h2>
+        <p class="meta">Dafür müssen zuerst die Scans hochgeladen sein.</p>
+        {% else %}
+        <section class="split-help">
+            <h2>Anleitung: so werden die Flugblätter getrennt</h2>
+            <div class="split-help-text">
+            <h3>Vorgehen</h3>
+            <ol>
+                <li>Mit „Schnitte von Datalab vorschlagen lassen“ beginnen (oder von Hand, dann ist der ganze Band zunächst ein einziges Flugblatt).</li>
+                <li>Den Band rechts Seite für Seite durchsehen. Links markiert ein blauer Rahmen die Seite, die gerade rechts zu sehen ist.</li>
+                <li>Ein Schnitt trennt zwei Flugblätter: Die Schere am rechten Rand einer Seite setzt ihn nach dieser Seite, ein zweiter Klick nimmt ihn wieder weg. Ein Klick auf eine Seite links zeigt sie rechts.</li>
+                <li>„Speichern“, wenn der Band fertig durchgesehen ist. Ein Vorschlag von Datalab gilt erst nach dem Speichern als geprüft.</li>
+            </ol>
+            <h3>Seiten ausschließen</h3>
+            <p>Leere Seiten, Trennblätter und Ähnliches gehören zu keinem Flugblatt. Unter der Seite (links) oder neben
+                ihrem Namen (rechts) steht „ausschließen“. Die Seite wird dann abgeblendet, nicht gezählt und von den Flugblättern
+                daneben getrennt. „wieder einbeziehen“ macht es rückgängig.</p>
+            <h3>Schnitte aus einer Liste</h3>
+            <p>Wer beim Scannen mitschreibt, kann die Schnitte als Liste laden: eine Zeile pro Flugblatt mit seinen Seiten, zum Beispiel
+                <code>1-2</code>, dann <code>3</code>, dann <code>4-9</code>. Eine Textdatei (.txt) oder eine CSV-Datei genügt, Zeilen mit „#“ und Überschriften
+                werden übergangen, auch Notizen hinter der Seitenangabe stören nicht. Jede Seite des Bandes muss in genau einem Flugblatt stehen,
+                sonst nennt die Meldung die Seiten, die nicht passen. Die geladenen Schnitte erscheinen im Raster und werden erst mit „Speichern“ übernommen.
+                Seiten, die zu keinem Flugblatt gehören, bekommen ein „x“ davor, zum Beispiel <code>x 17</code> oder <code>x 17-18</code>.
+                „Liste herunterladen“ speichert die aktuellen Schnitte im selben Format.</p>
+            <p>Ein Beispiel:</p>
+<pre class="split-example"># Ein Flugblatt pro Zeile
+1-2   Erstes Flugblatt, Vorder- und Rückseite
+3     Einseitiges Flugblatt
+4-9   Mehrseitiges Flugblatt</pre>
+            <p>Diese Liste teilt einen Band mit 9 Seiten in 3 Flugblätter. Die Notizen hinter den Seitenangaben sind optional.
+                Für deinen Band muss die Liste alle Seiten genau einmal enthalten.
+                <a href="{{ url_for('static', path='beispiel-flugblaetter.txt') }}" download>Beispieldatei herunterladen</a></p>
+            <h3>Worauf es bei Datalab ankommt</h3>
+            <p>Datalab setzt kaum falsche Schnitte, übersieht aber viele. Deshalb vor allem nach <b>fehlenden</b> Schnitten suchen. Ein „Flugblatt“ von sehr vielen Seiten ist fast immer ein Bündel mehrerer Blätter.</p>
+            <h3>Hier beginnt ein neues Flugblatt</h3>
+            <ul>
+                <li>Eine Kopfleiste mit Kürzeln der Gruppen (zum Beispiel „LSD – LSD – LSD“) oder ein Datum in der Kopfzeile ganz oben.</li>
+                <li>Ein Eingangsstempel des Archivs am Seitenkopf.</li>
+                <li>Die Seite davor endet mit einem Impressum („Verantwortlich“, „V. i. S. d. P.“): Dort ist ein Blatt zu Ende.</li>
+                <li>Ein anderer Herausgeber, anderes Thema, anderes Layout.</li>
+            </ul>
+            <h3>Hier gehört die Seite zum vorigen Flugblatt (kein Schnitt)</h3>
+            <ul>
+                <li>Eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“, „- 3 -“).</li>
+                <li>Der Text setzt mitten im Satz oder Gedankengang ein.</li>
+                <li>Die Seite davor endet mit „b. w.“ (bitte wenden): Die Rückseite gehört zum Blatt, auch mit eigenem Kopf.</li>
+                <li>Hefte und Dokumentationen bleiben ein Flugblatt, auch wenn einzelne Beiträge eigene Kopfleisten haben.</li>
+            </ul>
+            <h3>Sonderfälle</h3>
+            <ul>
+                <li><b>Fremde Rückseite:</b> Trägt die Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt.</li>
+                <li><b>Dasselbe Blatt zweimal im Band</b> (Kopien): Beide bleiben eigene Flugblätter. Doppelte findet ein späterer Schritt.</li>
+                <li><b>Vertauschte Seiten</b> werden nicht umsortiert, sie bleiben, wie sie gescannt sind.</li>
+                <li><b>Pressespiegel und Kalenderseiten:</b> Jede Seite hat ein eigenes Datum und eine eigene Quelle, das ist aber meist ein Blatt. Im Zweifel nicht schneiden.</li>
+            </ul>
+            </div>
+        </section>
+        <div id="split-stage" class="split-stage">
+        <p class="form-error" id="split-error" role="alert" hidden></p>
+        <div class="split-bar">
+            <div class="split-group split-info">
+                <span id="split-count" class="split-count"></span>
+                {% if split.saved and not split.confirmed %}<span class="form-warn" role="status" title="Dieser Stand ist ein Vorschlag von Datalab: prüfen und speichern">Vorschlag: bitte prüfen</span>
+                {% elif split.confirmed %}<span class="form-ok" role="status">✓ gespeichert</span>{% endif %}
+            </div>
+            <div class="split-group split-tools">
+                <button type="button" id="split-suggest" class="tool-button">Schnitte von Datalab vorschlagen</button>
+                <span class="file-pick">
+                    <input type="file" id="split-list" accept=".txt,.csv,.tsv,text/plain,text/csv">
+                    <label for="split-list" class="tool-button" title="Eine Zeile pro Flugblatt, Seiten von bis, zum Beispiel 1-2, dann 3, dann 4-9">Liste laden</label>
+                </span>
+                <button type="button" id="split-download" class="tool-button">Liste herunterladen</button>
+            </div>
+            <div class="split-group split-main">
+                <button type="button" id="split-save" class="tool-button primary">Speichern</button>
+                <button type="button" id="split-fullscreen" class="tool-button split-fullscreen" aria-pressed="false">⛶ Vollbild</button>
+            </div>
+        </div>
+        <div id="split-progress" class="upload-progress" hidden>
+            <progress></progress>
+            <span class="meta upload-text"></span>
+        </div>
+        <div class="split-layout">
+            <div id="split-left" class="split-left"><div id="split-grid" class="split-grid"></div></div>
+            <div id="split-resizer" class="split-resizer" role="separator" aria-orientation="vertical" title="Zum Anpassen ziehen, Doppelklick setzt zurück"></div>
+            <div id="split-right" class="split-right"><div id="split-pages" class="split-pages"></div></div>
+        </div>
+        </div>
+        <script type="application/json" id="split-data">{{ split | tojson }}</script>
+        {% endif %}
         {% else %}
         <h2>{{ steps[step] }}</h2>
         <p class="meta">Dieser Schritt folgt.</p>
-        {% endif %}
-        {% if volume and step != 'band' %}
-        {% set i = keys.index(step) %}
-        <p class="step-nav">
-            {% if i > 0 %}<a class="button-outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% else %}<span></span>{% endif %}
-            {% if i + 1 < keys | length %}<a class="button-link" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}">Weiter: {{ steps[keys[i + 1]] }} →</a>{% endif %}
-        </p>
         {% endif %}
 {% endblock %}
 {% block scripts %}
@@ -95,4 +187,5 @@
     </script>
     {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
+    {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
 {% endblock %}

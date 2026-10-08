@@ -17,7 +17,7 @@
                 <span class="row-main"><a class="row-title" href="/import/{{ v.vz }}">{{ v.label }}</a></span>
                 <span class="row-count">{{ (v.scans ~ ' Seiten') if v.scans else 'keine Scans' }}</span>
                 <form method="post" action="/import/{{ v.vz }}/loeschen"
-                      onsubmit="return confirm('Den Entwurf {{ v.label }} wirklich löschen? Die im Viewer angelegten Daten und hochgeladenen Scans gehen verloren, der Band im Archiv bleibt unberührt.')">
+                      onsubmit="return confirm('Den Entwurf {{ v.label }} wirklich löschen? Die im Viewer angelegten Daten und die hochgeladenen Scans gehen verloren. Der Band im Archiv bleibt unberührt.')">
                     <button type="submit" class="button-outline">Löschen</button></form>
             </li>
             {% endfor %}

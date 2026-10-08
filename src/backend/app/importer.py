@@ -32,8 +32,8 @@ def save_entries(entries):
         f.write(text)
 
 
-def running(volume):
-    return JOBS.get(volume.vz, {}).get("state") == "running"
+def running(volume, kind="scans"):
+    return JOBS.get((volume.vz, kind), {}).get("state") == "running"
 
 
 def update_entry(vz, **changes):
@@ -91,6 +91,18 @@ def set_portal_url(volume, portal_url):
     fillDatabase.session.commit()
 
 
+def drop_thumbs(stem):
+    """The cached page images of a scan; they are made again from the next scan."""
+    for thumbs in pdf_service.THUMB_DIR.glob(f"{stem}-*"):
+        shutil.rmtree(thumbs, ignore_errors=True)
+
+
+def scan_stamp(volume):
+    """Changes whenever the scan is replaced; in the image addresses, so the browser does not show the old pages."""
+    path = scan_path(volume)
+    return int(path.stat().st_mtime) if path.is_file() else 0
+
+
 def discard(volume):
     """Removes a volume that is still being imported: its scan and temporary files, and the volume itself.
 
@@ -99,16 +111,17 @@ def discard(volume):
     """
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen und lässt sich hier nicht löschen.")
-    if running(volume):
-        raise ValueError("Für diesen Band läuft gerade ein Upload. Bitte warten, bis er fertig ist.")
-    JOBS.pop(volume.vz, None)
+    if running(volume) or running(volume, "segment"):
+        raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
+    for kind in ("scans", "segment"):
+        JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)
         pdf_service._doc_cache.pop(str(target), None)
         target.unlink(missing_ok=True)
+        target.with_name(f"{volume.stem}.segments.json").unlink(missing_ok=True)
         shutil.rmtree(target.parent / f".upload-{volume.vz}", ignore_errors=True)
-        for thumbs in pdf_service.THUMB_DIR.glob(f"{volume.stem}-*"):
-            shutil.rmtree(thumbs, ignore_errors=True)
+        drop_thumbs(volume.stem)
         try:
             target.parent.rmdir()  # only if nothing else is in it
         except OSError:
@@ -206,6 +219,7 @@ def build(kind, paths, target, progress=None):
             tiffs_to_pdf(paths, result, progress)
         with pdf_service._lock:
             pdf_service._doc_cache.pop(str(target), None)  # a replaced scan must not stay cached
+            drop_thumbs(target.stem)
             result.replace(target)
     except OSError as error:
         raise ValueError(storage_problem(error, target)) from error
@@ -224,14 +238,14 @@ def save_scans(volume, files):
     return page_count(volume)
 
 
-# per volume number: {"state": "running" | "done" | "error", "done": pages, "total": pages, "error": text}
+# per (volume number, "scans" | "segment"): {"state": "running" | "done" | "error", "error": text, ...}
 JOBS = {}  # ponytail: in memory, gone after a restart; a jobs table when OCR needs one
 
 
 def start_scans(volume, files):
     """Like save_scans, but the PDF is built in the background; poll JOBS[volume.vz]."""
     kind, paths, target = stage(volume, files)
-    job = JOBS[volume.vz] = {"state": "running", "done": 0, "total": len(paths) if kind == "tiff" else 1, "error": ""}
+    job = JOBS[(volume.vz, "scans")] = {"state": "running", "done": 0, "total": len(paths) if kind == "tiff" else 1, "error": ""}
 
     def run():
         try:
