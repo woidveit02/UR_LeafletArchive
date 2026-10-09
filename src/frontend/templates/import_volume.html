@@ -96,90 +96,90 @@
         <h2>Flugblätter trennen</h2>
         <p class="meta">Dafür müssen zuerst die Scans hochgeladen sein.</p>
         {% else %}
+        <h2>Flugblätter trennen</h2>
+        <div class="split-work">
+            <div class="split-work-head">
+                <span class="split-count{{ ' done' if split.confirmed }}"></span>
+                <span class="split-work-actions">
+                    <button type="button" id="split-download" class="text-button">Liste herunterladen</button>
+                    {% if split.confirmed %}<button type="button" id="split-open" class="tool-button">Einteilung ansehen</button>
+                    <a class="tool-button primary" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}">Weiter zu {{ steps[keys[i + 1]] }} →</a>
+                    {% else %}<button type="button" id="split-open" class="tool-button primary">Seiten prüfen</button>{% endif %}
+                </span>
+            </div>
+            <details class="split-change{{ ' done' if split.confirmed }}"{% if not split.confirmed %} open{% endif %}>
+                <summary>Einteilung ändern</summary>
+                <div class="split-start">
+                    <div>
+                        <button type="button" id="split-suggest-text" class="tool-button">Aus Text vorschlagen</button>
+                        <p class="meta">Die App rät anhand des erkannten Textes, wo ein Flugblatt beginnt. Unsicher: jeder Vorschlag muss bestätigt werden.</p>
+                    </div>
+                    <div>
+                        <span class="file-pick">
+                            <input type="file" id="split-list" accept=".txt,.csv,.tsv,text/plain,text/csv">
+                            <label for="split-list" class="tool-button">Liste laden</label>
+                        </span>
+                        <p class="meta">Eine fertige Einteilung als Textdatei übernehmen, eine Zeile pro Flugblatt.</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+        <p class="form-error split-error" role="alert" hidden></p>
+        <p class="meta split-note" hidden></p>
         <section class="split-help">
-            <h2>Anleitung: so werden die Flugblätter getrennt</h2>
+            <h2>So trennst du die Flugblätter</h2>
             <div class="split-help-text">
-            <h3>Vorgehen</h3>
+            <p>Lege fest, welche Scanseiten zusammen ein Flugblatt bilden. Mehrseitige Flugblätter und zusammengehörige Hefte bleiben eine Einheit.</p>
             <ol>
-                <li>Mit „Schnitte von Datalab vorschlagen lassen“ beginnen (oder von Hand, dann ist der ganze Band zunächst ein einziges Flugblatt).</li>
-                <li>Den Band rechts Seite für Seite durchsehen. Links markiert ein blauer Rahmen die Seite, die gerade rechts zu sehen ist.</li>
-                <li>Ein Schnitt trennt zwei Flugblätter: Die Schere am rechten Rand einer Seite setzt ihn nach dieser Seite, ein zweiter Klick nimmt ihn wieder weg. Ein Klick auf eine Seite links zeigt sie rechts.</li>
-                <li>„Speichern“, wenn der Band fertig durchgesehen ist. Ein Vorschlag von Datalab gilt erst nach dem Speichern als geprüft.</li>
+                <li><b>Einteilung wählen:</b> Lass dir Trennungen aus dem Text vorschlagen, lade eine vorhandene Liste oder beginne von Hand. Vorschläge aus dem Text sind unsicher:
+                    Sie finden nicht jede Grenze und setzen manche falsch.</li>
+                <li><b>Seiten prüfen:</b> Öffne die Schnittansicht. Bei den beiden angezeigten Seiten entscheidest du mit „Schnitt setzen“ oder „Nicht setzen“, ob ein neues Flugblatt beginnt.
+                    Jeder Vorschlag muss bestätigt oder verworfen werden. Eine geladene Liste gilt als bestätigt, mögliche fehlende Trennungen werden zusätzlich angezeigt.</li>
+                <li><b>Prüfung abschließen:</b> Änderungen werden automatisch gespeichert, du kannst jederzeit unterbrechen und später fortsetzen. Sind alle Übergänge geprüft,
+                    schließt „Prüfung abschließen“ den Schritt ab, dann kannst du weitergehen.</li>
             </ol>
-            <h3>Seiten ausschließen</h3>
-            <p>Leere Seiten, Trennblätter und Ähnliches gehören zu keinem Flugblatt. Unter der Seite (links) oder neben
-                ihrem Namen (rechts) steht „ausschließen“. Die Seite wird dann abgeblendet, nicht gezählt und von den Flugblättern
-                daneben getrennt. „wieder einbeziehen“ macht es rückgängig.</p>
-            <h3>Schnitte aus einer Liste</h3>
-            <p>Wer beim Scannen mitschreibt, kann die Schnitte als Liste laden: eine Zeile pro Flugblatt mit seinen Seiten, zum Beispiel
-                <code>1-2</code>, dann <code>3</code>, dann <code>4-9</code>. Eine Textdatei (.txt) oder eine CSV-Datei genügt, Zeilen mit „#“ und Überschriften
-                werden übergangen, auch Notizen hinter der Seitenangabe stören nicht. Jede Seite des Bandes muss in genau einem Flugblatt stehen,
-                sonst nennt die Meldung die Seiten, die nicht passen. Die geladenen Schnitte erscheinen im Raster und werden erst mit „Speichern“ übernommen.
-                Seiten, die zu keinem Flugblatt gehören, bekommen ein „x“ davor, zum Beispiel <code>x 17</code> oder <code>x 17-18</code>.
-                „Liste herunterladen“ speichert die aktuellen Schnitte im selben Format.</p>
-            <p>Ein Beispiel:</p>
-<pre class="split-example"># Ein Flugblatt pro Zeile
-1-2   Erstes Flugblatt, Vorder- und Rückseite
-3     Einseitiges Flugblatt
-4-9   Mehrseitiges Flugblatt</pre>
-            <p>Diese Liste teilt einen Band mit 9 Seiten in 3 Flugblätter. Die Notizen hinter den Seitenangaben sind optional.
-                Für deinen Band muss die Liste alle Seiten genau einmal enthalten.
-                <a href="{{ url_for('static', path='beispiel-flugblaetter.txt') }}" download>Beispieldatei herunterladen</a></p>
-            <h3>Worauf es bei Datalab ankommt</h3>
-            <p>Datalab setzt kaum falsche Schnitte, übersieht aber viele. Deshalb vor allem nach <b>fehlenden</b> Schnitten suchen. Ein „Flugblatt“ von sehr vielen Seiten ist fast immer ein Bündel mehrerer Blätter.</p>
-            <h3>Hier beginnt ein neues Flugblatt</h3>
-            <ul>
-                <li>Eine Kopfleiste mit Kürzeln der Gruppen (zum Beispiel „LSD – LSD – LSD“) oder ein Datum in der Kopfzeile ganz oben.</li>
-                <li>Ein Eingangsstempel des Archivs am Seitenkopf.</li>
-                <li>Die Seite davor endet mit einem Impressum („Verantwortlich“, „V. i. S. d. P.“): Dort ist ein Blatt zu Ende.</li>
-                <li>Ein anderer Herausgeber, anderes Thema, anderes Layout.</li>
-            </ul>
-            <h3>Hier gehört die Seite zum vorigen Flugblatt (kein Schnitt)</h3>
-            <ul>
-                <li>Eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“, „- 3 -“).</li>
-                <li>Der Text setzt mitten im Satz oder Gedankengang ein.</li>
-                <li>Die Seite davor endet mit „b. w.“ (bitte wenden): Die Rückseite gehört zum Blatt, auch mit eigenem Kopf.</li>
-                <li>Hefte und Dokumentationen bleiben ein Flugblatt, auch wenn einzelne Beiträge eigene Kopfleisten haben.</li>
-            </ul>
-            <h3>Sonderfälle</h3>
-            <ul>
-                <li><b>Fremde Rückseite:</b> Trägt die Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt.</li>
-                <li><b>Dasselbe Blatt zweimal im Band</b> (Kopien): Beide bleiben eigene Flugblätter. Doppelte findet ein späterer Schritt.</li>
-                <li><b>Vertauschte Seiten</b> werden nicht umsortiert, sie bleiben, wie sie gescannt sind.</li>
-                <li><b>Pressespiegel und Kalenderseiten:</b> Jede Seite hat ein eigenes Datum und eine eigene Quelle, das ist aber meist ein Blatt. Im Zweifel nicht schneiden.</li>
-            </ul>
+            <details class="advanced">
+                <summary><b>Woran erkenne ich ein neues Flugblatt?</b></summary>
+                <p>Für ein neues Flugblatt sprechen eine Kopfleiste mit Kürzeln der Gruppen (zum Beispiel „LSD – LSD – LSD“) oder ein Datum ganz oben, ein Eingangsstempel des Archivs
+                    am Seitenkopf, ein Impressum („Verantwortlich“, „V. i. S. d. P.“) auf der Seite davor sowie ein anderer Herausgeber oder ein anderes Thema.</p>
+                <p>Dagegen sprechen eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“), ein Text, der mitten im Satz einsetzt, und „b. w.“ oder „bitte wenden!“ auf der Seite davor.
+                    Die Rückseite gehört dann dazu, auch mit eigener Kopfleiste. Ein einzelnes Merkmal reicht nicht immer: Auch in einem mehrseitigen Flugblatt kommen neue Überschriften, Daten oder Impressen vor.</p>
+                <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Leerseite / Trennblatt“, die Schnitte davor und danach setzen sich von selbst,
+                    die Seite wird nicht mitgezählt. Trägt eine Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt. Hefte, Pressespiegel und Kalenderseiten mit eigenem Datum
+                    je Seite sind meist ein Flugblatt. Im Zweifel nicht schneiden.</p>
+            </details>
+            <details class="advanced">
+                <summary><b>Mit einer Liste arbeiten</b></summary>
+                <p>Hast du die Einteilung schon, lade sie mit „Liste laden“ als Textdatei, eine Zeile pro Flugblatt mit den Seitenzahlen:</p>
+<pre class="split-example">1-2
+3
+4-9</pre>
+                <p>Das sind drei Flugblätter: Seite 1 bis 2, Seite 3 allein und Seite 4 bis 9. Seiten, die zu keinem Flugblatt gehören, bekommen ein „x“ davor, etwa <code>x 17</code>.
+                    Jede Seite muss genau einmal vorkommen, sonst nennt dir die Meldung die Seiten, die nicht passen. Die Liste ersetzt die vorhandenen Schnitte und gilt als geprüft.
+                    Ist der Text schon erkannt, markiert die App zusätzlich Stellen, an denen sie eine Trennung vermutet, die in der Liste fehlt („Mögliche fehlende Trennung“).
+                    Die Einteilung bleibt unverändert, bis du darüber entscheidest. „Liste herunterladen“ speichert die aktuelle Einteilung im selben Format.
+                    <a href="{{ url_for('static', path='beispiel-flugblaetter.txt') }}" download>Beispieldatei herunterladen</a></p>
+            </details>
+            <details class="advanced">
+                <summary><b>Bedienung und Tastenkürzel</b></summary>
+                <p>Links stehen alle Seiten, rechts immer zwei benachbarte groß. Ein Klick auf eine Seite links zeigt sie mit ihrer Nachbarseite. Nach „Schnitt setzen“ (S) oder „Nicht setzen“ (N)
+                    zeigt die Ansicht den nächsten offenen Übergang. Mit „Weiter“ (Pfeil rechts) gehst du ohne Entscheidung zum nächsten. Wo nichts vorgeschlagen ist, gilt der Übergang damit als geprüft.
+                    Der Streifen rechts an einer Seite links setzt oder entfernt den Schnitt ebenfalls. „Prüfung abschließen“ springt zum nächsten offenen Übergang, solange noch einer fehlt.</p>
+                <p>Tasten: Pfeile blättern, S und N entscheiden, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc schließt die Ansicht.</p>
+            </details>
             </div>
         </section>
-        <div id="split-stage" class="split-stage">
-        <p class="form-error" id="split-error" role="alert" hidden></p>
-        <div class="split-bar">
-            <div class="split-group split-info">
-                <span id="split-count" class="split-count"></span>
-                {% if split.saved and not split.confirmed %}<span class="form-warn" role="status" title="Dieser Stand ist ein Vorschlag von Datalab: prüfen und speichern">Vorschlag: bitte prüfen</span>
-                {% elif split.confirmed %}<span class="form-ok" role="status">✓ gespeichert</span>{% endif %}
-            </div>
-            <div class="split-group split-tools">
-                <button type="button" id="split-suggest" class="tool-button">Schnitte von Datalab vorschlagen</button>
-                <span class="file-pick">
-                    <input type="file" id="split-list" accept=".txt,.csv,.tsv,text/plain,text/csv">
-                    <label for="split-list" class="tool-button" title="Eine Zeile pro Flugblatt, Seiten von bis, zum Beispiel 1-2, dann 3, dann 4-9">Liste laden</label>
+        <div id="split-stage" class="split-stage" hidden>
+            <div class="split-bar">
+                <span class="split-count"></span>
+                <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt den Schnitt nach ihr. Grau gestrichelt: noch nicht geprüft, ohne Linie: geprüft, kein Schnitt."><i class="on">▮</i> Schnitt · <i class="suggested">▮</i> Vorschlag · <i class="open">┆</i> ungeprüft</span>
+                <span class="split-end">
+                    <button type="button" id="split-finish" class="tool-button primary" title="Möglich, wenn jeder Übergang geprüft und kein Vorschlag mehr offen ist">Prüfung abschließen</button>
+                    <button type="button" id="split-close" class="tool-button" title="Schließen (Esc)">✕ Schließen</button>
                 </span>
-                <button type="button" id="split-download" class="tool-button">Liste herunterladen</button>
             </div>
-            <div class="split-group split-main">
-                <button type="button" id="split-save" class="tool-button primary">Speichern</button>
-                <button type="button" id="split-fullscreen" class="tool-button split-fullscreen" aria-pressed="false">⛶ Vollbild</button>
-            </div>
-        </div>
-        <div id="split-progress" class="upload-progress" hidden>
-            <progress></progress>
-            <span class="meta upload-text"></span>
-        </div>
-        <div class="split-layout">
-            <div id="split-left" class="split-left"><div id="split-grid" class="split-grid"></div></div>
-            <div id="split-resizer" class="split-resizer" role="separator" aria-orientation="vertical" title="Zum Anpassen ziehen, Doppelklick setzt zurück"></div>
-            <div id="split-right" class="split-right"><div id="split-pages" class="split-pages"></div></div>
-        </div>
+            <p class="form-error split-error" role="alert" hidden></p>
+            <div class="split-layout"><div id="split-left" class="split-left"></div><div id="split-resizer" class="split-resizer" role="separator" aria-orientation="vertical" title="Zum Anpassen ziehen, Doppelklick setzt zurück"></div><div class="split-view"><div id="split-right" class="split-right"></div><div id="split-nav" class="split-nav"></div><div id="split-decide" class="split-decide"></div></div></div>
         </div>
         <script type="application/json" id="split-data">{{ split | tojson }}</script>
         {% endif %}
@@ -215,6 +215,7 @@
         {% if ocr_job and ocr_job.state == 'cancelled' and ocr.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
         {% if ocr_job and ocr_job.state == 'error' and ocr.state != 'done' %}<p class="form-error" role="alert">{{ ocr_job.error }}</p>{% endif %}
         <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <div class="split-work">
         {% if busy %}
         <p class="meta">Der Text wird erkannt. Das dauert einige Minuten. Die Seite darf geschlossen werden, die Erkennung läuft weiter.</p>
         {% elif ocr.state == 'done' %}
@@ -259,8 +260,6 @@
         </form>
         {% endif %}
 
-        {% if not ocr_key or finished %}{{ key_help() }}{% endif %}
-
         {% if ocr.state != 'done' or busy %}
         <h3>Qualität und Kosten</h3>
         <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
@@ -291,6 +290,8 @@
             </div>
         </form>
         {% endif %}
+        </div>
+        {% if not ocr_key or finished %}{{ key_help() }}{% endif %}
 
         <details class="step-form zip-import">
             <summary>Alternativ: vorhandene Texterkennung als ZIP-Datei laden (ohne API-Key)</summary>

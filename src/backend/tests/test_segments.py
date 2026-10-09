@@ -13,21 +13,15 @@ def test_cuts_make_contiguous_segments():
     assert [(s["start_page"], s["end_page"]) for s in segments.segments_from_cuts([], 4)] == [(1, 4)]
 
 
-# Tests if the pages of the Datalab segments (0-indexed lists) turn into cuts after each leaflet but the last.
-def test_cuts_from_datalab_segments():
-    suggested = [{"pages": [4, 5, 6]}, {"pages": [0, 1]}, {"pages": [2, 3]}, {"pages": [7]}]
-    assert segments.cuts_from_datalab(suggested) == [2, 4, 7]
-
-
 # Tests if saving keeps the notes of a segment whose pages did not change, and tells a suggestion from a confirmed file.
 def test_save_keeps_notes_and_status(tmp_path, monkeypatch):
     monkeypatch.setattr(fillDatabase, "PDF_DIR", tmp_path)
     volume = SimpleNamespace(label="Nr. 016 (1974)", stem="0118_0016", vz=16)
     (tmp_path / volume.label).mkdir()
-    assert segments.status(volume) == {"cuts": [], "excluded": [], "saved": False, "confirmed": False}
+    assert segments.status(volume) == {"cuts": [], "suggested": [], "excluded": [], "reviewed": [], "hints": [], "saved": False, "confirmed": False}
 
     segments.save(volume, [2], 6, confirmed=False)
-    assert segments.status(volume) == {"cuts": [2], "excluded": [], "saved": True, "confirmed": False}
+    assert segments.status(volume) == {"cuts": [2], "suggested": [2], "excluded": [], "reviewed": [], "hints": [], "saved": True, "confirmed": False}
 
     doc = segments.load(volume)
     doc["segments"][0]["note"] = "Seite fehlt"
@@ -37,6 +31,22 @@ def test_save_keeps_notes_and_status(tmp_path, monkeypatch):
     assert [(s["start_page"], s["end_page"]) for s in result] == [(1, 2), (3, 4), (5, 6)]
     assert result[0]["note"] == "Seite fehlt" and "note" not in result[1]
     assert segments.status(volume)["confirmed"]
+
+
+# Tests if saving half way keeps open suggestions open and the volume unfinished until it is finished.
+def test_review_state(tmp_path, monkeypatch):
+    monkeypatch.setattr(fillDatabase, "PDF_DIR", tmp_path)
+    volume = SimpleNamespace(label="Nr. 016 (1974)", stem="0118_0016", vz=16)
+    (tmp_path / volume.label).mkdir()
+    segments.save(volume, [2, 4], 6, suggested=[4], reviewed=[1], finished=False)
+    status = segments.status(volume)
+    assert (status["cuts"], status["suggested"], status["reviewed"], status["confirmed"]) == ([2, 4], [4], [1], False)
+    segments.save(volume, [2], 6, hints=[4], finished=False)  # a hint is no cut
+    status = segments.status(volume)
+    assert (status["cuts"], status["hints"]) == ([2], [4])
+    segments.save(volume, [2, 4], 6, reviewed=[1, 3, 5])  # all decided and finished
+    status = segments.status(volume)
+    assert (status["suggested"], status["reviewed"], status["confirmed"]) == ([], [1, 3, 5], True)
 
 
 # Tests if a list kept while scanning gives the cuts, whatever the separators, headers, notes and order.
@@ -81,7 +91,7 @@ def test_excluded_pages(tmp_path, monkeypatch):
     doc = segments.save(volume, [3], 8, excluded=[2, 3, 7])
     assert [(s["start_page"], s["end_page"], s.get("no_content", False)) for s in doc["segments"]] == [
         (1, 1, False), (2, 3, True), (4, 6, False), (7, 7, True), (8, 8, False)]
-    assert segments.status(volume) == {"cuts": [], "excluded": [2, 3, 7], "saved": True, "confirmed": True}
+    assert segments.status(volume) == {"cuts": [], "suggested": [], "excluded": [2, 3, 7], "reviewed": list(range(1, 8)), "hints": [], "saved": True, "confirmed": True}
     segments.save(volume, [], 8)  # nothing left out any more: the flags are gone, too
     assert not any(s.get("no_content") for s in segments.load(volume)["segments"])
     text = "1\nx 2-3\n4-6\nx 7\nKein Inhalt 8\n"

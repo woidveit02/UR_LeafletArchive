@@ -1664,9 +1664,8 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     split = {"pages": pages, "thumb": f"/import/{vz}/seiten/{{n}}.jpg?v={stamp}",
              "large": f"/import/{vz}/seiten/{{n}}.jpg?gross=1&v={stamp}",
              **segments.status(volume),
-             "suggesting": importer.running(volume, segments.SEGMENT_JOB), "saveUrl": f"/import/{vz}/trennen",
-             "suggestUrl": f"/import/{vz}/vorschlag", "listUrl": f"/import/{vz}/liste", "name": volume.stem,
-             "statusUrl": f"/import/{vz}/status?job={segments.SEGMENT_JOB}"} if step == 'trennen' and pages else None
+             "saveUrl": f"/import/{vz}/trennen",
+             "textUrl": f"/import/{vz}/vorschlag-text", "listUrl": f"/import/{vz}/liste", "name": volume.stem} if step == 'trennen' and pages else None
     text = ocr.status(volume)
     waiting = {'scans': None if pages else 'Zuerst die Scans hochladen.',  # why "Weiter" does not work yet
                'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis importieren.',
@@ -1746,23 +1745,27 @@ def import_page_thumb(vz: int, page_no: int, gross: bool = False):
 
 @app.post("/import/{vz}/trennen")
 async def import_cuts(request: Request, vz: int):
-    """Saves what was chosen on the page: {"cuts": [page, ...], "excluded": [page, ...]}, each cut the last page
-    of a leaflet, each excluded page left out of every leaflet."""
+    """Saves what was chosen on the page: {"cuts": [page, ...], "excluded": [page, ...], "suggested": [page, ...],
+    "reviewed": [page, ...], "hints": [page, ...], "finish": bool}, each cut the last page of a leaflet, each excluded page left out of every
+    leaflet, "suggested" the cuts nobody has decided, "reviewed" the transitions found to belong together, "hints" the
+    transitions where the text suggests an overlooked cut."""
     volume = import_volume_or_404(vz)
     pages = importer.page_count(volume) if volume.stem else None
     body = await request.json()
-    cuts, excluded = body.get('cuts'), body.get('excluded', [])
-    fits = pages and all(isinstance(v, list) and all(isinstance(p, int) for p in v) for v in (cuts, excluded)) \
-        and all(1 <= c < pages for c in cuts) and all(1 <= p <= pages for p in excluded)
+    cuts, excluded, suggested, reviewed, hints = body.get('cuts'), *(body.get(k, []) for k in ('excluded', 'suggested', 'reviewed', 'hints'))
+    fits = pages and all(isinstance(v, list) and all(isinstance(p, int) for p in v) for v in (cuts, excluded, suggested, reviewed, hints)) \
+        and all(1 <= c < pages for c in cuts + suggested + reviewed + hints) and all(1 <= p <= pages for p in excluded)
     if not fits:
         return JSONResponse({'error': 'Die Schnitte passen nicht zu den hochgeladenen Seiten.'}, status_code=400)
-    doc = segments.save(volume, cuts, pages, excluded=excluded)
+    doc = segments.save(volume, cuts, pages, excluded=excluded, suggested=suggested, reviewed=reviewed,
+                        hints=hints, finished=bool(body.get('finish')))
     return JSONResponse({'ok': True, 'count': sum(not s.get('no_content') for s in doc['segments'])})
 
 
 @app.post("/import/{vz}/liste")
 def import_list_file(vz: int, liste: UploadFile = File(...)):
-    """Reads a list of leaflets (one page range per line) and answers with the cuts, without saving them."""
+    """Reads a list of leaflets (one page range per line) and answers with the cuts and with "hints": transitions where
+    the text makes a cut likely that the list lacks (null without usable text). Nothing is saved."""
     volume = import_volume_or_404(vz)
     pages = importer.page_count(volume) if volume.stem else None
     if not pages:
@@ -1774,7 +1777,7 @@ def import_list_file(vz: int, liste: UploadFile = File(...)):
         text = raw.decode('cp1252', errors='replace')
     try:
         cuts, excluded = segments.parse_list(text, pages)
-        return JSONResponse({'cuts': cuts, 'excluded': excluded})
+        return JSONResponse({'cuts': cuts, 'excluded': excluded, 'hints': segments.missed_cuts(volume, cuts, excluded, pages)})
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
 
@@ -1837,13 +1840,13 @@ def import_key(request: Request, vz: int, key: str = Form(''), forget: bool = Fo
     return RedirectResponse(f"/import/{vz}?schritt=ocr", 303)
 
 
-@app.post("/import/{vz}/vorschlag")
-def import_suggest(vz: int):
+@app.post("/import/{vz}/vorschlag-text")
+def import_suggest_from_text(vz: int):
     try:
-        segments.start_suggestion(import_volume_or_404(vz))
+        count = segments.suggest_from_text(import_volume_or_404(vz))
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
-    return JSONResponse({'ok': True})
+    return JSONResponse({'ok': True, 'count': count})
 
 
 @app.get("/volumes")

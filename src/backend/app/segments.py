@@ -4,21 +4,10 @@ The result is <stem>.segments.json next to the scan PDF, the file format of flug
 pipeline. A cut after page n means that page n + 1 starts a new leaflet.
 """
 import json
-import logging
 import re
-import threading
-import time
 from datetime import datetime, timezone
 
-import pymupdf
-import requests
-
-from . import importer, ocr
-
-logger = logging.getLogger(__name__)
-API_URL = "https://www.datalab.to/api/v1/segment"
-POLL_SECONDS, MAX_WAIT_SECONDS = 3, 30 * 60
-SEGMENT_JOB = "segment"
+from . import boundaries, importer, ocr
 
 
 def path(volume):
@@ -52,13 +41,17 @@ def forced_cuts(excluded, page_count):
     return {p for p in range(1, page_count) if (p in excluded) != (p + 1 in excluded)}
 
 
-def save(volume, cuts, page_count, confirmed=True, excluded=()):
+def save(volume, cuts, page_count, confirmed=True, excluded=(), suggested=(), reviewed=None, finished=True, hints=()):
     """Writes the segments for the cuts; the pages in `excluded` become segments of their own, marked no_content.
-    A segment with the same pages as before keeps its other fields (title, date, note)."""
+    A segment with the same pages as before keeps its other fields (title, date, note).
+    `suggested` are cuts nobody has decided yet, `reviewed` the transitions (after page n) somebody found to belong
+    together; `hints` the transitions where a cut is possible but not set (an overlooked one); `finished` says the
+    whole volume was looked through."""
     excluded = set(excluded)
     before = {(s["start_page"], s["end_page"]): s for s in (load(volume) or {}).get("segments", [])}
     segments = []
     for s in segments_from_cuts(set(cuts) | forced_cuts(excluded, page_count), page_count, confirmed):
+        s["confirmed"] = s["confirmed"] and s["start_page"] - 1 not in suggested
         merged = {**before.get((s["start_page"], s["end_page"]), {}), **s}
         if excluded.issuperset(range(s["start_page"], s["end_page"] + 1)):
             merged["no_content"] = True
@@ -66,7 +59,11 @@ def save(volume, cuts, page_count, confirmed=True, excluded=()):
             merged.pop("no_content", None)
         segments.append(merged)
     doc = {"source_pdf": f"{volume.stem}.pdf", "created": datetime.now(timezone.utc).isoformat(),
-           "segments": segments}
+           "finished": finished, "segments": segments}
+    if reviewed is not None:
+        doc["reviewed"] = sorted(reviewed)
+    if hints:
+        doc["hints"] = sorted(hints)
     path(volume).write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
     return doc
 
@@ -118,67 +115,44 @@ def parse_list(text, page_count):
 
 
 def status(volume):
-    """What the page shows: the cuts and the left-out pages, and whether somebody has confirmed them
-    (a suggestion is not). The cuts next to a left-out page follow from it and are not listed."""
+    """What the page shows: the cuts and the left-out pages, and whether somebody has finished looking through them (a
+    suggestion is not decided: its segment says "confirmed": false in the file; "suggested" are the cuts before such a
+    segment; "reviewed" the transitions found to belong together). The cuts next to a left-out page follow from it
+    and are not listed. Files from before the review (no "finished") count as finished when all is confirmed."""
     doc = load(volume)
     if doc is None:
-        return {"cuts": [], "excluded": [], "saved": False, "confirmed": False}
-    segments = doc["segments"]
+        return {"cuts": [], "suggested": [], "excluded": [], "reviewed": [], "hints": [], "saved": False, "confirmed": False}
+    segments = sorted(doc["segments"], key=lambda s: s["start_page"])
     excluded = excluded_pages(segments)
-    forced = forced_cuts(excluded, max(s["end_page"] for s in segments))
+    pages = max(s["end_page"] for s in segments)
+    forced = forced_cuts(excluded, pages)
+    confirmed = all(s.get("confirmed") for s in segments) and doc.get("finished", True)
     return {"cuts": [c for c in cuts_from_segments(segments) if c not in forced], "excluded": sorted(excluded),
-            "saved": True, "confirmed": all(s.get("confirmed") for s in segments)}
+            "suggested": [a["end_page"] for a, b in zip(segments, segments[1:]) if not b.get("confirmed")],
+            "reviewed": doc.get("reviewed", list(range(1, pages)) if confirmed else []), "hints": doc.get("hints", []),
+            "saved": True, "confirmed": confirmed}
 
 
-def cuts_from_datalab(datalab_segments):
-    """Datalab gives 0-indexed page lists per segment; the cut is after the last page of each but the final one."""
-    ends = sorted(max(s["pages"]) + 1 for s in datalab_segments)
-    return ends[:-1]
+def missed_cuts(volume, cuts, excluded, page_count):
+    """Where a list has no cut but the recognized text makes a start likely: possibly overlooked, to be decided (nothing
+    is cut). None if there is no text that fits the scans."""
+    result = ocr.result_path(volume)
+    if not result.is_file():
+        return None
+    found, pages = boundaries.suggest(result, boundaries.HINT_PROBABILITY)
+    if pages != page_count:
+        return None
+    skip = set(cuts) | forced_cuts(excluded, page_count)
+    return sorted(c for c in found if c not in skip and not (c in excluded and c + 1 in excluded))
 
 
-def ask_datalab(pdf_path, api_key, job):
-    headers = {"X-API-Key": api_key}
-    with open(pdf_path, "rb") as f:
-        response = requests.post(API_URL, headers=headers, files={"file": (pdf_path.name, f, "application/pdf")},
-                                 data={"mode": "balanced", "segmentation_schema": json.dumps({"segments": []})},
-                                 timeout=600)
-    response.raise_for_status()
-    check_url, started = response.json()["request_check_url"], time.monotonic()
-    while time.monotonic() - started < MAX_WAIT_SECONDS:
-        result = requests.get(check_url, headers=headers, timeout=60).json()
-        job["seconds"] = round(time.monotonic() - started)
-        if result.get("status") == "complete":
-            if not result.get("success", True):
-                raise ValueError(f"Datalab konnte den Band nicht trennen: {result.get('error')}")
-            return result["segmentation_results"]["segments"]
-        if result.get("status") == "failed":
-            raise ValueError(f"Datalab konnte den Band nicht trennen: {result.get('error')}")
-        time.sleep(POLL_SECONDS)
-    raise ValueError("Datalab hat nach 30 Minuten noch keine Antwort geliefert.")
-
-
-def start_suggestion(volume):
-    """Has Datalab suggest the cuts, in the background; poll importer.JOBS[(vz, "segment")]."""
-    api_key = ocr.api_key()
-    if not api_key:
-        raise ValueError("Für den Vorschlag fehlt der Zugang zu Datalab: den API-Key im Schritt „Text erkennen“ eintragen.")
-    scan = importer.scan_path(volume)
-    if not scan.is_file():
-        raise ValueError("Es sind noch keine Scans hochgeladen.")
-    if importer.running(volume, SEGMENT_JOB):
-        raise ValueError("Der Vorschlag wird gerade berechnet.")
-    with pymupdf.open(scan) as doc:
-        page_count = doc.page_count
-    job = importer.JOBS[(volume.vz, SEGMENT_JOB)] = {"state": "running", "seconds": 0, "error": ""}
-
-    def run():
-        try:
-            save(volume, cuts_from_datalab(ask_datalab(scan, api_key, job)), page_count, confirmed=False)
-            job["state"] = "done"
-        except (ValueError, requests.RequestException) as error:
-            job.update(state="error", error=str(error))
-        except Exception as error:  # a thread must report, not die silently
-            logger.exception("suggesting the cuts failed")
-            job.update(state="error", error=f"Unerwarteter Fehler: {error}")
-
-    threading.Thread(target=run, daemon=True).start()
+def suggest_from_text(volume):
+    """Saves the cuts that the recognized text makes very probable (boundaries.py), unconfirmed; returns their number."""
+    result = ocr.result_path(volume)
+    if not result.is_file():
+        raise ValueError("Der Text der Scans ist noch nicht erkannt.")
+    cuts, page_count = boundaries.suggest(result)
+    if page_count != importer.page_count(volume):
+        raise ValueError("Der erkannte Text passt nicht zu den Scans (andere Seitenzahl). Bitte die Texterkennung wiederholen.")
+    save(volume, cuts, page_count, confirmed=False, reviewed=[], hints=[])
+    return len(cuts)

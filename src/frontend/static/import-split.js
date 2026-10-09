@@ -1,272 +1,313 @@
-// The cuts between the leaflets of a volume: one cell per page, a scissors button at its right edge.
-// A page can also be left out of every leaflet (blank sheet, separator): it then forms a segment of its own.
+// The cuts between the leaflets of a volume: a page grid on the left, two neighbouring pages large on the right.
 (() => {
     const data = JSON.parse(document.getElementById('split-data').textContent);
-    const grid = document.getElementById('split-grid');
-    const count = document.getElementById('split-count');
-    const error = document.getElementById('split-error');
-    const save = document.getElementById('split-save');
-    const suggest = document.getElementById('split-suggest');
-    const progress = document.getElementById('split-progress');
-    const pagesEl = document.getElementById('split-pages');
-    const left = document.getElementById('split-left');
-    const right = document.getElementById('split-right');
+    const $ = (id) => document.getElementById(id);
+    const [stage, left, right, nav, decide, finish] = ['split-stage', 'split-left', 'split-right', 'split-nav', 'split-decide', 'split-finish'].map($);
+    const errors = document.querySelectorAll('.split-error');
     const cuts = new Set(data.cuts);
     const excluded = new Set(data.excluded);
-    let unsaved = !data.saved;  // a volume without a file starts as one leaflet that nobody has looked at
-    const cells = [];
-    const sheets = [];
-    let current = 0;
+    const suggested = new Set(data.suggested);
+    const reviewed = new Set(data.reviewed);
+    const hints = new Set(data.hints);
+    const transitions = data.pages - 1;
+    let dirty = false;
+    const undo = [], redo = [];
+    let current = 0, shown = 0, note = '';
 
-    // keeps an element inside its own scrolling pane, without moving the page or the other pane
-    const keepVisible = (pane, element) => {
-        const top = element.offsetTop - pane.offsetTop, bottom = top + element.offsetHeight;
-        if (top < pane.scrollTop) pane.scrollTop = top - 8;
-        else if (bottom > pane.scrollTop + pane.clientHeight) pane.scrollTop = bottom - pane.clientHeight + 8;
-    };
-    const show = (page) => right.scrollTo({ top: sheets[page - 1].offsetTop - pagesEl.offsetTop - 8, behavior: 'instant' });
-    const toggleExcluded = (page) => {
-        if (excluded.has(page)) excluded.delete(page); else excluded.add(page);
-        unsaved = true;
-        update();
-    };
-    const skipButton = (page, text) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'split-skip';
-        button.dataset.text = text;
-        button.addEventListener('click', (event) => { event.stopPropagation(); toggleExcluded(page); });
-        return button;
-    };
+    right.innerHTML = '<div class="split-pair"></div>';
+    const pair = right.firstChild;
+    const join = document.createElement('div'), sheets = new Map();
+    const at = () => Math.max(1, Math.min(current || 1, transitions));
 
-    for (let page = 1; page <= data.pages; page++) {
-        const cell = document.createElement('figure');
-        cell.className = 'split-page';
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = `Seite ${page}`;
-        img.src = data.thumb.replace('{n}', page);
-        img.addEventListener('click', () => show(page));
-        const label = document.createElement('figcaption');
-        const badge = document.createElement('span');
-        badge.className = 'split-badge';
-        label.append(`S. ${page}`, badge);
-        cell.append(img, label, cell.skip = skipButton(page, 'ausschließen'));
-        if (page < data.pages) {
-            const cut = document.createElement('button');
-            cut.type = 'button';
-            cut.className = 'split-cut';
-            cut.textContent = '✂';
-            cut.addEventListener('click', () => {
-                if (cuts.has(page)) cuts.delete(page); else cuts.add(page);
-                unsaved = true;
-                update();
-            });
-            cell.append(cut);
-            cell.cut = cut;
-        }
-        grid.append(cell);
-        cells.push(cell);
-
-        // the same page large, on the right
-        const sheet = document.createElement('figure');
-        sheet.className = 'split-sheet';
-        const big = document.createElement('img');
-        big.loading = 'lazy';
-        big.alt = `Seite ${page}`;
-        big.src = data.large.replace('{n}', page);
-        const caption = document.createElement('figcaption');
-        const name = document.createElement('span');
-        name.append(`Seite ${page} `);
-        const mark = document.createElement('span');
-        mark.className = 'split-badge';
-        name.append(mark);
-        caption.append(name, sheet.skip = skipButton(page, 'Seite ausschließen'));
-        sheet.append(big, caption);
-        pagesEl.append(sheet);
-        sheets.push(sheet);
-    }
-
-    // the page being read on the right is marked on the left
-    let waiting = false;
-    right.addEventListener('scroll', () => {
-        if (waiting) return;
-        waiting = true;
-        requestAnimationFrame(() => {
-            waiting = false;
-            const line = right.scrollTop + right.clientHeight / 3;
-            let page = sheets.findIndex((s) => s.offsetTop - pagesEl.offsetTop + s.offsetHeight > line);
-            page = page < 0 ? sheets.length : page + 1;
-            if (page === current) return;
-            if (current) cells[current - 1].classList.remove('current');
-            current = page;
-            cells[page - 1].classList.add('current');
-            keepVisible(left, cells[page - 1]);
-        });
-    });
-
-    // a left-out page is cut off from the leaflets next to it
     const forced = (page) => page < data.pages && excluded.has(page) !== excluded.has(page + 1);
-    const cutAfter = (page) => cuts.has(page) || forced(page);
-    // the segments in order: [first, last, left out]
     const segments = () => {
         const result = [];
         for (let page = 1; page <= data.pages; page++) {
-            if (page === 1 || cutAfter(page - 1)) result.push([page, page, excluded.has(page)]);
+            if (page === 1 || cuts.has(page - 1) || forced(page - 1)) result.push([page, page]);
             else result[result.length - 1][1] = page;
         }
         return result;
     };
 
-    function update() {
+    left.innerHTML = '<div class="split-grid">' + Array.from({ length: data.pages }, (_, i) => {
+        const page = i + 1;
+        return `<figure class="split-page" data-page="${page}">
+            <img loading="lazy" alt="Seite ${page}" title="Seite ${page}" src="${data.thumb.replace('{n}', page)}">
+            <figcaption><span class="split-num">${page}</span></figcaption>
+            ${page < data.pages ? `<button type="button" class="split-cut" data-cut="${page}">✂</button>` : ''}</figure>`;
+    }).join('') + '</div>';
+    const cells = [...left.querySelectorAll('.split-page')];
+
+    const render = () => {
         let leaflet = 0;
         cells.forEach((cell, i) => {
-            const page = i + 1;
-            const starts = page === 1 || cutAfter(page - 1);
-            const out = excluded.has(page);
+            const page = i + 1, out = excluded.has(page), starts = page === 1 || cuts.has(page - 1) || forced(page - 1);
             if (starts && !out) leaflet++;
-            const text = !out && starts ? `Blatt ${leaflet}` : '';  // a left-out page is only dimmed
-            cell.classList.toggle('tone-1', !out && leaflet % 2 === 0);
-            cell.classList.toggle('split-start', starts && !out);
             cell.classList.toggle('excluded', out);
-            sheets[i].classList.toggle('split-start', starts && !out);
-            sheets[i].classList.toggle('excluded', out);
-            cell.querySelector('.split-badge').textContent = text;
-            sheets[i].querySelector('.split-badge').textContent = text;
-            for (const holder of [cell, sheets[i]]) {
-                const skip = holder.skip;
-                skip.textContent = out ? 'einbeziehen' : skip.dataset.text;
-                skip.title = out ? `Seite ${page} wieder einbeziehen` : `Seite ${page} ausschließen: weder Teil eines Flugblatts noch gezählt`;
-                skip.setAttribute('aria-pressed', out);
-            }
-            if (cell.cut) {
-                const on = cuts.has(page) && !forced(page);  // a cut that a left-out page forces is not shown as one
-                cell.cut.classList.toggle('on', on);
-                cell.cut.classList.toggle('forced', forced(page));
-                cell.cut.disabled = forced(page);
-                cell.cut.setAttribute('aria-pressed', on);
-                cell.cut.title = forced(page) ? 'Schnitt wegen der ausgeschlossenen Seite'
-                    : on ? `Schnitt nach Seite ${page} entfernen` : `Schnitt nach Seite ${page} setzen`;
-                cell.cut.setAttribute('aria-label', cell.cut.title);
-            }
+            const cut = cell.querySelector('.split-cut');
+            if (!cut) return;
+            const on = cuts.has(page) && !forced(page), hint = hints.has(page) && !on;
+            const checked = !on && !hint && !suggested.has(page) && reviewed.has(page);
+            cut.className = `split-cut${on ? ' on' : ''}${(on && suggested.has(page)) || hint ? ' suggested' : ''}${checked ? ' checked' : ''}`;
+            cut.title = cut.ariaLabel = forced(page) ? 'Schnitt wegen „Leerseite / Trennblatt“' : `Schnitt nach Seite ${page} ${on ? 'entfernen' : 'setzen'}`;
+            cut.disabled = forced(page);
         });
-        const skipped = excluded.size ? ` · ${excluded.size} ausgeschlossen` : '';
-        count.textContent = `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'}${skipped}${unsaved ? ' · nicht gespeichert' : ''}`;
-        const saved = document.querySelector('.split-info .form-ok');
-        if (saved) saved.hidden = unsaved;  // "gespeichert" is only true until the next change
-        save.disabled = !unsaved;
-    }
+        paint();
+        document.querySelectorAll('.split-count').forEach((e) => {
+            e.classList.toggle('done', data.confirmed && !dirty);
+            e.textContent = `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ${data.confirmed && !dirty ? 'Prüfung abgeschlossen' : `${all.filter(decided).length} von ${transitions} Übergängen geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
+                dirty ? ' · speichert …' : data.confirmed ? '' : data.saved ? '' : ' · noch nicht gesetzt'}`;
+        });
+        finish.disabled = complete() && !dirty && data.confirmed;
+        const missing = all.filter((a) => !decided(a)).length;
+        finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Übergänge${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Übergänge sind geprüft';
+        renderView();
+    };
+    const decided = (a) => !suggested.has(a) && !hints.has(a) && (cuts.has(a) || forced(a) || reviewed.has(a) || (excluded.has(a) && excluded.has(a + 1)));
+    const all = Array.from({ length: transitions }, (_, i) => i + 1);
+    const complete = () => all.every(decided);
+    const kind = (a) => forced(a) ? ['on', 'Getrennt wegen Leerseite / Trennblatt'] : suggested.has(a) ? ['suggested', 'Trennung vorgeschlagen'] : hints.has(a) ? ['suggested', 'Mögliche fehlende Trennung']
+        : cuts.has(a) ? ['on', ''] : reviewed.has(a) ? ['', ''] : ['', 'Noch nicht geprüft'];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const renderView = (direction = 0) => {
+        const a = at(), [style, text] = kind(a);
+        if (shown !== a) {
+            const sheet = (p) => {
+                if (!sheets.has(p)) {
+                    const figure = document.createElement('figure');
+                    figure.className = 'split-sheet';
+                    figure.innerHTML = `<img alt="Seite ${p}" src="${data.large.replace('{n}', p)}"><figcaption><button type="button" class="split-skip" data-out="${p}"></button></figcaption>`;
+                    sheets.set(p, figure);
+                }
+                return sheets.get(p);
+            };
+            pair.replaceChildren(...(transitions < 1 ? [sheet(1)] : [sheet(a), join, sheet(a + 1)]));
+            [a - 1, a + 2].filter((p) => p >= 1 && p <= data.pages).forEach(sheet);
+            sheets.forEach((_, p) => { if (Math.abs(p - a) > 3) sheets.delete(p); });
+            shown = a;
+            if (Math.abs(direction) === 1 && !reduced.matches) {
+                pair.classList.remove('from-right', 'from-left');
+                void pair.offsetWidth;
+                pair.classList.add(direction > 0 ? 'from-right' : 'from-left');
+            }
+        }
+        pair.classList.toggle('together', reviewed.has(a) && !cuts.has(a) && !suggested.has(a) && !hints.has(a) && !forced(a));
+        join.className = `split-join ${style}`;
+        pair.querySelectorAll('.split-sheet').forEach((f, i) => {
+            const out = excluded.has(a + i), skip = f.querySelector('.split-skip');
+            f.classList.toggle('excluded', out);
+            skip.setAttribute('aria-pressed', out);
+            skip.textContent = out ? 'Wieder einbeziehen' : 'Leerseite / Trennblatt';
+            skip.title = out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`;
+        });
+        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="tool-button" data-act="prev" title="Vorheriger Übergang"${a < 2 ? ' disabled' : ''}><kbd>←</kbd> Zurück</button>
+            <b class="${note ? '' : style}">${note || text}</b>
+            <button type="button" class="tool-button" data-act="next" title="Nächster Übergang"${current >= data.pages ? ' disabled' : ''}>Weiter <kbd>→</kbd></button>`;
+        decide.innerHTML = transitions < 1 ? '' : `<div class="split-buttons"><button type="button" class="tool-button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Schnitt setzen <kbd>S</kbd></button>
+            <button type="button" class="tool-button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Nicht setzen <kbd>N</kbd></button>
+            <button type="button" class="tool-button" data-act="undo" title="Rückgängig (U oder Strg+Z)"${undo.length ? '' : ' disabled'}>↶ Rückgängig <kbd>U</kbd></button>
+            <button type="button" class="tool-button" data-act="redo" title="Wiederholen (Strg+Y)" aria-label="Wiederholen"${redo.length ? '' : ' disabled'}>↷</button></div>`;
+    };
+    const sets = [cuts, excluded, suggested, reviewed, hints];
+    const sorted = (set) => [...set].sort((a, b) => a - b);
+    const snapshot = () => JSON.stringify([...sets.map(sorted), at()]);
+    const change = (edit) => {
+        undo.push(snapshot());
+        redo.length = 0;
+        edit();
+        touch();
+        render();
+    };
+    const travel = (from, to) => {
+        if (!from.length) return;
+        to.push(snapshot());
+        const list = JSON.parse(from.pop()), page = list.pop();
+        list.forEach((items, i) => { sets[i].clear(); items.forEach((x) => sets[i].add(x)); });
+        touch();
+        render();
+        go(page);
+    };
+    const choose = (page, cut) => change(() => {
+        suggested.delete(page);
+        hints.delete(page);
+        if (cut) { cuts.add(page); reviewed.delete(page); } else { cuts.delete(page); reviewed.add(page); }
+    });
+    const toggleCut = (page) => choose(page, !cuts.has(page));
+    const decideAt = (cut) => {
+        const a = at();
+        choose(a, cut);
+        if (a >= transitions) return;
+        const next = all.slice(a).find((x) => !decided(x)) || a + 1;
+        const skipped = next - a - 1;
+        go(next, true, skipped ? `${skipped} bereits entschiedene${skipped === 1 ? 'r Übergang' : ' Übergänge'} übersprungen` : '');
+    };
+    const nextOpen = () => {
+        const a = at(), open = [...all.slice(a), ...all.slice(0, a - 1)].find((x) => !decided(x));
+        if (open) go(open);
+    };
+    const pass = (page) => {
+        if (decided(page) || suggested.has(page) || hints.has(page)) return;
+        reviewed.add(page);
+        touch();
+    };
+    const act = (e) => {
+        const what = e.target.closest('[data-act]')?.dataset.act;
+        if (what === 'cut' || what === 'keep') decideAt(what === 'cut');
+        else if (what === 'undo') travel(undo, redo);
+        else if (what === 'redo') travel(redo, undo);
+        else if (what === 'prev') go(at() - 1);
+        else if (what === 'next') forward();
+    };
+    decide.addEventListener('click', act);
+    nav.addEventListener('click', act);
 
-    const fail = (message) => { error.hidden = false; error.textContent = message; };
+    left.addEventListener('click', (e) => {
+        const cut = e.target.closest('[data-cut]');
+        if (cut) return toggleCut(Number(cut.dataset.cut));
+        const thumb = e.target.closest('.split-page');
+        if (thumb) go(Number(thumb.dataset.page));
+    });
+
+    right.addEventListener('click', (e) => {
+        const skip = e.target.closest('[data-out]');
+        if (!skip) return;
+        const page = Number(skip.dataset.out);
+        change(() => {
+            excluded.has(page) ? excluded.delete(page) : excluded.add(page);
+            [page - 1, page].filter((c) => c > 0 && c < data.pages).forEach((c) => cuts.add(c));
+        });
+    });
+
+    const paint = () => {
+        left.querySelectorAll('.current, .next').forEach((e) => e.classList.remove('current', 'next', 'joined'));
+        const [a, b] = [at(), at() + 1].map((page) => left.querySelector(`[data-page="${page}"]`));
+        a?.classList.add('current');
+        b?.classList.add('next');
+        if (a && b && a.offsetTop === b.offsetTop) { a.classList.add('joined'); b.classList.add('joined'); }
+    };
+    const go = (page, slide = false, remark = '') => {
+        const before = at();
+        note = remark;
+        current = Math.min(data.pages, Math.max(1, page));
+        paint();
+        const [first, second] = [at(), at() + 1].map((n) => left.querySelector(`[data-page="${n}"]`));
+        const box = left.getBoundingClientRect(), top = first.getBoundingClientRect().top, bottom = (second || first).getBoundingClientRect().bottom;
+        if (top < box.top || bottom > box.bottom) left.scrollBy({ top: (top + bottom - box.top - box.bottom) / 2, behavior: reduced.matches ? 'auto' : 'smooth' });
+        const moved = at() - before;
+        renderView(Math.abs(moved) === 1 || slide ? Math.sign(moved) : 0);
+    };
+    const forward = () => { pass(at()); go(current + 1); render(); };
+
+    const fail = (message) => errors.forEach((e) => { e.hidden = false; e.textContent = message; });
     const post = async (url, body) => {
-        const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        errors.forEach((e) => { e.hidden = true; });
+        const response = await fetch(url, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body),
+            headers: body instanceof FormData ? {} : { 'Content-Type': 'application/json' } });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Das hat nicht geklappt.');
         return result;
     };
-    const sorted = (set) => [...set].sort((a, b) => a - b);
-
-    save.addEventListener('click', async () => {
-        error.hidden = true;
-        try {
-            await post(data.saveUrl, { cuts: sorted(cuts), excluded: sorted(excluded) });
-            unsaved = false;
-            location.reload();  // shows the saved state
-        } catch (e) { fail(e.message); }
-    });
-
-    const poll = async () => {
-        progress.hidden = false;
-        suggest.disabled = true;
-        try {
-            const job = await (await fetch(data.statusUrl)).json();
-            if (job.state === 'done') { unsaved = false; location.reload(); return; }
-            if (job.state === 'error') { progress.hidden = true; suggest.disabled = false; fail(job.error); return; }
-            const m = Math.floor((job.seconds || 0) / 60), s = String((job.seconds || 0) % 60).padStart(2, '0');
-            progress.querySelector('.upload-text').textContent = `Datalab schlägt die Schnitte vor … ${m}:${s} Minuten`;
-        } catch (e) { /* app restarting: try again */ }
-        setTimeout(poll, 2000);
+    const saved = async (url, body) => {
+        try { await post(url, body); dirty = false; location.reload(); } catch (e) { fail(e.message); }
     };
 
-    suggest.addEventListener('click', async () => {
+    const body = (done) => ({ cuts: sorted(cuts), excluded: sorted(excluded), suggested: sorted(suggested), reviewed: sorted(reviewed), hints: sorted(hints), finish: done && complete() });
+    let timer = null, changed = false;
+    const flush = async (finishing = false) => {
+        clearTimeout(timer);
+        if (!dirty && !finishing) return;
+        const stored = body(finishing || data.confirmed);
+        dirty = false;
+        try { await post(data.saveUrl, stored); data.saved = true; data.confirmed = stored.finish; changed = true; } catch (e) { dirty = true; fail(e.message); }
+        render();
+    };
+    const touch = () => { dirty = true; clearTimeout(timer); timer = setTimeout(flush, 600); };
+    finish.addEventListener('click', () => complete() ? flush(true) : nextOpen());
+    $('split-suggest-text').addEventListener('click', () => {
         if ((data.saved || cuts.size) && !confirm('Der Vorschlag ersetzt die vorhandenen Schnitte. Fortfahren?')) return;
-        if (!confirm(`Datalab ist ein kostenpflichtiger Dienst. Es werden ${data.pages} Seiten übertragen. Fortfahren?`)) return;
-        error.hidden = true;
-        try { await post(data.suggestUrl, {}); poll(); } catch (e) { fail(e.message); }
+        saved(data.textUrl, {});
     });
 
-    // a list kept while scanning: one leaflet per line, its pages "5-7" or "9"; "x 17" leaves a page out
-    document.getElementById('split-list').addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        event.target.value = '';
-        if (!file) return;
-        error.hidden = true;
-        const body = new FormData();
-        body.append('liste', file);
+    $('split-list').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        e.target.value = '';
+        if (!file || ((data.saved || cuts.size) && !confirm('Die Liste ersetzt die vorhandenen Schnitte. Fortfahren?'))) return;
+        const form = new FormData();
+        form.append('liste', file);
         try {
-            const response = await fetch(data.listUrl, { method: 'POST', body });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || 'Die Liste konnte nicht gelesen werden.');
-            cuts.clear();
-            result.cuts.forEach((c) => cuts.add(c));
-            excluded.clear();
-            result.excluded.forEach((p) => excluded.add(p));
-            unsaved = true;
-            update();
+            const result = await post(data.listUrl, form);
+            change(() => {
+                suggested.clear();
+                [[cuts, result.cuts], [excluded, result.excluded]].forEach(([set, list]) => { set.clear(); list.forEach((x) => set.add(x)); });
+                hints.clear();
+                (result.hints || []).forEach((a) => hints.add(a));
+                reviewed.clear();
+                all.filter((a) => !cuts.has(a) && !hints.has(a)).forEach((a) => reviewed.add(a));
+            });
+            const leaflets = segments().filter(([first]) => !excluded.has(first)).length;
+            try {
+                sessionStorage.setItem('split-note', result.hints === null ? 'Liste übernommen. Zusätzliche Hinweise sind erst nach der Texterkennung verfügbar.'
+                    : `${leaflets} Flugblätter aus der Liste übernommen${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'} bitte prüfen` : ''}.`);
+            } catch (x) { /* no storage */ }
+            saved(data.saveUrl, body(false));
         } catch (e) { fail(e.message); }
     });
-
-    document.getElementById('split-download').addEventListener('click', () => {
-        const lines = segments().map(([first, last, out]) => `${out ? 'x ' : ''}${first === last ? first : `${first}-${last}`}`);
-        const text = `# ${data.name}: ein Flugblatt pro Zeile, Seiten von-bis; "x" davor lässt Seiten aus\n${lines.join('\n')}\n`;
+    $('split-download').addEventListener('click', () => {
+        const lines = segments().map(([first, last]) => `${excluded.has(first) ? 'x ' : ''}${first === last ? first : `${first}-${last}`}`);
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+        link.href = URL.createObjectURL(new Blob([`# ${data.name}: ein Flugblatt pro Zeile, Seiten von-bis; "x" davor lässt Seiten aus\n${lines.join('\n')}\n`],
+            { type: 'text/plain;charset=utf-8' }));
         link.download = `${data.name}-flugblaetter.txt`;
         link.click();
         URL.revokeObjectURL(link.href);
     });
 
-    window.addEventListener('beforeunload', (e) => { if (unsaved && cells.length) { e.preventDefault(); } });
+    try {
+        const remark = sessionStorage.getItem('split-note');
+        sessionStorage.removeItem('split-note');
+        if (remark) document.querySelectorAll('.split-note').forEach((e) => { e.hidden = false; e.textContent = remark; });
+    } catch (e) { /* no storage */ }
 
-    // the divider between the two panes: dragged with the pointer, remembered per browser
-    const layout = document.querySelector('.split-layout');
-    const resizer = document.getElementById('split-resizer');
-    const setLeft = (px) => {
-        const width = layout.getBoundingClientRect().width;
-        layout.style.setProperty('--split-left', `${Math.min(Math.max(px, 240), width - 320)}px`);
-    };
-    try { const saved = localStorage.getItem('import-split-left'); if (saved) setLeft(Number(saved)); } catch (e) { /* no storage */ }
-    resizer.addEventListener('pointerdown', (event) => {
-        resizer.setPointerCapture(event.pointerId);
-        resizer.classList.add('dragging');
-        const move = (e) => setLeft(e.clientX - layout.getBoundingClientRect().left);
-        const stop = () => {
-            resizer.classList.remove('dragging');
-            resizer.removeEventListener('pointermove', move);
-            resizer.removeEventListener('pointerup', stop);
-            try { localStorage.setItem('import-split-left', parseInt(getComputedStyle(left).width, 10)); } catch (e) { /* no storage */ }
-        };
-        resizer.addEventListener('pointermove', move);
-        resizer.addEventListener('pointerup', stop);
+    const layout = left.parentElement, resizer = $('split-resizer');
+    try { const width = localStorage.getItem('import-split-left'); if (width) layout.style.setProperty('--split-left', `${width}px`); } catch (e) { /* no storage */ }
+    resizer.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const move = (m) => layout.style.setProperty('--split-left', `${Math.min(Math.max(m.clientX - layout.getBoundingClientRect().left, 240), layout.clientWidth - 320)}px`);
+        addEventListener('pointermove', move);
+        addEventListener('pointerup', () => {
+            removeEventListener('pointermove', move);
+            try { localStorage.setItem('import-split-left', parseInt(getComputedStyle(left).width, 10)); } catch (x) { /* no storage */ }
+        }, { once: true });
     });
     resizer.addEventListener('dblclick', () => {
         layout.style.removeProperty('--split-left');
         try { localStorage.removeItem('import-split-left'); } catch (e) { /* no storage */ }
     });
 
-    // the controls and both panes can fill the browser window; a clear button and Esc bring them back
-    const stage = document.getElementById('split-stage');
-    const maximize = document.getElementById('split-fullscreen');
-    const setMaximized = (on) => {
-        stage.classList.toggle('maximized', on);
-        document.body.classList.toggle('split-lock', on);
-        maximize.setAttribute('aria-pressed', on);
-        maximize.textContent = on ? '✕ Vollbild beenden (Esc)' : '⛶ Vollbild';
-        maximize.classList.toggle('exit', on);
-        if (current) keepVisible(left, cells[current - 1]);
-    };
-    maximize.addEventListener('click', () => setMaximized(!stage.classList.contains('maximized')));
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && stage.classList.contains('maximized')) setMaximized(false); });
-    update();
-    if (data.suggesting) poll();
+    const open = (on) => { if (!on && changed) return location.reload(); document.activeElement.blur(); stage.hidden = !on; if (on && !current) go(1); document.body.classList.toggle('split-lock', on); };
+    $('split-open').addEventListener('click', () => open(true));
+    $('split-close').addEventListener('click', () => open(false));
+    addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') return open(false);
+        if (stage.hidden || e.altKey || e.target.closest('input')) return;
+        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        const page = at();
+        if (e.ctrlKey || e.metaKey) {
+            const key = e.key.toLowerCase();
+            if (key === 's') flush();
+            if (key === 'z') travel(...(e.shiftKey ? [redo, undo] : [undo, redo]));
+            if (key === 'y') travel(redo, undo);
+            if ('szy'.includes(key)) e.preventDefault();
+        } else if (step) {
+            e.preventDefault();
+            if (step > 0) forward(); else go(page - 1);
+        } else if (e.key.toLowerCase() === 'u') {
+            travel(undo, redo);
+        } else if (['s', 'n'].includes(e.key.toLowerCase()) || (e.key === 'Enter' && !e.target.closest('.split-bar, .split-decide button'))) {
+            e.preventDefault();
+            if (transitions > 0 && !forced(page)) decideAt(e.key.toLowerCase() !== 'n');
+        }
+    });
+    addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+    render();
 })();

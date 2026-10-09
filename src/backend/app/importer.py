@@ -123,9 +123,9 @@ def discard(volume):
     """
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "segment", "ocr")):
+    if any(running(volume, kind) for kind in ("scans", "ocr")):
         raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "segment", "ocr"):
+    for kind in ("scans", "ocr"):
         JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)
@@ -252,7 +252,7 @@ def save_scans(volume, files):
     return page_count(volume)
 
 
-# per (volume number, "scans" | "segment" | "ocr"): {"state": "running" | "done" | "error", "error": text, ...}
+# per (volume number, "scans" | "ocr"): {"state": "running" | "done" | "error", "error": text, ...}
 JOBS = {}  # ponytail: in memory, gone after a restart; a jobs table when OCR needs one
 
 

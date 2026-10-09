@@ -394,8 +394,8 @@ def test_text_step_page(scan, monkeypatch):
 
 # Tests if the leaflet page names what is known about the text recognition and leaves out the rest.
 def test_describe_text_recognition():
-    assert ocr.describe("accurate", "2026-10-08") == "Datalab Convert, Qualitätsstufe Genau, 08.10.2026"
-    assert ocr.describe("balanced+nocaptions", None) == "Datalab Convert, Qualitätsstufe Günstig, ohne Bildbeschreibungen"
+    assert ocr.describe("accurate", "2026-10-08") == "Datalab Convert, accurate, 08.10.2026"
+    assert ocr.describe("balanced+nocaptions", None) == "Datalab Convert, balanced, ohne Bildbeschreibungen"
     assert ocr.describe(None, None) == "Datalab Convert"
 
 
@@ -436,3 +436,37 @@ def test_draft_opens_at_the_step_it_has_reached(scan, monkeypatch):
     assert leaflet_app.resume_step(scan) == "angaben"
     importer.scan_path(scan).unlink()
     assert leaflet_app.resume_step(scan) == "scans"
+
+
+# Tests if cuts are suggested where the text speaks for a new leaflet, not where it speaks against one or says
+# nothing, and are saved as unconfirmed.
+def test_cuts_from_the_text(scan):
+    from backend.app import boundaries, segments
+    with pytest.raises(ValueError, match="noch nicht erkannt"):
+        segments.suggest_from_text(scan)
+    assert segments.missed_cuts(scan, [9], [], 120) is None  # no text, no hints
+    # no hint, no cut: a page without any feature stays below the threshold (check again after learning new weights)
+    assert boundaries.probability(set()) < boundaries.MIN_PROBABILITY
+
+    def page(*blocks):
+        return {"children": [{"block_type": t, "html": f"<p>{x}</p>"} for t, x in blocks]}
+    call = "Wir fordern alle Studenten auf, zur Vollversammlung zu kommen."
+    other = "Alle Hochschulgruppen protestieren gegen Kürzungen beim Studentenwerk heute"  # a few words in common
+    pages = [page(("Text", call))] * 120
+    pages[9] = page(("PageHeader", "LSD - LSD - LSD"), ("Text", other + "."))  # masthead: a start
+    pages[29] = page(("Text", "UB Regensburg eingelaufen am: 1. FEB. 1973"), ("Text", other + "."))  # stamp: a start
+    pages[39] = page(("Text", "- 2 -"), ("Text", call))  # a page number: a continuation
+    pages[48] = page(("Text", call.rstrip(".")))
+    pages[49] = page(("Text", other))  # nothing for or against a start
+    ocr.result_path(scan).parent.mkdir(parents=True, exist_ok=True)
+    ocr.result_path(scan).write_text(json.dumps({"children": pages}), encoding="utf-8")
+    blocks = boundaries.page_blocks(ocr.result_path(scan))
+    assert boundaries.features(blocks[49], blocks[48]) == set()
+    assert segments.suggest_from_text(scan) == 2
+    status = segments.status(scan)
+    assert (status["cuts"], status["suggested"], status["confirmed"]) == ([9, 29], [9, 29], False)
+    segments.save(scan, [9, 29, 60], 120)  # saved by somebody: nothing is a suggestion any more
+    assert (segments.status(scan)["suggested"], segments.status(scan)["confirmed"]) == ([], True)
+    # a list without the cut after 30 gets it as a hint; its own cuts and the ones a left-out page forces are no hints
+    assert segments.missed_cuts(scan, [9, 60], [], 120) == [29]
+    assert segments.missed_cuts(scan, [9], [30], 120) == []

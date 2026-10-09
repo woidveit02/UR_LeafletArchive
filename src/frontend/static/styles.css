@@ -3453,22 +3453,6 @@ a.topic-year.active .topic-bar {
     font-weight: 600;
 }
 
-.split-bar {  /* left: what there is, middle: where the cuts come from, right: save and the full window */
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px 20px;
-    margin: 16px 0;
-}
-
-.split-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-}
-
 .tool-button {  /* every action of the toolbar has this size */
     box-sizing: border-box;
     display: inline-flex;
@@ -3508,147 +3492,9 @@ a.topic-year.active .topic-bar {
     cursor: default;
 }
 
-.split-count {
-    font-weight: 600;
-}
-
-.split-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 10px 0;
-    margin-top: 12px;
-}
-
-.split-page {
-    position: relative;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 6px 34px 6px 6px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    font-size: 0.85em;
-}
-
-.split-page.tone-1 {
-    background: var(--surface-muted);
-}
-
-.split-page.split-start {
-    border-left: 3px solid var(--accent);
-}
-
-.split-page img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 7 / 10;
-    object-fit: contain;
-    cursor: pointer;
-}
-
-.split-page figcaption {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2px;
-    color: var(--muted);
-}
-
-.split-badge {
-    color: var(--accent);
-    font-weight: 600;
-}
-
-.split-cut {  /* the strip at the right edge: grey scissors, a solid accent bar once the cut is set */
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 32px;
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--muted);
-    font-size: 1.1rem;
-    cursor: pointer;
-}
-
-.split-cut:hover {
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    color: var(--accent);
-}
-
-.split-cut.on {
-    background: var(--accent);
-    color: #fff;
-}
-
-.split-layout {
-    display: grid;
-    grid-template-columns: var(--split-left, 40%) 10px minmax(0, 1fr);
-    height: max(92vh, 680px);
-    min-height: 680px;
-}
-
-.split-left,
-.split-right {
-    min-width: 0;
-    overflow-y: auto;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-}
-
-.split-left {
-    padding: 0 8px 8px;
-}
-
-.split-left .split-grid {
-    margin-top: 8px;
-}
-
-.split-pages {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 12px;
-    background: var(--surface-muted);
-}
-
-.split-sheet {
-    margin: 0;
-}
-
-.split-sheet img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 7 / 10;
-    object-fit: contain;
-    background: #fff;
-    border: 1px solid var(--line);
-}
-
-.split-sheet.split-start img {
-    border-left: 4px solid var(--accent);
-}
-
-.split-sheet figcaption {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 0.85em;
-    align-items: baseline;
-}
-
-.split-page.current img {
-    outline: 3px solid var(--accent);
-}
-
-
-
-
-
-
 
 .split-help {
+    max-width: 760px;
     margin: 0 0 20px;
 }
 
@@ -3657,17 +3503,55 @@ a.topic-year.active .topic-bar {
 }
 
 
-
-
-
-
-
-
 .split-help-text {
-    columns: 2 24rem;
-    column-gap: 36px;
     color: var(--ink);
     font-size: 0.95rem;
+}
+
+.split-help-text > p,
+.split-help-text > ol {
+    margin: 0 0 12px;
+}
+
+.split-help-text li {
+    margin-bottom: 8px;
+}
+
+.split-help-text .advanced {
+    margin: 0;
+    border-top: 1px solid var(--line);
+}
+
+.split-help-text .advanced:last-child {
+    border-bottom: 1px solid var(--line);
+}
+
+.split-help-text .advanced > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 12px 4px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.split-help-text .advanced > summary::-webkit-details-marker {
+    display: none;
+}
+
+.split-help-text .advanced > summary::after {
+    content: "▾";
+    color: var(--muted);
+}
+
+.split-help-text .advanced[open] > summary::after {
+    content: "▴";
+}
+
+.split-help-text .advanced > p,
+.split-help-text .advanced > pre {
+    margin: 0 4px 12px;
 }
 
 .split-help-text h3 {
@@ -3747,40 +3631,6 @@ a.topic-year.active .topic-bar {
 }
 
 
-
-.split-resizer {
-    cursor: col-resize;
-    background: var(--line);
-    border-radius: 3px;
-    margin: 0 3px;
-}
-
-.split-resizer:hover,
-.split-resizer.dragging {
-    background: var(--accent);
-}
-
-.split-stage.maximized {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    padding: 6px 10px 10px;
-    background: var(--canvas, var(--surface));
-}
-
-.split-stage.maximized .split-layout {
-    flex: 1;
-    height: auto;
-    min-height: 0;
-}
-
-
-body.split-lock {
-    overflow: hidden;
-}
-
 @media (max-width: 800px) {
     .step-head {
         grid-template-columns: 1fr 1fr;
@@ -3792,7 +3642,7 @@ body.split-lock {
     }
 }
 
-.split-tools .file-pick label {  /* the generic file picker label is lighter; here it is a toolbar button like the others */
+.split-start .file-pick label {
     font-weight: 600;
 }
 
@@ -3807,100 +3657,15 @@ body.split-lock {
     overflow-x: auto;
 }
 
-/* left-out pages */
-.split-skip {
-    display: block;
-    margin: 2px 0 0;
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.8em;
-    text-decoration: underline;
-    cursor: pointer;
+.split-help-text code {
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface-muted);
+    font-size: 0.9em;
 }
 
-.split-skip:hover {
-    color: var(--accent);
-}
-
-.split-page.excluded,
-.split-sheet.excluded {  /* a soft red: noticeable, but quieter than a cut */
-    border-left: 3px solid #c0584f;
-    background: color-mix(in srgb, #c0584f 9%, var(--surface));
-}
-
-.split-page.excluded img,
-.split-sheet.excluded img {
-    opacity: 0.5;
-}
-
-.split-page.excluded .split-skip,
-.split-sheet.excluded .split-skip {
-    color: #b3261e;
-}
-
-.split-cut:disabled {
-    cursor: default;
-}
-
-.split-cut.forced {  /* follows from the left-out page next to it: barely there */
-    opacity: 0.3;
-}
-
-/* the full window: a slim toolbar, and a way out that cannot be missed */
-.split-fullscreen {
-    border-width: 2px;
-    border-color: var(--accent);
-}
-
-.split-fullscreen.exit {
-    border-color: #b3261e;
-    background: #b3261e;
-}
-
-.split-fullscreen.exit:hover {
-    border-color: #8c1d18;
-    background: #8c1d18;
-}
-
-.split-stage.maximized .split-bar {
-    margin: 0 0 6px;
-    gap: 4px 12px;
-}
-
-.split-stage.maximized .tool-button {
-    min-height: 30px;
-    padding: 0 10px;
-    font-size: 0.85rem;
-}
-
-.split-stage.maximized .split-fullscreen.exit {
-    min-height: 34px;
-    font-size: 0.95rem;
-}
-
-.split-stage.maximized .split-count {
-    font-size: 0.9rem;
-}
-
-.split-stage.maximized .form-ok,
-.split-stage.maximized .form-warn {
-    padding: 2px 8px;
-}
-
-.split-info {  /* the status stays on one line */
-    flex-wrap: nowrap;
-    white-space: nowrap;
-}
-
-.split-info[hidden],
-.split-info [hidden] {
-    display: none;
-}
-
-.drop-zone {  /* where the scans are dropped */
+.drop-zone {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3953,7 +3718,7 @@ body.split-lock {
 }
 
 
-.button-small.upload-submit {  /* the main action of the page, as high as the step buttons */
+.button-small.upload-submit {
     padding: 8px 18px;
     border-radius: var(--radius);
     font-size: 1em;
@@ -3976,10 +3741,55 @@ body.split-lock {
 }
 
 .step-narrow {
-    max-width: 850px;
+    max-width: 760px;
 }
 
-.mode-choice {  /* the quality levels as plain rows */
+.step-narrow .split-work h3 {
+    margin: 16px 0 6px;
+    font-size: 1rem;
+}
+
+.step-narrow .split-work > :last-child {
+    margin-bottom: 0;
+}
+
+.step-narrow details.help,
+.step-narrow details.zip-import {
+    margin: 0;
+    border-top: 1px solid var(--line);
+}
+
+.step-narrow details.zip-import {
+    border-bottom: 1px solid var(--line);
+}
+
+.step-narrow details.help > summary,
+.step-narrow details.zip-import > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.step-narrow details.help > summary::-webkit-details-marker,
+.step-narrow details.zip-import > summary::-webkit-details-marker {
+    display: none;
+}
+
+.step-narrow details.help > summary::after,
+.step-narrow details.zip-import > summary::after {
+    content: "▾";
+    color: var(--muted);
+}
+
+.step-narrow details.help[open] > summary::after,
+.step-narrow details.zip-import[open] > summary::after {
+    content: "▴";
+}
+
+.mode-choice {
     margin: 0 0 12px;
     padding: 0;
     border: 0;
@@ -4025,12 +3835,12 @@ body.split-lock {
     margin: 0 0 8px;
 }
 
-.step-narrow details {  /* 12 px inside a group, 32 px between groups (the headings) */
+.step-narrow details {
     margin: 12px 0;
 }
 
 .step-narrow details.step-form {
-    margin-top: 24px;
+    margin-top: 0;
 }
 
 /* the step bar is quiet: no frames, the current step bold and underlined */
@@ -4059,7 +3869,7 @@ body.split-lock {
     text-underline-offset: 6px;
 }
 
-.step-narrow h3 {  /* the sections are told apart by the space between them */
+.step-narrow h3 {
     margin: 32px 0 12px;
 }
 
@@ -4094,7 +3904,7 @@ body.split-lock {
     margin-bottom: 8px;
 }
 
-.key-line {  /* a saved key is a lasting state: one plain line */
+.key-line {
     margin: 0 0 8px;
 }
 
@@ -4139,7 +3949,7 @@ body.split-lock {
     margin: 0 0 10px;
 }
 
-.page-check-nav input {  /* compact, like the other number field */
+.page-check-nav input {
     width: 4.5em;
     height: 30px;
     padding: 2px 8px;
@@ -4151,11 +3961,11 @@ body.split-lock {
     padding: 2px 12px;
 }
 
-.help > :not(summary):not(h4) {  /* the answers are indented under their questions */
+.help > :not(summary):not(h4) {
     margin-left: 1.5rem;
 }
 
-.drop-alt {  /* the other way, set apart from the default */
+.drop-alt {
     width: 100%;
     margin-top: 12px;
     padding-top: 12px;
@@ -4171,7 +3981,7 @@ body.split-lock {
     font-weight: 400;
 }
 
-.size-row input {  /* a small number field in the line of text */
+.size-row input {
     width: 4.5em;
     height: 30px;
     padding: 2px 8px;
@@ -4179,7 +3989,7 @@ body.split-lock {
     text-align: right;
 }
 
-summary.button-outline {  /* a disclosure that looks like a button, not like a dropdown */
+summary.button-outline {
     display: inline-block;
     list-style: none;
     cursor: pointer;
@@ -4193,14 +4003,14 @@ details[open] > summary.button-outline {
     margin-bottom: 12px;
 }
 
-.step-button.disabled {  /* "Weiter" until the step is done */
+.step-button.disabled {
     border-color: var(--line-strong);
     background: var(--line);
     color: #8a8a8a;
     cursor: not-allowed;
 }
 
-summary.link-button {  /* an optional change, offered as a plain link */
+summary.link-button {
     display: inline;
     list-style: none;
 }
@@ -4209,7 +4019,7 @@ summary.link-button::-webkit-details-marker {
     display: none;
 }
 
-.portal-row {  /* the link and its optional change on one line */
+.portal-row {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -4231,7 +4041,7 @@ summary.link-button::-webkit-details-marker {
     max-width: 32rem;
 }
 
-.meta-list.plain {  /* two fields do not need a card */
+.meta-list.plain {
     padding: 0;
     background: none;
     border: 0;
@@ -4239,7 +4049,7 @@ summary.link-button::-webkit-details-marker {
     box-shadow: none;
 }
 
-.zip-import form {  /* under its summary, indented like the text of the summary */
+.zip-import form {
     margin: 8px 0 0 1.4rem;
 }
 
@@ -4255,7 +4065,7 @@ summary.link-button::-webkit-details-marker {
     margin-top: 0;
 }
 
-.section-head {  /* a heading with its action on the right */
+.section-head {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -4263,7 +4073,454 @@ summary.link-button::-webkit-details-marker {
     gap: 4px 16px;
 }
 
-.section-head .button-outline {  /* a quiet action beside the heading */
+.section-head .button-outline {
     padding: 2px 10px;
     font-size: 0.85em;
+}
+
+.split-work {
+    max-width: 760px;
+    margin: 0 0 24px;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.split-work-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.split-work-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.text-button {
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.split-change {
+    margin: 16px 0 0;
+}
+
+.split-change:not(.done) > summary {
+    display: none;
+}
+
+.split-change > summary {
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.split-start {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.split-start .meta {
+    margin: 6px 0 0;
+}
+
+.split-count {
+    font-weight: 600;
+}
+
+.split-count.done {
+    color: var(--success);
+}
+
+.split-stage {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    background: var(--canvas, var(--surface));
+}
+
+.split-stage[hidden] {
+    display: none;
+}
+
+.split-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+}
+
+.split-bar .tool-button {
+    min-height: 28px;
+    padding: 0 6px;
+    font-size: 0.8rem;
+}
+
+.split-end {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.split-layout {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: var(--split-left, 1fr) 6px minmax(0, 1fr);
+}
+
+.split-resizer {
+    background: var(--line);
+    cursor: col-resize;
+}
+
+.split-resizer:hover {
+    background: var(--accent);
+}
+
+.split-left,
+.split-right {
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.split-left {
+    display: flex;
+    flex-direction: column;
+    padding: 0 4px;
+}
+
+.split-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px 0;
+    padding-top: 6px;
+}
+
+.split-page {
+    position: relative;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 6px 26px 6px 6px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.85em;
+}
+
+.split-page img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 7 / 10;
+    object-fit: contain;
+    background: #fff;
+    cursor: pointer;
+}
+
+.split-page.excluded img {
+    opacity: 0.4;
+}
+
+.split-num {
+    color: var(--faint);
+    font-size: 0.85em;
+}
+
+.split-page figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 22px;
+    margin-top: 2px;
+    color: var(--muted);
+}
+
+.split-skip {
+    padding: 0 4px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 0.9em;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.split-page.current,
+.split-page.next {
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.split-page.current.joined {
+    border-radius: var(--radius) 0 0 var(--radius);
+    box-shadow: inset 2px 0 0 var(--accent), inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent);
+}
+
+.split-page.next.joined {
+    border-radius: 0 var(--radius) var(--radius) 0;
+    box-shadow: inset -2px 0 0 var(--accent), inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent);
+}
+
+.split-cut {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    padding: 0;
+    border: none;
+    background: repeating-linear-gradient(to bottom, var(--line-strong) 0 8px, transparent 8px 14px) center / 3px 100% no-repeat;  /* no cut: grey dashes */
+    color: var(--accent);
+    font-size: 0;
+    cursor: pointer;
+}
+
+.split-cut:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--accent) 18%, transparent);
+    font-size: 1rem;  /* the scissors show up where a click sets a cut */
+}
+
+.split-cut.on {
+    background: linear-gradient(#c0584f, #c0584f) center / 5px 100% no-repeat;
+}
+
+.split-cut.suggested {
+    background: repeating-linear-gradient(to bottom, #e08a00 0 10px, transparent 10px 16px) center / 5px 100% no-repeat;
+}
+
+.split-cut.checked {
+    background: none;
+}
+
+.split-cut:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.split-legend {
+    font-size: 0.85em;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.split-legend i {
+    font-style: normal;
+    color: var(--line-strong);
+}
+
+.split-legend i.on {
+    color: #c0584f;
+}
+
+.split-legend i.open {
+    color: var(--muted);
+}
+
+.split-legend i.suggested {
+    color: #e08a00;
+}
+
+.split-pair {
+    display: grid;
+    grid-template-columns: 1fr 12px 1fr;
+    gap: 2px;
+    background: var(--surface-muted);
+}
+
+.split-pair.together {
+    grid-template-columns: 1fr 0 1fr;
+}
+
+.split-pair.from-right {
+    animation: split-from-right 200ms ease-out;
+}
+
+.split-pair.from-left {
+    animation: split-from-left 200ms ease-out;
+}
+
+@keyframes split-from-right {
+    from { transform: translateX(45%); }
+}
+
+@keyframes split-from-left {
+    from { transform: translateX(-45%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .split-pair {
+        animation: none;
+    }
+}
+
+.split-join {
+    position: relative;
+    background: repeating-linear-gradient(to bottom, var(--line-strong) 0 8px, transparent 8px 14px) center / 3px 100% no-repeat;
+}
+
+.split-join.on {
+    background: linear-gradient(#c0584f, #c0584f) center / 4px 100% no-repeat;
+}
+
+.split-join.suggested {
+    background: repeating-linear-gradient(to bottom, #e08a00 0 10px, transparent 10px 16px) center top / 4px calc(100% - 44px) no-repeat;
+}
+
+.split-join.suggested::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 44px;
+    background: #fff;
+}
+
+.split-join.suggested::after {
+    content: "✂";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-90deg);
+    color: #e08a00;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.split-pair.together .split-join {
+    visibility: hidden;
+}
+
+.split-view {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.split-right {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    container-type: size;
+}
+
+.split-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 12px;
+    padding: 6px 8px 0;
+    border-top: 1px solid var(--line-strong);
+}
+
+.split-nav .tool-button {
+    min-height: 32px;
+    padding: 0 10px;
+}
+
+.split-decide {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 8px;
+}
+
+.split-nav b {
+    flex: 1;
+    text-align: center;
+}
+
+.split-nav .on {
+    color: #c0584f;
+}
+
+.split-nav .suggested {
+    color: #e08a00;
+}
+
+.split-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 8px;
+}
+
+.split-decide .tool-button {
+    min-height: 32px;
+    padding: 0 10px;
+}
+
+.split-buttons .tool-button {
+    min-height: 40px;
+    font-size: 0.95rem;
+}
+
+.split-view kbd {
+    margin-left: 6px;
+    padding: 0 5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    font: inherit;
+    font-size: 0.85em;
+    line-height: 1.3;
+    opacity: 0.85;
+}
+
+.split-nav kbd {
+    margin: 0 6px;
+    padding: 0 7px;
+    font-size: 1.15em;
+    font-weight: 600;
+    opacity: 1;
+}
+
+.split-sheet {
+    display: flex;
+    flex-direction: column;
+    height: 100cqh;
+    margin: 0;
+}
+
+.split-sheet img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--line);
+}
+
+.split-sheet.excluded img {
+    opacity: 0.5;
+}
+
+.split-sheet figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 28px;
+    margin-top: 4px;
+    padding: 0 18px;  /* clear of the scissors in the middle */
+    color: var(--muted);
+    font-size: 0.85em;
+}
+
+body.split-lock {
+    overflow: hidden;
 }

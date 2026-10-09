@@ -121,11 +121,12 @@ def variant_label(value):
 
 
 def describe(mode, created):
-    """Line for the leaflet page, e.g. "Datalab Convert, Qualitätsstufe Genau, 08.10.2026". Volumes recognized before
-    the app may lack level or date."""
+    """Line for the leaflet page, e.g. "Datalab Convert, accurate, 08.10.2026". Volumes recognized before the app may
+    lack level or date."""
     bits = ["Datalab Convert"]
     if mode:
-        bits.append(f"Qualitätsstufe {variant_label(mode)}")
+        level, _, extra = mode.partition("+")
+        bits.append(level + (", ohne Bildbeschreibungen" if extra else ""))
     if created:
         bits.append(".".join(reversed(created.split("-"))))
     return ", ".join(bits)
