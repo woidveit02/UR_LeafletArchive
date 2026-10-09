@@ -18,7 +18,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import importer, ocr, pdf_service, segments
+from . import importer, keys, metadata, ocr, pdf_service, segments
 from .database import copy_decisions, corrections, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -1667,14 +1667,26 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
              "saveUrl": f"/import/{vz}/trennen",
              "textUrl": f"/import/{vz}/vorschlag-text", "listUrl": f"/import/{vz}/liste", "name": volume.stem} if step == 'trennen' and pages else None
     text = ocr.status(volume)
+    meta = metadata.status(volume) if step == 'angaben' and text['state'] == 'done' and segments.status(volume)['confirmed'] else None
+    used = Counter(v.meta_model for v in session.query(Volume).filter_by(status=RELEASED) if v.meta_model).most_common() if meta else []
     waiting = {'scans': None if pages else 'Zuerst die Scans hochladen.',  # why "Weiter" does not work yet
                'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis importieren.',
-               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Schnitte speichern.'}.get(step)
-    return templates.TemplateResponse(request, "import_volume.html", {"waiting": waiting,
+               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Schnitte speichern.',
+               'angaben': None if meta and meta['state'] == 'done' else 'Zuerst die Metadaten erzeugen.'}.get(step)
+    done = ['band'] + (['scans'] if pages else []) + (['ocr'] if text['state'] == 'done' else []) \
+        + (['trennen'] if segments.status(volume)['confirmed'] else [])
+    done += ['angaben'] if 'trennen' in done and metadata.status(volume)['state'] == 'done' else []
+    return templates.TemplateResponse(request, "import_volume.html", {"waiting": waiting, "done": done,
         "volume": volume, "pages": pages, "error": error, "steps": importer.STEPS, "step_help": importer.STEP_HELP, "step": step, "split": split,
         "running": importer.running(volume), "ocr": text, "stamp": stamp, "uploaded": uploaded,
         "ocr_job": importer.JOBS.get((vz, ocr.JOB)) if step == 'ocr' else None,
-        "ocr_key": ocr.key_info() if step == 'ocr' else None},
+        "ocr_key": keys.info('datalab') if step == 'ocr' else None,
+        "meta": meta, "meta_job": importer.JOBS.get((vz, metadata.JOB)) if meta else None,
+        "meta_key": keys.info('openrouter') if meta else None,
+        "default_model": (used[0][0] if used else metadata.DEFAULT_MODEL) if meta else None,
+        "model_names": [m[:2] for m in metadata.models()] if meta else [],
+        "model_top": metadata.top_models(used) if meta else [],
+        "model_prices": metadata.prices(volume) if meta else {}},
         status_code=status_code)
 
 
@@ -1684,7 +1696,9 @@ def resume_step(volume):
         return 'scans'
     if ocr.status(volume)['state'] != 'done':
         return 'ocr'
-    return 'angaben' if segments.status(volume)['confirmed'] else 'trennen'
+    if not segments.status(volume)['confirmed']:
+        return 'trennen'
+    return 'pruefen' if metadata.status(volume)['state'] == 'done' else 'angaben'
 
 
 @app.get("/import/{vz}")
@@ -1792,6 +1806,25 @@ def import_ocr(vz: int, mode: str = Form(ocr.DEFAULT_MODE), captions: str = Form
     return JSONResponse({'ok': True})
 
 
+@app.post("/import/{vz}/angaben")
+def import_metadata(vz: int, model: str = Form('')):
+    orgs = [(o.id, o.name, o.full_name) for o in session.query(Organization)]
+    try:
+        metadata.start(import_volume_or_404(vz), model.strip(), orgs)
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
+@app.post("/import/{vz}/angaben/abbrechen")
+def import_metadata_cancel(vz: int):
+    try:
+        metadata.cancel(import_volume_or_404(vz))
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
 @app.get("/import/{vz}/ocr/seiten/{page_no}.json")
 def import_ocr_page(vz: int, page_no: int):
     """The recognized blocks of one page, for checking them against the scan."""
@@ -1831,13 +1864,16 @@ def import_ocr_upload(request: Request, vz: int, ergebnis: UploadFile = File(...
 
 
 @app.post("/import/{vz}/schluessel")
-def import_key(request: Request, vz: int, key: str = Form(''), forget: bool = Form(False)):
+def import_key(request: Request, vz: int, key: str = Form(''), forget: bool = Form(False), service: str = Form('datalab'),
+               step: str = Form('ocr')):
     import_volume_or_404(vz)
+    if service not in keys.SERVICES or step not in importer.STEPS:
+        raise HTTPException(status_code=400)
     try:
-        ocr.forget_key() if forget else ocr.save_key(key)
+        keys.forget(service) if forget else keys.save(service, key)
     except ValueError as error:
-        return import_page(request, vz, 'ocr', str(error), 400)
-    return RedirectResponse(f"/import/{vz}?schritt=ocr", 303)
+        return import_page(request, vz, step, str(error), 400)
+    return RedirectResponse(f"/import/{vz}?schritt={step}", 303)
 
 
 @app.post("/import/{vz}/vorschlag-text")

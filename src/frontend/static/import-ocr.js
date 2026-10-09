@@ -16,6 +16,17 @@
         details.querySelector('[data-mode-price]').textContent = choice.dataset.price;
     });
 
+    const choice = document.getElementById('model-choice'), model = document.getElementById('model');
+    choice?.addEventListener('change', () => { model.value = ''; model.dispatchEvent(new Event('input')); });
+    model?.addEventListener('input', () => {  // something typed in the search wins over the choice
+        const typed = Boolean(model.value.trim());
+        [choice.name, model.name] = typed ? ['', 'model'] : ['model', ''];
+        choice.classList.toggle('overridden', typed);
+        const id = typed ? model.value : choice.value;
+        const option = [...document.querySelectorAll('#model-list option')].find((o) => o.value === id);
+        document.getElementById('model-price').textContent = option?.dataset.price || 'unbekannt';
+    });
+
     const forms = document.querySelectorAll('form[data-ocr]');
     if (!forms.length) return;
     const box = document.getElementById('ocr-progress');
@@ -39,18 +50,18 @@
         const s = Math.max(0, Math.round(now() - t));
         return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
     };
-    const STATES = {wartet: 'wartet', upload: 'wird hochgeladen', datalab: 'wird bei Datalab verarbeitet', fertig: 'fertig ✓', fehler: 'Fehler'};
+    const STATES = {wartet: 'wartet', upload: 'wird hochgeladen', datalab: 'wird bei Datalab verarbeitet', 'läuft': 'wird verarbeitet', fertig: 'fertig ✓', fehler: 'Fehler'};
     const render = () => {
         if (!job || job.state !== 'running') return;
         box.hidden = false;
-        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.done} von ${job.total} Seiten erkannt` +
+        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}` +
             (job.cancel ? ' · wird abgebrochen, bereits gesendete Teile werden noch fertig' : '');
         cancel.disabled = Boolean(job.cancel);
         if (job.done) { bar.max = job.total; bar.value = job.done; } else bar.removeAttribute('value');
         list.replaceChildren(...(job.parts || []).map((p, i, all) => {
             const item = document.createElement('li');
             const busy = p.state === 'upload' || p.state === 'datalab';
-            item.textContent = `Teil ${i + 1} von ${all.length} · Seiten ${p.first}–${p.last} · ` +
+            item.textContent = `Teil ${i + 1} von ${all.length} · ${p.label || `Seiten ${p.first}–${p.last}`} · ` +
                 `${p.kept ? 'schon erkannt ✓' : STATES[p.state]}${busy ? ` (seit ${clock(p.since)} Min)` : ''}`;
             return item;
         }));

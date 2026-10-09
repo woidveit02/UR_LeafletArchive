@@ -23,7 +23,7 @@ STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
              "scans": "Die gescannten Seiten des Bandes hochladen.",
              "ocr": "Der Text der Scans wird automatisch erkannt, damit er sich lesen und durchsuchen lässt.",
              "trennen": "Festlegen, wo ein Flugblatt endet und das nächste beginnt.",
-             "angaben": "Titel, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
+             "angaben": "Titel, Reihe, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
              "pruefen": "Die Ergebnisse durchsehen und den Band für alle sichtbar machen.",
              "themen": "Die Flugblätter werden Themen zugeordnet."}
 
@@ -123,9 +123,9 @@ def discard(volume):
     """
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "ocr")):
+    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben")):
         raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "ocr"):
+    for kind in ("scans", "ocr", "angaben"):
         JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)

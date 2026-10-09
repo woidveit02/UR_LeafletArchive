@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pymupdf
 
-from . import importer
+from . import importer, keys
 from .database import fillDatabase
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ POLL_SECONDS, MAX_POLLS = 10, 180  # 30 minutes per batch
 # quality levels with the price per page in $ (datalab.to/pricing: $10 accurate, $4 balanced and fast), for the estimate only
 MODES = {"accurate": ("Genau", 0.01, "Voreinstellung, wie bei den Bänden 1 bis 14"),
          "balanced": ("Günstig", 0.004, "Geringere Kosten, möglicherweise mehr Erkennungsfehler")}
-USD_PER_EUR, RATES_FROM = 1.1177, "7.10.2026"  # ECB rate of that day; the prices are estimates, so change both together
+PRICES_FROM = "7.10.2026"  # of the price list in MODES
 DEFAULT_MODE = "accurate"  # as the volumes 1 to 14
 NO_CREDIT = (401, 402, 403)  # wrong key or empty account
 PIPELINE_NAME = "Flugblatt_Pipeline"  # accurate; the other level gets "_balanced"
@@ -42,49 +42,6 @@ PIPELINE_SETTINGS = {  # as in the pipeline script
 FINISHED = ("completed", "completed_with_errors", "failed")
 IMAGE_NAME = re.compile(r"^[0-9a-f]{32}_img\.\w+$")
 MAX_UNPACKED = 2_000_000_000  # of an uploaded ZIP
-
-
-# ---------- the key ----------
-
-def key_file():
-    return fillDatabase.PDF_DIR / ".datalab-key"  # next to the scans, outside the repository
-
-
-def api_key():
-    """DATALAB_API_KEY from the .env wins over the key saved from the page."""
-    key = os.getenv("DATALAB_API_KEY", "").strip()
-    if key:
-        return key
-    try:
-        return key_file().read_text(encoding="utf-8").strip() or None
-    except OSError:
-        return None
-
-
-def key_info():
-    """What the page may show of the key: its source and last four characters."""
-    key = api_key()
-    if not key:
-        return None
-    return {"hint": key[-4:], "from_env": bool(os.getenv("DATALAB_API_KEY", "").strip())}
-
-
-def save_key(key):
-    key = key.strip()
-    if len(key) < 10 or re.search(r"\s", key):
-        raise ValueError("Das sieht nicht nach einem API-Key aus. Er steht auf datalab.to unter „API Keys“.")
-    path = key_file()
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)  # only the app's user may read it
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            f.write(key)
-    except OSError as error:
-        raise ValueError(importer.storage_problem(error, path)) from error
-
-
-def forget_key():
-    key_file().unlink(missing_ok=True)
 
 
 # ---------- state ----------
@@ -102,12 +59,12 @@ def batch_path(volume, first, last):
     return importer.ocr_dir(volume) / ".batches" / f"{first:05d}-{last:05d}.json"
 
 
-def euro(dollars):
-    return f"{dollars / USD_PER_EUR:.2f}".replace(".", ",") + " €"
+def dollar(amount):
+    return f"{amount:.2f}".replace(".", ",") + " $"  # as Datalab and OpenRouter keep the credit
 
 
 def price(pages, mode=DEFAULT_MODE):
-    return euro(pages * MODES[mode][1])
+    return dollar(pages * MODES[mode][1])
 
 
 def variant(mode, captions=True):
@@ -157,7 +114,7 @@ def status(volume):
     size = kept_size(volume)
     kept = sum(batch_path(volume, *b).is_file() for b in batches(pages, size))
     state = "done" if result_path(volume).is_file() else "partial" if kept else "none"
-    info = {"state": state, "pages": pages, "kept": kept, "batches": len(batches(pages, size)), "rates_from": RATES_FROM,
+    info = {"state": state, "pages": pages, "kept": kept, "batches": len(batches(pages, size)), "prices_from": PRICES_FROM,
             "size": size, "size_min": BATCH_MIN, "size_max": BATCH_MAX,
             "modes": [{"key": k, "label": label, "price": price(pages, k), "hint": hint}
                       for k, (label, _, hint) in MODES.items()]}
@@ -172,7 +129,7 @@ def status(volume):
     mode, _, extra = (info.get("mode") or "").partition("+")
     info.update(mode_key=mode or DEFAULT_MODE, no_captions=bool(extra), mode_label=variant_label(info.get("mode")))
     if info.get("cost_cents"):
-        info["cost"] = euro(info["cost_cents"] / 100)
+        info["cost"] = dollar(info["cost_cents"] / 100)
     return info
 
 
@@ -302,7 +259,7 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
         raise ValueError("Diese Qualitätsstufe gibt es nicht.")
     if not BATCH_MIN <= size <= BATCH_MAX:
         raise ValueError(f"Die Teilgröße muss zwischen {BATCH_MIN} und {BATCH_MAX} Seiten liegen.")
-    key = api_key()
+    key = keys.get("datalab")
     if not key:
         raise ValueError("Für die Texterkennung fehlt der Zugang zu Datalab. Bitte unten den API-Key eintragen.")
     scan = importer.scan_path(volume)

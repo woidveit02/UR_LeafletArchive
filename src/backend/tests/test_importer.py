@@ -9,7 +9,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from backend.app import importer, ocr
+from backend.app import importer, keys, ocr
 from backend.app.database import fillDatabase
 from backend.app.database.base import Base
 from backend.app.database.models import DRAFT, Volume
@@ -219,7 +219,7 @@ def test_text_recognition_merges_the_batches(scan, monkeypatch):
     assert len(names) == 3 and IMAGE not in names  # one picture per batch, none of them overwritten
     assert not (out / ".batches").exists()
     info = ocr.status(scan)
-    assert (info["state"], info["cost"]) == ("done", "1,07 €")
+    assert (info["state"], info["cost"]) == ("done", "1,20 $")
     first = ocr.page_blocks(scan, 1)
     assert [b["type"] for b in first] == ["Text", "Picture"] and first[0]["box"] == [0, 0, 10, 10]
     assert ocr.page_blocks(scan, 121) is None
@@ -304,18 +304,18 @@ def test_no_credit_and_new_scan(scan, monkeypatch):
 # the .env, and is refused when it cannot be one.
 def test_key_handling(folders, monkeypatch):
     monkeypatch.delenv("DATALAB_API_KEY", raising=False)
-    assert ocr.api_key() is None and ocr.key_info() is None
+    assert keys.get("datalab") is None and keys.info("datalab") is None
     for bad in ("", "short", "has a space in it"):
         with pytest.raises(ValueError, match="API-Key"):
-            ocr.save_key(bad)
-    ocr.save_key(" abcdefgh-1234 ")
-    assert ocr.api_key() == "abcdefgh-1234" and ocr.key_info() == {"hint": "1234", "from_env": False}
-    assert ocr.key_file().parent == fillDatabase.PDF_DIR
+            keys.save("datalab", bad)
+    keys.save("datalab", " abcdefgh-1234 ")
+    assert keys.get("datalab") == "abcdefgh-1234" and keys.info("datalab") == {"hint": "1234", "from_env": False}
+    assert keys.path("datalab").parent == fillDatabase.PDF_DIR
     monkeypatch.setenv("DATALAB_API_KEY", "from-env-9999")
-    assert (ocr.api_key(), ocr.key_info()["from_env"]) == ("from-env-9999", True)
+    assert (keys.get("datalab"), keys.info("datalab")["from_env"]) == ("from-env-9999", True)
     monkeypatch.delenv("DATALAB_API_KEY")
-    ocr.forget_key()
-    assert ocr.api_key() is None
+    keys.forget("datalab")
+    assert keys.get("datalab") is None
     with pytest.raises(ValueError, match="API-Key"):
         ocr.start(folders[1].query(Volume).one())
 
@@ -368,12 +368,12 @@ def test_text_step_page(scan, monkeypatch):
         return leaflet_app.import_page(request, scan.vz, step).body.decode()
 
     html = page()
-    assert "1,07 €" in html and "Texterkennung starten" in html and "API-Key …1234)" in html
+    assert "1,20 $" in html and "Texterkennung starten" in html and "API-Key …1234)" in html
     assert "test-key-1234" not in html
     monkeypatch.delenv("DATALAB_API_KEY")
-    ocr.save_key("saved-key-5678")  # a key saved from the page can be replaced or removed there
+    keys.save("datalab", "saved-key-5678")  # a key saved from the page can be replaced or removed there
     assert 'name="forget" value="true"' in page() and "API-Key …5678)" in page()
-    ocr.forget_key()
+    keys.forget("datalab")
     assert "API-Key" in page() and "Speichere zuerst deinen API-Key" in page()
     monkeypatch.setenv("DATALAB_API_KEY", "test-key-1234")
     fake_datalab(monkeypatch, [])
@@ -390,6 +390,16 @@ def test_text_step_page(scan, monkeypatch):
     assert '<details class="advanced"><summary class="button-outline">Scans ersetzen</summary>' in scans_page  # the drop zone is folded away
     assert "Upload abgeschlossen" not in scans_page and page("trennen")
     assert 'step-button disabled' in page("trennen") and 'step-button disabled' not in scans_page  # needs the saved cuts; scans are there
+    from backend.app import metadata, segments
+    monkeypatch.setattr(metadata, "models", lambda: [("a/b", "Modell B", 1e-6, 2e-6)])  # the default is gone
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    assert "Flugblätter getrennt sein" in page("angaben")
+    segments.save(scan, [60], 120)
+    html = page("angaben")
+    assert "Metadaten erzeugen" in html and 'value="a/b" selected' in html and "gibt es bei OpenRouter nicht mehr" in html
+    assert "Speichere zuerst deinen API-Key" in html
+    with pytest.raises(ValueError, match="OpenRouter"):
+        metadata.start(scan, "a/b", [])
 
 
 # Tests if the leaflet page names what is known about the text recognition and leaves out the rest.
@@ -404,7 +414,7 @@ def test_describe_text_recognition():
 def test_quality_level(scan, monkeypatch):
     seen = []
     monkeypatch.setattr(ocr, "find_or_create_pipeline", lambda client, mode, captions: seen.append((mode, captions)) or "pl_1")
-    assert (ocr.price(120), ocr.price(120, "balanced")) == ("1,07 €", "0,43 €")
+    assert (ocr.price(120), ocr.price(120, "balanced")) == ("1,20 $", "0,48 $")
     fake_datalab(monkeypatch, [], fail_pages=20)
     ocr.start(scan, "balanced", captions=False)
     wait_for(scan)

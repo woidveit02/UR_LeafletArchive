@@ -2,12 +2,79 @@
 {% block title %}Band hinzufügen{% if volume %}: {{ volume.name }}{% endif %} – UR Leaflet Archive{% endblock %}
 {% block app_class %}{% if split or (volume and step == 'ocr' and ocr.state == 'done') %} app-wide{% endif %}{% endblock %}
 {% block content %}
+        {% macro key_help(service) %}
+        <details class="help">
+            <summary>Wo finde ich meinen API-Key?</summary>
+            {% if service == 'datalab' %}
+            <h4>Was ist Datalab, was ein API-Key?</h4>
+            <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
+                Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
+            {% else %}
+            <h4>Was ist OpenRouter, was ein API-Key?</h4>
+            <p><b>OpenRouter</b> ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
+                Die App schickt den erkannten Text jedes Flugblatts dorthin und bekommt Titel, Datum und Herausgeber zurück. Abgerechnet wird nach der Nutzung über Guthaben im OpenRouter-Konto.</p>
+            {% endif %}
+            <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
+                und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
+            <h4>Wie bekomme ich einen API-Key?</h4>
+            {% if service == 'datalab' %}
+            <ol>
+                <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
+                <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
+                    (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
+                <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+            </ol>
+            <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
+            {% else %}
+            <ol>
+                <li>Konto auf <a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a> anlegen.</li>
+                <li>Unter „Credits“ Guthaben aufladen.</li>
+                <li>Unter „Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+            </ol>
+            <p>Die Preise je Modell stehen in der <a href="https://openrouter.ai/models" target="_blank" rel="noopener">Modellübersicht</a>.</p>
+            {% endif %}
+            <h4>Wo wird der API-Key gespeichert?</h4>
+            <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
+        </details>
+        {% endmacro %}
+        {% macro key_block(service, key, finished, step) %}
+        {% set name = 'Datalab' if service == 'datalab' else 'OpenRouter' %}
+        {% set fields %}<input type="hidden" name="service" value="{{ service }}"><input type="hidden" name="step" value="{{ step }}">{% endset %}
+        {% if key and key.from_env %}
+        <p class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
+        {% elif key %}
+        <details class="key-change">
+            <summary class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}) · <span class="key-link">Ändern</span></summary>
+            <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
+                <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
+                <button type="submit" class="button-outline">Speichern</button>
+                <button type="submit" name="forget" value="true" class="link-button" formnovalidate
+                        onclick="return confirm('Den gespeicherten API-Key entfernen?')">Entfernen</button>
+            </form>
+            {% if not finished %}{{ key_help(service) }}{% endif %}
+        </details>
+        {% else %}
+        <p>Das läuft über ein kostenpflichtiges {{ name }}-Konto. Hinterlege dafür einen API-Key.</p>
+        <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
+            <label>API-Key<input type="password" name="key" autocomplete="off"></label>
+            <button type="submit" class="button-small">API-Key speichern</button>
+        </form>
+        {% endif %}
+        {% endmacro %}
+        {% macro progress(cancel_url, cancel_confirm) %}
+        <div id="ocr-progress" class="upload-progress" hidden>
+            <progress></progress>
+            <span class="meta upload-text"></span>
+            <ul id="ocr-parts" class="ocr-parts"></ul>
+            <button type="button" id="ocr-cancel" class="button-outline" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>
+        </div>
+        {% endmacro %}
         <header class="page-head">
             <p class="meta"><a href="/import">← Zur Übersicht</a></p>
             <h1>Band hinzufügen{% if volume %}: {{ volume.name }}{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
-        {% set done = (['band'] + (['scans'] if pages else []) + (['ocr'] if ocr.state == 'done' else [])) if volume else [] %}
+        {% set done = done or [] %}
         <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}: {{ step_help[step] }}</p>
         {% set i = keys.index(step) %}
         <div class="step-head">
@@ -190,27 +257,7 @@
         {% else %}
         {% set busy = ocr_job and ocr_job.state == 'running' %}
         <div class="step-narrow"{% if ocr.state != 'done' and not busy %} data-leave-warning="Der Text ist noch nicht erkannt. Trotzdem weiter?"{% endif %}>
-        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}<details class="advanced"><summary><b data-mode-label>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).label }}</b> · etwa <span data-mode-price>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary><fieldset class="mode-choice"><legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>{% for m in ocr.modes %}<label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}><span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>{% endfor %}<small class="meta" title="Datalab-Preisliste in Dollar, in Euro umgerechnet zum EZB-Kurs vom {{ ocr.rates_from }}">Schätzung, Stand {{ ocr.rates_from }}</small></fieldset><fieldset class="mode-choice"><legend>Bildbeschreibungen</legend><label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span><span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label><label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span><span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label></fieldset><fieldset class="mode-choice"><legend>Teilgröße</legend><label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label><small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small></fieldset></details>{% endmacro %}
-        {% macro key_help() %}
-        <details class="help">
-            <summary>Wo finde ich meinen API-Key?</summary>
-            <h4>Was ist Datalab, was ein API-Key?</h4>
-            <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
-                Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
-            <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App Seiten erkennen lassen,
-                und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
-            <h4>Wie bekomme ich einen API-Key?</h4>
-            <ol>
-                <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
-                <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
-                    (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
-                <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
-            </ol>
-            <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
-            <h4>Wo wird der API-Key gespeichert?</h4>
-            <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
-        </details>
-        {% endmacro %}
+        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}<details class="advanced"><summary><b data-mode-label>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).label }}</b> · etwa <span data-mode-price>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary><fieldset class="mode-choice"><legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>{% for m in ocr.modes %}<label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}><span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>{% endfor %}<small class="meta">Schätzung nach der Preisliste vom {{ ocr.prices_from }}, wird in Dollar angerechnet</small></fieldset><fieldset class="mode-choice"><legend>Bildbeschreibungen</legend><label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span><span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label><label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span><span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label></fieldset><fieldset class="mode-choice"><legend>Teilgröße</legend><label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label><small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small></fieldset></details>{% endmacro %}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if ocr_job and ocr_job.state == 'cancelled' and ocr.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
         {% if ocr_job and ocr_job.state == 'error' and ocr.state != 'done' %}<p class="form-error" role="alert">{{ ocr_job.error }}</p>{% endif %}
@@ -227,38 +274,11 @@
             die Kosten werden über dein Datalab-Konto abgerechnet.</p>
         {% endif %}
 
-        <div id="ocr-progress" class="upload-progress" hidden>
-            <progress></progress>
-            <span class="meta upload-text"></span>
-            <ul id="ocr-parts" class="ocr-parts"></ul>
-            <button type="button" id="ocr-cancel" class="button-outline" data-url="/import/{{ volume.vz }}/ocr/abbrechen"
-                    data-confirm="Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.">Abbrechen</button>
-        </div>
+        {{ progress('/import/' ~ volume.vz ~ '/ocr/abbrechen', 'Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.') }}
 
         {% set finished = ocr.state == 'done' and not busy %}
         <h3>Zugang zu Datalab</h3>
-        {% if ocr_key %}
-        {% if ocr_key.from_env %}
-        <p class="key-line">✓ Datalab-Zugang eingerichtet (API-Key …{{ ocr_key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
-        {% else %}
-        <details class="key-change">
-            <summary class="key-line">✓ Datalab-Zugang eingerichtet (API-Key …{{ ocr_key.hint }}) · <span class="key-link">Ändern</span></summary>
-            <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">
-                <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
-                <button type="submit" class="button-outline">Speichern</button>
-                <button type="submit" name="forget" value="true" class="link-button" formnovalidate
-                        onclick="return confirm('Den gespeicherten API-Key entfernen?')">Entfernen</button>
-            </form>
-            {% if not finished %}{{ key_help() }}{% endif %}
-        </details>
-        {% endif %}
-        {% else %}
-        <p>Die Texterkennung läuft über ein kostenpflichtiges Datalab-Konto. Hinterlege dafür einen API-Key.</p>
-        <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">
-            <label>API-Key<input type="password" name="key" autocomplete="off"></label>
-            <button type="submit" class="button-small">API-Key speichern</button>
-        </form>
-        {% endif %}
+        {{ key_block('datalab', ocr_key, finished, 'ocr') }}
 
         {% if ocr.state != 'done' or busy %}
         <h3>Qualität und Kosten</h3>
@@ -291,7 +311,7 @@
         </form>
         {% endif %}
         </div>
-        {% if not ocr_key or finished %}{{ key_help() }}{% endif %}
+        {% if not ocr_key or finished %}{{ key_help('datalab') }}{% endif %}
 
         <details class="step-form zip-import">
             <summary>Alternativ: vorhandene Texterkennung als ZIP-Datei laden (ohne API-Key)</summary>
@@ -341,6 +361,60 @@
         {% endif %}
         {% if not finished %}</div>{% endif %}
         {% endif %}
+        {% elif step == 'angaben' %}
+        <h2>Metadaten</h2>
+        {% if not meta %}
+        <p class="meta">Dafür müssen zuerst der Text erkannt und die Flugblätter getrennt sein.</p>
+        {% else %}
+        {% set busy = meta_job and meta_job.state == 'running' %}
+        {% set finished = meta.state == 'done' and not busy %}
+        <div class="step-narrow">
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% if meta_job and meta_job.state == 'cancelled' and meta.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
+        {% if meta_job and meta_job.state == 'error' and meta.state != 'done' %}<p class="form-error" role="alert">{{ meta_job.error }}</p>{% endif %}
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <div class="split-work">
+        {% if busy %}
+        <p class="meta">Die Angaben werden erzeugt. Das dauert einige Minuten. Die Seite darf geschlossen werden, es läuft weiter.</p>
+        {% elif meta.state == 'done' %}
+        <p class="form-ok" role="status">✓ Angaben für {{ meta.count }} Flugblätter erzeugt ({{ meta.model }}, Kosten laut OpenRouter etwa {{ meta.cost }}){% if meta.flagged %}. Bei {{ meta.flagged }} hat die Prüfung etwas bemerkt, das zeigt der nächste Schritt{% endif %}.</p>
+        {% elif meta.state == 'stale' %}
+        <p class="form-warn" role="status">Die Flugblätter wurden seit dem letzten Lauf anders getrennt. Bitte die Angaben neu erzeugen.</p>
+        {% elif meta.state == 'partial' %}
+        <p class="form-warn" role="status">Unterbrochen. Was schon erzeugt ist, wird beim Fortsetzen nicht noch einmal angefragt.</p>
+        {% else %}
+        <p>Ein Sprachmodell liest den Text jedes Flugblatts und trägt Titel, Reihe, Datum, Herausgeber und Unterzeichnende ein, jeweils mit der Stelle im Text als Beleg.
+            Die Kosten werden über dein OpenRouter-Konto abgerechnet.</p>
+        {% endif %}
+        {{ progress('/import/' ~ volume.vz ~ '/angaben/abbrechen', 'Abbrechen? Die laufende Anfrage wird noch fertig und berechnet. Was fertig ist, bleibt erhalten.') }}
+        <h3>Zugang zu OpenRouter</h3>
+        {{ key_block('openrouter', meta_key, finished, 'angaben') }}
+        <form method="post" action="/import/{{ volume.vz }}/angaben" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=angaben"{% if busy %} data-running="1"{% endif %}
+              {% if finished %} data-confirm="Die Angaben noch einmal erzeugen? Das kostet erneut, die jetzigen Angaben werden ersetzt."{% endif %}>
+            {% if not busy %}
+            {% set ids = [] %}{% for _, group in model_top %}{% for id, _ in group %}{% set _ = ids.append(id) %}{% endfor %}{% endfor %}
+            {% set chosen = default_model if default_model in ids else ids[0] %}
+            {% if default_model not in ids %}<p class="form-warn">Das bisher meistverwendete Modell ({{ default_model }}) gibt es bei OpenRouter nicht mehr.
+                Wähle ein anderes, möglichst ähnlich starkes Modell. Die Angaben sind dann nicht ganz mit denen der älteren Bände vergleichbar.</p>{% endif %}
+            <h3><label for="model-choice">Modell</label></h3>
+            <select id="model-choice" name="model">
+                {% for label, group in model_top %}<optgroup label="{{ label }}">{% for id, name in group %}<option value="{{ id }}"{% if id == chosen %} selected{% endif %}>{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</optgroup>
+                {% endfor %}
+            </select>
+            <label class="model-search" for="model">Oder ein anderes Modell suchen</label>
+            <input type="text" id="model" list="model-list" placeholder="Name oder Kennung, zum Beispiel „gemini“ oder „gpt“" spellcheck="false">
+            <datalist id="model-list">{% for id, name in model_names %}<option value="{{ id }}" data-price="{{ model_prices.get(id, '') }}">{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</datalist>
+            <p class="meta">Weitere Modelle nach der Rangliste von OpenRouter. Kosten: <span id="model-price">{{ model_prices.get(chosen) or 'unbekannt' }}</span>, wird in Dollar angerechnet</p>
+            <div class="start-row">
+                <button type="submit" class="{{ 'button-outline' if finished else 'button-small upload-submit' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
+                {% if not meta_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+            </div>
+            {% endif %}
+        </form>
+        </div>
+        {% if not meta_key or finished %}{{ key_help('openrouter') }}{% endif %}
+        </div>
+        {% endif %}
         {% else %}
         <h2>{{ steps[step] }}</h2>
         <p class="meta">Dieser Schritt folgt.</p>
@@ -356,6 +430,7 @@
     {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
     {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
-    {% if step == 'ocr' %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>
+    {% if step in ('ocr', 'angaben') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
+    {% if step == 'ocr' %}
     <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}
 {% endblock %}

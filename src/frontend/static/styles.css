@@ -4078,6 +4078,17 @@ summary.link-button::-webkit-details-marker {
     font-size: 0.85em;
 }
 
+.model-search {
+    display: block;
+    margin: 12px 0 4px;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+#model-choice.overridden {
+    opacity: 0.5;
+}
+
 .split-work {
     max-width: 760px;
     margin: 0 0 24px;
