@@ -25,7 +25,13 @@
         const id = typed ? model.value : choice.value;
         const option = [...document.querySelectorAll('#model-list option')].find((o) => o.value === id);
         document.getElementById('model-price').textContent = option?.dataset.price || 'unbekannt';
+        const label = document.getElementById('model-label');
+        if (label) label.textContent = typed ? option?.text || id : choice.selectedOptions[0].text;
     });
+    model?.dispatchEvent(new Event('input'));
+
+    const prompt = document.getElementById('prompt');
+    document.getElementById('prompt-reset')?.addEventListener('click', () => { prompt.value = prompt.dataset.default; });
 
     const forms = document.querySelectorAll('form[data-ocr]');
     if (!forms.length) return;

@@ -3,7 +3,7 @@ state of one reviewed group. Anchors carry the exact page range, so a review
 whose segments changed is not applied but listed for a new review."""
 import json
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 
 _lock = threading.Lock()
 
@@ -13,7 +13,7 @@ def anchor(a):
 
 
 def append(path, line):
-    stamp = datetime.now().isoformat(timespec="seconds")
+    stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
     with _lock, open(path, "a", encoding="utf-8") as f:
         f.write(json.dumps({**line, "at": stamp}, ensure_ascii=False) + "\n")
 

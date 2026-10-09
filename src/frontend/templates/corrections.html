@@ -1,38 +1,55 @@
 {% extends "base.html" %}
-{% block title %}Korrekturen prüfen – UR Leaflet Archive{% endblock %}
+{% from '_leaflets.html' import title %}
+{% block title %}Korrekturen – UR Leaflet Archive{% endblock %}
+{% macro history(row) %}
+                <details class="fix-history">
+                    <summary>Änderungsverlauf · {{ row.history | length }} {{ 'Eintrag' if row.history | length == 1 else 'Einträge' }}</summary>
+                    <dl class="fix-fields">
+                        {% for label, value, at in row.history %}<dt>{{ label }}</dt><dd>{{ value }} <span class="meta">{{ at }}</span></dd>{% endfor %}
+                    </dl>
+                </details>
+{% endmacro %}
 {% block content %}
         <header class="page-head">
-            <h1>Korrekturen prüfen</h1>
+            <h1>Korrekturen</h1>
+            <p class="meta">Hier findest du manuell korrigierte Angaben. Sie werden bei einer erneuten Erfassung wieder angewendet.</p>
+        </header>
+        {% if rows or copies %}
+        <h2>Ohne Zuordnung</h2>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
             Sie werden nicht angewendet. Zum Übernehmen in <code>data/corrections.jsonl</code> Anfangs- und Endseite anpassen.
             Ebenso Prüfungen möglicher Duplikate (<code>data/copy_decisions.jsonl</code>), deren Segmente sich geändert haben.</p>
-        </header>
-        {% for row in rows %}
-        <h2>{{ row.segment }}</h2>
-        <ul class="leaflet-list leaflet-list-plain">
-            {% for e in row.entries %}
-            {% if e.field == 'date' %}{% set value = e.value.iso ~ ' (' ~ e.value.type ~ ')' %}
-            {% elif e.field == 'series' %}{% set value = [e.value.name, e.value.issue] | select | join(', ') %}
-            {% elif e.field == 'issuers' %}{% set value = e.value | map(attribute='org') | join(', ') %}
-            {% elif e.field == 'signatories' %}{% set value = e.value | map(attribute='name') | join(', ') %}
-            {% elif e.field == 'revert' %}{% set value = 'alle früheren Zeilen' if e.value == 'all' else 'frühere Zeilen für ' ~ fields.get(e.value, e.value) %}
-            {% else %}{% set value = e.value %}{% endif %}
-            <li><span class="row-main">{{ fields.get(e.field, 'Handkorrektur entfernt') }}: {{ value }}
-                <span class="meta">{{ e.at }}{% if e.reason %} · {{ e.reason }}{% endif %}</span></span></li>
+        <ul class="fix-list">
+            {% for row in rows %}
+            <li>
+                <span class="meta">{{ row.place }}</span>
+                <span class="fix-title todo">Ohne Zuordnung</span>
+                <p class="meta">Überlappende Flugblätter jetzt:
+                    {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
+                {{ history(row) }}
+            </li>
             {% endfor %}
-        </ul>
-        <p class="meta">Überlappende Flugblätter jetzt:
-            {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
-        {% endfor %}
-        {% if copies %}
-        <h2>Geprüfte Duplikate, die nicht mehr passen</h2>
-        <ul class="leaflet-list leaflet-list-plain">
             {% for c in copies %}
-            <li><span class="row-main">{{ c.members | join(' · ') }} <span class="meta">{{ c.at }}</span></span></li>
+            <li><span class="meta">{{ c.at }}</span> Geprüfte Duplikate, die nicht mehr passen: {{ c.members | join(' · ') }}</li>
             {% endfor %}
         </ul>
         {% endif %}
-        {% if not rows and not copies %}
-        <div class="empty-state">Alle Korrekturen und geprüften Duplikate passen zu einem Flugblatt.</div>
-        {% endif %}
+        {% if rows or copies %}<h2>Zugeordnet</h2>{% endif %}
+        <ul class="fix-list">
+            {% for row in saved %}
+            <li>
+                <span class="meta">{{ row.place }}</span>
+                <a class="fix-title" href="/leaflets/{{ row.leaflet.id }}">{{ title(row.leaflet) }}</a>
+                {% if row.now %}
+                <dl class="fix-fields">
+                    {% for label, value in row.now %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endfor %}
+                </dl>
+                {% else %}<p class="meta">Keine wirksame Korrektur, alle wurden zurückgenommen.</p>{% endif %}
+                <span class="meta">Zuletzt geändert am {{ row.at }}</span>
+                {% if row.history | length > row.now | length %}{{ history(row) }}{% endif %}
+            </li>
+            {% else %}
+            <li class="meta">Noch keine Korrekturen gespeichert.</li>
+            {% endfor %}
+        </ul>
 {% endblock %}

@@ -1,5 +1,5 @@
-// Checking the text recognition one page at a time, as on the leaflet page: the scan with the boxes of the
-// recognized blocks, next to the blocks. Hovering one lights up the other; a click on a box scrolls to its text.
+// Checking the text recognition one page at a time, in the layout of the leaflet page: the transcription next to the
+// scan with the boxes of the recognized blocks (page-pair.js links them).
 (() => {
     const box = document.getElementById('page-check');
     if (!box) return;
@@ -8,13 +8,9 @@
     const pair = document.getElementById('check-pair');
     const frame = document.getElementById('check-frame');
     const img = document.getElementById('check-scan');
-    const link = document.getElementById('check-scan-link');
     const wrap = document.getElementById('check-scan-wrap');
-    const title = document.getElementById('check-title');
     const body = document.getElementById('check-body');
     let current = 0;
-
-    const highlight = (els, on) => els.forEach((el) => el.classList.toggle('active', on));
 
     const render = (n, blocks) => {
         frame.querySelectorAll('.ocr-box').forEach((el) => el.remove());
@@ -48,15 +44,7 @@
             }
             el.dataset.block = id;
             body.append(el);
-            for (const part of [el, mark]) {
-                part.addEventListener('mouseenter', () => highlight([el, mark], true));
-                part.addEventListener('mouseleave', () => highlight([el, mark], false));
-            }
-            mark.addEventListener('click', () => {
-                el.scrollIntoView({behavior: 'smooth', block: 'center'});
-                highlight([el, mark], true);
-                setTimeout(() => highlight([el, mark], false), 1500);
-            });
+            PagePair.link(el, mark);
         });
     };
 
@@ -64,13 +52,13 @@
         const n = Math.min(pages, Math.max(1, Math.round(wanted) || 1));
         current = n;
         input.value = n;
+        box.querySelector('.check-scroll').scrollTop = 0;
         img.classList.remove('loaded');
         img.onload = () => {
-            pair.style.setProperty('--ratio', img.naturalWidth / img.naturalHeight);  // the scan is sized to the screen, as on the leaflet page
+            pair.style.setProperty('--ratio', img.naturalWidth / img.naturalHeight);  // the scan is sized to the screen
             img.classList.add('loaded');
         };
-        img.src = link.href = wrap.href = box.dataset.large.replace('{n}', n);  // the large rendering: single words must be readable
-        title.textContent = `Bandseite ${n}`;
+        img.src = wrap.href = box.dataset.large.replace('{n}', n);  // the large rendering: single words must be readable
         body.textContent = 'Wird geladen …';
         try {
             const answer = await (await fetch(box.dataset.url.replace('{n}', n))).json();
@@ -82,10 +70,18 @@
 
     box.addEventListener('click', (e) => {
         const go = e.target.closest('[data-go]')?.dataset.go;
-        if (!go) return;
-        const at = Number(input.value);
-        show(go === 'prev' ? at - 1 : go === 'next' ? at + 1 : go === 'mid' ? Math.ceil(pages / 2) : go === 'last' ? pages : Number(go));
+        if (go) show(Number(input.value) + (go === 'prev' ? -1 : 1));
     });
     input.addEventListener('change', () => show(Number(input.value)));
     show(1);
+
+    const stage = document.getElementById('check-stage');
+    const open = (on) => { stage.hidden = !on; document.body.style.overflow = on ? 'hidden' : ''; };
+    document.getElementById('check-open').addEventListener('click', () => open(true));
+    document.getElementById('check-close').addEventListener('click', () => open(false));
+    document.addEventListener('keydown', (e) => {
+        if (stage.hidden) return;
+        if (e.key === 'Escape') open(false);
+        if (e.target !== input && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) show(current + (e.key === 'ArrowLeft' ? -1 : 1));
+    });
 })();

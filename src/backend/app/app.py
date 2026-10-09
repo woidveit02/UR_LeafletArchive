@@ -8,6 +8,7 @@ from html import unescape
 from itertools import combinations
 import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urlencode
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
@@ -76,6 +77,9 @@ def page_range(start, end):
 templates.env.globals['page_range'] = page_range
 templates.env.globals['FONDS_URL'] = \
     "https://www.archivportal-d.de/item/NFTD57JPRHJOTMAI46F4P3EQ6NA5DKLZ"
+
+
+LOCAL = ZoneInfo("Europe/Berlin")
 
 
 def german_date(iso):
@@ -367,7 +371,7 @@ def term_profile(term, filters, buckets, totals, org_totals, chosen):
     if not search.terms(term):
         return {'term': term, 'short': True}
     # the copy chosen for the totals, even if only another copy matches: copies differ in issuers
-    items = list({copy_key(i): chosen[copy_key(i)] for i in faceted_items(filters + [('q', term)])[0]}.values())
+    items = list({copy_key(i): chosen[copy_key(i)] for i in faceted_items(filters + [('q', term), ('duplikate', '1')])[0]}.values())
     counts = Counter(buckets[i['year']] for i in items)
     dated = sorted((i for i in items if i['leaflet'].date_iso), key=lambda i: i['leaflet'].date_iso)
     org_counts = Counter(o for i in items for o in i['orgs'] if o not in SPECIAL)
@@ -448,7 +452,7 @@ def trends(request: Request, begriffe: str = ''):
     rows = [term_profile(t, filters, buckets, totals, org_totals, chosen) for t in terms]
     found = [r['term'] for r in rows if r.get('total')]
     together = [{'terms': pair, 'url': '/leaflets?' + urlencode(filters + [('q', ' '.join(pair))]),
-                 'count': len(unique(faceted_items(filters + [('q', ' '.join(pair))])[0]))}
+                 'count': len(unique(faceted_items(filters + [('q', ' '.join(pair)), ('duplikate', '1')])[0]))}
                 for pair in combinations(found, 2)]
     for row in rows:
         row['remove_url'] = '/trends?' + urlencode(
@@ -523,11 +527,11 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
                    'height': round(counts['jahr'][y] / highest * 75),
                    'active': y == selected.get('jahr')} for y in axis],
         'orgs': facet('org', labels['org'], lambda o: orgs[o].full_name or '' if o in orgs else ''),
-        'topics': facet('thema', labels['thema']),
+        # "uncertain" sits with the special entries of the topic list, it is a filter on the topic
+        'topics': facet('thema', labels['thema']) + [{**e, 'none': True} for e in facet('unsicher', labels['unsicher'])],
         'types': facet('typ', labels['typ']),
         'series': facet('reihe', str),
         'dates': facet('datum', labels['datum']),
-        'uncertain': facet('unsicher', labels['unsicher']),
     }
 
     # chips above the results, each removes its own parameter
@@ -1030,7 +1034,7 @@ def copy_rows():
         first, volume = group['members'][0]
         rows.append({'group': key, 'id': main.id, 'title': main.display_title, 'new': group['new'],
                      'state': 'neu' if group['new'] else 'geprueft' if main.copies_checked else 'offen',
-                     'order': (volume.vz, first.start_page),
+                     'order': (volume.vz, first.start_page), 'volumes': {v.vz for _, v in group['members']},
                      'anchors': [(v.stem, lf.start_page, lf.end_page) for lf, v in group['members']],
                      'labels': [f"{v.label}, {page_range(lf.start_page, lf.end_page)}" + (' (Hauptexemplar)' if lf is main and main.copies_checked else '')
                                 for lf, v in group['members']]})
@@ -1075,7 +1079,10 @@ def separated_rows(latest):
 
 
 def review_date(at):
-    return f"{german_date(at[:10])}, {at[11:16]}"
+    """In German time; a stamp without zone is UTC, the clock of the container that wrote it."""
+    t = datetime.datetime.fromisoformat(at)
+    t = (t if t.tzinfo else t.replace(tzinfo=datetime.timezone.utc)).astimezone(LOCAL)
+    return t.strftime("%d.%m.%Y, %H:%M")
 
 
 REVIEW_KINDS = {**COPY_STATES, 'getrennt': 'Getrennt'}
@@ -1083,15 +1090,16 @@ REVIEW_SORTS = {'': 'Reihenfolge im Archiv', 'neu': 'Prüfdatum, neueste zuerst'
 
 
 @app.get("/exemplare")
-def copy_list(request: Request, status: str = '', sortierung: str = ''):
+def copy_list(request: Request, status: str = '', sortierung: str = '', band: int = 0):
     """All groups of copies with the state of their review; each opens its comparison page. A leaflet that a
-    review split off is listed as checked; the checked rows can be sorted by review date."""
+    review split off is listed as checked; the checked rows can be sorted by review date. band= keeps the
+    groups with a copy in that volume."""
     latest = latest_reviews()
-    rows = copy_rows()
+    rows = [r for r in copy_rows() if not band or band in r['volumes']]
     for r in rows:
         r['at'] = r['state'] == 'geprueft' and max((latest[a]['at'] for a in r['anchors'] if a in latest), default=None)
     first = next((r['id'] for r in rows if r['state'] != 'geprueft'), None)
-    rows = sorted(rows + separated_rows(latest), key=lambda r: r['order'])
+    rows = sorted(rows + [r for r in separated_rows(latest) if not band or r['order'][0] == band], key=lambda r: r['order'])
     for r in rows:
         r['date'] = r['at'] and review_date(r['at'])
     checked = lambda r: r['state'] in ('geprueft', 'getrennt')
@@ -1102,7 +1110,7 @@ def copy_list(request: Request, status: str = '', sortierung: str = ''):
     return templates.TemplateResponse(
         request, "copy_list.html",
         {"rows": shown, "total": len(rows), "counts": counts, "states": COPY_STATES, "kinds": REVIEW_KINDS,
-         "sorts": REVIEW_SORTS, "status": status, "sort": sortierung, "first": first})
+         "sorts": REVIEW_SORTS, "status": status, "sort": sortierung, "first": first, "band": band})
 
 
 def copy_group_of(leaflet):
@@ -1546,27 +1554,58 @@ async def copy_save(request: Request, leaflet_id: int):
     return RedirectResponse(f"/leaflets/{leaflet_id}/exemplare?meldung={message}", status_code=303)
 
 
-@app.get("/korrekturen")
-def correction_list(request: Request):
-    """Corrections whose page range no longer matches a segment."""
-    volumes = {v.stem: v for v in session.query(Volume) if v.stem}
+def correction_rows(volumes, saved):
+    """The saved corrections per page range, with the leaflet they apply to; None when the range no longer
+    matches a segment."""
     rows = []
-    for (stem, start, end), entries in corrections.by_segment(
-            corrections.load(CORRECTIONS)).items():
+    for (stem, start, end), entries in saved.items():
         volume = volumes.get(stem)
         overlaps = session.query(Leaflet).filter(
             Leaflet.volume_id == volume.id, Leaflet.start_page <= end,
             Leaflet.end_page >= start).order_by(Leaflet.start_page).all() if volume else []
-        if any((lf.start_page, lf.end_page) == (start, end) for lf in overlaps):
-            continue
         rows.append({'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
-                     'entries': entries, 'overlaps': overlaps})
-    copies = [{'at': r['at'], 'members': [
+                     'place': f"Band {volume.vz:03d} · {page_range(start, end)}" if volume else f"{stem}, {page_range(start, end)}",
+                     'entries': entries, 'overlaps': overlaps,
+                     'leaflet': next((lf for lf in overlaps if (lf.start_page, lf.end_page) == (start, end)), None)})
+    return rows
+
+
+def correction_text(e):
+    """(label, value) of a correction line as a reader sees it: organizations by name, dates in words."""
+    field, value = e['field'], e['value']
+    if field == 'revert':
+        return 'Rücknahme', 'alle früheren Korrekturen' if value == 'all' else corrections.FIELDS.get(value, value)
+    if field == 'date':
+        value = (iso_to_text(value['iso']) or value['iso']) + (f" ({value['type']})" if value.get('type') else '')
+    elif field == 'series' and isinstance(value, dict):  # early lines hold the name alone
+        value = ', '.join(filter(None, [value['name'], value['issue']]))
+    elif field == 'issuers':
+        value = ', '.join((org.full_name or org.name) if (org := session.get(Organization, i['org'])) else i['org'] for i in value)
+    elif field == 'signatories':
+        value = ', '.join(i['name'] for i in value)
+    return corrections.FIELDS.get(field, field), value
+
+
+def in_force(entries):
+    """The correction in force per field, in the order apply() leaves them: the last line not reverted wins."""
+    return list({e['field']: e for e in corrections.active(entries)}.values())
+
+
+@app.get("/korrekturen")
+def correction_list(request: Request):
+    volumes = {v.stem: v for v in session.query(Volume) if v.stem}
+    rows = correction_rows(volumes, corrections.by_segment(corrections.load(CORRECTIONS)))
+    for r in rows:
+        r['now'] = [correction_text(e) for e in in_force(r['entries'])]
+        r['history'] = [(*correction_text(e), german_date(e['at'])) for e in r['entries']]
+        r['at'] = german_date(max(e['at'] for e in r['entries']))
+    copies = [{'at': review_date(r['at']), 'members': [
         f"{volumes[a['volume']].label if a['volume'] in volumes else a['volume']}, "
         f"{page_range(a['start_page'], a['end_page'])}" for a in r['members']]}
         for r in copy_review()[1]]
     return templates.TemplateResponse(
-        request, "corrections.html", {"rows": rows, "copies": copies, "fields": corrections.FIELDS})
+        request, "corrections.html", {"rows": [r for r in rows if not r['leaflet']], "copies": copies,
+                                      "saved": sorted((r for r in rows if r['leaflet']), key=lambda r: max(e['at'] for e in r['entries']), reverse=True)})
 
 
 @app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")
@@ -1621,21 +1660,49 @@ def volume_status(volume, n_leaflets):
 
 
 @app.get("/import")
-def import_list(request: Request, error: str = ''):
+def import_list(error: str = ''):
+    return RedirectResponse('/verwaltung' + (f"?{urlencode({'error': error})}" if error else ''), 301)
+
+
+@app.get("/verwaltung")
+def admin_page(request: Request, error: str = ''):
+    """Where each volume stands, with the open duplicates and corrections, and the imports in progress."""
+    leaflets = Counter(vid for (vid,) in session.query(Leaflet.volume_id))
+    volumes = session.query(Volume).order_by(Volume.vz).all()
+    groups = copy_rows()
+    open_groups = [g for g in groups if g['state'] != 'geprueft']
+    fix_rows = correction_rows({v.stem: v for v in volumes if v.stem}, corrections.by_segment(corrections.load(CORRECTIONS)))
+    fixes = Counter(r['leaflet'].volume_id for r in fix_rows if r['leaflet'] and corrections.active(r['entries']))
     added = {e["vz"] for e in importer.load_entries() if e.get("added")}
-    return templates.TemplateResponse(request, "import_list.html", {
+    steps = list(importer.STEPS)
+    drafts = []
+    for v in volumes:
+        if v.status == RELEASED and leaflets[v.id]:
+            continue
+        step = resume_step(v)
         # an archive unit without scans has nothing to delete: it would stay in the list as "not digitized"
-        "volumes": [{"vz": v.vz, "label": v.name, "scans": importer.page_count(v) if v.stem else None,
-                     "deletable": bool(v.stem) or v.vz in added}
-                    for v in importer.pending_volumes()],
-        "has_units": bool(importer.free_units()), "error": error})
+        drafts.append({"vz": v.vz, "title": v.title, "step": importer.STEPS[step], "n": steps.index(step) + 1,
+                       "deletable": bool(v.stem) or v.vz in added})
+    return templates.TemplateResponse(request, "admin.html", {
+        "volumes": [{"vz": v.vz, "title": v.title, "leaflets": leaflets[v.id],
+                     "groups": sum(v.vz in g['volumes'] for g in groups),
+                     "open": sum(v.vz in g['volumes'] for g in open_groups), "fixes": fixes[v.id]}
+                    for v in volumes if v.status == RELEASED and leaflets[v.id]],
+        "drafts": drafts, "n_steps": len(steps), "units": importer.free_units(),
+        "groups": len(groups), "open": len(open_groups),
+        "fixes": sum(fixes.values()), "unmatched": sum(not r['leaflet'] for r in fix_rows),
+        "error": error})
 
 
 @app.get("/import/neu")
-def import_new(request: Request, error: str = ''):
-    """The first step of an import, before the volume exists: which unit of the archive it is."""
+def import_new(request: Request, error: str = '', vz: int = 0):
+    """The first step of an import, before the volume exists: which unit of the archive it is. vz= preselects
+    one; a unit that is already added is not offered, creating it is refused in new_volume as well."""
+    units = importer.free_units()
+    if vz and not any(u["vz"] == vz for u in units):
+        error, vz = error or f"Nr. {vz:03d} ist schon angelegt.", 0
     return templates.TemplateResponse(request, "import_volume.html", {
-        "volume": None, "units": importer.free_units(), "error": error,
+        "volume": None, "units": units, "chosen": vz, "error": error,
         "steps": importer.STEPS, "step_help": importer.STEP_HELP, "step": "band", "pages": None, "split": None, "running": False})
 
 
@@ -1686,7 +1753,9 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
         "default_model": (used[0][0] if used else metadata.DEFAULT_MODEL) if meta else None,
         "model_names": [m[:2] for m in metadata.models()] if meta else [],
         "model_top": metadata.top_models(used) if meta else [],
-        "model_prices": metadata.prices(volume) if meta else {}},
+        "model_prices": metadata.prices(volume) if meta else {},
+        "prompt_text": metadata.prompt_text() if meta else '', "prompt_default": metadata.default_prompt() if meta else '',
+        "batch_size": metadata.BATCH_SIZE, "max_batch": metadata.MAX_BATCH},
         status_code=status_code)
 
 
@@ -1720,8 +1789,8 @@ def import_discard(vz: int):
     try:
         importer.discard(import_volume_or_404(vz))
     except ValueError as error:
-        return RedirectResponse('/import?' + urlencode({'error': str(error)}), 303)
-    return RedirectResponse("/import", 303)
+        return RedirectResponse('/verwaltung?' + urlencode({'error': str(error)}), 303)
+    return RedirectResponse("/verwaltung", 303)
 
 
 @app.post("/import/{vz}/scans")
@@ -1807,10 +1876,10 @@ def import_ocr(vz: int, mode: str = Form(ocr.DEFAULT_MODE), captions: str = Form
 
 
 @app.post("/import/{vz}/angaben")
-def import_metadata(vz: int, model: str = Form('')):
+def import_metadata(vz: int, model: str = Form(''), prompt: str = Form(''), batch: int = Form(metadata.BATCH_SIZE)):
     orgs = [(o.id, o.name, o.full_name) for o in session.query(Organization)]
     try:
-        metadata.start(import_volume_or_404(vz), model.strip(), orgs)
+        metadata.start(import_volume_or_404(vz), model.strip(), orgs, prompt, batch)
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
     return JSONResponse({'ok': True})

@@ -28,6 +28,6 @@ def test_database_contains_basic_seed_data():
 
 # Tests if all Findmittel units 1967-1973 exist and imported leaflets point to one of them.
 def test_volumes_from_findmittel():
-    assert session.query(Volume).count() == 15
+    assert session.query(Volume).filter(Volume.vz <= 15).count() == 15
     leaflet = session.query(Leaflet).first()
     assert session.get(Volume, leaflet.volume_id).title

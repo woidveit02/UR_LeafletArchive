@@ -381,10 +381,10 @@ def test_text_step_page(scan, monkeypatch):
     wait_for(scan)
     html = page()
     assert 'name="captions" value="yes" checked' in html and "brauchten zuletzt" not in html
-    assert "✓ Text für 120 Seiten erkannt" in html and "/import/15/ocr.zip" in html and "Erneut erkennen" in html
+    assert "120 Seiten · Text erkannt" in html and "/import/15/ocr.zip" in html and "Erneut erkennen" in html
     assert 'class="done"' in page("trennen")  # the step bar marks the text as done
     ocr.import_zip(scan, io.BytesIO(ocr.zip_result(scan)))  # loaded from a ZIP, the page says imported, not recognized
-    assert "Texterkennung für 120 Seiten importiert" in page() and "Datalab, Qualitätsstufe" not in page()
+    assert "120 Seiten · Text importiert" in page() and "Datalab, Qualitätsstufe" not in page()
     scans_page = page("scans")
     assert "Aktuell gespeichert: <b>120 Seiten</b>" in scans_page and "Scans ersetzen" in scans_page
     assert '<details class="advanced"><summary class="button-outline">Scans ersetzen</summary>' in scans_page  # the drop zone is folded away

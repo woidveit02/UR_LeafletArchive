@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
 JPEG_QUALITY, DPI = 75, 400  # as pipelines/01_pdf/tiff_to_pdf.py
 STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "ocr": "Text erkennen", "trennen": "Flugblätter trennen",
-         "angaben": "Metadaten", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
+         "angaben": "Metadaten erzeugen", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
 # what a step is for, said to somebody who does not know the system: under the step bar and as its tooltips
 STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
              "scans": "Die gescannten Seiten des Bandes hochladen.",

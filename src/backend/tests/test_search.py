@@ -250,6 +250,7 @@ def test_trends_count_copies_once(db, monkeypatch):
     copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
                        "Stre1kaufruf zur Blockade der Mensa. Polizei", date_iso="1969-02-01")
     leaflets["ocr"].copy_group = copy.copy_group = 7
+    leaflets["ocr"].canonical_leaflet_id = copy.canonical_leaflet_id = leaflets["ocr"].id
     db.commit()
     search.rebuild_search_index(db.get_bind())
 

@@ -232,6 +232,10 @@ def test_copy_overview(tmp_path, monkeypatch):
     assert "Nicht geprüft (1)" in show() and "Geprüft (3)" in show() and "Alle (4)" in show()
     assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 3
     assert show("unsinn").count("<li>") == 4  # an unknown filter shows everything
+    # four copies in one volume are one group of that volume
+    assert [r["volumes"] for r in leaflet_app.copy_rows()] == [{2}, {2}]
+    assert "Alle (4)" in leaflet_app.copy_list(page("/exemplare"), band=2).body.decode()
+    assert "Alle (0)" in leaflet_app.copy_list(page("/exemplare"), band=3).body.decode()
 
 
 # Tests if the leaflets a review split off are listed as checked, sortable by review date; a reverted review is not.
@@ -245,7 +249,8 @@ def test_separated_list(tmp_path, monkeypatch):
         page("/exemplare"), "geprueft", sort).context["rows"] if r["state"] == "getrennt"]
     assert rows("neu") == [(d.id, [c.id]), (b.id, [a.id])] and rows("alt") == [(b.id, [a.id]), (d.id, [c.id])]
     html = leaflet_app.copy_list(page("/exemplare"), "geprueft").body.decode()
-    assert "06.10.2026, 09:30</span><br>Getrennt" in html
+    assert "06.10.2026, 11:30</span><br>Getrennt" in html  # stored in UTC, shown in German summer time
+    assert leaflet_app.review_date("2026-12-01T09:30:00+00:00") == "01.12.2026, 10:30"
 
 
 # Tests if the detail page and the list say which copy is the main one and whether the group is checked.

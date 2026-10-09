@@ -15,6 +15,7 @@ from pathlib import Path
 import requests
 
 from . import importer, keys, ocr, segments
+from .database import fillDatabase
 from .boundaries import RESPONSIBLE_LINE, STAMP_INLINE, is_stamp_block, page_blocks
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,7 @@ CHARS_PER_TOKEN = 2.0  # (152,668 prompt and 37,311 answer tokens for 56 leaflet
 PROMPT_FILE = Path(__file__).with_name("metadata_prompt.txt")
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 BATCH_SIZE = 20
+MAX_BATCH = 50
 MAX_RETRIES = 5
 FORMATS = ["schema_strict", "schema", "json_object"]  # not every model takes a strict schema; then the next one
 ROUTING_ERROR = re.compile(r"No endpoints found|failed_routing_step|response_format", re.I)
@@ -116,9 +118,34 @@ def segment_texts(pages, first, last):
     return joined(marked), joined(plain), texts
 
 
+def custom_prompt_file():
+    return fillDatabase.DATA_DIR / "metadata_prompt.txt"
+
+
+def default_prompt():
+    return PROMPT_FILE.read_text(encoding="utf-8").replace("\r\n", "\n")
+
+
+def prompt_text():
+    """The edited instructions if there are any, else the ones shipped."""
+    try:
+        return custom_prompt_file().read_text(encoding="utf-8").replace("\r\n", "\n") or default_prompt()
+    except OSError:
+        return default_prompt()
+
+
+def save_prompt(text):
+    """Keeps text as the instructions; the shipped ones (or nothing) delete the edited file."""
+    text = text.replace("\r\n", "\n").strip("\n")
+    if not text.strip() or text == default_prompt().strip("\n"):
+        custom_prompt_file().unlink(missing_ok=True)
+    else:
+        custom_prompt_file().write_text(text + "\n", encoding="utf-8")
+
+
 def build_prompt(year, batch, known_orgs=(), hints=None, template=None):
     """batch: [(segment id, first page, last page, text)]; hints: {segment id: remark of the checks}."""
-    parts = [(template or PROMPT_FILE.read_text(encoding="utf-8")).rstrip("\n") + "\n"]
+    parts = [(template or default_prompt()).rstrip("\n") + "\n"]
     if known_orgs:
         parts.append("BEKANNTE GRUPPEN\n"
                      "Ist eine dieser Gruppen gemeint, benutze in `surface` genau diese Schreibweise.\n"
@@ -661,8 +688,8 @@ def finish(done, segs, texts, pages, year, forms):
     return results
 
 
-def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, template=None):
-    """Asks the model for every leaflet of segs (the segments of segments.json), BATCH_SIZE at a time. Every answer is
+def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, template=None, batch_size=BATCH_SIZE):
+    """Asks the model for every leaflet of segs (the segments of segments.json), batch_size at a time. Every answer is
     appended to checkpoint at once, so a new run asks only for what is missing. job: the dict the page polls."""
     job = job if job is not None else {}
     done = {}
@@ -684,7 +711,7 @@ def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, 
     todo = [s for s in segs if s["id"] not in done and not s.get("no_content")]
     keep([{"id": s["id"], **EMPTY} for s in todo if not texts[s["id"]][0]])
     todo = [s for s in todo if texts[s["id"]][0]]
-    batches = [todo[i:i + BATCH_SIZE] for i in range(0, len(todo), BATCH_SIZE)]
+    batches = [todo[i:i + batch_size] for i in range(0, len(todo), batch_size)]
     state, cost = {}, []
     job.update(parts=[{"label": f"{len(b)} Flugblätter", "state": "wartet"} for b in batches], cost=0.0,
                done=0, total=len(todo))
@@ -784,6 +811,22 @@ def leaflets(volume):
     return sorted((segments.load(volume) or {}).get("segments", []), key=lambda s: s["start_page"])
 
 
+HINT_KINDS = [("Datum", r"date_|Erscheinungsdatum|Eingangsstempel"), ("Beleg", r"Beleg|evidence|Block"),
+              ("Herausgeber", r"issuer|Unterzeichner|Stichwort|Person|Funktion|Name "),
+              ("Titel", r"title|Titel"), ("Reihe", r"series|issue")]
+
+
+def hint_counts(records):
+    """{kind: number of leaflets} for the remarks of the checks, in the order of HINT_KINDS."""
+    count = {}
+    for r in records:
+        kinds = {next((k for k, rx in HINT_KINDS if re.search(rx, p)), "Sonstiges") for p in r.get("_grounding") or []}
+        for kind in kinds:
+            count[kind] = count.get(kind, 0) + 1
+    order = [k for k, _ in HINT_KINDS] + ["Sonstiges"]
+    return dict(sorted(count.items(), key=lambda kv: order.index(kv[0])))
+
+
 def status(volume):
     """State for the page: "none", "partial" (answers kept from an interrupted run), "stale" (the cuts changed since)
     or "done", with model, cost and how many leaflets the checks found something on."""
@@ -795,8 +838,9 @@ def status(volume):
     ranges = [(s["start_page"], s["end_page"]) for s in segs]
     named = [r for r in doc["segments"] if not r.get("no_content")]
     return {"state": "done" if [(r["start_page"], r["end_page"]) for r in doc["segments"]] == ranges else "stale",
-            "model": doc.get("model"), "cost": ocr.dollar(doc.get("cost") or 0), "count": len(named),
-            "flagged": sum(bool(r.get("_grounding")) for r in named)}
+            "model": doc.get("model"), "model_name": dict((m[0], m[1]) for m in models()).get(doc.get("model"), doc.get("model")),
+            "cost": ocr.dollar(doc.get("cost") or 0), "count": len(named),
+            "flagged": sum(bool(r.get("_grounding")) for r in named), "hints": hint_counts(named)}
 
 
 def prices(volume):
@@ -806,14 +850,15 @@ def prices(volume):
     pages = page_blocks(ocr.result_path(volume))
     todo = [s for s in leaflets(volume) if not s.get("no_content")]
     chars = sum(len(segment_texts(pages, s["start_page"], s["end_page"])[0]) for s in todo)
-    chars += len(PROMPT_FILE.read_text(encoding="utf-8")) * -(-len(todo) // BATCH_SIZE)
+    chars += len(prompt_text()) * -(-len(todo) // BATCH_SIZE)
     tokens_in, tokens_out = chars / CHARS_PER_TOKEN, len(todo) * OUT_TOKENS
     return {m: "etwa " + ocr.dollar((tokens_in * p_in + tokens_out * p_out) * 1.05)  # asking again.replace("0,00 $", "unter 0,01 $")
             for m, _, p_in, p_out in models()}
 
 
-def start(volume, model, orgs):
-    """Runs in the background (poll importer.JOBS[(vz, "angaben")]). orgs: [(id, short name, full name)]."""
+def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
+    """Runs in the background (poll importer.JOBS[(vz, "angaben")]). orgs: [(id, short name, full name)]. prompt: the
+    instructions as shown on the page (kept for the next volumes); empty for the saved ones."""
     key = keys.get("openrouter")
     if not key:
         raise ValueError("Es fehlt der Zugang zu OpenRouter. Bitte unten den API-Key eintragen.")
@@ -825,6 +870,11 @@ def start(volume, model, orgs):
         raise ValueError("Zuerst die Flugblätter trennen und die Prüfung abschließen.")
     if importer.running(volume, JOB):
         raise ValueError("Die Metadaten werden schon erzeugt. Bitte warten.")
+    if not 1 <= batch_size <= MAX_BATCH:
+        raise ValueError(f"Die Batchgröße muss zwischen 1 und {MAX_BATCH} liegen.")
+    if prompt.strip():
+        save_prompt(prompt)
+    template = prompt_text()
     segs, year = leaflets(volume), volume.year
     job = importer.JOBS[(volume.vz, JOB)] = {"state": "running", "done": 0, "total": 0, "error": "",
                                             "started": time.time(), "parts": [], "unit": "Flugblättern fertig"}
@@ -832,7 +882,8 @@ def start(volume, model, orgs):
     def go():
         try:
             doc = run(segs, page_blocks(ocr.result_path(volume)), year, key, model, [o[1] for o in orgs if o[1]],
-                      registry(orgs), checkpoint_path(volume, segs), job)
+                      registry(orgs), checkpoint_path(volume, segs), job,
+                      template, batch_size)
             if doc is None:
                 job["state"] = "cancelled"
                 return

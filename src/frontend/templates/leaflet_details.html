@@ -255,6 +255,7 @@
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
     <script src="{{ url_for('static', path='meta-form.js') }}"></script>
     <script src="{{ url_for('static', path='evidence-pick.js') }}"></script>
+    <script src="{{ url_for('static', path='page-pair.js') }}"></script>
     {% if leaflet.highlight %}
     <script>
         // mark the search terms in the transcription and show hit #treffer-N (default: the first);
@@ -351,21 +352,11 @@
             popup.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });  // the backdrop
         }
 
-        const highlight = (els, on) => els.forEach((el) => el.classList.toggle('active', on));
-        const flash = (els) => {
-            els[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            highlight(els, true);
-            setTimeout(() => highlight(els, false), 1500);
-        };
+        const { highlight, flash, link } = PagePair;
 
         document.querySelectorAll('.ocr-block[data-block]').forEach((block) => {
             const box = document.querySelector(`.ocr-box[data-block="${block.dataset.block}"]`);
-            if (!box) return;
-            for (const el of [block, box]) {
-                el.addEventListener('mouseenter', () => highlight([block, box], true));
-                el.addEventListener('mouseleave', () => highlight([block, box], false));
-            }
-            box.addEventListener('click', () => flash([block]));
+            if (box) link(block, box);
         });
 
         const closeAll = () => document.querySelectorAll('.beleg').forEach((b) => {

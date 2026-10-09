@@ -191,6 +191,7 @@ def test_topic_bars_share_one_scale_and_list_top_issuers(monkeypatch):
     untopiced = Leaflet(volume_id=volume.id, start_page=6, end_page=6)
     test_session.add_all([work1, work1_copy, work2, work3, small_leaflet, untopiced])
     test_session.flush()
+    work1.canonical_leaflet_id = work1_copy.canonical_leaflet_id = work1.id
     test_session.add_all([
         LeafletIssuer(leaflet_id=work1.id, role="issuer", surface="AStA", org_id="asta"),
         LeafletIssuer(leaflet_id=work1_copy.id, role="issuer", surface="AStA", org_id="asta"),

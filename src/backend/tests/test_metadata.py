@@ -66,3 +66,20 @@ def test_top_models(monkeypatch):
         ("Bisher verwendet", [("x/a", "A · 2 Bände")]), ("Weitere Modelle", [("x/b", "B")])]
     monkeypatch.setattr(metadata, "models", lambda: [])  # offline: what was used stays
     assert metadata.top_models([]) == [("Bisher verwendet", [(metadata.DEFAULT_MODEL, metadata.DEFAULT_MODEL)])]
+
+
+# Tests the edited instructions: kept in their own file, the shipped text (or nothing) removes it, batches follow the size.
+def test_prompt_and_batches(tmp_path, monkeypatch):
+    monkeypatch.setattr(metadata, "custom_prompt_file", lambda: tmp_path / "p.txt")
+    assert metadata.prompt_text() == metadata.default_prompt()
+    metadata.save_prompt("Eigene Regeln\r\nzwei")
+    assert metadata.prompt_text() == "Eigene Regeln\nzwei\n"
+    metadata.save_prompt(metadata.default_prompt())
+    assert not (tmp_path / "p.txt").exists()
+    job = {}
+    monkeypatch.setattr(metadata, "extract", lambda *a: (_ for _ in ()).throw(RuntimeError("stop")))
+    try:
+        metadata.run(SEGS, PAGES, 1973, "key", "m/x", [], {}, tmp_path / "c.jsonl", job, batch_size=1)
+    except RuntimeError:
+        pass
+    assert len(job["parts"]) == 2

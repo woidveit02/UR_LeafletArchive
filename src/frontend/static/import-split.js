@@ -43,6 +43,7 @@
         cells.forEach((cell, i) => {
             const page = i + 1, out = excluded.has(page), starts = page === 1 || cuts.has(page - 1) || forced(page - 1);
             if (starts && !out) leaflet++;
+            if (out) cell.removeAttribute('data-group'); else cell.dataset.group = leaflet % 2;
             cell.classList.toggle('excluded', out);
             const cut = cell.querySelector('.split-cut');
             if (!cut) return;
@@ -58,7 +59,7 @@
             e.textContent = `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ${data.confirmed && !dirty ? 'Prüfung abgeschlossen' : `${all.filter(decided).length} von ${transitions} Übergängen geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
                 dirty ? ' · speichert …' : data.confirmed ? '' : data.saved ? '' : ' · noch nicht gesetzt'}`;
         });
-        finish.disabled = complete() && !dirty && data.confirmed;
+        finish.hidden = complete() && !dirty && data.confirmed;
         const missing = all.filter((a) => !decided(a)).length;
         finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Übergänge${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Übergänge sind geprüft';
         renderView();
@@ -67,7 +68,7 @@
     const all = Array.from({ length: transitions }, (_, i) => i + 1);
     const complete = () => all.every(decided);
     const kind = (a) => forced(a) ? ['on', 'Getrennt wegen Leerseite / Trennblatt'] : suggested.has(a) ? ['suggested', 'Trennung vorgeschlagen'] : hints.has(a) ? ['suggested', 'Mögliche fehlende Trennung']
-        : cuts.has(a) ? ['on', ''] : reviewed.has(a) ? ['', ''] : ['', 'Noch nicht geprüft'];
+        : cuts.has(a) ? ['on', 'Neues Flugblatt'] : reviewed.has(a) ? ['', 'Gehören zusammen'] : ['', 'Noch nicht geprüft'];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const renderView = (direction = 0) => {
         const a = at(), [style, text] = kind(a);
@@ -97,16 +98,16 @@
             const out = excluded.has(a + i), skip = f.querySelector('.split-skip');
             f.classList.toggle('excluded', out);
             skip.setAttribute('aria-pressed', out);
-            skip.textContent = out ? 'Wieder einbeziehen' : 'Leerseite / Trennblatt';
+            skip.textContent = out ? 'Wieder einbeziehen' : 'Als Leerseite / Trennblatt markieren';
             skip.title = out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`;
         });
-        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="tool-button" data-act="prev" title="Vorheriger Übergang"${a < 2 ? ' disabled' : ''}><kbd>←</kbd> Zurück</button>
-            <b class="${note ? '' : style}">${note || text}</b>
-            <button type="button" class="tool-button" data-act="next" title="Nächster Übergang"${current >= data.pages ? ' disabled' : ''}>Weiter <kbd>→</kbd></button>`;
-        decide.innerHTML = transitions < 1 ? '' : `<div class="split-buttons"><button type="button" class="tool-button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Schnitt setzen <kbd>S</kbd></button>
-            <button type="button" class="tool-button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Nicht setzen <kbd>N</kbd></button>
-            <button type="button" class="tool-button" data-act="undo" title="Rückgängig (U oder Strg+Z)"${undo.length ? '' : ' disabled'}>↶ Rückgängig <kbd>U</kbd></button>
-            <button type="button" class="tool-button" data-act="redo" title="Wiederholen (Strg+Y)" aria-label="Wiederholen"${redo.length ? '' : ' disabled'}>↷</button></div>`;
+        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="tool-button" data-act="prev" title="Vorheriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
+            <b class="${note ? '' : style}">${note || `Seiten ${a} und ${a + 1} · ${text}`}</b>
+            <button type="button" class="tool-button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter</button>`;
+        decide.innerHTML = transitions < 1 ? '' : `<div class="split-buttons"><button type="button" class="tool-button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Neues Flugblatt <kbd>S</kbd></button>
+            <button type="button" class="tool-button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Gehören zusammen <kbd>N</kbd></button></div>`;
+        $('split-undo').disabled = !undo.length;
+        $('split-redo').disabled = !redo.length;
     };
     const sets = [cuts, excluded, suggested, reviewed, hints];
     const sorted = (set) => [...set].sort((a, b) => a - b);
@@ -158,8 +159,7 @@
         else if (what === 'prev') go(at() - 1);
         else if (what === 'next') forward();
     };
-    decide.addEventListener('click', act);
-    nav.addEventListener('click', act);
+    stage.addEventListener('click', act);
 
     left.addEventListener('click', (e) => {
         const cut = e.target.closest('[data-cut]');
@@ -221,7 +221,7 @@
         try { await post(data.saveUrl, stored); data.saved = true; data.confirmed = stored.finish; changed = true; } catch (e) { dirty = true; fail(e.message); }
         render();
     };
-    const touch = () => { dirty = true; clearTimeout(timer); timer = setTimeout(flush, 600); };
+    const touch = () => { dirty = true; data.confirmed = false; clearTimeout(timer); timer = setTimeout(flush, 600); };
     finish.addEventListener('click', () => complete() ? flush(true) : nextOpen());
     $('split-suggest-text').addEventListener('click', () => {
         if ((data.saved || cuts.size) && !confirm('Der Vorschlag ersetzt die vorhandenen Schnitte. Fortfahren?')) return;

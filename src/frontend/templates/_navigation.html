@@ -16,5 +16,6 @@
                    value="{{ request.query_params.get('q', '') if path.startswith('/leaflets') else '' }}">
         </form>
         {% endif %}
+        <a class="topadmin{% if path.startswith(('/verwaltung', '/import', '/korrekturen', '/exemplare')) %} active" aria-current="page{% endif %}" href="/verwaltung">Verwaltung</a>
     </div>
 </header>

@@ -7,16 +7,19 @@
             <p class="meta">Dasselbe Flugblatt an mehreren Stellen im Bestand. Die Gruppen wurden automatisch am Text erkannt;
                 hier steht, welche schon geprüft sind. Ein Klick öffnet den Vergleich.
                 {% if first %}<a href="/leaflets/{{ first }}/exemplare">Ungeprüfte Gruppen nacheinander durchgehen →</a>{% endif %}</p>
+            {% if band %}<p class="meta">Nur Gruppen mit einem Exemplar in Nr. {{ '%03d' % band }} · <a href="/exemplare">alle Bände</a></p>{% endif %}
         </header>
+        {% set in_band = ('band=' ~ band) if band else '' %}
         <nav class="view-switch" aria-label="Prüfstand">
-            <a href="/exemplare"{% if status not in states %} aria-current="page"{% endif %}>Alle ({{ total }})</a>
+            <a href="/exemplare{{ '?' ~ in_band if band }}"{% if status not in states %} aria-current="page"{% endif %}>Alle ({{ total }})</a>
             {% for key, label in states.items() if counts[key] or key != 'neu' %}
-            <a href="/exemplare?status={{ key }}"{% if status == key %} aria-current="page"{% endif %}>{{ label }} ({{ counts[key] }})</a>
+            <a href="/exemplare?status={{ key }}{{ '&' ~ in_band if band }}"{% if status == key %} aria-current="page"{% endif %}>{{ label }} ({{ counts[key] }})</a>
             {% endfor %}
         </nav>
         {% if status == 'geprueft' %}
         <form class="filter" method="get" action="/exemplare">
             <input type="hidden" name="status" value="geprueft">
+            {% if band %}<input type="hidden" name="band" value="{{ band }}">{% endif %}
             <div class="filter-bar">
                 <p class="filter-result meta">Geprüfte Gruppen und Flugblätter, die bei der Prüfung aus einer Gruppe herausgenommen wurden.</p>
                 <label class="sort">Sortiert nach
