@@ -333,6 +333,7 @@ a:hover {
 }
 
 .status-badge.checked {
+    border-color: var(--success);
     background: var(--success-soft);
     color: var(--success);
 }
@@ -692,6 +693,12 @@ button:disabled {
     border: 1px solid var(--line);
     font-size: 1rem;
     line-height: 1.55;
+}
+
+.pair-grid .is-main img.leaflet-page,
+.copy-ocr[data-main] {  /* the main copy, framed like its card above */
+    border-color: #15803d;
+    box-shadow: 0 0 0 1px #15803d;
 }
 
 .copy-ocr.ocr-page {
@@ -1816,8 +1823,13 @@ select:focus {
     object-fit: contain;
 }
 
+.grid-page.left-out {  /* hatched like a blank page in the cutting view */
+    background: repeating-linear-gradient(-45deg, var(--surface-muted) 0 6px, var(--surface) 6px 12px);
+}
+
 .left-out .grid-scan img {
-    opacity: 0.5;
+    opacity: 0.35;
+    filter: grayscale(1);
 }
 
 .grid-scan:hover img {
@@ -3582,7 +3594,7 @@ a.topic-year.active .topic-bar {
 
 .step-head {  /* back and next left and right of the steps, the same place on every page */
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr) 7.5rem;
+    grid-template-columns: 6.5rem minmax(0, 1fr) 6.5rem;
     align-items: start;
     gap: 10px 14px;
     margin-bottom: 20px;
@@ -3606,7 +3618,7 @@ a.topic-year.active .topic-bar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 7.5rem;
+    min-width: 6.5rem;
     padding: 8px 14px;
     border: 1px solid var(--accent);
     border-radius: var(--radius);
@@ -3857,7 +3869,9 @@ a.topic-year.active .topic-bar {
 .step-switch a,
 .step-switch a.done,
 .step-switch a.todo {
-    padding-inline: 5px;
+    padding-inline: 4px;
+    font-size: 0.85rem;
+    white-space: nowrap;
     gap: 0;
     border-color: transparent;
     background: none;
@@ -4137,6 +4151,10 @@ summary.link-button::-webkit-details-marker {
     gap: 8px;
 }
 
+.split-work-actions .tool-button[hidden] {
+    display: none;
+}
+
 .text-button {
     border: 0;
     background: none;
@@ -4224,7 +4242,8 @@ summary.link-button::-webkit-details-marker {
 .split-left {
     display: flex;
     flex-direction: column;
-    padding: 0 4px;
+    padding: 0 0 0 4px;  /* on the right the last cut strip is margin enough */
+    scrollbar-width: thin;
 }
 
 .split-grid {
@@ -4232,13 +4251,14 @@ summary.link-button::-webkit-details-marker {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 10px 0;
     padding-top: 6px;
+    overflow-x: clip;  /* the hatching of a blank page at the start of a row reaches 12px to the left */
 }
 
 .split-page {
     position: relative;
     box-sizing: border-box;
     margin: 0;
-    padding: 6px 26px 6px 6px;
+    padding: 6px 30px 6px 6px;  /* the cut line, 12px from the right edge, sits midway between two thumbnails */
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     font-size: 0.85em;
@@ -4254,7 +4274,15 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-page.excluded img {
-    opacity: 0.4;
+    opacity: 0.35;
+    filter: grayscale(1);
+}
+
+.split-page.excluded figcaption::after {
+    content: "Leerseite";
+    font-size: 0.85em;
+    color: var(--ink-soft);
+    font-weight: 600;
 }
 
 .split-num {
@@ -4282,10 +4310,22 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-page.current,
-.split-page.next {
+.split-page.next::before {
     border-radius: var(--radius);
     background: var(--accent-soft);
     box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.split-page.next {
+    isolation: isolate;
+}
+
+.split-page.next::before {  /* ends before the page's own cut strip: the next transition is not part of the pair */
+    content: "";
+    position: absolute;
+    inset: 0 24px 0 0;  /* 6px beside the thumbnail, like on the left */
+    z-index: -1;
+    pointer-events: none;
 }
 
 .split-page.current.joined {
@@ -4293,13 +4333,18 @@ summary.link-button::-webkit-details-marker {
     box-shadow: inset 2px 0 0 var(--accent), inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent);
 }
 
-.split-page.next.joined {
+.split-page.next.joined::before {
     border-radius: 0 var(--radius) var(--radius) 0;
     box-shadow: inset -2px 0 0 var(--accent), inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent);
 }
 
+.split-page.current .split-cut.open::after {
+    background: var(--ink);
+}
+
 .split-cut {
     position: absolute;
+    z-index: 1;  /* above the hatching of a blank page next to it */
     top: 0;
     right: 0;
     bottom: 0;
@@ -4322,16 +4367,42 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-cut.suggested {
-    background: repeating-linear-gradient(to bottom, #e08a00 0 10px, transparent 10px 16px) center / 5px 100% no-repeat;
+    background: repeating-linear-gradient(to bottom, var(--muted) 0 10px, transparent 10px 16px) center / 5px 100% no-repeat;
 }
 
 .split-cut.checked {
     background: none;
 }
 
+.split-cut.open::after {  /* not decided yet */
+    content: "?";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 22px;
+    height: 22px;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--surface);
+    border-radius: 50%;
+    background: var(--muted);
+    color: #fff;
+    font: 700 13px/1 system-ui, sans-serif;
+}
+
+.split-cut:hover::after {
+    content: none;
+}
+
 .split-cut:disabled {
-    opacity: 0.4;
+    opacity: 1;  /* the cut beside a blank page is a cut like any other */
     cursor: default;
+}
+
+.split-cut:disabled:not(.on) {
+    opacity: 0.4;
 }
 
 .split-legend {
@@ -4351,10 +4422,11 @@ summary.link-button::-webkit-details-marker {
 
 .split-legend i.open {
     color: var(--muted);
+    font-weight: 700;
 }
 
 .split-legend i.suggested {
-    color: #e08a00;
+    color: var(--muted);
 }
 
 .split-pair {
@@ -4477,6 +4549,11 @@ summary.link-button::-webkit-details-marker {
     color: #e08a00;
 }
 
+.split-question {
+    margin: 0 0 6px;
+    font-weight: 600;
+}
+
 .split-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -4520,8 +4597,22 @@ summary.link-button::-webkit-details-marker {
     border: 1px solid var(--line);
 }
 
+.split-sheet.excluded {
+    background: repeating-linear-gradient(-45deg, var(--line-strong) 0 8px, transparent 8px 16px);
+}
+
 .split-sheet.excluded img {
-    opacity: 0.5;
+    opacity: 0.35;
+    filter: grayscale(1);
+    background: transparent;
+}
+
+.split-sheet.excluded figcaption {
+    background: var(--surface);
+}
+
+.split-sheet.excluded figcaption b::after {
+    content: " · Leerseite";
 }
 
 .split-sheet figcaption {
@@ -4750,8 +4841,39 @@ body.split-lock {
     }
 }
 
-.split-page[data-group="1"]:not(.current):not(.next) {
-    background: var(--surface-muted);
+.split-page {
+    --own: var(--surface);
+    --after: var(--surface);
+    --hatch: repeating-linear-gradient(-45deg, var(--surface-muted) 0 6px, var(--surface) 6px 12px);
+}
+
+.split-page[data-group="1"] {
+    --own: var(--surface-muted);
+}
+
+.split-page[data-after="1"] {
+    --after: var(--surface-muted);
+}
+
+.split-page:not(.current):not(.next) {
+    background: var(--own);
+}
+
+.split-page[data-after]:not(.current):not(.next) {  /* the cut line sits 12px from the right edge */
+    background: linear-gradient(to right, var(--own) calc(100% - 12px), var(--after) 0);
+}
+
+.split-page.excluded:not(.current):not(.next) {
+    isolation: isolate;
+}
+
+.split-page.excluded:not(.current):not(.next)::after {  /* one piece from cut line to cut line, so the stripes meet */
+    content: "";
+    position: absolute;
+    inset: 0 12px 0 -12px;
+    z-index: -1;
+    background: var(--hatch);
+    pointer-events: none;
 }
 
 .split-end .tool-button[hidden] {
@@ -5028,4 +5150,209 @@ h2 .count {
 
 .fix-history .fix-fields {
     font-size: 0.9rem;
+}
+
+.split-work .fix-list {
+    margin: 0 8px 12px;
+}
+
+.split-work .fix-list > li {
+    padding: 10px 0;
+}
+
+.release-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 8px;
+    border-top: 1px solid var(--line);
+}
+
+.release-row p {
+    margin: 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border: 1px solid var(--warning);
+    border-radius: 999px;
+    color: var(--warning);
+    font-size: 0.85rem;
+    font-weight: 600;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.task-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: task;
+}
+
+.task {
+    position: relative;
+    padding: 20px 8px 20px 44px;
+    border-top: 1px solid var(--line);
+    counter-increment: task;
+}
+
+.task::before {  /* the number, a check mark once done */
+    content: counter(task);
+    position: absolute;
+    top: 18px;
+    left: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    line-height: 26px;
+    text-align: center;
+}
+
+.task.done::before {
+    content: "\2713";
+    background: var(--surface-muted);
+    color: var(--ink-soft);
+}
+
+.task h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 12px;
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+}
+
+.task-state {
+    color: var(--warning);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.task.done .task-state {
+    color: var(--ink-soft);
+    font-weight: 400;
+}
+
+.task p {
+    margin: 0 0 8px;
+}
+
+.task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.redo-row {
+    margin-top: 8px;
+}
+
+.split-work .task h3 {
+    min-height: 26px;
+    margin-top: 0;
+    line-height: 26px;
+}
+
+.release-row p {
+    flex: 1 1 20rem;
+}
+
+.review-bar {  /* on the pages of a volume being checked in step 6 */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+}
+
+.review-bar .pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+}
+
+.issuer-review {  /* the scan beside the choice */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.issuer-evidence, .issuer-page {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+}
+
+.issuer-evidence {
+    outline: 3px solid var(--accent);
+}
+
+.issuer-choice fieldset {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+}
+
+.issuer-choice legend {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.issuer-choice label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.issuer-choice input[type="text"] {
+    width: min(100%, 24rem);
+    margin-top: 4px;
+}
+
+.issuer-save {
+    position: sticky;
+    bottom: 0;
+    padding: 12px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+}
+
+@media (max-width: 800px) {
+    .issuer-review {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.section-head + .result-list {  /* the heading has the line already */
+    margin-top: 0;
+    border-top: none;
+}
+
+.review-seen {
+    margin: 0;
+}
+
+.hint-texts {
+    margin: 4px 0 0;
+    padding-left: 1.2em;
+    font-size: 0.9rem;
+    font-weight: 400;
 }

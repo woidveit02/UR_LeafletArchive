@@ -59,6 +59,23 @@ def test_run(tmp_path, monkeypatch):
     assert len(calls) == asked
 
 
+# Tests if after a new split the answer of a leaflet with the same pages is taken over, and only the others are asked.
+def test_run_takes_over_unchanged_leaflets(tmp_path, monkeypatch):
+    calls = []
+
+    def post(url, **kw):
+        calls.append(kw["json"])
+        return Answer(200, {"choices": [{"message": {"content": json.dumps({"results": [{**RECORD, "id": 5}]})}}], "usage": {"cost": 0.01}})
+
+    monkeypatch.setattr(metadata.requests, "post", post)
+    seed = {(1, 2): {**RECORD, "title": "Aus dem letzten Lauf"}}
+    segs = [{"id": 5, "start_page": 1, "end_page": 2}, {"id": 6, "start_page": 3, "end_page": 3, "no_content": True}]
+    doc = metadata.run(segs, PAGES, 1973, "key", "some/model", [], {}, tmp_path / "neu.jsonl", seed=seed)
+    assert doc["segments"][0]["title"] == "Aus dem letzten Lauf" and not calls
+    other = metadata.run([{"id": 5, "start_page": 1, "end_page": 3}], PAGES, 1973, "key", "some/model", [], {}, tmp_path / "andere.jsonl", seed=seed)
+    assert other["segments"][0]["title"] == "Mensa-Preise steigen" and len(calls) == 1
+
+
 # Tests if a model OpenRouter no longer lists is not offered, also not the default.
 def test_top_models(monkeypatch):
     monkeypatch.setattr(metadata, "models", lambda: [("x/a", "A", 0, 0), ("x/b", "B", 0, 0)])
@@ -83,3 +100,42 @@ def test_prompt_and_batches(tmp_path, monkeypatch):
     except RuntimeError:
         pass
     assert len(job["parts"]) == 2
+
+
+# Tests if the remarks of the checks are sorted into kinds, per leaflet and counted over the volume.
+def test_hint_kinds():
+    a = {"_grounding": ["title: zu lang", "date_iso: unklar"]}
+    b = {"_grounding": ["etwas anderes"]}
+    assert metadata.hint_kinds(a) == ["Datum", "Titel"] and metadata.hint_kinds({}) == []
+    assert metadata.hint_counts([a, b, {"_grounding": ["date_type"]}]) == {"Datum": 2, "Titel": 1, "Sonstiges": 1}
+
+
+# Tests if a date in another year than the volume's is no remark when the weekday beside it fits, and if "Passt so"
+# is kept by the pages of the leaflet, the last mark counting.
+def test_weekday_and_seen(tmp_path, monkeypatch):
+    assert metadata.weekday_fits("1972-11-08", "MITTWOCH, 8. 11. 72") and metadata.weekday_fits("1972-01-11", "DI. 11.1.72")
+    assert metadata.weekday_fits("1972-09-27", "Mittwoch, den 27. 9. 1972")
+    assert not metadata.weekday_fits("1972-11-08", "Donnerstag, 8. 11. 72") and not metadata.weekday_fits("1972-11-08", "so wurde 8 Uhr")
+    assert not metadata.weekday_fits("1972-11", "Mittwoch, 11. 72") and not metadata.weekday_fits("", None)
+    msg = "date_iso 1972-11-08 passt nicht zum Jahrgang 1973"
+    assert metadata.remarks({"_grounding": [msg], "date_evidence": "MITTWOCH, 8. 11. 72"}) == []
+    assert metadata.remarks({"_grounding": [msg, "title_evidence nicht im Text"], "date_evidence": "8. 11. 72"}) == [msg, "title_evidence nicht im Text"]
+    assert "vor dem Jahr des Bandes (1973)" in metadata.hint_text(msg)
+    monkeypatch.setattr(metadata.fillDatabase, "CHECKED", tmp_path / "checked.jsonl")
+    volume, leaflet = type("V", (), {"stem": "0118_0015"})(), type("L", (), {"start_page": 3, "end_page": 4})()
+    metadata.mark_seen(volume, leaflet)
+    metadata.mark_seen(volume, leaflet, False)
+    lines = [json.loads(x) for x in (tmp_path / "checked.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [(x["volume"], x["start_page"], x["end_page"], x["seen"]) for x in lines] == [("0118_0015", 3, 4, True), ("0118_0015", 3, 4, False)]
+
+
+# Tests if the remarks of the checks are put into plain German, dates written as usual, and an unknown one stays as it is.
+def test_hint_text():
+    assert metadata.hint_text("date_iso 1972-11-08 passt nicht zum Jahrgang 1973").startswith("Datum 08.11.1972 liegt vor dem Jahr des Bandes (1973).")
+    assert metadata.hint_text("issuer 'L. Zeise': Name 'L. Zeise' nicht im Beleg") == "Herausgeber „L. Zeise“: „L. Zeise“ steht nicht in der angegebenen Belegstelle."
+    assert "einem Bild" in metadata.hint_text("issuer 'AStA': Block-id unbekannt oder Abbildung: 5-1")
+    # a quote that differs from the text only in spaces and punctuation is found
+    assert metadata.match_kind("L. Zeise", "verantw: L.Zeise 84 Grünthal Keilbergstr.6") == "exakt"
+    assert metadata.match_kind("L. Zeise", "verantw: M.Meier 84 Grünthal") is None
+    assert metadata.hint_text("title_evidence nicht im Text") == "Titel: Die Belegstelle steht nicht im erkannten Text."
+    assert metadata.hint_text("etwas ganz anderes") == "etwas ganz anderes"

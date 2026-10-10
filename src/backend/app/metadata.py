@@ -14,8 +14,8 @@ from pathlib import Path
 
 import requests
 
-from . import importer, keys, ocr, segments
-from .database import fillDatabase
+from . import copy_search, importer, keys, ocr, segments
+from .database import corrections, fillDatabase
 from .boundaries import RESPONSIBLE_LINE, STAMP_INLINE, is_stamp_block, page_blocks
 
 logger = logging.getLogger(__name__)
@@ -367,6 +367,8 @@ def match_kind(quote, text, threshold=0.9):
         return None
     if q in t:
         return "exakt"
+    if len(s := _squeeze(quote)) >= 6 and s in _squeeze(text):  # "L. Zeise" for "L.Zeise": only spaces and punctuation differ
+        return "exakt"
     n = len(q)
     if n < 8 or n > len(t):
         return None
@@ -688,9 +690,10 @@ def finish(done, segs, texts, pages, year, forms):
     return results
 
 
-def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, template=None, batch_size=BATCH_SIZE):
+def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, template=None, batch_size=BATCH_SIZE, seed=None):
     """Asks the model for every leaflet of segs (the segments of segments.json), batch_size at a time. Every answer is
-    appended to checkpoint at once, so a new run asks only for what is missing. job: the dict the page polls."""
+    appended to checkpoint at once, so a new run asks only for what is missing. seed: {(first page, last page): answer}
+    of an earlier run, taken over for the leaflets with the same pages. job: the dict the page polls."""
     job = job if job is not None else {}
     done = {}
     if checkpoint.is_file():
@@ -707,14 +710,16 @@ def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, 
         done.update((r["id"], r) for r in records)
 
     segs = sorted(segs, key=lambda s: s["start_page"])
+    keep([{**seed[s["start_page"], s["end_page"]], "id": s["id"]} for s in segs
+          if s["id"] not in done and (s["start_page"], s["end_page"]) in (seed or {})])
     texts = {s["id"]: segment_texts(pages, s["start_page"], s["end_page"]) for s in segs}
     todo = [s for s in segs if s["id"] not in done and not s.get("no_content")]
     keep([{"id": s["id"], **EMPTY} for s in todo if not texts[s["id"]][0]])
     todo = [s for s in todo if texts[s["id"]][0]]
     batches = [todo[i:i + batch_size] for i in range(0, len(todo), batch_size)]
     state, cost = {}, []
-    job.update(parts=[{"label": f"{len(b)} Flugblätter", "state": "wartet"} for b in batches], cost=0.0,
-               done=0, total=len(todo))
+    job.update(parts=[{"label": f"{len(b)} {'Flugblatt' if len(b) == 1 else 'Flugblätter'}", "state": "wartet"} for b in batches], cost=0.0,
+               done=0, total=len(todo), unit="Flugblatt fertig" if len(todo) == 1 else "Flugblättern fertig")
     for part, batch in zip(job["parts"], batches):
         if job.get("cancel"):
             return None
@@ -807,6 +812,28 @@ def checkpoint_path(volume, segs):
     return importer.ocr_dir(volume) / f"metadata-{hashlib.sha1(ranges.encode()).hexdigest()[:8]}.jsonl"
 
 
+def earlier(volume):
+    """(model, prompt, {(first page, last page): answer}) of the last finished run: its answers per leaflet, as they were kept
+    while it ran. After a new split a leaflet with the same pages needs no new answer."""
+    try:
+        doc = json.loads(result_path(volume).read_text(encoding="utf-8"))
+        lines = checkpoint_path(volume, doc["segments"]).read_text(encoding="utf-8").splitlines()
+    except (OSError, ValueError, KeyError):
+        return None, None, {}
+    kept = {}
+    for line in lines:
+        try:
+            kept[json.loads(line)["id"]] = json.loads(line)
+        except (ValueError, KeyError, TypeError):
+            pass
+    return doc.get("model"), doc.get("prompt"), {(s["start_page"], s["end_page"]): kept[s["id"]]
+                                                 for s in doc["segments"] if s["id"] in kept and not s.get("no_content")}
+
+
+def prompt_id(template):
+    return hashlib.sha1((template or "").encode()).hexdigest()[:8]
+
+
 def leaflets(volume):
     return sorted((segments.load(volume) or {}).get("segments", []), key=lambda s: s["start_page"])
 
@@ -814,17 +841,143 @@ def leaflets(volume):
 HINT_KINDS = [("Datum", r"date_|Erscheinungsdatum|Eingangsstempel"), ("Beleg", r"Beleg|evidence|Block"),
               ("Herausgeber", r"issuer|Unterzeichner|Stichwort|Person|Funktion|Name "),
               ("Titel", r"title|Titel"), ("Reihe", r"series|issue")]
+KIND_ORDER = [k for k, _ in HINT_KINDS] + ["Sonstiges"]
+
+
+def hint_kinds(record):
+    """What the remarks of the checks on one leaflet are about, in the order of HINT_KINDS."""
+    kinds = {next((k for k, rx in HINT_KINDS if re.search(rx, p)), "Sonstiges") for p in remarks(record)}
+    return [k for k in KIND_ORDER if k in kinds]
+
+
+FIELD = {"title": "Titel", "date": "Datum"}
+HINT_TEXTS = [  # (message of the pipeline's check, the sentence for the reader); the first that fits wins
+    (r"date_iso (\S+) passt nicht zum Jahrgang (\d{4})",
+     lambda d, y: f"Datum {d} liegt {'vor' if int(d[-4:]) < int(y) else 'nach'} dem Jahr des Bandes ({y}). Das kommt vor, wenn ein Blatt erst später "
+                  "abgeheftet wurde. Prüfen, wenn im Text ein anderes Jahr steht."),
+    (r"Erscheinungsdatum (\S+) liegt nach dem Eingangsstempel (\S+)",
+     lambda d, e: f"Erscheinungsdatum {d} liegt nach dem Eingangsstempel {e}. Das ist unwahrscheinlich, eines von beiden prüfen."),
+    (r"date_type=issued, aber der Beleg steht mitten im Text", lambda: "Datum: Die Belegstelle steht mitten im Text, vermutlich ist es kein Erscheinungsdatum."),
+    (r"date_type=undated, aber date_evidence", lambda: "Datum: Es gibt eine Belegstelle, obwohl das Blatt als undatiert gilt."),
+    (r"Person als issuer: '(.*)'", lambda n: f"Herausgeber „{n}“ ist vermutlich eine Person und gehört zu den Unterzeichnenden."),
+    (r"issuer '(.*)': Stichwort bei Organisation",
+     lambda n: f"Herausgeber „{n}“: Ein Stichwort wie „Verantwortlich“ passt nicht zu einer Organisation, vermutlich ist es eine Person."),
+    (r"issuer '(.*)': (?:Name|Funktion|Stichwort) '(.*)' nicht im Beleg", lambda n, w: f"Herausgeber „{n}“: „{w}“ steht nicht in der angegebenen Belegstelle."),
+    (r"issuer-evidence nicht im Text: '(.*)'", lambda n: f"Herausgeber „{n}“: Die Belegstelle steht nicht im erkannten Text."),
+    (r"issuer '(.*)': Block-id unbekannt",
+     lambda n: f"Herausgeber „{n}“: Der Name stammt aus einem Bild (z. B. einem Logo) oder einem Block, den es nicht gibt. Die App zeigt deshalb keine Belegstelle. Auf dem Blatt prüfen, ob der Name dort steht."),
+    (r"issuer '(.*)': Beleg steht nicht in den genannten",
+     lambda n: f"Herausgeber „{n}“: Der zitierte Wortlaut steht nicht in den Textblöcken, die als Beleg angegeben sind."),
+    (r"(title|date): Block-id unbekannt",
+     lambda f: f"{FIELD[f]}: Die Angabe stammt aus einem Bild oder einem Block, den es nicht gibt. Die App zeigt deshalb keine Belegstelle."),
+    (r"(title|date): Beleg steht nicht in den genannten",
+     lambda f: f"{FIELD[f]}: Der zitierte Wortlaut steht nicht in den Textblöcken, die als Beleg angegeben sind."),
+    (r"(title|date)_evidence nicht im Text", lambda f: f"{FIELD[f]}: Die Belegstelle steht nicht im erkannten Text."),
+    (r"title: Incipit ohne Beleg|title_type=original ohne Belegzitat", lambda: "Titel: Zum Titel fehlt die Belegstelle."),
+    (r"Titel wirkt übersetzt", lambda: "Titel: Er wirkt übersetzt oder erfunden (englische Wörter, kein Beleg im Text)."),
+    (r"series nicht im Text: '(.*)'", lambda s: f"Reihe „{s}“ steht nicht im erkannten Text."),
+    (r"issue gesetzt, aber keine series", lambda: "Reihe: Eine Nummer ist angegeben, aber keine Reihe."),
+    (r"Unterzeichner fehlt \(Verantwortlich-Zeile\): (.*)", lambda n: f"In der Verantwortlich-Zeile steht {n}, bei den Unterzeichnenden fehlt der Name."),
+    (r"Stichwort fehlt \(Verantwortlich-Zeile\): (.*)", lambda n: f"{n}: Das Stichwort aus der Verantwortlich-Zeile fehlt bei den Unterzeichnenden."),
+]
+
+
+def hint_text(message):
+    """One remark of the checks in plain German; one that fits no rule is shown as it is."""
+    message = re.sub(r"\b(\d{4})-(\d\d)(?:-(\d\d))?\b", lambda m: ".".join(g for g in (m[3], m[2], m[1]) if g), message)
+    for rx, say in HINT_TEXTS:
+        if m := re.search(rx, message):
+            return say(*m.groups())
+    return message
+
+
+WEEKDAY = re.compile(r"\b(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonnabend|sonntag|mo|di|mi|do|fr|sa|so)\b"
+                     r"(?=[.,\s]*(?:den\s+)?\d)", re.I)
+DAYS = {"mo": 0, "di": 1, "mi": 2, "do": 3, "fr": 4, "sa": 5, "so": 6}
+
+
+def weekday_fits(iso, evidence):
+    """Whether the weekday written beside a date ("Mittwoch, 8. 11. 72") is the weekday of that date."""
+    try:
+        day = datetime.fromisoformat(iso).weekday()
+    except ValueError:
+        return False
+    return any((5 if m[1].lower() == "sonnabend" else DAYS[m[1][:2].lower()]) == day for m in WEEKDAY.finditer(evidence or ""))
+
+
+def remarks(record):
+    """The remarks of the checks worth a look: a date outside the year of the volume is none when the weekday written
+    beside it fits, it is a leaflet of the year before that was filed later."""
+    return [p for p in record.get("_grounding") or []
+            if not ((m := re.match(r"date_iso (\d{4}-\d\d-\d\d) passt nicht zum Jahrgang", p)) and weekday_fits(m[1], record.get("date_evidence")))]
 
 
 def hint_counts(records):
     """{kind: number of leaflets} for the remarks of the checks, in the order of HINT_KINDS."""
-    count = {}
-    for r in records:
-        kinds = {next((k for k, rx in HINT_KINDS if re.search(rx, p)), "Sonstiges") for p in r.get("_grounding") or []}
-        for kind in kinds:
-            count[kind] = count.get(kind, 0) + 1
-    order = [k for k, _ in HINT_KINDS] + ["Sonstiges"]
-    return dict(sorted(count.items(), key=lambda kv: order.index(kv[0])))
+    kinds = [k for r in records for k in hint_kinds(r)]
+    return {k: kinds.count(k) for k in KIND_ORDER if k in kinds}
+
+
+PREPARE = "anlegen"
+
+
+def create_leaflets(volume, job=None):
+    """Step 6: the leaflets as a draft in the database, from the metadata of step 5, and their copies."""
+    step = lambda i, state: job and (job["parts"][i].update(state=state, since=time.time()), job.update(done=i + (state == "fertig")))
+    step(0, "läuft")
+    doc = json.loads(result_path(volume).read_text(encoding="utf-8"))
+    doc["source_pdf"] = f"{volume.stem}.pdf"  # the import finds the scan by it, as in the files of the pipeline
+    (fillDatabase.DATA_DIR / f"nr{volume.vz:03d}_metadata.json").write_text(
+        json.dumps(doc, ensure_ascii=False, indent=2), encoding="utf-8")
+    fillDatabase.import_volume(volume.vz)
+    step(0, "fertig")
+    step(1, "läuft")
+    copy_search.add(volume)
+    step(1, "fertig")
+
+
+def start_create(volume):
+    """create_leaflets in the background, so step 6 can show its progress; poll importer.JOBS[(vz, PREPARE)]."""
+    now = time.time()
+    job = importer.JOBS[(volume.vz, PREPARE)] = {
+        "state": "running", "done": 0, "total": 2, "unit": "Teilen fertig", "error": "", "started": now,
+        "parts": [{"label": "Flugblätter übernehmen", "state": "wartet", "since": now},
+                  {"label": "Duplikate in allen Bänden suchen", "state": "wartet", "since": now}]}
+
+    def go():
+        try:  # ponytail: shares the app's one database session with the requests, as the other jobs do
+            create_leaflets(volume, job)
+            job["state"] = "done"
+        except Exception as error:  # a thread must report, not die silently
+            logger.exception("preparing the leaflets failed")
+            job.update(state="error", error=f"Die Flugblätter ließen sich nicht vorbereiten: {error}")
+
+    threading.Thread(target=go, daemon=True).start()
+
+
+def flagged_leaflets(volume):
+    """(leaflet, remarks in plain German, seen) for each created leaflet the checks found something on. seen: marked
+    "Passt so", or corrected since. Not a copy whose group is checked: its details are those of the main copy, which is
+    looked at there."""
+    doc = json.loads(result_path(volume).read_text(encoding="utf-8"))
+    by_range = {(lf.start_page, lf.end_page): lf
+                for lf in fillDatabase.session.query(fillDatabase.Leaflet).filter_by(volume_id=volume.id)
+                if not (lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id))}
+    checked = corrections.by_segment(corrections.load(fillDatabase.CHECKED))
+    fixed = corrections.by_segment(corrections.load(fillDatabase.CORRECTIONS))
+
+    def seen(lf):
+        key = (volume.stem, lf.start_page, lf.end_page)
+        return checked[key][-1]["seen"] if key in checked else key in fixed  # the last mark counts
+    return [(by_range[r["start_page"], r["end_page"]], [hint_text(p) for p in remarks(r)], seen(by_range[r["start_page"], r["end_page"]]))
+            for r in doc["segments"]
+            if remarks(r) and not r.get("no_content") and (r["start_page"], r["end_page"]) in by_range]
+
+
+def mark_seen(volume, leaflet, seen=True):
+    """"Passt so" (or taking it back) for the remarks on a leaflet; kept by its pages, so preparing again keeps it."""
+    corrections.append(fillDatabase.CHECKED, [{"volume": volume.stem, "start_page": leaflet.start_page,
+                                               "end_page": leaflet.end_page, "field": "hints", "seen": seen}])
 
 
 def status(volume):
@@ -840,7 +993,9 @@ def status(volume):
     return {"state": "done" if [(r["start_page"], r["end_page"]) for r in doc["segments"]] == ranges else "stale",
             "model": doc.get("model"), "model_name": dict((m[0], m[1]) for m in models()).get(doc.get("model"), doc.get("model")),
             "cost": ocr.dollar(doc.get("cost") or 0), "count": len(named),
-            "flagged": sum(bool(r.get("_grounding")) for r in named), "hints": hint_counts(named)}
+            "now": sum(not s.get("no_content") for s in segs),
+            "same": len({(s["start_page"], s["end_page"]) for s in segs if not s.get("no_content")} & set(earlier(volume)[2])),
+            "flagged": sum(bool(remarks(r)) for r in named), "hints": hint_counts(named)}
 
 
 def prices(volume):
@@ -849,10 +1004,13 @@ def prices(volume):
         return {}
     pages = page_blocks(ocr.result_path(volume))
     todo = [s for s in leaflets(volume) if not s.get("no_content")]
-    chars = sum(len(segment_texts(pages, s["start_page"], s["end_page"])[0]) for s in todo)
-    chars += len(prompt_text()) * -(-len(todo) // BATCH_SIZE)
-    tokens_in, tokens_out = chars / CHARS_PER_TOKEN, len(todo) * OUT_TOKENS
-    return {m: "etwa " + ocr.dollar((tokens_in * p_in + tokens_out * p_out) * 1.05)  # asking again.replace("0,00 $", "unter 0,01 $")
+    before_model, _, before = earlier(volume)
+
+    def price(asked, p_in, p_out):
+        chars = sum(len(segment_texts(pages, s["start_page"], s["end_page"])[0]) for s in asked)
+        chars += len(prompt_text()) * -(-len(asked) // BATCH_SIZE)
+        return "etwa " + ocr.dollar((chars / CHARS_PER_TOKEN * p_in + len(asked) * OUT_TOKENS * p_out) * 1.05)  # asking again
+    return {m: price([s for s in todo if m != before_model or (s["start_page"], s["end_page"]) not in before], p_in, p_out)  # leaflets of the last run cost nothing
             for m, _, p_in, p_out in models()}
 
 
@@ -876,6 +1034,8 @@ def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
         save_prompt(prompt)
     template = prompt_text()
     segs, year = leaflets(volume), volume.year
+    before_model, before_prompt, before = earlier(volume)
+    seed = before if before_model == model and before_prompt in (None, prompt_id(template)) else {}  # an answer of another model or prompt does not carry over
     job = importer.JOBS[(volume.vz, JOB)] = {"state": "running", "done": 0, "total": 0, "error": "",
                                             "started": time.time(), "parts": [], "unit": "Flugblättern fertig"}
 
@@ -883,10 +1043,11 @@ def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
         try:
             doc = run(segs, page_blocks(ocr.result_path(volume)), year, key, model, [o[1] for o in orgs if o[1]],
                       registry(orgs), checkpoint_path(volume, segs), job,
-                      template, batch_size)
+                      template, batch_size, seed)
             if doc is None:
                 job["state"] = "cancelled"
                 return
+            doc["prompt"] = prompt_id(template)
             result_path(volume).write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
             job["state"] = "done"
         except Exception as error:  # report from the thread

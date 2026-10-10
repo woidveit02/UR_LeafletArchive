@@ -66,12 +66,12 @@
             <progress></progress>
             <span class="meta upload-text"></span>
             <ul id="ocr-parts" class="ocr-parts"></ul>
-            <button type="button" id="ocr-cancel" class="button-outline" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>
+            {% if cancel_url %}<button type="button" id="ocr-cancel" class="button-outline" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
         </div>
         {% endmacro %}
         <header class="page-head">
             <p class="meta"><a href="/verwaltung">← Zur Verwaltung</a></p>
-            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %}</h1>
+            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }} <span class="status-badge">nicht freigegeben</span>{% else %}Band hinzufügen{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
         {% set done = done or [] %}
@@ -170,6 +170,7 @@
             <div class="split-work-head">
                 <span class="split-count{{ ' done' if split.confirmed }}"></span>
                 <span class="split-work-actions">
+                    <button type="button" id="split-finish-page" class="tool-button primary" hidden>Prüfung abschließen</button>
                     {% if split.confirmed %}<button type="button" id="split-open" class="tool-button">Einteilung ansehen</button>
                     {% else %}<button type="button" id="split-open" class="tool-button primary">Seiten prüfen</button>{% endif %}
                 </span>
@@ -197,7 +198,7 @@
                 <ol>
                     <li><b>Einteilung wählen:</b> Lass dir Trennungen aus dem Text vorschlagen, lade eine vorhandene Liste oder beginne von Hand. Vorschläge aus dem Text sind unsicher:
                         Sie finden nicht jede Grenze und setzen manche falsch.</li>
-                    <li><b>Seiten prüfen:</b> Öffne die Schnittansicht. Bei den beiden angezeigten Seiten entscheidest du mit „Neues Flugblatt“ oder „Gehören zusammen“, ob ein neues Flugblatt beginnt.
+                    <li><b>Seiten prüfen:</b> Öffne die Ansicht mit „Seiten prüfen“. Bei jedem Paar benachbarter Seiten entscheidest du, ob dazwischen getrennt wird, also mit der rechten Seite ein neues Flugblatt beginnt.
                         Jeder Vorschlag muss bestätigt oder verworfen werden. Eine geladene Liste gilt als bestätigt, mögliche fehlende Trennungen werden zusätzlich angezeigt.</li>
                     <li><b>Prüfung abschließen:</b> Änderungen werden automatisch gespeichert, du kannst jederzeit unterbrechen und später fortsetzen. Sind alle Übergänge geprüft,
                         schließt „Prüfung abschließen“ den Schritt ab, dann kannst du weitergehen.</li>
@@ -208,7 +209,7 @@
                         am Seitenkopf, ein Impressum („Verantwortlich“, „V. i. S. d. P.“) auf der Seite davor sowie ein anderer Herausgeber oder ein anderes Thema.</p>
                     <p>Dagegen sprechen eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“), ein Text, der mitten im Satz einsetzt, und „b. w.“ oder „bitte wenden!“ auf der Seite davor.
                         Die Rückseite gehört dann dazu, auch mit eigener Kopfleiste. Ein einzelnes Merkmal reicht nicht immer: Auch in einem mehrseitigen Flugblatt kommen neue Überschriften, Daten oder Impressen vor.</p>
-                    <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Als Leerseite / Trennblatt markieren“, die Schnitte davor und danach setzen sich von selbst,
+                    <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Als Leerseite / Trennblatt markieren“, die Trennungen davor und danach setzen sich von selbst,
                         die Seite wird nicht mitgezählt. Trägt eine Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt. Hefte, Pressespiegel und Kalenderseiten mit eigenem Datum
                         je Seite sind meist ein Flugblatt. Im Zweifel nicht schneiden.</p>
                 </details>
@@ -219,17 +220,17 @@
 3
 4-9</pre>
                     <p>Das sind drei Flugblätter: Seite 1 bis 2, Seite 3 allein und Seite 4 bis 9. Seiten, die zu keinem Flugblatt gehören, bekommen ein „x“ davor, etwa <code>x 17</code>.
-                        Jede Seite muss genau einmal vorkommen, sonst nennt dir die Meldung die Seiten, die nicht passen. Die Liste ersetzt die vorhandenen Schnitte und gilt als geprüft.
+                        Jede Seite muss genau einmal vorkommen, sonst nennt dir die Meldung die Seiten, die nicht passen. Die Liste ersetzt die vorhandenen Trennungen und gilt als geprüft.
                         Ist der Text schon erkannt, markiert die App zusätzlich Stellen, an denen sie eine Trennung vermutet, die in der Liste fehlt („Mögliche fehlende Trennung“).
                         Die Einteilung bleibt unverändert, bis du darüber entscheidest. „Liste herunterladen“ speichert die aktuelle Einteilung im selben Format.
                         <a href="{{ url_for('static', path='beispiel-flugblaetter.txt') }}" download>Beispieldatei herunterladen</a></p>
                 </details>
                 <details class="advanced">
                     <summary>Bedienung und Tastenkürzel</summary>
-                    <p>Links stehen alle Seiten, rechts immer zwei benachbarte groß. Ein Klick auf eine Seite links zeigt sie mit ihrer Nachbarseite. Nach „Neues Flugblatt“ (S) oder „Gehören zusammen“ (N)
+                    <p>Links stehen alle Seiten, rechts immer zwei benachbarte groß. Ein Klick auf eine Seite links zeigt sie mit ihrer Nachbarseite. Nach „Ja, trennen“ (T) oder „Nein, gehören zusammen“ (Z)
                         zeigt die Ansicht den nächsten offenen Übergang. Mit „Weiter“ (Taste →) gehst du ohne Entscheidung zum nächsten. Wo nichts vorgeschlagen ist, gilt der Übergang damit als geprüft.
-                        Der Streifen rechts an einer Seite links setzt oder entfernt den Schnitt ebenfalls. „Prüfung abschließen“ springt zum nächsten offenen Übergang, solange noch einer fehlt.</p>
-                    <p>Tasten: Pfeile blättern, S und N entscheiden, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc schließt die Ansicht.</p>
+                        Der Streifen rechts an einer Seite links setzt oder entfernt die Trennung ebenfalls. „Prüfung abschließen“ springt zum nächsten offenen Übergang, solange noch einer fehlt.</p>
+                    <p>Tasten: Pfeile blättern, T (links) trennt, Z (rechts) lässt zusammen, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc schließt die Ansicht.</p>
                 </details>
                 </div>
             </details>
@@ -241,7 +242,7 @@
         <div id="split-stage" class="split-stage" hidden>
             <div class="split-bar">
                 <span class="split-count"></span>
-                <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt den Schnitt nach ihr. Grau gestrichelt: noch nicht geprüft, ohne Linie: geprüft, kein Schnitt."><i class="on">▮</i> Schnitt · <i class="suggested">▮</i> Vorschlag · <i class="open">┆</i> ungeprüft</span>
+                <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt die Trennung nach ihr. Fragezeichen: noch nicht entschieden, ohne Zeichen: gehören zusammen."><i class="on">▮</i> Trennung · <i class="suggested">▮</i> Vorschlag · <i class="open">?</i> offen</span>
                 <span class="split-end">
                     <button type="button" id="split-undo" class="tool-button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig</button>
                     <button type="button" id="split-redo" class="tool-button" data-act="redo" title="Wiederholen (Strg+Y)" disabled>Wiederholen</button>
@@ -391,7 +392,8 @@
         {% if meta.flagged %}<p>{{ meta.flagged }} Flugblätter haben Hinweise der Prüfung ({% for kind, n in meta.hints.items() %}{{ kind }} {{ n }}{{ ', ' if not loop.last }}{% endfor %}).</p>{% endif %}
         <p class="meta" title="{{ meta.model }}">Modell: {{ meta.model_name }} · Kosten laut OpenRouter etwa {{ meta.cost }}</p>
         {% elif meta.state == 'stale' %}
-        <p class="form-warn" role="status">Die Flugblätter wurden seit dem letzten Lauf anders getrennt. Bitte die Angaben neu erzeugen.</p>
+        <p class="form-warn" role="status">Die Einteilung der Flugblätter hat sich seit dem letzten Lauf geändert. Die Angaben müssen deshalb neu erzeugt werden.
+            {% if meta.same %}Bei {{ meta.same }} von {{ meta.now }} Flugblättern sind die Seiten gleich geblieben. Ihre Angaben werden bei demselben Modell aus dem letzten Lauf übernommen, Kosten entstehen nur für die übrigen.{% endif %}</p>
         {% elif meta.state == 'partial' %}
         <p class="form-warn" role="status">Unterbrochen. Was schon erzeugt ist, wird beim Fortsetzen nicht noch einmal angefragt.</p>
         {% else %}
@@ -461,6 +463,93 @@
         </div>
         </div>
         {% endif %}
+        {% elif step == 'pruefen' %}
+        <h2>{{ steps[step] }}</h2>
+        <div class="step-narrow">
+        <p>Bisher ist der Band nur hier im Import zu sehen. Mit der Freigabe erscheint er in der Flugblattliste, in der Suche und in den Trends.
+            Vorher lohnt es sich, die drei Aufgaben unten durchzugehen. Nichts davon ist Pflicht, und alles, was du entscheidest oder korrigierst, bleibt auch bei einem späteren Neuimport erhalten.</p>
+        {% if prepare.state == 'error' %}
+        <p class="form-error" role="alert">{{ prepare.error }}</p>
+        <form method="post" action="/import/{{ volume.vz }}/vorbereiten"><button type="submit" class="button-outline">Erneut versuchen</button></form>
+        {% elif prepare.state == 'running' %}
+        <p>Die Flugblätter werden für die Prüfung vorbereitet. Das dauert etwa eine halbe Minute, die Seite lädt danach neu.</p>
+        <form hidden data-ocr data-running="1" data-status-url="/import/{{ volume.vz }}/status?job=anlegen"><button type="submit"></button></form>
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        {{ progress('', '') }}
+        {% elif not created %}
+        <p class="meta">Dafür müssen zuerst die Metadaten erzeugt sein.</p>
+        {% else %}
+        {% set todo = (copies.open > 0) + (new_issuers | length > 0) + (hints_open > 0) %}
+        <div class="split-work">
+            <div class="split-work-head">
+                <div class="step-status">
+                <span class="split-count done">{{ created }} Flugblätter</span>
+                <p class="meta">{% if todo %}{{ todo }} von 3 Aufgaben offen{% else %}Alle Aufgaben erledigt{% endif %}</p>
+                </div>
+                <span class="split-work-actions"><a class="tool-button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
+            </div>
+            <ol class="task-list">
+                <li class="task{{ ' done' if not copies.open }}">
+                    <h3>Duplikate prüfen <span class="task-state">{% if copies.open %}{{ copies.open }} {{ 'Gruppe' if copies.open == 1 else 'Gruppen' }} offen{% else %}erledigt{% endif %}</span></h3>
+                    <p>Viele Flugblätter wurden mehrfach verteilt und gesammelt und liegen deshalb in mehreren Bänden. Ohne Prüfung zählen Trends und Statistiken sie doppelt.
+                        Prüfst du sie zuerst, musst du die Angaben eines Exemplars, das es schon gibt, nicht noch einmal kontrollieren.</p>
+                    {% if copies.found %}
+                    <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen: {{ copies.found }} {{ 'Flugblatt hat' if copies.found == 1 else 'Flugblätter haben' }} ein Exemplar mit fast gleichem Text.</p>
+                    <p class="task-actions">{% if copies.open %}<a class="tool-button primary" href="/leaflets/{{ copies.first }}/exemplare">Duplikate durchgehen</a>
+                        <a class="text-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen</a>
+                        {% else %}<a class="tool-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen mit Status</a>{% endif %}</p>
+                    {% else %}
+                    <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen und keine Exemplare gefunden.</p>
+                    {% endif %}
+                </li>
+                <li class="task{{ ' done' if not new_issuers }}" id="herausgeber">
+                    <h3>Herausgeber zuordnen <span class="task-state">{% if new_issuers %}{{ new_issuers | length }} offen{% else %}erledigt{% endif %}</span></h3>
+                    {% if new_issuers %}
+                    <p>Diese Herausgeber kennt das Register noch nicht. Ordne jeden einmal einer Organisation zu, oder lege ihn neu an. Dann erscheint er im Filter
+                        „Herausgeber“, und die App erkennt ihn auch in späteren Bänden.</p>
+                    {% else %}
+                    <p>Alle Herausgeber dieses Bandes stehen schon im Register.</p>
+                    {% endif %}
+                    {% if new_issuers %}
+                    <p class="task-actions"><a class="tool-button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a></p>
+                    {% endif %}
+                </li>
+                <li class="task{{ ' done' if not hints_open }}">
+                    <h3>Hinweise der automatischen Prüfung ansehen <span class="task-state">{% if hints_open %}{{ hints_open }} von {{ flagged | length }} offen{% else %}erledigt{% endif %}</span></h3>
+                    <p>Die App hat jede automatisch erzeugte Angabe mit dem erkannten Text verglichen: ob das Datum wirklich dort steht, ob das zitierte Belegstück auf dem Blatt
+                        vorkommt und ob der Herausgeber genannt ist. Wo etwas nicht passt, sieh dir das Flugblatt an und korrigiere die Angabe auf seiner Seite.
+                        Mit „Passt so“ bestätigst du, dass ein Hinweis keine Korrektur braucht.</p>
+                    {% if flagged %}
+                    {% if hints_open %}<p class="task-actions"><a class="tool-button primary" href="/leaflets/{{ hints_first }}">Hinweise durchgehen</a></p>{% endif %}
+                    <details class="help">
+                        <summary>Liste der Flugblätter mit Hinweisen</summary>
+                        <ul class="fix-list">
+                            {% for lf, texts, seen in flagged %}
+                            <li><span class="meta">{{ page_range(lf.start_page, lf.end_page) }}{% if seen %} · gesehen{% endif %}</span>
+                                <a class="fix-title" href="/leaflets/{{ lf.id }}">{{ lf.display_title or 'Ohne erkannten Titel' }}</a>
+                                <ul class="hint-texts">{% for t in texts %}<li>{{ t }}</li>{% endfor %}</ul></li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                    {% endif %}
+                </li>
+            </ol>
+            <div class="release-row">
+                <p class="meta">{% if todo %}Noch {{ todo }} {{ 'Aufgabe' if todo == 1 else 'Aufgaben' }} offen. Du kannst trotzdem freigeben.{% else %}Alles geprüft.{% endif %}
+                    Mit der Freigabe erscheint der Band in Liste, Suche und Trends.</p>
+                <form method="post" action="/import/{{ volume.vz }}/freigeben" onsubmit="return confirm('Band {{ '%03d' % volume.vz }} freigeben? Er erscheint dann in Liste, Suche und Trends.')">
+                    <button type="submit" class="tool-button primary">Band freigeben</button></form>
+            </div>
+            <details class="help redo-row">
+                <summary>Neu vorbereiten</summary>
+                <p>Übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Duplikate neu, etwa nachdem Duplikate in einem anderen Band geprüft wurden.
+                    Deine Korrekturen, Herausgeber-Zuordnungen und Duplikat-Entscheidungen bleiben erhalten.</p>
+                <form method="post" action="/import/{{ volume.vz }}/vorbereiten" onsubmit="return confirm('Die Flugblätter neu vorbereiten? Das dauert etwa eine halbe Minute.')">
+                    <button type="submit" class="button-outline">Neu vorbereiten</button></form>
+            </details>
+        </div>
+        {% endif %}
+        </div>
         {% else %}
         <h2>{{ steps[step] }}</h2>
         <p class="meta">Dieser Schritt folgt.</p>
@@ -477,7 +566,7 @@
     {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
     {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
-    {% if step in ('ocr', 'angaben') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
+    {% if step in ('ocr', 'angaben', 'pruefen') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
     {% if step == 'ocr' %}
     <script src="{{ url_for('static', path='page-pair.js') }}"></script>
     <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}

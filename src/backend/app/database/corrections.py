@@ -87,11 +87,12 @@ def apply(leaflet, entries):
         elif field == "issuers":
             session.query(LeafletIssuer).filter_by(
                 leaflet_id=leaflet.id, role="issuer").delete()
-            for item in value:
-                org = session.get(Organization, item["org"])
-                if org:
+            for item in value:  # an item with a name only: an issuer not in the register yet
+                org = session.get(Organization, item.get("org") or "")
+                if org or item.get("name"):
                     session.add(LeafletIssuer(
-                        leaflet_id=leaflet.id, role="issuer", org_id=org.id, surface=org.name,
+                        leaflet_id=leaflet.id, role="issuer", org_id=org.id if org else None,
+                        surface=org.name if org else item["name"],
                         blocks=item["blocks"], quote=quote(leaflet, item["blocks"])))
         elif field == "signatories":
             session.query(LeafletIssuer).filter_by(

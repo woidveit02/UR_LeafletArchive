@@ -14,8 +14,7 @@
     {% if simple %}
     <div class="dup-actions">
         {% if not checked %}
-        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Als Hauptexemplar wählen</button>
-        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button-plain">wählen und weiter</button>
+        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button-small">Als Hauptexemplar wählen</button>
         {% elif not c.main %}
         <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Zum Hauptexemplar machen</button>
         {% endif %}
@@ -71,14 +70,24 @@
         <section id="pair">{% include 'leaflet_copy_pair.html' %}</section>
 {% endmacro %}
 {% block content %}
-        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
-            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+        {% set state %}{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}{% endset %}
+        {% set pager %}
             <span class="pager">
                 {% if queue.previous %}<a href="/leaflets/{{ queue.previous }}/exemplare">‹ Voriges</a>{% else %}<span class="disabled">‹ Voriges</span>{% endif %}
-                <span class="meta">{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}</span>
+                {% if not queue.band %}<span class="meta">{{ state }}</span>{% endif %}
                 {% if queue.next %}<a href="/leaflets/{{ queue.next }}/exemplare">Nächstes ›</a>{% else %}<span class="disabled">Nächstes ›</span>{% endif %}
-            </span>
+            </span>{% endset %}
+        {% if queue.band %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % queue.band }}">
+            <span><a href="/import/{{ queue.band }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % queue.band }} prüfen</b> · Duplikate: {{ state }}</span>
+            {{ pager }}
         </nav>
+        {% else %}
+        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
+            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+            {{ pager }}
+        </nav>
+        {% endif %}
         <header class="page-head page-head-wide">
             <div class="head-row">
                 <h1>Duplikate prüfen</h1>
@@ -87,7 +96,7 @@
         </header>
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
             <p class="meta">Wähle das Blatt mit den richtigen Angaben, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
-                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; „{{ 'wählen' if simple else 'speichern' }} und weiter“ führt direkt zur nächsten ungeprüften Gruppe.</p>
+                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; {% if simple %}mit der Wahl geht es direkt zur nächsten ungeprüften Gruppe{% else %}„speichern und weiter“ führt direkt zur nächsten ungeprüften Gruppe{% endif %}.</p>
             <div class="review-actions dup-more">
                 {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
                 {% if simple %}<button type="submit" name="verdict" value="different" class="button-outline">Das sind verschiedene Flugblätter</button>

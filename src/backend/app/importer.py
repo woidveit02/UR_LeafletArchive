@@ -9,9 +9,9 @@ from pathlib import Path
 
 import pymupdf
 
-from . import pdf_service
+from . import copy_search, pdf_service
 from .database import fillDatabase
-from .database.models import DRAFT, RELEASED, Leaflet, Volume
+from .database.models import DRAFT, RELEASED, Leaflet, LeafletIssuer, Page, Volume
 
 logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
@@ -24,8 +24,8 @@ STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
              "ocr": "Der Text der Scans wird automatisch erkannt, damit er sich lesen und durchsuchen lässt.",
              "trennen": "Festlegen, wo ein Flugblatt endet und das nächste beginnt.",
              "angaben": "Titel, Reihe, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
-             "pruefen": "Die Ergebnisse durchsehen und den Band für alle sichtbar machen.",
-             "themen": "Die Flugblätter werden Themen zugeordnet."}
+             "pruefen": "Die Ergebnisse durchsehen und den Band in Liste, Suche und Trends aufnehmen.",
+             "themen": "Optional: Die Flugblätter werden Themen zugeordnet. Der Band ist schon nach Schritt 6 fertig."}
 
 
 def load_entries():
@@ -33,10 +33,7 @@ def load_entries():
 
 
 def save_entries(entries):
-    # same layout as the file in the repo (two spaces, CRLF, no final newline), so only changes show up in git
-    text = json.dumps(entries, ensure_ascii=False, indent=2).replace("\n", "\r\n")
-    with open(fillDatabase.DATA_DIR / "volumes.json", "w", encoding="utf-8", newline="") as f:
-        f.write(text)
+    fillDatabase.save_json("volumes.json", entries)
 
 
 def running(volume, kind="scans"):
@@ -115,22 +112,38 @@ def scan_stamp(volume):
     return int(path.stat().st_mtime) if path.is_file() else 0
 
 
+def withdraw(volume):
+    """Takes back the leaflets of a draft, so the steps before can change them; scans, text and metadata stay."""
+    if volume.status != DRAFT:
+        raise ValueError("Ein freigegebener Band lässt sich hier nicht zurücknehmen.")
+    session = fillDatabase.session
+    ids = [i for (i,) in session.query(Leaflet.id).filter_by(volume_id=volume.id)]
+    session.query(LeafletIssuer).filter(LeafletIssuer.leaflet_id.in_(ids)).delete(synchronize_session=False)
+    session.query(Page).filter_by(volume_id=volume.id).delete()
+    session.query(Leaflet).filter_by(volume_id=volume.id).delete()
+    session.commit()
+    copy_search.remove(volume)
+
+
 def discard(volume):
     """Removes a volume that is still being imported: its scan and temporary files, and the volume itself.
 
     A unit the archive listed in volumes.json from the start only goes back to "not digitized";
     one added by new_volume disappears, so its number is free again.
     """
-    if n_leaflets(volume):
-        raise ValueError("Dieser Band ist schon eingelesen und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben")):
+    if n_leaflets(volume) and volume.status != DRAFT:
+        raise ValueError("Dieser Band ist schon freigegeben und lässt sich hier nicht löschen.")
+    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben", "anlegen")):
         raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "ocr", "angaben"):
+    for kind in ("scans", "ocr", "angaben", "anlegen"):
         JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)
         pdf_service._doc_cache.pop(str(target), None)
-        target.unlink(missing_ok=True)
+        try:  # first, so a folder that cannot be written leaves the volume as it was
+            target.unlink(missing_ok=True)
+        except OSError as error:
+            raise ValueError(storage_problem(error, target)) from error
         target.with_name(f"{volume.stem}.segments.json").unlink(missing_ok=True)
         shutil.rmtree(target.parent / f".upload-{volume.vz}", ignore_errors=True)
         shutil.rmtree(ocr_dir(volume), ignore_errors=True)
@@ -139,6 +152,12 @@ def discard(volume):
             target.parent.rmdir()  # only if nothing else is in it
         except OSError:
             pass
+    if n_leaflets(volume):
+        withdraw(volume)
+    (fillDatabase.DATA_DIR / f"nr{volume.vz:03d}_metadata.json").unlink(missing_ok=True)  # the copy step 6 made
+    if fillDatabase.CHECKED.is_file() and volume.stem:  # the "Passt so" marks of the volume
+        lines = fillDatabase.CHECKED.read_text(encoding="utf-8").splitlines(keepends=True)
+        fillDatabase.CHECKED.write_text("".join(x for x in lines if f'"volume": "{volume.stem}"' not in x), encoding="utf-8", newline="")
     entries = load_entries()
     added = next(e for e in entries if e["vz"] == volume.vz).get("added")
     if added:

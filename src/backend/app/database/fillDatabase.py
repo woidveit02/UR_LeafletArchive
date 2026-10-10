@@ -19,11 +19,19 @@ else:
 PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 CORRECTIONS = Path(os.environ.get("LEAFLET_CORRECTIONS") or DATA_DIR / "corrections.jsonl")
 COPY_DECISIONS = Path(os.environ.get("LEAFLET_COPY_DECISIONS") or DATA_DIR / "copy_decisions.jsonl")
+CHECKED = Path(os.environ.get("LEAFLET_CHECKED") or DATA_DIR / "checked.jsonl")  # "Passt so" for the remarks of the checks
 
 
 def load_json(name):
     with open(DATA_DIR / name, encoding="utf-8") as f:
         return json.load(f)
+
+
+def save_json(name, data):
+    # same layout as the files in the repo (two spaces, CRLF, no final newline), so only changes show up in git
+    text = json.dumps(data, ensure_ascii=False, indent=2).replace("\n", "\r\n")
+    with open(DATA_DIR / name, "w", encoding="utf-8", newline="") as f:
+        f.write(text)
 
 
 def copy_groups(stems, name="copies.tsv"):
@@ -70,8 +78,8 @@ def issuer_org_ids(issuer, orgs_by_variant, known_ids):
     if issuer.get("role") == "signatory":
         return [None]
     # newer metadata carries org_ids, older only the surface form
-    if "org_ids" in issuer:
-        return [i for i in issuer["org_ids"] if i in known_ids] or [None]
+    if "org_ids" in issuer:  # a spelling decided in the app since is in the variants
+        return [i for i in issuer["org_ids"] if i in known_ids] or [orgs_by_variant.get(issuer["surface"].strip().lower())]
     return [orgs_by_variant.get(issuer["surface"].strip().lower())]
 
 
@@ -296,9 +304,8 @@ def add_issuers(leaflet, r, orgs_by_variant, known_ids):
 
 
 def automatic_record(leaflet):
-    volume = session.get(Volume, leaflet.volume_id)
-    cfg = next(c for c in VOLUMES if c["label"] == volume.label)
-    return next(r for r in load_json(cfg["metadata_file"])["segments"]
+    volume = session.get(Volume, leaflet.volume_id)  # by number: VOLUMES misses a volume created since the start
+    return next(r for r in load_json(f"nr{volume.vz:03d}_metadata.json")["segments"]
                 if (r["start_page"], r["end_page"]) == (leaflet.start_page, leaflet.end_page))
 
 

@@ -41,7 +41,7 @@
     const list = document.getElementById('ocr-parts');
     const error = document.getElementById('ocr-error');
     const cancel = document.getElementById('ocr-cancel');
-    cancel.addEventListener('click', async () => {
+    cancel?.addEventListener('click', async () => {
         if (!confirm(cancel.dataset.confirm)) return;
         cancel.disabled = true;
         await fetch(cancel.dataset.url, {method: 'POST'});
@@ -62,7 +62,7 @@
         box.hidden = false;
         text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}` +
             (job.cancel ? ' · wird abgebrochen, bereits gesendete Teile werden noch fertig' : '');
-        cancel.disabled = Boolean(job.cancel);
+        if (cancel) cancel.disabled = Boolean(job.cancel);
         if (job.done) { bar.max = job.total; bar.value = job.done; } else bar.removeAttribute('value');
         list.replaceChildren(...(job.parts || []).map((p, i, all) => {
             const item = document.createElement('li');

@@ -5,6 +5,20 @@
     {% macro sibling(id, text) -%}
         {% if id %}<a href="/leaflets/{{ id }}{{ leaflet.qs }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
     {%- endmacro %}
+        {% if hints %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % hints.vz }}">
+            <span><a href="/import/{{ hints.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % hints.vz }} prüfen</b> ·
+                {% if hints.position %}Hinweis {{ hints.position }} von {{ hints.total }}{% elif hints.seen %}Hinweise gesehen{% else %}zu diesem Flugblatt kein Hinweis{% endif %}
+                {% if hints.texts %}<ul class="hint-texts">{% for t in hints.texts %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}</span>
+            <span class="pager">
+                {% if hints.flagged %}<form method="post" action="/leaflets/{{ leaflet.id }}/hinweis" class="review-seen">
+                    {% if hints.seen %}<button type="submit" name="seen" value="0" class="button-plain">Wieder offen</button>
+                    {% else %}<button type="submit" name="seen" value="1" class="button-small" title="Der Hinweis braucht keine Korrektur">Passt so</button>{% endif %}</form>{% endif %}
+                {% if hints.previous %}<a href="/leaflets/{{ hints.previous }}">‹ Voriger Hinweis</a>{% else %}<span class="disabled">‹ Voriger Hinweis</span>{% endif %}
+                {% if hints.next %}<a href="/leaflets/{{ hints.next }}">Nächster Hinweis ›</a>{% else %}<span class="disabled">Nächster Hinweis ›</span>{% endif %}
+            </span>
+        </nav>
+        {% endif %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>
             <span class="pager">
@@ -64,6 +78,7 @@
         {{ title_field(m) }}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% else %}
+        {% if leaflet.draft %}<p><span class="status-badge">Band nicht freigegeben</span></p>{% endif %}
         {# last word and "Beleg" wrap together #}
         <h1 class="document-title">{% if leaflet.title %}{% set words = leaflet.title.rsplit(' ', 1) %}{{ words[0] if words | length > 1 }} <span class="nowrap">{{ words[-1] }} {{ beleg('Titel') }}</span>{{ fixed('title') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
         {% if leaflet.title_from_series %}<p class="meta title-note">Das Blatt hat keine eigene Überschrift; als Titel stehen Reihe und Nummer.</p>{% endif %}

@@ -11,7 +11,7 @@ from starlette.requests import Request
 import backend.app.app as leaflet_app
 from backend.app.database import corrections, fillDatabase
 from backend.app.database.base import Base
-from backend.app.database.models import Leaflet, Page, Volume
+from backend.app.database.models import DRAFT, Leaflet, Page, Volume
 from backend.app.database.session import session
 
 
@@ -175,8 +175,8 @@ def test_comparison_page_confirm_and_revert(tmp_path, monkeypatch):
 def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})  # a and b: checked; c and d: not
-    assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1}
-    assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1}
+    assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1, "band": 0}
+    assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1, "band": 0}
     assert "1 von 1 ungeprüft" in leaflet_app.copy_page(page("/"), c.id).body.decode()
 
     def judge(leaflet, verdict):
@@ -201,6 +201,9 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})
     assert judge(a, f"next:{b.id}").headers["location"] == f"/leaflets/{c.id}/exemplare" and b.canonical_leaflet_id == b.id
+    # with the last group of a volume not released yet checked, the review returns to the volume's step 6
+    leaflet_app.session.get(Volume, c.volume_id).status = DRAFT
+    assert judge(c, f"next:{d.id}").headers["location"] == "/import/2?schritt=pruefen"
 
 
 # Tests if the start page counts a leaflet with duplicates once.

@@ -10,7 +10,7 @@
             </span>
         </nav>
         <header class="page-head page-head-detail">
-            <h1>{{ volume.label }}</h1>
+            <h1>{{ volume.label }}{% if volume.draft %} <span class="status-badge">nicht freigegeben</span>{% endif %}</h1>
         </header>
 
         <dl class="meta-list facts-panel">
@@ -24,7 +24,10 @@
             {% endif %}
             <dt>Organisationen laut Findmittel</dt>
             <dd>
-                {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% else %}n.a.{% endfor %}
+                {% if volume.organizations %}<details>
+                    <summary>{{ volume.organizations | length }} {{ 'Organisation' if volume.organizations | length == 1 else 'Organisationen' }}</summary>
+                    {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
+                </details>{% else %}n.a.{% endif %}
             </dd>
         </dl>
 
@@ -33,7 +36,7 @@
         {% endif %}
 
         {% if volume.leaflets %}
-        {% from '_leaflets.html' import leaflet_list, leaflet_cards, title %}
+        {% from '_leaflets.html' import result_list, leaflet_cards, title %}
         {% from '_ui.html' import view_switch %}
         <div class="section-head">
             <h2>Flugblätter</h2>
@@ -63,7 +66,7 @@
             {% endfor %}
         </div>
         {% else %}
-        {{ leaflet_list(volume.leaflets, fields=('pages', 'date', 'issuers')) }}
+        {{ result_list(volume.leaflets) }}
         {% endif %}
         {% endif %}
 {% endblock %}
