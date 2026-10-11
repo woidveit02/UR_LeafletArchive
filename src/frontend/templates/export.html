@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Datensatz exportieren – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head">
+            <p class="meta"><a href="/verwaltung">← Verwaltung</a></p>
+            <h1>Datensatz exportieren</h1>
+            <p class="meta">Texte und Metadaten als ZIP mit JSONL, CSV und einer Textdatei pro Flugblatt, lesbar ohne die App. Eine README erklärt die Felder.</p>
+        </header>
+        <form id="export-form" action="/verwaltung/export.zip" class="step-form export-form">
+            <fieldset class="mode-choice">
+                <legend>Bände</legend>
+                <div class="export-volumes">
+                    {% for v in volumes %}<label title="{{ v.title }} · {{ v.leaflets }} Flugblätter"><input type="checkbox" name="band" value="{{ v.vz }}" checked> {{ '%03d' % v.vz }}</label>{% endfor %}
+                </div>
+                <p class="meta"><a href="#" data-all="1">Alle</a> · <a href="#" data-all="">Keinen</a></p>
+            </fieldset>
+            <fieldset class="mode-choice">
+                <legend>Duplikate</legend>
+                <label class="mode-row"><input type="radio" name="exemplare" value="alle" checked><span class="mode-name">Alle</span><span class="meta">Jedes Exemplar, Kopien verweisen auf ihr Hauptexemplar</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="exemplare" value="haupt"><span class="mode-name">Nur Hauptexemplare</span><span class="meta">Jedes Flugblatt einmal, z. B. für Zählungen und Trends</span><span></span></label>
+            </fieldset>
+            <fieldset class="mode-choice">
+                <legend>Personen</legend>
+                <label class="mode-row"><input type="radio" name="personen" value="mit" checked><span class="mode-name">Mit Namen</span><span class="meta">Unterzeichnende stehen in den Metadaten</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="personen" value="ohne"><span class="mode-name">Ohne Namen</span><span class="meta">Für eine Weitergabe: Unterzeichnende fehlen in den Metadaten, im Volltext stehen sie weiter</span><span></span></label>
+            </fieldset>
+            <fieldset class="mode-choice">
+                <legend>Seiten</legend>
+                <label class="mode-row"><input type="checkbox" name="seiten" value="1"><span class="mode-name">Mit Layout</span><span class="meta">Jede Seite mit ihren Textblöcken und deren Lage, für OCR- und Layout-Auswertungen; etwa doppelt so groß</span><span></span></label>
+            </fieldset>
+            <div class="start-row">
+                <button type="submit" class="button-small">ZIP erstellen</button>
+                <span class="meta" id="export-status" role="status"></span>
+            </div>
+        </form>
+{% endblock %}
+{% block scripts %}
+    <script>
+        const form = document.getElementById('export-form');
+        const status = document.getElementById('export-status');
+        const button = form.querySelector('button');
+        form.querySelectorAll('[data-all]').forEach(a => a.addEventListener('click', e => {
+            e.preventDefault();
+            form.querySelectorAll('[name=band]').forEach(box => box.checked = !!a.dataset.all);
+        }));
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            if (!form.querySelector('[name=band]:checked')) {
+                status.textContent = 'Bitte mindestens einen Band wählen.';
+                return;
+            }
+            const url = form.action + '?' + new URLSearchParams(new FormData(form));
+            const started = Date.now();
+            const tick = () => status.textContent = `ZIP wird erstellt … ${Math.round((Date.now() - started) / 1000)} s`;
+            tick();
+            const timer = setInterval(tick, 1000);
+            button.disabled = true;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(response.status);
+                const blob = await response.blob();
+                const name = (response.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/)?.[1] || 'export.zip';
+                const link = Object.assign(document.createElement('a'), {href: URL.createObjectURL(blob), download: name});
+                link.click();
+                setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+                status.textContent = `Fertig: ${name} (${(blob.size / 1e6).toFixed(1).replace('.', ',')} MB) wird heruntergeladen.`;
+            } catch (error) {
+                status.textContent = 'Der Export ist fehlgeschlagen. Bitte noch einmal versuchen.';
+            } finally {
+                clearInterval(timer);
+                button.disabled = false;
+            }
+        });
+    </script>
+{% endblock %}

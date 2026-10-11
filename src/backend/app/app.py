@@ -11,7 +11,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urlencode
 
-from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -19,7 +19,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import importer, keys, metadata, ocr, organizations, pdf_service, segments
+from . import export, importer, keys, metadata, ocr, organizations, pdf_service, segments
 from .database import copy_decisions, corrections, fillDatabase, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -484,15 +484,20 @@ def facet_labels():
 
 
 @app.get("/leaflets")
-def leaflet_list(request: Request, ansicht: str = "liste"):
+def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro_seite: str = ""):
     logger.info('Opening leaflet list')
     params = list_params(request)
     selected = dict(params)
     items, counts = faceted_items(params)
     view = ansicht if ansicht in ('kacheln', 'fundstellen') else 'liste'
     found = passages(items, selected) if view == 'fundstellen' and selected.get('q') else []
+    # the counts, the CSV and the detail page's paging cover the whole selection, the page shows a part of it
+    size = int(pro_seite) if pro_seite in map(str, PAGE_SIZES) else PAGE_SIZE
+    pages = max(1, -(-len(items) // size))
+    page = min(max(int(seite) if seite.isdigit() else 1, 1), pages)
+    shown_items = items[(page - 1) * size:page * size]
     if view != 'fundstellen' and search.terms(selected.get('q', '')):
-        attach_passages(items, selected['q'])
+        attach_passages(shown_items, selected['q'])
 
     def shown(key):
         """Values of a facet with hits, plus the selected one."""
@@ -501,7 +506,7 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
 
     def url(pairs):
         """List address for the parameter pairs, in the current view."""
-        pairs = pairs + ([('ansicht', view)] if view != 'liste' else [])
+        pairs = pairs + ([('ansicht', view)] if view != 'liste' else []) + ([('pro_seite', size)] if size != PAGE_SIZE else [])
         return '/leaflets' + ('?' + urlencode(pairs) if pairs else '')
 
     def toggle_url(key, value):
@@ -543,7 +548,10 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
         request, "leaflet_list.html",
-        {"leaflets": items, "facets": facets, "show_duplicates": 'duplikate' in selected,
+        {"leaflets": shown_items, "count": len(items), "page": page, "pages": pages,
+         "prev_url": url(params + [('seite', page - 1)]) if page > 1 else '',
+         "next_url": url(params + [('seite', page + 1)]) if page < pages else '',
+         "facets": facets, "show_duplicates": 'duplikate' in selected,
          "total": released_leaflets().filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id)
                                                 if 'duplikate' not in selected else True).count(),
          "hidden_params": [(k, v) for k, v in params if k in FACETS],
@@ -556,11 +564,14 @@ def leaflet_list(request: Request, ansicht: str = "liste"):
          "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
          "trends_url": '/trends?' + urlencode([('begriffe', selected.get('q', ''))] + [
              (k, v) for k, v in params if k in FACETS and k != 'jahr']),
-         "switch_base": '/leaflets' + query_string,
+         "switch_base": '/leaflets' + query_string + (('&' if params else '?') + f'pro_seite={size}' if size != PAGE_SIZE else ''),
+         "size": size, "page_sizes": PAGE_SIZES,
          "detail_qs": query_string})
 
 
 PASSAGE_LIMIT = 500
+PAGE_SIZE = 100
+PAGE_SIZES = (25, 50, 100, 250, 500)
 
 
 def passages(items, params):
@@ -685,6 +696,16 @@ def searched_items(params):
         key = date_sort_key if sort.startswith('datum_') else title_sort_key
         items.sort(key=key, reverse=sort.endswith('_ab'))
     return items
+
+
+@app.get("/leaflets.csv")
+def leaflet_list_csv(request: Request):
+    """The leaflets of the list, with its filters and order, as a table for Excel or pandas."""
+    ids = [item['leaflet'].id for item in filtered_items(list_params(request))]
+    content = export.files(only=ids, pages=False, link=str(request.base_url).rstrip('/'))['flugblaetter.csv']
+    filename = f"flugblaetter-liste-{datetime.date.today():%Y-%m-%d}.csv"
+    return Response(content=content.encode('utf-8'), media_type="text/csv; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="{filename}"'})
 
 
 @app.get("/leaflets/{leaflet_id}")
@@ -2096,6 +2117,22 @@ def import_ocr_cancel(vz: int):
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
     return JSONResponse({'ok': True})
+
+
+@app.get("/verwaltung/export")
+def admin_export_page(request: Request):
+    volumes = session.query(Volume).filter_by(status=RELEASED).order_by(Volume.vz).all()
+    counts = Counter(vid for (vid,) in session.query(Leaflet.volume_id))
+    return templates.TemplateResponse(request, "export.html", {
+        "volumes": [{"vz": v.vz, "title": v.title, "leaflets": counts[v.id]} for v in volumes if counts[v.id]]})
+
+
+@app.get("/verwaltung/export.zip")
+def admin_export(band: list[int] = Query(default=[]), exemplare: str = '', personen: str = '', seiten: str = ''):
+    filename = f"flugblaetter-export-{datetime.date.today():%Y-%m-%d}.zip"
+    content = export.zip_bytes(bands=band, main_only=exemplare == 'haupt', persons=personen != 'ohne', pages=seiten == '1')
+    return Response(content=content, media_type="application/zip",
+                    headers={"Content-Disposition": f'attachment; filename="{filename}"'})
 
 
 @app.get("/import/{vz}/ocr.zip")

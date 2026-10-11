@@ -5000,9 +5000,67 @@ body.split-lock {
     gap: 16px;
 }
 
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: 24px;
+}
+
+.list-pager .pager {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.list-pager .sort {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.list-pager .sort select {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 1em;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.list-pager .disabled {
+    color: var(--faint);
+}
+
+.list-export {
+    margin-left: auto;
+    font-size: 0.9em;
+}
+
+.export-volumes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 7px 0;
+}
+
+.export-form .mode-row {
+    grid-template-columns: auto 10rem minmax(0, 1fr) auto;
+}
+
 .admin-tiles {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-bottom: 32px;
 }
 

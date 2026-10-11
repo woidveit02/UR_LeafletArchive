@@ -3,7 +3,10 @@
 {% block content %}
         <header class="page-head admin-head">
             <h1>Verwaltung</h1>
-            {% if units %}<a class="button-link" href="/import/neu">Band hinzufügen</a>{% endif %}
+            <span class="admin-actions">
+                <a class="tool-button" href="/verwaltung/export">Datensatz exportieren</a>
+                {% if units %}<a class="button-link" href="/import/neu">Band hinzufügen</a>{% endif %}
+            </span>
         </header>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
 

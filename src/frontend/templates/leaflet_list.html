@@ -28,6 +28,7 @@
         {% endmacro %}
         <form method="get" action="/leaflets" class="filter">
             {% if view != 'liste' %}<input type="hidden" name="ansicht" value="{{ view }}">{% endif %}
+            {% if size != 100 %}<input type="hidden" name="pro_seite" value="{{ size }}">{% endif %}
             {% for k, v in hidden_params %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
             <div class="search-layout">
                 <div class="search-box">
@@ -95,10 +96,10 @@
                     {% endif %}
                     <div class="filter-bar">
                         <p class="filter-result">
-                            {%- if selected_q and leaflets %}{{ leaflets | length }} Treffer für „{{ selected_q }}“
+                            {%- if selected_q and leaflets %}{{ count }} Treffer für „{{ selected_q }}“
                             {%- elif selected_q %}Keine Treffer für „{{ selected_q }}“
-                            {%- elif leaflets and filtered %}{{ leaflets | length }} von {{ total }} Flugblättern
-                            {%- elif leaflets %}{{ leaflets | length }} {{ 'Flugblatt' if leaflets | length == 1 else 'Flugblätter' }}
+                            {%- elif leaflets and filtered %}{{ count }} von {{ total }} Flugblättern
+                            {%- elif leaflets %}{{ count }} {{ 'Flugblatt' if count == 1 else 'Flugblätter' }}
                             {%- else %}Keine Flugblätter für diese Auswahl{% endif %}
                             {%- if leaflets and selected_q and not q_short %} · <a href="{{ trends_url }}" title="Anteil der Blätter pro Jahr, mit den gesetzten Filtern">Trend über die Jahre</a>{% endif %}</p>
                         <label class="sort">Sortiert nach
@@ -136,6 +137,17 @@
                     {% elif leaflets %}
                     {{ result_list(leaflets, qs=detail_qs) }}
                     {% endif %}
+                    {% if leaflets %}<nav class="list-pager">
+                        {% if pages > 1 and view != 'fundstellen' %}<span class="pager">
+                            {% if prev_url %}<a href="{{ prev_url }}">‹ Zurück</a>{% else %}<span class="disabled">‹ Zurück</span>{% endif %}
+                            <span class="meta">Seite {{ page }} von {{ pages }}</span>
+                            {% if next_url %}<a href="{{ next_url }}">Weiter ›</a>{% else %}<span class="disabled">Weiter ›</span>{% endif %}
+                        </span>{% endif %}
+                        {% if view != 'fundstellen' and count > page_sizes[0] %}<label class="sort">pro Seite
+                            <select name="pro_seite" onchange="this.form.submit()">{% for n in page_sizes %}<option value="{{ n }}"{% if n == size %} selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+                        </label>{% endif %}
+                        <a class="list-export" href="/leaflets.csv{{ detail_qs }}" download title="Titel, Datum, Herausgeber, Thema und Link, ohne Volltext">{{ 'Dieses Flugblatt' if count == 1 else 'Alle ' ~ count ~ ' Flugblätter' }} als CSV-Tabelle herunterladen</a>
+                    </nav>{% endif %}
                 </div>
             </div>
         </form>
