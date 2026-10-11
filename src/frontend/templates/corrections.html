@@ -18,7 +18,7 @@
         <h2>Ohne Zuordnung</h2>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
             Sie werden nicht angewendet. Übernimm sie auf ein Flugblatt, das jetzt dort liegt, oder verwirf sie.
-            Prüfungen möglicher Duplikate, deren Segmente sich geändert haben, stehen darunter.</p>
+            Prüfungen möglicher Exemplare, deren Segmente sich geändert haben, stehen darunter.</p>
         <ul class="fix-list">
             {% for row in rows %}
             <li>
@@ -38,7 +38,7 @@
             </li>
             {% endfor %}
             {% for c in copies %}
-            <li><span class="meta">{{ c.at }}</span> Geprüfte Duplikate, die nicht mehr passen: {{ c.members | join(' · ') }}</li>
+            <li><span class="meta">{{ c.at }}</span> Geprüfte Exemplare, die nicht mehr passen: {{ c.members | join(' · ') }}</li>
             {% endfor %}
         </ul>
         {% endif %}

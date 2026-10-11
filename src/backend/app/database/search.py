@@ -15,9 +15,12 @@ from markupsafe import Markup
 from sqlalchemy import Float, Integer, bindparam, text
 
 FTS = "leaflets_fts"
-COLUMNS = ("title", "series", "publisher", "ocr_text")
+COLUMNS = ("title", "series", "publisher", "signatories", "ocr_text")
 # bm25 weights per column (leaflet_id is unindexed): title and series count more
-BM25_WEIGHTS = "0, 10.0, 8.0, 4.0, 1.0"
+BM25_WEIGHTS = "0, 10.0, 8.0, 4.0, 4.0, 1.0"
+# the fields a search can be limited to (parameter `feld`) -> index columns
+FIELDS = {"titel": ("title",), "herausgeber": ("publisher",), "unterzeichner": ("signatories",),
+          "reihe": ("series",), "text": ("ocr_text",)}
 MIN_TOKEN = 3  # a trigram needs three characters
 MAX_TOKENS = 8
 MAX_QUERY = 200
@@ -34,6 +37,8 @@ def _insert(where):
                                               coalesce(i.surface, '')), ' ; ')
                      FROM leaflet_issuers i LEFT JOIN organizations o ON o.id = i.org_id
                      WHERE i.leaflet_id = l.id AND i.role = 'issuer'), ''),
+           coalesce((SELECT group_concat(i.surface, ' ; ') FROM leaflet_issuers i
+                     WHERE i.leaflet_id = l.id AND i.role = 'signatory'), ''),
            coalesce((SELECT replace(group_concat(text, char(10)), '- ', '')
                      FROM (SELECT text FROM pages WHERE leaflet_id = l.id
                            ORDER BY page_no)), '')
@@ -68,12 +73,22 @@ def _triggers():
 def ensure_search_index(engine):
     """Creates the FTS5 table and the sync triggers if missing."""
     with engine.begin() as conn:
+        # an index without the newest column is dropped with its triggers and built again
+        old = [r[1] for r in conn.exec_driver_sql(f"PRAGMA table_info({FTS})")]
+        stale = bool(old) and old != ["leaflet_id", *COLUMNS]
+        if stale:
+            for (name,) in conn.exec_driver_sql(
+                    f"SELECT name FROM sqlite_master WHERE type = 'trigger' AND name LIKE '{FTS}\\_%' ESCAPE '\\'").all():
+                conn.exec_driver_sql(f"DROP TRIGGER {name}")
+            conn.exec_driver_sql(f"DROP TABLE {FTS}")
         # remove_diacritics for trigrams needs SQLite >= 3.45 (the container has 3.46)
         conn.exec_driver_sql(
             f"CREATE VIRTUAL TABLE IF NOT EXISTS {FTS} USING fts5(leaflet_id UNINDEXED, "
             f"{', '.join(COLUMNS)}, tokenize='trigram remove_diacritics 1')")
         for statement in _triggers():
             conn.exec_driver_sql(statement)
+        if stale:
+            conn.exec_driver_sql(_insert(""))
 
 
 def rebuild_search_index(engine):
@@ -108,7 +123,7 @@ def variants(term):
     return list(dict.fromkeys([low, low.replace("ß", "ss"), low.replace("ss", "ß")]))
 
 
-def match_expression(query):
+def match_expression(query, columns=None):
     """FTS5 MATCH string for user input, or None if no term is long enough.
 
     Every term becomes a quoted string, so `*`, parentheses, `-`, `:` and the operators
@@ -119,7 +134,18 @@ def match_expression(query):
     for term in terms(query):
         quoted = [f'"{v}"' for v in variants(term)]
         parts.append(f"({' OR '.join(quoted)})")
-    return " AND ".join(parts) or None
+    expression = " AND ".join(parts) or None
+    return f"{{{' '.join(columns)}}} : ({expression})" if expression and columns else expression
+
+
+def combine(rows):
+    """MATCH string for rows of (operator, expression): AND, OR or NOT, applied from top to bottom;
+    rows without an expression (no word of three characters) are left out."""
+    result = None
+    for operator, expression in rows:
+        if expression:
+            result = f"({expression})" if result is None else f"({result} {operator} ({expression}))"
+    return result
 
 
 def like_pattern(query):

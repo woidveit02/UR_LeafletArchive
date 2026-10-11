@@ -20,7 +20,8 @@
         </nav>
         {% endif %}
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>
+            {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← Zurück zu den Ergebnissen</a></span>
+            {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
             <span class="pager">
                 {{ sibling(leaflet.prev_id, '‹ Voriges') }}
                 <span class="meta">{{ leaflet.position }} von {{ leaflet.in_volume }}</span>
@@ -29,9 +30,9 @@
         </nav>
     {% set main_copy = leaflet.copies | selectattr('main') | list %}
     {% if leaflet.copies and leaflet.copies_checked and not leaflet.copy_main and main_copy %}
-        <p class="alt-note"><span class="role alt">Duplikat</span> Dasselbe Blatt wie das Hauptexemplar
+        <p class="alt-note"><span class="role alt">Weiteres Exemplar</span> Dasselbe Blatt wie das Hauptexemplar
             <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Angaben der Gruppe stehen dort.
-            <a href="/leaflets/{{ leaflet.id }}/exemplare">Duplikate vergleichen</a></p>
+            <a href="/leaflets/{{ leaflet.id }}/exemplare">Exemplare vergleichen</a></p>
     {% endif %}
     {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
     {% set m = {'uid': leaflet.id, 'edit': edit, 'automatic': leaflet.automatic, 'pickable': true} %}
@@ -152,7 +153,7 @@
             <dd>{{ leaflet.received }} <span class="meta">(Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher{% endif %})</span>
                 {{ beleg('Eingang im Archiv') }}{{ fixed('received') }}</dd>
             {% endif %}
-            <dt>{{ 'Duplikate' if leaflet.copies_checked else 'Mögliche Duplikate' }}</dt>
+            <dt>{{ 'Weitere Exemplare' if leaflet.copies_checked else 'Mögliche weitere Exemplare' }}</dt>
             {% if leaflet.group %}
             <dd>
                 <span class="dup-inline">{% for c in leaflet.group %}<span class="dup-item"><span class="dup-letter">{{ c.letter }}</span>{% if c.self %}<strong>{{ c.label }}</strong>{% else %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% endif %}{% if c.main %} <span class="role main">Hauptexemplar</span>{% elif c.new %} <span class="role">Neu gefunden</span>{% endif %}</span>{% endfor %}</span>

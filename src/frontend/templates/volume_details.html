@@ -62,7 +62,7 @@
                 {% if loop.first %}
                 <figcaption>
                     <span class="strip-title">{% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}" title="{{ group.leaflet.display_title }}">{{ title(group.leaflet) }}</a>{% else %}<span class="meta">ausgeschlossen</span>{% endif %}</span>
-                    {% if group.main %}<a class="strip-dup" href="/leaflets/{{ group.main.id }}" title="Hauptexemplar: {{ group.main.label }}">Duplikat von {{ group.main.label }}</a>{% endif %}
+                    {% if group.main %}<a class="strip-dup" href="/leaflets/{{ group.main.id }}" title="Hauptexemplar: {{ group.main.label }}">Exemplar von {{ group.main.label }}</a>{% endif %}
                     {% if group.issuers %}<span class="strip-issuers" title="{{ group.issuers }}">{{ group.issuers }}</span>{% endif %}
                 </figcaption>
                 {% endif %}

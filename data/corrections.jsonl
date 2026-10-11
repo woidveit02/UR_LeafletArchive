@@ -78,3 +78,7 @@
 {"volume": "0118_0001", "start_page": 8, "end_page": 9, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 2"}, "at": "2026-10-11"}
 {"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 3"}, "at": "2026-10-11"}
 {"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 4"}, "at": "2026-10-11"}
+{"volume": "0118_0002", "start_page": 48, "end_page": 48, "field": "date", "value": {"iso": "1970-05-08", "type": "event"}, "blocks": ["48-19"], "at": "2026-10-11"}
+{"volume": "0118_0008", "start_page": 295, "end_page": 296, "field": "series", "value": {"name": "AStA-Info", "issue": ""}, "blocks": ["295-1"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 172, "end_page": 173, "field": "series", "value": {"name": "AstA-Info", "issue": ""}, "blocks": ["172-1"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 172, "end_page": 173, "field": "series", "value": {"name": "AStA-Info", "issue": ""}, "blocks": ["172-1"], "at": "2026-10-11"}

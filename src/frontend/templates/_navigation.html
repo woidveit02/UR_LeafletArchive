@@ -4,16 +4,17 @@
         <a class="brand" href="/" title="Flugblätter im Universitätsarchiv Regensburg (UR), Rep. 118">UR Leaflet Archive</a>
         <nav class="topnav" aria-label="Hauptnavigation">
             <a href="/leaflets" {% if path.startswith('/leaflets') %}class="active" aria-current="page"{% endif %}>Flugblätter</a>
-            <a href="/organizations" {% if path.startswith('/organizations') %}class="active" aria-current="page"{% endif %}>Organisationen</a>
+            <a href="/organizations" {% if path.startswith('/organizations') %}class="active" aria-current="page"{% endif %}>Herausgeber</a>
             <a href="/volumes" {% if path.startswith('/volumes') %}class="active" aria-current="page"{% endif %}>Bände</a>
             <a href="/themen" {% if path.startswith('/themen') %}class="active" aria-current="page"{% endif %}>Themen</a>
             <a href="/trends" {% if path.startswith('/trends') %}class="active" aria-current="page"{% endif %}>Trends</a>
         </nav>
-        {% if path != '/leaflets' %}{# the list has its own search field above the filters #}
-        <form class="topsearch" method="get" action="/leaflets" role="search">
-            <input type="search" name="q" maxlength="200" aria-label="Volltextsuche" placeholder="Volltext durchsuchen …"
-                   title="Sucht in Titel, Reihe, Herausgeber und Text, auch nach Wortteilen. Wörter in Anführungszeichen suchen eine feste Wortfolge."
-                   value="{{ request.query_params.get('q', '') if path.startswith('/leaflets') else '' }}">
+        {% set on_list = path.startswith('/leaflets') %}
+        {% if path != '/leaflets' %}{# the list has its search above the results #}
+        <form class="topsearch" method="get" action="/leaflets" role="search" data-fields='{{ search_fields | tojson }}'>
+            <input type="search" name="q" maxlength="200" autocomplete="off" aria-label="Suchbegriffe" placeholder="Suchen …"
+                   title="Sucht in Titel, Reihe, Herausgeber, Unterzeichnenden und Text, auch nach Wortteilen („gesetz“ trifft „Hochschulgesetz“). Wörter in Anführungszeichen suchen eine feste Wortfolge."
+                   value="{{ request.query_params.get('q', '') if on_list else '' }}">
         </form>
         {% endif %}
         <a class="topadmin{% if path.startswith(('/verwaltung', '/import', '/korrekturen', '/exemplare')) %} active" aria-current="page{% endif %}" href="/verwaltung">Verwaltung</a>

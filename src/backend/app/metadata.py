@@ -942,7 +942,7 @@ def start_create(volume):
     job = importer.JOBS[(volume.vz, PREPARE)] = {
         "state": "running", "done": 0, "total": 2, "unit": "Teilen fertig", "error": "", "started": now,
         "parts": [{"label": "Flugblätter übernehmen", "state": "wartet", "since": now},
-                  {"label": "Duplikate in allen Bänden suchen", "state": "wartet", "since": now}]}
+                  {"label": "Exemplare in allen Bänden suchen", "state": "wartet", "since": now}]}
 
     def go():
         try:  # ponytail: shares the app's one database session with the requests, as the other jobs do

@@ -492,12 +492,12 @@
             </div>
             <ol class="task-list">
                 <li class="task{{ ' done' if not copies.open }}">
-                    <h3>Duplikate prüfen <span class="task-state">{% if copies.open %}{{ copies.open }} {{ 'Gruppe' if copies.open == 1 else 'Gruppen' }} offen{% else %}erledigt{% endif %}</span></h3>
+                    <h3>Exemplare prüfen <span class="task-state">{% if copies.open %}{{ copies.open }} {{ 'Gruppe' if copies.open == 1 else 'Gruppen' }} offen{% else %}erledigt{% endif %}</span></h3>
                     <p>Viele Flugblätter wurden mehrfach verteilt und gesammelt und liegen deshalb in mehreren Bänden. Ohne Prüfung zählen Trends und Statistiken sie doppelt.
                         Prüfst du sie zuerst, musst du die Angaben eines Exemplars, das es schon gibt, nicht noch einmal kontrollieren.</p>
                     {% if copies.found %}
                     <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen: {{ copies.found }} {{ 'Flugblatt hat' if copies.found == 1 else 'Flugblätter haben' }} ein Exemplar mit fast gleichem Text.</p>
-                    <p class="task-actions">{% if copies.open %}<a class="tool-button primary" href="/leaflets/{{ copies.first }}/exemplare">Duplikate durchgehen</a>
+                    <p class="task-actions">{% if copies.open %}<a class="tool-button primary" href="/leaflets/{{ copies.first }}/exemplare">Exemplare durchgehen</a>
                         <a class="text-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen</a>
                         {% else %}<a class="tool-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen mit Status</a>{% endif %}</p>
                     {% else %}
@@ -545,8 +545,8 @@
             </div>
             <details class="help redo-row">
                 <summary>Neu vorbereiten</summary>
-                <p>Übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Duplikate neu, etwa nachdem Duplikate in einem anderen Band geprüft wurden.
-                    Deine Korrekturen, Herausgeber-Zuordnungen und Duplikat-Entscheidungen bleiben erhalten.</p>
+                <p>Übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Exemplare neu, etwa nachdem Exemplare in einem anderen Band geprüft wurden.
+                    Deine Korrekturen, Herausgeber-Zuordnungen und Exemplar-Entscheidungen bleiben erhalten.</p>
                 <form method="post" action="/import/{{ volume.vz }}/vorbereiten" onsubmit="return confirm('Die Flugblätter neu vorbereiten? Das dauert etwa eine halbe Minute.')">
                     <button type="submit" class="button-outline">Neu vorbereiten</button></form>
             </details>

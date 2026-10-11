@@ -2,7 +2,7 @@
 {% block title %}{{ org.name }} – UR Leaflet Archive{% endblock %}
 {% block content %}
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/organizations">Organisationen</a></span>
+            <span class="breadcrumb"><a href="/organizations">Herausgeber</a></span>
             <span>
                 {% if org.prev_id %}<a href="/organizations/{{ org.prev_id }}">‹ Vorherige</a>{% else %}<span class="disabled">‹ Vorherige</span>{% endif %}
                 {% if org.next_id %}<a href="/organizations/{{ org.next_id }}">Nächste ›</a>{% else %}<span class="disabled">Nächste ›</span>{% endif %}

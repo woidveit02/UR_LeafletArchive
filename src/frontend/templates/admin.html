@@ -15,14 +15,15 @@
                 <h2>Bände</h2>
                 <p class="admin-figure">{{ volumes | length }} freigegeben</p>
                 <p class="meta">{% if drafts %}{{ drafts | length }} in Bearbeitung{% if units %} · {% endif %}{% endif %}{% if units %}{{ units | length }} noch nicht hinzugefügt{% endif %}</p>
+                <a href="/volumes">Bände ansehen →</a>
             </section>
             <section class="admin-tile">
-                <h2>Duplikate</h2>
-                {% if not groups %}<p class="admin-figure">Keine Duplikatgruppen</p>
+                <h2>Exemplare</h2>
+                {% if not groups %}<p class="admin-figure">Keine Exemplargruppen</p>
                 {% elif open %}<p class="admin-figure todo">{{ open }} offene {{ 'Gruppe' if open == 1 else 'Gruppen' }}</p>
                 {% else %}<p class="admin-figure">Alle geprüft</p>{% endif %}
                 {% if groups %}<p class="meta">{{ groups }} Gruppen insgesamt</p>{% endif %}
-                <a href="/exemplare{{ '?status=offen' if open }}">Duplikate prüfen →</a>
+                <a href="/exemplare{{ '?status=offen' if open }}">Exemplare prüfen →</a>
             </section>
             <section class="admin-tile">
                 <h2>Korrekturen</h2>
@@ -61,7 +62,7 @@
 
         <h2>Freigegeben <span class="count">· {{ volumes | length }}</span></h2>
         <table class="admin-table">
-            <thead><tr><th>Band</th><th>Titel</th><th class="num">Seiten</th><th class="num">Flugblätter</th><th class="num">Duplikatgruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
+            <thead><tr><th>Band</th><th>Titel</th><th class="num">Seiten</th><th class="num">Flugblätter</th><th class="num">Exemplargruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
             <tbody>
             {% for v in volumes %}
             <tr>
@@ -76,5 +77,5 @@
             {% endfor %}
             </tbody>
         </table>
-        <p class="meta">Bandübergreifende Duplikatgruppen werden in jedem betroffenen Band gezählt. Die Tabellensumme kann deshalb höher sein als die Gesamtzahl oben.</p>
+        <p class="meta">Bandübergreifende Exemplargruppen werden in jedem betroffenen Band gezählt. Die Tabellensumme kann deshalb höher sein als die Gesamtzahl oben.</p>
 {% endblock %}

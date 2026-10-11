@@ -20,45 +20,47 @@
 {%- for f in fields -%}
     {%- if f == 'pages' %}{% set _ = parts.append(page_range(l.start_page, l.end_page)) %}
     {%- elif f == 'count' %}{% set _ = parts.append('<span class="nowrap">{}</span>'.format(count(l)) | safe) %}
-    {%- elif f == 'band' %}{% set _ = parts.append(item.place) %}
-    {%- elif f == 'date' and item.date and item.date_label %}{% set _ = parts.append('<span title="{}">{} ({})</span>'.format({'Veranstaltung': 'Datum der Veranstaltung, zu der das Blatt einlädt', 'Eingang': 'Datum des Eingangsstempels im Archiv'}.get(item.date_label, '') | e, item.date | e, item.date_label | e) | safe) %}
+    {%- elif f == 'band' %}{% set _ = parts.append('<span class="locator">{}</span>'.format(item.place | e) | safe) %}
+    {%- elif f == 'hits' and item.get('hits') %}{% set _ = parts.append(item.hits ~ (' Fundstelle' if item.hits == 1 else ' Fundstellen')) %}
+    {%- elif f == 'date' and item.date and item.date_label %}{% set _ = parts.append('<span title="{}">{} {}</span>'.format({'Veranstaltung': 'Datum der Veranstaltung, zu der das Blatt einlädt', 'Eingang': 'Datum des Eingangsstempels im Archiv'}.get(item.date_label, '') | e, {'Eingang': 'eingegangen'}.get(item.date_label, item.date_label) | e, item.date | e) | safe) %}
     {%- elif f == 'date' and item.date %}{% set _ = parts.append(item.date) %}
     {%- elif f == 'issuers' and item.issuers %}{% set _ = parts.append(issuer_list(item.issuers)) %}
     {#- a series already shown as title is not repeated -#}
-    {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
+    {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series ~ ((' ' ~ ('Nr. ' ~ l.issue if l.issue[0].isdigit() else l.issue)) if l.issue else '')) %}
     {%- endif -%}
 {%- endfor -%}
-{%- if item.copy_alternative %}{% set _ = parts.append('Duplikat') %}
+{%- if item.copy_alternative %}{% set _ = parts.append('weiteres Exemplar') %}
 {%- elif item.copies %}
-    {%- set text = item.copies ~ ((' Duplikat' if item.copies == 1 else ' Duplikate') if item.copies_checked
-            else (' mögliches Duplikat' if item.copies == 1 else ' mögliche Duplikate')) -%}
+    {%- set text = item.copies ~ ((' weiteres Exemplar' if item.copies == 1 else ' weitere Exemplare') if item.copies_checked
+            else (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare')) -%}
     {#- an unchecked group links to its review -#}
     {%- set _ = parts.append(text if item.copies_checked else ('<a href="/leaflets/' ~ l.id ~ '/exemplare">' ~ text ~ '</a>') | safe) %}{% endif -%}
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 
-{# search page: metadata line, title, three passages; further passages fold out #}
-{% macro result_list(items, qs='') %}
+{# search page: metadata line, title, two passages; all passages fold out #}
+{% macro result_list(items, qs='', locator=True) %}
 <ul class="result-list">
     {% for item in items %}{% set link = '/leaflets/' ~ item.leaflet.id ~ qs %}
-    <li>
+    <li id="l{{ item.leaflet.id }}">
         <a class="result-thumb" href="{{ link }}" tabindex="-1" aria-hidden="true">
             {%- if item.thumb %}<img src="/volumes/{{ item.vz }}/pages/{{ item.leaflet.start_page }}.jpg" alt="" loading="lazy">{% endif -%}
         </a>
         <div class="result-body">
         <a class="row-title" href="{{ link }}">{{ title(item.leaflet) }}</a>
-        {{ meta(item, ('date', 'issuers', 'series', 'count', 'band')) }}
-        {% for s in (item.snippets or [])[:3] if s %}{{ excerpt(s, href=link ~ ('#treffer-' ~ loop.index if item.get('hits') else '')) }}{% endfor %}
-        {% if item.get('hits', 0) > 3 %}
+        {{ meta(item, ('date', 'issuers', 'series', 'count', 'hits') + (('band',) if locator else ())) }}
+        {% if item.preview %}<span class="preview">… {{ item.preview }}</span>{% endif %}
+        {% for s in (item.snippets or [])[:2] if s %}{{ excerpt(s, href=link ~ ('#treffer-' ~ loop.index if item.get('hits') else '')) }}{% endfor %}
+        {% if item.get('hits', 0) > 2 %}
         <details class="excerpt-more">
-            <summary>{{ item.hits - 3 }} weitere {{ 'Fundstelle' if item.hits == 4 else 'Fundstellen' }}</summary>
-            {% for s in item.snippets[3:] %}{{ excerpt(s, href=link ~ '#treffer-' ~ (loop.index + 3)) }}{% endfor %}
+            <summary>Weitere Fundstellen anzeigen</summary>
+            {% for s in item.snippets[2:] %}{{ excerpt(s, href=link ~ '#treffer-' ~ (loop.index + 2)) }}{% endfor %}
         </details>
         {% endif %}
         </div>
     </li>
     {% else %}
-    <li>Keine Flugblätter gefunden.</li>
+    <li>Keine Dokumente gefunden.</li>
     {% endfor %}
 </ul>
 {% endmacro %}
@@ -66,7 +68,7 @@
 {% macro leaflet_cards(items, fields=('pages', 'date'), qs='') %}
 <div class="doc-grid">
     {% for item in items %}{% set l = item.leaflet %}
-    <figure class="doc-card">
+    <figure class="doc-card" id="l{{ l.id }}">
         {% if item.thumb %}
         {% set n = l.end_page - l.start_page + 1 %}
         <a class="doc-thumb" href="/leaflets/{{ l.id }}{{ qs }}" tabindex="-1" aria-hidden="true">

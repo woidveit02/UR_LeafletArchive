@@ -1,4 +1,5 @@
 import logging
+import math
 import re
 import time
 import unicodedata
@@ -24,7 +25,7 @@ from .database import copy_decisions, corrections, fillDatabase, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
                                     automatic_values, reset_leaflet, series_names)
-from .database.session import session
+from .database.session import DB_PATH, session
 from .database.models import (DRAFT, RELEASED, Leaflet, LeafletIssuer, Volume, Organization, Page,
                               Topic)
 from .app_helper import setup_logging
@@ -103,6 +104,9 @@ def german_to_iso(text):
 templates.env.globals['german_date'] = german_date
 templates.env.globals['DOC_TYPES'] = DOC_TYPES
 templates.env.globals['DATE_TYPES'] = DATE_TYPES
+# the fields a search can be limited to (the keys of search.FIELDS), for the field selection and the suggestions
+templates.env.globals['search_fields'] = [('titel', 'Titel'), ('herausgeber', 'Herausgeber'), ('unterzeichner', 'Unterzeichnende'),
+                                          ('reihe', 'Reihe'), ('text', 'Volltext')]
 
 
 MONTHS = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.',
@@ -337,6 +341,10 @@ def topic_list(request: Request, sortierung: str = ''):
 
 TREND_TERMS = 4
 MIN_YEAR_SIZE = 20  # smaller years join the next one, a single leaflet would swing their share
+MIN_SEMESTER = 5  # a semester with fewer dated leaflets gets no share: "1 of 1" is 100 %
+MONTH_NAMES = ('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember')
+MAX_NUR = 700  # leaflet ids in an address (about 5 KB): the lines of a request are limited, 8 KB at most
+MULTIPLE = '_mehrere'  # a leaflet of several of the issuers shown in a chart
 MIN_ORG_SIZE = 10  # issuers with fewer leaflets get no share, "1 of 1 = 100 %" says nothing
 
 
@@ -366,68 +374,148 @@ def year_buckets(totals):
     return buckets
 
 
-def term_profile(term, filters, buckets, totals, org_totals, chosen):
+def wilson_low(hits, total, z=1.96):
+    """Lower end of the 95 % Wilson interval of hits out of total: a small group has a wide interval and a low end."""
+    p = hits / total
+    return (p + z * z / (2 * total) - z * math.sqrt(p * (1 - p) / total + z * z / (4 * total * total))) / (1 + z * z / total)
+
+
+def leaflet_forms(term, items):
+    """Leaflet id -> the words of a single-word term that the title and text of any copy of it contain
+    ("gesetz" also finds Hochschulgesetz). The copies are searched as well: one of them may be the only hit."""
+    if ' ' in term or '"' in term:
+        return {}
+    groups = {i['leaflet'].copy_group for i in items if i['leaflet'].copy_group is not None}
+    copies = defaultdict(list)  # copy group -> (leaflet id, title)
+    for group, leaflet_id, title in session.query(Leaflet.copy_group, Leaflet.id, Leaflet.title).filter(Leaflet.copy_group.in_(groups)):
+        copies[group].append((leaflet_id, title or ''))
+    members = {i['leaflet'].id: copies.get(i['leaflet'].copy_group) or [(i['leaflet'].id, i['leaflet'].title or '')] for i in items}
+    texts = defaultdict(list)
+    for leaflet_id, text in session.query(Page.leaflet_id, Page.text).filter(Page.leaflet_id.in_([m[0] for ms in members.values() for m in ms])):
+        texts[leaflet_id].append(text or '')
+    wanted = search.variants(term)
+    return {own: {w for w in set(re.findall(r"\w+", ' '.join(t for lid, title in ms for t in [title, *texts[lid]]).replace('- ', '').lower()))
+                  if any(v in w for v in wanted)}
+            for own, ms in members.items()}
+
+
+def trend_url(terms, filters, ohne, tab=0):
+    """The trends page for these terms, the tab of one of them open; `ohne` (term -> forms) are left out of the count of that term."""
+    return '/trends?' + urlencode([('begriffe', ', '.join(terms)), *filters,
+                                   *(('ohne', f"{t}:{f}") for t in terms for f in sorted(ohne.get(t.lower(), ()))),
+                                   *([('tab', tab)] if tab else [])])
+
+
+def semester(iso):
+    """(year, 0 for the summer semester April-September or 1 for the winter semester October-March, which starts in that year)."""
+    year, month = int(iso[:4]), int(iso[5:7])
+    return (year, 0) if 4 <= month <= 9 else (year if month >= 10 else year - 1, 1)
+
+
+def semester_label(sem):
+    year, winter = sem
+    return f"WS {year % 100:02}/{(year + 1) % 100:02}" if winter else f"SS {year % 100:02}"
+
+
+TREND_CACHE = {}  # (term, filters, state of the database) -> (items, forms): switching a tab or a form does not search again
+
+
+def database_stamp():
+    """Changes with every commit to the database file (also in its journal)."""
+    return tuple(p.stat().st_mtime_ns if p.exists() else 0 for p in (DB_PATH, DB_PATH.with_name(DB_PATH.name + '-wal')))
+
+
+def term_profile(term, filters, buckets, totals, org_totals, chosen, span, sem_totals, terms, ohne, partial):
     """Counts per year bucket, first and last dated leaflet, top issuers and topics of a term."""
     if not search.terms(term):
         return {'term': term, 'short': True}
     # the copy chosen for the totals, even if only another copy matches: copies differ in issuers
-    items = list({copy_key(i): chosen[copy_key(i)] for i in faceted_items(filters + [('q', term), ('duplikate', '1')])[0]}.values())
+    key = (term.lower(), tuple(filters), database_stamp())
+    if key not in TREND_CACHE:
+        found = list({copy_key(i): chosen[copy_key(i)] for i in faceted_items(filters + [('q', term), ('duplikate', '1'), ('text', '1')])[0]}.values())
+        if len(TREND_CACHE) >= 32:
+            TREND_CACHE.clear()
+        TREND_CACHE[key] = found, leaflet_forms(term, found)
+    items, forms = TREND_CACHE[key]
+    # a leaflet counts if it has a form that is not left out
+    form_counts = Counter(f for fs in forms.values() for f in fs)
+    left_out = ohne.get(term.lower(), set())
+    if left_out:
+        items = [i for i in items if forms[i['leaflet'].id] - left_out]
     counts = Counter(buckets[i['year']] for i in items)
     dated = sorted((i for i in items if i['leaflet'].date_iso), key=lambda i: i['leaflet'].date_iso)
     org_counts = Counter(o for i in items for o in i['orgs'] if o not in SPECIAL)
     orgs = org_counts.most_common()  # the page shows the first five and folds the rest
     unregistered = sum(NOT_IN_REGISTER in i['orgs'] for i in items)
     no_org = sum(NO_ORG in i['orgs'] for i in items)
-    # share of the issuer's own leaflets that contain the term
-    shares = sorted(((n / org_totals[o], n, o) for o, n in org_counts.items()
-                     if org_totals[o] >= MIN_ORG_SIZE), reverse=True)
     # issuers per year: each leaflet once, under the first of these issuers it has
     ranked = [o for o, _ in Counter(o for i in items for o in i['orgs'] if o != NO_ORG).most_common(5)]
-    stacks = Counter((next((o for o in ranked if o in i['orgs']), None), buckets[i['year']]) for i in items)
-    months = Counter(i['leaflet'].date_iso[:7] for i in items if len(i['leaflet'].date_iso or '') >= 7)
-    first, last = min(months, default=''), max(months, default='')
-    span = [m for y in range(int(first[:4] or 0), int(last[:4] or -1) + 1)
-            for m in (f"{y}-{n:02}" for n in range(1, 13)) if first <= m <= last]
+
+    def stack(i):
+        mine = [o for o in ranked if o in i['orgs']]
+        return MULTIPLE if len(mine) > 1 else mine[0] if mine else None
+
+    stacks = Counter((stack(i), buckets[i['year']]) for i in items)
+    sems = Counter(semester(i['leaflet'].date_iso) for i in items if len(i['leaflet'].date_iso or '') >= 7)
     names = {o.id: o.name for o in session.query(Organization).filter(
-        Organization.id.in_([o for o, _ in orgs] + [o for _, _, o in shares] + ranked))}
+        Organization.id.in_([o for o, _ in orgs] + ranked))}
     names[NOT_IN_REGISTER] = 'nicht im Register'
-    topics = Counter(i['leaflet'].topic_id for i in items if i['leaflet'].topic_id).most_common(3)
+    topics = Counter(i['leaflet'].topic_id for i in items if i['leaflet'].topic_id).most_common(15)
     titles = {t.id: t.title for t in session.query(Topic).filter(Topic.id.in_([t for t, _ in topics]))}
 
+    ids = ','.join(str(i['leaflet'].id) for i in items) or '0'
+    scope = ('nur', ids) if left_out else ('q', term)  # with forms left out the list shows the leaflets that were counted
+
     def list_url(*pairs):
-        return '/leaflets?' + urlencode(filters + [('q', term), *pairs])
+        return '/leaflets?' + urlencode(filters + [scope, *(() if left_out else (('text', '1'),)), *pairs])
 
     def year_url(bucket, *pairs):
         # a merged bucket cannot be a year filter: the list sorted by date starts with it
         return list_url(('jahr', bucket) if '/' not in bucket else ('sortierung', 'datum_auf'), *pairs)
 
+    peak = max(((counts[b] / totals[b], b) for b in totals if totals[b]), default=(0, ''))
+    top = [names.get(o, o) for o, _ in orgs[:3]]
+    lead = f"{len(items)} {'Flugblatt' if len(items) == 1 else 'Flugblätter'}"
+    if items:
+        percent = f"{round(peak[0] * 100, 1):g}".replace('.', ',')
+        lead += f". Höchster Anteil {peak[1]}: {percent} % ({counts[peak[1]]} von {totals[peak[1]]})"
+    if top:
+        lead += ". Am häufigsten von " + (', '.join(top[:-1]) + ' und ' + top[-1] if len(top) > 1 else top[0])
     return {
-        'term': term, 'total': len(items), 'url': list_url(),
+        'term': term, 'total': len(items), 'url': list_url(), 'lead': lead + '.', 'left_out_n': len(left_out),
         'counts': [counts[b] for b in totals],
         'shares': [round(counts[b] / totals[b] * 100, 1) for b in totals],
         'urls': [year_url(b) for b in totals],
-        'by_org': [{'label': names.get(o, o) if o else 'andere', 'org': o,
+        'by_org': [{'label': 'mehrere Herausgeber' if o == MULTIPLE else names.get(o, o) if o else 'andere', 'org': o,
                     'counts': [stacks[o, b] for b in totals],
-                    'urls': [year_url(b, ('org', o)) if o else year_url(b) for b in totals]} for o in ranked + [None]],
-        # a month cannot be filtered in the list: its bar opens the year, sorted by date
-        'months': {'labels': span, 'counts': [months[m] for m in span],
-                   'urls': [list_url(('jahr', m[:4]), ('sortierung', 'datum_auf')) for m in span],
-                   # hits dated only to the year, or not at all
-                   'rest': len(items) - sum(months.values())},
-        'month_dated': sum(months.values()),
+                    'urls': [year_url(b, ('org', o)) if o and o != MULTIPLE else year_url(b) for b in totals]}
+                   for o in ranked + [MULTIPLE, None]],
+        # a semester cannot be filtered in the list: its bar opens the year, sorted by date
+        # the share of the leaflets dated to that semester; one with too few dated leaflets has none (a gap, not a zero)
+        'sems': {'counts': [sems[m] for m in span], 'shares': [round(sems[m] / sem_totals[m] * 100, 1) if sem_totals[m] >= MIN_SEMESTER else None for m in span],
+                 'urls': [list_url(('jahr', str(m[0])), ('sortierung', 'datum_auf')) for m in span],
+                 # hits dated only to the year, or not at all
+                 'rest': len(items) - sum(sems.values())},
+        'sem_dated': sum(sems.values()),
+        'ids': {i['leaflet'].id for i in items},
+        'forms': [{'label': f, 'count': n, 'off': f in left_out, 'title': f"in {n} Flugblättern",
+                   'url': '/leaflets?' + urlencode(filters + [('q', f)]),
+                   'toggle': trend_url(terms, filters, {**ohne, term.lower(): left_out ^ {f}}, terms.index(term))}
+                  for f, n in form_counts.most_common(60)],
         'first': dated[0] if dated else None, 'last': dated[-1] if len(dated) > 1 else None,
-        'orgs': [{'label': names.get(o, o), 'count': n, 'url': list_url(('org', o))} for o, n in orgs],
+        # one row per issuer: the hits, and the share of its own leaflets with the lower end of its interval (from MIN_ORG_SIZE leaflets)
+        'org_max': max((o for o in (n / org_totals[o_id] for o_id, n in orgs if org_totals[o_id] >= MIN_ORG_SIZE)), default=1),
+        'org_table': [{'label': names.get(o, o), 'count': n, 'url': list_url(('org', o)),
+                       'total': org_totals[o] if org_totals[o] >= MIN_ORG_SIZE else 0,
+                       'share': n / org_totals[o] if org_totals[o] >= MIN_ORG_SIZE else None,
+                       'low': wilson_low(n, org_totals[o]) if org_totals[o] >= MIN_ORG_SIZE else None} for o, n in orgs],
         # what the issuer list leaves out
         'orgs_other': [{'label': label, 'url': url} for label, url in (
             (f"{unregistered} nicht im Register", list_url(('org', NOT_IN_REGISTER))),
             (f"{no_org} ohne Herausgeber", list_url(('org', NO_ORG))))
             if not label.startswith('0 ')],
-        'org_shares': [{'label': names.get(o, o), 'count': s, 'url': list_url(('org', o)),
-                        'meta': f"{round(s * 100)} % ({n} von {org_totals[o]})", 'title': f"{n} von {org_totals[o]} Flugblättern"}
-                       for s, n, o in shares],
         'topics': [{'label': titles.get(t, str(t)), 'count': n,
                     'url': list_url(('thema', str(t)))} for t, n in topics],
-        'points': [[i['leaflet'].x, i['leaflet'].y] for i in items if i['leaflet'].x is not None],
     }
 
 
@@ -444,27 +532,49 @@ def trends(request: Request, begriffe: str = ''):
     totals = {b: counts[b] for b in sorted(counts)}
     org_totals = Counter(o for i in everything for o in i['orgs'])
     labels = facet_labels()
+    ohne = {}
+    for value in request.query_params.getlist('ohne'):  # "term:form": that form is not counted for that term
+        term, _, form = value.rpartition(':')
+        if term and form:
+            ohne.setdefault(term.lower(), set()).add(form.lower())
     chips = [{'label': short_topic_title(labels.get(k, str)(v)),
-              'url': '/trends?' + urlencode([('begriffe', ', '.join(terms))]
-                                            + [p for p in filters if p != (k, v)])}
+              'url': trend_url(terms, [p for p in filters if p != (k, v)], ohne)}
              for k, v in filters]
     chosen = {copy_key(i): i for i in everything}
-    rows = [term_profile(t, filters, buckets, totals, org_totals, chosen) for t in terms]
-    found = [r['term'] for r in rows if r.get('total')]
-    together = [{'terms': pair, 'url': '/leaflets?' + urlencode(filters + [('q', ' '.join(pair))]),
-                 'count': len(unique(faceted_items(filters + [('q', ' '.join(pair)), ('duplikate', '1')])[0]))}
-                for pair in combinations(found, 2)]
+    sem_totals = Counter(semester(i['leaflet'].date_iso) for i in everything if len(i['leaflet'].date_iso or '') >= 7)
+    # the axis runs from the first to the last semester with enough dated leaflets; the thinner ones at the edges are not shown
+    enough = [m for m in sem_totals if sem_totals[m] >= MIN_SEMESTER] or list(sem_totals)
+    first, last = min(enough, default=(0, 0)), max(enough, default=(0, -1))
+    span = [(y, w) for y in range(first[0], last[0] + 1) for w in (0, 1) if first <= (y, w) <= last]
+    before, after = (sum(n for m, n in sem_totals.items() if m < first),
+                     sum(n for m, n in sem_totals.items() if m > last))
+    cut_note = ' und '.join(part for part in (f"{before} datierte Flugblätter vor {semester_label(first)}" if before else '',
+                                              f"{after} datierte Flugblätter nach {semester_label(last)}" if after else '') if part)
+    # the archive ends within the last semester: its share rests on part of it
+    latest = max((i['leaflet'].date_iso for i in everything if len(i['leaflet'].date_iso or '') >= 7), default='')
+    partial = bool(latest) and (latest[5:7] not in ('03', '09'))
+    rows = [term_profile(t, filters, buckets, totals, org_totals, chosen, span, sem_totals, terms, ohne, partial) for t in terms]
+    # what two terms have in common: the leaflets both counted
+    together = []
+    for a, b in combinations([r for r in rows if r.get('total')], 2):
+        both = sorted(a['ids'] & b['ids'])
+        together.append({'terms': (a['term'], b['term']), 'count': len(both),
+                         'url': '/leaflets?' + urlencode(filters + [('nur', ','.join(map(str, both)) or '0')])})
     for row in rows:
-        row['remove_url'] = '/trends?' + urlencode(
-            [('begriffe', ', '.join(t for t in terms if t != row['term']))] + filters)
-    cloud = [[i['leaflet'].x, i['leaflet'].y] for i in everything if i['leaflet'].x is not None]
-    chart = {'years': list(totals), 'totals': list(totals.values()), 'cloud': cloud,
-             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'months', 'points')}
-                       for r in rows]}
+        row['remove_url'] = trend_url([t for t in terms if t != row['term']], filters, ohne)
+    chart = {'years': list(totals), 'totals': list(totals.values()),
+             'sems': {'labels': [semester_label(m) + ('*' if partial and m == semester(latest) else '') for m in span],
+                      'totals': [sem_totals[m] for m in span], 'gap': [sem_totals[m] < MIN_SEMESTER for m in span]},
+             'terms': [{k: r.get(k) for k in ('term', 'counts', 'shares', 'urls', 'by_org', 'sems')} for r in rows],
+             }
     return templates.TemplateResponse(
         request, "trends.html",
-        {"begriffe": ', '.join(terms), "filters": filters, "chips": chips, "rows": rows,
-         "min_org_size": MIN_ORG_SIZE,
+        {"tab": min(int(request.query_params.get('tab', '0')) if request.query_params.get('tab', '0').isdigit() else 0, max(len(rows) - 1, 0)),
+         "cut_note": f"Im Semesterverlauf nicht gezeigt, zu wenige für einen Anteil: {cut_note}." if cut_note else '',
+         "tab_urls": [trend_url(terms, filters, ohne, n) for n in range(len(rows))],
+         "begriffe": ', '.join(terms), "filters": filters, "chips": chips, "rows": rows,
+         "min_org_size": MIN_ORG_SIZE, "min_semester": MIN_SEMESTER,
+         "partial_until": f"{MONTH_NAMES[int(latest[5:7]) - 1]} {latest[:4]}" if partial else '',
          "together": together, "chart": chart})
 
 
@@ -488,21 +598,28 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
     logger.info('Opening leaflet list')
     params = list_params(request)
     selected = dict(params)
+    picked = chosen_values(params)
     items, counts = faceted_items(params)
     view = ansicht if ansicht in ('kacheln', 'fundstellen') else 'liste'
-    found = passages(items, selected) if view == 'fundstellen' and selected.get('q') else []
+    # the words to mark in the texts: those of the search field and of the rows that are not excluded
+    marked = ' '.join([selected.get('q', '')] + [row[2] for row in map(search_row, (v for k, v in params if k == 's')) if row[0] != 'nicht'])
+    found = passages(items, {**selected, 'q': marked}) if view == 'fundstellen' and marked else []
     # the counts, the CSV and the detail page's paging cover the whole selection, the page shows a part of it
     size = int(pro_seite) if pro_seite in map(str, PAGE_SIZES) else PAGE_SIZE
     pages = max(1, -(-len(items) // size))
     page = min(max(int(seite) if seite.isdigit() else 1, 1), pages)
     shown_items = items[(page - 1) * size:page * size]
-    if view != 'fundstellen' and search.terms(selected.get('q', '')):
-        attach_passages(shown_items, selected['q'])
+    if view != 'fundstellen' and search.terms(marked):
+        attach_passages(shown_items, marked, 35 if view == 'kacheln' else 70)
+    elif view == 'liste':  # without a search the beginning of the text says what the leaflet is about
+        previews = text_previews([i['leaflet'].id for i in shown_items])
+        for item in shown_items:
+            item['preview'] = shorten_preview(previews.get(item['leaflet'].id, ''))
 
     def shown(key):
         """Values of a facet with hits, plus the selected one."""
         return {v for v, n in counts[key].items() if n and v} | (
-            {selected[key]} if key in selected else set())
+            set(picked.get(key, ())))
 
     def url(pairs):
         """List address for the parameter pairs, in the current view."""
@@ -510,16 +627,15 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
         return '/leaflets' + ('?' + urlencode(pairs) if pairs else '')
 
     def toggle_url(key, value):
-        """List address with `key` set to `value`, or without it if already chosen."""
-        rest = [(k, v) for k, v in params if k != key]
-        return url(rest + ([(key, value)] if selected.get(key) != value else []))
+        """List address with `value` added to the values chosen for `key`, or removed if it is chosen."""
+        return url([p for p in params if p != (key, value)] + ([] if value in picked.get(key, ()) else [(key, value)]))
 
     def facet(key, label_of, sub_of=lambda v: ''):
         """Entries of a facet list: the selected one first, 'none' last, else by count."""
-        values = sorted(shown(key), key=lambda v: (v != selected.get(key), v in SPECIAL,
+        values = sorted(shown(key), key=lambda v: (v not in picked.get(key, ()), v in SPECIAL,
                                                    -counts[key][v], label_of(v).casefold()))
         return [{'label': label_of(v), 'sub': sub_of(v), 'count': counts[key][v],
-                 'url': toggle_url(key, v), 'active': v == selected.get(key),
+                 'url': toggle_url(key, v), 'active': v in picked.get(key, ()),
                  'none': v in SPECIAL} for v in values]
 
     orgs = {o.id: o for o in session.query(Organization)}
@@ -530,7 +646,7 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
     facets = {
         'years': [{'year': y, 'count': counts['jahr'][y], 'url': toggle_url('jahr', y),
                    'height': round(counts['jahr'][y] / highest * 75),
-                   'active': y == selected.get('jahr')} for y in axis],
+                   'active': y in picked.get('jahr', ())} for y in axis],
         'orgs': facet('org', labels['org'], lambda o: orgs[o].full_name or '' if o in orgs else ''),
         # "uncertain" sits with the special entries of the topic list, it is a filter on the topic
         'topics': facet('thema', labels['thema']) + [{**e, 'none': True} for e in facet('unsicher', labels['unsicher'])],
@@ -540,10 +656,23 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
     }
 
     # chips above the results, each removes its own parameter
-    active_filters = [{'label': short_topic_title(labels['thema'](v)) if k == 'thema'
-                       else labels.get(k, str)(v),
-                       'url': url([p for p in params if p != (k, v)])}
-                      for k, v in params if k not in ('sortierung', 'duplikate')]
+    # the search itself stands in the rows above the results, the chips are for the filters
+    kinds = {'jahr': 'Jahr', 'org': 'Herausgeber', 'thema': 'Thema', 'typ': 'Typ', 'reihe': 'Reihe', 'datum': 'Datierung'}
+    groups = {}  # one chip per facet, its values joined by "oder", each with its own ×
+    for k, v in params:
+        if k not in ('q', 'feld', 's', 'sortierung', 'duplikate'):
+            label = short_topic_title(labels['thema'](v)) if k == 'thema' else labels.get(k, str)(v)
+            groups.setdefault(k, {'kind': kinds.get(k, ''), 'entries': []})['entries'].append(
+                {'label': label, 'url': url([p for p in params if p != (k, v)])})
+    active_filters = list(groups.values())
+    one_row = [{'operator': '', 'field': selected.get('feld', ''), 'term': selected.get('q', '')}]
+    search_lines = one_row + [dict(zip(('operator', 'field', 'term'), search_row(v))) for k, v in params if k == 's']
+    reading = ''
+    if len(search_lines) > 2:  # with three conditions the order of the connectives matters: show how they are read
+        reading = search_lines[0]['term']
+        for line in search_lines[1:]:
+            reading = f"({reading} {line['operator'].upper()} {line['term']})"
+
 
     query_string = '?' + urlencode(params) if params else ''
     return templates.TemplateResponse(
@@ -556,17 +685,19 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
                                                 if 'duplikate' not in selected else True).count(),
          "hidden_params": [(k, v) for k, v in params if k in FACETS],
          "active_filters": active_filters, "reset_all_url": url([]),
-         "clear_search_url": url([(k, v) for k, v in params if k != 'q']),
+         "clear_search_url": url([(k, v) for k, v in params if k not in ('q', 'feld', 's')]),
+         "search_active": any(line['term'] for line in search_lines), "search_lines": search_lines, "reading": reading, "operators": [(k, k.upper()) for k in BOOLEAN],
          "selected_sort": selected.get('sortierung'),
          "selected_q": selected.get('q', ''),
          "q_short": bool(selected.get('q')) and not search.terms(selected['q']),
-         "filtered": sum(k not in ('q', 'sortierung', 'duplikate') for k, _ in params),
+         "filtered": sum(k not in ('q', 'feld', 's', 'sortierung', 'duplikate') for k, _ in params),
          "view": view, "passages": found[:PASSAGE_LIMIT], "passage_count": len(found),
          "trends_url": '/trends?' + urlencode([('begriffe', selected.get('q', ''))] + [
              (k, v) for k, v in params if k in FACETS and k != 'jahr']),
          "switch_base": '/leaflets' + query_string + (('&' if params else '?') + f'pro_seite={size}' if size != PAGE_SIZE else ''),
          "size": size, "page_sizes": PAGE_SIZES,
-         "detail_qs": query_string})
+         "detail_from": '?' + urlencode(params + ([('pro_seite', size)] if size != PAGE_SIZE else [])
+                                        + ([('ansicht', view)] if view != 'liste' else []) + [('ergebnisse', '1')])})
 
 
 PASSAGE_LIMIT = 500
@@ -576,17 +707,84 @@ PAGE_SIZES = (25, 50, 100, 250, 500)
 
 def passages(items, params):
     """Occurrences of the search terms in the OCR text of the items, by date unless sorted otherwise."""
-    texts = search.ocr_texts(session, [i['leaflet'].id for i in items])
+    texts = search.ocr_texts(session, [text_id(i) for i in items])
     if not params.get('sortierung'):
         items = sorted(items, key=date_sort_key)
     return [{'item': item, 'n': n, 'left': left, 'hit': hit, 'right': right}
             for item in items
             for n, (left, hit, right) in enumerate(
-                search.kwic(texts.get(item['leaflet'].id, ''), params['q']), start=1)]
+                search.kwic(texts.get(text_id(item), ''), params['q']), start=1)]
+
+
+PREVIEW_MIN = 40  # characters a block needs to count as running text
+PREVIEW_CHARS = 180  # about two lines of the list
+SPACED = re.compile(r'\b(?:[^\W\d_] ){2,}[^\W\d_]\b')  # "R o s s": letter-spaced typewriter lettering
+
+
+def tidy_preview(text):
+    """Typesetting of the recognised text made readable: spaced-out words joined, no space before a closing mark
+    or after an opening bracket. Only the preview is changed, not the stored text."""
+    text = SPACED.sub(lambda m: m.group().replace(' ', ''), text)
+    text = re.sub(r'\s+([,;:.!?)\]])', r'\1', text)
+    return re.sub(r'([(\[])\s+', r'\1', text)
+
+
+def shorten_preview(text, width=PREVIEW_CHARS):
+    """The text cut at a word boundary, without a dangling mark in front of the "…"."""
+    if len(text) <= width:
+        return text + ' …' if text.endswith(':') else text  # a colon announces what follows in the next block
+    return text[:width].rsplit(' ', 1)[0].rstrip(' ,;:(-–') + ' …'
+MAX_REPEATED = 0.5  # a block of which fewer words are different is a banner ("STREIK ?? STREIK !! STREIK ??")
+
+
+def running_text(plain, title):
+    """Whether a block reads as text: long enough, not a banner of repeated words, not the title again."""
+    words = re.findall(r'\w+', plain.casefold())
+    if len(plain) < PREVIEW_MIN or len(set(words)) < MAX_REPEATED * len(words):
+        return False
+    # spaced-out letters ("a k t i o n s") and strings like "aaaaa sssss" are lettering the recognition could not read
+    if sum(map(len, words)) < 2.5 * len(words) or sum(len(w) > 2 and len(set(w)) == 1 for w in words) >= 3:
+        return False
+    shown, wanted = ' '.join(words), ' '.join(re.findall(r'\w+', (title or '').casefold()))
+    return not wanted or SequenceMatcher(None, shown[:len(wanted)], wanted).ratio() < 0.85
+
+
+def text_previews(leaflet_ids):
+    """{leaflet id: text}: the first running text block (not a header, banner, footer or the title) on the first two
+    pages of the leaflet; a leaflet without one has no preview."""
+    pages = (session.query(Page.leaflet_id, Page.blocks, Leaflet.title).join(Leaflet, Leaflet.id == Page.leaflet_id)
+             .filter(Page.leaflet_id.in_(leaflet_ids), Page.page_no <= Leaflet.start_page + 1).order_by(Page.page_no))
+    found = {}
+    for leaflet_id, blocks, title in pages:
+        if leaflet_id in found:
+            continue
+        for block in blocks or []:
+            plain = ' '.join(unescape(re.sub(r'<[^>]+>', ' ', block.get('html', ''))).split()).replace('- ', '')
+            if block.get('type') in ('Text', 'ListGroup') and running_text(plain, title):
+                found[leaflet_id] = tidy_preview(plain)
+                break
+    return found
+
+
+def text_id(item):
+    """The leaflet whose text matched: the item's own, or the other copy of its group that the search found."""
+    return item.get('text_id', item['leaflet'].id)
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung', 'duplikate')
+LIST_PARAMS = ('q', 'feld', 's', 'text', 'nur', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung', 'duplikate')
+
+
+BOOLEAN = {'und': 'AND', 'oder': 'OR', 'nicht': 'NOT'}
+MAX_ROWS = 8
+
+
+def search_row(value):
+    """(operator, field, term) of an extra search row "und|titel|streik", or None if it is not valid."""
+    operator, _, rest = value.partition('|')
+    field, _, term = rest.partition('|')
+    term = ' '.join(term.split())[:search.MAX_QUERY]
+    return (operator, field, term) if operator in BOOLEAN and (not field or field in search.FIELDS) and term else None
 
 
 def list_params(request):
@@ -595,35 +793,51 @@ def list_params(request):
     for key, value in request.query_params.multi_items():
         if key == 'q':
             value = ' '.join(value.split())[:search.MAX_QUERY]
-        if key in LIST_PARAMS and value:
+        if key == 's':  # further search rows
+            row = search_row(value)
+            value = '|'.join(row) if row and sum(k == 's' for k, _ in params) < MAX_ROWS else ''
+        if key in LIST_PARAMS and value and (key != 'feld' or value in search.FIELDS):
             params.append((key, value))
     return params
 
 
-def search_hits(query, q):
-    """Restricts `query` to the full-text hits for `q`.
+def search_rows(params):
+    """[(operator, index columns, term)]: the search field first, then the further rows."""
+    one = dict(params)
+    # feld: only that field; text=1 (trends page): not in the issuers' names
+    first = search.FIELDS.get(one.get('feld')) or (('title', 'ocr_text') if one.get('text') else None)
+    rows = [('AND', first, one['q'])] if one.get('q') else []
+    for key, value in params:
+        if key == 's':
+            operator, field, term = search_row(value)
+            rows.append((BOOLEAN[operator], search.FIELDS.get(field), term))
+    return rows
+
+
+def search_hits(query, rows):
+    """Restricts `query` to the full-text hits for the search `rows`.
 
     Returns (query, ranked): with FTS hits the query also yields a rank column.
     Queries without a word of three characters cannot use the trigram index and
     fall back to a substring search in title and series.
     """
-    match = search.match_expression(q)
+    match = search.combine([(operator, search.match_expression(term, columns)) for operator, columns, term in rows])
     if match:
         hits = search.hits_subquery(match)
         return (query.join(hits, hits.c.leaflet_id == Leaflet.id)
                 .add_columns(hits.c.rank), True)
-    pattern = search.like_pattern(q)
+    pattern = search.like_pattern(rows[0][2])
     return query.filter(or_(Leaflet.title.ilike(pattern, escape='\\'),
                             Leaflet.series.ilike(pattern, escape='\\'))), False
 
 
-def attach_passages(items, q):
+def attach_passages(items, q, width=70):
     """Adds 'snippets' (all passages as safe HTML) and 'hits' (their number) to the items;
     hits outside the OCR text show its beginning."""
-    texts = search.ocr_texts(session, [i['leaflet'].id for i in items])
+    texts = search.ocr_texts(session, [text_id(i) for i in items])
     for item in items:
-        text = texts.get(item['leaflet'].id, '')
-        found = search.kwic(text, q, width=35)  # one line in the result list
+        text = texts.get(text_id(item), '')
+        found = search.kwic(text, q, width=width)  # two lines in the result list
         item['snippets'] = [search.passage_html(*p) for p in found] or [search.fallback_snippet(text)]
         item['hits'] = len(found)
 
@@ -649,14 +863,23 @@ def filtered_items(params):
     return faceted_items(params)[0]
 
 
+def chosen_values(params):
+    """{facet: [values]} of the list parameters: several values of one facet are alternatives."""
+    chosen = {}
+    for k, v in params:
+        if k in FACETS:
+            chosen.setdefault(k, []).append(v)
+    return chosen
+
+
 def faceted_items(params):
     """(items, counts): the selection, and per facet the counts over the items that
     match all other filters, so each option shows what choosing it would give."""
-    chosen = {k: v for k, v in params if k in FACETS}
+    chosen = chosen_values(params)
     items = searched_items(params)
 
-    def matches(item, skip=None):
-        return all(v in FACETS[k](item) for k, v in chosen.items() if k != skip)
+    def matches(item, skip=None):  # one value of each chosen facet is enough, every chosen facet must match
+        return all(any(v in FACETS[k](item) for v in values) for k, values in chosen.items() if k != skip)
 
     counts = {key: Counter(value for item in items if matches(item, key)
                            for value in FACETS[key](item))
@@ -664,27 +887,57 @@ def faceted_items(params):
     return [item for item in items if matches(item)], counts
 
 
+def main_copies(hits):
+    """(the main copy of each group among the hits, once and in the order of the hits; {main id: id of the other copy
+    whose text matched}, only where the main copy itself did not match)."""
+    groups = {lf.copy_group for lf in hits if lf.copy_group}
+    mains = {lf.copy_group: lf for lf in released_leaflets().filter(
+        Leaflet.copy_group.in_(groups), Leaflet.canonical_leaflet_id == Leaflet.id)} if groups else {}
+    listed, via, own = {}, {}, set()
+    for lf in hits:
+        main = mains.get(lf.copy_group, lf) if lf.copy_group else lf
+        listed.setdefault(main.id, main)
+        if lf.id == main.id:
+            own.add(main.id)
+        else:
+            via.setdefault(main.id, lf.id)
+    return list(listed.values()), {k: v for k, v in via.items() if k not in own}
+
+
 def searched_items(params):
     """Items for the search and sort order of `params`; facets are left to the caller."""
     one = dict(params)
-    q = one.get('q', '')
+    rows = search_rows(params)
     query = released_leaflets()
-    if not one.get('duplikate'):  # a group of duplicates is listed once, by its main copy, unless all copies are asked for
+    # a group of copies is listed once, by its main copy, unless all copies are asked for; a search looks in all
+    # copies, so that a gap in the main copy's text does not hide the group (as on the trends page)
+    through_copies = bool(rows) and not one.get('duplikate') and not one.get('nur')
+    if not one.get('duplikate') and not through_copies:
         query = query.filter(or_(Leaflet.copy_group.is_(None), Leaflet.canonical_leaflet_id == Leaflet.id))
 
     ranked = False
-    if q:
-        query, ranked = search_hits(query, q)
+    if rows:
+        query, ranked = search_hits(query, rows)
+    if one.get('nur'):  # exactly these leaflets (ids): the trends page lists what its charts counted
+        query = query.filter(Leaflet.id.in_([int(n) for n in one['nur'].split(',') if n.isdigit()][:MAX_NUR]))
 
     sort = one.get('sortierung', '')
-    by_relevance = ranked and not sort.startswith(('datum_', 'titel_'))
+    if not sort and not ranked:  # without a search the list runs by date; "band" is the order of the archive
+        sort = 'datum_auf'
+    by_relevance = ranked and not sort
     order = [Volume.vz, Leaflet.start_page, Leaflet.id]
     if by_relevance:
         order = [literal_column('hits.rank')] + order
-    rows = query.order_by(*order).all()
+    found = query.order_by(*order).all()
     if ranked:
-        rows = [row[0] for row in rows]
-    items = leaflet_items(rows)
+        found = [row[0] for row in found]
+    matched = {}
+    if through_copies:
+        found, matched = main_copies(found)
+    items = leaflet_items(found)
+    for item in items:
+        if item['leaflet'].id in matched:
+            item['text_id'] = matched[item['leaflet'].id]
     # issuer facet values: register ids, NOT_IN_REGISTER for an unmatched issuer, NO_ORG for none
     orgs = {}
     for leaflet_id, org_id in (session.query(LeafletIssuer.leaflet_id, LeafletIssuer.org_id)
@@ -790,15 +1043,23 @@ def detail_page(request, leaflet, edit=None, error=None):
               else f"{short[lf.id]}, {short_pages(lf)}"}
              for lf in ordered]
 
-    # coming from a filtered list: page through that selection, else through the volume
+    # coming from a filtered list or from the result list itself (ergebnisse=1): page through those results, else
+    # through the volume
     selection = list_params(request)
-    siblings = [i['leaflet'].id for i in filtered_items(selection)] if selection else []
+    from_results = 'ergebnisse' in request.query_params
+    siblings = [i['leaflet'].id for i in filtered_items(selection)] if selection or from_results else []
     if leaflet.id not in siblings:
-        selection = []
+        selection, from_results = [], False
         siblings = [row.id for row in session.query(Leaflet.id)
                     .filter_by(volume_id=leaflet.volume_id)
                     .order_by(Leaflet.start_page)]
     pos = siblings.index(leaflet.id)
+    # the view of the list is carried along (the list checks the values), so that the way back leads to the same page
+    shown = [(k, v) for k, v in request.query_params.items() if k in ('pro_seite', 'ansicht')]
+    size = int(dict(shown).get('pro_seite', PAGE_SIZE)) if dict(shown).get('pro_seite') in map(str, PAGE_SIZES) else PAGE_SIZE
+    on_page = 1 if dict(shown).get('ansicht') == 'fundstellen' else pos // size + 1
+    pairs = selection + shown + ([('seite', on_page)] if on_page > 1 else [])
+    back_url = '/leaflets' + ('?' + urlencode(pairs) if pairs else '') + f'#l{leaflet.id}' if from_results else ''
     chosen = dict(selection)
     org = session.get(Organization, chosen['org']) if 'org' in chosen else None
     chosen_topic = (session.query(Topic)
@@ -831,7 +1092,8 @@ def detail_page(request, leaflet, edit=None, error=None):
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'position': pos + 1,
         'in_volume': len(siblings),
-        'qs': '?' + urlencode(selection) if selection else '',
+        'qs': '?' + urlencode(selection + (shown + [('ergebnisse', '1')] if from_results else [])) if selection or from_results else '',
+        'back_url': back_url,
         'selection': ' · '.join(filter(None, selection_labels)),
         'highlight': [v for t in search.terms(chosen.get('q', '')) for v in search.variants(t)],
         'volume': volume.name if volume else '',
@@ -1171,6 +1433,8 @@ def copy_list(request: Request, status: str = '', sortierung: str = '', band: in
         r['date'] = r['at'] and review_date(r['at'])
     checked = lambda r: r['state'] in ('geprueft', 'getrennt')
     counts = Counter('geprueft' if checked(r) else r['state'] for r in rows)
+    if not status and counts['offen']:  # without a choice the groups still to review come first
+        status = 'offen'
     shown = [r for r in rows if r['state'] == status or status == 'geprueft' and checked(r)] if status in COPY_STATES else rows
     if status == 'geprueft' and sortierung in ('neu', 'alt'):
         shown.sort(key=lambda r: r['at'] or '', reverse=sortierung == 'neu')
@@ -1219,7 +1483,7 @@ def word_key(word):
     return re.sub(r'\W+', '', unescape(word)).casefold() or word
 
 
-GAP = '<mark class="gap" data-diff="{}" title="Im anderen Duplikat nicht erkannt">∅</mark>'
+GAP = '<mark class="gap" data-diff="{}" title="Im anderen Exemplar nicht erkannt">∅</mark>'
 
 
 def mark_block(html_text, start, marks, gaps):

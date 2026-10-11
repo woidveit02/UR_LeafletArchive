@@ -13,6 +13,7 @@
     <main id="content" class="app{% block app_class %}{% endblock %}">
         {% block content %}{% endblock %}
     </main>
+    <script src="{{ url_for('static', path='field-search.js') }}" defer></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

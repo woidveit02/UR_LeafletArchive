@@ -9,6 +9,7 @@ from backend.app.database.models import RELEASED, Leaflet, Volume
 from backend.app.database.session import session
 
 
+@pytest.mark.built_db
 def test_export_reads_back():
     """Only reads the database: every released leaflet once, with its text, in each file."""
     released = session.query(Leaflet).join(Volume, Leaflet.volume_id == Volume.id).filter(Volume.status == RELEASED).count()

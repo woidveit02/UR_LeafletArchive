@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Duplikate prüfen – UR Leaflet Archive{% endblock %}
+{% block title %}Exemplare prüfen – UR Leaflet Archive{% endblock %}
 {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
 {% macro field(label, value, deviates) %}
 <span class="copy-field"><span class="meta">{{ label }}:</span>
@@ -36,7 +36,7 @@
 {% endmacro %}
 {% macro details_section() %}
         <h2>Angaben der Gruppe</h2>
-        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Duplikat etwas
+        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Exemplar etwas
             anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars.</p>
         {{ lists(org_names, series_names) }}
         {% for c in cards if c.id == left %}
@@ -79,18 +79,18 @@
             </span>{% endset %}
         {% if queue.band %}
         <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % queue.band }}">
-            <span><a href="/import/{{ queue.band }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % queue.band }} prüfen</b> · Duplikate: {{ state }}</span>
+            <span><a href="/import/{{ queue.band }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % queue.band }} prüfen</b> · Exemplare: {{ state }}</span>
             {{ pager }}
         </nav>
         {% else %}
         <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
-            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+            <span class="breadcrumb"><a href="/exemplare">Exemplare</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
             {{ pager }}
         </nav>
         {% endif %}
         <header class="page-head page-head-wide">
             <div class="head-row">
-                <h1>Duplikate prüfen</h1>
+                <h1>Exemplare prüfen</h1>
                 <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
             </div>
         </header>

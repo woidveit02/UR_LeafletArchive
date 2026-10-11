@@ -98,7 +98,7 @@ def test_ocr_marks_differences():
     assert right["blocks"][0]["html"] == '<p>der Weg zum <mark data-diff="1">Erfolge</mark></p>'
     # the second deviation: the words exist only on the right, so the left text gets a gap marker at its end
     assert right["blocks"][1]["html"] == '<p>Zweiter Absatz <mark data-diff="2">&amp;</mark> <mark data-diff="2">mehr</mark></p>'
-    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Duplikat nicht erkannt">∅</mark></p>')
+    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Exemplar nicht erkannt">∅</mark></p>')
     assert right["differs"] == 3 and right["words"] == 8 and left["diffs"] == right["diffs"] == 2
     assert [b["marked"] for b in right["blocks"]] == [True, True] and left["blocks"][1]["marked"] is True
     assert [b["id"] for b in left["blocks"]] == ["1-1", "1-2"]  # page and block number, as in the evidence image
@@ -263,16 +263,16 @@ def test_review_shows_on_detail_and_list(tmp_path, monkeypatch):
     detail = lambda leaflet: leaflet_app.leaflet_detail(page(f"/leaflets/{leaflet.id}"), leaflet.id).body.decode()
     listing = lambda: leaflet_app.leaflet_list(page("/leaflets"), ansicht="liste").body.decode()
     assert 'class="dup-inline"' in detail(a) and "</span><strong>" in detail(a)  # this leaflet is set in bold
-    assert "Hauptexemplar" not in detail(a) + detail(b) and "Duplikat<" not in detail(b)  # the proposal is not shown as a choice
-    assert "Noch nicht geprüft" in detail(a) and "3 mögliche Duplikate" in listing()
+    assert "Hauptexemplar" not in detail(a) + detail(b) and "Exemplar<" not in detail(b)  # the proposal is not shown as a choice
+    assert "Noch nicht geprüft" in detail(a) and "3 mögliche weitere Exemplare" in listing()
     assert f'href="/leaflets/{a.id}' in listing() and f'href="/leaflets/{b.id}' not in listing()  # a group is listed once
     everything = leaflet_app.leaflet_list(page("/leaflets", b"duplikate=1"), ansicht="liste").body.decode()
     assert f'href="/leaflets/{b.id}' in everything and "checked" in everything  # the switch brings the other copies back
-    assert f'href="/leaflets/{a.id}/exemplare">3 mögliche Duplikate</a>' in listing()  # an unchecked group links to its review
+    assert f'href="/leaflets/{a.id}/exemplare">3 mögliche weitere Exemplare</a>' in listing()  # an unchecked group links to its review
 
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     assert ">Geprüft</a>" in detail(a) and 'class="alt-note"' in detail(a) and 'class="alt-note"' not in detail(b) and 'role main">Hauptexemplar' in detail(b)
-    assert "1 Duplikat" in listing() and "1 mögliches Duplikat" in listing()  # a and b checked, c and d not
+    assert "1 weiteres Exemplar" in listing() and "1 mögliches weiteres Exemplar" in listing()  # a and b checked, c and d not
 
     # a new automatic hit for a checked group is offered, not added (a fresh import with a review on file)
     reviewed = copy_db(tmp_path, monkeypatch, [{"members": [ref(2), ref(5)], "rejected": [ref(8)],
@@ -345,6 +345,7 @@ def test_copy_details(tmp_path, monkeypatch):
 
 
 # Tests if, after the real import, every group has exactly one main copy that belongs to it.
+@pytest.mark.built_db
 def test_every_group_has_one_main_copy():
     groups = {}
     for leaflet in session.query(Leaflet).filter(Leaflet.copy_group.isnot(None)):

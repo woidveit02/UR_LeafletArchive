@@ -1,21 +1,33 @@
 {% extends "base.html" %}
 {% from '_leaflets.html' import title %}
-{% block title %}Duplikate – UR Leaflet Archive{% endblock %}
+{% block title %}Exemplare – UR Leaflet Archive{% endblock %}
 {% block content %}
         <header class="page-head">
-            <h1>Duplikate</h1>
-            <p class="meta">Dasselbe Flugblatt an mehreren Stellen im Bestand. Die Gruppen wurden automatisch am Text erkannt;
-                hier steht, welche schon geprüft sind. Ein Klick öffnet den Vergleich.
-                {% if first %}<a href="/leaflets/{{ first }}/exemplare">Ungeprüfte Gruppen nacheinander durchgehen →</a>{% endif %}</p>
-            {% if band %}<p class="meta">Nur Gruppen mit einem Exemplar in Nr. {{ '%03d' % band }} · <a href="/exemplare">alle Bände</a></p>{% endif %}
+            <p class="meta"><a href="/verwaltung">← Verwaltung</a></p>
+            <div class="head-row">
+                <h1>Exemplare</h1>
+                {% set checked = counts['geprueft'] %}
+                <span class="copy-progress" title="Geprüft sind Gruppen, bei denen ein Hauptexemplar gewählt oder die Gruppe getrennt wurde">{{ checked }} von {{ total }} geprüft
+                    <progress value="{{ checked }}" max="{{ total or 1 }}"></progress></span>
+            </div>
+            <p class="meta">Manche Flugblätter liegen mehrfach im Bestand, etwa in zwei verschiedenen Bänden. Solche Exemplare erkennt das System
+                automatisch am Text und fasst sie zu einer Gruppe zusammen. Ein Klick auf eine Gruppe öffnet den Vergleich, in dem du sie prüfen kannst.</p>
+            <p class="meta">Damit ein Blatt nicht mehrfach zählt, vertritt ein Hauptexemplar die Gruppe in der Liste, in den Trends und im Export,
+                und seine Angaben zu Titel, Datum und Herausgeber gelten für alle Exemplare. Die übrigen bleiben erhalten, denn sie können sich durch Stempel,
+                Randnotizen oder die Qualität der Texterkennung unterscheiden; in der Liste erscheinen sie mit „Jedes Exemplar einzeln zeigen“.
+                Die Suche findet eine Gruppe auch über die anderen Exemplare und zeigt dann das Hauptexemplar. Wähle als Hauptexemplar den vollständigsten, am besten lesbaren Scan.</p>
+            {% if band %}<p class="meta">Nur Gruppen mit einem Exemplar in Nr. {{ '%03d' % band }} · <a href="/exemplare?status=alle">alle Bände</a></p>{% endif %}
         </header>
         {% set in_band = ('band=' ~ band) if band else '' %}
-        <nav class="view-switch" aria-label="Prüfstand">
-            <a href="/exemplare{{ '?' ~ in_band if band }}"{% if status not in states %} aria-current="page"{% endif %}>Alle ({{ total }})</a>
-            {% for key, label in states.items() if counts[key] or key != 'neu' %}
-            <a href="/exemplare?status={{ key }}{{ '&' ~ in_band if band }}"{% if status == key %} aria-current="page"{% endif %}>{{ label }} ({{ counts[key] }})</a>
-            {% endfor %}
-        </nav>
+        <div class="copy-bar">
+            <nav class="view-switch" aria-label="Prüfstand">
+                {% for key, label in states.items() if counts[key] or key != 'neu' %}
+                <a href="/exemplare?status={{ key }}{{ '&' ~ in_band if band }}"{% if status == key %} aria-current="page"{% endif %}>{{ label }} ({{ counts[key] }})</a>
+                {% endfor %}
+                <a href="/exemplare?status=alle{{ '&' ~ in_band if band }}"{% if status not in states %} aria-current="page"{% endif %}>Alle ({{ total }})</a>
+            </nav>
+            {% if first %}<a class="button-link" href="/leaflets/{{ first }}/exemplare">Ungeprüfte durchgehen →</a>{% endif %}
+        </div>
         {% if status == 'geprueft' %}
         <form class="filter" method="get" action="/exemplare">
             <input type="hidden" name="status" value="geprueft">

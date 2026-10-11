@@ -121,7 +121,7 @@ def files(bands=None, main_only=False, persons=True, pages=True, only=None, link
 
 
 def readme(n_volumes, n_leaflets, main_only, persons, pages):
-    left_out = [part for part, out in (('Duplikate (nur Hauptexemplare)', main_only),
+    left_out = [part for part, out in (('Weitere Exemplare (nur Hauptexemplare)', main_only),
                                        ('Namen der Unterzeichnenden (im Volltext stehen sie weiter)', not persons),
                                        ('`seiten.jsonl`', not pages)) if out]
     return f"""# Flugblätter der Universität Regensburg (Rep. 118)
@@ -145,7 +145,7 @@ Export vom {datetime.date.today():%d.%m.%Y}: {n_volumes} freigegebene Bände, {n
 
 - `id`: Datei des Bandes und Seiten (`0118_0003_S127-128`); bleibt bei späteren Exporten gleich, solange die Seitengrenzen bleiben.
 - `datum`: ISO-Datum, so genau wie bekannt (`1968`, `1968-05`, `1968-05-14`); `datum_wortlaut` wie im Text.
-- `hauptexemplar`: bei Duplikaten die `id` des Hauptexemplars, sonst leer.
+- `hauptexemplar`: bei weiteren Exemplaren die `id` des Hauptexemplars, sonst leer.
 - `korrigiert`: die von Hand geprüften Felder. Alle anderen Angaben hat ein Sprachmodell aus dem OCR-Text erzeugt.
 
 ## Grenzen

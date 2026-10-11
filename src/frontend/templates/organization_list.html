@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Organisationen – UR Leaflet Archive{% endblock %}
+{% block title %}Herausgeber – UR Leaflet Archive{% endblock %}
 {% block content %}
         {% from '_ui.html' import sort_link %}
         <header class="page-head">
-		    <h1>Organisationen</h1>
+		    <h1>Herausgeber</h1>
             <p class="page-intro">Körperschaften, Gruppen und Initiativen, die als Herausgeber erschlossener Flugblätter auftreten.</p>
         </header>
         <div class="list-head">
-            {{ sort_link('/organizations', sort, 'name', 'Organisation', '_auf', 'anzahl_ab') }}
+            {{ sort_link('/organizations', sort, 'name', 'Herausgeber', '_auf', 'anzahl_ab') }}
             {{ sort_link('/organizations', sort, 'anzahl', 'Flugblätter', '_ab', 'anzahl_ab') }}
         </div>
         <ul class="leaflet-list leaflet-list-plain">
@@ -17,7 +17,7 @@
                 <span class="row-count">{{ org.count }}</span>
             </li>
             {% else %}
-            <li>Keine Organisationen gefunden.</li>
+            <li>Keine Herausgeber gefunden.</li>
             {% endfor %}
         </ul>
 {% endblock %}

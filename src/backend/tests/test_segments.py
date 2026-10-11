@@ -1,6 +1,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from backend.app import segments
 from backend.app.database import fillDatabase
 
@@ -79,6 +81,8 @@ def test_list_must_cover_every_page_once():
 def test_example_list_is_valid():
     from pathlib import Path
     example = Path(__file__).resolve().parents[2] / "frontend" / "static" / "beispiel-flugblaetter.txt"
+    if not example.is_file():
+        pytest.skip("the frontend folder is not next to the tests (container)")
     assert segments.parse_list(example.read_text(encoding="utf-8"), 9) == ([2, 3], [])
 
 
