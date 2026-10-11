@@ -74,3 +74,7 @@
 {"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "received", "value": "1970-01-28", "blocks": ["29-4"], "at": "2026-10-07"}
 {"volume": "0118_0005", "start_page": 287, "end_page": 287, "field": "received", "value": "1971-01-14", "blocks": ["287-3"], "at": "2026-10-07"}
 {"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "received", "value": "1970-01-29", "blocks": ["126-3"], "at": "2026-10-07"}
+{"volume": "0118_0001", "start_page": 6, "end_page": 7, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 1"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 8, "end_page": 9, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 2"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 3"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 4"}, "at": "2026-10-11"}

@@ -569,7 +569,7 @@ def resolve(surface, forms):
     return sorted(found)
 
 
-LOCAL_ORGS = {"asta", "linke_asta_fraktion", "studentenschaft", "studentenschaft_der_universit_t_regensburg",
+LOCAL_ORGS = {"asta", "linke_asta_fraktion", "studentenschaft",
               "studentenparlament", "fachschaften", "fachschaften_fachbereiche", "studentische_vertretung",
               "rektor", "kanzler", "studentenwerk", "studentenwerk_regensburg"}
 OTHER_PLACE = re.compile(

@@ -477,7 +477,8 @@
       "astakollektiv",
       "Allgemeiner Studentenausschuß der Universität",
       "Referat für Öffentlichkeitsarbeit",
-      "Asa-Kollektiv"
+      "Asa-Kollektiv",
+      "Studentenschaft der Universität Regensburg"
     ],
     "jahre": [
       "1967",
@@ -495,6 +496,7 @@
       4,
       5,
       8,
+      9,
       13
     ],
     "gnd_id": "",
@@ -2106,31 +2108,13 @@
     "type": "",
     "variants": [
       "Studentenschaft",
-      "Studentenschaft Uni — PH — Poly-Technikum",
-      "Studentenschaft der Universität Regensburg"
+      "Studentenschaft Uni — PH — Poly-Technikum"
     ],
     "jahre": [
       "1973"
     ],
     "vz": [
       14
-    ],
-    "gnd_id": "",
-    "notes": "aus Findmittel Rep. 118 (St_Darin)"
-  },
-  {
-    "org_id": "studentenschaft_der_universit_t_regensburg",
-    "name": "Studentenschaft der Universität Regensburg",
-    "full_name": "",
-    "type": "",
-    "variants": [
-      "Studentenschaft der Universität Regensburg"
-    ],
-    "jahre": [
-      "1972"
-    ],
-    "vz": [
-      9
     ],
     "gnd_id": "",
     "notes": "aus Findmittel Rep. 118 (St_Darin)"
