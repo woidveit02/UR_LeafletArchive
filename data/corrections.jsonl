@@ -74,3 +74,161 @@
 {"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "received", "value": "1970-01-28", "blocks": ["29-4"], "at": "2026-10-07"}
 {"volume": "0118_0005", "start_page": 287, "end_page": 287, "field": "received", "value": "1971-01-14", "blocks": ["287-3"], "at": "2026-10-07"}
 {"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "received", "value": "1970-01-29", "blocks": ["126-3"], "at": "2026-10-07"}
+{"volume": "0118_0005", "start_page": 34, "end_page": 39, "field": "received", "value": "1971-11-29", "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 51, "end_page": 52, "field": "received", "value": "1971-11-19", "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 69, "end_page": 70, "field": "issuers", "value": [{"org": "asta", "blocks": []}, {"org": "studentenschaft_der_universit_t_regensburg", "blocks": []}], "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 69, "end_page": 70, "field": "issuers", "value": [{"org": "asta", "blocks": ["69-1"]}, {"org": "studentenschaft_der_universit_t_regensburg", "blocks": ["69-2"]}], "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 212, "end_page": 213, "field": "received", "value": "1971-06-23", "at": "2026-10-08"}
+{"volume": "0118_0009", "start_page": 258, "end_page": 259, "field": "received", "value": "1972-07-11", "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 537, "end_page": 538, "field": "received", "value": "1971-12-14", "at": "2026-10-08"}
+{"volume": "0118_0007", "start_page": 210, "end_page": 210, "field": "received", "value": "1971-12-01", "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 577, "end_page": 578, "field": "title", "value": "Zum Fachschafts-Pamphlet vom 19.11.71. Halbe Information = Falsche Information???", "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 577, "end_page": 578, "field": "title", "value": "Zum Fachschafts-Pamphlet vom 19.11.71. Halbe Information = Falsche Information???", "blocks": ["577-5"], "at": "2026-10-08"}
+{"volume": "0118_0005", "start_page": 577, "end_page": 578, "field": "received", "value": "1971-11-23", "blocks": ["577-3"], "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 401, "end_page": 402, "field": "received", "value": "1971-11-29", "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 10, "end_page": 11, "field": "received", "value": "1972-07-12", "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 16, "end_page": 17, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["16-4"], "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 16, "end_page": 17, "field": "received", "value": "1972-07-18", "blocks": ["16-4"], "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 16, "end_page": 17, "field": "date", "value": {"iso": "", "type": "undated"}, "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 28, "end_page": 29, "field": "received", "value": "1972-06-27", "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 71, "end_page": 76, "field": "received", "value": "1972-01-10", "at": "2026-10-08"}
+{"volume": "0118_0006", "start_page": 95, "end_page": 95, "field": "received", "value": "1972-11-27", "blocks": ["95-3"], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 105, "end_page": 105, "field": "received", "value": "1972-11-16", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 112, "end_page": 112, "field": "received", "value": "1972-11-27", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 277, "end_page": 277, "field": "received", "value": "1972-04-26", "blocks": ["277-5"], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 327, "end_page": 328, "field": "received", "value": "1972-05-03", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 321, "end_page": 322, "field": "received", "value": "1972-05-11", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 354, "end_page": 354, "field": "received", "value": "1972-11-24", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 358, "end_page": 359, "field": "issuers", "value": [{"org": "msb", "blocks": []}], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 358, "end_page": 359, "field": "issuers", "value": [{"org": "msb", "blocks": ["358-3"]}], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 364, "end_page": 365, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["364-3"], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 364, "end_page": 365, "field": "received", "value": "1972-07-05", "blocks": ["364-3"], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 388, "end_page": 389, "field": "received", "value": "1972-04-26", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 421, "end_page": 430, "field": "received", "value": "1972-11-02", "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 419, "end_page": 420, "field": "date", "value": {"iso": "1972-10-25", "type": "event"}, "blocks": ["419-8", "420-8"], "at": "2026-10-09"}
+{"volume": "0118_0006", "start_page": 419, "end_page": 420, "field": "received", "value": "1972-10-23", "blocks": ["419-13"], "at": "2026-10-09"}
+{"volume": "0118_0009", "start_page": 480, "end_page": 481, "field": "date", "value": {"iso": "1972-11-19", "type": "event"}, "at": "2026-10-09"}
+{"volume": "0118_0009", "start_page": 480, "end_page": 481, "field": "issuers", "value": [{"org": "shb", "blocks": []}], "at": "2026-10-09"}
+{"volume": "0118_0009", "start_page": 480, "end_page": 481, "field": "received", "value": "1972-11-16", "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 26, "end_page": 29, "field": "received", "value": "1972-11-23", "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 119, "end_page": 119, "field": "series", "value": {"name": "RCDS-Info", "issue": ""}, "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 119, "end_page": 119, "field": "series", "value": {"name": "RCDS-Info", "issue": ""}, "blocks": ["119-1"], "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 107, "end_page": 113, "field": "series", "value": {"name": "WiWi-Service", "issue": "Wahl-Spezial"}, "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 107, "end_page": 113, "field": "series", "value": {"name": "WiWi-Service", "issue": "Wahl-Spezial"}, "blocks": ["107-2"], "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 107, "end_page": 113, "field": "received", "value": "1973-01-29", "at": "2026-10-09"}
+{"volume": "0118_0010", "start_page": 180, "end_page": 181, "field": "received", "value": "1972-12-14", "at": "2026-10-09"}
+{"volume": "0118_0010", "start_page": 180, "end_page": 181, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["180-6"], "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 205, "end_page": 206, "field": "received", "value": "1972-06-22", "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 146, "end_page": 147, "field": "received", "value": "1972-06", "blocks": ["146-1"], "at": "2026-10-09"}
+{"volume": "0118_0007", "start_page": 168, "end_page": 175, "field": "received", "value": "1972-01-26", "blocks": ["168-2"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 25, "end_page": 27, "field": "received", "value": "1972-11-24", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 110, "end_page": 110, "field": "received", "value": "1972-10-20", "blocks": ["110-4"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 50, "end_page": 50, "field": "title", "value": "Wahlaufruf zur SP-Wahl", "blocks": ["50-3"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 114, "end_page": 115, "field": "received", "value": "1972-11-07", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 126, "end_page": 128, "field": "received", "value": "1972-10-30", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 102, "end_page": 105, "field": "date", "value": {"iso": "1972-10", "type": "event"}, "blocks": ["102-3"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 102, "end_page": 105, "field": "received", "value": "1972-10-30", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 124, "end_page": 125, "field": "date", "value": {"iso": "1972-10-30", "type": "event"}, "blocks": ["124-7"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 124, "end_page": 125, "field": "received", "value": "1972-10-27", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 152, "end_page": 154, "field": "received", "value": "1972-12-12", "blocks": ["152-4"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 143, "end_page": 143, "field": "received", "value": "1973-12-01", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 151, "end_page": 151, "field": "title", "value": "Hochschul Komitee Aktion Roter Punkt", "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 151, "end_page": 151, "field": "title", "value": "Hochschul Komitee Aktion Roter Punkt", "blocks": ["151-3"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 151, "end_page": 151, "field": "received", "value": "1972-12-13", "at": "2026-10-09"}
+{"volume": "0118_0013", "start_page": 205, "end_page": 205, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["205-6"], "at": "2026-10-09"}
+{"volume": "0118_0013", "start_page": 205, "end_page": 205, "field": "received", "value": "1973-02-08", "blocks": ["205-5"], "at": "2026-10-09"}
+{"volume": "0118_0008", "start_page": 206, "end_page": 207, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["206-2"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 206, "end_page": 207, "field": "received", "value": "1972-06-22", "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 210, "end_page": 211, "field": "received", "value": "1972-06-13", "blocks": ["210-5"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 216, "end_page": 217, "field": "received", "value": "1972-06-13", "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 237, "end_page": 239, "field": "doc_type", "value": "einladung", "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 237, "end_page": 239, "field": "received", "value": "1972-05-19", "blocks": ["237-4"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 242, "end_page": 248, "field": "received", "value": "1972-05-03", "blocks": ["242-1"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 285, "end_page": 285, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["285-2"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 311, "end_page": 311, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["311-9"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 311, "end_page": 311, "field": "received", "value": "1972-04-26", "blocks": ["311-3"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 275, "end_page": 276, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["275-4"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 275, "end_page": 276, "field": "received", "value": "1972-04-04", "blocks": ["275-4"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 291, "end_page": 292, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["291-5"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 291, "end_page": 292, "field": "received", "value": "1972-02", "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 303, "end_page": 304, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["303-3"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 303, "end_page": 304, "field": "received", "value": "1972-03-27", "blocks": ["303-3"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 312, "end_page": 312, "field": "received", "value": "1972-01-28", "blocks": ["312-12"], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 325, "field": "signatories", "value": [{"name": "Heinz Holländer", "details": "", "blocks": []}, {"name": "Konrad Hecker", "details": "", "blocks": []}], "at": "2026-10-10"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 325, "field": "series", "value": {"name": "Universität Regensburg / Informationen", "issue": "Nr. 1, Jan. '72"}, "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 5, "end_page": 6, "field": "title", "value": "Wahl-Info LFS/LAF", "blocks": ["5-2"], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 5, "end_page": 6, "field": "signatories", "value": [], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 100, "end_page": 105, "field": "received", "value": "1972-11-16", "blocks": ["100-1"], "at": "2026-10-10"}
+{"volume": "0118_0011", "start_page": 217, "end_page": 220, "field": "received", "value": "1973-02-15", "blocks": ["217-1"], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 250, "end_page": 253, "field": "received", "value": "1972-12-14", "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 304, "end_page": 305, "field": "received", "value": "1972-06-26", "blocks": ["304-2"], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 336, "end_page": 337, "field": "received", "value": "1972-11-13", "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 426, "end_page": 427, "field": "received", "value": "1972-10-18", "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 426, "end_page": 427, "field": "signatories", "value": [], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 432, "end_page": 433, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["432-3"], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 432, "end_page": 433, "field": "received", "value": "1972-07-13", "blocks": ["432-3"], "at": "2026-10-10"}
+{"volume": "0118_0009", "start_page": 528, "end_page": 528, "field": "received", "value": "1973-11-14", "blocks": ["528-1"], "at": "2026-10-10"}
+{"volume": "0118_0012", "start_page": 278, "end_page": 281, "field": "received", "value": "1973-05-21", "blocks": ["278-1"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 15, "end_page": 16, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["15-1"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 15, "end_page": 16, "field": "received", "value": "1973-12-01", "blocks": ["15-1"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 164, "end_page": 172, "field": "received", "value": "1973-03-07", "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 108, "end_page": 109, "field": "signatories", "value": [{"name": "S. Eggerdinger", "details": "Presserechtlich", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "series", "value": {"name": "Demokratische Front", "issue": "NR 1"}, "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "revert", "value": "series", "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "series", "value": {"name": "Demokratische Front", "issue": "NR 1"}, "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "date", "value": {"iso": "1973-02-01", "type": "event"}, "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "revert", "value": "date", "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "date", "value": {"iso": "1973-02-01", "type": "event"}, "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 206, "end_page": 208, "field": "date", "value": {"iso": "1973-02-01", "type": "event"}, "blocks": ["206-4"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 235, "end_page": 236, "field": "series", "value": {"name": "Wahlflugblatt", "issue": "3"}, "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 235, "end_page": 236, "field": "series", "value": {"name": "Wahlflugblatt", "issue": "3"}, "blocks": ["235-1"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 235, "end_page": 236, "field": "received", "value": "1973-02-09", "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 247, "end_page": 248, "field": "received", "value": "1973-01-30", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 22, "end_page": 25, "field": "received", "value": "1973-12-10", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 50, "end_page": 50, "field": "received", "value": "1973-10-08", "blocks": ["50-7"], "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 58, "end_page": 63, "field": "received", "value": "1973-07-09", "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 129, "end_page": 132, "field": "received", "value": "1973-02-06", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 108, "end_page": 109, "field": "issuers", "value": [{"org": "demokratisches_aktionsb_ndnis_ehemalige_fs", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 102, "end_page": 103, "field": "received", "value": "1973-01-31", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 104, "end_page": 105, "field": "issuers", "value": [{"org": "demokratisches_aktionsb_ndnis_ehemalige_fs", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 104, "end_page": 105, "field": "received", "value": "1973-01-31", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 118, "end_page": 119, "field": "received", "value": "1973-01-31", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 168, "end_page": 169, "field": "received", "value": "1973-05-08", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 230, "end_page": 231, "field": "signatories", "value": [{"name": "H.Hörtling", "details": "Pr.verantw.", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 252, "end_page": 253, "field": "received", "value": "1973-07-14", "at": "2026-10-11"}
+{"volume": "0118_0012", "start_page": 266, "end_page": 266, "field": "received", "value": "1973-09-24", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 177, "end_page": 177, "field": "received", "value": "1973-05-18", "blocks": ["177-3"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 2, "end_page": 2, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["2-15"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 2, "end_page": 2, "field": "received", "value": "1973", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 15, "end_page": 15, "field": "received", "value": "1972-06-08", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 15, "end_page": 15, "field": "received", "value": "1972-06-28", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 31, "end_page": 31, "field": "received", "value": "1973-11-20", "blocks": ["31-24"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 32, "end_page": 34, "field": "title", "value": "Verband deutscher studentenschaften Aufruf", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 32, "end_page": 34, "field": "title", "value": "Verband deutscher studentenschaften Aufruf", "blocks": ["32-1"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 32, "end_page": 34, "field": "received", "value": "1973-11-16", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 65, "end_page": 65, "field": "received", "value": "1973-06-26", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 114, "end_page": 115, "field": "received", "value": "1973-06-28", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 135, "end_page": 135, "field": "title", "value": "Demonstration heute", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 135, "end_page": 135, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["135-2"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 174, "end_page": 174, "field": "received", "value": "1973-05-11", "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 210, "end_page": 211, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["210-4"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 210, "end_page": 211, "field": "received", "value": "1973-02-05", "blocks": ["210-4"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 233, "end_page": 234, "field": "issuers", "value": [{"org": "asta", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 233, "end_page": 234, "field": "date", "value": {"iso": "1973-01-26", "type": "event"}, "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 233, "end_page": 234, "field": "date", "value": {"iso": "1973-01-26", "type": "event"}, "blocks": ["234-14"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 39, "end_page": 40, "field": "received", "value": "1973-07-09", "blocks": ["39-5"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 41, "end_page": 42, "field": "date", "value": {"iso": "1973-07-03", "type": "issued"}, "blocks": ["41-4"], "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 41, "end_page": 42, "field": "received", "value": "1973-07-09", "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 43, "end_page": 44, "field": "received", "value": "1973-07-09", "at": "2026-10-11"}
+{"volume": "0118_0011", "start_page": 57, "end_page": 60, "field": "received", "value": "1973-07-04", "blocks": ["57-1"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 49, "end_page": 53, "field": "date", "value": {"iso": "1973-06-05", "type": "issued"}, "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 49, "end_page": 53, "field": "date", "value": {"iso": "1973-06-05", "type": "event"}, "blocks": ["50-1"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 47, "end_page": 48, "field": "signatories", "value": [{"name": "Eberhard Enß", "details": "Protokollführer", "blocks": []}], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 67, "end_page": 71, "field": "received", "value": "1973-05-11", "blocks": ["67-5"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 110, "end_page": 110, "field": "received", "value": "1973-02-06", "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 261, "end_page": 262, "field": "series", "value": {"name": "IMAFAG Psychologie", "issue": ""}, "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 279, "end_page": 280, "field": "received", "value": "1973-12-18", "blocks": ["279-3"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 342, "end_page": 343, "field": "date", "value": {"iso": "", "type": "undated"}, "blocks": ["342-12"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 342, "end_page": 343, "field": "received", "value": "1973-05-08", "blocks": ["342-12"], "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 398, "end_page": 405, "field": "received", "value": "1973-02-12", "at": "2026-10-11"}
+{"volume": "0118_0014", "start_page": 455, "end_page": 457, "field": "received", "value": "1973-10-26", "at": "2026-10-11"}
