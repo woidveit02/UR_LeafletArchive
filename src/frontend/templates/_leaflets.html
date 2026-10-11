@@ -1,6 +1,6 @@
 {% from '_ui.html' import excerpt %}
 {# `items` come from leaflet_items() in app.py. `fields`: pages, count, date,
-   issuers, series. #}
+   issuers, series, band. #}
 
 {% macro title(leaflet) -%}
 {% if leaflet.display_title %}{{ leaflet.display_title }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}
@@ -19,8 +19,10 @@
 {%- set parts = [] -%}
 {%- for f in fields -%}
     {%- if f == 'pages' %}{% set _ = parts.append(page_range(l.start_page, l.end_page)) %}
-    {%- elif f == 'count' %}{% set _ = parts.append(count(l)) %}
-    {%- elif f == 'date' and item.date %}{% set _ = parts.append(item.date ~ (' (' ~ item.date_label ~ ')' if item.date_label else '')) %}
+    {%- elif f == 'count' %}{% set _ = parts.append('<span class="nowrap">{}</span>'.format(count(l)) | safe) %}
+    {%- elif f == 'band' %}{% set _ = parts.append(item.place) %}
+    {%- elif f == 'date' and item.date and item.date_label %}{% set _ = parts.append('<span title="{}">{} ({})</span>'.format({'Veranstaltung': 'Datum der Veranstaltung, zu der das Blatt einlädt', 'Eingang': 'Datum des Eingangsstempels im Archiv'}.get(item.date_label, '') | e, item.date | e, item.date_label | e) | safe) %}
+    {%- elif f == 'date' and item.date %}{% set _ = parts.append(item.date) %}
     {%- elif f == 'issuers' and item.issuers %}{% set _ = parts.append(issuer_list(item.issuers)) %}
     {#- a series already shown as title is not repeated -#}
     {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series_label) %}
@@ -35,24 +37,6 @@
 <span class="meta">{{ parts | join(' · ') }}</span>
 {%- endmacro %}
 
-{% macro leaflet_list(items, fields, qs='') %}
-{% set rest = fields | reject('in', ['date', 'count']) | list %}
-<ul class="leaflet-list">
-    {% for item in items %}
-    <li>
-        {% if 'date' in fields %}<span class="row-date">{{ item.date }}{% if item.date_label %}<small>{{ item.date_label }}</small>{% endif %}</span>{% endif %}
-        <span class="row-main">
-            <a class="row-title" href="/leaflets/{{ item.leaflet.id }}{{ qs }}">{{ title(item.leaflet) }}</a>
-            {{ meta(item, rest) }}
-        </span>
-        {% if 'count' in fields %}<span class="row-count">{{ count(item.leaflet) }}</span>{% endif %}
-    </li>
-    {% else %}
-    <li>Keine Flugblätter gefunden.</li>
-    {% endfor %}
-</ul>
-{% endmacro %}
-
 {# search page: metadata line, title, three passages; further passages fold out #}
 {% macro result_list(items, qs='') %}
 <ul class="result-list">
@@ -62,8 +46,8 @@
             {%- if item.thumb %}<img src="/volumes/{{ item.vz }}/pages/{{ item.leaflet.start_page }}.jpg" alt="" loading="lazy">{% endif -%}
         </a>
         <div class="result-body">
-        {{ meta(item, ('date', 'issuers', 'series', 'count')) }}
         <a class="row-title" href="{{ link }}">{{ title(item.leaflet) }}</a>
+        {{ meta(item, ('date', 'issuers', 'series', 'count', 'band')) }}
         {% for s in (item.snippets or [])[:3] if s %}{{ excerpt(s, href=link ~ ('#treffer-' ~ loop.index if item.get('hits') else '')) }}{% endfor %}
         {% if item.get('hits', 0) > 3 %}
         <details class="excerpt-more">

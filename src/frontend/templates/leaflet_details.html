@@ -351,16 +351,33 @@
             });
         }
 
-        // a click on a section of the transcription shows that section of the scan, enlarged
+        // the magnifier beside a section of the transcription shows that section of the scan, enlarged, with its text;
+        // the text itself stays free to select and copy
         const popup = document.getElementById('scan-popup');
         if (popup) {
+            document.querySelectorAll('.pair-text .ocr-block[data-block]').forEach((block) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'block-scan';
+                button.title = 'Diese Stelle im Scan zeigen';
+                button.setAttribute('aria-label', 'Diese Stelle im Scan zeigen');
+                block.append(button);
+            });
             document.addEventListener('click', (e) => {
-                const block = e.target.closest('.ocr-block[data-block]');
-                if (!block || e.target.closest('a, button') || String(getSelection())) return;  // keep links and text selection
+                const block = e.target.closest('.block-scan')?.parentElement;
+                if (!block) return;
                 const id = block.dataset.block, page = id.split('-')[0];
                 popup.querySelector('.popup-grid').innerHTML = `<figure><figcaption>Bandseite ${page}
                     <a href="/leaflets/{{ leaflet.id }}/pages/${page}.png?dpi=220" target="_blank" rel="noopener">ganze Seite ↗</a></figcaption>
                     <img src="/leaflets/{{ leaflet.id }}/evidence.png?blocks=${id}" alt="Ausschnitt aus dem Scan"></figure>`;
+                if (!block.classList.contains('ocr-picture')) {
+                    const transcript = document.createElement('div');
+                    transcript.className = 'popup-text ocr-page';
+                    const copy = block.cloneNode(true);
+                    copy.querySelector('.block-scan').remove();
+                    transcript.innerHTML = copy.innerHTML;
+                    popup.querySelector('figure').after(transcript);
+                }
                 popup.showModal();
             });
             document.getElementById('popup-close').addEventListener('click', () => popup.close());
@@ -373,6 +390,15 @@
             const box = document.querySelector(`.ocr-box[data-block="${block.dataset.block}"]`);
             if (box) link(block, box);
         });
+
+        // a picture in the transcription is as large as its place on the scan, not stretched to the column
+        const fitPictures = () => document.querySelectorAll('.ocr-picture[data-block] img').forEach((img) => {
+            const box = document.querySelector(`.ocr-box[data-block="${img.closest('.ocr-picture').dataset.block}"]`);
+            const width = box?.getBoundingClientRect().width;
+            if (width) Object.assign(img.style, {width: width + 'px', height: 'auto', maxHeight: 'none'});
+        });
+        window.addEventListener('load', fitPictures);
+        window.addEventListener('resize', fitPictures);
 
         const closeAll = () => document.querySelectorAll('.beleg').forEach((b) => {
             b.nextElementSibling.hidden = true;

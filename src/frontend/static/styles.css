@@ -393,10 +393,6 @@ a:hover {
     background: var(--surface-muted);
 }
 
-body:has(#scan-popup) .pair-text .ocr-block[data-block] {
-    cursor: zoom-in;
-}
-
 .copy-edit {
     margin: 8px 0;
 }
@@ -1871,22 +1867,27 @@ select:focus {
 .doc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 24px 20px;
-    margin-top: 16px;
+    gap: 0 20px;  /* the space between the rows is the cards' padding */
+    margin-top: 8px;
 }
 
 @media (max-width: 600px) {
     .doc-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 20px 12px;
+        gap: 0 12px;
     }
 }
 
-/* padding and negative margin: the hover area reaches 8 px around the card
-   without shifting the layout */
+/* padding and negative margin: the hover area reaches 8 px to the sides without shifting the text.
+   Scan row and caption row come from the grid: all scans of a row share the height of the tallest one,
+   so the captions of a row start together and a row of landscape scans stays low */
 .doc-card {
-    margin: -8px;
-    padding: 8px;
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    grid-template-columns: minmax(0, 1fr);  /* a long nowrap line must not widen the card */
+    margin: 0 -8px;
+    padding: 8px 8px 16px;
     border-radius: var(--radius);
     font-size: 0.85em;
     line-height: 1.35;
@@ -1909,16 +1910,16 @@ select:focus {
 .doc-thumb {
     display: flex;
     align-items: flex-end;
-    aspect-ratio: 3 / 4;
+    min-height: 9rem;  /* the row keeps about its height until the scans are loaded */
     padding: 0 8px 8px 0;
     box-sizing: border-box;
-    container-type: size;
 }
 
 /* wraps the scan itself, so the sheets follow its real size */
 .doc-sheet {
     position: relative;
     z-index: 0;
+    max-width: 100%;
 }
 
 /* fits portrait and landscape scans without letterboxing */
@@ -1926,8 +1927,8 @@ select:focus {
     display: block;
     width: auto;
     height: auto;
-    max-width: 100cqw;
-    max-height: 100cqh;
+    max-width: 100%;
+    max-height: 22rem;
     border: 1px solid #cfc6b3;
 }
 
@@ -1949,6 +1950,7 @@ select:focus {
 }
 
 .doc-card figcaption {
+    grid-row: 2;
     margin-top: 6px;
 }
 
@@ -2136,10 +2138,66 @@ select:focus {
 }
 
 .ocr-block {
+    position: relative;
     margin: 0 -8px;
     padding: 2px 8px;
     border-radius: 6px;
     transition: background 0.12s ease;
+}
+
+.block-scan {  /* in the gap beside the text, so it never covers a line; a click on the text itself only selects it */
+    position: absolute;
+    top: 2px;
+    right: -22px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    user-select: none;
+}
+
+.block-scan::before {
+    content: "\1F50D\FE0E";
+}
+
+.ocr-block:hover .block-scan,
+.block-scan:focus-visible {
+    opacity: 1;
+}
+
+.picking .block-scan {
+    display: none;
+}
+
+@media (hover: none) {
+    .block-scan {
+        opacity: 0.7;
+    }
+}
+
+@media (max-width: 800px) {  /* one column: no gap, so the text leaves room for the button */
+    .pair-text .ocr-block {
+        padding-right: 32px;
+    }
+
+    .block-scan {
+        right: 4px;
+    }
+}
+
+.popup-grid .popup-text {
+    margin: 12px 0 0;
+    max-width: none;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface-muted);
 }
 
 .ocr-block.active {
@@ -3152,16 +3210,26 @@ a.excerpt:focus-visible {
     display: grid;
     grid-template-columns: 3.5rem minmax(0, 1fr);
     gap: 0 16px;
-    padding: 12px 0;
+    padding: 12px 8px;
+    margin: 0 -8px;  /* the hover background reaches past the text, which keeps its place */
     border-bottom: 1px solid var(--line);
 }
 
+.result-thumb {
+    min-height: 3.5rem;  /* the row keeps about its height until the scan is loaded */
+}
+
+.result-list li:hover {
+    background: var(--surface-hover);
+}
+
+/* the whole scan at its own proportions, portrait or landscape */
 .result-thumb img {
     display: block;
-    width: 100%;
-    aspect-ratio: 7 / 10;
-    object-fit: cover;
-    object-position: top;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 5rem;
     border: 1px solid var(--line);
     border-radius: 2px;
 }
@@ -3169,11 +3237,11 @@ a.excerpt:focus-visible {
 .result-list .meta {
     display: block;
     font-size: 0.8rem;
+    margin-top: 2px;
 }
 
 .result-list .row-title {
     display: block;
-    margin-top: 2px;
     font-size: 1.05rem;
 }
 

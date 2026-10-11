@@ -2,6 +2,11 @@
 {% block title %}{{ volume.label }} – UR Leaflet Archive{% endblock %}
 {% block app_class %}{% if volume.view == 'seiten' %} app-wide{% endif %}{% endblock %}
 {% block content %}
+        {% if volume.review %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % volume.vz }}">
+            <span><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % volume.vz }} prüfen</b> · Alle Flugblätter</span>
+        </nav>
+        {% endif %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
             <span>

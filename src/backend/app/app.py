@@ -852,7 +852,7 @@ def detail_page(request, leaflet, edit=None, error=None):
 
     return templates.TemplateResponse(
         request, "leaflet_details.html",
-        {"leaflet": data, "edit": edit, "error": error, "hints": hint_queue(leaflet, volume), **(edit_choices() if edit else {})},
+        {"leaflet": data, "edit": edit, "error": error, "hints": hint_queue(leaflet, volume, reviewing(request)), **(edit_choices() if edit else {})},
         status_code=400 if error else 200)
 
 
@@ -1044,7 +1044,13 @@ def copy_rows():
     return rows
 
 
-def review_queue(leaflet):
+def reviewing(request):
+    """The released volume whose step 6 was opened last: its pages get the review bar too."""
+    value = request.cookies.get('pruefen', '')
+    return int(value) if value.isdigit() else 0
+
+
+def review_queue(leaflet, open_vz=0):
     """The groups still to check, seen from the leaflet's group: the main copies of the previous and the next
     one, the position of this group among them (None if it is checked) and their number. A group with a leaflet
     of a volume not released yet goes through that volume's groups only: they are checked in its step 6."""
@@ -1052,7 +1058,7 @@ def review_queue(leaflet):
     key = leaflet.copy_candidate_of or leaflet.copy_group
     here = next((i for i, r in enumerate(rows) if r['group'] == key), len(rows))
     drafts = {vz for (vz,) in session.query(Volume.vz).filter(Volume.status != RELEASED)}
-    band = min(rows[here]['volumes'] & drafts, default=0) if here < len(rows) else 0
+    band = min(rows[here]['volumes'] & (drafts | {open_vz}), default=0) if here < len(rows) else 0
     if band:
         rows = [r for r in rows if band in r['volumes']]
         here = next(i for i, r in enumerate(rows) if r['group'] == key)
@@ -1063,9 +1069,9 @@ def review_queue(leaflet):
             'position': len(before) + 1 if current else None, 'total': len(before) + len(after) + current, 'band': band}
 
 
-def hint_queue(leaflet, volume):
+def hint_queue(leaflet, volume, open_vz=0):
     """For a leaflet of a volume not released yet: its place among the leaflets the checks remarked on."""
-    if volume.status == RELEASED:
+    if volume.status == RELEASED and volume.vz != open_vz:
         return None
     flagged = metadata.flagged_leaflets(volume)
     ids = [lf.id for lf, _, seen in flagged if not seen]  # the ones still to look at
@@ -1083,10 +1089,10 @@ async def hint_seen(request: Request, leaflet_id: int):
     """"Passt so" for the remarks of the checks on a leaflet of a volume not released yet, and on to the next one."""
     leaflet = leaflet_or_404(leaflet_id)
     volume = session.get(Volume, leaflet.volume_id)
-    if volume.status == RELEASED:
+    if volume.status == RELEASED and volume.vz != reviewing(request):
         raise HTTPException(404)
     seen = parse_qs((await request.body()).decode()).get('seen', ['1'])[0] == '1'
-    queue = hint_queue(leaflet, volume)
+    queue = hint_queue(leaflet, volume, reviewing(request))
     metadata.mark_seen(volume, leaflet, seen)
     following = queue['next'] or queue['previous']
     if not seen:
@@ -1446,7 +1452,7 @@ def copy_view(request, leaflet, meldung='', offen=False, form=None, error=None):
         {"leaflet": leaflet, "cards": cards, "new": new, "differs": differs, "left": left,
          "fields": fields, "message": COPY_MESSAGES.get(meldung),
          "pair": copy_compare(leaflet, shown), "shown": shown, "checked": checked, "details": details,
-         "offers": offers, "queue": review_queue(leaflet), "simple": len(cards) == 2 and not new, **edit_choices()},
+         "offers": offers, "queue": review_queue(leaflet, reviewing(request)), "simple": len(cards) == 2 and not new, **edit_choices()},
         status_code=400 if error else 200)
 
 
@@ -1586,7 +1592,7 @@ async def copy_save(request: Request, leaflet_id: int):
         main = verdict[5:] if verdict.startswith(('main:', 'next:')) else str(members[0].canonical_leaflet_id or members[0].id)
         form['main'] = [main]
         form['out'] = [str(lf.id) for lf in members if str(lf.id) != main] if verdict == 'different' else []
-    queue = review_queue(leaflet)
+    queue = review_queue(leaflet, reviewing(request))
     following = (queue['next'] or (queue['previous'] if queue['band'] else None)) if onward else None
     save_copy_review(leaflet, form)
     if following:
@@ -1606,7 +1612,7 @@ def correction_rows(volumes, saved):
         overlaps = session.query(Leaflet).filter(
             Leaflet.volume_id == volume.id, Leaflet.start_page <= end,
             Leaflet.end_page >= start).order_by(Leaflet.start_page).all() if volume else []
-        rows.append({'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
+        rows.append({'stem': stem, 'start': start, 'end': end, 'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
                      'place': f"Band {volume.vz:03d} · {page_range(start, end)}" if volume else f"{stem}, {page_range(start, end)}",
                      'entries': entries, 'overlaps': overlaps,
                      'leaflet': next((lf for lf in overlaps if (lf.start_page, lf.end_page) == (start, end)), None)})
@@ -1648,8 +1654,24 @@ def correction_list(request: Request):
         f"{page_range(a['start_page'], a['end_page'])}" for a in r['members']]}
         for r in copy_review()[1]]
     return templates.TemplateResponse(
-        request, "corrections.html", {"rows": [r for r in rows if not r['leaflet']], "copies": copies,
+        request, "corrections.html", {"rows": [r for r in rows if not r['leaflet'] and r['now']], "copies": copies,
                                       "saved": sorted((r for r in rows if r['leaflet']), key=lambda r: max(e['at'] for e in r['entries']), reverse=True)})
+
+
+@app.post("/korrekturen/zuordnen")
+def correction_move(volume: str = Form(...), start: int = Form(...), end: int = Form(...), target: int = Form(0)):
+    """The corrections in force for a page range that fits no leaflet any more go to a leaflet there (target), or are
+    dropped (no target); the old lines stay in the file, cancelled by a revert."""
+    entries = in_force(corrections.by_segment(corrections.load(CORRECTIONS)).get((volume, start, end), []))
+    if not entries:
+        raise HTTPException(404)
+    if target:
+        leaflet = leaflet_or_404(target)
+        if session.get(Volume, leaflet.volume_id).stem != volume or not leaflet.start_page <= end or not leaflet.end_page >= start:
+            raise HTTPException(400)
+        save_corrections(leaflet, [(e['field'], e['value'], e.get('blocks', [])) for e in entries])
+    corrections.append(CORRECTIONS, [{'volume': volume, 'start_page': start, 'end_page': end, 'field': 'revert', 'value': 'all'}])
+    return RedirectResponse("/korrekturen", 303)
 
 
 @app.get("/leaflets/{leaflet_id}/pages/{page_no}.png")
@@ -1712,6 +1734,7 @@ def import_list(error: str = ''):
 def admin_page(request: Request, error: str = ''):
     """Where each volume stands, with the open duplicates and corrections, and the imports in progress."""
     leaflets = Counter(vid for (vid,) in session.query(Leaflet.volume_id))
+    pages = Counter(vid for (vid,) in session.query(Page.volume_id))
     volumes = session.query(Volume).order_by(Volume.vz).all()
     groups = copy_rows()
     open_groups = [g for g in groups if g['state'] != 'geprueft']
@@ -1728,7 +1751,7 @@ def admin_page(request: Request, error: str = ''):
         drafts.append({"vz": v.vz, "title": v.title, "step": importer.STEPS[step], "n": steps.index(step) + 1,
                        "deletable": bool(v.stem) or v.vz in added})
     return templates.TemplateResponse(request, "admin.html", {
-        "volumes": [{"vz": v.vz, "title": v.title, "leaflets": leaflets[v.id],
+        "volumes": [{"vz": v.vz, "title": v.title, "leaflets": leaflets[v.id], "pages": v.n_pages or pages[v.id],
                      "groups": sum(v.vz in g['volumes'] for g in groups),
                      "open": sum(v.vz in g['volumes'] for g in open_groups), "fixes": fixes[v.id]}
                     for v in volumes if v.status == RELEASED and leaflets[v.id]],
@@ -1781,7 +1804,7 @@ def import_volume_or_404(vz):
 def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     volume = import_volume_or_404(vz)
     created = importer.n_leaflets(volume)
-    if created and volume.status == RELEASED or step not in importer.STEPS:
+    if created and volume.status == RELEASED and step not in ('pruefen', 'themen') or step not in importer.STEPS:
         raise HTTPException(404)
     prepare = importer.JOBS.get((vz, metadata.PREPARE), {})
     flagged = metadata.flagged_leaflets(volume) if step == 'pruefen' and created else []
@@ -1805,7 +1828,7 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     done = ['band'] + (['scans'] if pages else []) + (['ocr'] if text['state'] == 'done' else []) \
         + (['trennen'] if segments.status(volume)['confirmed'] else [])
     done += ['angaben'] if 'trennen' in done and metadata.status(volume)['state'] == 'done' else []
-    return templates.TemplateResponse(request, "import_volume.html", {"waiting": waiting, "done": done,
+    response = templates.TemplateResponse(request, "import_volume.html", {"waiting": waiting, "done": done,
         "volume": volume, "pages": pages, "error": error, "steps": importer.STEPS, "step_help": importer.STEP_HELP, "step": step, "split": split,
         "running": importer.running(volume), "ocr": text, "stamp": stamp, "uploaded": uploaded,
         "ocr_job": importer.JOBS.get((vz, ocr.JOB)) if step == 'ocr' else None,
@@ -1823,6 +1846,9 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
         "new_issuers": organizations.unmatched(vz) if step == 'pruefen' and created else [],
         "copies": copy_counts(volume) if step == 'pruefen' and created else None},
         status_code=status_code)
+    if volume.status == RELEASED and step == 'pruefen':
+        response.set_cookie('pruefen', str(vz), samesite='lax')
+    return response
 
 
 def copy_counts(volume):
@@ -1887,7 +1913,7 @@ def in_holdings(org_id):
 def import_issuers(request: Request, vz: int, nr: int = 0, blatt: int = 0, fehler: str = ''):
     """One issuer the register does not know at a time, with its place in the scan and the organizations it may be."""
     volume = import_volume_or_404(vz)
-    groups = organizations.unmatched(vz) if volume.status != RELEASED else []
+    groups = organizations.unmatched(vz)
     if not groups:
         return RedirectResponse(f"/import/{vz}?schritt=pruefen#herausgeber", 303)
     nr = min(max(nr, 0), len(groups) - 1)
@@ -1941,6 +1967,15 @@ def import_release(vz: int):
         raise HTTPException(409)
     fillDatabase.release_volume(vz)
     return RedirectResponse("/verwaltung", 303)
+
+
+@app.post("/import/{vz}/zuruecknehmen")
+def import_take_back(vz: int):
+    """A released volume becomes a draft again, so the steps before 6 can change it; it is hidden until released anew."""
+    if import_volume_or_404(vz).status != RELEASED:
+        raise HTTPException(409)
+    fillDatabase.release_volume(vz, DRAFT)
+    return RedirectResponse(f"/import/{vz}?schritt=pruefen", 303)
 
 
 @app.post("/import/{vz}/scans")
@@ -2160,7 +2195,7 @@ def leaflet_items(leaflets):
     for lf in leaflets:
         volume = volumes[lf.volume_id]
         date, date_label = list_date(lf, volume.year)
-        items.append({'leaflet': lf, 'vz': volume.vz,
+        items.append({'leaflet': lf, 'vz': volume.vz, 'place': f"Band {volume.vz:03d} · {page_range(lf.start_page, lf.end_page)}",
                       'date': date, 'date_label': date_label,
                       'year': leaflet_year(lf, volume.year),
                       'thumb': has_pdf[lf.volume_id],
@@ -2220,6 +2255,7 @@ def volume_detail(request: Request, vz: int, ansicht: str = ""):
         'label': volume.name,
         'vz': volume.vz,
         'draft': volume.status != RELEASED,
+        'review': volume.status != RELEASED or volume.vz == reviewing(request),
         'group': volume.group,
         'anchor': group_anchor(volume.group),
         'signature': volume.signature,

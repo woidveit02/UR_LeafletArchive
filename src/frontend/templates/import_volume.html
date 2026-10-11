@@ -71,18 +71,20 @@
         {% endmacro %}
         <header class="page-head">
             <p class="meta"><a href="/verwaltung">← Zur Verwaltung</a></p>
-            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }} <span class="status-badge">nicht freigegeben</span>{% else %}Band hinzufügen{% endif %}</h1>
+            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% if volume.status == 'entwurf' %} <span class="status-badge">nicht freigegeben</span>{% endif %}{% else %}Band hinzufügen{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
         {% set done = done or [] %}
         <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}: {{ step_help[step] }}</p>
         {% set i = keys.index(step) %}
+        {% set locked = volume and volume.status == 'freigegeben' and created %}
         <div class="step-head">
-        <span class="step-back">{% if volume and i > 0 %}<a class="step-button outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% endif %}</span>
+        <span class="step-back">{% if volume and i > 0 and not locked %}<a class="step-button outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% endif %}</span>
         <nav class="view-switch step-switch" aria-label="Schritte">
             {% for key, label in steps.items() %}
             {% set mark = '✓ ' if key in done and key != step else '' %}
-            {% if volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}" title="{{ step_help[key] }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
+            {% if locked and key not in ('pruefen', 'themen') %}<a aria-disabled="true" class="todo" title="Der Band ist freigegeben, dieser Schritt ist gesperrt.">{{ loop.index }}. {{ label }}</a>
+            {% elif volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}" title="{{ step_help[key] }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
             {% else %}<a title="{{ step_help[key] }}"{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
             {% endfor %}
         </nav>
@@ -534,6 +536,7 @@
                     {% endif %}
                 </li>
             </ol>
+            {% if volume.status == 'entwurf' %}
             <div class="release-row">
                 <p class="meta">{% if todo %}Noch {{ todo }} {{ 'Aufgabe' if todo == 1 else 'Aufgaben' }} offen. Du kannst trotzdem freigeben.{% else %}Alles geprüft.{% endif %}
                     Mit der Freigabe erscheint der Band in Liste, Suche und Trends.</p>
@@ -547,6 +550,13 @@
                 <form method="post" action="/import/{{ volume.vz }}/vorbereiten" onsubmit="return confirm('Die Flugblätter neu vorbereiten? Das dauert etwa eine halbe Minute.')">
                     <button type="submit" class="button-outline">Neu vorbereiten</button></form>
             </details>
+            {% elif locked %}
+            <div class="release-row">
+                <p class="meta">Der Band ist freigegeben. Zum Ändern der Schritte 1 bis 5 muss er zurückgenommen werden und fehlt dann bis zur neuen Freigabe in Liste, Suche und Trends.</p>
+                <form method="post" action="/import/{{ volume.vz }}/zuruecknehmen" onsubmit="return confirm('Band {{ '%03d' % volume.vz }} zur Überarbeitung zurücknehmen? Er verschwindet aus Liste, Suche und Trends, bis er wieder freigegeben wird.')">
+                    <button type="submit" class="tool-button">Zur Überarbeitung zurücknehmen</button></form>
+            </div>
+            {% endif %}
         </div>
         {% endif %}
         </div>

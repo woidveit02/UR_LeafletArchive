@@ -403,10 +403,10 @@ def import_volume(vz):
     return volume
 
 
-def release_volume(vz):
-    """Makes a draft visible in the list, the search, the trends and the topics."""
+def release_volume(vz, status=RELEASED):
+    """Makes a draft visible in the list, the search, the trends and the topics; status=DRAFT hides a volume again."""
     volume = session.query(Volume).filter_by(vz=vz).one()
-    volume.status = RELEASED
+    volume.status = status
     session.commit()
 
 

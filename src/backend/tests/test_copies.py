@@ -354,3 +354,23 @@ def test_every_group_has_one_main_copy():
         assert len(members) > 1
         mains = {m.canonical_leaflet_id for m in members}
         assert len(mains) == 1 and mains <= {m.id for m in members}
+
+
+# Tests if corrections without a leaflet go to one at their pages or are dropped, and leave the list either way.
+def test_correction_move(tmp_path, monkeypatch):
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    file = tmp_path / "corrections.jsonl"
+    anchor = {"volume": "0118_0002", "at": "2026-10-10"}
+    lines = [{**anchor, "start_page": 2, "end_page": 3, "field": "title", "value": "Neuer Titel"},
+             {**anchor, "start_page": 5, "end_page": 6, "field": "doc_type", "value": "Plakat"}]
+    file.write_text("".join(json.dumps(x) + "\n" for x in lines), encoding="utf-8")
+    monkeypatch.setattr(leaflet_app, "CORRECTIONS", file)
+    monkeypatch.setattr(corrections, "session", leaflet_app.session)
+    html = leaflet_app.correction_list(page("/korrekturen")).body.decode()
+    assert "Auf Bandseite 2 übernehmen" in html and "Auf Bandseite 5 übernehmen" in html
+    with pytest.raises(HTTPException):
+        leaflet_app.correction_move("0118_0002", 2, 3, c.id)
+    leaflet_app.correction_move("0118_0002", 2, 3, a.id)
+    leaflet_app.correction_move("0118_0002", 5, 6, 0)
+    html = leaflet_app.correction_list(page("/korrekturen")).body.decode()
+    assert "übernehmen" not in html and "Ohne Zuordnung" not in html and a.title == "Neuer Titel" and b.doc_type != "Plakat"

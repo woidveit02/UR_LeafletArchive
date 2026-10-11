@@ -31,7 +31,7 @@
             <dd>{{ org.notes if org.notes else 'n.a.' }}</dd>
         </dl>
 
-        {% from '_leaflets.html' import leaflet_list, leaflet_cards %}
+        {% from '_leaflets.html' import result_list, leaflet_cards %}
         {% from '_ui.html' import view_switch %}
         <div class="section-head section-head-table">
             <h2>Flugblätter</h2>
@@ -41,7 +41,7 @@
         {% if org.view == 'kacheln' %}
         {{ leaflet_cards(org.leaflets, fields=('date', 'count'), qs='?org=' ~ org.id) }}
         {% else %}
-        {{ leaflet_list(org.leaflets, fields=('date', 'issuers', 'series', 'count'), qs='?org=' ~ org.id) }}
+        {{ result_list(org.leaflets, qs='?org=' ~ org.id) }}
         {% endif %}
 {% endblock %}
 {% block scripts %}

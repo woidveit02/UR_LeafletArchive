@@ -17,15 +17,23 @@
         {% if rows or copies %}
         <h2>Ohne Zuordnung</h2>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
-            Sie werden nicht angewendet. Zum Übernehmen in <code>data/corrections.jsonl</code> Anfangs- und Endseite anpassen.
-            Ebenso Prüfungen möglicher Duplikate (<code>data/copy_decisions.jsonl</code>), deren Segmente sich geändert haben.</p>
+            Sie werden nicht angewendet. Übernimm sie auf ein Flugblatt, das jetzt dort liegt, oder verwirf sie.
+            Prüfungen möglicher Duplikate, deren Segmente sich geändert haben, stehen darunter.</p>
         <ul class="fix-list">
             {% for row in rows %}
             <li>
                 <span class="meta">{{ row.place }}</span>
                 <span class="fix-title todo">Ohne Zuordnung</span>
+                <dl class="fix-fields">
+                    {% for label, value in row.now %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endfor %}
+                </dl>
                 <p class="meta">Überlappende Flugblätter jetzt:
                     {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
+                <form method="post" action="/korrekturen/zuordnen" class="task-actions">
+                    <input type="hidden" name="volume" value="{{ row.stem }}"><input type="hidden" name="start" value="{{ row.start }}"><input type="hidden" name="end" value="{{ row.end }}">
+                    {% for lf in row.overlaps %}<button type="submit" name="target" value="{{ lf.id }}" class="tool-button primary">Auf {{ page_range(lf.start_page, lf.end_page) }} übernehmen</button>{% endfor %}
+                    <button type="submit" class="text-button" onclick="return confirm('Diese Korrektur verwerfen? Sie wird nicht mehr angewendet.')">Verwerfen</button>
+                </form>
                 {{ history(row) }}
             </li>
             {% endfor %}

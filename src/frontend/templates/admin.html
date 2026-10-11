@@ -11,7 +11,7 @@
             <section class="admin-tile">
                 <h2>Bände</h2>
                 <p class="admin-figure">{{ volumes | length }} freigegeben</p>
-                <p class="meta">{{ drafts | length }} in Bearbeitung · {{ units | length }} noch nicht hinzugefügt</p>
+                <p class="meta">{% if drafts %}{{ drafts | length }} in Bearbeitung{% if units %} · {% endif %}{% endif %}{% if units %}{{ units | length }} noch nicht hinzugefügt{% endif %}</p>
             </section>
             <section class="admin-tile">
                 <h2>Duplikate</h2>
@@ -58,15 +58,17 @@
 
         <h2>Freigegeben <span class="count">· {{ volumes | length }}</span></h2>
         <table class="admin-table">
-            <thead><tr><th>Band</th><th>Titel</th><th class="num">Flugblätter</th><th class="num">Duplikatgruppen</th><th class="num" title="Flugblätter mit Korrekturen">Korrigiert</th></tr></thead>
+            <thead><tr><th>Band</th><th>Titel</th><th class="num">Seiten</th><th class="num">Flugblätter</th><th class="num">Duplikatgruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
             <tbody>
             {% for v in volumes %}
             <tr>
                 <td><a href="/volumes/{{ v.vz }}">{{ '%03d' % v.vz }}</a></td>
                 <td><a href="/volumes/{{ v.vz }}">{{ v.title }}</a></td>
+                <td class="num">{{ v.pages or '–' }}</td>
                 <td class="num">{{ v.leaflets }}</td>
-                <td class="num">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{% if v.open %}<span class="todo">{{ v.open }} offen</span> · {% endif %}{{ v.groups }} insgesamt</a>{% else %}–{% endif %}</td>
+                <td class="num">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{% if v.open %}<span class="todo">{{ v.open }} offen</span> · {% endif %}{{ v.groups }} {{ 'Gruppe' if v.groups == 1 else 'Gruppen' }}{% if not v.open %} · alle geprüft{% endif %}</a>{% else %}–{% endif %}</td>
                 <td class="num">{{ v.fixes or '–' }}</td>
+                <td><a href="/import/{{ v.vz }}?schritt=pruefen">Prüfen</a></td>
             </tr>
             {% endfor %}
             </tbody>

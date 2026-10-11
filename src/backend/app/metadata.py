@@ -959,7 +959,8 @@ def flagged_leaflets(volume):
     """(leaflet, remarks in plain German, seen) for each created leaflet the checks found something on. seen: marked
     "Passt so", or corrected since. Not a copy whose group is checked: its details are those of the main copy, which is
     looked at there."""
-    doc = json.loads(result_path(volume).read_text(encoding="utf-8"))
+    path = result_path(volume)  # a volume from before the import has only the file the database was filled from
+    doc = json.loads((path if path.exists() else fillDatabase.DATA_DIR / f"nr{volume.vz:03d}_metadata.json").read_text(encoding="utf-8"))
     by_range = {(lf.start_page, lf.end_page): lf
                 for lf in fillDatabase.session.query(fillDatabase.Leaflet).filter_by(volume_id=volume.id)
                 if not (lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id))}
