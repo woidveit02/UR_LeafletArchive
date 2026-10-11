@@ -656,7 +656,7 @@
       "title": "Verfassungsjuristische Stellungnahme zum sog. \"Radikalenbeschluß\" der Länderministerpräsidenten",
       "date": "",
       "start_page": 32,
-      "end_page": 35,
+      "end_page": 34,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -697,6 +697,28 @@
         "32-7"
       ],
       "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 133,
+      "start_page": 35,
+      "end_page": 35,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -890,7 +912,7 @@
       "title": "Der Boden des Grundgesetzes",
       "date": "",
       "start_page": 46,
-      "end_page": 47,
+      "end_page": 46,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -933,6 +955,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 134,
+      "start_page": 47,
+      "end_page": 47,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -2054,7 +2098,7 @@
       "title": "Folgende Kandidaten des demokratischen Aktionsbündnisses/ehem. FS stellen sich bei den Fachschaftsratswahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
       "date": "",
       "start_page": 98,
-      "end_page": 99,
+      "end_page": 98,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2097,6 +2141,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 135,
+      "start_page": 99,
+      "end_page": 99,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -2144,7 +2210,7 @@
       "title": "Folgende Kandidaten des demokratischen Aktionsbündnisses/ehem. FS stellen sich bei den Fachschaftsratswahlen am Fachbereich Wirtschaftswissenschaft zur Wahl:",
       "date": "",
       "start_page": 102,
-      "end_page": 103,
+      "end_page": 102,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2190,6 +2256,28 @@
       "_grounding": []
     },
     {
+      "id": 136,
+      "start_page": 103,
+      "end_page": 103,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
       "id": 41,
       "title": "Für verbesserte Ausbildungsbedingungen der Wirtschaftsphilologen",
       "date": "",
@@ -2232,7 +2320,7 @@
       "title": "Kommilitonen! Die Ausbildungssituation stellt sich im Augenblick folgendermaßen dar:",
       "date": "",
       "start_page": 106,
-      "end_page": 107,
+      "end_page": 106,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2270,6 +2358,28 @@
         "106-1"
       ],
       "received_year_uncertain": true,
+      "_grounding": []
+    },
+    {
+      "id": 137,
+      "start_page": 107,
+      "end_page": 107,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -3222,7 +3332,7 @@
       "title": "Heute, Dienstag 3, Juli findet um 15.00 eine Wahl-Vollversammlung statt in H 02",
       "date": "",
       "start_page": 160,
-      "end_page": 161,
+      "end_page": 160,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -3258,6 +3368,28 @@
       "_grounding": [
         "series nicht im Text: 'Sozpol-Info'"
       ]
+    },
+    {
+      "id": 138,
+      "start_page": 161,
+      "end_page": 161,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
     },
     {
       "id": 66,
@@ -4112,7 +4244,7 @@
       "title": "Wählt die Kandidaten des gewerkschaftlich orientierten Bündnisses in Fachschafts- und Fachbereichsrat von Sprach/Lit",
       "date": "",
       "start_page": 210,
-      "end_page": 211,
+      "end_page": 210,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -4146,6 +4278,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 139,
+      "start_page": 211,
+      "end_page": 211,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -5822,7 +5976,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         },
         {
@@ -5964,7 +6118,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         },
         {

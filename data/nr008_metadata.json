@@ -106,7 +106,7 @@
       "title": "Bedingungen unserer Politik. Das Programm der LFS/LAF",
       "date": "",
       "start_page": 5,
-      "end_page": 8,
+      "end_page": 7,
       "confirmed": false,
       "no_content": false,
       "note": "",
@@ -143,6 +143,28 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 164,
+      "start_page": 8,
+      "end_page": 8,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -948,9 +970,7 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": [
-            "ak"
-          ]
+          "org_ids": []
         },
         {
           "evidence": "Presserechtlich verantwortlich: Michael Horn, 8 Mü 4o, Leopoldstr.15",
@@ -3964,7 +3984,7 @@
       "title": "Prorektor - Wahl",
       "date": "",
       "start_page": 176,
-      "end_page": 177,
+      "end_page": 176,
       "confirmed": false,
       "no_content": false,
       "note": "",
@@ -3999,6 +4019,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 165,
+      "start_page": 177,
+      "end_page": 177,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -4207,9 +4249,7 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": [
-            "ak"
-          ]
+          "org_ids": []
         }
       ],
       "date_evidence": "Mittwoch, 28. Juni, um 19\n30",
@@ -7144,7 +7184,7 @@
       "title": "Kulturpolitiker in Regensburg",
       "date": "",
       "start_page": 320,
-      "end_page": 325,
+      "end_page": 324,
       "confirmed": false,
       "no_content": false,
       "note": "",
@@ -7165,6 +7205,28 @@
       "date_type": "issued",
       "doc_type": "unklar",
       "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 166,
+      "start_page": 325,
+      "end_page": 325,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     }
   ]

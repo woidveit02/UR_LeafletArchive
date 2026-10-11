@@ -999,7 +999,7 @@
       "title": "Kampf dem reaktionären bayr. Hochschulgesetz. Kampf der politischen Disziplinierung",
       "date": "",
       "start_page": 42,
-      "end_page": 47,
+      "end_page": 46,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -1022,7 +1022,7 @@
           "function": "",
           "marker": "verantw.",
           "org_ids": [
-            "fachschaften"
+            "hochschulausschuss_der_fachschaften"
           ]
         }
       ],
@@ -1038,6 +1038,28 @@
       "_grounding": [
         "issuer 'HS-Ausschuß der Fachschaften': Stichwort bei Organisation"
       ]
+    },
+    {
+      "id": 235,
+      "start_page": 47,
+      "end_page": 47,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
     },
     {
       "id": 20,
@@ -1067,7 +1089,9 @@
           "role": "issuer",
           "function": "",
           "marker": "verantw",
-          "org_ids": []
+          "org_ids": [
+            "hochschulausschuss_der_fachschaften"
+          ]
         }
       ],
       "date_evidence": "AKTIONSWOCHE v. 15.-18.5.",
@@ -1088,7 +1112,7 @@
       "title": "Kampf dem reaktionären bayr. Hochschulgesetz",
       "date": "",
       "start_page": 54,
-      "end_page": 61,
+      "end_page": 60,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -1113,11 +1137,33 @@
       "_grounding": []
     },
     {
+      "id": 236,
+      "start_page": 61,
+      "end_page": 61,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
       "id": 22,
       "title": "Kampf dem reaktionären bayr. Hochschulgesetz",
       "date": "",
       "start_page": 62,
-      "end_page": 69,
+      "end_page": 68,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -1140,7 +1186,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "fachschaften"
+            "hochschulausschuss_der_fachschaften"
           ]
         }
       ],
@@ -1162,11 +1208,33 @@
       "_grounding": []
     },
     {
+      "id": 237,
+      "start_page": 69,
+      "end_page": 69,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
       "id": 23,
       "title": "Kampf dem reaktionären bayr. Hochschulgesetz",
       "date": "",
       "start_page": 70,
-      "end_page": 75,
+      "end_page": 74,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -1188,6 +1256,28 @@
       "date_type": "event",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 238,
+      "start_page": 75,
+      "end_page": 75,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -1220,7 +1310,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "fachschaften"
+            "hochschulausschuss_der_fachschaften"
           ]
         }
       ],
@@ -2036,7 +2126,7 @@
       "title": "Termine zum Streik gegen das BHG!",
       "date": "",
       "start_page": 124,
-      "end_page": 125,
+      "end_page": 124,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2070,11 +2160,33 @@
       "_grounding": []
     },
     {
+      "id": 239,
+      "start_page": 125,
+      "end_page": 125,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
       "id": 43,
       "title": "Zur SP-Wahl",
       "date": "",
       "start_page": 126,
-      "end_page": 131,
+      "end_page": 130,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2112,6 +2224,28 @@
         "130-2"
       ],
       "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 240,
+      "start_page": 131,
+      "end_page": 131,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -2294,7 +2428,7 @@
       "title": "Programm für die Wahlen zum Fachbereichsrat GGP",
       "date": "",
       "start_page": 164,
-      "end_page": 167,
+      "end_page": 166,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -2313,6 +2447,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 241,
+      "start_page": 167,
+      "end_page": 167,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -3957,7 +4113,7 @@
       "title": "Germanisten",
       "date": "",
       "start_page": 262,
-      "end_page": 263,
+      "end_page": 262,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -3978,6 +4134,28 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 242,
+      "start_page": 263,
+      "end_page": 263,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -4629,7 +4807,7 @@
       "title": "Der Kampf geht weiter!",
       "date": "",
       "start_page": 304,
-      "end_page": 305,
+      "end_page": 304,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -4663,6 +4841,28 @@
       "_grounding": []
     },
     {
+      "id": 243,
+      "start_page": 305,
+      "end_page": 305,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
+      "_grounding": []
+    },
+    {
       "id": 105,
       "title": "Nach Maier's Law-and-order Konzept nun die SPD-Leitsätze. Demokrat. Variante? Bayr. Hochschulpolitik.",
       "date": "",
@@ -4692,7 +4892,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "fachschaften"
+            "hochschulausschuss_der_fachschaften"
           ]
         }
       ],
@@ -6348,7 +6548,7 @@
       "title": "Programm für die Wahlen zum Fachbereichsrat GGP",
       "date": "",
       "start_page": 394,
-      "end_page": 397,
+      "end_page": 396,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -6380,6 +6580,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 244,
+      "start_page": 397,
+      "end_page": 397,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -6427,7 +6649,7 @@
       "title": "Die bildungspolitischen Vorstellungen der GEW",
       "date": "",
       "start_page": 400,
-      "end_page": 403,
+      "end_page": 402,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -6460,6 +6682,28 @@
       "date_type": "undated",
       "doc_type": "broschuere",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 245,
+      "start_page": 403,
+      "end_page": 403,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -6593,7 +6837,7 @@
       "title": "Info zur Prorektorwahl",
       "date": "",
       "start_page": 409,
-      "end_page": 410,
+      "end_page": 409,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -6635,6 +6879,28 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 246,
+      "start_page": 410,
+      "end_page": 410,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -7313,7 +7579,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "studentenparlament"
+            "linke_asta_fraktion"
           ]
         }
       ],
@@ -7361,7 +7627,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "studentenparlament"
+            "linke_asta_fraktion"
           ]
         }
       ],
@@ -7856,7 +8122,9 @@
           "role": "issuer",
           "function": "",
           "marker": "",
-          "org_ids": []
+          "org_ids": [
+            "tv"
+          ]
         }
       ],
       "date_evidence": "Stuttgart, 7. Februar 1972",
@@ -7940,7 +8208,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ],
           "_merged": [
             "Jungsozialisten in der SPD Bezirksvorstand Niederbayern/Oberpfalz"
@@ -8128,7 +8396,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ],
           "_merged": [
             "Jungsozialisten in der SPD Bezirksvorstand Niederbayern/Oberpfalz"
@@ -8589,7 +8857,7 @@
       "title": "Erklärung des SHB-Regensburg",
       "date": "",
       "start_page": 494,
-      "end_page": 495,
+      "end_page": 494,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -8632,6 +8900,28 @@
       "date_type": "undated",
       "doc_type": "flugblatt",
       "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 247,
+      "start_page": 495,
+      "end_page": 495,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -8809,7 +9099,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         },
         {
@@ -8878,7 +9168,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         },
         {
@@ -8930,7 +9220,6 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "esg",
             "smd"
           ]
         },
@@ -9219,7 +9508,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         }
       ],

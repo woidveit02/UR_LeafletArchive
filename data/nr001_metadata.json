@@ -37,7 +37,7 @@
           "surface": "AStA",
           "role": "issuer",
           "org_ids": [
-            "asta"
+            "asta_wuerzburg"
           ]
         },
         {
@@ -142,9 +142,22 @@
           ],
           "surface": "Allgemeiner Studentenausschuß der Universität",
           "role": "issuer",
-          "org_ids": [],
+          "org_ids": [
+            "asta_wuerzburg"
+          ],
           "_other_institution": [
             "asta"
+          ]
+        },
+        {
+          "evidence": "Herausgeber: AStA und Universitätspresseamt",
+          "blocks": [],
+          "surface": "Universitätspresseamt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "universitaetspresseamt_wuerzburg"
           ]
         }
       ],
@@ -188,7 +201,20 @@
           "_other_institution": [
             "asta"
           ],
-          "org_ids": []
+          "org_ids": [
+            "asta_wuerzburg"
+          ]
+        },
+        {
+          "evidence": "Herausgeber: AStA und Universitätspresseamt",
+          "blocks": [],
+          "surface": "Universitätspresseamt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "universitaetspresseamt_wuerzburg"
+          ]
         }
       ],
       "date_evidence": "27. Januar 67",
@@ -230,7 +256,20 @@
           "_other_institution": [
             "asta"
           ],
-          "org_ids": []
+          "org_ids": [
+            "asta_wuerzburg"
+          ]
+        },
+        {
+          "evidence": "Herausgeber: AStA und Universitätspresseamt",
+          "blocks": [],
+          "surface": "Universitätspresseamt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "universitaetspresseamt_wuerzburg"
+          ]
         }
       ],
       "date_evidence": "10.Februar 1967",
@@ -272,7 +311,20 @@
           "_other_institution": [
             "asta"
           ],
-          "org_ids": []
+          "org_ids": [
+            "asta_wuerzburg"
+          ]
+        },
+        {
+          "evidence": "Herausgeber: AStA und Universitätspresseamt",
+          "blocks": [],
+          "surface": "Universitätspresseamt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "universitaetspresseamt_wuerzburg"
+          ]
         }
       ],
       "date_evidence": "23.februar 1967",

@@ -5950,7 +5950,7 @@
     {
       "volume": "0118_0006",
       "start_page": 133,
-      "end_page": 136,
+      "end_page": 135,
       "topic": 34,
       "uncertain": true
     },
@@ -6076,7 +6076,7 @@
     {
       "volume": "0118_0006",
       "start_page": 221,
-      "end_page": 228,
+      "end_page": 227,
       "topic": 26,
       "uncertain": false
     },
@@ -7070,7 +7070,7 @@
     {
       "volume": "0118_0007",
       "start_page": 142,
-      "end_page": 143,
+      "end_page": 142,
       "topic": 17,
       "uncertain": false
     },
@@ -7133,7 +7133,7 @@
     {
       "volume": "0118_0007",
       "start_page": 168,
-      "end_page": 175,
+      "end_page": 174,
       "topic": 26,
       "uncertain": false
     },
@@ -7154,7 +7154,7 @@
     {
       "volume": "0118_0007",
       "start_page": 189,
-      "end_page": 196,
+      "end_page": 195,
       "topic": 26,
       "uncertain": false
     },
@@ -7259,7 +7259,7 @@
     {
       "volume": "0118_0008",
       "start_page": 5,
-      "end_page": 8,
+      "end_page": 7,
       "topic": 27,
       "uncertain": true
     },
@@ -7777,7 +7777,7 @@
     {
       "volume": "0118_0008",
       "start_page": 176,
-      "end_page": 177,
+      "end_page": 176,
       "topic": 17,
       "uncertain": false
     },
@@ -8218,7 +8218,7 @@
     {
       "volume": "0118_0008",
       "start_page": 320,
-      "end_page": 325,
+      "end_page": 324,
       "topic": 29,
       "uncertain": true
     },
@@ -8351,7 +8351,7 @@
     {
       "volume": "0118_0009",
       "start_page": 42,
-      "end_page": 47,
+      "end_page": 46,
       "topic": 29,
       "uncertain": false
     },
@@ -8365,21 +8365,21 @@
     {
       "volume": "0118_0009",
       "start_page": 54,
-      "end_page": 61,
+      "end_page": 60,
       "topic": 29,
       "uncertain": false
     },
     {
       "volume": "0118_0009",
       "start_page": 62,
-      "end_page": 69,
+      "end_page": 68,
       "topic": 29,
       "uncertain": false
     },
     {
       "volume": "0118_0009",
       "start_page": 70,
-      "end_page": 75,
+      "end_page": 74,
       "topic": 29,
       "uncertain": false
     },
@@ -8512,14 +8512,14 @@
     {
       "volume": "0118_0009",
       "start_page": 124,
-      "end_page": 125,
+      "end_page": 124,
       "topic": 23,
       "uncertain": false
     },
     {
       "volume": "0118_0009",
       "start_page": 126,
-      "end_page": 131,
+      "end_page": 130,
       "topic": 9,
       "uncertain": false
     },
@@ -8561,7 +8561,7 @@
     {
       "volume": "0118_0009",
       "start_page": 164,
-      "end_page": 167,
+      "end_page": 166,
       "topic": 13,
       "uncertain": true
     },
@@ -8806,7 +8806,7 @@
     {
       "volume": "0118_0009",
       "start_page": 262,
-      "end_page": 263,
+      "end_page": 262,
       "topic": 22,
       "uncertain": false
     },
@@ -8939,7 +8939,7 @@
     {
       "volume": "0118_0009",
       "start_page": 304,
-      "end_page": 305,
+      "end_page": 304,
       "topic": 23,
       "uncertain": false
     },
@@ -9177,7 +9177,7 @@
     {
       "volume": "0118_0009",
       "start_page": 394,
-      "end_page": 397,
+      "end_page": 396,
       "topic": 13,
       "uncertain": true
     },
@@ -9191,7 +9191,7 @@
     {
       "volume": "0118_0009",
       "start_page": 400,
-      "end_page": 403,
+      "end_page": 402,
       "topic": 9,
       "uncertain": false
     },
@@ -9219,7 +9219,7 @@
     {
       "volume": "0118_0009",
       "start_page": 409,
-      "end_page": 410,
+      "end_page": 409,
       "topic": 17,
       "uncertain": true
     },
@@ -9506,7 +9506,7 @@
     {
       "volume": "0118_0009",
       "start_page": 494,
-      "end_page": 495,
+      "end_page": 494,
       "topic": 14,
       "uncertain": false
     },
@@ -9940,7 +9940,7 @@
     {
       "volume": "0118_0010",
       "start_page": 30,
-      "end_page": 31,
+      "end_page": 30,
       "topic": 34,
       "uncertain": false
     },
@@ -9954,7 +9954,7 @@
     {
       "volume": "0118_0010",
       "start_page": 34,
-      "end_page": 35,
+      "end_page": 34,
       "topic": 6,
       "uncertain": false
     },
@@ -10038,7 +10038,7 @@
     {
       "volume": "0118_0010",
       "start_page": 68,
-      "end_page": 69,
+      "end_page": 68,
       "topic": 34,
       "uncertain": false
     },
@@ -10150,7 +10150,7 @@
     {
       "volume": "0118_0010",
       "start_page": 103,
-      "end_page": 104,
+      "end_page": 103,
       "topic": 15,
       "uncertain": false
     },
@@ -10199,7 +10199,7 @@
     {
       "volume": "0118_0010",
       "start_page": 122,
-      "end_page": 129,
+      "end_page": 128,
       "topic": 17,
       "uncertain": false
     },
@@ -10213,7 +10213,7 @@
     {
       "volume": "0118_0010",
       "start_page": 138,
-      "end_page": 151,
+      "end_page": 150,
       "topic": 15,
       "uncertain": true
     },
@@ -10318,7 +10318,7 @@
     {
       "volume": "0118_0010",
       "start_page": 197,
-      "end_page": 198,
+      "end_page": 197,
       "topic": 6,
       "uncertain": false
     },
@@ -10423,7 +10423,7 @@
     {
       "volume": "0118_0011",
       "start_page": 17,
-      "end_page": 22,
+      "end_page": 21,
       "topic": 32,
       "uncertain": false
     },
@@ -10444,7 +10444,7 @@
     {
       "volume": "0118_0011",
       "start_page": 27,
-      "end_page": 28,
+      "end_page": 27,
       "topic": 37,
       "uncertain": true
     },
@@ -10500,7 +10500,7 @@
     {
       "volume": "0118_0011",
       "start_page": 49,
-      "end_page": 56,
+      "end_page": 55,
       "topic": 31,
       "uncertain": true
     },
@@ -10549,7 +10549,7 @@
     {
       "volume": "0118_0011",
       "start_page": 74,
-      "end_page": 75,
+      "end_page": 74,
       "topic": 31,
       "uncertain": true
     },
@@ -10605,14 +10605,14 @@
     {
       "volume": "0118_0011",
       "start_page": 100,
-      "end_page": 101,
+      "end_page": 100,
       "topic": 31,
       "uncertain": false
     },
     {
       "volume": "0118_0011",
       "start_page": 102,
-      "end_page": 103,
+      "end_page": 102,
       "topic": 31,
       "uncertain": false
     },
@@ -11081,7 +11081,7 @@
     {
       "volume": "0118_0012",
       "start_page": 32,
-      "end_page": 35,
+      "end_page": 34,
       "topic": 10,
       "uncertain": false
     },
@@ -11116,7 +11116,7 @@
     {
       "volume": "0118_0012",
       "start_page": 46,
-      "end_page": 47,
+      "end_page": 46,
       "topic": 14,
       "uncertain": false
     },
@@ -11263,7 +11263,7 @@
     {
       "volume": "0118_0012",
       "start_page": 98,
-      "end_page": 99,
+      "end_page": 98,
       "topic": 6,
       "uncertain": false
     },
@@ -11277,7 +11277,7 @@
     {
       "volume": "0118_0012",
       "start_page": 102,
-      "end_page": 103,
+      "end_page": 102,
       "topic": 6,
       "uncertain": false
     },
@@ -11291,7 +11291,7 @@
     {
       "volume": "0118_0012",
       "start_page": 106,
-      "end_page": 107,
+      "end_page": 106,
       "topic": 29,
       "uncertain": false
     },
@@ -11452,7 +11452,7 @@
     {
       "volume": "0118_0012",
       "start_page": 160,
-      "end_page": 161,
+      "end_page": 160,
       "topic": 5,
       "uncertain": false
     },
@@ -11613,7 +11613,7 @@
     {
       "volume": "0118_0012",
       "start_page": 210,
-      "end_page": 211,
+      "end_page": 210,
       "topic": 6,
       "uncertain": false
     },
@@ -13482,7 +13482,7 @@
     {
       "volume": "0118_0014",
       "start_page": 344,
-      "end_page": 345,
+      "end_page": 344,
       "topic": 23,
       "uncertain": false
     },

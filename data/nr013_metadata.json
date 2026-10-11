@@ -480,7 +480,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "fachschaften"
+            "zentralrat_der_fachschaften"
           ]
         },
         {
@@ -2972,7 +2972,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "asta"
+            "asta_fachhochschule_regensburg"
           ],
           "_merged": [
             "AStA Uni"
@@ -3575,7 +3575,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "asta"
+            "asta_fachhochschule_regensburg"
           ],
           "_merged": [
             "AStA Uni"
@@ -4870,7 +4870,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "ak"
+            "arbeitskreis_regensburger_smv"
           ]
         },
         {

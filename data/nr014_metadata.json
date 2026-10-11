@@ -249,38 +249,24 @@
     },
     {
       "id": 5,
-      "title": "",
-      "date": "",
       "start_page": 7,
       "end_page": 7,
-      "confirmed": true,
-      "no_content": false,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
       "note": "",
       "title_evidence": "",
       "title_blocks": [],
       "title_type": "",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "FS geschichte",
-          "blocks": [
-            "7-1"
-          ],
-          "surface": "FS Geschichte",
-          "role": "issuer",
-          "function": "",
-          "marker": "",
-          "org_ids": []
-        }
-      ],
+      "issuers": [],
       "date_evidence": "",
       "date_blocks": [],
       "date_text": "",
       "date_iso": "",
       "date_type": "undated",
       "doc_type": "unklar",
-      "confidence": 0.4,
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -4340,44 +4326,24 @@
     },
     {
       "id": 94,
-      "title": "MHG Mafag",
-      "date": "",
       "start_page": 317,
       "end_page": 317,
-      "confirmed": true,
-      "no_content": false,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
       "note": "",
-      "title_evidence": "MHG\nMAFAG",
-      "title_blocks": [
-        "317-1"
-      ],
-      "title_type": "original",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "MHG\nMAFAG",
-          "blocks": [
-            "317-1"
-          ],
-          "surface": "MHG",
-          "role": "issuer",
-          "function": "",
-          "marker": "",
-          "org_ids": [
-            "mhg"
-          ]
-        }
-      ],
-      "date_evidence": "1973",
-      "date_blocks": [
-        "317-2"
-      ],
-      "date_text": "1973",
-      "date_iso": "1973",
-      "date_type": "issued",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
       "doc_type": "unklar",
-      "confidence": 0.5,
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -4597,44 +4563,24 @@
     },
     {
       "id": 99,
-      "title": "MHG Mafag",
-      "date": "",
       "start_page": 339,
       "end_page": 339,
-      "confirmed": true,
-      "no_content": false,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
       "note": "",
-      "title_evidence": "MHG\nMAFAG",
-      "title_blocks": [
-        "339-1"
-      ],
-      "title_type": "original",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "MHG\nMAFAG",
-          "blocks": [
-            "339-1"
-          ],
-          "surface": "MHG",
-          "role": "issuer",
-          "function": "",
-          "marker": "",
-          "org_ids": [
-            "mhg"
-          ]
-        }
-      ],
-      "date_evidence": "1973",
-      "date_blocks": [
-        "339-2"
-      ],
-      "date_text": "1973",
-      "date_iso": "1973",
-      "date_type": "issued",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
       "doc_type": "unklar",
-      "confidence": 0.5,
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -4746,7 +4692,7 @@
       "title": "Was nutzen Diskussionen mit Kumi Maier? Oder: Der AStA demonstriert die Ohnmacht der Studenten",
       "date": "",
       "start_page": 344,
-      "end_page": 345,
+      "end_page": 344,
       "confirmed": true,
       "no_content": false,
       "note": "",
@@ -4791,6 +4737,28 @@
       "date_type": "issued",
       "doc_type": "flugblatt",
       "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 174,
+      "start_page": 345,
+      "end_page": 345,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
+      "note": "",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -6955,44 +6923,24 @@
     },
     {
       "id": 145,
-      "title": "MSB Spartakus: Berufsverbot",
-      "date": "",
       "start_page": 448,
       "end_page": 448,
-      "confirmed": true,
-      "no_content": false,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
       "note": "",
-      "title_evidence": "MSB Spartakus\n: Berufsverbot",
-      "title_blocks": [
-        "448-1"
-      ],
-      "title_type": "original",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "MSB Spartakus\n: Berufsverbot",
-          "blocks": [
-            "448-1"
-          ],
-          "surface": "MSB Spartakus",
-          "role": "issuer",
-          "function": "",
-          "marker": "",
-          "org_ids": [
-            "msb"
-          ]
-        }
-      ],
-      "date_evidence": "1973",
-      "date_blocks": [
-        "448-2"
-      ],
-      "date_text": "1973",
-      "date_iso": "1973",
-      "date_type": "issued",
-      "doc_type": "broschuere",
-      "confidence": 0.75,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0,
       "_grounding": []
     },
     {
@@ -7866,48 +7814,25 @@
     },
     {
       "id": 163,
-      "title": "SHB 1973",
-      "date": "",
       "start_page": 483,
       "end_page": 483,
-      "confirmed": true,
-      "no_content": false,
+      "title": "",
+      "date": "",
+      "confirmed": false,
+      "no_content": true,
       "note": "",
-      "title_evidence": "SHB\n1973",
-      "title_blocks": [
-        "483-1",
-        "483-2"
-      ],
-      "title_type": "original",
-      "series": "",
-      "issue": "",
-      "issuers": [
-        {
-          "evidence": "SHB",
-          "blocks": [
-            "483-1"
-          ],
-          "surface": "SHB",
-          "role": "issuer",
-          "function": "",
-          "marker": "",
-          "org_ids": [
-            "shb"
-          ]
-        }
-      ],
-      "date_evidence": "1973",
-      "date_blocks": [
-        "483-2"
-      ],
-      "date_text": "1973",
-      "date_iso": "1973",
-      "date_type": "issued",
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
       "doc_type": "unklar",
-      "confidence": 0.5,
-      "_grounding": [
-        "date_type=issued, aber der Beleg steht mitten im Text (Position 85%) - vermutlich kein Erscheinungsdatum"
-      ]
+      "confidence": 0.0,
+      "_grounding": []
     },
     {
       "id": 164,
@@ -8213,7 +8138,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "spd"
+            "juso"
           ]
         }
       ],
