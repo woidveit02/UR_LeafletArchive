@@ -240,3 +240,12 @@
 {"volume": "0118_0014", "start_page": 342, "end_page": 343, "field": "received", "value": "1973-05-08", "blocks": ["342-12"], "at": "2026-10-11"}
 {"volume": "0118_0014", "start_page": 398, "end_page": 405, "field": "received", "value": "1973-02-12", "at": "2026-10-11"}
 {"volume": "0118_0014", "start_page": 455, "end_page": 457, "field": "received", "value": "1973-10-26", "at": "2026-10-11"}
+{"volume": "0118_0007", "start_page": 168, "end_page": 174, "field": "received", "value": "1972-01-26", "blocks": ["168-2"], "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 324, "field": "signatories", "value": [{"name": "Heinz Holländer", "details": "", "blocks": []}, {"name": "Konrad Hecker", "details": "", "blocks": []}], "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 324, "field": "series", "value": {"name": "Universität Regensburg / Informationen", "issue": "Nr. 1, Jan. '72"}, "at": "2026-10-12"}
+{"volume": "0118_0009", "start_page": 304, "end_page": 304, "field": "received", "value": "1972-06-26", "blocks": ["304-2"], "at": "2026-10-12"}
+{"volume": "0118_0012", "start_page": 102, "end_page": 102, "field": "received", "value": "1973-01-31", "at": "2026-10-12"}
+{"volume": "0118_0007", "start_page": 168, "end_page": 175, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 325, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0009", "start_page": 304, "end_page": 305, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0012", "start_page": 102, "end_page": 103, "field": "revert", "value": "all", "at": "2026-10-12"}
