@@ -10,12 +10,13 @@
                 </details>
 {% endmacro %}
 {% block content %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>Korrekturen</h1>
-            <p class="meta">Hier findest du manuell korrigierte Angaben. Sie werden bei einer erneuten Erfassung wieder angewendet.</p>
+            <p class="page-intro">Hier findest du manuell korrigierte Angaben. Sie werden bei einer erneuten Erfassung wieder angewendet.</p>
         </header>
         {% if rows or copies %}
-        <h2>Ohne Zuordnung</h2>
+        <h2>Ohne Zuordnung <span class="count">· {{ rows | length + copies | length }}</span></h2>
         <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
             Sie werden nicht angewendet. Übernimm sie auf ein Flugblatt, das jetzt dort liegt, oder verwirf sie.
             Prüfungen möglicher Exemplare, deren Segmente sich geändert haben, stehen darunter.</p>
@@ -31,8 +32,8 @@
                     {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
                 <form method="post" action="/korrekturen/zuordnen" class="task-actions">
                     <input type="hidden" name="volume" value="{{ row.stem }}"><input type="hidden" name="start" value="{{ row.start }}"><input type="hidden" name="end" value="{{ row.end }}">
-                    {% for lf in row.overlaps %}<button type="submit" name="target" value="{{ lf.id }}" class="tool-button primary">Auf {{ page_range(lf.start_page, lf.end_page) }} übernehmen</button>{% endfor %}
-                    <button type="submit" class="text-button" onclick="return confirm('Diese Korrektur verwerfen? Sie wird nicht mehr angewendet.')">Verwerfen</button>
+                    {% for lf in row.overlaps %}<button type="submit" name="target" value="{{ lf.id }}" class="button primary">Auf {{ page_range(lf.start_page, lf.end_page) }} übernehmen</button>{% endfor %}
+                    <button type="submit" class="button text danger" onclick="return confirm('Diese Korrektur verwerfen? Sie wird nicht mehr angewendet.')">Verwerfen</button>
                 </form>
                 {{ history(row) }}
             </li>
@@ -42,7 +43,7 @@
             {% endfor %}
         </ul>
         {% endif %}
-        {% if rows or copies %}<h2>Zugeordnet</h2>{% endif %}
+        {% if rows or copies %}<h2>Zugeordnet <span class="count">· {{ saved | length }}</span></h2>{% endif %}
         <ul class="fix-list">
             {% for row in saved %}
             <li>
@@ -52,12 +53,12 @@
                 <dl class="fix-fields">
                     {% for label, value in row.now %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endfor %}
                 </dl>
-                {% else %}<p class="meta">Keine wirksame Korrektur, alle wurden zurückgenommen.</p>{% endif %}
+                {% else %}<p class="empty">Keine wirksame Korrektur, alle wurden zurückgenommen.</p>{% endif %}
                 <span class="meta">Zuletzt geändert am {{ row.at }}</span>
                 {% if row.history | length > row.now | length %}{{ history(row) }}{% endif %}
             </li>
             {% else %}
-            <li class="meta">Noch keine Korrekturen gespeichert.</li>
+            <li class="empty">Noch keine Korrekturen.</li>
             {% endfor %}
         </ul>
 {% endblock %}

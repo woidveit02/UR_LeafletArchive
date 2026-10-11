@@ -114,7 +114,6 @@ class Organization(Base):
     variants = Column(JSON)
     jahre = Column(JSON)
     vz = Column(JSON)
-    gnd_id = Column(String)
     notes = Column(String)
 
 

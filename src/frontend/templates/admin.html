@@ -4,8 +4,8 @@
         <header class="page-head admin-head">
             <h1>Verwaltung</h1>
             <span class="admin-actions">
-                <a class="tool-button" href="/verwaltung/export">Datensatz exportieren</a>
-                {% if units %}<a class="button-link" href="/import/neu">Band hinzufügen</a>{% endif %}
+                <a class="button" href="/verwaltung/export">Datensatz exportieren</a>
+                {% if units %}<a class="button primary" href="/import/neu">Band hinzufügen</a>{% endif %}
             </span>
         </header>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
@@ -42,12 +42,12 @@
             <li>
                 <span class="row-main"><a class="row-title" href="/import/{{ d.vz }}">Band {{ '%03d' % d.vz }} · {{ d.title }}</a>
                     <span class="meta">Schritt {{ d.n }} von {{ n_steps }} · {{ d.step }}</span></span>
-                <a class="tool-button" href="/import/{{ d.vz }}">Fortsetzen</a>
+                <a class="button" href="/import/{{ d.vz }}">Fortsetzen</a>
                 {% if d.deletable %}<details class="row-menu">
                     <summary aria-label="Weitere Aktionen" title="Weitere Aktionen">⋯</summary>
                     <form method="post" action="/import/{{ d.vz }}/loeschen"
                           onsubmit="return confirm('Den Entwurf Band {{ '%03d' % d.vz }} wirklich löschen? Die im Viewer angelegten Daten und die hochgeladenen Scans gehen verloren. Der Band im Archiv bleibt unberührt.')">
-                        <button type="submit" class="text-button">Entwurf löschen</button></form>
+                        <button type="submit" class="button text danger">Entwurf löschen</button></form>
                 </details>{% endif %}
             </li>
             {% endfor %}
@@ -61,16 +61,16 @@
         {% endif %}
 
         <h2>Freigegeben <span class="count">· {{ volumes | length }}</span></h2>
-        <table class="admin-table">
-            <thead><tr><th>Band</th><th>Titel</th><th class="num">Seiten</th><th class="num">Flugblätter</th><th class="num">Exemplargruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
+        <table class="data-table">
+            <thead><tr><th>Band</th><th>Titel</th><th class="num hide-narrow">Seiten</th><th class="num">Flugblätter</th><th class="num hide-narrow">Exemplargruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
             <tbody>
             {% for v in volumes %}
             <tr>
                 <td><a href="/volumes/{{ v.vz }}">{{ '%03d' % v.vz }}</a></td>
                 <td><a href="/volumes/{{ v.vz }}">{{ v.title }}</a></td>
-                <td class="num">{{ v.pages or '–' }}</td>
+                <td class="num hide-narrow">{{ v.pages or '–' }}</td>
                 <td class="num">{{ v.leaflets }}</td>
-                <td class="num">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{% if v.open %}<span class="todo">{{ v.open }} offen</span> · {% endif %}{{ v.groups }} {{ 'Gruppe' if v.groups == 1 else 'Gruppen' }}{% if not v.open %} · alle geprüft{% endif %}</a>{% else %}–{% endif %}</td>
+                <td class="num hide-narrow">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{% if v.open %}<span class="todo">{{ v.open }} offen</span> · {% endif %}{{ v.groups }} {{ 'Gruppe' if v.groups == 1 else 'Gruppen' }}{% if not v.open %} · alle geprüft{% endif %}</a>{% else %}–{% endif %}</td>
                 <td class="num">{{ v.fixes or '–' }}</td>
                 <td><a href="/import/{{ v.vz }}?schritt=pruefen">Prüfen</a></td>
             </tr>

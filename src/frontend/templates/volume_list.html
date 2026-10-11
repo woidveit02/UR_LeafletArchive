@@ -3,18 +3,18 @@
 {% block content %}
         <header class="page-head">
             <h1>Bände</h1>
-        <p class="meta">Verzeichnungseinheiten 1967–1973 im Bestand Rep. 118 laut Findmittel des Universitätsarchivs
-            (<a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
+            <p class="page-intro">Verzeichnungseinheiten 1967–1973 im Bestand Rep. 118 laut Findmittel des Universitätsarchivs
+                (<a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im Archivportal-D ↗</a>).</p>
         </header>
         {% for group in volumes | groupby('group', default='') | sort(attribute='list.0.label') %}
-        <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }}</h2>
-        <ul class="leaflet-list leaflet-list-plain">
+        <h2 id="{{ group.list[0].anchor }}">{{ group.grouper }} <span class="count">· {{ group.list | length }}</span></h2>
+        <table class="data-table">
+            <thead><tr><th>Band</th><th class="num">Inhalt</th></tr></thead>
+            <tbody>
             {% for volume in group.list %}
-            <li>
-                <span class="row-main"><a class="row-title" href="/volumes/{{ volume.vz }}">{{ volume.label }}</a></span>
-                <span class="row-count">{{ volume.status }}</span>
-            </li>
+            <tr><td><a href="/volumes/{{ volume.vz }}">{{ volume.label }}</a></td><td class="num">{{ volume.status }}</td></tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
         {% endfor %}
 {% endblock %}

@@ -97,10 +97,10 @@ def files(bands=None, main_only=False, persons=True, pages=True, only=None, link
               'beleg': i.quote} for l in keys for i in issuers[l]],
             ['flugblatt', 'rolle', 'herausgeber_id', 'name', 'wortlaut', 'funktion', 'beleg']),
         'herausgeber.csv': table(
-            [{'id': o.id, 'name': o.name, 'voller_name': o.full_name, 'typ': o.type, 'gnd': o.gnd_id,
+            [{'id': o.id, 'name': o.name, 'voller_name': o.full_name, 'typ': o.type,
               'varianten': o.variants or [], 'jahre': [str(j) for j in o.jahre or []],
               'baende': [str(n) for n in o.vz or [] if n in released], 'notiz': o.notes} for o in orgs.values()],
-            ['id', 'name', 'voller_name', 'typ', 'gnd', 'varianten', 'jahre', 'baende', 'notiz']),
+            ['id', 'name', 'voller_name', 'typ', 'varianten', 'jahre', 'baende', 'notiz']),
         'baende.csv': table(
             [{'band': v.vz, 'signatur': v.signature, 'titel': v.title, 'jahr': v.year, 'gruppe': v.group,
               'archivportal': v.portal_url, 'datei': v.stem, 'seiten': v.n_pages, 'flugblaetter': count[v.id],

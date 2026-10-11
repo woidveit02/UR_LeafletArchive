@@ -51,10 +51,10 @@ def decide(surface, choice, full_name=""):
         taken = {o["org_id"] for o in orgs}
         org_id = next(i for i in [base] + [f"{base}_{n}" for n in range(2, 99)] if i not in taken)
         entry = {"org_id": org_id, "name": surface, "full_name": full_name.strip(), "type": "", "variants": [surface],
-                 "jahre": [], "vz": [], "gnd_id": "", "notes": "in der App angelegt"}
+                 "jahre": [], "vz": [], "notes": "in der App angelegt"}
         orgs.append(entry)
         session.add(Organization(id=org_id, name=surface, full_name=entry["full_name"], type="", variants=[surface],
-                                 jahre=[], vz=[], gnd_id="", notes=entry["notes"]))
+                                 jahre=[], vz=[], notes=entry["notes"]))
     else:
         org_id = choice
         entry = next(o for o in orgs if o["org_id"] == org_id)

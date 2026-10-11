@@ -2,22 +2,59 @@
 {% block title %}Herausgeber – UR Leaflet Archive{% endblock %}
 {% block content %}
         {% from '_ui.html' import sort_link %}
+        {% macro org_row(org) %}
+            <tr data-search="{{ org.search }}">
+                <td><a href="/organizations/{{ org.id }}">{{ org.name }}</a>{% if org.full_name %} <span class="org-full">{{ org.full_name }}</span>{% endif %}</td>
+                <td class="hide-narrow"><span class="spark" role="img" aria-label="Dokumente je Jahr: {{ org.bars | selectattr(1) | map('join', ': ') | join(', ') }}">
+                    {%- for year, n in org.bars %}{% if n %}<a href="/leaflets?org={{ org.id }}&jahr={{ year }}" tabindex="-1" title="{{ year }}: {{ n }} – in der Flugblattliste zeigen" style="height: {{ (100 * n / org.peak) | round(0) | int }}%"></a>{% else %}<i title="{{ year }}: 0"></i>{% endif %}{% endfor -%}
+                </span></td>
+                <td class="nowrap">{% if org.first %}{{ org.first }}{% if org.last != org.first %}–{{ org.last }}{% endif %}{% endif %}</td>
+                <td class="num">{{ org.count }}</td>
+            </tr>
+        {% endmacro %}
         <header class="page-head">
-		    <h1>Herausgeber</h1>
-            <p class="page-intro">Körperschaften, Gruppen und Initiativen, die als Herausgeber erschlossener Flugblätter auftreten.</p>
+            <h1>Herausgeber</h1>
+            <p class="page-intro">{{ n_orgs }} Herausgeber · {{ total }} Dokumente. Organisationen, Gruppen und Initiativen, die im erschlossenen Bestand als Herausgeber auftreten.</p>
         </header>
-        <div class="list-head">
-            {{ sort_link('/organizations', sort, 'name', 'Herausgeber', '_auf', 'anzahl_ab') }}
-            {{ sort_link('/organizations', sort, 'anzahl', 'Flugblätter', '_ab', 'anzahl_ab') }}
-        </div>
-        <ul class="leaflet-list leaflet-list-plain">
-            {% for org in organizations %}
-            <li{% if not org.count %} class="row-empty"{% endif %}>
-                <span class="row-main"><a class="row-title" href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a></span>
-                <span class="row-count">{{ org.count }}</span>
-            </li>
-            {% else %}
-            <li>Keine Herausgeber gefunden.</li>
+        <input type="search" id="org-filter" class="org-filter" placeholder="Herausgeber filtern …" aria-label="Herausgeber filtern" autocomplete="off">
+        <table class="data-table sticky org-table">
+            <thead><tr>
+                <th>{{ sort_link('/organizations', sort, 'name', 'Herausgeber', '_auf', 'anzahl_ab') }}</th>
+                <th class="hide-narrow"><span class="spark-head" title="Jede Zeile ist auf ihr eigenes stärkstes Jahr skaliert, die Höhen sind zwischen den Zeilen nicht vergleichbar.">Dokumente je Jahr
+                    <span class="spark-axis" aria-hidden="true">{% for year in span %}<i>{{ year[2:] }}</i>{% endfor %}</span></span></th>
+                <th title="Erstes und letztes Jahr der Dokumente im Bestand, nicht die Zeit, in der die Gruppe bestand">{{ sort_link('/organizations', sort, 'erst', 'Jahre im Bestand', '_auf', 'anzahl_ab') }}</th>
+                <th class="num">{{ sort_link('/organizations', sort, 'anzahl', 'Dokumente', '_ab', 'anzahl_ab') }}</th>
+            </tr></thead>
+            <tbody id="org-list">
+            {% for org in organizations %}{{ org_row(org) }}{% else %}
+            <tr><td colspan="4" class="empty">Keine Herausgeber gefunden.</td></tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
+        {% if few %}
+        <details class="org-few" id="org-few">
+            <summary>{{ few | length }} weitere mit weniger als 5 Dokumenten</summary>
+            <table class="data-table org-table"><tbody>{% for org in few %}{{ org_row(org) }}{% endfor %}</tbody></table>
+        </details>
+        {% endif %}
+        <p class="org-foot">
+            <a href="/leaflets?org=keiner">kein Herausgeber erkannt {{ no_org }}</a> ·
+            <a href="/leaflets?org=nicht_im_register">nicht im Register {{ unknown }}</a>{% if unused %} ·
+            {{ unused }} Registereinträge ohne Dokument{% endif %}
+        </p>
+        <p class="org-foot">Ein Dokument mit mehreren Herausgebern zählt in jeder ihrer Zeilen, die Summe der Zeilen ist deshalb größer als {{ total }}.</p>
+{% endblock %}
+{% block scripts %}
+    <script>
+        (() => {
+            const box = document.getElementById('org-filter');
+            const rows = document.querySelectorAll('tr[data-search]');
+            box.addEventListener('input', () => {
+                const text = box.value.trim().toLowerCase();
+                rows.forEach(tr => tr.hidden = !!text && !tr.dataset.search.includes(text));
+                const few = document.getElementById('org-few');
+                if (few) few.open = !!text;
+            });
+        })();
+    </script>
 {% endblock %}

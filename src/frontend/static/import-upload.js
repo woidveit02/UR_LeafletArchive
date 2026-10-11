@@ -58,7 +58,7 @@
     // leaving with a choice that was not uploaded would drop it silently
     document.querySelector('.step-head')?.addEventListener('click', (e) => {
         const link = e.target.closest('a');
-        if (link && pending() && !confirm('Die ausgewählten Scans sind noch nicht hochgeladen. Trotzdem weiter?')) e.preventDefault();
+        if (link && pending() && !confirm('Ohne Hochladen weitergehen? Die ausgewählten Scans sind noch nicht hochgeladen.')) e.preventDefault();
     });
     inputs.forEach((input) => input.addEventListener('change', () => {
         inputs.filter((other) => other !== input).forEach((other) => { other.value = ''; });

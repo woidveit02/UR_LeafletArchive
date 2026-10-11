@@ -125,7 +125,6 @@ def fill_organizations():
             variants=org.get("variants", []),
             jahre=org.get("jahre", []),
             vz=org.get("vz", []),
-            gnd_id=org.get("gnd_id", ""),
             notes=org.get("notes", ""),
         ))
     session.commit()

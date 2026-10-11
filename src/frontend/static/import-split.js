@@ -109,12 +109,12 @@
             skip.textContent = out ? 'Wieder einbeziehen' : 'Als Leerseite / Trennblatt markieren';
             skip.title = out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`;
         });
-        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="tool-button" data-act="prev" title="Vorheriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
+        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Vorheriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
             <b class="${note ? '' : style}">${note || text}</b>
-            <button type="button" class="tool-button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter</button>`;
+            <button type="button" class="button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter</button>`;
         decide.innerHTML = transitions < 1 ? '' : `<p class="split-question">Zwischen Seite ${a} und ${a + 1} trennen?</p>
-            <div class="split-buttons"><button type="button" class="tool-button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Ja, trennen <kbd>T</kbd></button>
-            <button type="button" class="tool-button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Nein, gehören zusammen <kbd>Z</kbd></button></div>`;
+            <div class="split-buttons"><button type="button" class="button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Ja, trennen <kbd>T</kbd></button>
+            <button type="button" class="button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Nein, gehören zusammen <kbd>Z</kbd></button></div>`;
         $('split-undo').disabled = !undo.length;
         $('split-redo').disabled = !redo.length;
     };
@@ -235,14 +235,14 @@
     finish.addEventListener('click', () => complete() ? flush(true) : nextOpen());
     outside.addEventListener('click', async () => { await flush(true); if (data.confirmed) location.reload(); });
     $('split-suggest-text').addEventListener('click', () => {
-        if ((data.saved || cuts.size) && !confirm('Der Vorschlag ersetzt die vorhandenen Trennungen. Fortfahren?')) return;
+        if ((data.saved || cuts.size) && !confirm('Vorschlag übernehmen? Die vorhandenen Trennungen werden ersetzt.')) return;
         saved(data.textUrl, {});
     });
 
     $('split-list').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         e.target.value = '';
-        if (!file || ((data.saved || cuts.size) && !confirm('Die Liste ersetzt die vorhandenen Trennungen. Fortfahren?'))) return;
+        if (!file || ((data.saved || cuts.size) && !confirm('Liste laden? Die vorhandenen Trennungen werden ersetzt.'))) return;
         const form = new FormData();
         form.append('liste', file);
         try {

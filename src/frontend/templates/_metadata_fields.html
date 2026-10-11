@@ -11,11 +11,11 @@
 
 {% macro automatic(m, field) -%}
     {%- if field in m.automatic %}<span class="meta note">Automatisch erkannt: {{ m.automatic[field] or 'nichts' }}
-        <button type="submit" form="revert-{{ m.uid }}" name="field" value="{{ field }}" class="button-plain">wiederherstellen</button></span>{% endif -%}
+        <button type="submit" form="revert-{{ m.uid }}" name="field" value="{{ field }}" class="button text">wiederherstellen</button></span>{% endif -%}
 {%- endmacro %}
 
 {% macro row_tools(what) -%}
-    <button type="button" class="button-plain row-remove" aria-label="{{ what }} entfernen" title="Zeile entfernen">×</button>
+    <button type="button" class="button text row-remove" aria-label="{{ what }} entfernen" title="Zeile entfernen">×</button>
 {%- endmacro %}
 
 {% macro issuer_row(m, i) -%}
@@ -72,7 +72,7 @@
 {% macro issuers_field(m) -%}
     <span class="edit-rows">{% for i in m.edit.issuers + [{'name': '', 'blocks': []}] %}{{ issuer_row(m, i) }}{% endfor %}</span>
     <template>{{ issuer_row(m, {'name': '', 'blocks': []}) }}</template>
-    <button type="button" class="button-plain row-add">+ Herausgeber</button>
+    <button type="button" class="button text row-add">+ Herausgeber</button>
     <span class="meta note">Nur Organisationen aus dem Register. Die Liste ersetzt alle bisherigen Herausgeber.</span>
     {{ automatic(m, 'issuers') }}
 {%- endmacro %}
@@ -80,7 +80,7 @@
 {% macro signatories_field(m) -%}
     <span class="edit-rows">{% for s in m.edit.signatories + [{'name': '', 'details': '', 'blocks': []}] %}{{ signatory_row(m, s) }}{% endfor %}</span>
     <template>{{ signatory_row(m, {'name': '', 'details': '', 'blocks': []}) }}</template>
-    <button type="button" class="button-plain row-add">+ Unterzeichnende</button>
+    <button type="button" class="button text row-add">+ Unterzeichnende</button>
     {{ automatic(m, 'signatories') }}
 {%- endmacro %}
 

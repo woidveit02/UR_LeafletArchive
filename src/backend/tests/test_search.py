@@ -452,10 +452,10 @@ def test_detail_pages_through_the_results_and_leads_back(db):
     assert f'href="/leaflets/{order[1]}?pro_seite=25&amp;ergebnisse=1"' in html
     assert f'href="/leaflets/{order[3]}?pro_seite=25&amp;ergebnisse=1"' in html and "3 von 4" in html
     assert f'href="/leaflets?pro_seite=25#l{one}">← Zurück zu den Ergebnissen' in html
-    assert "Flugblätter</a> /" not in html  # the breadcrumb of the volume is not needed then
+    assert "Flugblätter</a> ›" not in html  # the breadcrumb of the volume is not needed then
 
     elsewhere = leaflet_app.leaflet_detail(request(f"/leaflets/{one}", b""), one).body.decode()
-    assert "Zurück zu den Ergebnissen" not in elsewhere and "Flugblätter</a> /" in elsewhere
+    assert "Zurück zu den Ergebnissen" not in elsewhere and "Flugblätter</a> ›" in elsewhere
 
     filtered = leaflet_app.leaflet_detail(request(f"/leaflets/{leaflets['ocr'].id}", b"q=kaufruf&ergebnisse=1"), leaflets["ocr"].id).body.decode()
     assert '← Zurück zu den Ergebnissen' in filtered and 'href="/leaflets?q=kaufruf#l' in filtered
@@ -471,3 +471,24 @@ def test_preview_is_tidied_and_cut_at_a_word():
     assert cut.endswith(" …") and not cut[:-2].endswith((",", "(")) and len(cut) <= 82
     assert leaflet_app.shorten_preview("kurz") == "kurz"
     assert leaflet_app.shorten_preview("mit der offiziellen Begründung:") == "mit der offiziellen Begründung: …"
+
+
+# The issuer list counts every document once and shows its years; the page of an issuer lists its documents and years.
+def test_issuer_pages_count_documents_and_years(db):
+    leaflets = seed(db)
+    db.add(Organization(id="asta", name="AStA", full_name="Allgemeiner Studentenausschuss", variants=[]))
+    db.add(Organization(id="leer", name="Leer", variants=[]))
+    db.flush()
+    for key in ("ocr", "other_year", "invitation"):
+        db.add(LeafletIssuer(leaflet_id=leaflets[key].id, surface="AStA", role="issuer", org_id="asta"))
+    db.commit()
+
+    listing = leaflet_app.organization_list(request("/organizations", b""), "").body.decode()
+    assert "1 Herausgeber · 4 Dokumente" in listing
+    assert "1 weitere mit weniger als 5 Dokumenten" in listing and "1 Registereinträge ohne Dokument" in listing and "Leer" not in listing
+    assert "1968–1969" in listing
+
+    detail = leaflet_app.organization_detail(request("/organizations/asta", b""), "asta").body.decode()
+    assert "1968 – 1969" in detail and 'href="/leaflets?org=asta&jahr=1968"' in detail
+    assert detail.count('class="topic-year"') == 2
+

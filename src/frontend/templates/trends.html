@@ -33,7 +33,7 @@
             {% for k, v in filters %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
             <input type="search" name="begriffe" value="{{ begriffe }}" maxlength="400" aria-label="Begriffe"
                    placeholder="z. B. Notstand, Berufsverbot">
-            <button type="submit" class="button-small">Vergleichen</button>
+            <button type="submit" class="button small">Vergleichen</button>
         </form>
         <p class="search-hint">Bis zu vier Begriffe, durch Komma getrennt. Gefunden werden auch Wortteile („Hund“ trifft „Hundert“). Mehrere Wörter in Anführungszeichen suchen eine feste Wortfolge.</p>
         {% if rows %}
@@ -117,7 +117,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    {% if row.org_table | length > 3 %}<button type="button" class="text-button trend-orgs-more">Alle {{ row.org_table | length }} anzeigen</button>{% endif %}
+                    {% if row.org_table | length > 3 %}<button type="button" class="button text trend-orgs-more">Alle {{ row.org_table | length }} anzeigen</button>{% endif %}
                     {% endif %}
                     {{ top_list('Themen der Treffer', row.topics, bars=False, limit=3) }}
                 </div>

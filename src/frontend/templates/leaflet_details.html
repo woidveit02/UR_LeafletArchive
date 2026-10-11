@@ -12,8 +12,8 @@
                 {% if hints.texts %}<ul class="hint-texts">{% for t in hints.texts %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}</span>
             <span class="pager">
                 {% if hints.flagged %}<form method="post" action="/leaflets/{{ leaflet.id }}/hinweis" class="review-seen">
-                    {% if hints.seen %}<button type="submit" name="seen" value="0" class="button-plain">Wieder offen</button>
-                    {% else %}<button type="submit" name="seen" value="1" class="button-small" title="Der Hinweis braucht keine Korrektur">Passt so</button>{% endif %}</form>{% endif %}
+                    {% if hints.seen %}<button type="submit" name="seen" value="0" class="button text">Wieder offen</button>
+                    {% else %}<button type="submit" name="seen" value="1" class="button small" title="Der Hinweis braucht keine Korrektur">Passt so</button>{% endif %}</form>{% endif %}
                 {% if hints.previous %}<a href="/leaflets/{{ hints.previous }}">‹ Voriger Hinweis</a>{% else %}<span class="disabled">‹ Voriger Hinweis</span>{% endif %}
                 {% if hints.next %}<a href="/leaflets/{{ hints.next }}">Nächster Hinweis ›</a>{% else %}<span class="disabled">Nächster Hinweis ›</span>{% endif %}
             </span>
@@ -21,7 +21,7 @@
         {% endif %}
         <nav class="detail-nav">
             {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← Zurück zu den Ergebnissen</a></span>
-            {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
+            {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> › {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
             <span class="pager">
                 {{ sibling(leaflet.prev_id, '‹ Voriges') }}
                 <span class="meta">{{ leaflet.position }} von {{ leaflet.in_volume }}</span>
@@ -166,7 +166,7 @@
         {% if edit %}
         <div class="edit-actions">
             <span class="review-actions">
-                <button type="submit" class="button-small">Speichern</button>
+                <button type="submit" class="button small">Speichern</button>
                 <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs }}" class="keep-scroll">Abbrechen</a>
             </span>
             <span class="meta note">„Beleg wählen“, dann Textblöcke im Scan oder in der Transkription anklicken; ein zweiter Klick entfernt sie. Geänderte Felder gelten als von Hand korrigiert.</span>
@@ -177,8 +177,8 @@
             <div class="side-actions">
                 <p><span class="side-label">Texterkennung</span>{{ leaflet.ocr_label }}</p>
                 {% if leaflet.provenance_model %}<p><span class="side-label">Metadaten</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
-                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button-outline" data-swap="edit">Angaben korrigieren</a>
-                {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
+                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button small" data-swap="edit">Angaben korrigieren</a>
+                {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button text">Alle Handkorrekturen entfernen</button>{% endif %}
             </div>
         </aside>
         {% endif %}
@@ -261,7 +261,7 @@
     {% if leaflet.has_pdf %}
     <dialog id="scan-popup">
         <div class="popup-head"><strong>Stelle im Scan</strong>
-            <button type="button" class="button-plain" id="popup-close">Schließen</button></div>
+            <button type="button" class="button text" id="popup-close">Schließen</button></div>
         <div class="popup-grid"></div>
     </dialog>
     {% endif %}

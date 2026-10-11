@@ -47,9 +47,9 @@
             <summary class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}) · <span class="key-link">Ändern</span></summary>
             <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
                 <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
-                <button type="submit" class="button-outline">Speichern</button>
+                <button type="submit" class="button small">Speichern</button>
                 <button type="submit" name="forget" value="true" class="link-button" formnovalidate
-                        onclick="return confirm('Den gespeicherten API-Key entfernen?')">Entfernen</button>
+                        onclick="return confirm('API-Key entfernen? Der gespeicherte Schlüssel wird gelöscht.')">Entfernen</button>
             </form>
             {% if not finished %}{{ key_help(service) }}{% endif %}
         </details>
@@ -57,7 +57,7 @@
         <p>Das läuft über ein kostenpflichtiges {{ name }}-Konto. Hinterlege dafür einen API-Key.</p>
         <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
             <label>API-Key<input type="password" name="key" autocomplete="off"></label>
-            <button type="submit" class="button-small">API-Key speichern</button>
+            <button type="submit" class="button small primary">API-Key speichern</button>
         </form>
         {% endif %}
         {% endmacro %}
@@ -66,11 +66,11 @@
             <progress></progress>
             <span class="meta upload-text"></span>
             <ul id="ocr-parts" class="ocr-parts"></ul>
-            {% if cancel_url %}<button type="button" id="ocr-cancel" class="button-outline" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
+            {% if cancel_url %}<button type="button" id="ocr-cancel" class="button small" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
         </div>
         {% endmacro %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
-            <p class="meta"><a href="/verwaltung">← Zur Verwaltung</a></p>
             <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% if volume.status == 'entwurf' %} <span class="status-badge">nicht freigegeben</span>{% endif %}{% else %}Band hinzufügen{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
@@ -132,7 +132,7 @@
         {% if pages %}<p class="current-scans">Aktuell gespeichert: <b>{{ pages }} Seiten</b></p>{% endif %}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         <p class="form-error" id="upload-error" role="alert" hidden></p>
-        {% if pages %}<details class="advanced"{% if running or error %} open{% endif %}><summary class="button-outline">Scans ersetzen</summary>{% endif %}
+        {% if pages %}<details class="advanced"{% if running or error %} open{% endif %}><summary class="button small">Scans ersetzen</summary>{% endif %}
         <form method="post" action="/import/{{ volume.vz }}/scans" enctype="multipart/form-data" class="meta-form step-form"
               data-status-url="/import/{{ volume.vz }}/status"{% if running %} data-running="1"{% endif %}>
             <div id="drop-zone" class="drop-zone">
@@ -140,15 +140,15 @@
                 <p class="meta">Die Scans des Bandes als eine PDF-Datei</p>
                 <div class="drop-actions">
                     <span class="file-pick"><input type="file" id="pdf" name="scans" accept=".pdf">
-                        <label for="pdf" class="button-outline">PDF-Datei wählen</label></span>
+                        <label for="pdf" class="button small">PDF-Datei wählen</label></span>
                 </div>
                 <div class="drop-alt">
                     <p class="meta"><b>Oder einzelne TIFF-Scans:</b> Sie werden nach Dateiname sortiert und zu einem PDF zusammengefügt.</p>
                     <div class="drop-actions">
                         <span class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
-                            <label for="folder" class="button-outline">Ordner mit TIFFs wählen</label></span>
+                            <label for="folder" class="button small">Ordner mit TIFFs wählen</label></span>
                         <span class="file-pick"><input type="file" id="tiffs" name="scans" accept=".tif,.tiff" multiple>
-                            <label for="tiffs" class="button-outline">TIFF-Dateien wählen</label></span>
+                            <label for="tiffs" class="button small">TIFF-Dateien wählen</label></span>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                 <progress></progress>
                 <span class="meta upload-text"></span>
             </div>
-            <button type="submit" id="upload-button" class="button-small upload-submit" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
+            <button type="submit" id="upload-button" class="button small primary upload-submit" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
         </form>
         {% if pages %}</details>{% endif %}
         {% elif step == 'trennen' %}
@@ -172,22 +172,22 @@
             <div class="split-work-head">
                 <span class="split-count{{ ' done' if split.confirmed }}"></span>
                 <span class="split-work-actions">
-                    <button type="button" id="split-finish-page" class="tool-button primary" hidden>Prüfung abschließen</button>
-                    {% if split.confirmed %}<button type="button" id="split-open" class="tool-button">Einteilung ansehen</button>
-                    {% else %}<button type="button" id="split-open" class="tool-button primary">Seiten prüfen</button>{% endif %}
+                    <button type="button" id="split-finish-page" class="button primary" hidden>Prüfung abschließen</button>
+                    {% if split.confirmed %}<button type="button" id="split-open" class="button">Einteilung ansehen</button>
+                    {% else %}<button type="button" id="split-open" class="button primary">Seiten prüfen</button>{% endif %}
                 </span>
             </div>
             <details class="help"{% if not split.confirmed %} open{% endif %}>
                 <summary>Einteilung ändern</summary>
                 <div class="split-start">
                     <div>
-                        <button type="button" id="split-suggest-text" class="tool-button">Aus Text vorschlagen</button>
+                        <button type="button" id="split-suggest-text" class="button">Aus Text vorschlagen</button>
                         <p class="meta">Die App rät anhand des erkannten Textes, wo ein Flugblatt beginnt. Unsicher: jeder Vorschlag muss bestätigt werden.</p>
                     </div>
                     <div>
                         <span class="file-pick">
                             <input type="file" id="split-list" accept=".txt,.csv,.tsv,text/plain,text/csv">
-                            <label for="split-list" class="tool-button">Liste laden</label>
+                            <label for="split-list" class="button">Liste laden</label>
                         </span>
                         <p class="meta">Eine fertige Einteilung als Textdatei übernehmen, eine Zeile pro Flugblatt.</p>
                     </div>
@@ -236,7 +236,7 @@
                 </details>
                 </div>
             </details>
-            <p class="step-foot"><button type="button" id="split-download" class="text-button">Liste herunterladen</button></p>
+            <p class="step-foot"><button type="button" id="split-download" class="button text">Liste herunterladen</button></p>
         </div>
         <p class="form-error split-error" role="alert" hidden></p>
         <p class="meta split-note" hidden></p>
@@ -246,10 +246,10 @@
                 <span class="split-count"></span>
                 <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt die Trennung nach ihr. Fragezeichen: noch nicht entschieden, ohne Zeichen: gehören zusammen."><i class="on">▮</i> Trennung · <i class="suggested">▮</i> Vorschlag · <i class="open">?</i> offen</span>
                 <span class="split-end">
-                    <button type="button" id="split-undo" class="tool-button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig</button>
-                    <button type="button" id="split-redo" class="tool-button" data-act="redo" title="Wiederholen (Strg+Y)" disabled>Wiederholen</button>
-                    <button type="button" id="split-finish" class="tool-button primary" title="Möglich, wenn jeder Übergang geprüft und kein Vorschlag mehr offen ist">Prüfung abschließen</button>
-                    <button type="button" id="split-close" class="tool-button" title="Schließen (Esc)">✕ Schließen</button>
+                    <button type="button" id="split-undo" class="button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig</button>
+                    <button type="button" id="split-redo" class="button" data-act="redo" title="Wiederholen (Strg+Y)" disabled>Wiederholen</button>
+                    <button type="button" id="split-finish" class="button primary" title="Möglich, wenn jeder Übergang geprüft und kein Vorschlag mehr offen ist">Prüfung abschließen</button>
+                    <button type="button" id="split-close" class="button" title="Schließen (Esc)">✕ Schließen</button>
                 </span>
             </div>
             <p class="form-error split-error" role="alert" hidden></p>
@@ -286,14 +286,14 @@
         {% endif %}
 
             </div>
-            {% if finished %}<span class="split-work-actions"><button type="button" id="check-open" class="tool-button">Texterkennung ansehen</button></span>{% endif %}
+            {% if finished %}<span class="split-work-actions"><button type="button" id="check-open" class="button">Texterkennung ansehen</button></span>{% endif %}
         </div>
         {{ progress('/import/' ~ volume.vz ~ '/ocr/abbrechen', 'Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.') }}
         {% if ocr.state != 'done' or busy %}
         <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
             {% if busy %}{% elif ocr.state == 'partial' %}<input type="hidden" name="mode" value="{{ ocr.mode_key }}">{% if ocr.no_captions %}<input type="hidden" name="captions" value="no">{% endif %}<input type="hidden" name="size" value="{{ ocr.size }}"><p class="meta">Fortgesetzt wird in der Qualitätsstufe der schon erkannten Teile (Qualitätsstufe „{{ ocr.mode_label }}“).</p>{% else %}{{ mode_select('accurate') }}{% endif %}
             {% if not busy %}<div class="start-row">
-                <button type="submit" class="button-small upload-submit"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
+                <button type="submit" class="button small primary upload-submit"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
                 {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
             </div>
             <p class="meta">Nach der Texterkennung kannst du mit dem nächsten Schritt fortfahren.</p>{% endif %}
@@ -303,7 +303,7 @@
               data-confirm="Von vorn beginnen? Die schon erkannten Teile gehen verloren, die Texterkennung kostet dann für alle Seiten neu.">
             <input type="hidden" name="again" value="true">
             {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
-            <button type="submit" class="button-outline"{% if not ocr_key %} disabled{% endif %}>Von vorn beginnen</button>
+            <button type="submit" class="button small"{% if not ocr_key %} disabled{% endif %}>Von vorn beginnen</button>
         </form>
         {% endif %}
         {% else %}
@@ -314,7 +314,7 @@
                 <summary>Erneut erkennen</summary>
                 {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
                 <div class="start-row">
-                    <button type="submit" class="button-outline"{% if not ocr_key %} disabled{% endif %}>Erneut erkennen</button>
+                    <button type="submit" class="button small"{% if not ocr_key %} disabled{% endif %}>Erneut erkennen</button>
                     {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
                 </div>
             </details>
@@ -332,13 +332,13 @@
                     Die Seitenzahl muss zum Scan passen.{% if ocr.state == 'done' %} Das jetzige Ergebnis wird ersetzt.{% endif %}</p>
                 <div class="zip-row">
                     <span class="file-pick"><input type="file" id="ergebnis" name="ergebnis" accept=".zip" required>
-                        <label for="ergebnis" class="button-outline">ZIP wählen</label>
+                        <label for="ergebnis" class="button small">ZIP wählen</label>
                         <span class="meta file-name">Nichts ausgewählt</span></span>
-                    <button type="submit" class="button-small" disabled>Laden</button>
+                    <button type="submit" class="button small" disabled>Laden</button>
                 </div>
             </form>
         </details>
-        {% if finished %}<p class="step-foot"><a class="text-button" href="/import/{{ volume.vz }}/ocr.zip">Ergebnis als ZIP herunterladen</a></p>{% endif %}
+        {% if finished %}<p class="step-foot"><a class="button text" href="/import/{{ volume.vz }}/ocr.zip">Ergebnis als ZIP herunterladen</a></p>{% endif %}
         </div>
         </div>
         {% if finished %}
@@ -348,11 +348,11 @@
                 <div class="check-bar">
                     <span class="check-title">Texterkennung ansehen</span>
                     <span class="check-nav" role="group" aria-label="Seitennavigation">
-                        <button type="button" class="tool-button" data-go="prev" title="Vorherige Seite (←)">Zurück</button>
+                        <button type="button" class="button" data-go="prev" title="Vorherige Seite (←)">Zurück</button>
                         <label class="check-page">Seite <input type="number" min="1" max="{{ ocr.pages }}" value="1"> <span>von {{ ocr.pages }}</span></label>
-                        <button type="button" class="tool-button" data-go="next" title="Nächste Seite (→)">Weiter</button>
+                        <button type="button" class="button" data-go="next" title="Nächste Seite (→)">Weiter</button>
                     </span>
-                    <span class="check-end"><button type="button" id="check-close" class="tool-button" title="Schließen (Esc)">✕ Schließen</button></span>
+                    <span class="check-end"><button type="button" id="check-close" class="button" title="Schließen (Esc)">✕ Schließen</button></span>
                 </div>
                 <div class="check-scroll">
                     <section id="check-pair" class="page-pair">
@@ -404,7 +404,7 @@
         {% endif %}
             </div>
         {% set start %}<div class="start-row">
-                <button type="submit" class="{{ 'button-outline' if finished else 'button-small upload-submit' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
+                <button type="submit" class="{{ 'button small' if finished else 'button small primary upload-submit' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
                 {% if not meta_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
             </div>{% endset %}
             {% if not busy and not finished %}<span class="split-work-actions">{{ start }}</span>{% endif %}
@@ -428,7 +428,7 @@
             {% set prompt_fields %}
                 <label class="model-search" for="prompt">Prompt (Anweisung mit Beispielen)</label>
                 <textarea id="prompt" name="prompt" rows="30" spellcheck="false" data-default="{{ prompt_default }}">{{ prompt_text }}</textarea>
-                <p class="meta">Wird beim Erzeugen gespeichert und für alle Bände verwendet. <button type="button" class="text-button" id="prompt-reset">Zurücksetzen</button></p>
+                <p class="meta">Wird beim Erzeugen gespeichert und für alle Bände verwendet. <button type="button" class="button text danger" id="prompt-reset">Zurücksetzen</button></p>
                 <label class="model-search" for="batch">Batchgröße (Flugblätter pro Anfrage)</label>
                 <input type="number" id="batch" name="batch" value="{{ batch_size }}" min="1" max="{{ max_batch }}">
                 <p class="meta">Kleinere Batches sind für schwächere Modelle sicherer, kosten aber etwas mehr, weil der Prompt öfter mitgeschickt wird.</p>
@@ -472,7 +472,7 @@
             Vorher lohnt es sich, die drei Aufgaben unten durchzugehen. Nichts davon ist Pflicht, und alles, was du entscheidest oder korrigierst, bleibt auch bei einem späteren Neuimport erhalten.</p>
         {% if prepare.state == 'error' %}
         <p class="form-error" role="alert">{{ prepare.error }}</p>
-        <form method="post" action="/import/{{ volume.vz }}/vorbereiten"><button type="submit" class="button-outline">Erneut versuchen</button></form>
+        <form method="post" action="/import/{{ volume.vz }}/vorbereiten"><button type="submit" class="button small">Erneut versuchen</button></form>
         {% elif prepare.state == 'running' %}
         <p>Die Flugblätter werden für die Prüfung vorbereitet. Das dauert etwa eine halbe Minute, die Seite lädt danach neu.</p>
         <form hidden data-ocr data-running="1" data-status-url="/import/{{ volume.vz }}/status?job=anlegen"><button type="submit"></button></form>
@@ -488,7 +488,7 @@
                 <span class="split-count done">{{ created }} Flugblätter</span>
                 <p class="meta">{% if todo %}{{ todo }} von 3 Aufgaben offen{% else %}Alle Aufgaben erledigt{% endif %}</p>
                 </div>
-                <span class="split-work-actions"><a class="tool-button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
+                <span class="split-work-actions"><a class="button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
             </div>
             <ol class="task-list">
                 <li class="task{{ ' done' if not copies.open }}">
@@ -497,9 +497,9 @@
                         Prüfst du sie zuerst, musst du die Angaben eines Exemplars, das es schon gibt, nicht noch einmal kontrollieren.</p>
                     {% if copies.found %}
                     <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen: {{ copies.found }} {{ 'Flugblatt hat' if copies.found == 1 else 'Flugblätter haben' }} ein Exemplar mit fast gleichem Text.</p>
-                    <p class="task-actions">{% if copies.open %}<a class="tool-button primary" href="/leaflets/{{ copies.first }}/exemplare">Exemplare durchgehen</a>
-                        <a class="text-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen</a>
-                        {% else %}<a class="tool-button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen mit Status</a>{% endif %}</p>
+                    <p class="task-actions">{% if copies.open %}<a class="button primary" href="/leaflets/{{ copies.first }}/exemplare">Exemplare durchgehen</a>
+                        <a class="button text" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen</a>
+                        {% else %}<a class="button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen mit Status</a>{% endif %}</p>
                     {% else %}
                     <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen und keine Exemplare gefunden.</p>
                     {% endif %}
@@ -513,7 +513,7 @@
                     <p>Alle Herausgeber dieses Bandes stehen schon im Register.</p>
                     {% endif %}
                     {% if new_issuers %}
-                    <p class="task-actions"><a class="tool-button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a></p>
+                    <p class="task-actions"><a class="button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a></p>
                     {% endif %}
                 </li>
                 <li class="task{{ ' done' if not hints_open }}">
@@ -522,7 +522,7 @@
                         vorkommt und ob der Herausgeber genannt ist. Wo etwas nicht passt, sieh dir das Flugblatt an und korrigiere die Angabe auf seiner Seite.
                         Mit „Passt so“ bestätigst du, dass ein Hinweis keine Korrektur braucht.</p>
                     {% if flagged %}
-                    {% if hints_open %}<p class="task-actions"><a class="tool-button primary" href="/leaflets/{{ hints_first }}">Hinweise durchgehen</a></p>{% endif %}
+                    {% if hints_open %}<p class="task-actions"><a class="button primary" href="/leaflets/{{ hints_first }}">Hinweise durchgehen</a></p>{% endif %}
                     <details class="help">
                         <summary>Liste der Flugblätter mit Hinweisen</summary>
                         <ul class="fix-list">
@@ -541,20 +541,20 @@
                 <p class="meta">{% if todo %}Noch {{ todo }} {{ 'Aufgabe' if todo == 1 else 'Aufgaben' }} offen. Du kannst trotzdem freigeben.{% else %}Alles geprüft.{% endif %}
                     Mit der Freigabe erscheint der Band in Liste, Suche und Trends.</p>
                 <form method="post" action="/import/{{ volume.vz }}/freigeben" onsubmit="return confirm('Band {{ '%03d' % volume.vz }} freigeben? Er erscheint dann in Liste, Suche und Trends.')">
-                    <button type="submit" class="tool-button primary">Band freigeben</button></form>
+                    <button type="submit" class="button primary">Band freigeben</button></form>
             </div>
             <details class="help redo-row">
                 <summary>Neu vorbereiten</summary>
                 <p>Übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Exemplare neu, etwa nachdem Exemplare in einem anderen Band geprüft wurden.
                     Deine Korrekturen, Herausgeber-Zuordnungen und Exemplar-Entscheidungen bleiben erhalten.</p>
                 <form method="post" action="/import/{{ volume.vz }}/vorbereiten" onsubmit="return confirm('Die Flugblätter neu vorbereiten? Das dauert etwa eine halbe Minute.')">
-                    <button type="submit" class="button-outline">Neu vorbereiten</button></form>
+                    <button type="submit" class="button small">Neu vorbereiten</button></form>
             </details>
             {% elif locked %}
             <div class="release-row">
-                <p class="meta">Der Band ist freigegeben. Zum Ändern der Schritte 1 bis 5 muss er zurückgenommen werden und fehlt dann bis zur neuen Freigabe in Liste, Suche und Trends.</p>
-                <form method="post" action="/import/{{ volume.vz }}/zuruecknehmen" onsubmit="return confirm('Band {{ '%03d' % volume.vz }} zur Überarbeitung zurücknehmen? Er verschwindet aus Liste, Suche und Trends, bis er wieder freigegeben wird.')">
-                    <button type="submit" class="tool-button">Zur Überarbeitung zurücknehmen</button></form>
+                <p class="meta">Der Band ist freigegeben. Zum Ändern der Schritte 1 bis 5 muss die Freigabe zurückgenommen werden, und er fehlt dann bis zur neuen Freigabe in Liste, Suche und Trends.</p>
+                <form method="post" action="/import/{{ volume.vz }}/zuruecknehmen" onsubmit="return confirm('Freigabe von Band {{ '%03d' % volume.vz }} zurücknehmen? Er verschwindet aus Liste, Suche und Trends, bis er wieder freigegeben wird.')">
+                    <button type="submit" class="button">Freigabe zurücknehmen</button></form>
             </div>
             {% endif %}
         </div>

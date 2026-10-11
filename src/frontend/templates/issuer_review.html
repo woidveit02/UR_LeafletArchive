@@ -63,7 +63,7 @@
                     <label><input type="radio" name="choice" value="erwaehnt" required>
                         <span>Nur erwähnt: als Herausgeber entfernen</span></label>
                 </fieldset>
-                <p class="issuer-save"><button type="submit" class="tool-button primary">Speichern &amp; weiter</button>
+                <p class="issuer-save"><button type="submit" class="button primary">Speichern &amp; weiter</button>
                     <span class="meta">gilt für {{ 'das Flugblatt' if n == 1 else 'alle ' ~ n ~ ' Flugblätter' }}:
                         {% for lf, _ in group.issuers %}{{ 'S. ' if loop.first }}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
             </form>

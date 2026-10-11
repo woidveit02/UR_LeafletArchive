@@ -185,7 +185,7 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     assert c.copy_candidate_of is None and d.copy_candidate_of is None  # a re-review does not bring back what was rejected
     assert judge(b, f"main:{b.id}").headers["location"] == f"/leaflets/{b.id}/exemplare?meldung=gespeichert"
     assert b.canonical_leaflet_id == b.id
-    assert f'class="button-small review-next" href="/leaflets/{c.id}/exemplare"' in leaflet_app.copy_page(page("/"), b.id).body.decode()
+    assert f'class="button small primary review-next" href="/leaflets/{c.id}/exemplare"' in leaflet_app.copy_page(page("/"), b.id).body.decode()
     # the pair is judged with the other card as main copy
     assert judge(c, f"main:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert"
     assert c.canonical_leaflet_id == d.id and c.copies_checked
@@ -233,8 +233,8 @@ def test_copy_overview(tmp_path, monkeypatch):
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     # checked: the group of a and b, and c and d, which were split off (and are still proposed as a group of their own)
     assert "Nicht geprüft (1)" in show() and "Geprüft (3)" in show() and "Alle (4)" in show()
-    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 3
-    assert show("unsinn").count("<li>") == 4  # an unknown filter shows everything
+    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<tr>") - 1 == 3
+    assert show("unsinn").count("<tr>") - 1 == 4  # an unknown filter shows everything
     # four copies in one volume are one group of that volume
     assert [r["volumes"] for r in leaflet_app.copy_rows()] == [{2}, {2}]
     assert "Alle (4)" in leaflet_app.copy_list(page("/exemplare"), band=2).body.decode()

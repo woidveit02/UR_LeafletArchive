@@ -387,7 +387,7 @@ def test_text_step_page(scan, monkeypatch):
     assert "120 Seiten · Text importiert" in page() and "Datalab, Qualitätsstufe" not in page()
     scans_page = page("scans")
     assert "Aktuell gespeichert: <b>120 Seiten</b>" in scans_page and "Scans ersetzen" in scans_page
-    assert '<details class="advanced"><summary class="button-outline">Scans ersetzen</summary>' in scans_page  # the drop zone is folded away
+    assert '<details class="advanced"><summary class="button small">Scans ersetzen</summary>' in scans_page  # the drop zone is folded away
     assert "Upload abgeschlossen" not in scans_page and page("trennen")
     assert 'step-button disabled' in page("trennen") and 'step-button disabled' not in scans_page  # needs the saved cuts; scans are there
     from backend.app import metadata, segments

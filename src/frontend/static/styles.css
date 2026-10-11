@@ -43,6 +43,74 @@ body {
     color: var(--ink);
 }
 
+/* buttons: framed by default; .primary is the one main action, .small sits in forms and rows, .text is a link-like action */
+.button {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    text-decoration: none;
+}
+
+.button.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.button.primary:hover:not(:disabled) {
+    border-color: var(--accent-strong);
+    background: var(--accent-strong);
+}
+
+.button.small {
+    min-height: 32px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+}
+
+.button.text {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: inherit;
+    font-weight: 400;
+}
+
+.button.text:hover:not(:disabled) {
+    background: none;
+    text-decoration: underline;
+}
+
+.button.text.danger {
+    color: var(--danger);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
 .topbar {
     position: sticky;
     top: 0;
@@ -222,6 +290,10 @@ a:hover {
 
 .page-head-list {
     margin-bottom: 16px;
+}
+
+.page-intro + .page-intro {
+    margin-top: 8px;
 }
 
 .page-intro {
@@ -1655,7 +1727,8 @@ abbr[title] {
     font-size: 0.85em;
 }
 
-.list-head .sort-link {
+.list-head .sort-link,
+.data-table .sort-link {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -1665,7 +1738,9 @@ abbr[title] {
 }
 
 .list-head .sort-link:hover,
-.list-head .sort-link.active {
+.list-head .sort-link.active,
+.data-table .sort-link:hover,
+.data-table .sort-link.active {
     color: var(--accent);
 }
 
@@ -2231,19 +2306,7 @@ select:focus {
     }
 }
 
-.button-link {
-    display: inline-block;
-    padding: 8px 14px;
-    border-radius: var(--radius);
-    background: var(--accent);
-    color: #ffffff;
-    font-weight: 600;
-}
 
-.button-link:hover {
-    background: var(--accent-strong);
-    text-decoration: none;
-}
 
 .scan-missing {
     padding: 48px 24px;
@@ -2508,23 +2571,7 @@ h1 .beleg-wrap {
     margin: 6px 0;
 }
 
-.button-small {
-    width: fit-content;
-    padding: 5px 11px;
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-sm);
-    background: var(--accent);
-    color: #fff;
-    font: inherit;
-    font-size: 0.9em;
-    line-height: 1.35;
-    cursor: pointer;
-}
 
-.button-small:hover {
-    border-color: var(--accent-strong);
-    background: var(--accent-strong);
-}
 
 .meta-list label {
     font-weight: inherit;
@@ -2735,19 +2782,7 @@ html {
     font-weight: 700;
 }
 
-.button-plain {
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--accent);
-    font: inherit;
-    cursor: pointer;
-}
 
-.button-plain:hover {
-    background: none;
-    text-decoration: underline;
-}
 
 /* the transcription on the left, the scan on the right, as wide as the scan at screen height */
 .page-pair {
@@ -2936,11 +2971,11 @@ html {
     margin-top: auto;
 }
 
-.meta-side .button-outline {
+.meta-side .button.small {
     text-align: center;
 }
 
-.meta-side .button-plain {
+.meta-side .button.text {
     align-self: flex-start;
 }
 
@@ -2984,20 +3019,7 @@ html {
     }
 }
 
-.button-outline {
-    padding: 5px 12px;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius);
-    background: var(--surface);
-    color: var(--accent);
-    white-space: nowrap;
-}
 
-.button-outline:hover {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    text-decoration: none;
-}
 
 .pair-head {
     display: flex;
@@ -3272,8 +3294,8 @@ body:has(.page-nav) .pair-scan {
 .search-line input,
 .search-line select,
 .search-line .remove,
-.search-line .button-small,
-.search-actions .button-small {
+.search-line .button.small,
+.search-actions .button.small {
     box-sizing: border-box;
     height: 2.6rem;
 }
@@ -3764,7 +3786,7 @@ a.topic-year.active .topic-bar {
 }
 
 .draft-list .row-menu,
-.draft-list .tool-button {  /* above the link that covers the whole row */
+.draft-list .button {  /* above the link that covers the whole row */
     position: relative;
     z-index: 1;
 }
@@ -3800,7 +3822,7 @@ a.topic-year.active .topic-bar {
     margin-bottom: 20px;
 }
 
-.meta-form .button-small {
+.meta-form .button.small {
     margin-top: 4px;
 }
 
@@ -3861,44 +3883,10 @@ a.topic-year.active .topic-bar {
     font-weight: 600;
 }
 
-.tool-button {  /* every action of the toolbar has this size */
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius);
-    background: var(--surface);
-    color: var(--accent);
-    font: inherit;
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1.2;
-    white-space: nowrap;
-    cursor: pointer;
-}
 
-.tool-button:hover:not(:disabled) {
-    border-color: var(--accent);
-}
 
-.tool-button.primary {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #fff;
-}
 
-.tool-button.primary:hover:not(:disabled) {
-    border-color: var(--accent-strong);
-    background: var(--accent-strong);
-}
 
-.tool-button:disabled {
-    opacity: 0.5;
-    cursor: default;
-}
 
 
 
@@ -4109,15 +4097,9 @@ a.topic-year.active .topic-bar {
     margin: 0 0 12px;
 }
 
-.button-small:disabled {
-    border-color: var(--line-strong);
-    background: var(--line);
-    color: var(--muted, #777);
-    cursor: not-allowed;
-}
 
 
-.button-small.upload-submit {
+.button.upload-submit {
     padding: 8px 18px;
     border-radius: var(--radius);
     font-size: 1em;
@@ -4358,7 +4340,7 @@ a.topic-year.active .topic-bar {
     text-align: right;
 }
 
-.page-check-nav .button-outline {
+.page-check-nav .button.small {
     padding: 2px 12px;
 }
 
@@ -4390,17 +4372,17 @@ a.topic-year.active .topic-bar {
     text-align: right;
 }
 
-summary.button-outline {
+summary.button {
     display: inline-block;
     list-style: none;
     cursor: pointer;
 }
 
-summary.button-outline::-webkit-details-marker {
+summary.button::-webkit-details-marker {
     display: none;
 }
 
-details[open] > summary.button-outline {
+details[open] > summary.button {
     margin-bottom: 12px;
 }
 
@@ -4462,7 +4444,7 @@ summary.link-button::-webkit-details-marker {
     margin-top: 12px;
 }
 
-.zip-import .zip-row .button-small {
+.zip-import .zip-row .button.small {
     margin-top: 0;
 }
 
@@ -4474,7 +4456,7 @@ summary.link-button::-webkit-details-marker {
     gap: 4px 16px;
 }
 
-.section-head .button-outline {
+.section-head .button.small {
     padding: 2px 10px;
     font-size: 0.85em;
 }
@@ -4528,19 +4510,10 @@ summary.link-button::-webkit-details-marker {
     gap: 8px;
 }
 
-.split-work-actions .tool-button[hidden] {
+.split-work-actions .button[hidden] {
     display: none;
 }
 
-.text-button {
-    border: 0;
-    background: none;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
-}
 
 .split-start {
     display: grid;
@@ -4582,7 +4555,7 @@ summary.link-button::-webkit-details-marker {
     padding: 4px 8px;
 }
 
-.split-bar .tool-button {
+.split-bar .button {
     min-height: 28px;
     padding: 0 6px;
     font-size: 0.8rem;
@@ -4901,7 +4874,7 @@ summary.link-button::-webkit-details-marker {
     border-top: 1px solid var(--line-strong);
 }
 
-.split-nav .tool-button {
+.split-nav .button {
     min-height: 32px;
     padding: 0 10px;
 }
@@ -4937,12 +4910,12 @@ summary.link-button::-webkit-details-marker {
     gap: 8px;
 }
 
-.split-decide .tool-button {
+.split-decide .button {
     min-height: 32px;
     padding: 0 10px;
 }
 
-.split-buttons .tool-button {
+.split-buttons .button {
     min-height: 40px;
     font-size: 0.95rem;
 }
@@ -5148,7 +5121,7 @@ body.split-lock {
     gap: 12px;
 }
 
-.check-nav .tool-button {
+.check-nav .button {
     color: var(--ink);
 }
 
@@ -5253,7 +5226,7 @@ body.split-lock {
     pointer-events: none;
 }
 
-.split-end .tool-button[hidden] {
+.split-end .button[hidden] {
     display: none;
 }
 
@@ -5425,25 +5398,25 @@ body.split-lock {
     color: var(--warning);
 }
 
-.admin-table {
+.data-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.admin-table th,
-.admin-table td {
+.data-table th,
+.data-table td {
     padding: 12px 10px;
     border-bottom: 1px solid var(--line);
     text-align: left;
 }
 
-.admin-table th {
+.data-table th {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--ink-soft);
 }
 
-.admin-table .num {
+.data-table .num {
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
@@ -5455,12 +5428,26 @@ body.split-lock {
 }
 
 @media (max-width: 600px) {
-    .admin-table th:nth-child(3),
-    .admin-table td:nth-child(3),
-    .admin-table th:nth-child(5),
-    .admin-table td:nth-child(5) {
+    .data-table .hide-narrow {
         display: none;
     }
+}
+
+.data-table.sticky th {
+    position: sticky;
+    top: 62px;  /* under the top bar */
+    z-index: 5;
+    background: var(--canvas);
+}
+
+@media (max-width: 600px) {
+    .data-table.sticky th {
+        position: static;  /* the top bar is taller here */
+    }
+}
+
+.empty {
+    color: var(--muted);
 }
 
 h2 .count {
@@ -5501,7 +5488,7 @@ h2 .count {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-.admin-table tbody tr:hover {
+.data-table tbody tr:hover {
     background: var(--surface-muted);
 }
 
@@ -5931,4 +5918,220 @@ h2 .count {
 .clear-search:hover {
     color: var(--ink);
     text-decoration: none;
+}
+
+/* issuer list: name, yearly bars, period, count */
+.org-filter {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 26rem;
+    height: 2.6rem;
+    margin-bottom: 12px;
+    padding: 0 10px;
+    font: inherit;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    background: var(--surface);
+}
+
+.org-table {
+    table-layout: fixed;
+}
+
+.org-table th:nth-child(2),
+.org-table td:nth-child(2) {
+    width: 11rem;
+}
+
+.org-table th:nth-child(3),
+.org-table td:nth-child(3) {
+    width: 10rem;
+}
+
+.org-table th:nth-child(4),
+.org-table td:nth-child(4) {
+    width: 6.5rem;
+}
+
+.org-table td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.org-full {
+    color: var(--muted);
+    font-size: 0.9em;
+}
+
+.spark-head {
+    display: grid;
+    gap: 2px;
+    color: var(--muted);
+    cursor: help;
+}
+
+.spark,
+.spark-axis {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    width: 10rem;
+    height: 24px;
+}
+
+.spark > * {
+    position: relative;
+    flex: 1;
+    min-width: 3px;
+    max-width: 18px;
+    min-height: 3px;  /* a year with one document stays visible next to one with fifty */
+    background: #93b4f5;
+    border-radius: 2px 2px 0 0;
+}
+
+.spark > *::before {  /* the whole column of a year reacts, also an empty one */
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 24px;
+}
+
+.spark a:hover {
+    background: #5f8bea;
+}
+
+.spark i {
+    height: 1px;
+    background: var(--line);
+}
+
+.spark-axis {
+    height: auto;
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.spark-axis i {  /* one label under each bar: the same flex box as .spark i */
+    flex: 1;
+    min-width: 3px;
+    max-width: 18px;
+    font-style: normal;
+    text-align: center;
+}
+
+.org-few {
+    margin-top: 8px;
+}
+
+.org-few summary {
+    padding: 8px 10px;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.org-foot {
+    margin-top: 16px;
+    color: var(--muted);
+}
+
+@media (max-width: 600px) {
+    .org-table {
+        table-layout: auto;
+    }
+
+    .org-table th:nth-child(3),
+    .org-table td:nth-child(3) {
+        display: none;  /* the years range is for wide screens */
+    }
+
+    .org-table th:nth-child(4),
+    .org-table td:nth-child(4) {
+        width: auto;
+    }
+
+    .org-table th:first-child,
+    .org-table td:first-child {
+        width: 100%;  /* the name takes what the numbers leave */
+    }
+}
+
+/* issuer page: the course over the years (bars as on the topics page) and the usual neighbours */
+.history {
+    max-width: 300px;
+    margin: 12px 0 8px;
+}
+
+.history .topic-bar-wrap {
+    min-height: 60px;
+}
+
+.history .topic-bar {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.history .topic-bar i {
+    background: #d3e0fb;  /* undated: the year comes from the volume */
+}
+
+.history-none {
+    width: min(100%, 28px);
+    height: 1px;
+    background: var(--line);
+}
+
+.org-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 48px;
+    margin-top: 20px;
+}
+
+.org-facts h3 {
+    margin: 0 0 6px;
+    font-size: 0.95em;
+}
+
+.org-facts ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.org-n {
+    margin-left: 6px;
+    color: var(--muted);
+    font-size: 0.85em;
+}
+
+.data-table .nowrap {
+    white-space: nowrap;
+}
+
+.section-head .section-link {
+    margin-right: auto;
+    font-size: 0.9em;
+}
+
+.section-head .sort-form {
+    margin-left: auto;
+}
+
+.section-head .sort-form .sort {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.section-head .sort-form select {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 1em;
+    color: var(--ink);
+    cursor: pointer;
 }

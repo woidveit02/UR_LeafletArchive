@@ -2,21 +2,21 @@
 {% from '_leaflets.html' import title %}
 {% block title %}Exemplare – UR Leaflet Archive{% endblock %}
 {% block content %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
-            <p class="meta"><a href="/verwaltung">← Verwaltung</a></p>
             <div class="head-row">
                 <h1>Exemplare</h1>
                 {% set checked = counts['geprueft'] %}
                 <span class="copy-progress" title="Geprüft sind Gruppen, bei denen ein Hauptexemplar gewählt oder die Gruppe getrennt wurde">{{ checked }} von {{ total }} geprüft
                     <progress value="{{ checked }}" max="{{ total or 1 }}"></progress></span>
             </div>
-            <p class="meta">Manche Flugblätter liegen mehrfach im Bestand, etwa in zwei verschiedenen Bänden. Solche Exemplare erkennt das System
+            <p class="page-intro">Manche Flugblätter liegen mehrfach im Bestand, etwa in zwei verschiedenen Bänden. Solche Exemplare erkennt das System
                 automatisch am Text und fasst sie zu einer Gruppe zusammen. Ein Klick auf eine Gruppe öffnet den Vergleich, in dem du sie prüfen kannst.</p>
-            <p class="meta">Damit ein Blatt nicht mehrfach zählt, vertritt ein Hauptexemplar die Gruppe in der Liste, in den Trends und im Export,
+            <p class="page-intro">Damit ein Blatt nicht mehrfach zählt, vertritt ein Hauptexemplar die Gruppe in der Liste, in den Trends und im Export,
                 und seine Angaben zu Titel, Datum und Herausgeber gelten für alle Exemplare. Die übrigen bleiben erhalten, denn sie können sich durch Stempel,
                 Randnotizen oder die Qualität der Texterkennung unterscheiden; in der Liste erscheinen sie mit „Jedes Exemplar einzeln zeigen“.
                 Die Suche findet eine Gruppe auch über die anderen Exemplare und zeigt dann das Hauptexemplar. Wähle als Hauptexemplar den vollständigsten, am besten lesbaren Scan.</p>
-            {% if band %}<p class="meta">Nur Gruppen mit einem Exemplar in Nr. {{ '%03d' % band }} · <a href="/exemplare?status=alle">alle Bände</a></p>{% endif %}
+            {% if band %}<p class="meta">Nur Gruppen mit einem Exemplar in Band {{ '%03d' % band }} · <a href="/exemplare?status=alle">alle Bände</a></p>{% endif %}
         </header>
         {% set in_band = ('band=' ~ band) if band else '' %}
         <div class="copy-bar">
@@ -26,7 +26,7 @@
                 {% endfor %}
                 <a href="/exemplare?status=alle{{ '&' ~ in_band if band }}"{% if status not in states %} aria-current="page"{% endif %}>Alle ({{ total }})</a>
             </nav>
-            {% if first %}<a class="button-link" href="/leaflets/{{ first }}/exemplare">Ungeprüfte durchgehen →</a>{% endif %}
+            {% if first %}<a class="button primary" href="/leaflets/{{ first }}/exemplare">Ungeprüfte durchgehen →</a>{% endif %}
         </div>
         {% if status == 'geprueft' %}
         <form class="filter" method="get" action="/exemplare">
@@ -39,26 +39,29 @@
                         {% for key, label in sorts.items() %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
                     </select>
                 </label>
-                <noscript><button type="submit" class="button-small">Sortieren</button></noscript>
+                <noscript><button type="submit" class="button small">Sortieren</button></noscript>
             </div>
         </form>
         {% endif %}
-        <ul class="leaflet-list leaflet-list-plain">
+        <table class="data-table">
+            <thead><tr><th>Gruppe</th><th>Exemplare</th><th class="num">Stand</th></tr></thead>
+            <tbody>
             {% for r in rows %}
-            <li>
+            <tr>
                 {% if r.state == 'getrennt' %}
-                <span class="row-main"><a href="/leaflets/{{ r.id }}">{{ title(r.leaflet) }}</a>
-                    <span class="meta">{{ r.label }} · getrennt von
-                        {% for f in r['from'] %}<a href="/leaflets/{{ f.id }}">{{ title(f.leaflet) }}</a> ({{ f.label }}){{ ', ' if not loop.last }}{% endfor %}</span></span>
+                <td><a href="/leaflets/{{ r.id }}">{{ title(r.leaflet) }}</a></td>
+                <td class="meta">{{ r.label }} · getrennt von
+                    {% for f in r['from'] %}<a href="/leaflets/{{ f.id }}">{{ title(f.leaflet) }}</a> ({{ f.label }}){{ ', ' if not loop.last }}{% endfor %}</td>
                 {% else %}
-                <span class="row-main"><a href="/leaflets/{{ r.id }}/exemplare">{{ r.title }}</a>
-                    <span class="meta">{{ r.labels | length }} Blätter{% if r.new %}, {{ r.new }} neu gefunden{% endif %}
-                        · {{ r.labels | join(' · ') }}</span></span>
+                <td><a href="/leaflets/{{ r.id }}/exemplare">{{ r.title }}</a></td>
+                <td class="meta">{{ r.labels | length }} Blätter{% if r.new %}, {{ r.new }} neu gefunden{% endif %}
+                    · {{ r.labels | join(' · ') }}</td>
                 {% endif %}
-                <span class="meta review-state">{% if r.date %}<span class="nowrap">{{ r.date }}</span><br>{% endif %}{{ kinds[r.state] }}</span>
-            </li>
+                <td class="num meta review-state">{% if r.date %}<span class="nowrap">{{ r.date }}</span><br>{% endif %}{{ kinds[r.state] }}</td>
+            </tr>
             {% else %}
-            <li class="meta">Keine Gruppen in dieser Auswahl.</li>
+            <tr><td colspan="3" class="empty">Keine Gruppen in dieser Auswahl.</td></tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
 {% endblock %}

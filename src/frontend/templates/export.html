@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Datensatz exportieren – UR Leaflet Archive{% endblock %}
 {% block content %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
-            <p class="meta"><a href="/verwaltung">← Verwaltung</a></p>
             <h1>Datensatz exportieren</h1>
-            <p class="meta">Texte und Metadaten als ZIP mit JSONL, CSV und einer Textdatei pro Flugblatt, lesbar ohne die App. Eine README erklärt die Felder.</p>
+            <p class="page-intro">Texte und Metadaten als ZIP mit JSONL, CSV und einer Textdatei pro Flugblatt, lesbar ohne die App. Eine README erklärt die Felder.</p>
         </header>
         <form id="export-form" action="/verwaltung/export.zip" class="step-form export-form">
             <fieldset class="mode-choice">
@@ -29,7 +29,7 @@
                 <label class="mode-row"><input type="checkbox" name="seiten" value="1"><span class="mode-name">Mit Layout</span><span class="meta">Jede Seite mit ihren Textblöcken und deren Lage, für OCR- und Layout-Auswertungen; etwa doppelt so groß</span><span></span></label>
             </fieldset>
             <div class="start-row">
-                <button type="submit" class="button-small">ZIP erstellen</button>
+                <button type="submit" class="button small primary">ZIP erstellen</button>
                 <span class="meta" id="export-status" role="status"></span>
             </div>
         </form>

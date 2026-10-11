@@ -23,7 +23,7 @@
                                     {% if first and search_active %}<a class="clear-search" href="{{ clear_search_url }}" title="Suche leeren" aria-label="Suche leeren">✕</a>{% endif %}
                                 </span>
                             </label>
-                            {% if first %}<button type="submit" class="button-small inline-submit">Suchen</button>{% endif %}
+                            {% if first %}<button type="submit" class="button small primary inline-submit">Suchen</button>{% endif %}
                             {% if not first %}<button type="button" class="remove" title="Bedingung entfernen" aria-label="Bedingung entfernen">✕</button>{% endif %}
                         </div>
         {% endmacro %}
@@ -58,7 +58,7 @@
                     </div>
                     <div class="search-actions">
                         <button type="button" id="add-line" class="add-line">+ Suchbedingung hinzufügen</button>
-                        <button type="submit" class="button-small actions-submit">Suchen</button>
+                        <button type="submit" class="button small primary actions-submit">Suchen</button>
                     </div>
                     {% if reading %}<p class="search-hint">Gelesen als: {{ reading }}. Die Verknüpfungen gelten von oben nach unten.</p>{% endif %}
                     {% if q_short %}<p class="search-hint">Suchbegriffe unter 3 Zeichen werden nur in Titel und Reihe gesucht.</p>{% endif %}
@@ -137,7 +137,7 @@
                         </label>
                         {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]
                            + ([('fundstellen', 'Fundstellen', 'Alle Textstellen aller Treffer untereinander, nach Datum')] if selected_q else [])) }}
-                        <noscript><button type="submit" class="button-small">Filtern</button></noscript>
+                        <noscript><button type="submit" class="button small">Filtern</button></noscript>
                     </div>
                     {% if view == 'fundstellen' and not selected_q %}
                     <p class="meta">Fundstellen gibt es zu einem Suchbegriff. Gib oben einen Begriff ein.</p>

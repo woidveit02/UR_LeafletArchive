@@ -17,7 +17,7 @@ from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import literal_column, or_
+from sqlalchemy import func, literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import export, importer, keys, metadata, ocr, organizations, pdf_service, segments
@@ -1892,11 +1892,12 @@ def correction_rows(volumes, saved):
     """The saved corrections per page range, with the leaflet they apply to; None when the range no longer
     matches a segment."""
     rows = []
+    in_volume = defaultdict(list)  # one query for all the leaflets instead of one per correction
+    for leaflet in session.query(Leaflet).order_by(Leaflet.start_page):
+        in_volume[leaflet.volume_id].append(leaflet)
     for (stem, start, end), entries in saved.items():
         volume = volumes.get(stem)
-        overlaps = session.query(Leaflet).filter(
-            Leaflet.volume_id == volume.id, Leaflet.start_page <= end,
-            Leaflet.end_page >= start).order_by(Leaflet.start_page).all() if volume else []
+        overlaps = [lf for lf in in_volume[volume.id] if lf.start_page <= end and lf.end_page >= start] if volume else []
         rows.append({'stem': stem, 'start': start, 'end': end, 'segment': f"{volume.label if volume else stem}, {page_range(start, end)}",
                      'place': f"Band {volume.vz:03d} · {page_range(start, end)}" if volume else f"{stem}, {page_range(start, end)}",
                      'entries': entries, 'overlaps': overlaps,
@@ -2019,8 +2020,11 @@ def import_list(error: str = ''):
 def admin_page(request: Request, error: str = ''):
     """Where each volume stands, with the open duplicates and corrections, and the imports in progress."""
     leaflets = Counter(vid for (vid,) in session.query(Leaflet.volume_id))
-    pages = Counter(vid for (vid,) in session.query(Page.volume_id))
     volumes = session.query(Volume).order_by(Volume.vz).all()
+    # the page table is big and has no index on the volume: count only where the volume does not know its pages
+    unknown = [v.id for v in volumes if not v.n_pages and v.status == RELEASED and leaflets[v.id]]
+    pages = Counter(dict(session.query(Page.volume_id, func.count()).filter(Page.volume_id.in_(unknown))
+                         .group_by(Page.volume_id))) if unknown else Counter()
     groups = copy_rows()
     open_groups = [g for g in groups if g['state'] != 'geprueft']
     fix_rows = correction_rows({v.stem: v for v in volumes if v.stem}, corrections.by_segment(corrections.load(CORRECTIONS)))
@@ -2042,7 +2046,7 @@ def admin_page(request: Request, error: str = ''):
                     for v in volumes if v.status == RELEASED and leaflets[v.id]],
         "drafts": drafts, "n_steps": len(steps), "units": importer.free_units(),
         "groups": len(groups), "open": len(open_groups),
-        "fixes": sum(fixes.values()), "unmatched": sum(not r['leaflet'] for r in fix_rows),
+        "fixes": sum(fixes.values()), "unmatched": sum(not r['leaflet'] and bool(in_force(r['entries'])) for r in fix_rows),
         "error": error})
 
 
@@ -2609,36 +2613,57 @@ def volume_image(vz: int, name: str):
     return FileResponse(path)
 
 
+FEW_DOCUMENTS = 5  # issuers with fewer documents are folded away in the list
+BAR_SCALE_FLOOR = 5  # a bar is at least this many documents high on its scale: one document is a short bar, not a full one
+
+
+def issuer_years(items):
+    """org id (or NO_ORG, NOT_IN_REGISTER) -> {year: documents}, every document once."""
+    years = defaultdict(Counter)
+    for item in items:
+        for org in set(item['orgs']):
+            years[org][item['year']] += 1
+    return years
+
+
+def year_span(*counters):
+    """Every year from the first to the last of these counters, so gaps stay visible."""
+    found = sorted(int(y) for c in counters for y in c if y.isdigit())
+    return [str(y) for y in range(found[0], found[-1] + 1)] if found else []
+
+
 @app.get("/organizations")
 def organization_list(request: Request, sortierung: str = ''):
     logger.info('Opening organization list')
-
-    organizations = sorted(session.query(Organization), key=org_sort_key)
-
-    leaflet_ids_by_org = {}
-    issuer_rows = session.query(LeafletIssuer) \
-        .filter(LeafletIssuer.org_id.isnot(None))
-    for i in issuer_rows:
-        leaflet_ids_by_org.setdefault(i.org_id, set()).add(i.leaflet_id)
-
-    rows = [{
-        'id': org.id,
-        'name': org.name,
-        'full_name': org.full_name,
-        'count': len(leaflet_ids_by_org.get(org.id, set())),
-    } for org in organizations]
-    sort = sortierung if sortierung in ('anzahl_auf', 'name_auf', 'name_ab') else 'anzahl_ab'
+    items = unique(faceted_items([])[0])
+    years = issuer_years(items)
+    span = year_span(*years.values())
+    rows = []
+    for org in sorted(session.query(Organization), key=org_sort_key):
+        per_year = years.get(org.id, Counter())
+        found = sorted(per_year)
+        rows.append({'id': org.id, 'name': org.name, 'full_name': org.full_name, 'count': sum(per_year.values()),
+                     'first': found[0] if found else '', 'last': found[-1] if found else '',
+                     'bars': [(y, per_year[y]) for y in span], 'peak': max([*per_year.values(), BAR_SCALE_FLOOR]),
+                     'search': ' '.join([org.name, org.full_name or '', *(org.variants or [])]).casefold()})
+    sort = sortierung if sortierung in ('anzahl_auf', 'name_auf', 'name_ab', 'erst_auf', 'erst_ab') else 'anzahl_ab'
     if sort.startswith('anzahl'):
         rows.sort(key=lambda r: r['count'], reverse=sort == 'anzahl_ab')  # stable: ties stay by name
+    elif sort.startswith('erst'):
+        rows.sort(key=lambda r: r['first'] or '9999', reverse=sort == 'erst_ab')
     elif sort == 'name_ab':
         rows.reverse()
-
+    used = [r for r in rows if r['count']]
+    big = [r for r in used if r['count'] >= FEW_DOCUMENTS]
     return templates.TemplateResponse(
-        request, "organization_list.html", {"organizations": rows, "sort": sort})
+        request, "organization_list.html",
+        {"organizations": big, "few": [r for r in used if r['count'] < FEW_DOCUMENTS], "unused": len(rows) - len(used),
+         "span": span, "sort": sort, "total": len(items), "n_orgs": len(used),
+         "no_org": sum(years[NO_ORG].values()), "unknown": sum(years[NOT_IN_REGISTER].values())})
 
 
 @app.get("/organizations/{org_id}")
-def organization_detail(request: Request, org_id: str, ansicht: str = "liste"):
+def organization_detail(request: Request, org_id: str, ansicht: str = "liste", sortierung: str = ""):
     logger.info('Opening organization details')
 
     org = session.get(Organization, org_id)
@@ -2646,18 +2671,23 @@ def organization_detail(request: Request, org_id: str, ansicht: str = "liste"):
     if org is None:
         raise HTTPException(404)
 
-    issuer_rows = session.query(LeafletIssuer).filter_by(org_id=org_id).all()
-    leaflet_ids = {i.leaflet_id for i in issuer_rows}
-    leaflets = leaflet_items(
-        released_leaflets()
-        .filter(Leaflet.id.in_(leaflet_ids)).order_by(Volume.vz, Leaflet.start_page).all())
-    has_thumbs = any(item['thumb'] for item in leaflets)
+    all_items = unique(faceted_items([])[0])
+    sort = sortierung if sortierung in ('datum_ab', 'titel_auf', 'titel_ab', 'band') else 'datum_auf'
+    key = {'datum': date_sort_key, 'titel': title_sort_key, 'band': lambda i: (i['vz'], i['leaflet'].start_page)}[sort.split('_')[0]]
+    items = sorted((i for i in all_items if org_id in i['orgs']), key=key, reverse=sort.endswith('_ab'))
+    per_year = Counter(i['year'] for i in items)
+    # an undated document has the year of its volume only
+    undated = Counter(i['year'] for i in items if not (i['leaflet'].date_iso or '')[:4].isdigit())
+    topic_ids = Counter(i['leaflet'].topic_id for i in items if i['leaflet'].topic_id is not None)
+    topics = {t.id: t for t in session.query(Topic).filter(Topic.id.in_(topic_ids))}
+    partners = Counter(o for i in items for o in set(i['orgs']) if o != org_id and o not in SPECIAL + (MULTIPLE,))
+    names = {o.id: o for o in session.query(Organization).filter(Organization.id.in_(partners))}
+    has_thumbs = any(item['thumb'] for item in items)
 
     org_ids = [o.id for o in sorted(
         session.query(Organization), key=org_sort_key)]
     pos = org_ids.index(org.id)
-    volumes = session.query(Volume).filter(Volume.vz.in_(org.vz or [])) \
-        .order_by(Volume.vz).all()
+    volumes = session.query(Volume).filter(Volume.vz.in_(org.vz or []))         .order_by(Volume.vz).all()
 
     data = {
         'id': org.id,
@@ -2666,14 +2696,22 @@ def organization_detail(request: Request, org_id: str, ansicht: str = "liste"):
         'name': org.name,
         'full_name': org.full_name,
         'type': org.type,
-        'variants': org.variants,
-        'jahre': org.jahre,
+        'variants': [v for v in org.variants or [] if v not in (org.name, org.full_name)],
+        'jahre': ' – '.join(dict.fromkeys([min(org.jahre), max(org.jahre)])) if org.jahre else '',
+        'outside': [(y, n) for y, n in sorted(per_year.items()) if org.jahre and y not in org.jahre],
         'volumes': volumes,
-        'gnd_id': org.gnd_id,
         'notes': org.notes,
-        'leaflets': leaflets,
+        'leaflets': items,
+        'count': len(items),
+        'period': ' – '.join(dict.fromkeys([min(per_year), max(per_year)])) if per_year else '',
+        'bars': [(y, per_year[y], undated[y]) for y in year_span(Counter(i['year'] for i in all_items))],
+        'peak': max([*per_year.values(), BAR_SCALE_FLOOR]),
+        'topics': [{'title': short_topic_title(topics[t].title), 'count': n,
+                    'url': '/leaflets?' + urlencode([('org', org_id), ('thema', t)])} for t, n in topic_ids.most_common(5)],
+        'partners': [{'id': o, 'label': org_label(names[o]), 'count': n} for o, n in partners.most_common(5) if o in names],
         'view': 'kacheln' if ansicht == 'kacheln' and has_thumbs else 'liste',
         'has_thumbs': has_thumbs,
+        'sort': sort,
     }
 
     return templates.TemplateResponse(
