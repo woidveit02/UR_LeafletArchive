@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -238,9 +239,8 @@ def test_issuer_facets_chips_and_passage_links(db):
 
     html = leaflet_app.leaflet_list(request("/leaflets", b"q=versammlung&jahr=1968"),
                                     ansicht="liste").body.decode()
-    assert 'href="/leaflets?jahr=1968" title="Entfernen">„versammlung“' in html
-    assert 'class="search-clear" href="/leaflets?jahr=1968"' in html
-    assert f'href="/leaflets/{leaflets["ocr"].id}?q=versammlung&amp;jahr=1968#treffer-1"' in html
+    assert 'href="/leaflets?q=versammlung" title="Entfernen">1968' in html and 'Jahr: ' in html and 'value="versammlung"' in html
+    assert f'href="/leaflets/{leaflets["ocr"].id}?q=versammlung&amp;jahr=1968&amp;ergebnisse=1#treffer-1"' in html
 
 
 def test_trends_count_copies_once(db, monkeypatch):
@@ -250,6 +250,7 @@ def test_trends_count_copies_once(db, monkeypatch):
     copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
                        "Stre1kaufruf zur Blockade der Mensa. Polizei", date_iso="1969-02-01")
     leaflets["ocr"].copy_group = copy.copy_group = 7
+    leaflets["ocr"].canonical_leaflet_id = copy.canonical_leaflet_id = leaflets["ocr"].id
     db.commit()
     search.rebuild_search_index(db.get_bind())
 
@@ -258,16 +259,236 @@ def test_trends_count_copies_once(db, monkeypatch):
 
     html = leaflet_app.trends(request("/trends", b"typ=flugblatt"), begriffe="Blockade, xy, ").body.decode()
     assert '"shares": [50.0, 0.0]' in html  # 1968: 1 of 2 leaflets of type "flugblatt", copy once
-    assert '"/leaflets?typ=flugblatt\\u0026q=Blockade\\u0026jahr=1968"' in html
-    assert "unter 3 Zeichen" in html and 'value="Blockade, xy"' in html
+    assert '"/leaflets?typ=flugblatt\\u0026q=Blockade\\u0026text=1\\u0026jahr=1968"' in html
+    assert 'value="Blockade, xy"' in html
+    # the tab of a term shorter than 3 characters says that it is not searched
+    assert "unter 3 Zeichen" in leaflet_app.trends(request("/trends", b"typ=flugblatt&tab=1"), begriffe="Blockade, xy, ").body.decode()
     # only the 1969 copy matches, yet the group counts with its 1968 copy, like in the totals
     assert '"counts": [1, 0]' in leaflet_app.trends(request("/trends", b""), begriffe="Polizei").body.decode()
-    assert '"labels": ["1968-05"]' in html  # months with a hit
+    assert '"SS 68"' in html  # the semesters of the dated leaflets
 
     html = leaflet_app.trends(request("/trends", b""), begriffe="Blockade, Mensa").body.decode()
-    assert 'href="/leaflets?q=Blockade+Mensa">Blockade + Mensa</a> <span class="meta">1</span>' in html
+    assert 'Blockade + Mensa</a> <span class="meta">1</span>' in html and 'href="/leaflets?nur=' in html  # the leaflets both counted
+
+
+# Every leaflet that the search finds has a form of the term, also if only another copy of it contains the word.
+def test_every_hit_has_a_form(db):
+    leaflets = seed(db)
+    copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
+                       "Stre1kaufruf zur Blockade der Mensa. Polizei", date_iso="1969-02-01")
+    leaflets["ocr"].copy_group = copy.copy_group = 7
+    leaflets["ocr"].canonical_leaflet_id = copy.canonical_leaflet_id = leaflets["ocr"].id
+    db.commit()
+    search.rebuild_search_index(db.get_bind())
+    for term, expected in (("Blockade", {"blockade"}), ("Polizei", {"polizei"}), ("Streikauf", {"streikaufruf"})):
+        chosen = {leaflet_app.copy_key(i): i for i in leaflet_app.unique(leaflet_app.searched_items([]))}
+        items = [chosen[leaflet_app.copy_key(i)] for i in leaflet_app.searched_items([("q", term), ("duplikate", "1")])]
+        forms = leaflet_app.leaflet_forms(term, items)
+        assert items and all(forms[i["leaflet"].id] for i in items), term
+        assert set().union(*forms.values()) >= expected, term
+
+
+# A form that is left out takes the leaflets with only that form out of all counts of the term.
+def test_trends_leave_out_a_form(db, monkeypatch):
+    monkeypatch.setattr(leaflet_app, "MIN_YEAR_SIZE", 1)
+    seed(db)
+    html = leaflet_app.trends(request("/trends", b""), begriffe="Streikauf").body.decode()
+    assert "streikaufruf" in html and 'aria-checked="true"' in html and '<li class="off"' not in html
+    html = leaflet_app.trends(request("/trends", b"ohne=Streikauf%3Astreikaufruf"), begriffe="Streikauf").body.decode()
+    assert '<li class="off"' in html and '"counts": [0' in html
 
 
 def test_year_buckets_merge_small_years():
     buckets = leaflet_app.year_buckets({"1967": 7, "1968": 52, "1969": 185, "1973": 3})
     assert buckets == {"1967": "1967/68", "1968": "1967/68", "1969": "1969", "1973": "1973"}
+
+
+# `feld` limits the search to one field; an index without the signatories is rebuilt.
+def test_field_search_and_old_index(db):
+    leaflets = seed(db)
+    db.add_all([LeafletIssuer(leaflet_id=leaflets["ocr"].id, role="signatory", surface="Hans Müller"),
+                LeafletIssuer(leaflet_id=leaflets["unrelated"].id, role="issuer", surface="Müller GmbH")])
+    db.commit()
+
+    def found(*pairs):
+        return set(ids(leaflet_app.filtered_items(list(pairs))))
+
+    def check():
+        assert found(("q", "müller"), ("feld", "unterzeichner")) == {leaflets["ocr"].id}
+        assert found(("q", "müller"), ("feld", "herausgeber")) == {leaflets["unrelated"].id}
+        assert found(("q", "müller")) == {leaflets["ocr"].id, leaflets["unrelated"].id}
+        assert found(("q", "streikaufruf"), ("feld", "titel")) == {leaflets["other_year"].id}
+        assert found(("q", "mensapreise"), ("feld", "text")) == set()
+
+    search.rebuild_search_index(db.get_bind())
+    check()
+    assert leaflet_app.list_params(request("/leaflets", b"q=x&feld=foo")) == [("q", "x")]
+
+    html = leaflet_app.leaflet_list(request("/leaflets", b"q=streikaufruf&feld=titel&jahr=1969"), ansicht="liste").body.decode()
+    assert '<option value="titel" selected>' in html and 'value="streikaufruf"' in html
+
+    with db.get_bind().begin() as conn:
+        conn.exec_driver_sql("DROP TABLE leaflets_fts")
+        conn.exec_driver_sql("CREATE VIRTUAL TABLE leaflets_fts USING fts5(leaflet_id UNINDEXED, title, series, publisher, "
+                             "ocr_text, tokenize='trigram remove_diacritics 1')")
+    search.ensure_search_index(db.get_bind())
+    check()
+
+
+# Further rows combine searches with UND, ODER and NICHT, from top to bottom.
+def test_boolean_rows(db):
+    leaflets = seed(db)
+
+    def found(*pairs):
+        return set(ids(leaflet_app.filtered_items(list(pairs))))
+
+    streik = {leaflets["other_year"].id, leaflets["invitation"].id}
+    assert found(("q", "streikaufruf")) == streik
+    assert found(("q", "streikaufruf"), ("s", "und|titel|studenten")) == {leaflets["other_year"].id}
+    assert found(("q", "streikaufruf"), ("s", "nicht|titel|studenten")) == {leaflets["invitation"].id}
+    assert found(("q", "mensapreise"), ("s", "oder|text|feier")) == {leaflets["unrelated"].id, leaflets["invitation"].id}
+    # a row without a word of three characters is left out
+    assert found(("q", "streikaufruf"), ("s", "und||ab")) == streik
+
+    bad = b"q=x&s=xor|titel|y&s=und|foo|y&s=und|titel|&s=kein"
+    assert leaflet_app.list_params(request("/leaflets", bad)) == [("q", "x")]
+
+    html = leaflet_app.leaflet_list(request("/leaflets", b"q=streikaufruf&s=nicht|titel|studenten&s=oder|text|feier"),
+                                    ansicht="liste").body.decode()
+    assert 'value="studenten"' in html and '<option value="nicht" selected>' in html
+    assert "Gelesen als: ((streikaufruf NICHT studenten) ODER feier)" in html
+    assert "active-filter" not in html  # the search stands in the rows, not in chips
+
+
+# A search looks in all copies of a group and lists the main copy; with the switch each copy stands alone.
+def test_list_finds_a_group_through_any_copy(db):
+    leaflets = seed(db)
+    copy = add_leaflet(db, db.get(Volume, leaflets["ocr"].volume_id), 5, "Aufruf",
+                       "Stre1kaufruf zur Blockade der Mensa. Polizei", date_iso="1969-02-01")
+    leaflets["ocr"].copy_group = copy.copy_group = 7
+    leaflets["ocr"].canonical_leaflet_id = copy.canonical_leaflet_id = leaflets["ocr"].id
+    db.commit()
+    search.rebuild_search_index(db.get_bind())
+
+    items = leaflet_app.filtered_items([("q", "polizei")])
+    assert ids(items) == [leaflets["ocr"].id] and items[0]["text_id"] == copy.id
+    leaflet_app.attach_passages(items, "polizei")
+    assert "<mark>Polizei</mark>" in str(items[0]["snippets"][0])
+    assert ids(leaflet_app.filtered_items([("q", "polizei"), ("duplikate", "1")])) == [copy.id]
+    both = leaflet_app.filtered_items([("q", "blockade")])  # both copies match: the main copy's own text counts
+    assert ids(both) == [leaflets["ocr"].id] and "text_id" not in both[0]
+
+
+# Several values of one facet are alternatives, different facets must all match.
+def test_facets_take_several_values(db):
+    leaflets = seed(db)
+
+    def found(*pairs):
+        return set(ids(leaflet_app.filtered_items(list(pairs))))
+
+    assert found(("jahr", "1968")) == {leaflets["ocr"].id, leaflets["invitation"].id, leaflets["unrelated"].id}
+    assert found(("jahr", "1968"), ("jahr", "1969")) == {leaflets[k].id for k in ("ocr", "invitation", "unrelated", "other_year")}
+    assert found(("jahr", "1968"), ("jahr", "1969"), ("typ", "einladung")) == {leaflets["invitation"].id}
+    assert found(("q", "streikaufruf"), ("reihe", "AStA-Info"), ("reihe", "Rote Zelle")) == {leaflets["other_year"].id, leaflets["invitation"].id}
+
+    html = leaflet_app.leaflet_list(request("/leaflets", b"jahr=1968&jahr=1969&typ=flugblatt&typ=einladung"),
+                                    ansicht="liste").body.decode()
+    assert html.count('class="topic-year active"') == 2 and "1968 <span" in html and " oder <a" in html
+    assert html.count('role="checkbox" aria-checked="true"') == 2
+    # a value is removed from the choice by the same link that added it
+    links = re.findall(r'href="([^"]*)" title="[^"]*" role="checkbox" aria-checked="true"', html)
+    assert sorted(links) == ["/leaflets?jahr=1968&amp;jahr=1969&amp;typ=einladung", "/leaflets?jahr=1968&amp;jahr=1969&amp;typ=flugblatt"]
+
+
+# Without a search the list runs by date; the band and page show only when it is sorted by them.
+def test_default_sort_is_date_and_band_shows_with_band_sort(db):
+    leaflets = seed(db)
+    order = lambda *pairs: ids(leaflet_app.filtered_items(list(pairs)))
+    assert order() == [leaflets[k].id for k in ("unrelated", "ocr", "invitation", "other_year")]
+    assert order(("sortierung", "band")) == [leaflets[k].id for k in ("ocr", "other_year", "invitation", "unrelated")]
+    assert order(("q", "streikaufruf"))[0] == leaflets["other_year"].id  # a search stays by relevance
+
+    db.query(Page).filter_by(leaflet_id=leaflets["ocr"].id).one().blocks = [
+        {"type": "Text", "html": "<p>Kommt alle zur Versammlung in der Mensa und bringt Freunde mit</p>"}]
+    db.commit()
+    default = leaflet_app.leaflet_list(request("/leaflets", b""), ansicht="liste").body.decode()
+    by_band = leaflet_app.leaflet_list(request("/leaflets", b"sortierung=band"), ansicht="liste").body.decode()
+    assert 'class="locator"' not in default and 'class="locator"' in by_band
+    assert '<option value="" selected>Datum aufsteigend</option>' in default
+    searched = leaflet_app.leaflet_list(request("/leaflets", b"q=streikaufruf"), ansicht="liste").body.decode()
+    assert 'class="preview"' in default and 'class="preview"' not in searched  # the text start only without a search
+
+
+# The preview is the first running text block: not a header, a banner of repeated words or the title again.
+def test_preview_takes_the_first_text_block(db):
+    volume = Volume(vz=1, stem="sample", label="Band 1", year=1968)
+    db.add(volume)
+    db.flush()
+    title = "Heute ist die letzte Gelegenheit zur Wahl der Mitte"
+    leaflet = add_leaflet(db, volume, 1, title, title + " Kommt alle zur Versammlung in der Mensa")
+    page = db.query(Page).filter_by(leaflet_id=leaflet.id).one()
+    page.blocks = [{"type": "PageHeader", "html": "<p>- 1 -</p>"},
+                   {"type": "Text", "html": "<p>+ AStA-Info + AStA-Info + AStA-Info + AStA-Info + AStA-Info +</p>"},
+                   {"type": "Text", "html": "<p>STREIK ?? STREIK !! STREIK ?? STREIK !! STREIK ?? STREIK !!</p>"},
+                   {"type": "Text", "html": "<p>a k t i o n s g e m e i n s c h a f t l i b e r a l e r s t u d e n t e n</p>"},
+                   {"type": "Text", "html": "<p>aaaaa 1 sssss aktionsgemeinschaft a a 1 sssss liberaler aaaaaaa 1111 sssss studenten</p>"},
+                   {"type": "SectionHeader", "html": f"<h2>{title}</h2>"},
+                   {"type": "Text", "html": f"<p>{title.upper()}!</p>"},
+                   {"type": "Text", "html": "<p>Kommt</p>"},
+                   {"type": "Text", "html": "<p>Kommt alle zur Versammlung in der Mensa, die Hoch- schule braucht uns &amp; euch.</p>"}]
+    db.commit()
+    assert leaflet_app.text_previews([leaflet.id]) == {leaflet.id: "Kommt alle zur Versammlung in der Mensa, die Hochschule braucht uns & euch."}
+    page.blocks = []
+    db.commit()
+    assert leaflet_app.text_previews([leaflet.id]) == {}  # no running text block: no preview
+
+
+# From the result list the detail page pages through the results (also without filters) and leads back to their page.
+def test_detail_pages_through_the_results_and_leads_back(db):
+    leaflets = seed(db)
+    order = [leaflets[k].id for k in ("unrelated", "ocr", "invitation", "other_year")]  # the default order: by date
+    one = order[2]
+    html = leaflet_app.leaflet_detail(request(f"/leaflets/{one}", b"ergebnisse=1&pro_seite=25"), one).body.decode()
+    assert f'href="/leaflets/{order[1]}?pro_seite=25&amp;ergebnisse=1"' in html
+    assert f'href="/leaflets/{order[3]}?pro_seite=25&amp;ergebnisse=1"' in html and "3 von 4" in html
+    assert f'href="/leaflets?pro_seite=25#l{one}">← Zurück zu den Ergebnissen' in html
+    assert "Flugblätter</a> ›" not in html  # the breadcrumb of the volume is not needed then
+
+    elsewhere = leaflet_app.leaflet_detail(request(f"/leaflets/{one}", b""), one).body.decode()
+    assert "Zurück zu den Ergebnissen" not in elsewhere and "Flugblätter</a> ›" in elsewhere
+
+    filtered = leaflet_app.leaflet_detail(request(f"/leaflets/{leaflets['ocr'].id}", b"q=kaufruf&ergebnisse=1"), leaflets["ocr"].id).body.decode()
+    assert '← Zurück zu den Ergebnissen' in filtered and 'href="/leaflets?q=kaufruf#l' in filtered
+
+
+# The preview is tidied (not the stored text): spaced-out words joined, marks without a gap, cut at a word boundary.
+def test_preview_is_tidied_and_cut_at_a_word():
+    tidy = leaflet_app.tidy_preview
+    assert tidy("Dr.med.Walter R o s s hielt, W e s t p h a l kam .") == "Dr.med.Walter Ross hielt, Westphal kam."
+    assert tidy("AStA ( Termine von Veranstaltungen ) und Germanisten , die") == "AStA (Termine von Veranstaltungen) und Germanisten, die"
+    assert tidy("Art. 2 a b gilt und z. B. das") == "Art. 2 a b gilt und z. B. das"  # two letters and a number are no lettering
+    cut = leaflet_app.shorten_preview("Unter dieser Überschrift (Beschlusprotokoll, anstehende Probleme) " * 5, 80)
+    assert cut.endswith(" …") and not cut[:-2].endswith((",", "(")) and len(cut) <= 82
+    assert leaflet_app.shorten_preview("kurz") == "kurz"
+    assert leaflet_app.shorten_preview("mit der offiziellen Begründung:") == "mit der offiziellen Begründung: …"
+
+
+# The issuer list counts every document once and shows its years; the page of an issuer lists its documents and years.
+def test_issuer_pages_count_documents_and_years(db):
+    leaflets = seed(db)
+    db.add(Organization(id="asta", name="AStA", full_name="Allgemeiner Studentenausschuss", variants=[]))
+    db.add(Organization(id="leer", name="Leer", variants=[]))
+    db.flush()
+    for key in ("ocr", "other_year", "invitation"):
+        db.add(LeafletIssuer(leaflet_id=leaflets[key].id, surface="AStA", role="issuer", org_id="asta"))
+    db.commit()
+
+    listing = leaflet_app.organization_list(request("/organizations", b""), "").body.decode()
+    assert "1 Herausgeber · 4 Dokumente" in listing
+    assert "1 weitere mit weniger als 5 Dokumenten" in listing and "1 Registereinträge ohne Dokument" in listing and "Leer" not in listing
+    assert "1968–1969" in listing
+
+    detail = leaflet_app.organization_detail(request("/organizations/asta", b""), "asta").body.decode()
+    assert "1968 – 1969" in detail and 'href="/leaflets?org=asta&jahr=1968"' in detail
+    assert detail.count('class="topic-year"') == 2
+

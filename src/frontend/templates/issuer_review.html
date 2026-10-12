@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Herausgeber zuordnen – UR Leaflet Archive{% endblock %}
+{% block app_class %} app-wide{% endblock %}
+{% from '_metadata_fields.html' import lists %}
+{% block content %}
+        {% set n = group.issuers | length %}
+        {% set url = '/import/' ~ volume.vz ~ '/herausgeber' %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % volume.vz }}">
+            <span><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % volume.vz }} prüfen</b> · Herausgeber {{ nr + 1 }} von {{ total }}</span>
+            <span class="pager">
+                {% if nr %}<a href="{{ url }}?nr={{ nr - 1 }}">‹ Voriger</a>{% else %}<span class="disabled">‹ Voriger</span>{% endif %}
+                {% if nr + 1 < total %}<a href="{{ url }}?nr={{ nr + 1 }}">Nächster ›</a>{% else %}<span class="disabled">Nächster ›</span>{% endif %}
+            </span>
+        </nav>
+        <h1>„{{ group.surface }}“</h1>
+        <p class="page-intro">Diesen Herausgeber kennt das Register noch nicht. Ordnest du ihn zu, erscheint er im Filter „Herausgeber“,
+            und die App erkennt diese Schreibweise auch in späteren Bänden. Unsicher? „Nächster ›“ lässt ihn offen.</p>
+        <div class="issuer-review">
+            <section>
+                <p><b>{{ leaflet.title or 'Ohne erkannten Titel' }}</b><br>
+                    <span class="meta">{{ date or 'ohne Datum' }} · {{ pages }}{% if others %} · weitere Herausgeber: {{ others | join(', ') }}{% endif %}</span></p>
+                <p class="meta">
+                    {% if n > 1 %}Flugblatt {{ blatt + 1 }} von {{ n }}:
+                    {% if blatt %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt - 1 }}">‹ voriges</a>{% endif %}
+                    {% if blatt + 1 < n %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt + 1 }}">nächstes ›</a>{% endif %} · {% endif %}
+                    <a href="/leaflets/{{ leaflet.id }}?bearbeiten" target="_blank" rel="noopener">Dieses Blatt anders zuordnen</a></p>
+                {% if issuer.blocks %}
+                <img class="issuer-evidence" src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ issuer.blocks | join(',') }}" alt="Stelle im Scan, an der „{{ group.surface }}“ steht">
+                {% endif %}
+                <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener"><img class="issuer-page" loading="lazy"
+                   src="/leaflets/{{ leaflet.id }}/pages/{{ (issuer.blocks[0].split('-')[0] if issuer.blocks else leaflet.start_page) }}.png" alt="Scan der Seite"></a>
+            </section>
+            <form method="post" action="{{ url }}" class="issuer-choice">
+                {{ lists(org_names, []) }}
+                <input type="hidden" name="surface" value="{{ group.surface }}">
+                <input type="hidden" name="nr" value="{{ nr }}">
+                {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+                <fieldset>
+                    <legend>Schreibweise einer bekannten Organisation</legend>
+                    {% for org, form, count, first, last in candidates %}
+                    <label><input type="radio" name="choice" value="{{ org.id }}" required>
+                        <span><b>{{ org.full_name or org.name }}</b>{% if org.full_name %} ({{ org.name }}){% endif %}<br>
+                        <span class="meta">{% if form not in (org.name, org.full_name) %}ähnliche Schreibweise: „{{ form }}“ · {% endif %}
+                            {% if count %}im Bestand: {{ count }} {{ 'Flugblatt' if count == 1 else 'Flugblätter' }}, {{ first }}{% if last != first %}–{{ last }}{% endif %}{% else %}noch kein Flugblatt im Bestand{% endif %}
+                            · <a href="/organizations/{{ org.id }}" target="_blank" rel="noopener">ansehen ↗</a></span></span></label>
+                    {% else %}
+                    <p class="meta">Keine ähnlich geschriebene Organisation im Register.</p>
+                    {% endfor %}
+                    <label><input type="radio" name="choice" value="andere" required>
+                        <span>andere: <input type="text" name="other" list="org-names" placeholder="Register durchsuchen …" autocomplete="off"
+                                             aria-label="Organisation aus dem Register" oninput="this.form.choice.value = 'andere'"></span></label>
+                </fieldset>
+                <fieldset>
+                    <legend>Neu im Register</legend>
+                    <label><input type="radio" name="choice" value="neu" required>
+                        <span>Neue Organisation „{{ group.surface }}“{% if candidates %} <span class="meta">(prüfe zuerst die Vorschläge oben)</span>{% endif %}<br>
+                        <input type="text" name="full_name" placeholder="Langform, falls bekannt" aria-label="Langform" oninput="this.form.choice.value = 'neu'"></span></label>
+                </fieldset>
+                <fieldset>
+                    <legend>Kein Herausgeber</legend>
+                    <label><input type="radio" name="choice" value="person" required>
+                        <span>Eine Person: zu den Unterzeichnenden verschieben</span></label>
+                    <label><input type="radio" name="choice" value="erwaehnt" required>
+                        <span>Nur erwähnt: als Herausgeber entfernen</span></label>
+                </fieldset>
+                <p class="issuer-save"><button type="submit" class="button primary">Speichern &amp; weiter</button>
+                    <span class="meta">gilt für {{ 'das Flugblatt' if n == 1 else 'alle ' ~ n ~ ' Flugblätter' }}:
+                        {% for lf, _ in group.issuers %}{{ 'S. ' if loop.first }}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
+            </form>
+        </div>
+{% endblock %}

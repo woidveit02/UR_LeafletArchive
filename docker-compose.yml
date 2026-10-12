@@ -4,10 +4,13 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - TZ=Europe/Berlin  # stamps of OCR runs, metadata and corrections in local time
       - LEAFLET_DATA_DIR=/app/data
       - LEAFLET_PDF_DIR=/data/pdfs
       - LEAFLET_PDF_HOST_DIR=${LEAFLET_PDF_HOST_DIR:-}
       - LEAFLET_CORRECTIONS=${LEAFLET_CORRECTIONS:-}  # other file, e.g. for UI tests
+      - DATALAB_API_KEY=${DATALAB_API_KEY:-}  # only the import of new volumes needs these (.env)
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
     volumes:
       - ./src/backend:/app
       - ./src/frontend/templates:/app/app/templates

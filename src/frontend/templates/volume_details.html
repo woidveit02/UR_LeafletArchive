@@ -2,6 +2,11 @@
 {% block title %}{{ volume.label }} – UR Leaflet Archive{% endblock %}
 {% block app_class %}{% if volume.view == 'seiten' %} app-wide{% endif %}{% endblock %}
 {% block content %}
+        {% if volume.review %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % volume.vz }}">
+            <span><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % volume.vz }} prüfen</b> · Alle Flugblätter</span>
+        </nav>
+        {% endif %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
             <span>
@@ -10,14 +15,10 @@
             </span>
         </nav>
         <header class="page-head page-head-detail">
-            <h1>{{ volume.label }}</h1>
+            <h1>{{ volume.label }}{% if volume.draft %} <span class="status-badge">nicht freigegeben</span>{% endif %}</h1>
         </header>
 
         <dl class="meta-list facts-panel">
-            <dt>Titel im Findmittel</dt>
-            <dd>{{ volume.title }}</dd>
-            <dt>Art</dt>
-            <dd>{% if volume.collection %}Organisationsband: nur Blätter von {{ volume.collection }}{% else %}gemischter Band{% endif %}</dd>
             <dt>Signatur</dt>
             <dd>{{ volume.signature }}</dd>
             <dt>Stand</dt>
@@ -28,16 +29,19 @@
             {% endif %}
             <dt>Organisationen laut Findmittel</dt>
             <dd>
-                {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% else %}n.a.{% endfor %}
+                {% if volume.organizations %}<details>
+                    <summary>{{ volume.organizations | length }} {{ 'Organisation' if volume.organizations | length == 1 else 'Organisationen' }}</summary>
+                    {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
+                </details>{% else %}n.a.{% endif %}
             </dd>
         </dl>
 
         {% if volume.portal_url %}
-        <p><a class="button-link" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Im Archivportal-D ansehen ↗</a></p>
+        <p><a class="button primary" href="{{ volume.portal_url }}" target="_blank" rel="noopener">Im Archivportal-D ansehen ↗</a></p>
         {% endif %}
 
         {% if volume.leaflets %}
-        {% from '_leaflets.html' import leaflet_list, leaflet_cards, title %}
+        {% from '_leaflets.html' import result_list, leaflet_cards, title %}
         {% from '_ui.html' import view_switch %}
         <div class="section-head">
             <h2>Flugblätter</h2>
@@ -58,7 +62,7 @@
                 {% if loop.first %}
                 <figcaption>
                     <span class="strip-title">{% if group.leaflet %}<a href="/leaflets/{{ group.leaflet.id }}" title="{{ group.leaflet.display_title }}">{{ title(group.leaflet) }}</a>{% else %}<span class="meta">ausgeschlossen</span>{% endif %}</span>
-                    {% if group.main %}<a class="strip-dup" href="/leaflets/{{ group.main.id }}" title="Hauptexemplar: {{ group.main.label }}">Duplikat von {{ group.main.label }}</a>{% endif %}
+                    {% if group.main %}<a class="strip-dup" href="/leaflets/{{ group.main.id }}" title="Hauptexemplar: {{ group.main.label }}">Exemplar von {{ group.main.label }}</a>{% endif %}
                     {% if group.issuers %}<span class="strip-issuers" title="{{ group.issuers }}">{{ group.issuers }}</span>{% endif %}
                 </figcaption>
                 {% endif %}
@@ -67,7 +71,7 @@
             {% endfor %}
         </div>
         {% else %}
-        {{ leaflet_list(volume.leaflets, fields=('pages', 'date', 'issuers')) }}
+        {{ result_list(volume.leaflets) }}
         {% endif %}
         {% endif %}
 {% endblock %}

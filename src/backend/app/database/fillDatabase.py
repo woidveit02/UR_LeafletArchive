@@ -9,7 +9,7 @@ from pathlib import Path
 
 from . import copy_decisions, corrections, search
 from .session import session
-from .models import Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
+from .models import DRAFT, RELEASED, Volume, Page, Leaflet, Organization, LeafletIssuer, Topic
 
 if os.environ.get("LEAFLET_DATA_DIR"):
     DATA_DIR = Path(os.environ["LEAFLET_DATA_DIR"])
@@ -19,11 +19,19 @@ else:
 PDF_DIR = Path(os.environ.get("LEAFLET_PDF_DIR", "/data/pdfs"))
 CORRECTIONS = Path(os.environ.get("LEAFLET_CORRECTIONS") or DATA_DIR / "corrections.jsonl")
 COPY_DECISIONS = Path(os.environ.get("LEAFLET_COPY_DECISIONS") or DATA_DIR / "copy_decisions.jsonl")
+CHECKED = Path(os.environ.get("LEAFLET_CHECKED") or DATA_DIR / "checked.jsonl")  # "Passt so" for the remarks of the checks
 
 
 def load_json(name):
     with open(DATA_DIR / name, encoding="utf-8") as f:
         return json.load(f)
+
+
+def save_json(name, data):
+    # same layout as the files in the repo (two spaces, CRLF, no final newline), so only changes show up in git
+    text = json.dumps(data, ensure_ascii=False, indent=2).replace("\n", "\r\n")
+    with open(DATA_DIR / name, "w", encoding="utf-8", newline="") as f:
+        f.write(text)
 
 
 def copy_groups(stems, name="copies.tsv"):
@@ -70,8 +78,8 @@ def issuer_org_ids(issuer, orgs_by_variant, known_ids):
     if issuer.get("role") == "signatory":
         return [None]
     # newer metadata carries org_ids, older only the surface form
-    if "org_ids" in issuer:
-        return [i for i in issuer["org_ids"] if i in known_ids] or [None]
+    if "org_ids" in issuer:  # a spelling decided in the app since is in the variants
+        return [i for i in issuer["org_ids"] if i in known_ids] or [orgs_by_variant.get(issuer["surface"].strip().lower())]
     return [orgs_by_variant.get(issuer["surface"].strip().lower())]
 
 
@@ -117,21 +125,24 @@ def fill_organizations():
             variants=org.get("variants", []),
             jahre=org.get("jahre", []),
             vz=org.get("vz", []),
-            gnd_id=org.get("gnd_id", ""),
             notes=org.get("notes", ""),
         ))
     session.commit()
     return variant_index()
 
 
+def volume_from_entry(v):
+    return Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
+                  year=v["year"], title=v["title"], group=v["group"],
+                  signature=v["signature"],
+                  digitized=v["digitized"],
+                  portal_url=v.get("portal_url"))
+
+
 def fill_volumes():
     volumes = {}
     for v in load_json("volumes.json"):
-        volume = Volume(vz=v["vz"], stem=v["stem"], label=v["label"],
-                        year=v["year"], title=v["title"], group=v["group"],
-                        signature=v["signature"], collection=v["collection"],
-                        digitized=v["digitized"],
-                        portal_url=v.get("portal_url"))
+        volume = volume_from_entry(v)
         session.add(volume)
         volumes[v["label"]] = volume
     session.commit()
@@ -292,9 +303,8 @@ def add_issuers(leaflet, r, orgs_by_variant, known_ids):
 
 
 def automatic_record(leaflet):
-    volume = session.get(Volume, leaflet.volume_id)
-    cfg = next(c for c in VOLUMES if c["label"] == volume.label)
-    return next(r for r in load_json(cfg["metadata_file"])["segments"]
+    volume = session.get(Volume, leaflet.volume_id)  # by number: VOLUMES misses a volume created since the start
+    return next(r for r in load_json(f"nr{volume.vz:03d}_metadata.json")["segments"]
                 if (r["start_page"], r["end_page"]) == (leaflet.start_page, leaflet.end_page))
 
 
@@ -323,6 +333,11 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes):
     volume.n_pages = n_pages
     volume.meta_model = meta.get("model")
     volume.meta_created = meta.get("created", "")[:10]
+    try:  # written by the app's text recognition; volumes recognized earlier have none
+        run = json.loads((PDF_DIR / cfg["label"] / stem / "ocr-lauf.json").read_text(encoding="utf-8"))
+        volume.ocr_mode, volume.ocr_created = run.get("mode"), (run.get("at") or "")[:10]
+    except (OSError, ValueError):
+        pass
     session.commit()
 
     known_ids = {org_id for (org_id,) in session.query(Organization.id)}
@@ -359,6 +374,38 @@ def fill_volume(cfg, orgs_by_variant, volumes, series_by_key, fixes):
     # after the pages: manual evidence takes its wording from their OCR text
     for leaflet, entries in corrected:
         corrections.apply(leaflet, entries)
+    session.commit()
+
+
+def import_volume(vz):
+    """Reads one volume into the existing database, as a draft until it is released.
+
+    Needs its entry in volumes.json and nrXXX_metadata.json; nothing else in the
+    database is touched. Raises ValueError if the volume already has leaflets.
+    """
+    entry = next((v for v in load_json("volumes.json") if v["vz"] == vz), None)
+    if entry is None:
+        raise ValueError(f"volumes.json has no volume {vz}")
+    cfg = {"metadata_file": f"nr{vz:03d}_metadata.json", "label": entry["label"], "year": entry["year"]}
+    volume = session.query(Volume).filter_by(vz=vz).first()
+    if volume and session.query(Leaflet).filter_by(volume_id=volume.id).count():
+        raise ValueError(f"volume {vz} is already imported")
+    if volume is None:
+        volume = volume_from_entry(entry)
+        session.add(volume)
+    volume.status = DRAFT
+    session.commit()
+    configs = [c for c in VOLUMES if c["label"] != cfg["label"]] + [cfg]
+    fill_volume(cfg, variant_index(), {cfg["label"]: volume}, series_names(configs),
+                corrections.by_segment(corrections.load(CORRECTIONS)))
+    fill_copies()
+    return volume
+
+
+def release_volume(vz, status=RELEASED):
+    """Makes a draft visible in the list, the search, the trends and the topics; status=DRAFT hides a volume again."""
+    volume = session.query(Volume).filter_by(vz=vz).one()
+    volume.status = status
     session.commit()
 
 

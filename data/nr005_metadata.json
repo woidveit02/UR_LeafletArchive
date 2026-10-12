@@ -397,8 +397,7 @@
           "function": "",
           "marker": "",
           "org_ids": [
-            "adf",
-            "fachschaften"
+            "adf"
           ]
         },
         {
@@ -2621,7 +2620,7 @@
           "function": "",
           "marker": "gez.",
           "org_ids": [
-            "studentenschaft_der_universit_t_regensburg"
+            "ltestenrat"
           ]
         }
       ],
@@ -7769,12 +7768,12 @@
     },
     {
       "id": 149,
-      "title": "",
-      "date": "",
       "start_page": 471,
       "end_page": 471,
+      "title": "",
+      "date": "",
       "confirmed": false,
-      "no_content": false,
+      "no_content": true,
       "note": "",
       "title_evidence": "",
       "title_blocks": [],

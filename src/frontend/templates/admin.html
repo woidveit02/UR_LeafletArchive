@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Verwaltung – UR Leaflet Archive{% endblock %}
+{% block content %}
+        <header class="page-head admin-head">
+            <h1>Verwaltung</h1>
+            <span class="admin-actions">
+                <a class="button" href="/verwaltung/export">Datensatz exportieren</a>
+                {% if units %}<a class="button primary" href="/import/neu">Band hinzufügen</a>{% endif %}
+            </span>
+        </header>
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+
+        <div class="admin-tiles">
+            <section class="admin-tile">
+                <h2>Bände</h2>
+                <p class="admin-figure">{{ volumes | length }} freigegeben</p>
+                <p class="meta">{% if drafts %}{{ drafts | length }} in Bearbeitung{% if units %} · {% endif %}{% endif %}{% if units %}{{ units | length }} noch nicht hinzugefügt{% endif %}</p>
+                <a href="/volumes">Bände ansehen →</a>
+            </section>
+            <section class="admin-tile">
+                <h2>Exemplare</h2>
+                {% if not groups %}<p class="admin-figure">Keine Exemplargruppen</p>
+                {% elif open %}<p class="admin-figure todo">{{ open }} offene {{ 'Gruppe' if open == 1 else 'Gruppen' }}</p>
+                {% else %}<p class="admin-figure">Alle geprüft</p>{% endif %}
+                {% if groups %}<p class="meta">{{ groups }} Gruppen insgesamt</p>{% endif %}
+                <a href="/exemplare{{ '?status=offen' if open }}">Exemplare prüfen →</a>
+            </section>
+            <section class="admin-tile">
+                <h2>Korrekturen</h2>
+                {% if unmatched %}<p class="admin-figure todo">{{ unmatched }} ohne Zuordnung</p>
+                {% elif fixes %}<p class="admin-figure">Alle zugeordnet</p>
+                {% else %}<p class="admin-figure">Keine Korrekturen</p>{% endif %}
+                {% if fixes %}<p class="meta">{{ fixes }} {{ 'Flugblatt' if fixes == 1 else 'Flugblätter' }} korrigiert</p>{% endif %}
+                <a href="/korrekturen">{{ 'Zuordnung prüfen' if unmatched else 'Korrekturen ansehen' }} →</a>
+            </section>
+        </div>
+
+        {% if drafts %}
+        <h2>In Bearbeitung <span class="count">· {{ drafts | length }}</span></h2>
+        <ul class="leaflet-list leaflet-list-plain draft-list">
+            {% for d in drafts %}
+            <li>
+                <span class="row-main"><a class="row-title" href="/import/{{ d.vz }}">Band {{ '%03d' % d.vz }} · {{ d.title }}</a>
+                    <span class="meta">Schritt {{ d.n }} von {{ n_steps }} · {{ d.step }}</span></span>
+                <a class="button" href="/import/{{ d.vz }}">Fortsetzen</a>
+                {% if d.deletable %}<details class="row-menu">
+                    <summary aria-label="Weitere Aktionen" title="Weitere Aktionen">⋯</summary>
+                    <form method="post" action="/import/{{ d.vz }}/loeschen"
+                          onsubmit="return confirm('Den Entwurf Band {{ '%03d' % d.vz }} wirklich löschen? Die im Viewer angelegten Daten und die hochgeladenen Scans gehen verloren. Der Band im Archiv bleibt unberührt.')">
+                        <button type="submit" class="button text danger">Entwurf löschen</button></form>
+                </details>{% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if units %}
+        <h2>Noch nicht hinzugefügt <span class="count">· {{ units | length }}</span></h2>
+        <p class="meta">Ein Klick beginnt den Import dieses Bandes.</p>
+        <p class="unit-links">{% for u in units %}<a href="/import/neu?vz={{ u.vz }}" title="{{ u.title }}">{{ '%03d' % u.vz }}</a>{% endfor %}</p>
+        {% endif %}
+
+        <h2>Freigegeben <span class="count">· {{ volumes | length }}</span></h2>
+        <table class="data-table">
+            <thead><tr><th>Band</th><th>Titel</th><th class="num hide-narrow">Seiten</th><th class="num">Flugblätter</th><th class="num hide-narrow">Exemplargruppen</th><th class="num" >Korrigierte Flugblätter</th><th>Aktion</th></tr></thead>
+            <tbody>
+            {% for v in volumes %}
+            <tr>
+                <td><a href="/volumes/{{ v.vz }}">{{ '%03d' % v.vz }}</a></td>
+                <td><a href="/volumes/{{ v.vz }}">{{ v.title }}</a></td>
+                <td class="num hide-narrow">{{ v.pages or '–' }}</td>
+                <td class="num">{{ v.leaflets }}</td>
+                <td class="num hide-narrow">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{% if v.open %}<span class="todo">{{ v.open }} offen</span> · {% endif %}{{ v.groups }} {{ 'Gruppe' if v.groups == 1 else 'Gruppen' }}{% if not v.open %} · alle geprüft{% endif %}</a>{% else %}–{% endif %}</td>
+                <td class="num">{{ v.fixes or '–' }}</td>
+                <td><a href="/import/{{ v.vz }}?schritt=pruefen">Prüfen</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p class="meta">Bandübergreifende Exemplargruppen werden in jedem betroffenen Band gezählt. Die Tabellensumme kann deshalb höher sein als die Gesamtzahl oben.</p>
+{% endblock %}

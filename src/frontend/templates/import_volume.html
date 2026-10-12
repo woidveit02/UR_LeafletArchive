@@ -1,0 +1,583 @@
+{% extends "base.html" %}
+{% block title %}{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %} – UR Leaflet Archive{% endblock %}
+{% block app_class %}{% if split %} app-wide{% endif %}{% endblock %}
+{% block content %}
+        {% macro key_help(service) %}
+        <details class="help">
+            <summary>Wo finde ich meinen API-Key?</summary>
+            {% if service == 'datalab' %}
+            <h4>Was ist Datalab, was ein API-Key?</h4>
+            <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
+                Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
+            {% else %}
+            <h4>Was ist OpenRouter, was ein API-Key?</h4>
+            <p><b>OpenRouter</b> ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
+                Die App schickt den erkannten Text jedes Flugblatts dorthin und bekommt Titel, Datum und Herausgeber zurück. Abgerechnet wird nach der Nutzung über Guthaben im OpenRouter-Konto.</p>
+            {% endif %}
+            <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
+                und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
+            <h4>Wie bekomme ich einen API-Key?</h4>
+            {% if service == 'datalab' %}
+            <ol>
+                <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
+                <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
+                    (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
+                <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+            </ol>
+            <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
+            {% else %}
+            <ol>
+                <li>Konto auf <a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a> anlegen.</li>
+                <li>Unter „Credits“ Guthaben aufladen.</li>
+                <li>Unter „Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+            </ol>
+            <p>Die Preise je Modell stehen in der <a href="https://openrouter.ai/models" target="_blank" rel="noopener">Modellübersicht</a>.</p>
+            {% endif %}
+            <h4>Wo wird der API-Key gespeichert?</h4>
+            <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
+        </details>
+        {% endmacro %}
+        {% macro key_block(service, key, finished, step) %}
+        {% set name = 'Datalab' if service == 'datalab' else 'OpenRouter' %}
+        {% set fields %}<input type="hidden" name="service" value="{{ service }}"><input type="hidden" name="step" value="{{ step }}">{% endset %}
+        {% if key and key.from_env %}
+        <p class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
+        {% elif key %}
+        <details class="key-change">
+            <summary class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}) · <span class="key-link">Ändern</span></summary>
+            <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
+                <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
+                <button type="submit" class="button small">Speichern</button>
+                <button type="submit" name="forget" value="true" class="link-button" formnovalidate
+                        onclick="return confirm('API-Key entfernen? Der gespeicherte Schlüssel wird gelöscht.')">Entfernen</button>
+            </form>
+            {% if not finished %}{{ key_help(service) }}{% endif %}
+        </details>
+        {% else %}
+        <p>Das läuft über ein kostenpflichtiges {{ name }}-Konto. Hinterlege dafür einen API-Key.</p>
+        <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
+            <label>API-Key<input type="password" name="key" autocomplete="off"></label>
+            <button type="submit" class="button small primary">API-Key speichern</button>
+        </form>
+        {% endif %}
+        {% endmacro %}
+        {% macro progress(cancel_url, cancel_confirm) %}
+        <div id="ocr-progress" class="upload-progress" hidden>
+            <progress></progress>
+            <span class="meta upload-text"></span>
+            <ul id="ocr-parts" class="ocr-parts"></ul>
+            {% if cancel_url %}<button type="button" id="ocr-cancel" class="button small" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
+        </div>
+        {% endmacro %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
+        <header class="page-head">
+            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% if volume.status == 'entwurf' %} <span class="status-badge">nicht freigegeben</span>{% endif %}{% else %}Band hinzufügen{% endif %}</h1>
+        </header>
+        {% set keys = steps.keys() | list %}
+        {% set done = done or [] %}
+        <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}: {{ step_help[step] }}</p>
+        {% set i = keys.index(step) %}
+        {% set locked = volume and volume.status == 'freigegeben' and created %}
+        <div class="step-head">
+        <span class="step-back">{% if volume and i > 0 and not locked %}<a class="step-button outline" href="/import/{{ volume.vz }}?schritt={{ keys[i - 1] }}" title="{{ steps[keys[i - 1]] }}">← Zurück</a>{% endif %}</span>
+        <nav class="view-switch step-switch" aria-label="Schritte">
+            {% for key, label in steps.items() %}
+            {% set mark = '✓ ' if key in done and key != step else '' %}
+            {% if locked and key not in ('pruefen', 'themen') %}<a aria-disabled="true" class="todo" title="Der Band ist freigegeben, dieser Schritt ist gesperrt.">{{ loop.index }}. {{ label }}</a>
+            {% elif volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}" title="{{ step_help[key] }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
+            {% else %}<a title="{{ step_help[key] }}"{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
+            {% endfor %}
+        </nav>
+        <span class="step-next">
+            {% if not volume %}<button type="submit" form="new-form" class="step-button">Weiter →</button>
+            {% elif step == 'band' %}<button type="submit" form="band-form" class="step-button">Weiter →</button>
+            {% elif i + 1 < keys | length %}{% if waiting %}<span class="step-button disabled" aria-disabled="true" title="{{ waiting }}">Weiter →</span>{% else %}<a class="step-button" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}" title="{{ steps[keys[i + 1]] }}">Weiter →</a>{% endif %}{% endif %}
+        </span>
+        </div>
+        <div class="import-body">
+        {% if step == 'band' and not volume %}
+        <h2>{{ steps[step] }}</h2>
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <form id="new-form" method="post" action="/import/neu" class="meta-form step-form">
+            <dl class="meta-list plain">
+                <dt><label for="vz">Band</label></dt>
+                <dd><select id="vz" name="vz">
+                    {% for u in units %}<option value="{{ u.vz }}"{% if u.vz == chosen %} selected{% endif %} data-portal="{{ u.portal_url or '' }}">Band {{ '%03d' % u.vz }} · {{ u.title }}</option>{% endfor %}
+                </select>
+                <span class="meta note">Angezeigt werden Bände, die noch nicht hinzugefügt wurden.</span></dd>
+                <dt><label for="portal_url">Link zum Archivportal-D (optional)</label></dt>
+                <dd><input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ ((units | selectattr('vz', 'equalto', chosen) | first) or units[0]).portal_url or '' }}" placeholder="im Archivportal noch kein Eintrag">
+                    <span class="meta note">Falls vorhanden, ist der Link bereits eingetragen. Ohne Eintrag im Archivportal kann das Feld leer bleiben.</span></dd>
+            </dl>
+        </form>
+        {% elif step == 'band' %}
+        <h2>{{ steps[step] }}</h2>
+        <form id="band-form" method="post" action="/import/{{ volume.vz }}/band" class="meta-form step-form">
+            <dl class="meta-list">
+                <dt>Nummer</dt><dd>Nr. {{ '%03d' % volume.vz }}</dd>
+                <dt>Jahr</dt><dd>{{ volume.year }}</dd>
+                <dt>Titel</dt><dd>{{ volume.title }}</dd>
+                <dt>Signatur</dt><dd>{{ volume.signature }}</dd>
+                <dt>Archivportal</dt>
+                <dd class="portal-row">{% if volume.portal_url %}<a href="{{ volume.portal_url }}" target="_blank" rel="noopener">Im Archivportal-D ansehen ↗</a>{% else %}<span class="meta">noch kein Link eingetragen</span>{% endif %}
+                    <details class="inline-edit">
+                        <summary class="link-button">{{ 'Link ändern' if volume.portal_url else 'Link eintragen' }}</summary>
+                        <input type="url" id="portal_url" name="portal_url" maxlength="500" value="{{ volume.portal_url or '' }}" placeholder="Link zum Band im Archivportal-D" aria-label="Archivportal-Link">
+                    </details></dd>
+            </dl>
+        </form>
+        {% elif step == 'scans' %}
+        <h2>{{ steps[step] }}</h2>
+        {% if uploaded and pages %}<p class="form-ok" role="status">✓ Upload abgeschlossen</p>{% endif %}
+        {% if pages %}<p class="current-scans">Aktuell gespeichert: <b>{{ pages }} Seiten</b></p>{% endif %}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <p class="form-error" id="upload-error" role="alert" hidden></p>
+        {% if pages %}<details class="advanced"{% if running or error %} open{% endif %}><summary class="button small">Scans ersetzen</summary>{% endif %}
+        <form method="post" action="/import/{{ volume.vz }}/scans" enctype="multipart/form-data" class="meta-form step-form"
+              data-status-url="/import/{{ volume.vz }}/status"{% if running %} data-running="1"{% endif %}>
+            <div id="drop-zone" class="drop-zone">
+                <p class="drop-title">Scan-PDF hierher ziehen</p>
+                <p class="meta">Die Scans des Bandes als eine PDF-Datei</p>
+                <div class="drop-actions">
+                    <span class="file-pick"><input type="file" id="pdf" name="scans" accept=".pdf">
+                        <label for="pdf" class="button small">PDF-Datei wählen</label></span>
+                </div>
+                <div class="drop-alt">
+                    <p class="meta"><b>Oder einzelne TIFF-Scans:</b> Sie werden nach Dateiname sortiert und zu einem PDF zusammengefügt.</p>
+                    <div class="drop-actions">
+                        <span class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
+                            <label for="folder" class="button small">Ordner mit TIFFs wählen</label></span>
+                        <span class="file-pick"><input type="file" id="tiffs" name="scans" accept=".tif,.tiff" multiple>
+                            <label for="tiffs" class="button small">TIFF-Dateien wählen</label></span>
+                    </div>
+                </div>
+            </div>
+            <p id="pick-summary" class="pick-summary">Noch nichts ausgewählt.</p>
+            {% if pages %}<p id="replace-note" class="form-warn" hidden>Ersetzt die aktuell gespeicherten {{ pages }} Seiten.</p>{% endif %}
+            <div id="upload-progress" class="upload-progress" hidden>
+                <progress></progress>
+                <span class="meta upload-text"></span>
+            </div>
+            <button type="submit" id="upload-button" class="button small primary upload-submit" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
+        </form>
+        {% if pages %}</details>{% endif %}
+        {% elif step == 'trennen' %}
+        {% if not split %}
+        <h2>{{ steps[step] }}</h2>
+        <p class="meta">Dafür müssen zuerst die Scans hochgeladen sein.</p>
+        {% else %}
+        <h2>{{ steps[step] }}</h2>
+        <div class="step-narrow">
+        <div class="split-work">
+            <div class="split-work-head">
+                <span class="split-count{{ ' done' if split.confirmed }}"></span>
+                <span class="split-work-actions">
+                    <button type="button" id="split-finish-page" class="button primary" hidden>Prüfung abschließen</button>
+                    {% if split.confirmed %}<button type="button" id="split-open" class="button">Einteilung ansehen</button>
+                    {% else %}<button type="button" id="split-open" class="button primary">Seiten prüfen</button>{% endif %}
+                </span>
+            </div>
+            <details class="help"{% if not split.confirmed %} open{% endif %}>
+                <summary>Einteilung ändern</summary>
+                <div class="split-start">
+                    <div>
+                        <button type="button" id="split-suggest-text" class="button">Aus Text vorschlagen</button>
+                        <p class="meta">Die App rät anhand des erkannten Textes, wo ein Flugblatt beginnt. Unsicher: jeder Vorschlag muss bestätigt werden.</p>
+                    </div>
+                    <div>
+                        <span class="file-pick">
+                            <input type="file" id="split-list" accept=".txt,.csv,.tsv,text/plain,text/csv">
+                            <label for="split-list" class="button">Liste laden</label>
+                        </span>
+                        <p class="meta">Eine fertige Einteilung als Textdatei übernehmen, eine Zeile pro Flugblatt.</p>
+                    </div>
+                </div>
+            </details>
+            <details class="help"{% if not split.confirmed %} open{% endif %}>
+                <summary>So trennst du die Flugblätter</summary>
+                <div class="split-help-text">
+                <p>Lege fest, welche Scanseiten zusammen ein Flugblatt bilden. Mehrseitige Flugblätter und zusammengehörige Hefte bleiben eine Einheit.</p>
+                <ol>
+                    <li><b>Einteilung wählen:</b> Lass dir Trennungen aus dem Text vorschlagen, lade eine vorhandene Liste oder beginne von Hand. Vorschläge aus dem Text sind unsicher:
+                        Sie finden nicht jede Grenze und setzen manche falsch.</li>
+                    <li><b>Seiten prüfen:</b> Öffne die Ansicht mit „Seiten prüfen“. Bei jedem Paar benachbarter Seiten entscheidest du, ob dazwischen getrennt wird, also mit der rechten Seite ein neues Flugblatt beginnt.
+                        Jeder Vorschlag muss bestätigt oder verworfen werden. Eine geladene Liste gilt als bestätigt, mögliche fehlende Trennungen werden zusätzlich angezeigt.</li>
+                    <li><b>Prüfung abschließen:</b> Änderungen werden automatisch gespeichert, du kannst jederzeit unterbrechen und später fortsetzen. Sind alle Übergänge geprüft,
+                        schließt „Prüfung abschließen“ den Schritt ab, dann kannst du weitergehen.</li>
+                </ol>
+                <details class="advanced">
+                    <summary>Ein neues Flugblatt erkennen</summary>
+                    <p>Für ein neues Flugblatt sprechen eine Kopfleiste mit Kürzeln der Gruppen (zum Beispiel „LSD – LSD – LSD“) oder ein Datum ganz oben, ein Eingangsstempel des Archivs
+                        am Seitenkopf, ein Impressum („Verantwortlich“, „V. i. S. d. P.“) auf der Seite davor sowie ein anderer Herausgeber oder ein anderes Thema.</p>
+                    <p>Dagegen sprechen eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“), ein Text, der mitten im Satz einsetzt, und „b. w.“ oder „bitte wenden!“ auf der Seite davor.
+                        Die Rückseite gehört dann dazu, auch mit eigener Kopfleiste. Ein einzelnes Merkmal reicht nicht immer: Auch in einem mehrseitigen Flugblatt kommen neue Überschriften, Daten oder Impressen vor.</p>
+                    <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Als Leerseite / Trennblatt markieren“, die Trennungen davor und danach setzen sich von selbst,
+                        die Seite wird nicht mitgezählt. Trägt eine Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt. Hefte, Pressespiegel und Kalenderseiten mit eigenem Datum
+                        je Seite sind meist ein Flugblatt. Im Zweifel nicht schneiden.</p>
+                </details>
+                <details class="advanced">
+                    <summary>Seitenliste verwenden</summary>
+                    <p>Hast du die Einteilung schon, lade sie mit „Liste laden“ als Textdatei, eine Zeile pro Flugblatt mit den Seitenzahlen:</p>
+<pre class="split-example">1-2
+3
+4-9</pre>
+                    <p>Das sind drei Flugblätter: Seite 1 bis 2, Seite 3 allein und Seite 4 bis 9. Seiten, die zu keinem Flugblatt gehören, bekommen ein „x“ davor, etwa <code>x 17</code>.
+                        Jede Seite muss genau einmal vorkommen, sonst nennt dir die Meldung die Seiten, die nicht passen. Die Liste ersetzt die vorhandenen Trennungen und gilt als geprüft.
+                        Ist der Text schon erkannt, markiert die App zusätzlich Stellen, an denen sie eine Trennung vermutet, die in der Liste fehlt („Mögliche fehlende Trennung“).
+                        Die Einteilung bleibt unverändert, bis du darüber entscheidest. „Liste herunterladen“ speichert die aktuelle Einteilung im selben Format.
+                        <a href="{{ url_for('static', path='beispiel-flugblaetter.txt') }}" download>Beispieldatei herunterladen</a></p>
+                </details>
+                <details class="advanced">
+                    <summary>Bedienung und Tastenkürzel</summary>
+                    <p>Links stehen alle Seiten, rechts immer zwei benachbarte groß. Ein Klick auf eine Seite links zeigt sie mit ihrer Nachbarseite. Nach „Ja, trennen“ (T) oder „Nein, gehören zusammen“ (Z)
+                        zeigt die Ansicht den nächsten offenen Übergang. Mit „Weiter“ (Taste →) gehst du ohne Entscheidung zum nächsten. Wo nichts vorgeschlagen ist, gilt der Übergang damit als geprüft.
+                        Der Streifen rechts an einer Seite links setzt oder entfernt die Trennung ebenfalls. „Prüfung abschließen“ springt zum nächsten offenen Übergang, solange noch einer fehlt.</p>
+                    <p>Tasten: Pfeile blättern, T (links) trennt, Z (rechts) lässt zusammen, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc schließt die Ansicht.</p>
+                </details>
+                </div>
+            </details>
+            <p class="step-foot"><button type="button" id="split-download" class="button text">Liste herunterladen</button></p>
+        </div>
+        <p class="form-error split-error" role="alert" hidden></p>
+        <p class="meta split-note" hidden></p>
+        </div>
+        <div id="split-stage" class="split-stage" hidden>
+            <div class="split-bar">
+                <span class="split-count"></span>
+                <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt die Trennung nach ihr. Fragezeichen: noch nicht entschieden, ohne Zeichen: gehören zusammen."><i class="on">▮</i> Trennung · <i class="suggested">▮</i> Vorschlag · <i class="open">?</i> offen</span>
+                <span class="split-end">
+                    <button type="button" id="split-undo" class="button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig</button>
+                    <button type="button" id="split-redo" class="button" data-act="redo" title="Wiederholen (Strg+Y)" disabled>Wiederholen</button>
+                    <button type="button" id="split-finish" class="button primary" title="Möglich, wenn jeder Übergang geprüft und kein Vorschlag mehr offen ist">Prüfung abschließen</button>
+                    <button type="button" id="split-close" class="button" title="Schließen (Esc)">✕ Schließen</button>
+                </span>
+            </div>
+            <p class="form-error split-error" role="alert" hidden></p>
+            <div class="split-layout"><div id="split-left" class="split-left"></div><div id="split-resizer" class="split-resizer" role="separator" aria-orientation="vertical" title="Zum Anpassen ziehen, Doppelklick setzt zurück"></div><div class="split-view"><div id="split-right" class="split-right"></div><div id="split-nav" class="split-nav"></div><div id="split-decide" class="split-decide"></div></div></div>
+        </div>
+        <script type="application/json" id="split-data">{{ split | tojson }}</script>
+        {% endif %}
+        {% elif step == 'ocr' %}
+        <h2>{{ steps[step] }}</h2>
+        {% if not pages %}
+        <p class="meta">Dafür müssen zuerst die Scans hochgeladen sein.</p>
+        {% else %}
+        {% set busy = ocr_job and ocr_job.state == 'running' %}
+        <div class="step-narrow"{% if ocr.state != 'done' and not busy %} data-leave-warning="Der Text ist noch nicht erkannt. Trotzdem weiter?"{% endif %}>
+        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}<details class="advanced"><summary><b data-mode-label>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).label }}</b> · etwa <span data-mode-price>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary><fieldset class="mode-choice"><legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>{% for m in ocr.modes %}<label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}><span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>{% endfor %}<small class="meta">Schätzung nach der Preisliste vom {{ ocr.prices_from }}, wird in Dollar angerechnet</small></fieldset><fieldset class="mode-choice"><legend>Bildbeschreibungen</legend><label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span><span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label><label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span><span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label></fieldset><fieldset class="mode-choice"><legend>Teilgröße</legend><label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label><small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small></fieldset></details>{% endmacro %}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% if ocr_job and ocr_job.state == 'cancelled' and ocr.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
+        {% if ocr_job and ocr_job.state == 'error' and ocr.state != 'done' %}<p class="form-error" role="alert">{{ ocr_job.error }}</p>{% endif %}
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <div class="split-work">
+        {% set finished = ocr.state == 'done' and not busy %}
+        <div class="split-work-head">
+            <div class="step-status">
+        {% if busy %}
+        <p class="meta">Der Text wird erkannt. Das dauert einige Minuten. Die Seite darf geschlossen werden, die Erkennung läuft weiter.</p>
+        {% elif ocr.state == 'done' %}
+        <span class="split-count done">{{ ocr.pages }} Seiten · {% if ocr.source == 'hochgeladen' %}Text importiert{% else %}Text erkannt{% endif %}</span>
+        <p class="meta">{% if ocr.source != 'hochgeladen' %}{{ ocr.source }} · {% endif %}Qualitätsstufe „{{ ocr.mode_label }}“{% if ocr.seconds %} · in {{ [1, (ocr.seconds / 60) | round | int] | max }} Min{% endif %}{% if ocr.cost %} · Kosten laut Datalab etwa {{ ocr.cost }}{% endif %}</p>
+        {% elif ocr.state == 'partial' %}
+        <p class="form-warn" role="status">Unterbrochen: {{ ocr.kept }} von {{ ocr.batches }} Teilen sind schon erkannt und bezahlt (Qualitätsstufe „{{ ocr.mode_label }}“). Sie werden beim Fortsetzen nicht noch einmal angefragt.</p>
+        {% else %}
+        <p>Dafür schickt die App die {{ ocr.pages }} Seiten an den Online-Dienst Datalab. Das dauert einige Minuten,
+            die Kosten werden über dein Datalab-Konto abgerechnet.</p>
+        {% endif %}
+
+            </div>
+            {% if finished %}<span class="split-work-actions"><button type="button" id="check-open" class="button">Texterkennung ansehen</button></span>{% endif %}
+        </div>
+        {{ progress('/import/' ~ volume.vz ~ '/ocr/abbrechen', 'Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.') }}
+        {% if ocr.state != 'done' or busy %}
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
+            {% if busy %}{% elif ocr.state == 'partial' %}<input type="hidden" name="mode" value="{{ ocr.mode_key }}">{% if ocr.no_captions %}<input type="hidden" name="captions" value="no">{% endif %}<input type="hidden" name="size" value="{{ ocr.size }}"><p class="meta">Fortgesetzt wird in der Qualitätsstufe der schon erkannten Teile (Qualitätsstufe „{{ ocr.mode_label }}“).</p>{% else %}{{ mode_select('accurate') }}{% endif %}
+            {% if not busy %}<div class="start-row">
+                <button type="submit" class="button small primary upload-submit"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
+                {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+            </div>
+            <p class="meta">Nach der Texterkennung kannst du mit dem nächsten Schritt fortfahren.</p>{% endif %}
+        </form>
+        {% if ocr.state == 'partial' and not busy %}
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+              data-confirm="Von vorn beginnen? Die schon erkannten Teile gehen verloren, die Texterkennung kostet dann für alle Seiten neu.">
+            <input type="hidden" name="again" value="true">
+            {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
+            <button type="submit" class="button small"{% if not ocr_key %} disabled{% endif %}>Von vorn beginnen</button>
+        </form>
+        {% endif %}
+        {% else %}
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+              data-confirm="Den Text noch einmal erkennen? Das kostet erneut Geld (je nach Qualitätsstufe), das jetzige Ergebnis (Qualitätsstufe „{{ ocr.mode_label }}“) geht verloren.">
+            <input type="hidden" name="again" value="true">
+            <details class="help">
+                <summary>Erneut erkennen</summary>
+                {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
+                <div class="start-row">
+                    <button type="submit" class="button small"{% if not ocr_key %} disabled{% endif %}>Erneut erkennen</button>
+                    {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+                </div>
+            </details>
+        </form>
+        {% endif %}
+        <details class="help"{% if not ocr_key %} open{% endif %}>
+            <summary>Zugang verwalten</summary>
+            {{ key_block('datalab', ocr_key, true, 'ocr') }}
+            {{ key_help('datalab') }}
+        </details>
+        <details class="step-form zip-import">
+            <summary>Alternativ: vorhandene Texterkennung als ZIP-Datei laden (ohne API-Key)</summary>
+            <form method="post" action="/import/{{ volume.vz }}/ocr-hochladen" enctype="multipart/form-data" class="meta-form">
+                <p class="meta">Ein ZIP mit der JSON-Datei von Datalab und den Bildern, etwa der Ordner aus der Pipeline oder der Download von hier.
+                    Die Seitenzahl muss zum Scan passen.{% if ocr.state == 'done' %} Das jetzige Ergebnis wird ersetzt.{% endif %}</p>
+                <div class="zip-row">
+                    <span class="file-pick"><input type="file" id="ergebnis" name="ergebnis" accept=".zip" required>
+                        <label for="ergebnis" class="button small">ZIP wählen</label>
+                        <span class="meta file-name">Nichts ausgewählt</span></span>
+                    <button type="submit" class="button small" disabled>Laden</button>
+                </div>
+            </form>
+        </details>
+        {% if finished %}<p class="step-foot"><a class="button text" href="/import/{{ volume.vz }}/ocr.zip">Ergebnis als ZIP herunterladen</a></p>{% endif %}
+        </div>
+        </div>
+        {% if finished %}
+        <div id="check-stage" class="split-stage" hidden>
+            <div id="page-check" class="page-check" data-pages="{{ ocr.pages }}" data-url="/import/{{ volume.vz }}/ocr/seiten/{n}.json"
+                 data-large="/import/{{ volume.vz }}/seiten/{n}.jpg?gross=1&v={{ stamp }}" data-images="/volumes/{{ volume.vz }}/images/">
+                <div class="check-bar">
+                    <span class="check-title">Texterkennung ansehen</span>
+                    <span class="check-nav" role="group" aria-label="Seitennavigation">
+                        <button type="button" class="button" data-go="prev" title="Vorherige Seite (←)">Zurück</button>
+                        <label class="check-page">Seite <input type="number" min="1" max="{{ ocr.pages }}" value="1"> <span>von {{ ocr.pages }}</span></label>
+                        <button type="button" class="button" data-go="next" title="Nächste Seite (→)">Weiter</button>
+                    </span>
+                    <span class="check-end"><button type="button" id="check-close" class="button" title="Schließen (Esc)">✕ Schließen</button></span>
+                </div>
+                <div class="check-scroll">
+                    <section id="check-pair" class="page-pair">
+                        <div class="pair-scan">
+                            <div id="check-frame" class="page-frame">
+                                <a id="check-scan-wrap" class="scan-link" href="/import/{{ volume.vz }}/seiten/1.jpg?gross=1&v={{ stamp }}" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)">
+                                    <img id="check-scan" class="leaflet-page" alt="Scan der ausgewählten Seite"></a>
+                            </div>
+                        </div>
+                        <div id="check-body" class="pair-text ocr-page"></div>
+                    </section>
+                </div>
+                <noscript><p class="meta">Die Seitenansicht braucht JavaScript.</p></noscript>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% elif step == 'angaben' %}
+        <h2>{{ steps[step] }}</h2>
+        {% if not meta %}
+        <p class="meta">Dafür müssen zuerst der Text erkannt und die Flugblätter getrennt sein.</p>
+        {% else %}
+        {% set busy = meta_job and meta_job.state == 'running' %}
+        {% set finished = meta.state == 'done' and not busy %}
+        <div class="step-narrow">
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% if meta_job and meta_job.state == 'cancelled' and meta.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
+        {% if meta_job and meta_job.state == 'error' and meta.state != 'done' %}<p class="form-error" role="alert">{{ meta_job.error }}</p>{% endif %}
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <div class="split-work">
+        <form method="post" action="/import/{{ volume.vz }}/angaben" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=angaben"{% if busy %} data-running="1"{% endif %}
+              {% if finished %} data-confirm="Die Angaben noch einmal erzeugen? Das kostet erneut, die jetzigen Angaben werden ersetzt."{% endif %}>
+        <div class="split-work-head">
+            <div class="step-status">
+        {% if busy %}
+        <p class="meta">Die Angaben werden erzeugt. Das dauert einige Minuten. Die Seite darf geschlossen werden, es läuft weiter.</p>
+        {% elif meta.state == 'done' %}
+        <span class="split-count done">{{ meta.count }} Flugblätter · Metadaten erzeugt</span>
+        {% if meta.flagged %}<p>{{ meta.flagged }} Flugblätter haben Hinweise der Prüfung ({% for kind, n in meta.hints.items() %}{{ kind }} {{ n }}{{ ', ' if not loop.last }}{% endfor %}).</p>{% endif %}
+        <p class="meta" title="{{ meta.model }}">Modell: {{ meta.model_name }} · Kosten laut OpenRouter etwa {{ meta.cost }}</p>
+        {% elif meta.state == 'stale' %}
+        <p class="form-warn" role="status">Die Einteilung der Flugblätter hat sich seit dem letzten Lauf geändert. Die Angaben müssen deshalb neu erzeugt werden.
+            {% if meta.same %}Bei {{ meta.same }} von {{ meta.now }} Flugblättern sind die Seiten gleich geblieben. Ihre Angaben werden bei demselben Modell aus dem letzten Lauf übernommen, Kosten entstehen nur für die übrigen.{% endif %}</p>
+        {% elif meta.state == 'partial' %}
+        <p class="form-warn" role="status">Unterbrochen. Was schon erzeugt ist, wird beim Fortsetzen nicht noch einmal angefragt.</p>
+        {% else %}
+        <p>Ein Sprachmodell liest den Text jedes Flugblatts und trägt Titel, Reihe, Datum, Herausgeber und Unterzeichnende ein, jeweils mit der Stelle im Text als Beleg.
+            Die Kosten werden über dein OpenRouter-Konto abgerechnet.</p>
+        {% endif %}
+            </div>
+        {% set start %}<div class="start-row">
+                <button type="submit" class="{{ 'button small' if finished else 'button small primary upload-submit' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
+                {% if not meta_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
+            </div>{% endset %}
+            {% if not busy and not finished %}<span class="split-work-actions">{{ start }}</span>{% endif %}
+        </div>
+        {{ progress('/import/' ~ volume.vz ~ '/angaben/abbrechen', 'Abbrechen? Die laufende Anfrage wird noch fertig und berechnet. Was fertig ist, bleibt erhalten.') }}
+        {% if not busy %}
+            {% set ids = [] %}{% for _, group in model_top %}{% for id, _ in group %}{% set _ = ids.append(id) %}{% endfor %}{% endfor %}
+            {% set chosen = default_model if default_model in ids else ids[0] %}
+            {% if default_model not in ids %}<p class="form-warn">Das bisher meistverwendete Modell ({{ default_model }}) gibt es bei OpenRouter nicht mehr.
+                Wähle ein anderes, möglichst ähnlich starkes Modell. Die Angaben sind dann nicht ganz mit denen der älteren Bände vergleichbar.</p>{% endif %}
+            {% set model_fields %}
+                <select id="model-choice" name="model" aria-label="Modell">
+                    {% for label, group in model_top %}<optgroup label="{{ label }}">{% for id, name in group %}<option value="{{ id }}"{% if id == chosen %} selected{% endif %}>{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</optgroup>
+                    {% endfor %}
+                </select>
+                <label class="model-search" for="model">Oder ein anderes Modell suchen</label>
+                <input type="text" id="model" list="model-list" placeholder="Name oder Kennung, zum Beispiel „gemini“ oder „gpt“" spellcheck="false">
+                <datalist id="model-list">{% for id, name in model_names %}<option value="{{ id }}" data-price="{{ model_prices.get(id, '') }}">{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</datalist>
+                <p class="meta">Die Zahl bei „Bände“ nennt, wie viele freigegebene Bände mit diesem Modell erzeugt wurden. Geschätzte Kosten für diesen Lauf: <span id="model-price">{{ model_prices.get(chosen) or 'unbekannt' }}</span>, wird in Dollar angerechnet</p>
+            {% endset %}
+            {% set prompt_fields %}
+                <label class="model-search" for="prompt">Prompt (Anweisung mit Beispielen)</label>
+                <textarea id="prompt" name="prompt" rows="30" spellcheck="false" data-default="{{ prompt_default }}">{{ prompt_text }}</textarea>
+                <p class="meta">Wird beim Erzeugen gespeichert und für alle Bände verwendet. <button type="button" class="button text danger" id="prompt-reset">Zurücksetzen</button></p>
+                <label class="model-search" for="batch">Batchgröße (Flugblätter pro Anfrage)</label>
+                <input type="number" id="batch" name="batch" value="{{ batch_size }}" min="1" max="{{ max_batch }}">
+                <p class="meta">Kleinere Batches sind für schwächere Modelle sicherer, kosten aber etwas mehr, weil der Prompt öfter mitgeschickt wird.</p>
+            {% endset %}
+            {% if finished %}
+            <details class="help">
+                <summary>Einstellungen</summary>
+                <p class="meta">Ersetzt die jetzigen Angaben und kostet erneut.</p>
+                <h4>Modell für den neuen Lauf</h4>
+                {{ model_fields }}
+                <details class="help">
+                    <summary>Erweiterte Einstellungen</summary>
+                    {{ prompt_fields }}
+                </details>
+                {{ start }}
+            </details>
+            {% else %}
+            <details class="help">
+                <summary><span>Modell · <span id="model-label"></span></span></summary>
+                {{ model_fields }}
+            </details>
+            <details class="help">
+                <summary>Erweiterte Einstellungen</summary>
+                {{ prompt_fields }}
+            </details>
+            {% endif %}
+        {% endif %}
+        </form>
+        <details class="help"{% if not meta_key %} open{% endif %}>
+            <summary>Zugang verwalten</summary>
+            {{ key_block('openrouter', meta_key, true, 'angaben') }}
+            {{ key_help('openrouter') }}
+        </details>
+        </div>
+        </div>
+        {% endif %}
+        {% elif step == 'pruefen' %}
+        <h2>{{ steps[step] }}</h2>
+        <div class="step-narrow">
+        <p>Bisher ist der Band nur hier im Import zu sehen. Mit der Freigabe erscheint er in der Flugblattliste, in der Suche und in den Trends.
+            Vorher lohnt es sich, die drei Aufgaben unten durchzugehen. Nichts davon ist Pflicht, und alles, was du entscheidest oder korrigierst, bleibt auch bei einem späteren Neuimport erhalten.</p>
+        {% if prepare.state == 'error' %}
+        <p class="form-error" role="alert">{{ prepare.error }}</p>
+        <form method="post" action="/import/{{ volume.vz }}/vorbereiten"><button type="submit" class="button small">Erneut versuchen</button></form>
+        {% elif prepare.state == 'running' %}
+        <p>Die Flugblätter werden für die Prüfung vorbereitet. Das dauert etwa eine halbe Minute, die Seite lädt danach neu.</p>
+        <form hidden data-ocr data-running="1" data-status-url="/import/{{ volume.vz }}/status?job=anlegen"><button type="submit"></button></form>
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        {{ progress('', '') }}
+        {% elif not created %}
+        <p class="meta">Dafür müssen zuerst die Metadaten erzeugt sein.</p>
+        {% else %}
+        {% set todo = (copies.open > 0) + (new_issuers | length > 0) + (hints_open > 0) %}
+        <div class="split-work">
+            <div class="split-work-head">
+                <div class="step-status">
+                <span class="split-count done">{{ created }} Flugblätter</span>
+                <p class="meta">{% if todo %}{{ todo }} von 3 Aufgaben offen{% else %}Alle Aufgaben erledigt{% endif %}</p>
+                </div>
+                <span class="split-work-actions"><a class="button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
+            </div>
+            <ol class="task-list">
+                <li class="task{{ ' done' if not copies.open }}">
+                    <h3>Exemplare prüfen <span class="task-state">{% if copies.open %}{{ copies.open }} {{ 'Gruppe' if copies.open == 1 else 'Gruppen' }} offen{% else %}erledigt{% endif %}</span></h3>
+                    <p>Viele Flugblätter wurden mehrfach verteilt und gesammelt und liegen deshalb in mehreren Bänden. Ohne Prüfung zählen Trends und Statistiken sie doppelt.
+                        Prüfst du sie zuerst, musst du die Angaben eines Exemplars, das es schon gibt, nicht noch einmal kontrollieren.</p>
+                    {% if copies.found %}
+                    <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen: {{ copies.found }} {{ 'Flugblatt hat' if copies.found == 1 else 'Flugblätter haben' }} ein Exemplar mit fast gleichem Text.</p>
+                    <p class="task-actions">{% if copies.open %}<a class="button primary" href="/leaflets/{{ copies.first }}/exemplare">Exemplare durchgehen</a>
+                        <a class="button text" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen</a>
+                        {% else %}<a class="button" href="/exemplare?band={{ volume.vz }}">Liste der Gruppen mit Status</a>{% endif %}</p>
+                    {% else %}
+                    <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen und keine Exemplare gefunden.</p>
+                    {% endif %}
+                </li>
+                <li class="task{{ ' done' if not new_issuers }}" id="herausgeber">
+                    <h3>Herausgeber zuordnen <span class="task-state">{% if new_issuers %}{{ new_issuers | length }} offen{% else %}erledigt{% endif %}</span></h3>
+                    {% if new_issuers %}
+                    <p>Diese Herausgeber kennt das Register noch nicht. Ordne jeden einmal einer Organisation zu, oder lege ihn neu an. Dann erscheint er im Filter
+                        „Herausgeber“, und die App erkennt ihn auch in späteren Bänden.</p>
+                    {% else %}
+                    <p>Alle Herausgeber dieses Bandes stehen schon im Register.</p>
+                    {% endif %}
+                    {% if new_issuers %}
+                    <p class="task-actions"><a class="button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a></p>
+                    {% endif %}
+                </li>
+                <li class="task{{ ' done' if not hints_open }}">
+                    <h3>Hinweise der automatischen Prüfung ansehen <span class="task-state">{% if hints_open %}{{ hints_open }} von {{ flagged | length }} offen{% else %}erledigt{% endif %}</span></h3>
+                    <p>Die App hat jede automatisch erzeugte Angabe mit dem erkannten Text verglichen: ob das Datum wirklich dort steht, ob das zitierte Belegstück auf dem Blatt
+                        vorkommt und ob der Herausgeber genannt ist. Wo etwas nicht passt, sieh dir das Flugblatt an und korrigiere die Angabe auf seiner Seite.
+                        Mit „Passt so“ bestätigst du, dass ein Hinweis keine Korrektur braucht.</p>
+                    {% if flagged %}
+                    {% if hints_open %}<p class="task-actions"><a class="button primary" href="/leaflets/{{ hints_first }}">Hinweise durchgehen</a></p>{% endif %}
+                    <details class="help">
+                        <summary>Liste der Flugblätter mit Hinweisen</summary>
+                        <ul class="fix-list">
+                            {% for lf, texts, seen in flagged %}
+                            <li><span class="meta">{{ page_range(lf.start_page, lf.end_page) }}{% if seen %} · gesehen{% endif %}</span>
+                                <a class="fix-title" href="/leaflets/{{ lf.id }}">{{ lf.display_title or 'Ohne erkannten Titel' }}</a>
+                                <ul class="hint-texts">{% for t in texts %}<li>{{ t }}</li>{% endfor %}</ul></li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                    {% endif %}
+                </li>
+            </ol>
+            {% if volume.status == 'entwurf' %}
+            <div class="release-row">
+                <p class="meta">{% if todo %}Noch {{ todo }} {{ 'Aufgabe' if todo == 1 else 'Aufgaben' }} offen. Du kannst trotzdem freigeben.{% else %}Alles geprüft.{% endif %}
+                    Mit der Freigabe erscheint der Band in Liste, Suche und Trends.</p>
+                <form method="post" action="/import/{{ volume.vz }}/freigeben" onsubmit="return confirm('Band {{ '%03d' % volume.vz }} freigeben? Er erscheint dann in Liste, Suche und Trends.')">
+                    <button type="submit" class="button primary">Band freigeben</button></form>
+            </div>
+            <details class="help redo-row">
+                <summary>Neu vorbereiten</summary>
+                <p>Übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Exemplare neu, etwa nachdem Exemplare in einem anderen Band geprüft wurden.
+                    Deine Korrekturen, Herausgeber-Zuordnungen und Exemplar-Entscheidungen bleiben erhalten.</p>
+                <form method="post" action="/import/{{ volume.vz }}/vorbereiten" onsubmit="return confirm('Die Flugblätter neu vorbereiten? Das dauert etwa eine halbe Minute.')">
+                    <button type="submit" class="button small">Neu vorbereiten</button></form>
+            </details>
+            {% elif locked %}
+            <div class="release-row">
+                <p class="meta">Der Band ist freigegeben. Zum Ändern der Schritte 1 bis 5 muss die Freigabe zurückgenommen werden, und er fehlt dann bis zur neuen Freigabe in Liste, Suche und Trends.</p>
+                <form method="post" action="/import/{{ volume.vz }}/zuruecknehmen" onsubmit="return confirm('Freigabe von Band {{ '%03d' % volume.vz }} zurücknehmen? Er verschwindet aus Liste, Suche und Trends, bis er wieder freigegeben wird.')">
+                    <button type="submit" class="button">Freigabe zurücknehmen</button></form>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        </div>
+        {% else %}
+        <h2>{{ steps[step] }}</h2>
+        <p class="meta">Dieser Schritt folgt.</p>
+        {% endif %}
+        </div>
+{% endblock %}
+{% block scripts %}
+    {% if not volume %}
+    <script>
+        // the link of the chosen unit in the findmittel, to be overwritten if needed
+        const unit = document.getElementById('vz'), link = document.getElementById('portal_url');
+        unit.addEventListener('change', () => { link.value = unit.selectedOptions[0].dataset.portal; });
+    </script>
+    {% endif %}
+    <script src="{{ url_for('static', path='import-upload.js') }}"></script>
+    {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
+    {% if step in ('ocr', 'angaben', 'pruefen') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
+    {% if step == 'ocr' %}
+    <script src="{{ url_for('static', path='page-pair.js') }}"></script>
+    <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}
+{% endblock %}

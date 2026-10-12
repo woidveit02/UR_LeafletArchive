@@ -5,8 +5,23 @@
     {% macro sibling(id, text) -%}
         {% if id %}<a href="/leaflets/{{ id }}{{ leaflet.qs }}">{{ text }}</a>{% else %}<span class="disabled">{{ text }}</span>{% endif %}
     {%- endmacro %}
+        {% if hints %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % hints.vz }}">
+            <span><a href="/import/{{ hints.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % hints.vz }} prüfen</b> ·
+                {% if hints.position %}Hinweis {{ hints.position }} von {{ hints.total }}{% elif hints.seen %}Hinweise gesehen{% else %}zu diesem Flugblatt kein Hinweis{% endif %}
+                {% if hints.texts %}<ul class="hint-texts">{% for t in hints.texts %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}</span>
+            <span class="pager">
+                {% if hints.flagged %}<form method="post" action="/leaflets/{{ leaflet.id }}/hinweis" class="review-seen">
+                    {% if hints.seen %}<button type="submit" name="seen" value="0" class="button text">Wieder offen</button>
+                    {% else %}<button type="submit" name="seen" value="1" class="button small" title="Der Hinweis braucht keine Korrektur">Passt so</button>{% endif %}</form>{% endif %}
+                {% if hints.previous %}<a href="/leaflets/{{ hints.previous }}">‹ Voriger Hinweis</a>{% else %}<span class="disabled">‹ Voriger Hinweis</span>{% endif %}
+                {% if hints.next %}<a href="/leaflets/{{ hints.next }}">Nächster Hinweis ›</a>{% else %}<span class="disabled">Nächster Hinweis ›</span>{% endif %}
+            </span>
+        </nav>
+        {% endif %}
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/leaflets">Flugblätter</a> / {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>
+            {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← Zurück zu den Ergebnissen</a></span>
+            {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> › {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
             <span class="pager">
                 {{ sibling(leaflet.prev_id, '‹ Voriges') }}
                 <span class="meta">{{ leaflet.position }} von {{ leaflet.in_volume }}</span>
@@ -15,9 +30,9 @@
         </nav>
     {% set main_copy = leaflet.copies | selectattr('main') | list %}
     {% if leaflet.copies and leaflet.copies_checked and not leaflet.copy_main and main_copy %}
-        <p class="alt-note"><span class="role alt">Duplikat</span> Dasselbe Blatt wie das Hauptexemplar
+        <p class="alt-note"><span class="role alt">Weiteres Exemplar</span> Dasselbe Blatt wie das Hauptexemplar
             <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Angaben der Gruppe stehen dort.
-            <a href="/leaflets/{{ leaflet.id }}/exemplare">Duplikate vergleichen</a></p>
+            <a href="/leaflets/{{ leaflet.id }}/exemplare">Exemplare vergleichen</a></p>
     {% endif %}
     {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
     {% set m = {'uid': leaflet.id, 'edit': edit, 'automatic': leaflet.automatic, 'pickable': true} %}
@@ -64,6 +79,7 @@
         {{ title_field(m) }}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% else %}
+        {% if leaflet.draft %}<p><span class="status-badge">Band nicht freigegeben</span></p>{% endif %}
         {# last word and "Beleg" wrap together #}
         <h1 class="document-title">{% if leaflet.title %}{% set words = leaflet.title.rsplit(' ', 1) %}{{ words[0] if words | length > 1 }} <span class="nowrap">{{ words[-1] }} {{ beleg('Titel') }}</span>{{ fixed('title') }}{% else %}<span class="untitled">Ohne erkannten Titel</span>{% endif %}</h1>
         {% if leaflet.title_from_series %}<p class="meta title-note">Das Blatt hat keine eigene Überschrift; als Titel stehen Reihe und Nummer.</p>{% endif %}
@@ -130,14 +146,14 @@
                 {% else %} <span class="meta" title="{{ note }}">(automatisch)</span>{% endif %}</dd>
             {% endif %}
             <dt>Band</dt>
-            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, <a href="/volumes/{{ leaflet.volume_vz }}#page-{{ leaflet.start_page }}" title="Im Band ansehen">{{ leaflet.pages }}</a>{% if leaflet.volume_collection %} <span class="meta">({{ leaflet.volume_title }}, Organisationsband)</span>{% endif %}</dd>
+            <dd><a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>, <a href="/volumes/{{ leaflet.volume_vz }}#page-{{ leaflet.start_page }}" title="Im Band ansehen">{{ leaflet.pages }}</a></dd>
             {# only 1970 has archive stamps so far; an empty row would read as "missed" #}
             {% if leaflet.received %}
             <dt>Eingang im Archiv</dt>
             <dd>{{ leaflet.received }} <span class="meta">(Eingangsstempel{% if leaflet.received_uncertain %}, Jahr unsicher{% endif %})</span>
                 {{ beleg('Eingang im Archiv') }}{{ fixed('received') }}</dd>
             {% endif %}
-            <dt>{{ 'Duplikate' if leaflet.copies_checked else 'Mögliche Duplikate' }}</dt>
+            <dt>{{ 'Weitere Exemplare' if leaflet.copies_checked else 'Mögliche weitere Exemplare' }}</dt>
             {% if leaflet.group %}
             <dd>
                 <span class="dup-inline">{% for c in leaflet.group %}<span class="dup-item"><span class="dup-letter">{{ c.letter }}</span>{% if c.self %}<strong>{{ c.label }}</strong>{% else %}<a href="/leaflets/{{ c.id }}">{{ c.label }}</a>{% endif %}{% if c.main %} <span class="role main">Hauptexemplar</span>{% elif c.new %} <span class="role">Neu gefunden</span>{% endif %}</span>{% endfor %}</span>
@@ -150,7 +166,7 @@
         {% if edit %}
         <div class="edit-actions">
             <span class="review-actions">
-                <button type="submit" class="button-small">Speichern</button>
+                <button type="submit" class="button small">Speichern</button>
                 <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs }}" class="keep-scroll">Abbrechen</a>
             </span>
             <span class="meta note">„Beleg wählen“, dann Textblöcke im Scan oder in der Transkription anklicken; ein zweiter Klick entfernt sie. Geänderte Felder gelten als von Hand korrigiert.</span>
@@ -159,9 +175,10 @@
         <aside class="meta-side">
             <button type="button" class="toggle-pill" data-fold>Angaben einklappen ▴</button>
             <div class="side-actions">
-                {% if leaflet.provenance_model %}<p><span class="side-label">Automatisch erschlossen</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
-                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button-outline" data-swap="edit">Angaben korrigieren</a>
-                {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
+                <p><span class="side-label">Texterkennung</span>{{ leaflet.ocr_label }}</p>
+                {% if leaflet.provenance_model %}<p><span class="side-label">Metadaten</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
+                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button small" data-swap="edit">Angaben korrigieren</a>
+                {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button text">Alle Handkorrekturen entfernen</button>{% endif %}
             </div>
         </aside>
         {% endif %}
@@ -244,7 +261,7 @@
     {% if leaflet.has_pdf %}
     <dialog id="scan-popup">
         <div class="popup-head"><strong>Stelle im Scan</strong>
-            <button type="button" class="button-plain" id="popup-close">Schließen</button></div>
+            <button type="button" class="button text" id="popup-close">Schließen</button></div>
         <div class="popup-grid"></div>
     </dialog>
     {% endif %}
@@ -254,6 +271,7 @@
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
     <script src="{{ url_for('static', path='meta-form.js') }}"></script>
     <script src="{{ url_for('static', path='evidence-pick.js') }}"></script>
+    <script src="{{ url_for('static', path='page-pair.js') }}"></script>
     {% if leaflet.highlight %}
     <script>
         // mark the search terms in the transcription and show hit #treffer-N (default: the first);
@@ -334,38 +352,54 @@
             });
         }
 
-        // a click on a section of the transcription shows that section of the scan, enlarged
+        // the magnifier beside a section of the transcription shows that section of the scan, enlarged, with its text;
+        // the text itself stays free to select and copy
         const popup = document.getElementById('scan-popup');
         if (popup) {
+            document.querySelectorAll('.pair-text .ocr-block[data-block]').forEach((block) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'block-scan';
+                button.title = 'Diese Stelle im Scan zeigen';
+                button.setAttribute('aria-label', 'Diese Stelle im Scan zeigen');
+                block.append(button);
+            });
             document.addEventListener('click', (e) => {
-                const block = e.target.closest('.ocr-block[data-block]');
-                if (!block || e.target.closest('a, button') || String(getSelection())) return;  // keep links and text selection
+                const block = e.target.closest('.block-scan')?.parentElement;
+                if (!block) return;
                 const id = block.dataset.block, page = id.split('-')[0];
                 popup.querySelector('.popup-grid').innerHTML = `<figure><figcaption>Bandseite ${page}
                     <a href="/leaflets/{{ leaflet.id }}/pages/${page}.png?dpi=220" target="_blank" rel="noopener">ganze Seite ↗</a></figcaption>
                     <img src="/leaflets/{{ leaflet.id }}/evidence.png?blocks=${id}" alt="Ausschnitt aus dem Scan"></figure>`;
+                if (!block.classList.contains('ocr-picture')) {
+                    const transcript = document.createElement('div');
+                    transcript.className = 'popup-text ocr-page';
+                    const copy = block.cloneNode(true);
+                    copy.querySelector('.block-scan').remove();
+                    transcript.innerHTML = copy.innerHTML;
+                    popup.querySelector('figure').after(transcript);
+                }
                 popup.showModal();
             });
             document.getElementById('popup-close').addEventListener('click', () => popup.close());
             popup.addEventListener('click', (e) => { if (e.target === popup) popup.close(); });  // the backdrop
         }
 
-        const highlight = (els, on) => els.forEach((el) => el.classList.toggle('active', on));
-        const flash = (els) => {
-            els[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            highlight(els, true);
-            setTimeout(() => highlight(els, false), 1500);
-        };
+        const { highlight, flash, link } = PagePair;
 
         document.querySelectorAll('.ocr-block[data-block]').forEach((block) => {
             const box = document.querySelector(`.ocr-box[data-block="${block.dataset.block}"]`);
-            if (!box) return;
-            for (const el of [block, box]) {
-                el.addEventListener('mouseenter', () => highlight([block, box], true));
-                el.addEventListener('mouseleave', () => highlight([block, box], false));
-            }
-            box.addEventListener('click', () => flash([block]));
+            if (box) link(block, box);
         });
+
+        // a picture in the transcription is as large as its place on the scan, not stretched to the column
+        const fitPictures = () => document.querySelectorAll('.ocr-picture[data-block] img').forEach((img) => {
+            const box = document.querySelector(`.ocr-box[data-block="${img.closest('.ocr-picture').dataset.block}"]`);
+            const width = box?.getBoundingClientRect().width;
+            if (width) Object.assign(img.style, {width: width + 'px', height: 'auto', maxHeight: 'none'});
+        });
+        window.addEventListener('load', fitPictures);
+        window.addEventListener('resize', fitPictures);
 
         const closeAll = () => document.querySelectorAll('.beleg').forEach((b) => {
             b.nextElementSibling.hidden = true;

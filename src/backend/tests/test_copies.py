@@ -11,7 +11,7 @@ from starlette.requests import Request
 import backend.app.app as leaflet_app
 from backend.app.database import corrections, fillDatabase
 from backend.app.database.base import Base
-from backend.app.database.models import Leaflet, Page, Volume
+from backend.app.database.models import DRAFT, Leaflet, Page, Volume
 from backend.app.database.session import session
 
 
@@ -98,7 +98,7 @@ def test_ocr_marks_differences():
     assert right["blocks"][0]["html"] == '<p>der Weg zum <mark data-diff="1">Erfolge</mark></p>'
     # the second deviation: the words exist only on the right, so the left text gets a gap marker at its end
     assert right["blocks"][1]["html"] == '<p>Zweiter Absatz <mark data-diff="2">&amp;</mark> <mark data-diff="2">mehr</mark></p>'
-    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Duplikat nicht erkannt">∅</mark></p>')
+    assert left["blocks"][1]["html"].endswith('<mark class="gap" data-diff="2" title="Im anderen Exemplar nicht erkannt">∅</mark></p>')
     assert right["differs"] == 3 and right["words"] == 8 and left["diffs"] == right["diffs"] == 2
     assert [b["marked"] for b in right["blocks"]] == [True, True] and left["blocks"][1]["marked"] is True
     assert [b["id"] for b in left["blocks"]] == ["1-1", "1-2"]  # page and block number, as in the evidence image
@@ -175,8 +175,8 @@ def test_comparison_page_confirm_and_revert(tmp_path, monkeypatch):
 def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})  # a and b: checked; c and d: not
-    assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1}
-    assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1}
+    assert leaflet_app.review_queue(a) == {"previous": None, "next": c.id, "position": None, "total": 1, "band": 0}
+    assert leaflet_app.review_queue(c) == {"previous": None, "next": None, "position": 1, "total": 1, "band": 0}
     assert "1 von 1 ungeprüft" in leaflet_app.copy_page(page("/"), c.id).body.decode()
 
     def judge(leaflet, verdict):
@@ -185,7 +185,7 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     assert c.copy_candidate_of is None and d.copy_candidate_of is None  # a re-review does not bring back what was rejected
     assert judge(b, f"main:{b.id}").headers["location"] == f"/leaflets/{b.id}/exemplare?meldung=gespeichert"
     assert b.canonical_leaflet_id == b.id
-    assert f'class="button-small review-next" href="/leaflets/{c.id}/exemplare"' in leaflet_app.copy_page(page("/"), b.id).body.decode()
+    assert f'class="button small primary review-next" href="/leaflets/{c.id}/exemplare"' in leaflet_app.copy_page(page("/"), b.id).body.decode()
     # the pair is judged with the other card as main copy
     assert judge(c, f"main:{d.id}").headers["location"] == f"/leaflets/{c.id}/exemplare?meldung=gespeichert"
     assert c.canonical_leaflet_id == d.id and c.copies_checked
@@ -201,6 +201,9 @@ def test_pair_verdict_and_queue(tmp_path, monkeypatch):
     a, b, c, d = copy_db(tmp_path, monkeypatch)
     leaflet_app.save_copy_review(a, {"main": [str(a.id)], "out": [str(c.id), str(d.id)]})
     assert judge(a, f"next:{b.id}").headers["location"] == f"/leaflets/{c.id}/exemplare" and b.canonical_leaflet_id == b.id
+    # with the last group of a volume not released yet checked, the review returns to the volume's step 6
+    leaflet_app.session.get(Volume, c.volume_id).status = DRAFT
+    assert judge(c, f"next:{d.id}").headers["location"] == "/import/2?schritt=pruefen"
 
 
 # Tests if the start page counts a leaflet with duplicates once.
@@ -230,8 +233,12 @@ def test_copy_overview(tmp_path, monkeypatch):
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     # checked: the group of a and b, and c and d, which were split off (and are still proposed as a group of their own)
     assert "Nicht geprüft (1)" in show() and "Geprüft (3)" in show() and "Alle (4)" in show()
-    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<li>") == 3
-    assert show("unsinn").count("<li>") == 4  # an unknown filter shows everything
+    assert f'/leaflets/{b.id}/exemplare' in show("geprueft") and show("geprueft").count("<tr>") - 1 == 3
+    assert show("unsinn").count("<tr>") - 1 == 4  # an unknown filter shows everything
+    # four copies in one volume are one group of that volume
+    assert [r["volumes"] for r in leaflet_app.copy_rows()] == [{2}, {2}]
+    assert "Alle (4)" in leaflet_app.copy_list(page("/exemplare"), band=2).body.decode()
+    assert "Alle (0)" in leaflet_app.copy_list(page("/exemplare"), band=3).body.decode()
 
 
 # Tests if the leaflets a review split off are listed as checked, sortable by review date; a reverted review is not.
@@ -245,7 +252,8 @@ def test_separated_list(tmp_path, monkeypatch):
         page("/exemplare"), "geprueft", sort).context["rows"] if r["state"] == "getrennt"]
     assert rows("neu") == [(d.id, [c.id]), (b.id, [a.id])] and rows("alt") == [(b.id, [a.id]), (d.id, [c.id])]
     html = leaflet_app.copy_list(page("/exemplare"), "geprueft").body.decode()
-    assert "06.10.2026, 09:30</span><br>Getrennt" in html
+    assert "06.10.2026, 11:30</span><br>Getrennt" in html  # stored in UTC, shown in German summer time
+    assert leaflet_app.review_date("2026-12-01T09:30:00+00:00") == "01.12.2026, 10:30"
 
 
 # Tests if the detail page and the list say which copy is the main one and whether the group is checked.
@@ -255,16 +263,16 @@ def test_review_shows_on_detail_and_list(tmp_path, monkeypatch):
     detail = lambda leaflet: leaflet_app.leaflet_detail(page(f"/leaflets/{leaflet.id}"), leaflet.id).body.decode()
     listing = lambda: leaflet_app.leaflet_list(page("/leaflets"), ansicht="liste").body.decode()
     assert 'class="dup-inline"' in detail(a) and "</span><strong>" in detail(a)  # this leaflet is set in bold
-    assert "Hauptexemplar" not in detail(a) + detail(b) and "Duplikat<" not in detail(b)  # the proposal is not shown as a choice
-    assert "Noch nicht geprüft" in detail(a) and "3 mögliche Duplikate" in listing()
+    assert "Hauptexemplar" not in detail(a) + detail(b) and "Exemplar<" not in detail(b)  # the proposal is not shown as a choice
+    assert "Noch nicht geprüft" in detail(a) and "3 mögliche weitere Exemplare" in listing()
     assert f'href="/leaflets/{a.id}' in listing() and f'href="/leaflets/{b.id}' not in listing()  # a group is listed once
     everything = leaflet_app.leaflet_list(page("/leaflets", b"duplikate=1"), ansicht="liste").body.decode()
     assert f'href="/leaflets/{b.id}' in everything and "checked" in everything  # the switch brings the other copies back
-    assert f'href="/leaflets/{a.id}/exemplare">3 mögliche Duplikate</a>' in listing()  # an unchecked group links to its review
+    assert f'href="/leaflets/{a.id}/exemplare">3 mögliche weitere Exemplare</a>' in listing()  # an unchecked group links to its review
 
     leaflet_app.save_copy_review(a, {"main": [str(b.id)], "out": [str(c.id), str(d.id)]})
     assert ">Geprüft</a>" in detail(a) and 'class="alt-note"' in detail(a) and 'class="alt-note"' not in detail(b) and 'role main">Hauptexemplar' in detail(b)
-    assert "1 Duplikat" in listing() and "1 mögliches Duplikat" in listing()  # a and b checked, c and d not
+    assert "1 weiteres Exemplar" in listing() and "1 mögliches weiteres Exemplar" in listing()  # a and b checked, c and d not
 
     # a new automatic hit for a checked group is offered, not added (a fresh import with a review on file)
     reviewed = copy_db(tmp_path, monkeypatch, [{"members": [ref(2), ref(5)], "rejected": [ref(8)],
@@ -337,6 +345,7 @@ def test_copy_details(tmp_path, monkeypatch):
 
 
 # Tests if, after the real import, every group has exactly one main copy that belongs to it.
+@pytest.mark.built_db
 def test_every_group_has_one_main_copy():
     groups = {}
     for leaflet in session.query(Leaflet).filter(Leaflet.copy_group.isnot(None)):
@@ -346,3 +355,23 @@ def test_every_group_has_one_main_copy():
         assert len(members) > 1
         mains = {m.canonical_leaflet_id for m in members}
         assert len(mains) == 1 and mains <= {m.id for m in members}
+
+
+# Tests if corrections without a leaflet go to one at their pages or are dropped, and leave the list either way.
+def test_correction_move(tmp_path, monkeypatch):
+    a, b, c, d = copy_db(tmp_path, monkeypatch)
+    file = tmp_path / "corrections.jsonl"
+    anchor = {"volume": "0118_0002", "at": "2026-10-10"}
+    lines = [{**anchor, "start_page": 2, "end_page": 3, "field": "title", "value": "Neuer Titel"},
+             {**anchor, "start_page": 5, "end_page": 6, "field": "doc_type", "value": "Plakat"}]
+    file.write_text("".join(json.dumps(x) + "\n" for x in lines), encoding="utf-8")
+    monkeypatch.setattr(leaflet_app, "CORRECTIONS", file)
+    monkeypatch.setattr(corrections, "session", leaflet_app.session)
+    html = leaflet_app.correction_list(page("/korrekturen")).body.decode()
+    assert "Auf Bandseite 2 übernehmen" in html and "Auf Bandseite 5 übernehmen" in html
+    with pytest.raises(HTTPException):
+        leaflet_app.correction_move("0118_0002", 2, 3, c.id)
+    leaflet_app.correction_move("0118_0002", 2, 3, a.id)
+    leaflet_app.correction_move("0118_0002", 5, 6, 0)
+    html = leaflet_app.correction_list(page("/korrekturen")).body.decode()
+    assert "übernehmen" not in html and "Ohne Zuordnung" not in html and a.title == "Neuer Titel" and b.doc_type != "Plakat"

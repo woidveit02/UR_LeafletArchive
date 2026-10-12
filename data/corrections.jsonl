@@ -74,6 +74,14 @@
 {"volume": "0118_0004", "start_page": 29, "end_page": 29, "field": "received", "value": "1970-01-28", "blocks": ["29-4"], "at": "2026-10-07"}
 {"volume": "0118_0005", "start_page": 287, "end_page": 287, "field": "received", "value": "1971-01-14", "blocks": ["287-3"], "at": "2026-10-07"}
 {"volume": "0118_0004", "start_page": 126, "end_page": 126, "field": "received", "value": "1970-01-29", "blocks": ["126-3"], "at": "2026-10-07"}
+{"volume": "0118_0001", "start_page": 6, "end_page": 7, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 1"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 8, "end_page": 9, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 2"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 10, "end_page": 11, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 3"}, "at": "2026-10-11"}
+{"volume": "0118_0001", "start_page": 12, "end_page": 13, "field": "series", "value": {"name": "Informationsblatt für Dozenten und Studenten der Bayerischen Maximilians-Universität Würzburg", "issue": "Nr. 4"}, "at": "2026-10-11"}
+{"volume": "0118_0002", "start_page": 48, "end_page": 48, "field": "date", "value": {"iso": "1970-05-08", "type": "event"}, "blocks": ["48-19"], "at": "2026-10-11"}
+{"volume": "0118_0008", "start_page": 295, "end_page": 296, "field": "series", "value": {"name": "AStA-Info", "issue": ""}, "blocks": ["295-1"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 172, "end_page": 173, "field": "series", "value": {"name": "AstA-Info", "issue": ""}, "blocks": ["172-1"], "at": "2026-10-11"}
+{"volume": "0118_0013", "start_page": 172, "end_page": 173, "field": "series", "value": {"name": "AStA-Info", "issue": ""}, "blocks": ["172-1"], "at": "2026-10-11"}
 {"volume": "0118_0005", "start_page": 34, "end_page": 39, "field": "received", "value": "1971-11-29", "at": "2026-10-08"}
 {"volume": "0118_0005", "start_page": 51, "end_page": 52, "field": "received", "value": "1971-11-19", "at": "2026-10-08"}
 {"volume": "0118_0005", "start_page": 69, "end_page": 70, "field": "issuers", "value": [{"org": "asta", "blocks": []}, {"org": "studentenschaft_der_universit_t_regensburg", "blocks": []}], "at": "2026-10-08"}
@@ -232,3 +240,12 @@
 {"volume": "0118_0014", "start_page": 342, "end_page": 343, "field": "received", "value": "1973-05-08", "blocks": ["342-12"], "at": "2026-10-11"}
 {"volume": "0118_0014", "start_page": 398, "end_page": 405, "field": "received", "value": "1973-02-12", "at": "2026-10-11"}
 {"volume": "0118_0014", "start_page": 455, "end_page": 457, "field": "received", "value": "1973-10-26", "at": "2026-10-11"}
+{"volume": "0118_0007", "start_page": 168, "end_page": 174, "field": "received", "value": "1972-01-26", "blocks": ["168-2"], "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 324, "field": "signatories", "value": [{"name": "Heinz Holländer", "details": "", "blocks": []}, {"name": "Konrad Hecker", "details": "", "blocks": []}], "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 324, "field": "series", "value": {"name": "Universität Regensburg / Informationen", "issue": "Nr. 1, Jan. '72"}, "at": "2026-10-12"}
+{"volume": "0118_0009", "start_page": 304, "end_page": 304, "field": "received", "value": "1972-06-26", "blocks": ["304-2"], "at": "2026-10-12"}
+{"volume": "0118_0012", "start_page": 102, "end_page": 102, "field": "received", "value": "1973-01-31", "at": "2026-10-12"}
+{"volume": "0118_0007", "start_page": 168, "end_page": 175, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0008", "start_page": 320, "end_page": 325, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0009", "start_page": 304, "end_page": 305, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0012", "start_page": 102, "end_page": 103, "field": "revert", "value": "all", "at": "2026-10-12"}

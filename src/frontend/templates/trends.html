@@ -4,15 +4,15 @@
 {% if entries %}
 <h3 class="facet-head">{{ head }}</h3>
 {% if hint %}<p class="meta trend-hint">{{ hint }}</p>{% endif %}
-{% macro lines(items, first) %}{% for e in items %}
+{% macro lines(items, top) %}{% for e in items %}
     <li><a href="{{ e.url }}" title="{{ e.label }}">{{ e.label }}</a>
-        {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / first.count * 100) | round }}%"></span></span>{% endif %}
+        {% if bars %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (e.count / top * 100) | round }}%"></span>{% if e.low is defined %}<span class="trend-bar trend-bar-low" style="width: {{ (e.low / top * 100) | round }}%"></span>{% endif %}</span>{% endif %}
         <span class="meta" title="{{ e.title or 'Anzahl der Flugblätter' }}">{{ e.meta or e.count }}</span></li>
     {% endfor %}{% endmacro %}
-<ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[:limit] if limit else entries, entries[0]) }}</ul>
+<ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[:limit] if limit else entries, entries | map(attribute='count') | max) }}</ul>
 {% if limit and entries | length > limit %}
 <details class="trend-more-list"><summary>Alle {{ entries | length }} anzeigen</summary>
-    <ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[limit:], entries[0]) }}</ul>
+    <ul class="trend-bars{% if not bars %} trend-bars-text{% endif %}">{{ lines(entries[limit:], entries | map(attribute='count') | max) }}</ul>
 </details>
 {% endif %}
 {% endif %}
@@ -33,64 +33,101 @@
             {% for k, v in filters %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
             <input type="search" name="begriffe" value="{{ begriffe }}" maxlength="400" aria-label="Begriffe"
                    placeholder="z. B. Notstand, Berufsverbot">
-            <button type="submit" class="button-small">Vergleichen</button>
+            <button type="submit" class="button small">Vergleichen</button>
         </form>
         <p class="search-hint">Bis zu vier Begriffe, durch Komma getrennt. Gefunden werden auch Wortteile („Hund“ trifft „Hundert“). Mehrere Wörter in Anführungszeichen suchen eine feste Wortfolge.</p>
+        {% if rows %}
+        <details class="trend-howto">
+            <summary>So liest du diese Seite</summary>
+            <ul>
+                <li><b>Anteile statt Zahlen.</b> Die Seite zeigt, welcher Anteil der Flugblätter eines Jahres (oder Semesters) den Begriff enthält. Das misst, was im Bestand liegt, nicht wie viel damals diskutiert wurde. Jahre mit weniger als 20 Blättern sind mit dem folgenden zusammengefasst.</li>
+                <li><b>Semester.</b> Sommersemester April bis September, Wintersemester Oktober bis März. Semester mit weniger als {{ min_semester }} datierten Flugblättern haben keinen Punkt. Blätter ohne Monatsangabe fehlen im Semesterverlauf. Ein Stern markiert ein unvollständiges Semester.</li>
+                <li><b>Getroffene Wortformen.</b> Gefunden werden auch Wortteile. Die Zahl ist die Zahl der Flugblätter mit dieser Form. Mit dem Kästchen nimmst du eine Form aus allen Zahlen dieses Begriffs: Ein Blatt zählt dann nur noch, wenn es eine andere Form enthält. Durchsucht werden Titel und Text, nicht die Namen der Herausgeber. Die Volltextsuche im Kopf der Seite findet auch die Namen und nennt deshalb mehr Treffer.</li>
+                <li><b>Mehrere Herausgeber.</b> Ein Blatt mehrerer der gezeigten Herausgeber steht im Balken unter „mehrere Herausgeber“ (schraffiert).</li>
+                <li><b>Anteil am eigenen Bestand.</b> Der helle Balken ist der Anteil der Flugblätter eines Herausgebers, die den Begriff enthalten (ab {{ min_org_size }} Flugblättern). Der dunkle Teil ist die sichere Untergrenze (95 %-Konfidenzintervall). Ein Klick auf den Spaltenkopf sortiert, der Anteil nach der Untergrenze: Eine kleine Gruppe steht nicht oben, nur weil 5 von 11 viel aussieht.</li>
+            </ul>
+        </details>
+        {% endif %}
         {% if rows or chips %}
         <div class="active-filters" aria-label="Begriffe und Filter">
-            {% for row in rows %}<a class="active-filter" href="{{ row.remove_url }}" title="Begriff entfernen"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span>{{ row.term }} <span aria-hidden="true">×</span></a>{% endfor %}
+            {% for row in rows %}<a class="active-filter" href="{{ row.remove_url }}" title="Begriff entfernen"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span>{{ row.term }}{% if row.left_out_n %} <span class="meta">· {{ row.left_out_n }} ausgeschlossen</span>{% endif %} <span aria-hidden="true">×</span></a>{% endfor %}
             {% for c in chips %}<a class="active-filter" href="{{ c.url }}" title="Entfernen">{{ c.label }} <span aria-hidden="true">×</span></a>{% endfor %}
         </div>
         {% endif %}
         {% if rows %}
         <section class="trend-section">
-            <h2 class="trend-head">Anteil der Flugblätter pro Jahr</h2>
-            <div class="trend-chart"><canvas id="trend-compare" role="img" aria-label="Anteil der Flugblätter pro Jahr je Begriff"></canvas></div>
-            <p class="meta">Die Anteile zeigen, was im Bestand liegt. Ob ein Thema damals weniger diskutiert wurde oder nur weniger überliefert ist,
-                lässt sich daraus allein nicht sagen. Jahre mit weniger als 20 Blättern sind mit dem folgenden zusammengefasst.</p>
+            <h2 class="trend-head">Anteil der Flugblätter pro <span id="trend-unit">Jahr</span>
+                <span class="trend-switch" role="group" aria-label="Zeitraum">
+                    <button type="button" data-mode="year" aria-pressed="true">Jahr</button><button type="button" data-mode="sem" aria-pressed="false">Semester</button></span>
+                <span class="meta" id="trend-basis"></span></h2>
+            <div class="trend-chart"><canvas id="trend-compare" role="img" aria-label="Anteil der Flugblätter je Begriff"></canvas></div>
+            {% if cut_note %}<p class="meta" id="trend-cut" hidden>{{ cut_note }}</p>{% endif %}
             {% if together %}
             <p class="trend-together"><span class="meta">Gemeinsam in einem Flugblatt:</span>
                 {% for p in together %}<a href="{{ p.url }}">{{ p.terms | join(' + ') }}</a> <span class="meta">{{ p.count }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
             {% endif %}
         </section>
-        {% if chart.cloud %}
-        <section class="trend-section">
-            <h2 class="trend-head">Wo liegen die Treffer im Themenfeld?</h2>
-            <div class="trend-chart"><canvas id="trend-map" role="img" aria-label="Lage der Treffer unter allen Flugblättern nach Textähnlichkeit"></canvas></div>
-            <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung.</p>
-        </section>
-        {% endif %}
-        {% for row in rows %}
+        <nav class="trend-tabs" aria-label="Begriff vertiefen">
+            {% for row in rows %}<a href="{{ tab_urls[loop.index0] }}"{% if loop.index0 == tab %} aria-current="page"{% endif %}><span class="trend-swatch" data-term="{{ loop.index0 }}"></span>{{ row.term }}{% if row.left_out_n %} <span class="meta">· {{ row.left_out_n }} ausgeschlossen</span>{% endif %}</a>{% endfor %}
+        </nav>
+        {% for row in rows %}{% if loop.index0 == tab %}
         <section class="trend-section">
             <h2 class="trend-head"><span class="trend-swatch" data-term="{{ loop.index0 }}"></span><a href="{{ row.url }}" title="Treffer anzeigen">{{ row.term }}</a>
-                {% if not row.short %}<a class="meta" href="{{ row.url }}">Alle {{ row.total }} {{ 'Flugblatt' if row.total == 1 else 'Flugblätter' }} anzeigen</a>{% endif %}</h2>
+                {% if not row.short and row.total %}<a class="meta" href="{{ row.url }}">Alle {{ row.total }} {{ 'Flugblatt' if row.total == 1 else 'Flugblätter' }} anzeigen</a>{% endif %}</h2>
+            {% if row.lead and not row.short %}<p class="trend-lead">{{ row.lead }}</p>{% endif %}
             {% if row.short %}
             <p class="meta">Begriffe unter 3 Zeichen werden im Text nicht gesucht.</p>
-            {% elif row.total %}
+            {% else %}
+            {% if row.forms %}
+            <div class="trend-forms">
+                <h3 class="facet-head">Getroffene Wortformen</h3>
+                <p class="meta">Mit dem Kästchen nimmst du eine Form aus den Zahlen dieses Begriffs.</p>
+                {% macro form_item(f) %}<li{% if f.off %} class="off"{% endif %}><a class="form-toggle" href="{{ f.toggle }}" role="checkbox" aria-checked="{{ 'false' if f.off else 'true' }}"
+                    title="{{ 'Wieder mitzählen' if f.off else 'Nicht mitzählen' }}">{{ '☐' if f.off else '☑' }}</a>
+                    <a href="{{ f.url }}" title="Flugblätter mit genau diesem Wort">{{ f.label }}</a> <span class="meta" title="{{ f.title }}">{{ f.count }}</span></li>{% endmacro %}
+                <ul class="trend-forms-list">{% for f in row.forms[:8] %}{{ form_item(f) }}{% endfor %}</ul>
+                {% if row.forms | length > 8 %}<details class="trend-more-list"><summary>Alle {{ row.forms | length }} anzeigen</summary>
+                    <ul class="trend-forms-list">{% for f in row.forms[8:] %}{{ form_item(f) }}{% endfor %}</ul></details>{% endif %}
+            </div>
+            {% endif %}
+            {% if row.total %}
             <div class="trend-term">
                 <div>
                     <h3 class="facet-head">Anteil der Flugblätter pro Jahr, nach Herausgeber</h3>
                     <div class="trend-chart trend-chart-small"><canvas data-orgs="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Jahr mit {{ row.term }}, nach Herausgeber"></canvas></div>
-                    <p class="meta">Ein Blatt mehrerer Herausgeber zählt beim ersten aus der Legende.</p>
-                    {% if row.month_dated %}
-                    <h3 class="facet-head">Treffer pro Monat</h3>
-                    <div class="trend-chart trend-chart-small"><canvas data-months="{{ loop.index0 }}" role="img" aria-label="Flugblätter pro Monat mit {{ row.term }}"></canvas></div>
-                    <p class="meta">{% if row.months.rest %}{{ row.months.rest }} von {{ row.total }} Treffern haben keine Monatsangabe und fehlen hier. Das Diagramm darüber enthält alle.{% else %}Alle {{ row.total }} Treffer haben eine Monatsangabe.{% endif %}</p>
-                    {% endif %}
+                    {% if row.sems.rest %}<p class="meta">{{ row.sems.rest }} von {{ row.total }} Treffern haben keine Monatsangabe und fehlen im Semesterverlauf.</p>{% endif %}
                 </div>
                 <div class="trend-facts">
-                    {{ occurrence('Frühester Treffer', row.first) }}
-                    {{ occurrence('Spätester Treffer', row.last) }}
-                    {{ top_list('Herausgeber der Treffer', row.orgs, limit=5) }}
-                    {% if row.orgs_other %}<p class="meta trend-more">Außerdem {% for o in row.orgs_other %}<a href="{{ o.url }}">{{ o.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
-                    {{ top_list('Höchster Anteil am eigenen Bestand', row.org_shares, limit=5,
-                                hint='Anteil der eigenen Flugblätter, die den Begriff enthalten (ab ' ~ min_org_size ~ ' Flugblättern).') }}
-                    {{ top_list('Themen der Treffer', row.topics, bars=False) }}
+                    {{ occurrence('Frühester datierter Treffer', row.first) }}
+                    {{ occurrence('Spätester datierter Treffer', row.last) }}
+                    {% if row.org_table %}
+                    <h3 class="facet-head">Herausgeber der Treffer</h3>
+                    <table class="trend-orgs">
+                        <thead><tr><th>Herausgeber</th>
+                            <th class="num"><button type="button" data-sort="count" title="Nach Treffern sortieren">Treffer</button></th>
+                            <th class="num"><button type="button" data-sort="low" title="Nach der sicheren Untergrenze des Anteils sortieren">Anteil am Bestand</button></th></tr></thead>
+                        <tbody>
+                        {% for o in row.org_table %}
+                        <tr data-count="{{ o.count }}" data-low="{{ o.low if o.low is not none else -1 }}"{% if loop.index > 3 %} class="extra"{% endif %}>
+                            <td><a href="{{ o.url }}" title="{{ o.label }}">{{ o.label }}</a></td>
+                            <td class="num">{{ o.count }}</td>
+                            <td class="num">{% if o.share is not none %}<span class="trend-bar-wrap"><span class="trend-bar" style="width: {{ (o.share / row.org_max * 100) | round }}%"></span><span class="trend-bar trend-bar-low" style="width: {{ (o.low / row.org_max * 100) | round }}%"></span></span>
+                                <span class="meta" title="{{ o.count }} von {{ o.total }} Flugblättern">{{ (o.share * 100) | round | int }} % ({{ o.count }} von {{ o.total }})</span>{% else %}<span class="meta" title="Weniger als {{ min_org_size }} Flugblätter">–</span>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if row.org_table | length > 3 %}<button type="button" class="button text trend-orgs-more">Alle {{ row.org_table | length }} anzeigen</button>{% endif %}
+                    {% endif %}
+                    {{ top_list('Themen der Treffer', row.topics, bars=False, limit=3) }}
                 </div>
             </div>
+            {% else %}
+            <p class="meta">Mit dieser Auswahl bleibt kein Flugblatt übrig. Setze oben wieder ein Häkchen.</p>
+            {% endif %}
             {% endif %}
         </section>
-        {% endfor %}
+        {% endif %}{% endfor %}
         {% else %}
         <p class="meta">Zum Beispiel:</p>
         <ul class="trend-examples">
@@ -108,9 +145,11 @@
     <script type="application/json" id="trend-data">{{ chart | tojson }}</script>
     <script src="{{ url_for('static', path='chart.umd.min.js') }}"></script>
     <script>
+        let mode = 'year';  // year or semester: kept when the page is swapped
+        const initTrends = () => {
         const data = JSON.parse(document.getElementById('trend-data').textContent);
         const COLORS = ['#1e5aa8', '#c2410c', '#237a50', '#8a3fa8'];
-        const labels = data.years.map((y, i) => [y, 'n = ' + data.totals[i]]);
+        const labels = data.years.map((y, i) => y.includes('/') ? [y, 'n = ' + data.totals[i], 'zusammengefasst'] : [y, 'n = ' + data.totals[i]]);
         Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
         Chart.defaults.color = '#68707c';
         Chart.defaults.maintainAspectRatio = false;
@@ -127,47 +166,74 @@
         const pointer = (event, _, chart) => { chart.canvas.style.cursor = hitAt(chart, event) ? 'pointer' : 'default'; };
         const terms = data.terms.filter((t) => t.counts);
 
-        new Chart(document.getElementById('trend-compare'), {
+        // the comparison chart shows years or semesters (the semester shares have gaps where too few leaflets are dated)
+        const periods = () => mode === 'year' ? {labels, totals: data.totals} : {labels: data.sems.labels.map((l) => l.split(' ')), totals: data.sems.totals};
+        const values = (t) => mode === 'year' ? t : t.sems;
+        // semesters with too few dated leaflets: a gray field behind the lines, the lines break there (no value is measured)
+        const semMax = Math.max(10, Math.ceil(Math.max(0, ...terms.flatMap((t) => t.sems.shares.filter((v) => v !== null))) / 10) * 10);
+        const gaps = () => mode === 'year' ? [] : data.sems.gap.map((g) => g ? semMax : null);
+        const compare = new Chart(document.getElementById('trend-compare'), {
             type: 'line',
-            data: {labels, datasets: terms.map((t) => ({
+            data: {labels, datasets: [...terms.map((t) => ({
                 label: t.term, data: t.shares, borderColor: COLORS[data.terms.indexOf(t)],
                 backgroundColor: COLORS[data.terms.indexOf(t)], pointRadius: 4, pointHoverRadius: 6, pointHitRadius: 10,
-            }))},
+            })), {type: 'bar', label: 'zu wenige datierte Flugblätter', data: [], backgroundColor: '#e9ebee', grouped: false, order: 99,
+                  barPercentage: 1, categoryPercentage: 1}]},
             options: {
                 interaction: {mode: 'nearest', intersect: true},  // one point at a time, like the click
                 scales: {y: {beginAtZero: true, ticks: {callback: (v) => v + ' %'}}},
-                plugins: {tooltip: {callbacks: {
+                plugins: {legend: {labels: {filter: (item) => item.datasetIndex < terms.length}}, tooltip: {filter: (c) => c.datasetIndex < terms.length, callbacks: {
                     title: ([c]) => [].concat(c.chart.data.labels[c.dataIndex]).join(', '),
-                    label: (c) => `${c.dataset.label}: ${share(terms[c.datasetIndex], c.dataIndex)}`,
+                    label: (c) => {
+                        const t = values(terms[c.datasetIndex]), i = c.dataIndex;
+                        return `${c.dataset.label}: ${t.counts[i]} von ${periods().totals[i]} ${mode === 'year' ? '' : 'datierten '}Flugblättern · ${t.shares[i].toLocaleString('de-DE')} %`;
+                    },
                     footer: () => 'Klick auf einen Punkt zeigt die Flugblätter',
                 }}},
                 onHover: pointer,
-                onClick: (e, _, chart) => openList(chart, e, (hit) => terms[hit.datasetIndex].urls),
+                onClick: (e, _, chart) => {
+                    const hit = hitAt(chart, e);
+                    if (hit && terms[hit.datasetIndex]) location.href = values(terms[hit.datasetIndex]).urls[hit.index];
+                },
             },
         });
+        document.querySelectorAll('.trend-switch button').forEach((button) => button.addEventListener('click', () => {
+            mode = button.dataset.mode;
+            document.querySelectorAll('.trend-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+            document.getElementById('trend-unit').textContent = mode === 'year' ? 'Jahr' : 'Semester';
+            compare.data.labels = periods().labels;
+            compare.data.datasets.forEach((d, n) => { d.data = n < terms.length ? values(terms[n]).shares : gaps(); });
+            compare.options.scales.y.max = mode === 'year' ? undefined : semMax;
+            document.getElementById('trend-basis').textContent = mode === 'year' ? '' : 'Semester: nur Flugblätter mit Monatsangabe';
+            const cut = document.getElementById('trend-cut');
+            if (cut) cut.hidden = mode === 'year';
+            compare.update();
+        }));
 
-        if (data.cloud && data.cloud.length) {
-            const mapTerms = terms.filter((t) => t.points && t.points.length);
-            new Chart(document.getElementById('trend-map'), {
-                type: 'scatter',
-                data: {datasets: [
-                    {label: 'alle Flugblätter', data: data.cloud.map(([x, y]) => ({x, y})),
-                     backgroundColor: '#d9dce1', pointRadius: 2},
-                    ...mapTerms.map((t) => ({label: t.term, data: t.points.map(([x, y]) => ({x, y})),
-                        backgroundColor: COLORS[data.terms.indexOf(t)] + 'cc', pointRadius: 3.5})),
-                ]},
-                options: {
-                    scales: {x: {display: false}, y: {display: false}},
-                    plugins: {legend: {position: 'bottom', labels: {filter: (item) => item.datasetIndex !== 0}},
-                              tooltip: {enabled: false}},
-                },
-            });
-        }
+        // the table of the issuers: a click on a column head sorts it, the first three rows show, a button the rest
+        document.querySelectorAll('.trend-orgs').forEach((table) => {
+            const body = table.tBodies[0], more = table.nextElementSibling;
+            const mark = () => [...body.rows].forEach((r, n) => r.classList.toggle('extra', n >= 3 && !table.classList.contains('open')));
+            table.querySelectorAll('[data-sort]').forEach((b) => b.addEventListener('click', () => {
+                [...body.rows].sort((x, y) => y.dataset[b.dataset.sort] - x.dataset[b.dataset.sort]).forEach((r) => body.append(r));
+                mark();
+            }));
+            more?.addEventListener('click', () => { table.classList.add('open'); mark(); more.remove(); });
+        });
 
-        // one color per issuer on the whole page; the two grays are not issuers
-        const ORG_COLORS = ['#4c72b0', '#dd8452', '#55a868', '#c44e52', '#8172b3',
-                            '#937860', '#da8bc3', '#ccb974', '#64b5cd', '#2f4b7c'];
-        const orgColor = {nicht_im_register: '#8a929c', null: '#c8ccd2'};
+        // one color per issuer on the whole page, apart from the terms' colors; the grays are not issuers
+        const ORG_COLORS = ['#8d7b68', '#b59a5b', '#5e7c7a', '#a37b82', '#7c8f6a',
+                            '#9a8bb0', '#c0a080', '#6f7f99', '#b07a5a', '#8a9a86'];
+        // "mehrere Herausgeber" is hatched, so that it is not taken for an issuer
+        const hatch = () => {
+            const tile = document.createElement('canvas');
+            tile.width = tile.height = 8;
+            const g = tile.getContext('2d');
+            g.fillStyle = '#eef0f3'; g.fillRect(0, 0, 8, 8);
+            g.strokeStyle = '#6b7380'; g.lineWidth = 2; g.beginPath(); g.moveTo(-1, 9); g.lineTo(9, -1); g.stroke();
+            return g.createPattern(tile, 'repeat');
+        };
+        const orgColor = {nicht_im_register: '#8a929c', _mehrere: hatch(), null: '#c8ccd2'};
         data.terms.flatMap((t) => t.by_org || []).forEach((o) => {
             if (!(o.org in orgColor)) orgColor[o.org] = ORG_COLORS[Object.keys(orgColor).length % ORG_COLORS.length];
         });
@@ -193,22 +259,41 @@
             });
         });
 
-        const month = new Intl.DateTimeFormat('de-DE', {month: 'short', year: '2-digit'});
-        document.querySelectorAll('canvas[data-months]').forEach((canvas) => {
-            const t = data.terms[canvas.dataset.months], color = COLORS[canvas.dataset.months];
-            new Chart(canvas, {
-                type: 'bar',
-                data: {labels: t.months.labels.map((m) => month.format(new Date(m + '-15'))),
-                       datasets: [{label: 'Flugblätter', data: t.months.counts, backgroundColor: color + '99', hoverBackgroundColor: color}]},
-                options: {
-                    scales: {y: {beginAtZero: true, ticks: {precision: 0}}},
-                    plugins: {legend: {display: false}, tooltip: {callbacks: {footer: () => 'Klick zeigt das Jahr, nach Datum sortiert'}}},
-                    onHover: pointer,
-                    // only years can be filtered in the list: a month opens its year, sorted by date
-                    onClick: (e, _, c) => openList(c, e, () => t.months.urls),
-                },
-            });
+        // the semester view stays when the page is swapped
+        if (mode !== 'year') document.querySelector(`.trend-switch button[data-mode="${mode}"]`)?.click();
+        };
+        initTrends();
+
+        // links and the form of this page swap the content instead of loading the page again (the address stays right)
+        const content = document.getElementById('content');
+        const go = async (url, push = true) => {
+            content.style.opacity = '0.55';
+            try {
+                const doc = new DOMParser().parseFromString(await (await fetch(url)).text(), 'text/html');
+                if (!doc.getElementById('trend-data')) { location.href = url; return; }
+                document.querySelectorAll('canvas').forEach((c) => Chart.getChart(c)?.destroy());
+                content.replaceChildren(...doc.getElementById('content').childNodes);
+                document.getElementById('trend-data').textContent = doc.getElementById('trend-data').textContent;
+                if (push) history.pushState({}, '', url);
+                initTrends();
+            } catch (error) {
+                location.href = url;
+            } finally {
+                content.style.opacity = '';
+            }
+        };
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('.trend-tabs a, .form-toggle, .active-filter, .trend-examples a');
+            if (!link || e.metaKey || e.ctrlKey || e.shiftKey || !link.getAttribute('href')?.startsWith('/trends')) return;
+            e.preventDefault();
+            go(link.getAttribute('href'));
         });
+        document.addEventListener('submit', (e) => {
+            if (!e.target.matches('.trend-form')) return;
+            e.preventDefault();
+            go('/trends?' + new URLSearchParams(new FormData(e.target)));
+        });
+        window.addEventListener('popstate', () => go(location.href, false));
     </script>
     {% endif %}
 {% endblock %}

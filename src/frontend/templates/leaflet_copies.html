@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Duplikate prüfen – UR Leaflet Archive{% endblock %}
+{% block title %}Gruppe prüfen – UR Leaflet Archive{% endblock %}
 {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
 {% macro field(label, value, deviates) %}
 <span class="copy-field"><span class="meta">{{ label }}:</span>
@@ -14,10 +14,9 @@
     {% if simple %}
     <div class="dup-actions">
         {% if not checked %}
-        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Als Hauptexemplar wählen</button>
-        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button-plain">wählen und weiter</button>
+        <button type="submit" name="verdict" value="next:{{ c.id }}" class="button small primary">Als Hauptexemplar wählen</button>
         {% elif not c.main %}
-        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button-small">Zum Hauptexemplar machen</button>
+        <button type="submit" name="verdict" value="main:{{ c.id }}" class="button small primary">Zum Hauptexemplar machen</button>
         {% endif %}
     </div>
     {% elif is_new %}
@@ -31,13 +30,13 @@
 {% macro offered(field) %}
 {% for o in offers.get(field, []) %}
 <span class="meta note offer"><span class="dup-letter" title="{{ o.label }}">{{ o.letter }}</span> <mark class="differs">{{ o.value }}</mark>
-    <button type="submit" form="take" name="take" value="{{ field }}:{{ o.id }}" class="button-plain">übernehmen</button>
+    <button type="submit" form="take" name="take" value="{{ field }}:{{ o.id }}" class="button text">übernehmen</button>
     {% if o.blocks %}<a href="/leaflets/{{ o.id }}/evidence.png?blocks={{ o.blocks }}" target="_blank" rel="noopener">Beleg ↗</a>{% endif %}</span>
 {% endfor %}
 {% endmacro %}
 {% macro details_section() %}
         <h2>Angaben der Gruppe</h2>
-        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Duplikat etwas
+        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Exemplar etwas
             anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars.</p>
         {{ lists(org_names, series_names) }}
         {% for c in cards if c.id == left %}
@@ -57,8 +56,8 @@
                     <dt><label for="received-{{ c.id }}">Eingang im Archiv</label></dt><dd>{{ received_field(m) }}{{ offered('received') }}</dd>
                 </dl>
                 <div class="review-actions">
-                    <button type="submit" class="button-small">Angaben speichern</button>
-                    {% if m.corrected %}<button type="submit" form="revert-{{ c.id }}" name="field" value="all" class="button-plain">Alle Handkorrekturen entfernen</button>{% endif %}
+                    <button type="submit" class="button small primary">Speichern</button>
+                    {% if m.corrected %}<button type="submit" form="revert-{{ c.id }}" name="field" value="all" class="button text">Alle Handkorrekturen entfernen</button>{% endif %}
                 </div>
             </form>
             <form id="take" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/uebernehmen" hidden></form>
@@ -71,31 +70,41 @@
         <section id="pair">{% include 'leaflet_copy_pair.html' %}</section>
 {% endmacro %}
 {% block content %}
-        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
-            <span class="breadcrumb"><a href="/exemplare">Duplikate</a> / <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+        {% set state %}{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}{% endset %}
+        {% set pager %}
             <span class="pager">
                 {% if queue.previous %}<a href="/leaflets/{{ queue.previous }}/exemplare">‹ Voriges</a>{% else %}<span class="disabled">‹ Voriges</span>{% endif %}
-                <span class="meta">{% if queue.position %}{{ queue.position }} von {{ queue.total }} ungeprüft{% elif queue.total %}{{ queue.total }} ungeprüft{% else %}alles geprüft{% endif %}</span>
+                {% if not queue.band %}<span class="meta">{{ state }}</span>{% endif %}
                 {% if queue.next %}<a href="/leaflets/{{ queue.next }}/exemplare">Nächstes ›</a>{% else %}<span class="disabled">Nächstes ›</span>{% endif %}
-            </span>
+            </span>{% endset %}
+        {% if queue.band %}
+        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % queue.band }}">
+            <span><a href="/import/{{ queue.band }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % queue.band }} prüfen</b> · Exemplare: {{ state }}</span>
+            {{ pager }}
         </nav>
+        {% else %}
+        <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
+            <span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › <a href="/exemplare">Exemplare</a> › <a href="/exemplare?status=offen">Nicht geprüft</a></span>
+            {{ pager }}
+        </nav>
+        {% endif %}
         <header class="page-head page-head-wide">
             <div class="head-row">
-                <h1>Duplikate prüfen</h1>
+                <h1>Gruppe prüfen</h1>
                 <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
             </div>
         </header>
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
             <p class="meta">Wähle das Blatt mit den richtigen Angaben, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
-                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; „{{ 'wählen' if simple else 'speichern' }} und weiter“ führt direkt zur nächsten ungeprüften Gruppe.</p>
+                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; {% if simple %}mit der Wahl geht es direkt zur nächsten ungeprüften Gruppe{% else %}„speichern und weiter“ führt direkt zur nächsten ungeprüften Gruppe{% endif %}.</p>
             <div class="review-actions dup-more">
                 {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
-                {% if simple %}<button type="submit" name="verdict" value="different" class="button-outline">Das sind verschiedene Flugblätter</button>
-                {% elif checked %}<button type="submit" id="save" class="button-small">Änderung speichern</button>
-                {% else %}<button type="submit" id="save" class="button-small" disabled>Als geprüft speichern</button>
-                <button type="submit" id="save-next" name="next" value="1" class="button-plain" disabled>speichern und weiter</button>{% endif %}
-                {% if checked %}<button type="submit" name="revert" value="1" class="button-plain">Prüfung zurücknehmen</button>{% endif %}
-                {% if checked and queue.next %}<a class="button-small review-next" href="/leaflets/{{ queue.next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+                {% if simple %}<button type="submit" name="verdict" value="different" class="button small">Das sind verschiedene Flugblätter</button>
+                {% elif checked %}<button type="submit" id="save" class="button small primary">Speichern</button>
+                {% else %}<button type="submit" id="save" class="button small" disabled>Als geprüft speichern</button>
+                <button type="submit" id="save-next" name="next" value="1" class="button text" disabled>Speichern &amp; weiter</button>{% endif %}
+                {% if checked %}<button type="submit" name="revert" value="1" class="button text">Prüfung zurücknehmen</button>{% endif %}
+                {% if checked and queue.next %}<a class="button small primary review-next" href="/leaflets/{{ queue.next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
             </div>
             <div class="dup-cards">
                 {% for c in cards %}{{ card(c, false) }}{% endfor %}
@@ -109,7 +118,7 @@
         <dialog id="scan-popup">
             <div class="popup-head"><strong>Stelle im Scan</strong>
                 <span class="copy-sheets popup-switch" role="group" aria-label="Blatt"></span>
-                <button type="button" class="button-plain" id="popup-close">Schließen</button></div>
+                <button type="button" class="button text" id="popup-close">Schließen</button></div>
             <div class="popup-grid" id="popup-grid"></div>
         </dialog>
         {% include '_pick_bar.html' %}

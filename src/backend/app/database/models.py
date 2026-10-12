@@ -3,10 +3,15 @@ from sqlalchemy import (Column, Integer, String, Float, Text, JSON, Boolean,
                         ForeignKey)
 
 
+RELEASED = "freigegeben"
+DRAFT = "entwurf"  # an imported volume, hidden everywhere until it is released
+
+
 class Volume(Base):
     __tablename__ = "volumes"
 
     id = Column(Integer, primary_key=True)
+    status = Column(String, nullable=False, default=RELEASED, server_default=RELEASED)
     vz = Column(Integer, unique=True)
     stem = Column(String, unique=True, nullable=True)
     label = Column(String)
@@ -14,12 +19,18 @@ class Volume(Base):
     title = Column(String)
     group = Column(String)
     signature = Column(String)
-    collection = Column(String, nullable=True)
     digitized = Column(Boolean, default=True)
     portal_url = Column(String, nullable=True)
     meta_model = Column(String, nullable=True)
     meta_created = Column(String, nullable=True)
+    ocr_mode = Column(String, nullable=True)  # quality level of the text recognition, if known (ocr-lauf.json)
+    ocr_created = Column(String, nullable=True)
     n_pages = Column(Integer, nullable=True)
+
+    @property
+    def name(self):
+        """"Nr. 007, Flugblätter 1972. RCDS": the number tells apart units with the same title."""
+        return f"Nr. {self.vz:03d}, {self.title}"
 
 
 class Page(Base):
@@ -103,7 +114,6 @@ class Organization(Base):
     variants = Column(JSON)
     jahre = Column(JSON)
     vz = Column(JSON)
-    gnd_id = Column(String)
     notes = Column(String)
 
 

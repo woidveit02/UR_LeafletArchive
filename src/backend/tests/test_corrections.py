@@ -46,3 +46,13 @@ def test_field_revert():
     entries = [{"field": "title", "value": "A"}, {"field": "doc_type", "value": "Flugblatt"},
                {"field": "revert", "value": "title"}, {"field": "doc_type", "value": "Protokoll"}]
     assert [e["value"] for e in corrections.active(entries)] == ["Flugblatt", "Protokoll"]
+
+
+# Tests if the page shows what the import applies: the last line per field that no revert cancelled.
+def test_in_force():
+    from backend.app.app import in_force
+    line = lambda field, value: {"field": field, "value": value}
+    entries = [line("title", "A"), line("issuers", []), line("revert", "issuers"), line("title", "B"),
+               line("date", {"iso": "1969", "type": ""}), line("revert", "all"), line("title", "C")]
+    assert in_force(entries) == [line("title", "C")]
+    assert [e["value"] for e in in_force(entries[:4])] == ["B"]

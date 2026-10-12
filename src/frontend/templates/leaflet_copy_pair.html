@@ -5,7 +5,7 @@
 {% endif %}
 <div class="pair-grid" style="--cols: {{ cols }}{% if pair.ratio %}; --scan-ratio: {{ pair.ratio }}{% endif %}">
     {% for c in pair.cards %}
-    <section>
+    <section{% if c.main %} class="is-main"{% endif %}>
         <div class="copy-scan" data-id="{{ c.id }}" data-first="{{ c.page }}" data-pages="{{ c.pages }}">
             <div class="scan-frame page-frame"{% if c.ratio %} style="aspect-ratio: {{ c.ratio }}"{% endif %}>
             <a href="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img class="leaflet-page" src="/leaflets/{{ c.id }}/pages/{{ c.page }}.png?dpi=90" alt="Blattseite 1, {{ c.label }}" onload="this.classList.add('loaded')"></a>

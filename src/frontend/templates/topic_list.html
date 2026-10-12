@@ -23,10 +23,10 @@
                     </label>
                 </div>
                 <div class="topic-map-zoom">
-                    <button type="button" class="button-small" id="topic-map-in" aria-label="Vergrößern">+</button>
-                    <button type="button" class="button-small" id="topic-map-out" aria-label="Verkleinern">−</button>
-                    <button type="button" class="button-small" id="topic-map-reset">Ansicht zurücksetzen</button>
-                    <button type="button" class="button-small" id="topic-map-fullscreen">Vollbild</button>
+                    <button type="button" class="button small" id="topic-map-in" aria-label="Vergrößern">+</button>
+                    <button type="button" class="button small" id="topic-map-out" aria-label="Verkleinern">−</button>
+                    <button type="button" class="button small" id="topic-map-reset">Ansicht zurücksetzen</button>
+                    <button type="button" class="button small" id="topic-map-fullscreen">Vollbild</button>
                 </div>
                 <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema einfärbt"></canvas>
                 <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
@@ -43,7 +43,7 @@
                     <option value="alpha" {% if sort == 'alpha' %}selected{% endif %}>Titel A–Z</option>
                 </select>
             </label>
-            <noscript><button type="submit" class="button-small">Sortieren</button></noscript>
+            <noscript><button type="submit" class="button small">Sortieren</button></noscript>
         </form>
         <ul class="topic-list">
             {% if years %}
@@ -85,7 +85,7 @@
                 {% endif %}
             </li>
             {% else %}
-            <li class="meta">Keine Themen verfügbar.</li>
+            <li class="empty">Noch keine Themen.</li>
             {% endfor %}
         </ul>
 {% endblock %}
