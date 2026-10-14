@@ -34,7 +34,7 @@
     },
     {
       "id": 2,
-      "title": "Psychologie: Zulassung und Berufungen",
+      "title": "Psychologie: Zulassungsstopp und Numerus clausus",
       "title_source": "manual",
       "llm_label": "Zulassungssperre im Psychologiestudium wegen Berufungspolitik im Fachbereich Philosophie/Psychologie",
       "words": [
@@ -104,7 +104,7 @@
     },
     {
       "id": 6,
-      "title": "Fachbereichswahlen: Kandidaten und Ergebnisse",
+      "title": "Hochschulwahlen: Kandidaten, Listen und Ergebnisse",
       "title_source": "manual",
       "llm_label": "Ergebnisse und Kandidaten der Fachbereichs- und Fakultätsratswahlen an der Universität 1972",
       "words": [
@@ -187,7 +187,7 @@
     },
     {
       "id": 11,
-      "title": "BEGEFOGREGETZ: Satirische Ehrenerlasse gegen Schumann",
+      "title": "BEGEFOGREGETZ: satirische Erlasse",
       "title_source": "manual",
       "llm_label": "Ehrenerlass und Festveranstaltung zur Rettung der Universität durch Professor Schumann",
       "words": [
@@ -222,7 +222,7 @@
     },
     {
       "id": 13,
-      "title": "Psychologie: Bündnislisten zur Fachschaftswahl",
+      "title": "Fachschaftswahlen: marxistische Listen und Bündnisse",
       "title_source": "manual",
       "llm_label": "Kampf um gemeinsame Listen und Interessenvertretung in Fachschaftsratswahlen der Psychologie",
       "words": [
@@ -239,7 +239,7 @@
     },
     {
       "id": 14,
-      "title": "SHB, Jusos und Spartakus: Wahlkampf",
+      "title": "Bundespolitik und Parteien",
       "title_source": "manual",
       "llm_label": "Wahlkampf und politische Programme des Sozialdemokratischen Hochschulbundes 1972",
       "words": [
@@ -256,7 +256,7 @@
     },
     {
       "id": 15,
-      "title": "Grabenkämpfe zwischen den Hochschulgruppen",
+      "title": "RCDS: Selbstdarstellung und Kritik der linken Gruppen",
       "title_source": "manual",
       "llm_label": "Studentische Fachschaftswahlen und Proteste gegen Berufsverbot und Studienbeschränkungen",
       "words": [
@@ -388,7 +388,7 @@
     },
     {
       "id": 23,
-      "title": "Streik und Proteste gegen das Hochschulgesetz",
+      "title": "Streiks und Vollversammlungen gegen das Hochschulgesetz",
       "title_source": "manual",
       "llm_label": "Streik und Protest gegen das Bayerische Hochschulgesetz (BHG) an Universitäten",
       "words": [
@@ -402,7 +402,7 @@
     },
     {
       "id": 24,
-      "title": "Lehrenthaltung der Assistenten (WiWi)",
+      "title": "Lehrassistenten und Hilfskräfte: Stellen und Lehrenthaltung",
       "title_source": "manual",
       "llm_label": "Proteste und Lehrenthaltung der Lehrassistenten am Fachbereich Wirtschaftswissenschaft gegen Hochschulgesetz",
       "words": [
@@ -436,7 +436,7 @@
     },
     {
       "id": 26,
-      "title": "Jura: Studienreform und Fachbereichswahl",
+      "title": "Studium: Lehrveranstaltungen und Prüfungen",
       "title_source": "manual",
       "llm_label": "Informationen und Wahlen im Fachbereich Jura und Wirtschaftswissenschaft an Universitäten",
       "words": [
@@ -471,7 +471,7 @@
     },
     {
       "id": 28,
-      "title": "Demokratie und Demokratisierung",
+      "title": "Demokratisierung der Hochschule: Positionen des RCDS",
       "title_source": "manual",
       "llm_label": "Diskussionen zur Demokratisierung, Freiheit und gesellschaftlichen Konfliktlösung in Deutschland",
       "words": [
@@ -488,7 +488,7 @@
     },
     {
       "id": 29,
-      "title": "Hochschulgesetz und Hochschulreform: Grundsatzfragen",
+      "title": "Debatte um Hochschulgesetz und Hochschulreform",
       "title_source": "manual",
       "llm_label": "Diskussion und Kritik zum Bayerischen Hochschulgesetz und Hochschulreformen 1973",
       "words": [
@@ -503,7 +503,7 @@
     },
     {
       "id": 30,
-      "title": "Hochschulautonomie",
+      "title": "Demokratische Mitte: Programm zur Hochschulreform",
       "title_source": "manual",
       "llm_label": "Hochschulpolitik und Autonomie der Universität Regensburg",
       "words": [
@@ -536,7 +536,7 @@
     },
     {
       "id": 32,
-      "title": "Griechenland-Solidarität und Kampfaufrufe",
+      "title": "Kommunistische Hochschulgruppen und Arbeiterbewegung",
       "title_source": "manual",
       "llm_label": "Kampf gegen reaktionäre Kräfte und Einfluss auf Hochschulpolitik in Deutschland",
       "words": [
@@ -549,7 +549,7 @@
     },
     {
       "id": 33,
-      "title": "Studentenparlamentswahlen: Wahlvorschläge",
+      "title": "Wahlen zu den Hochschulgremien: Ausschreibungen und Ergebnisse",
       "title_source": "manual",
       "llm_label": "Wahlen zum Studentenparlament an der Universität Regensburg",
       "words": [
@@ -600,7 +600,7 @@
     },
     {
       "id": 36,
-      "title": "Die „als“: Programm und Wahlwerbung",
+      "title": "Aktionsgemeinschaft liberaler Studenten (ALS)",
       "title_source": "manual",
       "llm_label": "Liberale Hochschulpolitik und studentische Wahlbündnisse in den 1970er Jahren",
       "words": [
