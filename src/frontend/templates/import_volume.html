@@ -69,9 +69,9 @@
             {% if cancel_url %}<button type="button" id="ocr-cancel" class="button small" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
         </div>
         {% endmacro %}
-        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a>{% if volume %} › Band hinzufügen{% endif %}</span></nav>
         <header class="page-head">
-            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% if volume.status == 'entwurf' %} <span class="status-badge">nicht freigegeben</span>{% endif %}{% else %}Band hinzufügen{% endif %}</h1>
+            <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %}</h1>
         </header>
         {% set keys = steps.keys() | list %}
         {% set done = done or [] %}
@@ -182,7 +182,7 @@
                 <div class="split-start">
                     <div>
                         <button type="button" id="split-suggest-text" class="button">Aus Text vorschlagen</button>
-                        <p class="meta">Die App rät anhand des erkannten Textes, wo ein Flugblatt beginnt. Unsicher: jeder Vorschlag muss bestätigt werden.</p>
+                        <p class="meta">Schlägt Trennungen anhand von Merkmalen im erkannten Text vor, etwa Eingangsstempel, Datum in der Kopfzeile oder Impressum auf der vorigen Seite. Die Vorschläge sind nicht verlässlich, prüfe jeden einzeln.</p>
                     </div>
                     <div>
                         <span class="file-pick">

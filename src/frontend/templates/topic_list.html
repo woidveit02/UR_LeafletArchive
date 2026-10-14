@@ -119,7 +119,8 @@
         function externalTooltip(context) {
             const tt = context.tooltip;
             const points = tt.dataPoints || [];
-            if (!tt.opacity || !points.length) { tooltipEl.hidden = true; return; }
+            // an open picker replaces the tooltip, which would otherwise cover it
+            if (!tt.opacity || !points.length || !picker.hidden) { tooltipEl.hidden = true; return; }
 
             tooltipEl.innerHTML = '';
             const topic = document.createElement('div');
@@ -238,6 +239,7 @@
                         picker.style.left = event.native.clientX + 'px';
                         picker.style.top = event.native.clientY + 'px';
                         picker.hidden = false;
+                        tooltipEl.hidden = true;
                     },
                 },
             });
@@ -415,7 +417,9 @@
             activeFiltersEl.innerHTML = [...activeTopics].map((id) => {
                 const t = mapData.topics.find((x) => x.id === id);
                 return `<button type="button" class="active-filter" data-id="${id}" title="Entfernen">${t.title} <span aria-hidden="true">×</span></button>`;
-            }).join('') + '<button type="button" class="active-reset">Alle zurücksetzen</button>';
+            }).join('')
+                + '<button type="button" class="active-reset">Alle zurücksetzen</button>'
+                + `<a class="button small topic-list-link" href="/leaflets?${[...activeTopics].map((id) => `thema=${id}`).join('&')}">In der Liste zeigen</a>`;
             activeFiltersEl.querySelectorAll('button.active-filter').forEach((btn) => {
                 const topic = mapData.topics.find((t) => String(t.id) === btn.dataset.id);
                 btn.addEventListener('click', () => toggleTopic(topic));

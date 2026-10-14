@@ -203,7 +203,7 @@ async def not_found(request: Request, exc: StarletteHTTPException):
 
 
 # (volume vz, start page): stable across database rebuilds, unlike ids
-FEATURED = [(4, 101), (9, 120), (9, 498), (11, 17)]
+FEATURED = [(9, 120), (9, 498), (11, 17), (4, 131), (14, 406), (6, 421), (5, 554), (6, 113), (14, 209), (3, 129), (5, 594), (4, 235)]
 
 
 def released_leaflets():
@@ -211,13 +211,16 @@ def released_leaflets():
     return session.query(Leaflet).join(Volume, Leaflet.volume_id == Volume.id).filter(Volume.status == RELEASED)
 
 
+def featured_leaflets():
+    found = [released_leaflets().filter(Volume.vz == vz, Leaflet.start_page == page).first() for vz, page in FEATURED]
+    return [lf for lf in found if lf]
+
+
 @app.get("/")
 def index(request: Request):
     logger.info('Opening index page')
-    featured = [released_leaflets()
-                .filter(Volume.vz == vz, Leaflet.start_page == page).first()
-                for vz, page in FEATURED]
-    volume_years = {v.id: v.year for v in session.query(Volume).filter_by(status=RELEASED)}
+    volumes = session.query(Volume).filter_by(status=RELEASED).order_by(Volume.vz).all()
+    volume_years = {v.id: v.year for v in volumes}
     # a leaflet with duplicates counts once: the other copies of its group are left out
     unique = [lf for lf in released_leaflets() if lf.copy_group is None or lf.canonical_leaflet_id == lf.id]
     per_year = Counter(leaflet_year(lf, volume_years[lf.volume_id]) for lf in unique)
@@ -225,17 +228,21 @@ def index(request: Request):
     # every year in the range, so gaps in the collection stay visible
     timeline = [(str(y), per_year[str(y)])
                 for y in range(min(years), max(years) + 1)] if years else []
+    done = {v for (v,) in released_leaflets().with_entities(Leaflet.volume_id).distinct()}
     stats = {
         'leaflets': sum(per_year.values()),
         'organizations': session.query(LeafletIssuer.org_id)
         .filter(LeafletIssuer.org_id.isnot(None)).distinct().count(),
-        'volumes': len(volume_years),
-        'volumes_done': released_leaflets().with_entities(Leaflet.volume_id).distinct().count(),
+        'volumes': len(volumes),
+        'volumes_done': len(done),
+        'first_year': min(volume_years.values(), default=''),
+        'last_year': max(volume_years.values(), default=''),
+        'missing': [v.label for v in volumes if v.id not in done],
     }
     return templates.TemplateResponse(
         request, "index.html",
         {"stats": stats, "timeline": timeline,
-         "featured": leaflet_items([lf for lf in featured if lf]),
+         "featured": leaflet_items(featured_leaflets()),
          "max_count": max(per_year.values(), default=1)})
 
 
@@ -1047,9 +1054,11 @@ def detail_page(request, leaflet, edit=None, error=None):
     # through the volume
     selection = list_params(request)
     from_results = 'ergebnisse' in request.query_params
-    siblings = [i['leaflet'].id for i in filtered_items(selection)] if selection or from_results else []
+    from_featured = 'auswahl' in request.query_params  # coming from the selection on the start page
+    siblings = ([lf.id for lf in featured_leaflets()] if from_featured
+                else [i['leaflet'].id for i in filtered_items(selection)] if selection or from_results else [])
     if leaflet.id not in siblings:
-        selection, from_results = [], False
+        selection, from_results, from_featured = [], False, False
         siblings = [row.id for row in session.query(Leaflet.id)
                     .filter_by(volume_id=leaflet.volume_id)
                     .order_by(Leaflet.start_page)]
@@ -1092,7 +1101,8 @@ def detail_page(request, leaflet, edit=None, error=None):
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'position': pos + 1,
         'in_volume': len(siblings),
-        'qs': '?' + urlencode(selection + (shown + [('ergebnisse', '1')] if from_results else [])) if selection or from_results else '',
+        'qs': '?auswahl=1' if from_featured else '?' + urlencode(selection + (shown + [('ergebnisse', '1')] if from_results else [])) if selection or from_results else '',
+        'featured': from_featured,
         'back_url': back_url,
         'selection': ' · '.join(filter(None, selection_labels)),
         'highlight': [v for t in search.terms(chosen.get('q', '')) for v in search.variants(t)],

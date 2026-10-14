@@ -21,6 +21,7 @@
         {% endif %}
         <nav class="detail-nav">
             {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← Zurück zu den Ergebnissen</a></span>
+            {% elif leaflet.featured %}<span class="breadcrumb"><a href="/">Startseite</a> › Ausgewählte Flugblätter</span>
             {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> › {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
             <span class="pager">
                 {{ sibling(leaflet.prev_id, '‹ Voriges') }}
@@ -169,7 +170,7 @@
                 <button type="submit" class="button small">Speichern</button>
                 <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs }}" class="keep-scroll">Abbrechen</a>
             </span>
-            <span class="meta note">„Beleg wählen“, dann Textblöcke im Scan oder in der Transkription anklicken; ein zweiter Klick entfernt sie. Geänderte Felder gelten als von Hand korrigiert.</span>
+            <span class="meta note">„Beleg wählen“, dann Textblöcke im Scan oder im erkannten Text anklicken; ein zweiter Klick entfernt sie. Geänderte Felder gelten als von Hand korrigiert.</span>
         </div>
         {% else %}
         <aside class="meta-side">
@@ -220,7 +221,7 @@
                 <span>{% if total > 1 %}Blattseite {{ page.index }} von {{ total }} · {% endif %}Bandseite {{ page.no }}</span>
                 {% if leaflet.has_pdf %}<a href="/leaflets/{{ leaflet.id }}/pages/{{ page.no }}.png?dpi=220" target="_blank" rel="noopener">Vergrößern ↗</a>{% endif %}
             </div>
-            <div class="pair-head">Transkription, erzeugt von Datalab Convert</div>
+            <div class="pair-head">Erkannter Text (OCR, Datalab Convert)</div>
             <div class="pair-scan">
                 {% if leaflet.has_pdf %}
                 <div class="page-frame">
@@ -432,6 +433,21 @@
             const open = document.querySelector('.beleg[aria-expanded="true"]');
             closeAll();
             open?.focus();
+        });
+        // left and right, or the number of a sheet, move between the sheets of this leaflet; up and down keep scrolling
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || pick.active() || e.target.closest('input, textarea, select, [contenteditable]')) return;
+            if (!/^(Arrow(Left|Right)|[1-9])$/.test(e.key)) return;
+            // the same as clicking a number in the strip; a short leaflet has no strip, then the sheet's anchor is followed
+            const links = [...document.querySelectorAll('.page-nav-pages a')];
+            const sheets = [...document.querySelectorAll('.page-pair')];
+            const edge = parseFloat(getComputedStyle(sheets[0] || document.body).scrollMarginTop) + 5;
+            const now = links.length ? links.findIndex(a => a.hasAttribute('aria-current'))
+                : sheets.filter(s => s.getBoundingClientRect().top <= edge).length - 1;
+            const index = /\d/.test(e.key) ? e.key - 1 : now + (e.key === 'ArrowRight' ? 1 : -1);
+            if (!sheets[index]) return;
+            e.preventDefault();
+            if (links[index]) links[index].click(); else location.hash = sheets[index].id;
         });
     </script>
 {% endblock %}

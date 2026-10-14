@@ -14,7 +14,7 @@
 {% set n = leaflet.end_page - leaflet.start_page + 1 %}{{ n }} {{ 'Seite' if n == 1 else 'Seiten' }}
 {%- endmacro %}
 
-{% macro meta(item, fields) %}
+{% macro meta(item, fields, copies=True) %}
 {% set l = item.leaflet %}
 {%- set parts = [] -%}
 {%- for f in fields -%}
@@ -29,7 +29,7 @@
     {%- elif f == 'series' and l.series and l.title %}{% set _ = parts.append('Reihe: ' ~ l.series ~ ((' ' ~ ('Nr. ' ~ l.issue if l.issue[0].isdigit() else l.issue)) if l.issue else '')) %}
     {%- endif -%}
 {%- endfor -%}
-{%- if item.copy_alternative %}{% set _ = parts.append('weiteres Exemplar') %}
+{%- if not copies %}{% elif item.copy_alternative %}{% set _ = parts.append('weiteres Exemplar') %}
 {%- elif item.copies %}
     {%- set text = item.copies ~ ((' weiteres Exemplar' if item.copies == 1 else ' weitere Exemplare') if item.copies_checked
             else (' mögliches weiteres Exemplar' if item.copies == 1 else ' mögliche weitere Exemplare')) -%}
@@ -65,7 +65,7 @@
 </ul>
 {% endmacro %}
 
-{% macro leaflet_cards(items, fields=('pages', 'date'), qs='') %}
+{% macro leaflet_cards(items, fields=('pages', 'date'), qs='', copies=True) %}
 <div class="doc-grid">
     {% for item in items %}{% set l = item.leaflet %}
     <figure class="doc-card" id="l{{ l.id }}">
@@ -80,7 +80,7 @@
         <figcaption>
             <a class="doc-title" href="/leaflets/{{ l.id }}{{ qs }}" title="{{ l.display_title }}">{{ title(l) }}</a>
             <span class="doc-issuers">{{ issuer_list(item.issuers) }}</span>
-            {{ meta(item, fields) }}
+            {{ meta(item, fields, copies) }}
             {% if item.snippets and item.snippets[0] %}{{ excerpt(item.snippets[0], href='/leaflets/' ~ l.id ~ qs ~ ('#treffer-1' if item.get('hits') else '')) }}{% endif %}
         </figcaption>
     </figure>

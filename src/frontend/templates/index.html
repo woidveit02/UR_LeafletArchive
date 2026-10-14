@@ -17,9 +17,28 @@
         {% from '_leaflets.html' import leaflet_cards %}
         <div class="section-head">
             <h2>Ausgewählte Flugblätter</h2>
+            <span class="featured-nav">
+                <button type="button" class="button" data-step="-1" aria-label="Zurück">‹</button>
+                <span class="meta" id="featured-count" aria-live="polite"></span>
+                <button type="button" class="button" data-step="1" aria-label="Weiter">›</button>
+            </span>
             <a href="/leaflets">Alle Flugblätter ansehen →</a>
         </div>
-        <div class="featured">{{ leaflet_cards(featured, fields=('date',)) }}</div>
+        <div class="featured">{{ leaflet_cards(featured, fields=('count', 'date'), qs='?auswahl=1', copies=False) }}</div>
+        <script>
+            const row = document.querySelector('.featured .doc-grid');
+            const steps = document.querySelectorAll('.featured-nav button');
+            const update = () => {
+                steps.forEach(b => {
+                    b.disabled = b.dataset.step < 0 ? row.scrollLeft < 1 : row.scrollLeft + row.clientWidth >= row.scrollWidth - 1;
+                });
+                const page = Math.round(row.scrollLeft / row.clientWidth) + 1, pages = Math.round(row.scrollWidth / row.clientWidth);
+                document.getElementById('featured-count').textContent = `${page} / ${pages}`;
+            };
+            steps.forEach(b => b.addEventListener('click', () => row.scrollBy({left: b.dataset.step * row.clientWidth, behavior: 'smooth'})));
+            row.addEventListener('scroll', update);
+            update();
+        </script>
         {% endif %}
 
         <div class="home-columns">
@@ -42,7 +61,8 @@
         <h2>Über den Bestand</h2>
         <p>Die Universitätsbibliothek legte die Sammlung 1968 an; seit 2004 übernimmt das Universitätsarchiv die Jahrgänge.</p>
         <p><a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im <span class="nowrap">Archivportal-D ↗</span></a></p>
-        <p>Die Sammlung umfasst {{ stats.volumes }} Bände aus den Jahren 1967–1973. Erschlossen sind die {{ stats.volumes_done }} digitalisierten. Nr. 015 (1973) wurde nicht digitalisiert.</p>
+        <p>Die Sammlung umfasst {{ stats.volumes }} Bände aus den Jahren {{ stats.first_year }}–{{ stats.last_year }}. Erschlossen sind die {{ stats.volumes_done }} digitalisierten.
+            {%- if stats.missing %} {{ stats.missing | join(', ') }} {{ 'wurde' if stats.missing | length == 1 else 'wurden' }} nicht digitalisiert.{% endif %}</p>
         <p>Titel, Datum, Herausgeber und Unterzeichnende wurden automatisch aus den Scans erkannt. Die Angaben können Fehler enthalten.
             Wo ein Beleg vorliegt, lässt sich die Angabe auf der Detailseite im Scan prüfen.</p>
         </section>

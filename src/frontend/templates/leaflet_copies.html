@@ -91,7 +91,7 @@
         <header class="page-head page-head-wide">
             <div class="head-row">
                 <h1>Gruppe prüfen</h1>
-                <span class="status-badge{% if checked %} checked{% endif %}">{{ 'Geprüft' if checked else 'Noch nicht geprüft' }}</span>
+                {% if checked %}<span class="status-badge checked">Geprüft</span>{% endif %}
             </div>
         </header>
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">

@@ -328,8 +328,36 @@ a:hover {
 }
 
 .featured .doc-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: none;  /* else the first columns come from the list's auto-fill */
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 3 * 24px) / 4);
+    gap: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;  /* the buttons and swiping navigate */
+    scroll-snap-type: x mandatory;
     margin: 16px 0 40px;
+}
+
+.featured .doc-card {
+    margin: 0;  /* the row clips at its edge */
+    scroll-snap-align: start;
+}
+
+.featured-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 24px;
+}
+
+.featured-nav .button {
+    width: 36px;
+    min-height: 36px;
+    padding: 0 0 2px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
 }
 
 .featured .doc-title {
@@ -350,7 +378,7 @@ a:hover {
 
 @media (max-width: 600px) {
     .featured .doc-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-columns: calc((100% - 24px) / 2);
     }
 
     .home-columns {
@@ -737,7 +765,8 @@ button:disabled {
 
 .pair-grid img {
     width: 100%;
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-strong);
+    box-shadow: none;
 }
 
 .pair-diff {
@@ -1530,6 +1559,12 @@ a.topic-year:focus-visible .topic-bar {
     width: 4rem;
     margin-right: 6px;
     vertical-align: middle;
+}
+
+.trend-orgs .trend-bar-wrap + .meta {  /* a fixed width for the text after it, so the bars line up */
+    display: inline-block;
+    min-width: 9.5em;
+    font-variant-numeric: tabular-nums;
 }
 
 .trend-bar-wrap {
@@ -2789,6 +2824,7 @@ html {
     display: grid;
     grid-template-columns: minmax(0, 75ch) min(calc((100vh - 130px) * var(--ratio, 0.7)), 50%);
     gap: 0 32px;
+    justify-content: center;
     align-items: start;
     margin-bottom: 48px;
 }
@@ -3153,9 +3189,10 @@ body:has(.page-nav) .pair-scan {
     top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) + 10px);
 }
 
-/* a sheet lands right below the strip, its separator line hidden behind it; a heading keeps a little air */
+/* a sheet lands with its scan where the scan sticks, so the line above it ("Blattseite 1 von 12") slides under the strip;
+   a heading keeps a little air */
 .page-pair {
-    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 40px) - 2px);
+    scroll-margin-top: calc(var(--topbar-h, 62px) + var(--strip-h, 0px) - 43px);
 }
 
 .ocr-block[id] {
@@ -3672,6 +3709,10 @@ a.excerpt:focus-visible {
 
 .active-reset {
     font-size: 0.85rem;
+}
+
+.topic-list-link {
+    margin-left: auto;
 }
 
 /* the chips are <a> on /leaflets (server-rendered links) but <button> on /themen
@@ -4373,7 +4414,7 @@ a.topic-year.active .topic-bar {
 }
 
 summary.button {
-    display: inline-block;
+    display: inline-flex;
     list-style: none;
     cursor: pointer;
 }
@@ -4701,7 +4742,7 @@ summary.link-button::-webkit-details-marker {
     width: 24px;
     padding: 0;
     border: none;
-    background: repeating-linear-gradient(to bottom, var(--line-strong) 0 8px, transparent 8px 14px) center / 3px 100% no-repeat;  /* no cut: grey dashes */
+    background: repeating-linear-gradient(to bottom, var(--line-strong) 0 8px, transparent 8px 14px) center / 3px 100% no-repeat;  /* not decided: grey dashes */
     color: var(--accent);
     font-size: 0;
     cursor: pointer;
@@ -4713,11 +4754,11 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-cut.on {
-    background: linear-gradient(var(--ink-soft), var(--ink-soft)) center / 3px 100% no-repeat;
+    background: linear-gradient(var(--ink), var(--ink)) center / 4px 100% no-repeat;
 }
 
 .split-cut.suggested {
-    background: repeating-linear-gradient(to bottom, var(--muted) 0 10px, transparent 10px 16px) center / 5px 100% no-repeat;
+    background: repeating-linear-gradient(to bottom, #e08a00 0 10px, transparent 10px 16px) center / 4px 100% no-repeat;
 }
 
 .split-cut.checked {
@@ -4767,7 +4808,7 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-legend i.on {
-    color: var(--ink-soft);
+    color: var(--ink);
 }
 
 .split-legend i.open {
@@ -4776,7 +4817,7 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-legend i.suggested {
-    color: var(--muted);
+    color: #e08a00;
 }
 
 .split-pair {
@@ -4818,7 +4859,7 @@ summary.link-button::-webkit-details-marker {
 }
 
 .split-join.on {
-    background: linear-gradient(var(--ink-soft), var(--ink-soft)) center / 3px 100% no-repeat;
+    background: linear-gradient(var(--ink), var(--ink)) center / 4px 100% no-repeat;
 }
 
 .split-join.suggested {
