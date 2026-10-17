@@ -16,13 +16,23 @@ Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die 
 
 ## 8.3 Verteilungen
 
-- Jahr: 1972 und 1973 stellen 941 der 1 547 Flugblätter (61 %). 46 % tragen ein Datum auf dem Blatt.
-- Herausgeber: 170 im Register mit mindestens einem Flugblatt. Die größten: AStA (317), RCDS (133), Demokratische Mitte (66), Aktionsgemeinschaft liberaler Studenten (66), MSB Spartakus (60).
-- Textsorten: Flugblatt im engeren Sinn 1 140 (74 %), Einladung 186 (12 %), Broschüre 83, Zeitschrift 42, offener Brief 41, Protokoll 21, unklar 34.
+- Jahr: Nach zugeordnetem Jahr (Datum auf dem Blatt, sonst Jahr des Bandes) stellen 1972 und 1973 940 der 1 547 Flugblätter (61 %); nach dem Jahr des Bandes sind es 941 (`kennzahlen.md`). 46 % tragen ein Datum auf dem Blatt.
+- Herausgeber: 169 im Register mit mindestens einem Flugblatt. Die größten: AStA (318), RCDS (133), Aktionsgemeinschaft liberaler Studenten (67), Demokratische Mitte (66), MSB Spartakus (60).
+- Textsorten: Flugblatt im engeren Sinn 1 139 (74 %), Einladung 187 (12 %), Broschüre 83, Zeitschrift 42, offener Brief 41, Protokoll 21, unklar 34.
 - Umfang: Median 2 Seiten, Mittel 2,3, längstes Flugblatt 42 Seiten; 738 Flugblätter haben eine Seite.
-- Abbildungen: Flugblätter nach Jahr (mit und ohne Datum auf dem Blatt), nach Herausgeber, nach Seitenzahl.
+
+![Flugblätter nach zugeordnetem Jahr](../abbildungen/1_verteilung_jahr.png)
+
+![Flugblätter nach Herausgeber](../abbildungen/4_herausgeber.png)
+
+![Flugblätter nach Textsorte](../abbildungen/5_textsorte.png)
+
+![Flugblätter nach Seitenzahl](../abbildungen/2_seitenlaenge.png)
+
+<!-- Abbildungen aus flugblatt_praxisseminarSS26/notebooks/praesentation_plots.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
 
 ## 8.4 Lesart
 
-- Viele Flugblätter aus 1972/73 zeigen zunächst, was überliefert ist, nicht zwingend mehr politische Aktivität.
+- Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Zahlen zu Themen und Herausgebern zeigen, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
+- Die Häufung 1972/73 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Zugleich zeigt sie, was überliefert ist; aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen.
 - Für 1973 fehlt Einheit 15 (Kap. 2.5).

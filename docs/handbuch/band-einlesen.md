@@ -34,7 +34,9 @@
 
 ## 7. Themen zuordnen
 
-<!-- Zuordnung neuer Blätter; „Themen neu berechnen“ ist ein eigener Schritt mit Vorschau. -->
+Optional, auch nach der Freigabe. „Themen zuordnen“ gibt jedem Flugblatt das ähnlichste bestehende Thema und einen Punkt auf der Themenkarte. Braucht den OpenRouter-Key; kostet weniger als einen Cent je Band. Beim ersten Mal holt die App auch die Embeddings aller freigegebenen Flugblätter (etwa 2 Cent, einige Minuten).
+
+Danach zeigt der Schritt, wie viele Flugblätter ein Thema haben und wie viele davon unsicher sind. Neue Themen entstehen hier nicht; dafür gibt es „Themen neu berechnen“ (Handbuch Betrieb).
 
 ## Wenn etwas schiefgeht
 

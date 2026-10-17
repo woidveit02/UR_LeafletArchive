@@ -25,3 +25,11 @@ ToDo.txt
 .env
 src/backend/app/logs/app.log
 src/backend/leaflet_database.db
+site/
+bericht.pdf
+
+# topics: embedding cache, unreviewed candidate, backups of replaced runs
+data/embeddings.*.npz
+data/*.kandidat.json
+data/*.bis-*.json
+/docs/arbeitsdokumente

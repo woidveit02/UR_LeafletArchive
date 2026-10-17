@@ -14,11 +14,19 @@ Das Layout ist teilweise kompliziert: Neben einspaltigem Fließtext gibt es mehr
 
 Am stärksten fiel ins Gewicht, wie gut ein System mit den Scans selbst umgeht. Die Vorlagen sind Aufnahmen gealterter Blätter und keine digital erzeugten Dateien: Das Papier ist teils verfärbt, die Schrift ausgeblichen, und die Rückseite scheint mitunter durch. Außerdem sind die Texte deutsch, mit Umlauten und ß.
 
+![Ausschnitte aus vier Seiten mit dem, was die OCR dort gelesen hat](../abbildungen/ocr_schwierigkeiten.png)
+
+*Abbildung: Typische Schwierigkeiten und was die Datalab API daraus las. Die gemalte Überschrift wird zu „VRABSTIMMUNG“ statt „Urabstimmung“; gesperrte Wörter erscheinen Buchstabe für Buchstabe; der stark verblichene Text wird hier richtig gelesen; die Paraphe im Stempel beschreibt die API auf Englisch, die handschriftliche Ablagenummer liest sie richtig.*
+
 Für die weitere Verarbeitung reicht reiner Text nicht aus. Die Segmentierung nutzt Kopfzeilen als Hinweis auf den Beginn eines neuen Blatts (Kapitel 4), die Textvorverarbeitung filtert Kopf- und Fußzeilen, Seitenzahlen und Bilder heraus (Kapitel 7). Das System sollte deshalb den Text in Blöcke gliedern, diesen Blöcken einen Typ zuweisen und ihre Lage auf der Seite angeben (Bounding Boxes).
+
+![Seite 394 aus Band 006 mit den Blöcken, in die die Datalab API sie gliedert](../abbildungen/ocr_bloecke.png)
+
+*Abbildung: So gliedert die Datalab API eine Seite (Flugblatt 850, Band 006, S. 394). Jeder Rahmen ist ein Block mit Typ und Lage; Kopfzeile, Überschriften und Fließtext sind getrennt.*
 
 ## 3.2 Kandidatensuche
 
-Kandidaten haben wir auf drei Wegen gefunden: über die Technical Reports der Entwickler, über die Ranglisten der Benchmarks olmOCR-Bench [@olmocrbench] und OmniDocBench [@omnidocbench] und über Blog- und Forenbeiträge, vor allem auf Reddit und Hacker News. Ausgewählt haben wir Systeme aus drei Gruppen. Die erste bilden große Vision-Sprachmodelle für allgemeine Zwecke, die Seiten als Bild entgegennehmen und Text ausgeben (Claude Sonnet 5, Gemini 3.5 Flash und Qwen3-VL). Die zweite sind kommerzielle Dienste, die auf Dokumente spezialisiert sind (Datalab API und Mistral OCR 4). Die dritte sind spezialisierte Modelle mit offenen Gewichten, die in den Quellen häufig für den Betrieb auf eigener Hardware beschrieben werden (GLM-OCR, PaddleOCR-VL-1.5 und MinerU2.5-Pro).
+Kandidaten haben wir auf drei Wegen gefunden: über die Technical Reports der Entwickler, über die Ranglisten der Benchmarks olmOCR-Bench [@olmocrbench] und OmniDocBench [@omnidocbench] und über Blog- und Forenbeiträge, vor allem auf Reddit und Hacker News. Ausgewählt haben wir Systeme aus drei Gruppen. Die erste bilden große Vision-Sprachmodelle für allgemeine Zwecke, die Seiten als Bild entgegennehmen und Text ausgeben (Claude Sonnet 5, Gemini 3.5 Flash und Qwen3-VL). Die zweite sind kommerzielle Dienste, die auf Dokumente spezialisiert sind (Datalab API und Mistral OCR 4). Die dritte sind spezialisierte Modelle mit offenen Gewichten, die in den Quellen häufig für den Betrieb auf eigener Hardware beschrieben werden (GLM-OCR, PaddleOCR und MinerU).
 
 ## 3.3 Kandidaten und Merkmale
 
@@ -27,12 +35,12 @@ Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Sk
 | System | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
 |---|---|---|---|---|
 | GLM-OCR | spezialisiertes OCR-Modell, offene Gewichte | selbst gehostet, Modell direkt angesprochen | nein, nur Text | läuft über Ollama auch ohne GPU |
-| PaddleOCR-VL-1.5 | spezialisiertes OCR-Modell, offene Gewichte | [ergänzen] | ja | Layout im Test oft falsch erkannt |
-| MinerU2.5-Pro | spezialisiertes OCR-Modell, offene Gewichte | [ergänzen] | ja | geringere Textgenauigkeit |
+| PaddleOCR (klassische PP-OCR-Pipeline, [offen: Version]) | OCR-Pipeline aus Erkennung und Lesung von Zeilen, offene Gewichte | lokal ausgeführt | Zeilen mit Lage, keine Blocktypen | Layout im Test oft falsch erkannt |
+| MinerU 3.4.2 (Backend `pipeline`) | Dokument-Pipeline aus Layout- und OCR-Modellen, offene Gewichte | lokal ausgeführt | ja | geringere Textgenauigkeit |
 | Qwen3-VL (235B-A22B Instruct) | allgemeines Vision-Sprachmodell | API über OpenRouter | nein, nur Text | gute Textgenauigkeit |
 | Claude Sonnet 5 | allgemeines Vision-Sprachmodell | API über OpenRouter, Seiten als Bilder gesendet | nein, nur Text | |
 | Gemini 3.5 Flash | allgemeines Vision-Sprachmodell | Gemini-API | nein, nur Text | |
-| Datalab API (Chandra OCR 2) | OCR-Dienst | API | ja, mit Blocktypen | Wort-Boxen optional |
+| Datalab API (verbesserte Fassung von Chandra OCR 2) | OCR-Dienst | API | ja, mit Blocktypen | Wort-Boxen optional |
 | Mistral OCR 4 | OCR-Dienst | API | ja | Confidence-Wert je Wort |
 
 <!-- OFFEN: Betrieb von PaddleOCR und MinerU ergänzen, je Merkmal mit Quelle, Version und Abrufdatum.
@@ -56,6 +64,8 @@ Die folgende Übersicht fasst Angaben der Entwickler und veröffentlichte Benchm
 | Datalab API | Datalab | proprietäre Pipeline um Chandra 2 | proprietär | nicht berichtet | 86,7 ± 0,8 |
 | [Mistral OCR 4](https://mistral.ai/news/ocr-4/) [@mistralocr4] | Mistral AI | proprietär, spezialisiert | proprietär | 93,07 | 85,20 |
 
+<!-- OFFEN: Die Zeilen PaddleOCR-VL-1.5 und MinerU2.5-Pro beschreiben neuere Modelle, nicht die getesteten Versionen (klassische PP-OCR-Pipeline, MinerU 3.4.2 mit Backend pipeline). Kennzeichnen oder ersetzen, siehe arbeitsdokumente/offene-punkte.md. -->
+
 Die Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt; Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
 
 <!-- Gemini 3.5 Flash (Mai 2026): Google veröffentlicht keine Werte für OmniDocBench oder olmOCR-Bench.
@@ -76,7 +86,7 @@ Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogene
 
 ## 3.5 Vorauswahl
 
-Nach einer ersten Durchsicht der Ausgaben auf dem Testkorpus schieden sechs Systeme aus. GLM-OCR, Claude Sonnet 5 und Gemini 3.5 Flash lieferten nur Text, ohne Bounding Boxes und ohne Blocktypen. Ihnen fehlt damit eine Layouterkennung, die Tabellen, Listen und mehrspaltige Seiten als solche wiedergibt. Qwen3-VL erkannte den Text gut, gliederte die Seite aber ebenfalls nicht. PaddleOCR-VL-1.5 erkannte das Layout häufig falsch. MinerU2.5-Pro erkannte das Layout, lieferte aber eine geringere Textgenauigkeit. Die besten Ergebnisse erzielten die Datalab API (Chandra OCR 2) und Mistral OCR 4, die damit in die engere Wahl kamen.
+Nach einer ersten Durchsicht der Ausgaben auf dem Testkorpus schieden sechs Systeme aus. GLM-OCR, Claude Sonnet 5 und Gemini 3.5 Flash lieferten nur Text, ohne Bounding Boxes und ohne Blocktypen. Ihnen fehlt damit eine Layouterkennung, die Tabellen, Listen und mehrspaltige Seiten als solche wiedergibt. Qwen3-VL erkannte den Text gut, gliederte die Seite aber ebenfalls nicht. PaddleOCR erkannte das Layout häufig falsch. MinerU erkannte das Layout, lieferte aber eine geringere Textgenauigkeit. Die besten Ergebnisse erzielten die Datalab API (Chandra OCR 2) und Mistral OCR 4, die damit in die engere Wahl kamen.
 
 Beide Systeme haben auf dem Testkorpus vieles gemeinsam. Sie erkennen auch komplexe Layouts, gliedern die Seite in Blöcke mit Lage und Typ und kommen mit Handschrift gut zurecht. Beide erzeugen Beschreibungen für Abbildungen, Mistral OCR 4 kostet über die API 4 $ je 1 000 Seiten, die Datalab API im Modus `accurate` 10 $ (Preise Stand August 2026, siehe 3.9). Beide Anbieter veröffentlichen eigene Benchmark-Ergebnisse für Deutsch (Datalab) bzw. für die westeuropäische Sprachgruppe (Mistral). Im olmOCR-Bench geben die Anbieter 86,7 ± 0,8 Punkte für die Datalab API [@chandra2] und 85,20 Punkte für Mistral OCR 4 an [@mistralocr4]. Das sind Herstellerangaben, die wir nicht selbst nachgemessen haben, und der Abstand liegt innerhalb der Unsicherheit des Benchmarks. Mistral OCR 4 liefert zusätzlich für jedes Wort einen Confidence-Wert und war in unserem Test schneller: Die 100 Testseiten waren in 14 bis 22 Sekunden verarbeitet.
 
@@ -120,7 +130,7 @@ Fehler im Layout wiesen 18 der 105 Seiten auf (17 %), Fehler in der Lesereihenfo
 
 ## 3.8 Entscheidung
 
-Wir haben uns für die Datalab API mit Chandra OCR 2 entschieden. Ausschlaggebend waren die höhere Textgenauigkeit im Vergleich, vor allem bei verblichenen Seiten und Eigennamen, und die genauere Wiedergabe des Layouts. Für die weitere Verarbeitung zählt außerdem, dass Datalab Kopf- und Fußzeilen getrennt ausweist und Tabellen als solche erkennt. Die Vorteile von Mistral OCR 4, die Confidence-Werte je Wort und die höhere Geschwindigkeit, wogen das nicht auf.
+Wir haben uns für die Datalab API entschieden, die eine verbesserte Fassung von Chandra OCR 2 einsetzt. Ausschlaggebend waren die höhere Textgenauigkeit im Vergleich, vor allem bei verblichenen Seiten und Eigennamen, und die genauere Wiedergabe des Layouts. Für die weitere Verarbeitung zählt außerdem, dass Datalab Kopf- und Fußzeilen getrennt ausweist und Tabellen als solche erkennt. Die Vorteile von Mistral OCR 4, die Confidence-Werte je Wort und die höhere Geschwindigkeit, wogen das nicht auf.
 
 <!-- OFFEN: Datum der Entscheidung ergänzen und die Begründung im Team bestätigen. -->
 

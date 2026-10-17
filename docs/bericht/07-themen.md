@@ -4,41 +4,42 @@ Ein Themenmodell gruppiert inhaltlich ähnliche Flugblätter zu 40 Themen und sc
 
 ## 7.1 Aufgabe
 
-- Einen thematischen Zugang zum Bestand schaffen.
+Die Themen sollen einen inhaltlichen Zugang zum Bestand schaffen, neben der Suche nach Wörtern und der Ordnung nach Bänden und Herausgebern.
 
 ## 7.2 Herausforderungen
 
-- Viele Flugblätter behandeln mehrere Themen, das Modell vergibt aber nur eines.
-- Formelhafte Wörter, Gruppenkürzel und OCR-Reste überlagern den Inhalt.
+Viele Flugblätter behandeln mehrere Themen, das Modell vergibt aber nur eines. Außerdem überlagern formelhafte Wörter, Gruppenkürzel und Reste der Texterkennung den eigentlichen Inhalt.
 
-## 7.3 Verfahren und Entscheidung
+## 7.3 Verfahren
 
-- Textvorverarbeitung: Blockfilter (Kopf- und Fußzeilen, Seitenzahlen, Bilder), Silbentrennung zusammenführen, Gruppenkürzel zusammenfassen [aus alter Fassung 5.3, Quelle handbuch/ngrams.md].
-- bge-m3 bildet den ganzen Text jedes Flugblatts als Vektor ab (bis 8 192 Token).
-- BERTopic gruppiert mit UMAP und HDBSCAN: 50 Themen, zusammengefasst auf 40; Stoppwörter und Organisationskürzel entfernt.
-- Flugblätter ohne klares Thema werden dem ähnlichsten zugeordnet und als unsicher markiert.
-- Titel: Ein Sprachmodell schlägt sie aus Schlagwörtern und Textauszügen vor; danach wurden alle 40 von Hand nach Leitlinien geprüft, 15 am 13./14.10. geändert (`docs/analyse/themen-titel-vorschlaege.md` im Arbeits-Repository).
-- Aktueller Lauf vom 03.10.2026, Startwert 42.
+Vor der Berechnung wird der Text bereinigt. Ein Blockfilter entfernt Kopf- und Fußzeilen, Seitenzahlen und Bilder, getrennte Wörter werden zusammengeführt und Gruppenkürzel vereinheitlicht [offen: aus alter Fassung 5.3 übertragen, Quelle `handbuch/ngrams.md`].
 
-## 7.4 Wie gut
+Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab, bis zu einer Länge von 8 192 Token. BERTopic gruppiert diese Vektoren mit UMAP und HDBSCAN zu 50 Themen, die anschließend auf 40 zusammengefasst werden. Stoppwörter und Kürzel von Organisationen werden dabei nicht berücksichtigt. Flugblätter ohne klares Thema werden dem ähnlichsten zugeordnet und als unsicher markiert. Der aktuelle Lauf stammt vom 03.10.2026, mit dem Startwert 42.
 
-- Keine Messung.
-- 1 078 Flugblätter sicher zugeordnet, 408 unsicher, 61 ohne Thema.
-- Größte Themen: Streiks und Vollversammlungen gegen das Hochschulgesetz (136), Debatte um Hochschulgesetz und Hochschulreform (71), Hochschulwahlen (47).
-- Beispiel für eine Fehlzuordnung: Das Flugblatt zum Streik gegen die Notstandsgesetze vom 29.05.1968 liegt im Thema zum Hochschulgesetz, weil beide um Streiks gehen.
+Die Titel der Themen schlägt ein Sprachmodell aus Schlagwörtern und Textauszügen vor. Danach wurden alle 40 Titel von Hand nach Leitlinien geprüft und 15 davon am 13. und 14.10.2026 geändert (`docs/analyse/themen-titel-vorschlaege.md` im Arbeits-Repository).
 
-## 7.5 Was von Hand bleibt
+## 7.4 Qualität
 
-- Titel prüfen und umbenennen (über `data/topics.json`).
+Die Qualität der Zuordnung wurde nicht gemessen. 1 078 Flugblätter sind sicher zugeordnet, 408 unsicher und 61 haben kein Thema. Die größten Themen sind „Streiks und Vollversammlungen gegen das Hochschulgesetz“ (136 Flugblätter), „Debatte um Hochschulgesetz und Hochschulreform“ (71) und „Hochschulwahlen: Kandidaten, Listen und Ergebnisse“ (47).
+
+Fehlzuordnungen kommen vor. Das Flugblatt zum Streik gegen die Notstandsgesetze vom 29.05.1968 etwa liegt im Thema zum Hochschulgesetz, weil es in beiden um Streiks geht.
+
+![Themenkarte und Themenliste der Anwendung](../abbildungen/app_themen.png)
+
+*Abbildung: Themenkarte der Anwendung. Jeder Punkt ist ein Flugblatt, nahe Punkte haben ähnliche Texte. Flugblatt 850 gehört zum Thema „Fachschaftssatzungen und Urabstimmungen“ (25 Flugblätter).*
+
+## 7.5 Manuelle Prüfung
+
+Von Hand werden die Titel der Themen geprüft und bei Bedarf umbenannt. Das geht in der Anwendung unter Verwaltung › Themen; die Titel stehen in `data/topics.json`.
 
 ## 7.6 Kosten
 
-- Wenige Cent je Lauf über den ganzen Bestand.
+Ein Lauf über den ganzen Bestand kostet wenige Cent.
 
-## 7.7 Für die Weiterarbeit
+## 7.7 Hinweise zur Weiterentwicklung
 
-- Ein neuer Lauf vergibt neue Themennummern; die von Hand geprüften Titel gehen dann verloren.
-- Jedes Flugblatt hat genau ein Thema.
-- Das Modell rechnet über alle Exemplare statt nur über die Hauptexemplare.
-- Themen neu berechnen über das eigene Docker-Profil, Ergebnis zuerst als Kandidat neben `topics.json` (Handbuch Betrieb).
-- Abbildung: Themenliste der Anwendung.
+Neue Bände bekommen ihre Themen in Schritt 7 des Imports (`src/backend/app/topics.py`). Die Anwendung holt dazu die Embeddings mit bge-m3 über OpenRouter und ordnet jedes Flugblatt dem Thema zu, dessen Mittelpunkt ihm am nächsten liegt. Ist es dem Mittelpunkt weniger ähnlich als drei Viertel der Flugblätter, die schon im Thema liegen, gilt die Zuordnung als unsicher. Den Punkt auf der Themenkarte bekommt es als Mittel seiner fünf nächsten Nachbarn. Neue Themen entstehen dabei nicht.
+
+Dafür lassen sich die Themen in der Anwendung neu berechnen, unter Verwaltung › Themen. Das Verfahren ist dasselbe wie beim ersten Lauf, rechnet aber nur über die Hauptexemplare; weitere Exemplare bekommen das Thema ihres Hauptexemplars. Das Ergebnis wird nicht sofort übernommen. Eine Prüfseite zeigt zu jedem neuen Thema das bisherige mit den meisten gemeinsamen Flugblättern. Behält ein Thema mindestens die Hälfte davon, ist sein von Hand geprüfter Titel vorausgefüllt, sonst der Vorschlag des Sprachmodells, der nun den Leitlinien für die Titel folgt. Erst mit „Übernehmen“ ersetzt das Ergebnis die bisherigen Themen, die als Sicherung erhalten bleiben. Entwürfe zählen bei der Neuberechnung nicht mit und brauchen danach Schritt 7 noch einmal.
+
+Jedes Flugblatt hat genau ein Thema. Die Neuberechnung in der Anwendung wurde bisher nicht mit dem ersten Lauf verglichen [offen].

@@ -20,7 +20,7 @@ Belege zur OCR-Evaluation liegen außerhalb dieses Ordners unter `eval/ocr/`.
 
 - **Universitätsarchiv:** [Kurzfassung](bericht/00-kurzfassung.md), [Neuen Band einlesen](handbuch/band-einlesen.md), dann [Kapitel 8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md).
 - **Forschung:** [Kapitel 2 Bestand](bericht/02-bestand.md), [8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md), dann das Notebook unter `vertiefung/`.
-- **Entwicklung:** [Betrieb](handbuch/betrieb.md), Kapitel 3–7 (je Abschnitt „Für die Weiterarbeit“) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
+- **Entwicklung:** [Betrieb](handbuch/betrieb.md), Kapitel 4–7 (je Abschnitt „Hinweise zur Weiterentwicklung“) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
 
 ## Bericht
 
@@ -36,6 +36,7 @@ Belege zur OCR-Evaluation liegen außerhalb dieses Ordners unter `eval/ocr/`.
 9. [Die Anwendung](bericht/09-anwendung.md)
 10. [Grenzen und Ausblick](bericht/10-grenzen-ausblick.md)
 11. [Zusammenfassung](bericht/11-zusammenfassung.md)
+12. [Projektverlauf und Organisation](bericht/12-projektverlauf.md)
 
 ## Konventionen
 
@@ -48,6 +49,9 @@ Belege zur OCR-Evaluation liegen außerhalb dieses Ordners unter `eval/ocr/`.
 ## Bericht zusammenfügen
 
 ```bash
-pandoc docs/bericht/*.md --citeproc --bibliography docs/literatur.bib -o bericht.pdf
-pandoc docs/bericht/*.md --citeproc --bibliography docs/literatur.bib -o bericht.tex   # für Overleaf
+python scripts/bericht_pdf.py              # bericht.pdf, braucht Pandoc und XeLaTeX
+python scripts/bericht_pdf.py bericht.tex  # für Overleaf
+python -m mkdocs serve -a 127.0.0.1:8001  # als Website, Port 8000 hat die App
 ```
+
+Die Abbildungen erzeugen `scripts/abbildungen_scans.py`, `scripts/abbildungen_app.py` und danach `scripts/abbildung_ablauf.py` (App muss laufen); die Diagramme `flugblatt_praxisseminarSS26/notebooks/praesentation_plots.ipynb` mit `STIL = 'doku'`.

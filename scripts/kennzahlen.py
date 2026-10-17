@@ -78,7 +78,7 @@ def table(header, rows, total):
 def render(data, today=None):
     today = (today or datetime.date.today()).strftime("%d.%m.%Y")
     volumes = data["volumes"]
-    bands = table(["Band", "Jahr", "Seiten", "Segmente", "Exemplare", "Dokumente"],
+    bands = table(["Band", "Jahr", "Seiten", "Segmente", "Exemplare", "Flugblätter"],
                   [(f"{v['vz']:03d}", v["year"], number(v["pages"]), number(v["segments"]), number(v["segments"]),
                     number(v["documents"])) for v in volumes],
                   ["Summe", "", number(data["pages"]), number(data["segments"]), number(data["segments"]),
@@ -87,7 +87,7 @@ def render(data, today=None):
     def further(segments, documents):
         return number(segments - documents), percent(segments - documents, segments)
 
-    by_band = table(["Bandjahr", "Bände", "Seiten", "Segmente", "Exemplare", "Dokumente", "weitere Exemplare",
+    by_band = table(["Bandjahr", "Bände", "Seiten", "Segmente", "Exemplare", "Flugblätter", "weitere Exemplare",
                      "Anteil"],
                     [(y, sum(str(v["year"]) == y for v in volumes), number(data["band_pages"][y]),
                       number(data["band_year"]["segments", y]), number(data["band_year"]["segments", y]),
@@ -97,11 +97,11 @@ def render(data, today=None):
                      number(data["segments"]), number(data["documents"]),
                      *further(data["segments"], data["documents"])])
     labels = sorted({y for _, y in data["date_year"] if y != UNDATED}) + [UNDATED]
-    by_date = table(["Datierungsjahr", "Segmente", "Exemplare", "Dokumente"],
+    by_date = table(["Datierungsjahr", "Segmente", "Exemplare", "Flugblätter"],
                     [(y, number(data["date_year"]["segments", y]), number(data["date_year"]["segments", y]),
                       number(data["date_year"]["documents", y])) for y in labels],
                     ["Summe", number(data["segments"]), number(data["segments"]), number(data["documents"])])
-    types = table(["Textsorte", "Dokumente", "Anteil"],
+    types = table(["Textsorte", "Flugblätter", "Anteil"],
                   [(app.DOC_TYPES.get(t, t), number(n), percent(n, data["documents"]))
                    for t, n in data["types"].most_common()],
                   ["Summe", number(data["documents"]), percent(data["documents"], data["documents"])])
@@ -114,27 +114,27 @@ Stand: {today}, Datenbank vom {data['stamp']}. Erzeugt von scripts/kennzahlen.py
 
 {bands}
 
-Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Segmente: alle Flugblätter, die beim Splitten entstanden sind. Exemplare: jedes Segment ist ein Exemplar eines Dokuments, deshalb dieselbe Zahl wie Segmente. Dokumente: Exemplare zusammengefasst, nur das Hauptexemplar jeder Gruppe, ohne Trennblätter und leere Seiten (sie gehören zu keinem Segment). Nur freigegebene Bände; ein Band ohne Seiten ist angelegt, aber nicht eingelesen.
+Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Segmente: alle Stücke, die beim Trennen entstanden sind. Exemplare: jedes Segment ist ein Exemplar eines Flugblatts, deshalb dieselbe Zahl wie Segmente. Flugblätter: Exemplare zusammengefasst, nur das Hauptexemplar jeder Gruppe, ohne Trennblätter und leere Seiten (sie gehören zu keinem Segment). Nur freigegebene Bände; ein Band ohne Seiten ist angelegt, aber nicht eingelesen.
 
 ### Je Bandjahr
 
 {by_band}
 
-Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Segmente, die nicht Hauptexemplar ihrer Gruppe sind (Segmente minus Dokumente), Anteil an den Segmenten; sie zählen im Jahr ihres eigenen Bandes, das Hauptexemplar kann in einem anderen liegen. Zählweise sonst wie oben.
+Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Segmente, die nicht Hauptexemplar ihrer Gruppe sind (Segmente minus Flugblätter), Anteil an den Segmenten; sie zählen im Jahr ihres eigenen Bandes, das Hauptexemplar kann in einem anderen liegen. Zählweise sonst wie oben.
 
 ### Je Datierungsjahr
 
 {by_date}
 
-Datierungsjahr: Jahr des Datums auf dem Dokument. Zeile „{UNDATED}“: Dokumente ohne lesbares Datum (in den App-Listen zählen sie im Jahr ihres Bandes). Seiten gibt es hier nicht, sie hängen am Band. Zählweise wie oben.
+Datierungsjahr: Jahr des Datums auf dem Flugblatt. Zeile „{UNDATED}“: Flugblätter ohne lesbares Datum (in den App-Listen zählen sie im Jahr ihres Bandes). Seiten gibt es hier nicht, sie hängen am Band. Zählweise wie oben.
 
 ## Herausgeber und Textsorten
 
-Herausgeber mit mindestens einem Dokument: **{number(data['issuers'])}**. Dokumente ohne erkannten Herausgeber: {number(data['no_issuer'])}, mit einem Herausgeber, der nicht im Register steht: {number(data['unregistered'])} (dieselben Dokumente zählen bei mehreren Herausgebern mehrfach).
+Herausgeber mit mindestens einem Flugblatt: **{number(data['issuers'])}**. Flugblätter ohne erkannten Herausgeber: {number(data['no_issuer'])}, mit einem Herausgeber, der nicht im Register steht: {number(data['unregistered'])} (dieselben Flugblätter zählen bei mehreren Herausgebern mehrfach).
 
 {types}
 
-Herausgeber: Einträge des Registers, bei denen mindestens ein Dokument (Hauptexemplar) steht. Textsorte: Feld „Typ“ des Dokuments (Hauptexemplar), „unklar“ ohne Angabe.
+Herausgeber: Einträge des Registers, bei denen mindestens ein Flugblatt (Hauptexemplar) steht. Textsorte: Feld „Typ“ des Flugblatts (Hauptexemplar), „unklar“ ohne Angabe.
 
 Token: nicht aufgeführt. Die Tokenisierung von pipelines/06_analysis/ngrams.py arbeitet auf den OCR-Dateien (Blocktypen, Silbentrennung), die nicht in der Datenbank liegen; eine Zahl aus den Datenbanktexten wäre anders gezählt.
 {END}"""

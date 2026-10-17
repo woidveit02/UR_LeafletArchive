@@ -1,0 +1,22 @@
+site_name: Flugblattsammlung – Dokumentation
+docs_dir: docs
+exclude_docs: |
+  arbeitsdokumente/
+theme:
+  name: material
+  language: de
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - toc.follow
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+  - admonition
+  - footnotes
+plugins:
+  - search:
+      lang: de
+  - bibtex:
+      bib_file: docs/literatur.bib

@@ -237,7 +237,7 @@ python pipelines/06_analysis/ngrams.py --bands 0118_0009,0118_0013 kwic Berufsve
 [1973 0118_0013] …n eine Personalakte beim KUMi (zwecks späterem [Berufsverbot]). Dieses BHG zeichnet sich also v.a. dadurch…
 ```
 
-**Lesehinweis:** Die beiden 1973er Belege (`KuMi` / `KUMi`) sind dasselbe Blatt — ein Doppelstück im Bestand, das die OCR zweimal leicht anders gelesen hat. Solche Funde nebenbei sind der Grund, warum `kwic` zu jeder Auswertung gehört.
+**Lesehinweis:** Die beiden 1973er Belege (`KuMi` / `KUMi`) sind dasselbe Blatt — ein Mehrfachexemplar im Bestand, das die OCR zweimal leicht anders gelesen hat. Solche Funde nebenbei sind der Grund, warum `kwic` zu jeder Auswertung gehört.
 
 Die Suche ist eine einfache Zeichenkettensuche ohne Berücksichtigung von Groß-/Kleinschreibung, kein Token-Match — `Berufsverbot` findet also auch `Berufsverbote`. `--limit` gilt **je Band**, `--width` steuert die Kontextbreite (Standard 45 Zeichen je Seite).
 
