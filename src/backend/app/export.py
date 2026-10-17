@@ -135,7 +135,7 @@ Export vom {datetime.date.today():%d.%m.%Y}: {n_volumes} freigegebene Bände, {n
 - `flugblaetter.csv`: dieselben Angaben ohne Volltext, mehrere Werte durch `; ` getrennt.
 - `texte/<id>.txt`: der Volltext jedes Flugblatts als einzelne Datei.
 - `flugblatt_herausgeber.csv`: Herausgeber und Unterzeichnende je Flugblatt, mit Wortlaut und Beleg aus dem Text.
-- `herausgeber.csv`: das Register der Herausgeber (`id` wie in `herausgeber_id`, GND-Nummer, Namensvarianten).
+- `herausgeber.csv`: das Register der Herausgeber (`id` wie in `herausgeber_id`, Namensvarianten).
 - `baende.csv`: die Archivbände mit Signatur, Link ins Archivportal-D und den Läufen von Texterkennung und Metadaten.
 - `themen.csv`: die Themen aus dem Topic Modelling mit ihren Schlagwörtern.
 - `seiten.jsonl`: jede Seite mit Text und Textblöcken (`box`: x, y, Breite, Höhe in Prozent der Seite; `html`).

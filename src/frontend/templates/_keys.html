@@ -1,0 +1,60 @@
+{# API keys of the online services: shown in the import steps and under Verwaltung > API-Keys #}
+{% macro key_help(service) %}
+<details class="help">
+    <summary>Wo finde ich meinen API-Key?</summary>
+    {% if service == 'datalab' %}
+    <h4>Was ist Datalab, was ein API-Key?</h4>
+    <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
+        Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
+    {% else %}
+    <h4>Was ist OpenRouter, was ein API-Key?</h4>
+    <p><b>OpenRouter</b> ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
+        Die App schickt den erkannten Text jedes Flugblatts dorthin und bekommt Titel, Datum und Herausgeber zurück, für die Themen außerdem Embeddings, aus denen sich die Ähnlichkeit der Texte ergibt. Abgerechnet wird nach der Nutzung über Guthaben im OpenRouter-Konto.</p>
+    {% endif %}
+    <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
+        und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
+    <h4>Wie bekomme ich einen API-Key?</h4>
+    {% if service == 'datalab' %}
+    <ol>
+        <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
+        <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
+            (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
+        <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+    </ol>
+    <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
+    {% else %}
+    <ol>
+        <li>Konto auf <a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a> anlegen.</li>
+        <li>Unter „Credits“ Guthaben aufladen.</li>
+        <li>Unter „Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
+    </ol>
+    <p>Die Preise je Modell stehen in der <a href="https://openrouter.ai/models" target="_blank" rel="noopener">Modellübersicht</a>.</p>
+    {% endif %}
+    <h4>Wo wird der API-Key gespeichert?</h4>
+    <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
+</details>
+{% endmacro %}
+{% macro key_block(service, key, finished, action, step='') %}
+{% set name = 'Datalab' if service == 'datalab' else 'OpenRouter' %}
+{% set fields %}<input type="hidden" name="service" value="{{ service }}">{% if step %}<input type="hidden" name="step" value="{{ step }}">{% endif %}{% endset %}
+{% if key and key.from_env %}
+<p class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
+{% elif key %}
+<details class="key-change">
+    <summary class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}) · <span class="key-link">Ändern</span></summary>
+    <form method="post" action="{{ action }}" class="key-form">{{ fields }}
+        <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
+        <button type="submit" class="button small">Speichern</button>
+        <button type="submit" name="forget" value="true" class="link-button" formnovalidate
+                onclick="return confirm('API-Key entfernen? Der gespeicherte Schlüssel wird gelöscht.')">Entfernen</button>
+    </form>
+    {% if not finished %}{{ key_help(service) }}{% endif %}
+</details>
+{% else %}
+<p>Das läuft über ein kostenpflichtiges {{ name }}-Konto. Hinterlege dafür einen API-Key.</p>
+<form method="post" action="{{ action }}" class="key-form">{{ fields }}
+    <label>API-Key<input type="password" name="key" autocomplete="off"></label>
+    <button type="submit" class="button small primary">API-Key speichern</button>
+</form>
+{% endif %}
+{% endmacro %}

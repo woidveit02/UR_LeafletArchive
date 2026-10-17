@@ -784,13 +784,13 @@ def models():
     return _models.get("list", [])
 
 
-def top_models(used, n=8):
+def top_models(used, n=8, default=DEFAULT_MODEL):
     """[(group, [(id, label)])] for the choice: the models of the released volumes (used: [(id, number of volumes)],
     most used first), the n strongest. Models OpenRouter no longer lists are left out;
     without the list (offline) all but the strongest stay."""
     names = {m[0]: m[1] for m in models()}
     count = dict(used)
-    groups = [("Bisher verwendet", [i for i, _ in used] or [DEFAULT_MODEL]),
+    groups = [("Bisher verwendet", [i for i, _ in used] or [default]),
               ("Weitere Modelle", list(names)[:n])]
     seen, out = set(), []
     for label, ids in groups:

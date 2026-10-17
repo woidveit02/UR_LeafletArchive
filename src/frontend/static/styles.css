@@ -5383,7 +5383,7 @@ body.split-lock {
 
 .admin-tiles {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-bottom: 32px;
 }
 
@@ -6175,4 +6175,160 @@ h2 .count {
     font-size: 1em;
     color: var(--ink);
     cursor: pointer;
+}
+
+/* topic titles in the admin tables: the column takes the room, a title fits on one line */
+.title-input {
+    width: 100%;
+    min-width: 24rem;
+}
+
+@media (max-width: 600px) {
+    .title-input {
+        min-width: 0;
+    }
+}
+
+.topic-admin > p, .topic-admin > form > p, .topic-admin > form > label {
+    max-width: 50rem;
+}
+
+/* the review of a new topic run: summary and buttons stay in view over the long table */
+.review-summary {
+    position: sticky;
+    top: var(--topbar-h, 62px);
+    z-index: 2;
+    margin-bottom: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+}
+
+.topic-examples ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+}
+
+form.topic-title-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+form.topic-title-row[hidden] {
+    display: none;
+}
+
+span.topic-title-row .link-button {
+    margin-left: 6px;
+    text-decoration: none;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.topic-run {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 16px;
+    margin: 0 0 16px;
+}
+
+.topic-run dt {
+    color: var(--ink-soft);
+    font-weight: 600;
+}
+
+.topic-run dd {
+    margin: 0;
+}
+
+.key-section {
+    max-width: 50rem;
+    margin: 24px 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.key-section h2 {
+    margin: 0 0 4px;
+}
+
+.review-table td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    vertical-align: top;
+}
+
+.review-heading {
+    margin: 40px 0 4px;
+}
+
+.review-table td.num,
+.review-table td:last-child {
+    padding-top: 17px;
+}
+
+/* the list is the main choice; searching all models is the smaller way below it */
+.model-search-other {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+form input.model-search-input {
+    max-width: 30rem;
+    font-size: 0.9rem;
+}
+
+.model-cost {
+    margin: 8px 0 2px;
+    font-weight: 600;
+}
+
+form input.count-input {
+    max-width: 7rem;
+}
+
+.topic-later {
+    max-width: 50rem;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.topic-later p {
+    margin: 0 0 4px;
+}
+
+.review-table {
+    table-layout: fixed;
+}
+
+.review-table .col-title {
+    width: 62%;
+}
+
+.review-table .col-count {
+    width: 10%;
+}
+
+.review-table th.num {
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .review-table {
+        table-layout: auto;
+    }
+}
+
+.review-table.review-plain td {
+    padding-top: 8px;
+}
+
+
+.topic-admin > .form-warn {
+    font-weight: 400;
 }

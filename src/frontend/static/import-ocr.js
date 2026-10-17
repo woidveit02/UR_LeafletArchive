@@ -60,7 +60,8 @@
     const render = () => {
         if (!job || job.state !== 'running') return;
         box.hidden = false;
-        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}` +
+        const count = `${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}`;  // a phase without a count shows its name alone
+        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.phase ? job.phase + (job.total ? ` · ${count}` : '') : count}` +
             (job.cancel ? ' · wird abgebrochen, bereits gesendete Teile werden noch fertig' : '');
         if (cancel) cancel.disabled = Boolean(job.cancel);
         if (job.done) { bar.max = job.total; bar.value = job.done; } else bar.removeAttribute('value');

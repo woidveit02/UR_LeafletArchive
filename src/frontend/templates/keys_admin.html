@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}API-Keys – UR Leaflet Archive{% endblock %}
+{% block content %}
+        {% from "_keys.html" import key_help, key_block with context %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › API-Keys</span></nav>
+        <header class="page-head">
+            <h1>API-Keys</h1>
+        </header>
+        <div class="topic-admin">
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        {% if saved %}<p class="form-ok" role="status">Gespeichert.</p>{% endif %}
+        <p>Einige Schritte beim Einlesen eines Bandes nutzen kostenpflichtige Online-Dienste. Die Schlüssel gelten für alle Bände; ein Schlüssel aus der .env hat Vorrang vor einem hier gespeicherten.</p>
+        <section class="key-section">
+            <h2>Datalab</h2>
+            <p class="meta">Für Schritt 3: Text erkennen.</p>
+            {{ key_block('datalab', keys.datalab, true, '/verwaltung/api-keys') }}
+            {{ key_help('datalab') }}
+        </section>
+        <section class="key-section">
+            <h2>OpenRouter</h2>
+            <p class="meta">Für Schritt 5: Metadaten erzeugen, Schritt 7: Themen zuordnen, und für „Themen neu berechnen“.</p>
+            {{ key_block('openrouter', keys.openrouter, true, '/verwaltung/api-keys') }}
+            {{ key_help('openrouter') }}
+        </section>
+        </div>
+{% endblock %}

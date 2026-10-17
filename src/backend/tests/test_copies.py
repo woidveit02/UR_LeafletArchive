@@ -375,3 +375,28 @@ def test_correction_move(tmp_path, monkeypatch):
     leaflet_app.correction_move("0118_0002", 5, 6, 0)
     html = leaflet_app.correction_list(page("/korrekturen")).body.decode()
     assert "übernehmen" not in html and "Ohne Zuordnung" not in html and a.title == "Neuer Titel" and b.doc_type != "Plakat"
+
+
+# Tests if a draft never holds the main copy of a group with a released leaflet, even with the longer text.
+def test_draft_not_main_copy(tmp_path, monkeypatch):
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine)()
+    released = Volume(vz=14, stem="0118_0014", label="Nr. 014 (1973)", year=1973)
+    draft = Volume(vz=15, stem="0118_0015", label="Nr. 015 (1973)", year=1973, status=DRAFT)
+    db.add_all([released, draft])
+    db.flush()
+    old, new = Leaflet(volume_id=released.id, start_page=1, end_page=1), Leaflet(volume_id=draft.id, start_page=1, end_page=1)
+    db.add_all([old, new])
+    db.flush()
+    db.add_all([Page(volume_id=old.volume_id, page_no=1, leaflet_id=old.id, text="kurz"),
+                Page(volume_id=new.volume_id, page_no=1, leaflet_id=new.id, text="etwas länger")])
+    db.commit()
+    (tmp_path / "copies.tsv").write_text(
+        "gruppe\tkanonisch\tband\tseiten\n1\t\tNr. 014 (1973)\t1\n1\tja\tNr. 015 (1973)\t1\n", encoding="utf-8")
+    (tmp_path / "copy_decisions.jsonl").write_text("", encoding="utf-8")
+    monkeypatch.setattr(fillDatabase, "session", db)
+    monkeypatch.setattr(fillDatabase, "COPY_DECISIONS", tmp_path / "copy_decisions.jsonl")
+    monkeypatch.setattr(fillDatabase, "DATA_DIR", tmp_path)
+    fillDatabase.fill_copies()
+    assert old.canonical_leaflet_id == new.canonical_leaflet_id == old.id

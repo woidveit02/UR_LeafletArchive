@@ -2,65 +2,8 @@
 {% block title %}{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %} – UR Leaflet Archive{% endblock %}
 {% block app_class %}{% if split %} app-wide{% endif %}{% endblock %}
 {% block content %}
-        {% macro key_help(service) %}
-        <details class="help">
-            <summary>Wo finde ich meinen API-Key?</summary>
-            {% if service == 'datalab' %}
-            <h4>Was ist Datalab, was ein API-Key?</h4>
-            <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
-                Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
-            {% else %}
-            <h4>Was ist OpenRouter, was ein API-Key?</h4>
-            <p><b>OpenRouter</b> ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
-                Die App schickt den erkannten Text jedes Flugblatts dorthin und bekommt Titel, Datum und Herausgeber zurück. Abgerechnet wird nach der Nutzung über Guthaben im OpenRouter-Konto.</p>
-            {% endif %}
-            <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
-                und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
-            <h4>Wie bekomme ich einen API-Key?</h4>
-            {% if service == 'datalab' %}
-            <ol>
-                <li>Konto auf <a href="https://www.datalab.to" target="_blank" rel="noopener">datalab.to</a> anlegen und das kostenlose Abo („Free“) wählen. Die Nutzung wird danach abgerechnet.</li>
-                <li>Im Konto eine Zahlungsmethode hinterlegen oder Guthaben aufladen
-                    (<a href="https://documentation.datalab.to/platform/billing" target="_blank" rel="noopener">Hinweise zur Abrechnung</a>).</li>
-                <li>Unter „API Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
-            </ol>
-            <p>Die Preise stehen in der <a href="https://www.datalab.to/pricing" target="_blank" rel="noopener">Preisliste</a>.</p>
-            {% else %}
-            <ol>
-                <li>Konto auf <a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a> anlegen.</li>
-                <li>Unter „Credits“ Guthaben aufladen.</li>
-                <li>Unter „Keys“ einen API-Key erzeugen, kopieren und hier einfügen.</li>
-            </ol>
-            <p>Die Preise je Modell stehen in der <a href="https://openrouter.ai/models" target="_blank" rel="noopener">Modellübersicht</a>.</p>
-            {% endif %}
-            <h4>Wo wird der API-Key gespeichert?</h4>
-            <p>Auf diesem Rechner, und er wird nie wieder angezeigt. Entfernen lässt er sich unter „Ändern“.</p>
-        </details>
-        {% endmacro %}
-        {% macro key_block(service, key, finished, step) %}
-        {% set name = 'Datalab' if service == 'datalab' else 'OpenRouter' %}
-        {% set fields %}<input type="hidden" name="service" value="{{ service }}"><input type="hidden" name="step" value="{{ step }}">{% endset %}
-        {% if key and key.from_env %}
-        <p class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}), aus der .env. Sie hat Vorrang vor einem hier gespeicherten API-Key.</p>
-        {% elif key %}
-        <details class="key-change">
-            <summary class="key-line">✓ {{ name }}-Zugang eingerichtet (API-Key …{{ key.hint }}) · <span class="key-link">Ändern</span></summary>
-            <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
-                <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
-                <button type="submit" class="button small">Speichern</button>
-                <button type="submit" name="forget" value="true" class="link-button" formnovalidate
-                        onclick="return confirm('API-Key entfernen? Der gespeicherte Schlüssel wird gelöscht.')">Entfernen</button>
-            </form>
-            {% if not finished %}{{ key_help(service) }}{% endif %}
-        </details>
-        {% else %}
-        <p>Das läuft über ein kostenpflichtiges {{ name }}-Konto. Hinterlege dafür einen API-Key.</p>
-        <form method="post" action="/import/{{ volume.vz }}/schluessel" class="key-form">{{ fields }}
-            <label>API-Key<input type="password" name="key" autocomplete="off"></label>
-            <button type="submit" class="button small primary">API-Key speichern</button>
-        </form>
-        {% endif %}
-        {% endmacro %}
+        {% from "_keys.html" import key_help, key_block with context %}
+        {% from "_models.html" import model_choice %}
         {% macro progress(cancel_url, cancel_confirm) %}
         <div id="ocr-progress" class="upload-progress" hidden>
             <progress></progress>
@@ -322,7 +265,7 @@
         {% endif %}
         <details class="help"{% if not ocr_key %} open{% endif %}>
             <summary>Zugang verwalten</summary>
-            {{ key_block('datalab', ocr_key, true, 'ocr') }}
+            {{ key_block('datalab', ocr_key, true, '/import/' ~ volume.vz ~ '/schluessel', 'ocr') }}
             {{ key_help('datalab') }}
         </details>
         <details class="step-form zip-import">
@@ -416,14 +359,7 @@
             {% if default_model not in ids %}<p class="form-warn">Das bisher meistverwendete Modell ({{ default_model }}) gibt es bei OpenRouter nicht mehr.
                 Wähle ein anderes, möglichst ähnlich starkes Modell. Die Angaben sind dann nicht ganz mit denen der älteren Bände vergleichbar.</p>{% endif %}
             {% set model_fields %}
-                <select id="model-choice" name="model" aria-label="Modell">
-                    {% for label, group in model_top %}<optgroup label="{{ label }}">{% for id, name in group %}<option value="{{ id }}"{% if id == chosen %} selected{% endif %}>{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</optgroup>
-                    {% endfor %}
-                </select>
-                <label class="model-search" for="model">Oder ein anderes Modell suchen</label>
-                <input type="text" id="model" list="model-list" placeholder="Name oder Kennung, zum Beispiel „gemini“ oder „gpt“" spellcheck="false">
-                <datalist id="model-list">{% for id, name in model_names %}<option value="{{ id }}" data-price="{{ model_prices.get(id, '') }}">{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</datalist>
-                <p class="meta">Die Zahl bei „Bände“ nennt, wie viele freigegebene Bände mit diesem Modell erzeugt wurden. Geschätzte Kosten für diesen Lauf: <span id="model-price">{{ model_prices.get(chosen) or 'unbekannt' }}</span>, wird in Dollar angerechnet</p>
+                {{ model_choice(model_top, model_names, model_prices, chosen, 'Die Zahl bei „Bände“ nennt, wie viele freigegebene Bände mit diesem Modell erzeugt wurden.') }}
             {% endset %}
             {% set prompt_fields %}
                 <label class="model-search" for="prompt">Prompt (Anweisung mit Beispielen)</label>
@@ -459,7 +395,7 @@
         </form>
         <details class="help"{% if not meta_key %} open{% endif %}>
             <summary>Zugang verwalten</summary>
-            {{ key_block('openrouter', meta_key, true, 'angaben') }}
+            {{ key_block('openrouter', meta_key, true, '/import/' ~ volume.vz ~ '/schluessel', 'angaben') }}
             {{ key_help('openrouter') }}
         </details>
         </div>
@@ -560,9 +496,64 @@
         </div>
         {% endif %}
         </div>
-        {% else %}
+        {% elif step == 'themen' %}
         <h2>{{ steps[step] }}</h2>
-        <p class="meta">Dieser Schritt folgt.</p>
+        <div class="step-narrow">
+        {% if not topic_state %}
+        <p class="meta">Dafür müssen zuerst die Flugblätter in Schritt 6 vorbereitet sein.</p>
+        {% elif not topic_state.ready %}
+        <p class="meta">Es gibt noch keine Themen. Sie werden einmal für alle freigegebenen Bände berechnet, unter <a href="/verwaltung/themen/neu">Themen neu berechnen</a>.</p>
+        {% else %}
+        {% set busy = topic_job and topic_job.state == 'running' %}
+        {% if topic_job and topic_job.state == 'error' %}<p class="form-error" role="alert">{{ topic_job.error }}</p>{% endif %}
+        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <div class="split-work">
+        <form method="post" action="/import/{{ volume.vz }}/themen" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=themen"{% if busy %} data-running="1"{% endif %}
+              {% if topic_state.assigned %} data-confirm="Die Themen dieses Bandes neu zuordnen? Die jetzige Zuordnung wird ersetzt."{% endif %}>
+        <div class="split-work-head">
+            <div class="step-status">
+            {% if busy %}
+            <p class="meta">Die Themen werden zugeordnet. Beim ersten Mal holt die App auch die Embeddings aller freigegebenen Flugblätter, das dauert einige Minuten.</p>
+            {% elif topic_state.assigned %}
+            <span class="split-count done">{{ topic_state.assigned }} von {{ topic_state.leaflets }} Flugblättern mit Thema</span>
+            <p class="meta">{% if topic_state.uncertain %}{{ topic_state.uncertain | length }} davon unsicher, sie stehen unten.{% else %}Alle sicher zugeordnet.{% endif %}
+                {% if topic_state.assigned < topic_state.leaflets %}Flugblätter mit sehr wenig Text bekommen kein Thema.{% endif %}</p>
+            {% else %}
+            <p>Jedes Flugblatt bekommt das Thema der fünf Flugblätter, deren Text seinem am ähnlichsten ist, und einen Punkt auf der Themenkarte neben ihnen.
+                Sind sich diese Nachbarn nicht einig, oder ist schon der ähnlichste wenig ähnlich, gilt die Zuordnung als unsicher.
+                Die Ähnlichkeit berechnet das Modell bge-m3 über OpenRouter; das kostet weniger als einen Cent je Band.</p>
+            <p class="meta">Neue Themen entstehen dabei nicht. Dafür gibt es <a href="/verwaltung/themen">Themen neu berechnen</a>.</p>
+            {% endif %}
+            </div>
+            {% if not busy %}<span class="split-work-actions"><button type="submit" class="{{ 'button small' if topic_state.assigned else 'button small primary' }}"{% if not topic_key %} disabled{% endif %}>{{ 'Neu zuordnen' if topic_state.assigned else 'Themen zuordnen' }}</button></span>{% endif %}
+        </div>
+        {{ progress('', '') }}
+        </form>
+        {% if topic_state.topics and not busy %}
+        <table class="data-table">
+            <thead><tr><th>Thema</th><th class="num">Flugblätter</th><th class="num">davon unsicher</th></tr></thead>
+            <tbody>{% for id, title, n, unsure in topic_state.topics %}
+            <tr><td>{{ title }}</td><td class="num">{{ n }}</td><td class="num">{{ unsure or '–' }}</td></tr>{% endfor %}
+            </tbody>
+        </table>
+        {% if topic_state.uncertain %}
+        <h3>Unsicher zugeordnet</h3>
+        <p class="meta">Bei diesen Flugblättern waren sich die ähnlichsten Flugblätter nicht einig, oder schon das ähnlichste war wenig ähnlich. Ein Blick lohnt, ob das Thema passt.</p>
+        <ul class="fix-list">{% for lf, title in topic_state.uncertain %}
+            <li><span class="meta">{{ page_range(lf.start_page, lf.end_page) }} · {{ title }}</span>
+                <a class="fix-title" href="/leaflets/{{ lf.id }}">{{ lf.display_title or 'Ohne erkannten Titel' }}</a></li>{% endfor %}
+        </ul>
+        {% endif %}
+        <p class="meta"><a href="/themen">Zur Themenseite</a> · Titel ändern unter <a href="/verwaltung/themen">Verwaltung › Themen</a></p>
+        {% endif %}
+        <details class="help"{% if not topic_key %} open{% endif %}>
+            <summary>Zugang verwalten</summary>
+            {{ key_block('openrouter', topic_key, true, '/import/' ~ volume.vz ~ '/schluessel', 'themen') }}
+            {{ key_help('openrouter') }}
+        </details>
+        </div>
+        {% endif %}
+        </div>
         {% endif %}
         </div>
 {% endblock %}
@@ -576,7 +567,7 @@
     {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
     {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
-    {% if step in ('ocr', 'angaben', 'pruefen') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
+    {% if step in ('ocr', 'angaben', 'pruefen', 'themen') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
     {% if step == 'ocr' %}
     <script src="{{ url_for('static', path='page-pair.js') }}"></script>
     <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}

@@ -20,7 +20,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import func, literal_column, or_
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import export, importer, keys, metadata, ocr, organizations, pdf_service, segments
+from . import export, importer, keys, metadata, ocr, organizations, pdf_service, segments, topics
 from .database import copy_decisions, corrections, fillDatabase, search
 from .database.fillDatabase import (COPY_DECISIONS, CORRECTIONS, VOLUMES, automatic_record, copy_review,
                                     fill_copies,
@@ -266,53 +266,51 @@ def title_sort_key(item):
     return text_sort_key(item['leaflet'].display_title)
 
 
-@app.get("/themen")
-def topic_list(request: Request, sortierung: str = ''):
-    """Per topic: a bar per year bucket on one shared scale and its top issuers, plus a shared map of all topics."""
-    logger.info('Opening topic list')
+def topic_overview(defs, topic_of, uncertain_of, point_of, param='thema'):
+    """What a list of topics shows: per topic a bar per year bucket on one shared scale, its top issuers and its map
+    points, plus the counts above. defs: [{id, title, words, source}]; topic_of, uncertain_of, point_of: per list item
+    (the released leaflets, each once) its topic, whether that is uncertain, its map point; param: the list filter of
+    a topic ('thema', or 'kandidat' for a topic of a new run)."""
     items = unique(faceted_items([])[0])
-    buckets = year_buckets(Counter(i['year'] for i in items))
+    buckets = topic_year_buckets(Counter(i['year'] for i in items))
     counts_all = Counter(buckets[i['year']] for i in items)
     totals = {b: counts_all[b] for b in sorted(counts_all)}
     by_topic = {}
     for item in items:
-        by_topic.setdefault(item['leaflet'].topic_id, []).append(item)
+        by_topic.setdefault(topic_of(item), []).append(item)
     org_names = {o.id: o.name for o in session.query(Organization).filter(Organization.id.in_(
         {o for i in items for o in i['orgs'] if o not in SPECIAL}))}
 
     def point(i):
         issuers = ', '.join(org_names[o] for o in i['orgs'] if o in org_names)
-        return [i['leaflet'].x, i['leaflet'].y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year'],
-               bool(i['leaflet'].topic_uncertain)]
-
-    no_topic_points = [point(i) for i in items
-                      if i['leaflet'].topic_id is None and i['leaflet'].x is not None]
+        x, y = point_of(i)
+        return [x, y, i['leaflet'].id, i['leaflet'].display_title, issuers, i['year'], bool(uncertain_of(i))]
 
     def year_url(topic_id, bucket):
-        pairs = [('thema', topic_id)]
-        pairs += [('jahr', bucket)] if '/' not in bucket else [('sortierung', 'datum_auf')]
+        pairs = [(param, topic_id)]
+        pairs += [('jahr', bucket)] if bucket.isdigit() else [('sortierung', 'datum_auf')]  # several years: sorted by date
         return '/leaflets?' + urlencode(pairs)
 
     rows = []
-    for topic in session.query(Topic).order_by(Topic.id):
-        topic_items = by_topic.get(topic.id, [])
+    for topic in defs:
+        topic_items = by_topic.get(topic['id'], [])
         counts = Counter(buckets[i['year']] for i in topic_items)
         shares = {b: counts[b] / totals[b] for b in totals if counts[b]}
         rows.append((topic, topic_items, counts, shares))
     highest_share = max((s for _, _, _, shares in rows for s in shares.values()), default=1)
 
-    topics = []
+    topics_out = []
     for topic, topic_items, counts, shares in rows:
         top_orgs = Counter(o for i in topic_items for o in i['orgs'] if o not in SPECIAL).most_common(3)
-        topics.append({
-            'id': topic.id,
-            'title': topic.title,
-            'words': topic.words or [],
-            'title_note': TOPIC_TITLE_NOTES.get(topic.source),
+        topics_out.append({
+            **topic,
+            'words': topic.get('words') or [],
+            'title_note': TOPIC_TITLE_NOTES.get(topic.get('source')),
             'count': len(topic_items),
-            'uncertain': sum(1 for i in topic_items if i['leaflet'].topic_uncertain),
+            'url': '/leaflets?' + urlencode([(param, topic['id'])]),
+            'uncertain': sum(1 for i in topic_items if uncertain_of(i)),
             'top_orgs': [{'label': org_names.get(o, o), 'count': n,
-                         'url': '/leaflets?' + urlencode([('thema', topic.id), ('org', o)])}
+                         'url': '/leaflets?' + urlencode([(param, topic['id']), ('org', o)])}
                         for o, n in top_orgs],
             'years': [{
                 'year': b,
@@ -320,18 +318,15 @@ def topic_list(request: Request, sortierung: str = ''):
                 'total': totals[b],
                 'share': f"{shares.get(b, 0) * 100:.1f}".replace('.', ','),
                 'height': round(shares.get(b, 0) / highest_share * 100),
-                'url': year_url(topic.id, b),
+                'url': year_url(topic['id'], b),
             } for b in totals],
-            'points': [point(i) for i in topic_items if i['leaflet'].x is not None],
+            'points': [point(i) for i in topic_items if point_of(i)[0] is not None],
         })
-    if sortierung == 'alpha':
-        topics.sort(key=lambda t: text_sort_key(t['title']))
-    else:
-        topics.sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
-    map_data = {'no_topic': no_topic_points,
-               'topics': [{'id': t['id'], 'title': t['title'], 'count': t['count'], 'points': t['points']}
-                         for t in topics if t['points']]}
-    uncertain_count = sum(1 for i in items if i['leaflet'].topic_uncertain)
+    map_data = {'param': param,
+                'no_topic': [point(i) for i in by_topic.get(None, []) if point_of(i)[0] is not None],
+                'topics': [{'id': t['id'], 'title': t['title'], 'count': t['count'], 'points': t['points']}
+                           for t in sorted(topics_out, key=lambda t: -t['count']) if t['points']]}
+    uncertain_count = sum(1 for i in items if uncertain_of(i))
     no_topic_count = len(by_topic.get(None, []))
     overview = {
         'uncertain': uncertain_count,
@@ -340,10 +335,39 @@ def topic_list(request: Request, sortierung: str = ''):
         'no_topic_url': '/leaflets?' + urlencode([('thema', NO_TOPIC)]),
         'certain': len(items) - uncertain_count - no_topic_count,
     }
-    return templates.TemplateResponse(
-        request, "topic_list.html",
-        {"topics": topics, "years": list(totals), "sort": sortierung, "map_data": map_data,
-         "overview": overview})
+    return {"topics": topics_out, "years": list(totals), "map_data": map_data, "overview": overview}
+
+
+def current_topic_overview():
+    defs = [{'id': t.id, 'title': t.title, 'words': t.words, 'source': t.source} for t in session.query(Topic).order_by(Topic.id)]
+    return topic_overview(defs, lambda i: i['leaflet'].topic_id, lambda i: i['leaflet'].topic_uncertain,
+                          lambda i: (i['leaflet'].x, i['leaflet'].y))
+
+
+def candidate_topic_overview():
+    """The overview of the new run's topics, from its files: by volume and page range, like the run itself."""
+    candidate, points = topics.load(topics.CANDIDATE), topics.load(topics.CANDIDATE_MAP) or []
+    stems = {v.id: v.stem for v in session.query(Volume)}
+    anchor = lambda i: (stems.get(i['leaflet'].volume_id), i['leaflet'].start_page, i['leaflet'].end_page)
+    assigned = {(r['volume'], r['start_page'], r['end_page']): (r['topic'], r['uncertain']) for r in candidate['leaflets']}
+    xy = {(r['stem'], r['start_page'], r['end_page']): (r['x'], r['y']) for r in points}
+    return topic_overview(candidate['topics'], lambda i: assigned.get(anchor(i), (None, False))[0],
+                          lambda i: assigned.get(anchor(i), (None, False))[1], lambda i: xy.get(anchor(i), (None, None)),
+                          param='kandidat')
+
+
+@app.get("/themen")
+def topic_list(request: Request, sortierung: str = ''):
+    """Per topic: a bar per year bucket on one shared scale and its top issuers, plus a shared map of all topics."""
+    logger.info('Opening topic list')
+    view = current_topic_overview()
+    if sortierung == 'alpha':
+        view['topics'].sort(key=lambda t: text_sort_key(t['title']))
+    else:
+        view['topics'].sort(key=lambda t: t['count'], reverse=True)  # stable: ties stay by id
+    order = [t['id'] for t in view['topics']]
+    view['map_data']['topics'].sort(key=lambda t: order.index(t['id']))  # the map's colours follow the list
+    return templates.TemplateResponse(request, "topic_list.html", {**view, "sort": sortierung})
 
 
 TREND_TERMS = 4
@@ -367,6 +391,18 @@ def unique(items):
         if key not in first or item['year'] < first[key]['year']:
             first[key] = item
     return list(first.values())
+
+
+MAX_YEAR_BARS = 12  # more bars than this get too narrow in a topic row: then five-year spans
+
+
+def topic_year_buckets(totals):
+    """{year: label} for the bars of the topic rows: the years (small ones joined), or five-year spans ('1970–74')
+    once the collection spans too many years for single bars."""
+    buckets = year_buckets(totals)
+    if len(set(buckets.values())) <= MAX_YEAR_BARS:
+        return buckets
+    return {y: f"{int(y) // 5 * 5}–{(int(y) // 5 * 5 + 4) % 100:02d}" if str(y).isdigit() else y for y in totals}
 
 
 def year_buckets(totals):
@@ -585,6 +621,11 @@ def trends(request: Request, begriffe: str = ''):
          "together": together, "chart": chart})
 
 
+def candidate_title(topic_id):
+    doc = topics.load(topics.CANDIDATE) or {"topics": []}
+    return next((t["title"] for t in doc["topics"] if str(t["id"]) == topic_id), topic_id)
+
+
 def facet_labels():
     """Display label per facet parameter, shared by the list and the trends page."""
     orgs = {o.id: o for o in session.query(Organization)}
@@ -596,6 +637,7 @@ def facet_labels():
         'typ': lambda t: DOC_TYPES.get(t, t),
         'datum': lambda d: DATE_TYPE_LABELS.get(d, d),
         'unsicher': lambda v: 'unsichere Themenzuordnung',
+        'kandidat': lambda v: candidate_title(v),
         'q': lambda v: f"„{v}“",
     }
 
@@ -664,7 +706,8 @@ def leaflet_list(request: Request, ansicht: str = "liste", seite: str = "1", pro
 
     # chips above the results, each removes its own parameter
     # the search itself stands in the rows above the results, the chips are for the filters
-    kinds = {'jahr': 'Jahr', 'org': 'Herausgeber', 'thema': 'Thema', 'typ': 'Typ', 'reihe': 'Reihe', 'datum': 'Datierung'}
+    kinds = {'jahr': 'Jahr', 'org': 'Herausgeber', 'thema': 'Thema', 'typ': 'Typ', 'reihe': 'Reihe', 'datum': 'Datierung',
+             'kandidat': 'Neues Thema, noch nicht übernommen'}
     groups = {}  # one chip per facet, its values joined by "oder", each with its own ×
     for k, v in params:
         if k not in ('q', 'feld', 's', 'sortierung', 'duplikate'):
@@ -779,7 +822,8 @@ def text_id(item):
 
 
 # filters and sorting of the leaflet list; the detail page pages through the same selection
-LIST_PARAMS = ('q', 'feld', 's', 'text', 'nur', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung', 'duplikate')
+LIST_PARAMS = ('q', 'feld', 's', 'text', 'nur', 'org', 'jahr', 'typ', 'reihe', 'thema', 'datum', 'unsicher', 'sortierung', 'duplikate',
+               'kandidat')  # kandidat: a topic of a new run that is not taken over yet
 
 
 BOOLEAN = {'und': 'AND', 'oder': 'OR', 'nicht': 'NOT'}
@@ -925,6 +969,8 @@ def searched_items(params):
     ranked = False
     if rows:
         query, ranked = search_hits(query, rows)
+    if one.get('kandidat', '').isdigit():  # the leaflets of a topic of a new run, before it is taken over
+        query = query.filter(Leaflet.id.in_([lf.id for lf in topics.candidate_leaflets(int(one['kandidat']))[1]]))
     if one.get('nur'):  # exactly these leaflets (ids): the trends page lists what its charts counted
         query = query.filter(Leaflet.id.in_([int(n) for n in one['nur'].split(',') if n.isdigit()][:MAX_NUR]))
 
@@ -1085,6 +1131,7 @@ def detail_page(request, leaflet, edit=None, error=None):
         short_topic_title(chosen_topic.title) if chosen_topic
         else 'ohne Thema' if chosen.get('thema') == NO_TOPIC else None,
         chosen.get('jahr'),
+        f"neues Thema „{candidate_title(chosen['kandidat'])}“" if 'kandidat' in chosen else None,
     )
 
     data = {
@@ -2057,6 +2104,7 @@ def admin_page(request: Request, error: str = ''):
         "drafts": drafts, "n_steps": len(steps), "units": importer.free_units(),
         "groups": len(groups), "open": len(open_groups),
         "fixes": sum(fixes.values()), "unmatched": sum(not r['leaflet'] and bool(in_force(r['entries'])) for r in fix_rows),
+        "topics": session.query(Topic).count(), "candidate": len((topics.load(topics.CANDIDATE) or {"topics": []})["topics"]),
         "error": error})
 
 
@@ -2143,7 +2191,10 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
         "created": created, "prepare": prepare if step == 'pruefen' and not created else {}, "flagged": flagged,
         "hints_open": sum(not f[2] for f in flagged), "hints_first": next((f[0].id for f in flagged if not f[2]), None),
         "new_issuers": organizations.unmatched(vz) if step == 'pruefen' and created else [],
-        "copies": copy_counts(volume) if step == 'pruefen' and created else None},
+        "copies": copy_counts(volume) if step == 'pruefen' and created else None,
+        "topic_state": topics.status(volume) if step == 'themen' and created else None,
+        "topic_job": importer.JOBS.get((vz, topics.ASSIGN)) if step == 'themen' else None,
+        "topic_key": keys.info('openrouter') if step == 'themen' else None},
         status_code=status_code)
     if volume.status == RELEASED and step == 'pruefen':
         response.set_cookie('pruefen', str(vz), samesite='lax')
@@ -2376,6 +2427,124 @@ def import_metadata_cancel(vz: int):
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
     return JSONResponse({'ok': True})
+
+
+@app.post("/import/{vz}/themen")
+def import_topics(vz: int):
+    try:
+        topics.start_assign(import_volume_or_404(vz))
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
+@app.get("/verwaltung/themen/neu")
+def topics_recompute_page(request: Request, error: str = ''):
+    job = importer.JOBS.get((0, topics.RECOMPUTE), {})
+    current = topics.load(topics.TOPICS)
+    review = None if job.get('state') == 'running' else topics.review()
+    view = {}
+    if review:  # the rows of /themen, for the new run, with where most of each topic's leaflets come from
+        view = candidate_topic_overview()
+        origin = {r['id']: r for r in review['topics']}
+        for t in view['topics']:
+            r = origin.get(t['id'], {})
+            if r.get('old'):
+                t['note_label'] = 'Meiste Flugblätter aus dem bisherigen Thema'
+                t['note'] = f"{r['stay']} von {r['old_count']} aus „{r['old']}“"
+        view['topics'].sort(key=lambda t: t['count'], reverse=True)
+    return templates.TemplateResponse(request, "topics_new.html", {
+        "job": job, "review": review, **view, "error": error,
+        "n_topics": len(current['topics']) if current else 40, "key": keys.info('openrouter'),
+        "model_top": metadata.top_models([], default=topics.label_model_used()), "model_names": [m[:2] for m in metadata.models()],
+        "model_prices": topics.label_prices(len(current['topics']) if current else 40),
+        **dict(zip(("chosen", "model_gone"), topics.label_model_choice(len(current['topics']) if current else 40))),
+        "used_model": topics.label_model_used()})
+
+
+@app.get("/verwaltung/themen/neu/status")
+def topics_recompute_status():
+    return JSONResponse({**importer.JOBS.get((0, topics.RECOMPUTE), {'state': 'idle'}), 'now': time.time()})
+
+
+@app.post("/verwaltung/themen/neu")
+def topics_recompute(n_topics: int = Form(40), model: str = Form(topics.LABEL_MODEL)):
+    try:
+        topics.start_recompute(n_topics, model.strip())
+    except ValueError as error:
+        return JSONResponse({'error': str(error)}, status_code=400)
+    return JSONResponse({'ok': True})
+
+
+@app.post("/verwaltung/themen/neu/uebernehmen")
+async def topics_accept(request: Request):
+    form = await request.form()
+    try:
+        topics.accept({int(k.removeprefix('titel-')): v for k, v in form.items() if k.startswith('titel-')})
+    except ValueError as error:
+        return RedirectResponse('/verwaltung/themen/neu?' + urlencode({'error': str(error)}), 303)
+    return RedirectResponse('/themen', 303)
+
+
+@app.post("/verwaltung/themen/neu/verwerfen")
+def topics_discard():
+    topics.discard()
+    return RedirectResponse('/verwaltung/themen/neu', 303)
+
+
+@app.get("/verwaltung/api-keys")
+def keys_admin(request: Request, error: str = '', gespeichert: int = 0):
+    return templates.TemplateResponse(request, "keys_admin.html", {
+        "keys": {s: keys.info(s) for s in keys.SERVICES}, "error": error, "saved": gespeichert})
+
+
+@app.post("/verwaltung/api-keys")
+def keys_admin_save(key: str = Form(''), forget: bool = Form(False), service: str = Form('')):
+    if service not in keys.SERVICES:
+        raise HTTPException(status_code=400)
+    try:
+        keys.forget(service) if forget else keys.save(service, key)
+    except ValueError as error:
+        return RedirectResponse('/verwaltung/api-keys?' + urlencode({'error': str(error)}), 303)
+    return RedirectResponse('/verwaltung/api-keys?gespeichert=1', 303)
+
+
+@app.get("/verwaltung/themen")
+def topics_admin(request: Request, error: str = '', gespeichert: int = 0):
+    current = topics.load(topics.TOPICS)
+    view = current_topic_overview()
+    view['topics'].sort(key=lambda t: t['count'], reverse=True)
+    return templates.TemplateResponse(request, "topics_admin.html", {
+        "topics": view['topics'], "years": view['years'], "error": error, "saved": gespeichert,
+        "run_date": german_date(m.group()) if current and (m := re.search(r"\d{4}-\d{2}-\d{2}", current['run'])) else None,
+        **topic_volumes(current), "candidate": topics.load(topics.CANDIDATE) is not None})
+
+
+def topic_volumes(doc):
+    """The volumes the topic run computed, and those assigned later in step 7 (with the day)."""
+    if not doc:
+        return {"run_volumes": [], "later": []}
+    later = doc.get("assigned_later", {})
+    by_stem = {v.stem: v for v in session.query(Volume) if v.stem}
+    stems = sorted({r["volume"] for r in doc["leaflets"]} - set(later), key=lambda st: by_stem[st].vz if st in by_stem else 0)
+    numbers = [by_stem[st].vz for st in stems if st in by_stem]
+    spans, start = [], None  # 1, 2, 3, 5 -> "001–003, 005"
+    for i, n in enumerate(numbers):
+        start = n if start is None else start
+        if i + 1 == len(numbers) or numbers[i + 1] != n + 1:
+            spans.append(f"{start:03d}" if start == n else f"{start:03d}–{n:03d}")
+            start = None
+    return {"run_volumes": [by_stem[st] for st in stems if st in by_stem], "run_span": ", ".join(spans),
+            "later": sorted(((by_stem[st], german_date(day)) for st, day in later.items() if st in by_stem), key=lambda p: p[0].vz)}
+
+
+@app.post("/verwaltung/themen/{topic_id}")
+def topic_rename(topic_id: int, title: str = Form('')):
+    try:
+        topics.rename(topic_id, title)
+    except ValueError as error:
+        return RedirectResponse('/verwaltung/themen?' + urlencode({'error': str(error)}) + f'#thema-{topic_id}', 303)
+    return RedirectResponse(f'/verwaltung/themen?gespeichert=1#thema-{topic_id}', 303)
 
 
 @app.get("/import/{vz}/ocr/seiten/{page_no}.json")
