@@ -33,3 +33,6 @@ data/embeddings.*.npz
 data/*.kandidat.json
 data/*.bis-*.json
 /docs/arbeitsdokumente
+
+# Folienfassung der Diagramme (scripts/corpus_figures.ipynb)
+output/

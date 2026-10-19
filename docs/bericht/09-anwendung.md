@@ -27,7 +27,8 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 ## 9.4 Import neuer Bände
 
 - Sieben Schritte: Band wählen, Scans hochladen, Text erkennen, Flugblätter trennen, Metadaten erzeugen, Prüfen & freigeben, Themen zuordnen (optional, auch nach der Freigabe).
-- Themen neu berechnen mit Prüfseite für die Titel; Titel lassen sich unter Verwaltung › Themen ändern (Kap. 7).
+- Themen neu berechnen mit Prüfseite; Titel lassen sich unter Verwaltung › Themen ändern (Kap. 7).
+- Die API-Keys für Datalab und OpenRouter lassen sich unter Verwaltung › API-Keys eintragen.
 - Bis zur Freigabe ist der Band ein Entwurf und in Liste, Suche und Trends unsichtbar.
 - Kostenschätzung vor der Texterkennung und den Metadaten; unterbrochene Schritte lassen sich fortsetzen.
 - Anleitung: `handbuch/band-einlesen.md`.
@@ -45,7 +46,8 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
-- N-Gramm-Werkzeug (`ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung in `handbuch/ngrams.md`.
+- N-Gramm-Werkzeug (`scripts/ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung in `handbuch/ngrams.md`.
+- `scripts/tiff_to_pdf.py` fügt TIFF-Scans zu einem PDF zusammen, `scripts/learn_boundary_weights.py` lernt die Gewichte des Trennvorschlags neu (Kap. 4.7). Übersicht in `scripts/README.md`.
 - Notebook `vertiefung/forschungsfragen.ipynb`: zeigt, wie sich der Export für Auswertungen nutzen lässt. Die Fragen sind Beispiele, keine Ergebnisse des Projekts.
 
 Beispielhafte Fragen im Notebook:

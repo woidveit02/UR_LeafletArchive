@@ -64,8 +64,8 @@ Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien s
 
 | Datei | Inhalt | Herkunft |
 |-------|--------|----------|
-| `nr001_metadata.json`, `nr002_metadata.json`, … | Titel, Datum, Textsorte, Herausgeber je Flugblatt. Jeder Band mit einer solchen Datei wird importiert | LLM-Extraktion im Pipeline-Repo |
-| [`copies.tsv`](data/copies.tsv) | Mögliche Exemplare desselben Blatts | Textvergleich im Pipeline-Repo (`find_copies.py`) |
+| `nr001_metadata.json`, `nr002_metadata.json`, … | Titel, Datum, Textsorte, Herausgeber je Flugblatt. Jeder Band mit einer solchen Datei wird importiert | Sprachmodell: Nr. 001–014 im Projekt, neue Bände in Schritt 5 des Imports |
+| [`copies.tsv`](data/copies.tsv) | Mögliche Exemplare desselben Blatts | Textvergleich: Nr. 001–014 im Projekt, neue Bände beim Import |
 | `corrections.jsonl` | Handkorrekturen | Bearbeiten in der App |
 | `copy_decisions.jsonl` | Geprüfte Gruppen von Exemplaren | Vergleichsseite in der App |
 | [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
@@ -77,7 +77,7 @@ Importiert sind Nr. 001 bis Nr. 014 (1967–1973). Nr. 015 ist nicht digitalisie
 Ändert ein Pull etwas in `data/` oder am Datenbankschema (`models.py`), oder wurde der Datenordner erst nachträglich eingebunden, dann die Datenbank löschen und neu starten. Ein Neubau des Images (`--build`) ist nur nötig, wenn sich die Abhängigkeiten ändern.
 
 ```
-del srcackend\leaflet_database.db      # Windows (cmd/PowerShell); Git Bash: rm src/backend/leaflet_database.db
+del src\backend\leaflet_database.db      # Windows (cmd/PowerShell); Git Bash: rm src/backend/leaflet_database.db
 docker compose restart
 ```
 
@@ -102,13 +102,14 @@ python -m venv .venv
 pip install -r docs/requirements.txt
 ```
 
-Dann im Repo `python -m mkdocs serve -a 127.0.0.1:8001` und http://127.0.0.1:8001 öffnen; Änderungen erscheinen beim Speichern. Den Bericht als PDF erzeugt `python scripts/bericht_pdf.py`, dafür braucht es zusätzlich pandoc und eine LaTeX-Installation mit xelatex.
+Dann im Repo `python -m mkdocs serve -a 127.0.0.1:8001` und http://127.0.0.1:8001 öffnen; Änderungen erscheinen beim Speichern. Den Bericht als PDF erzeugt `python scripts/build_report.py`, dafür braucht es zusätzlich pandoc und eine LaTeX-Installation mit xelatex.
 
 ## Projektstruktur
 
 ```
 .
 ├── data/                          # Quelle für die DB (siehe Daten)
+├── scripts/                       # Werkzeuge neben der App (siehe scripts/README.md)
 ├── src/
 │   ├── backend/
 │   │   ├── app/

@@ -49,9 +49,9 @@ Belege zur OCR-Evaluation liegen außerhalb dieses Ordners unter `eval/ocr/`.
 ## Bericht zusammenfügen
 
 ```bash
-python scripts/bericht_pdf.py              # bericht.pdf, braucht Pandoc und XeLaTeX
-python scripts/bericht_pdf.py bericht.tex  # für Overleaf
+python scripts/build_report.py              # bericht.pdf, braucht Pandoc und XeLaTeX
+python scripts/build_report.py bericht.tex  # für Overleaf
 python -m mkdocs serve -a 127.0.0.1:8001  # als Website, Port 8000 hat die App
 ```
 
-Die Abbildungen erzeugen `scripts/abbildungen_scans.py`, `scripts/abbildungen_app.py` und danach `scripts/abbildung_ablauf.py` (App muss laufen); die Diagramme `flugblatt_praxisseminarSS26/notebooks/praesentation_plots.ipynb` mit `STIL = 'doku'`.
+Die Abbildungen erzeugen `scripts/scan_figures.py`, `scripts/app_screenshots.py` und danach `scripts/workflow_figure.py` (App muss laufen); die Diagramme `scripts/corpus_figures.ipynb` mit `STIL = 'doku'` (braucht pandas, matplotlib und Jupyter; liest die Datenbank der laufenden App).

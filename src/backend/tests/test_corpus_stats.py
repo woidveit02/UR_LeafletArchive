@@ -10,11 +10,11 @@ import backend.app.app as leaflet_app
 from backend.app.database.base import Base
 from backend.app.database.models import Leaflet, Page, Volume
 
-# KENNZAHLEN_SCRIPT: for a run where the tests are not below the repository (the container)
-SCRIPT = Path(os.environ.get("KENNZAHLEN_SCRIPT") or Path(__file__).resolve().parents[3] / "scripts" / "kennzahlen.py")
-spec = importlib.util.spec_from_file_location("kennzahlen", SCRIPT)
-kennzahlen = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(kennzahlen)
+# CORPUS_STATS_SCRIPT: for a run where the tests are not below the repository (the container)
+SCRIPT = Path(os.environ.get("CORPUS_STATS_SCRIPT") or Path(__file__).resolve().parents[3] / "scripts" / "corpus_stats.py")
+spec = importlib.util.spec_from_file_location("corpus_stats", SCRIPT)
+corpus_stats = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(corpus_stats)
 
 
 @pytest.fixture
@@ -51,22 +51,22 @@ def seed(session):
 
 def test_sums_and_order(db):
     seed(db)
-    data = kennzahlen.compute()
+    data = corpus_stats.compute()
     assert data["segments"] == 5 and data["documents"] == 4 and data["pages"] == 6
     for counts in (data["band_year"], data["date_year"]):
         for kind, total in (("segments", data["segments"]), ("documents", data["documents"])):
             assert sum(n for (k, _), n in counts.items() if k == kind) == total
     assert sum(v["pages"] for v in data["volumes"]) == data["pages"]
-    assert data["date_year"]["documents", kennzahlen.UNDATED] == 2
+    assert data["date_year"]["documents", corpus_stats.UNDATED] == 2
     assert data["documents"] <= data["segments"]  # documents <= copies == segments
 
 
 def test_generated_block_is_replaced_and_the_rest_stays(db):
     seed(db)
-    block = kennzahlen.render(kennzahlen.compute())
+    block = corpus_stats.render(corpus_stats.compute())
     head, tail = "# Kennzahlen\n\n", "\n## OCR-Qualität\n\nCER 0,60 %\n"
-    first = kennzahlen.replace_block(f"{head}{kennzahlen.FIRST_HEADING}\n\nvon Hand\n\n{tail}", block)
+    first = corpus_stats.replace_block(f"{head}{corpus_stats.FIRST_HEADING}\n\nvon Hand\n\n{tail}", block)
     assert "alte Tabelle" not in first and first.startswith(head) and first.endswith(tail)
-    again = kennzahlen.replace_block(first, block.replace("1 547", "x"))
-    assert again.startswith(head) and again.endswith(tail) and again.count(kennzahlen.BEGIN) == 1
-    assert kennzahlen.replace_block(again, block) == first
+    again = corpus_stats.replace_block(first, block.replace("1 547", "x"))
+    assert again.startswith(head) and again.endswith(tail) and again.count(corpus_stats.BEGIN) == 1
+    assert corpus_stats.replace_block(again, block) == first

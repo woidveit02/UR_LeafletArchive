@@ -46,6 +46,6 @@ Jeder Band durchläuft dieselben Schritte. Ein OCR-Dienst erkennt den Text der S
 
 *Abbildung: Flugblatt 850 in den einzelnen Schritten. Bild 5 zeigt das Nachbarblatt auf S. 396, weil 850 kein weiteres Exemplar hat.*
 
-<!-- Abbildung aus scripts/abbildung_ablauf.py, nach abbildungen_scans.py und abbildungen_app.py -->
+<!-- Abbildung aus scripts/workflow_figure.py, nach scan_figures.py und app_screenshots.py -->
 
 Die Kapitel 3 bis 7 behandeln je einen dieser Schritte. Kapitel 3 beschreibt ausführlich, wie wir das OCR-System ausgewählt haben. Die Kapitel 4 bis 7 sind gleich aufgebaut: Sie beschreiben die Aufgabe und ihre Schwierigkeiten, das gewählte Verfahren und wie gut es arbeitet, was von Hand geprüft wird und was es kostet. Am Ende steht jeweils, was für die Weiterentwicklung offen ist. Als Beispiel zieht sich ein Flugblatt durch alle Kapitel: „Zur Fachschaftssatzung“ des MSB Spartakus vom 8. Februar 1972 (Band 006, S. 394).

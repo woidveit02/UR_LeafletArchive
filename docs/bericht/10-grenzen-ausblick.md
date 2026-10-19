@@ -10,13 +10,13 @@ Die Ergebnisse sind brauchbar, aber an mehreren Stellen unsicher. Wo die Unsiche
 - Metadaten: Genauigkeit nicht gemessen; bekannte Fehler wie Eingangsstempel als Erscheinungsdatum; bei 54 % stammt das Jahr nur aus dem Band.
 - Themen: Schätzung, 408 unsicher, ein Thema je Flugblatt.
 - Quelle: Flugblätter zeigen die Selbstdarstellung der Gruppen, nicht die Ereignisse (Kap. 8.4).
-- Betrieb: abhängig von externen Diensten (Datalab, OpenRouter), Läufe nicht exakt wiederholbar; die Anwendung ist ohne Anmeldung auf allen Schnittstellen erreichbar; der Container startet nach einem Neustart nicht von selbst.
+- Betrieb: abhängig von externen Diensten (Datalab, OpenRouter), Läufe nicht exakt wiederholbar; die Anwendung hat keine Anmeldung und ist deshalb standardmäßig nur auf dem eigenen Rechner erreichbar (Freigabe im Netz: `handbuch/betrieb.md`).
 - Kein Usability-Test.
 
 ## 10.2 Wo Unsicherheit markiert ist
 
 - Unsichere Themen, Belege je Feld, Prüfstatus der Exemplargruppen, von Hand korrigierte Felder.
-- Auswertungen zusätzlich auf der geprüften Teilmenge rechnen [aus alter Fassung 9.3].
+- Auswertungen zusätzlich auf der geprüften Teilmenge rechnen.
 
 ## 10.3 Datenschutz und Urheberrecht
 

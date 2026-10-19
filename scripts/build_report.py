@@ -1,6 +1,6 @@
 """The report as PDF (pandoc and a LaTeX installation with xelatex needed).
 
-    python scripts/bericht_pdf.py [ausgabe.pdf]      (default: bericht.pdf in the repository)
+    python scripts/build_report.py [ausgabe.pdf]      (default: bericht.pdf in the repository)
 """
 import datetime
 import subprocess

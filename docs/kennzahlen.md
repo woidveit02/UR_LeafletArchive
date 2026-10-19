@@ -1,13 +1,13 @@
 # Kennzahlen
 
-<!-- Der Bereich zwischen BEGIN und END wird von scripts/kennzahlen.py aus der Datenbank erzeugt.
+<!-- Der Bereich zwischen BEGIN und END wird von scripts/corpus_stats.py aus der Datenbank erzeugt.
      OCR-Qualität und Kosten sind von Hand gepflegt, bei jeder Änderung das Datum anpassen.
      Im Bericht werden Zahlen nur von hier übernommen. -->
 
 <!-- BEGIN generiert -->
 ## Korpus nach Band und Jahr
 
-Stand: 17.10.2026, Datenbank vom 17.10.2026 22:18. Erzeugt von scripts/kennzahlen.py – nicht von Hand bearbeiten.
+Stand: 17.10.2026, Datenbank vom 17.10.2026 22:18. Erzeugt von scripts/corpus_stats.py – nicht von Hand bearbeiten.
 
 ### Je Band
 
@@ -79,7 +79,7 @@ Herausgeber mit mindestens einem Flugblatt: **169**. Flugblätter ohne erkannten
 
 Herausgeber: Einträge des Registers, bei denen mindestens ein Flugblatt (Hauptexemplar) steht. Textsorte: Feld „Typ“ des Flugblatts (Hauptexemplar), „unklar“ ohne Angabe.
 
-Token: nicht aufgeführt. Die Tokenisierung von pipelines/06_analysis/ngrams.py arbeitet auf den OCR-Dateien (Blocktypen, Silbentrennung), die nicht in der Datenbank liegen; eine Zahl aus den Datenbanktexten wäre anders gezählt.
+Token: nicht aufgeführt. Die Tokenisierung von scripts/ngrams.py arbeitet auf den OCR-Dateien (Blocktypen, Silbentrennung), die nicht in der Datenbank liegen; eine Zahl aus den Datenbanktexten wäre anders gezählt.
 <!-- END generiert -->
 
 ## OCR-Qualität

@@ -16,7 +16,7 @@ Vor der Berechnung wird der Text bereinigt. Aus der Texterkennung bleiben nur di
 
 Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab, bis zu einer Länge von 8 192 Token. BERTopic gruppiert diese Vektoren mit UMAP und HDBSCAN zu 50 Themen, die anschließend auf 40 zusammengefasst werden. Für die Schlagwörter eines Themas zählen nur Substantive in ihrer Grundform (spaCy, Modell `de_core_news_lg`). Stoppwörter und Kürzel von Organisationen werden dabei nicht berücksichtigt. Flugblätter ohne klares Thema werden dem ähnlichsten zugeordnet und als unsicher markiert. Der aktuelle Lauf stammt vom 03.10.2026, mit dem Startwert 42.
 
-Die Titel der Themen schlägt ein Sprachmodell aus Schlagwörtern und Textauszügen vor. Danach wurden alle 40 Titel von Hand nach Leitlinien geprüft und 15 davon am 13. und 14.10.2026 geändert (`docs/analyse/themen-titel-vorschlaege.md` im Arbeits-Repository).
+Die Titel der Themen schlägt ein Sprachmodell aus Schlagwörtern und Textauszügen vor. Danach wurden alle 40 Titel von Hand nach Leitlinien geprüft und 15 davon am 13. und 14.10.2026 geändert.
 
 ## 7.4 Qualität
 

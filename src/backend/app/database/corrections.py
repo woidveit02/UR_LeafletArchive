@@ -1,5 +1,4 @@
-"""Manual corrections, one JSON line per field (format: pipeline repo,
-docs/korpus/korpusstruktur.md, 7.3). A correction is applied only to the
+"""Manual corrections, one JSON line per field (format: README, Daten). A correction is applied only to the
 segment with exactly the page range it was made for; after a boundary change
 it stays in the file and is listed under /korrekturen for review."""
 import html

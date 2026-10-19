@@ -1,6 +1,6 @@
 """Schreibt die Kennzahlen des Korpus in docs/kennzahlen.md (nur den Bereich zwischen den Markern).
 
-    python scripts/kennzahlen.py
+    python scripts/corpus_stats.py
 
 Liest die Datenbank nur lesend und zählt mit den Funktionen der App.
 """
@@ -108,7 +108,7 @@ def render(data, today=None):
     return f"""{BEGIN}
 ## Korpus nach Band und Jahr
 
-Stand: {today}, Datenbank vom {data['stamp']}. Erzeugt von scripts/kennzahlen.py – nicht von Hand bearbeiten.
+Stand: {today}, Datenbank vom {data['stamp']}. Erzeugt von scripts/corpus_stats.py – nicht von Hand bearbeiten.
 
 ### Je Band
 
@@ -136,7 +136,7 @@ Herausgeber mit mindestens einem Flugblatt: **{number(data['issuers'])}**. Flugb
 
 Herausgeber: Einträge des Registers, bei denen mindestens ein Flugblatt (Hauptexemplar) steht. Textsorte: Feld „Typ“ des Flugblatts (Hauptexemplar), „unklar“ ohne Angabe.
 
-Token: nicht aufgeführt. Die Tokenisierung von pipelines/06_analysis/ngrams.py arbeitet auf den OCR-Dateien (Blocktypen, Silbentrennung), die nicht in der Datenbank liegen; eine Zahl aus den Datenbanktexten wäre anders gezählt.
+Token: nicht aufgeführt. Die Tokenisierung von scripts/ngrams.py arbeitet auf den OCR-Dateien (Blocktypen, Silbentrennung), die nicht in der Datenbank liegen; eine Zahl aus den Datenbanktexten wäre anders gezählt.
 {END}"""
 
 

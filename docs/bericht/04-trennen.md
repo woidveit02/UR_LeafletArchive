@@ -20,7 +20,7 @@ Für angehängte Resolutionen und für Pressespiegel wurde keine Regel festgeleg
 
 ## 4.3 Verfahren
 
-Die 14 Bände dieses Projekts wurden von Hand mit dem Werkzeug `flugblatt_splitter` getrennt. Die Arbeit war auf drei Personen aufgeteilt und im August abgeschlossen. An Band 002 wurde die Trennung von Hand mit der automatischen Segmentierung von Datalab verglichen. Von Hand entstanden 59 Segmente, automatisch 13. Alle 13 automatischen Schnitte stehen auch in der Trennung von Hand, keiner kommt nur automatisch vor. Die automatische Segmentierung setzt also kaum falsche Schnitte, lässt aber die meisten aus: 46 von 59. Sie wurde deshalb nicht verwendet. Keine der beiden Trennungen war zu diesem Zeitpunkt geprüft, der Vergleich zeigt also nur die Art der Abweichung.
+Die 14 Bände dieses Projekts wurden von Hand mit einem eigenen Werkzeug getrennt, dessen Aufgabe heute Schritt 4 der Anwendung übernimmt. Die Arbeit war auf drei Personen aufgeteilt und im August abgeschlossen. An Band 002 wurde die Trennung von Hand mit der automatischen Segmentierung von Datalab verglichen. Von Hand entstanden 59 Segmente, automatisch 13. Alle 13 automatischen Schnitte stehen auch in der Trennung von Hand, keiner kommt nur automatisch vor. Die automatische Segmentierung setzt also kaum falsche Schnitte, lässt aber die meisten aus: 46 von 59. Sie wurde deshalb nicht verwendet. Keine der beiden Trennungen war zu diesem Zeitpunkt geprüft, der Vergleich zeigt also nur die Art der Abweichung.
 
 Für neue Bände berechnet die Anwendung einen eigenen Vorschlag aus dem erkannten Text (`src/backend/app/boundaries.py`). Sie bewertet jeden Seitenübergang anhand von 14 Merkmalen und verrechnet sie mit einem naiven Bayes-Klassifikator. Die Gewichte wurden an den Bänden 1–14 gelernt, eine Trennung wird ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Das Verfahren läuft lokal und braucht kein Sprachmodell.
 
@@ -34,7 +34,7 @@ Gemessen wurde so, wie es bei einem neuen Band wäre: Jeder Band wurde mit Gewic
 
 Zusätzlich wurde ein Teil von Band 14 ab Seite 449 als neuer Band importiert. Von 50 Übergängen mussten 13 korrigiert werden: 11 Trennungen fehlten, 2 waren zu viel.
 
-Die Messung hat Grenzen. Die Referenz, also die Trennung der Bände 1–14, ist selbst nur teilweise geprüft. Ob gegen die Archivtitel 1968/69 geprüft wurde, ist offen [offen].
+Die Messung hat Grenzen. Die Referenz, also die Trennung der Bände 1–14, ist selbst nur teilweise geprüft. Ob zusätzlich gegen die Archivtitel 1968/69 geprüft wurde, ist offen (siehe 5.4).
 
 ## 4.5 Manuelle Prüfung
 
@@ -50,4 +50,4 @@ Die 4 464 Seiten ergeben 1 927 Exemplare. 115 Seiten gehören zu keinem Flugblat
 
 ## 4.7 Hinweise zur Weiterentwicklung
 
-Der Code liegt in `src/backend/app/boundaries.py` und `src/backend/app/segments.py`. Woher Merkmale und Gewichte stammen, zeigt `pipelines/01_pdf/` im Arbeits-Repository. Wächst der Bestand deutlich, sollten die Gewichte neu gelernt werden. Rückseiten bleiben die größte Schwäche des Verfahrens.
+Der Code liegt in `src/backend/app/boundaries.py` und `src/backend/app/segments.py`. Wächst der Bestand deutlich, sollten die Gewichte neu gelernt werden; das übernimmt `scripts/learn_boundary_weights.py`. Rückseiten bleiben die größte Schwäche des Verfahrens.

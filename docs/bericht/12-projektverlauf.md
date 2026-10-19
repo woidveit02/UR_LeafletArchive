@@ -36,6 +36,10 @@ Während der OCR-Evaluation [Zeitraum] wurden die Aufgaben auf einem Kanban-Boar
 
 <!-- Daten auf den Tag genau ergänzen. -->
 
-## 12.5 Erfahrungen für ein Folgeprojekt
+## 12.5 Arbeits-Repository
+
+Bevor die Anwendung entstand, lag die Arbeit in einem eigenen Repository. Dort liegen die Skripte für den Vergleich der OCR-Systeme und den Goldstandard, die Metadatenläufe mit allen Prompt-Fassungen, der erste Themenlauf und die Suche nach Mehrfachexemplaren über alle Bände. Auch die beiden Werkzeuge, mit denen die Bände von Hand getrennt und die Texterkennung geprüft wurden, sind dort abgelegt. Das Repository ist archiviert und wird nicht weiter gepflegt: <https://github.com/Alphazerfall/flugblatt_praxisseminarSS26>. Was für Betrieb und Weiterentwicklung nötig ist, steht in diesem Repository, in der Anwendung oder unter `scripts/`.
+
+## 12.6 Erfahrungen für ein Folgeprojekt
 
 - [offen: was hat gut funktioniert, was würde das Team anders machen; z. B. früher eine Referenzstrecke für die Metadaten festlegen, Prompt-Fassungen von Anfang an versionieren]
