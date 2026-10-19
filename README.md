@@ -92,6 +92,18 @@ python -m pytest backend/tests
 
 Den Codestil prüft `pycodestyle .`. Commits folgen den Conventional Commits.
 
+## Dokumentation
+
+Bericht und Handbücher liegen in [`docs/`](docs/) und werden mit MkDocs angezeigt. Einmal installieren, am besten in einem eigenen venv:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
+pip install -r docs/requirements.txt
+```
+
+Dann im Repo `python -m mkdocs serve -a 127.0.0.1:8001` und http://127.0.0.1:8001 öffnen; Änderungen erscheinen beim Speichern. Den Bericht als PDF erzeugt `python scripts/bericht_pdf.py`, dafür braucht es zusätzlich pandoc und eine LaTeX-Installation mit xelatex.
+
 ## Projektstruktur
 
 ```

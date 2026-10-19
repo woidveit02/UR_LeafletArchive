@@ -8,11 +8,19 @@ In diesem Schritt wird festgelegt, welche Seiten zusammen ein Flugblatt bilden. 
 
 ## 4.2 Herausforderungen
 
-Nicht jedes Flugblatt ist ein einzelnes Blatt. Es gibt mehrseitige Hefte und Anlagen, Rückseiten ohne eigenen Kopf sowie Trennblätter und leere Seiten. In den Bänden von 1973 finden sich zudem wenige auswertbare Kopfzeilen und Stempel. Für die Grenzfälle, also mehrseitige Hefte, Anlagen und Rückseiten, braucht es feste Regeln [offen: aus alter Fassung 4.5 übertragen].
+Nicht jedes Flugblatt ist ein einzelnes Blatt. Es gibt mehrseitige Hefte und Anlagen, Rückseiten ohne eigenen Kopf sowie Trennblätter und leere Seiten. In den Bänden von 1973 finden sich zudem wenige auswertbare Kopfzeilen und Stempel. Für die Grenzfälle braucht es feste Regeln. Sie ergaben sich bei der Durchsicht der Grenzen am 29.09.2026:
+
+- Hefte und Dokumentationen bleiben ein Flugblatt, auch wenn einzelne Beiträge eigene Kopfleisten tragen. Ein Beispiel ist das Fachbereichsinfo Nr. 10 in Band 005 mit den Heftseiten 1 bis 25 (S. 444–470).
+- Eine Rückseite gehört zum Blatt, auch wenn sie nach einem „b. w.“ einen eigenen Kopf trägt.
+- Trägt die Rückseite einen anderen Text mit eigenem Herausgeber, wird sie ein eigenes Flugblatt. So liegen in Band 013 AStA-Infos auf der Rückseite einer Bekanntmachung des Ältestenrats vom 22.06.1973, vermutlich auf schon bedrucktes Papier gedruckt.
+- Mehrfachexemplare bleiben eigene Exemplare und werden erst im nächsten Schritt zusammengeführt (Kap. 6).
+- Vertauschte Seiten werden nicht umsortiert, sondern im Segment vermerkt.
+
+Für angehängte Resolutionen und für Pressespiegel wurde keine Regel festgelegt.
 
 ## 4.3 Verfahren
 
-Die 14 Bände dieses Projekts wurden von Hand mit dem Werkzeug `flugblatt_splitter` getrennt. Die Arbeit war auf drei Personen aufgeteilt und im August abgeschlossen. An Band 002 wurde das Ergebnis mit der automatischen Segmentierung von Datalab verglichen; dort fehlten eher Schnitte, als dass falsche gesetzt wurden [offen: aus alter Fassung 4.3 prüfen].
+Die 14 Bände dieses Projekts wurden von Hand mit dem Werkzeug `flugblatt_splitter` getrennt. Die Arbeit war auf drei Personen aufgeteilt und im August abgeschlossen. An Band 002 wurde die Trennung von Hand mit der automatischen Segmentierung von Datalab verglichen. Von Hand entstanden 59 Segmente, automatisch 13. Alle 13 automatischen Schnitte stehen auch in der Trennung von Hand, keiner kommt nur automatisch vor. Die automatische Segmentierung setzt also kaum falsche Schnitte, lässt aber die meisten aus: 46 von 59. Sie wurde deshalb nicht verwendet. Keine der beiden Trennungen war zu diesem Zeitpunkt geprüft, der Vergleich zeigt also nur die Art der Abweichung.
 
 Für neue Bände berechnet die Anwendung einen eigenen Vorschlag aus dem erkannten Text (`src/backend/app/boundaries.py`). Sie bewertet jeden Seitenübergang anhand von 14 Merkmalen und verrechnet sie mit einem naiven Bayes-Klassifikator. Die Gewichte wurden an den Bänden 1–14 gelernt, eine Trennung wird ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Das Verfahren läuft lokal und braucht kein Sprachmodell.
 

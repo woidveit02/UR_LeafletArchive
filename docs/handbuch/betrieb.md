@@ -10,6 +10,8 @@
 <!-- .env: Pfade zu PDFs und OCR-Daten, DATALAB_API_KEY, OPENROUTER_API_KEY.
      Was passiert, wenn ein Schlüssel fehlt. -->
 
+Die API-Keys für Datalab (Texterkennung) und OpenRouter (Metadaten, Themen) lassen sich unter Verwaltung › API-Keys eintragen, ändern und entfernen. Ein Schlüssel in `.env` hat Vorrang vor einem dort gespeicherten.
+
 ## Zugriff und Betrieb auf einem Server
 
 Die Anwendung hat keine eigene Anmeldung. Wer sie im Browser erreicht, kann Angaben ändern, Bände löschen, kostenpflichtige OCR- und Metadatenläufe starten und den vollständigen Export mit Personennamen laden. Deshalb ist sie standardmäßig nur auf dem Rechner selbst erreichbar (`docker-compose.yml` bindet den Port an `127.0.0.1`).
@@ -56,15 +58,17 @@ Für eine Vorführung im eigenen Netz tragen Sie in `.env` die Zeile `LEAFLET_BI
 
 ## Themen neu berechnen
 
-Unter Verwaltung › Themen › „Themen neu berechnen“. Auf derselben Seite lassen sich die Titel der jetzigen Themen ändern. Braucht den OpenRouter-Key und kostet wenige Cent; die Berechnung läuft einige Minuten im Hintergrund.
+Unter Verwaltung › Themen › „Themen neu berechnen“. Braucht den OpenRouter-Key; die Berechnung läuft einige Minuten im Hintergrund. Auf der Seite Verwaltung › Themen lassen sich außerdem die Titel der jetzigen Themen ändern („Bearbeiten“).
 
-1. Zahl der Themen und Modell für die Titel wählen (Voreinstellung wie beim ersten Lauf: 40, `openai/gpt-4.1-mini`), „Neu berechnen“.
+1. Höchstzahl der Themen und Sprachmodell für die Titel wählen, „Themen neu berechnen“. Voreingestellt sind die Zahl der jetzigen Themen und das Modell der bisherigen Titel. Die geschätzten Kosten stehen beim Modell. Die Ähnlichkeit berechnet immer bge-m3.
 2. Das Ergebnis liegt als `data/topics.kandidat.json` und `data/topic_map.kandidat.json` neben den bisherigen Dateien und ist noch nicht in Gebrauch.
-3. Auf der Prüfseite die Titel durchgehen. Vorausgefüllt ist der bisherige Titel, wenn ein Thema mindestens die Hälfte seiner Flugblätter behält, sonst der Vorschlag des Modells.
-4. „Übernehmen“ ersetzt `topics.json` und `topic_map.json`; die alten Dateien bleiben als `topics.bis-<Zeit>.json` und `topic_map.bis-<Zeit>.json`. „Verwerfen“ löscht nur den Kandidaten.
+3. Auf der Prüfseite die Titel durchgehen. In den Feldern stehen die Vorschläge des Sprachmodells. Je Thema steht darunter, aus welchem bisherigen Thema die meisten Flugblätter stammen; „… Flugblätter“ öffnet sie in der Flugblattliste.
+4. „Neue Einteilung übernehmen“ ersetzt `topics.json` und `topic_map.json`; die alten Dateien bleiben als `topics.bis-<Zeit>.json` und `topic_map.bis-<Zeit>.json`. „Neuberechnung verwerfen“ löscht nur den Kandidaten.
 5. Entwürfe danach in Schritt 7 neu zuordnen.
 
-Die Embeddings speichert die Anwendung in `data/embeddings.bge-m3.npz`; ein zweiter Lauf fragt nur neue Texte an. Das Image enthält dafür BERTopic (ohne PyTorch), UMAP, HDBSCAN und das spaCy-Modell `de_core_news_lg`, zusammen einige hundert MB.
+Fehlt das bisherige Titelmodell bei OpenRouter, ist das stärkste Modell vorausgewählt, das für den Lauf höchstens etwa 0,10 $ kostet. Scheitern zu viele Titelanfragen, bricht der Lauf ab, statt Schlüsselwörter als Titel zu liefern.
+
+Die Embeddings speichert die Anwendung in `data/embeddings.bge-m3.npz`; ein zweiter Lauf fragt nur neue Texte an. Das Image enthält dafür BERTopic, UMAP, HDBSCAN und das spaCy-Modell `de_core_news_lg` und ist dadurch etwa 1,5 GB groß.
 
 ## Kosten
 
