@@ -20,7 +20,7 @@ Die Anwendung hat keine eigene Anmeldung. Wer sie im Browser erreicht, kann Anga
 
 Voraussetzungen, von der IT zu klären: ein Server mit Docker, ein Rechnername im Uni-Netz (im Beispiel `flugblaetter.example.uni-regensburg.de`) und ein Zertifikat dafür. Wer die Anwendung nutzen darf, legt das Archiv fest. [offen: Regeln des Archivs für Zugriff und Personennamen]
 
-1. Starten Sie die Anwendung wie im [README](../../README.md) beschrieben. Ändern Sie die Portbindung nicht: Die Anwendung bleibt nur für den Server selbst erreichbar.
+1. Starten Sie die Anwendung wie im [README](../../README.md) unter „Schnellstart“ beschrieben. Ändern Sie die Portbindung nicht: Die Anwendung bleibt nur für den Server selbst erreichbar.
 2. Installieren Sie auf dem Server den Webserver [Caddy](https://caddyserver.com/docs/install). Er nimmt die Anfragen von außen an, verlangt ein Passwort und reicht sie an die Anwendung weiter.
 3. Erzeugen Sie den Hash für das Passwort: `caddy hash-password`.
 4. Legen Sie die Datei `/etc/caddy/Caddyfile` an:

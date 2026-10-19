@@ -11,6 +11,7 @@
     <a class="skip-link" href="#content">Zum Inhalt</a>
     {% include '_navigation.html' %}
     <main id="content" class="app{% block app_class %}{% endblock %}">
+        {% if data_problems %}<p class="form-warn" role="status">Im Datenordner fehlt etwas, Scans oder erkannter Text werden nicht vollständig angezeigt. Meist stimmt der Pfad <code>LEAFLET_PDF_HOST_DIR</code> in <code>.env</code> nicht; den genauen Grund nennt <code>docker compose logs backend</code>.</p>{% endif %}
         {% block content %}{% endblock %}
     </main>
     <script src="{{ url_for('static', path='field-search.js') }}" defer></script>

@@ -44,3 +44,14 @@ def test_missing_ocr(tmp_path):
     (vol_dir / STEM / f"{STEM}.json").unlink()
     problems = check_data_dir(tmp_path)
     assert len(problems) == 1 and "json" in problems[0]
+
+
+# Without a working data folder every page says so and where to find the reason; with one, nothing is shown.
+def test_pages_name_a_broken_data_folder(monkeypatch):
+    from fastapi.testclient import TestClient
+    from backend.app.app import app, templates
+    client = TestClient(app)
+    monkeypatch.setitem(templates.env.globals, "data_problems", ["empty"])
+    assert "docker compose logs backend" in client.get("/gibt-es-nicht").text
+    monkeypatch.setitem(templates.env.globals, "data_problems", [])
+    assert "Datenordner" not in client.get("/gibt-es-nicht").text
