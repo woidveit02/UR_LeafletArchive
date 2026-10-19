@@ -30,7 +30,7 @@
         {% endfor %}
         <p>Titel erscheinen auf der Themenseite, in den Filtern und auf den Flugblattseiten. Gute Titel benennen den Inhalt neutral in 2 bis 6 Wörtern, nicht die Textsorte.</p>
         {% call(topic) topic_rows(topics, years) %}<span class="topic-title-row" data-view><a href="{{ topic.url }}">{{ topic.title }}</a>
-            <button type="button" class="link-button" data-edit>Bearbeiten</button></span>
+            <button type="button" class="button text" data-edit>Bearbeiten</button></span>
             <form method="post" action="/verwaltung/themen/{{ topic.id }}" class="topic-title-row" data-form hidden>
                 <input type="text" class="title-input" name="title" value="{{ topic.title }}" maxlength="120" required aria-label="Titel">
                 <button type="submit" class="button small primary">Speichern</button>

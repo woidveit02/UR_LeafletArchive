@@ -3,7 +3,7 @@
 {% block title %}Themen{% endblock %}
 {% block content %}
         {% from "_topics.html" import topic_map, topic_rows with context %}
-        <header class="page-head page-head-list">
+        <header class="page-head">
             <h1>Themen</h1>
             <p class="page-intro">Ein Sprachmodell hat die Flugblätter nach Textähnlichkeit zu {{ topics | length }} Themen gruppiert und aus den häufigsten Wörtern benannt. Das ist eine Schätzung, keine feste Einteilung. Unsichere Zuordnungen sind auf der Flugblattseite markiert, aber noch nicht korrigierbar.</p>
         </header>

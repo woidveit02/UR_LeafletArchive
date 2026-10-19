@@ -51,10 +51,10 @@
         zone.classList.toggle('has-files', n > 0);
         if (replaceNote) replaceNote.hidden = n === 0;
         summary.replaceChildren();
-        if (!n) { summary.textContent = 'Noch nichts ausgewählt.'; return; }
+        if (!n) { summary.textContent = 'Nichts ausgewählt'; return; }
         const remove = document.createElement('button');
         remove.type = 'button';
-        remove.className = 'link-button';
+        remove.className = 'button text';
         remove.textContent = 'Entfernen';
         remove.addEventListener('click', clear);
         summary.append(describe(), ' · ', remove);

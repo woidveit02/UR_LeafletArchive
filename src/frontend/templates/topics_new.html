@@ -60,7 +60,7 @@
             {{ model_choice(model_top, model_names, model_prices, chosen, 'Voreingestellt ist das Modell der bisherigen Titel. Die Schätzung umfasst die Titelvorschläge; die Embeddings kommen meist aus dem Zwischenspeicher, beim ersten Lauf kosten sie etwa 0,02 $.') }}
             <div class="start-row"><button type="submit" class="button primary"{% if not key %} disabled{% endif %}>Themen neu berechnen</button></div>
             {% else %}
-            <p class="meta">Die Themen werden berechnet. Die Seite darf geschlossen werden, es läuft weiter.</p>
+            <p class="meta">Die Themen werden berechnet. Das dauert einige Minuten. Die Seite darf geschlossen werden.</p>
             {% endif %}
             <div id="job-progress" class="upload-progress" hidden>
                 <progress></progress>

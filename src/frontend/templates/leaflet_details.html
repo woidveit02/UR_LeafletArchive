@@ -29,7 +29,7 @@
     {% set main_copy = leaflet.copies | selectattr('main') | list %}
     {% if leaflet.copies and leaflet.copies_checked and not leaflet.copy_main and main_copy %}
         <p class="alt-note"><span class="role alt">Weiteres Exemplar</span> Dasselbe Blatt wie das Hauptexemplar
-            <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Angaben der Gruppe stehen dort.
+            <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Metadaten der Gruppe stehen dort.
             <a href="/leaflets/{{ leaflet.id }}/exemplare">Exemplare vergleichen</a></p>
     {% endif %}
     {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}
@@ -73,6 +73,7 @@
         <div class="meta-area">
         {% if edit %}
         <form method="post" action="/leaflets/{{ leaflet.id }}/bearbeiten{{ leaflet.qs }}" class="meta-form keep-scroll">
+        <h1 class="visually-hidden">Metadaten korrigieren: {{ leaflet.title or 'Flugblatt ohne Titel' }}</h1>
         {{ lists(org_names, series_names) }}
         {{ title_field(m) }}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
@@ -86,14 +87,14 @@
         {% if not edit %}
         {# open state is kept per browser #}
         <details class="meta-details" open>
-            <summary title="Angaben aufklappen">
+            <summary title="Metadaten ausklappen">
                 <span class="fold-main">
                 <span class="fold-date">{{ date_value() }}{% if leaflet.date or leaflet.date_text %} {{ beleg('Datum') }}{% endif %}</span>
                 <span class="fold-issuers">{{ issuer_short() }} {{ beleg('Herausgeber') }}</span>
                 {% if leaflet.signatories %}<span class="fold-signers"><span class="meta">Unterzeichnet:</span> {{ leaflet.signatories | map(attribute='name') | join(', ') }} {{ beleg('Unterzeichnende') }}</span>{% endif %}
                 {% if leaflet.series %}<span class="fold-series"><span class="meta">Reihe</span> {{ leaflet.series }} {{ beleg('Reihe') }}</span>{% endif %}
                 </span>
-                <span class="fold-toggle">{% if leaflet.corrected %}<span class="fixed-tag">von Hand korrigiert</span>{% endif %}<span class="toggle-pill">Angaben ausklappen ▾</span></span>
+                <span class="fold-toggle">{% if leaflet.corrected %}<span class="fixed-tag">von Hand korrigiert</span>{% endif %}<span class="toggle-pill">Metadaten ausklappen ▾</span></span>
             </summary>
         {% endif %}
         <div class="meta-box{% if edit %} editing{% endif %}">
@@ -171,11 +172,11 @@
         </div>
         {% else %}
         <aside class="meta-side">
-            <button type="button" class="toggle-pill" data-fold>Angaben einklappen ▴</button>
+            <button type="button" class="toggle-pill" data-fold>Metadaten einklappen ▴</button>
             <div class="side-actions">
                 <p><span class="side-label">Texterkennung</span>{{ leaflet.ocr_label }}</p>
                 {% if leaflet.provenance_model %}<p><span class="side-label">Metadaten</span>{{ leaflet.provenance_model }}, {{ leaflet.provenance_date }}</p>{% endif %}
-                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button small" data-swap="edit">Angaben korrigieren</a>
+                <a href="/leaflets/{{ leaflet.id }}{{ leaflet.qs ~ '&' if leaflet.qs else '?' }}bearbeiten" class="button small" data-swap="edit">Metadaten korrigieren</a>
                 {% if leaflet.corrected %}<button type="submit" form="revert-{{ leaflet.id }}" name="field" value="all" class="button text">Alle Handkorrekturen entfernen</button>{% endif %}
             </div>
         </aside>
@@ -191,7 +192,7 @@
         </form>
         {% endif %}
         <form id="revert-{{ leaflet.id }}" class="keep-scroll" method="post" action="/leaflets/{{ leaflet.id }}/zuruecksetzen{{ leaflet.qs }}" hidden
-              onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen dieses Flugblatts entfernen? Es gelten dann wieder die automatisch erkannten Angaben.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
+              onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen dieses Flugblatts entfernen? Es gelten dann wieder die automatisch erkannten Metadaten.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
         </div>
 
         {% if not leaflet.has_pdf %}
@@ -250,7 +251,7 @@
         </section>
         {% endfor %}
 
-        <nav class="detail-nav detail-nav-bottom">
+        <nav class="detail-nav detail-nav-bottom" aria-label="Weitere Flugblätter">
             {{ step_link(('/leaflets/' ~ leaflet.prev_id ~ leaflet.qs) if leaflet.prev_id, '‹ Voriges Flugblatt') }}
             <a href="/leaflets{{ leaflet.qs }}">Zur Übersicht</a>
             {{ step_link(('/leaflets/' ~ leaflet.next_id ~ leaflet.qs) if leaflet.next_id, 'Nächstes Flugblatt ›') }}

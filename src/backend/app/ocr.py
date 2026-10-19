@@ -270,7 +270,7 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
     if again:
         clear(volume)
     elif kept_mode(volume) not in (None, variant(mode, captions)) or (kept_mode(volume) and kept_size(volume) != size):
-        raise ValueError(f"Die schon erkannten Teile haben die Qualität „{variant_label(kept_mode(volume))}“ und je "
+        raise ValueError(f"Die schon erkannten Teile haben die Qualitätsstufe „{variant_label(kept_mode(volume))}“ und je "
                          f"{kept_size(volume)} Seiten. Entweder damit fortsetzen oder von vorn beginnen.")
     pages = importer.page_count(volume)
     if result_path(volume).is_file():

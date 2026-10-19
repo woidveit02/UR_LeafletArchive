@@ -50,8 +50,8 @@
         <p><a href="{{ FONDS_URL }}" target="_blank" rel="noopener">Bestandsbeschreibung im <span class="nowrap">Archivportal-D ↗</span></a></p>
         <p>Die Sammlung umfasst {{ stats.volumes }} Bände aus den Jahren {{ stats.first_year }}–{{ stats.last_year }}. Erschlossen sind die {{ stats.volumes_done }} digitalisierten.
             {%- if stats.missing %} {{ stats.missing | join(', ') }} {{ 'wurde' if stats.missing | length == 1 else 'wurden' }} nicht digitalisiert.{% endif %}</p>
-        <p>Titel, Datum, Herausgeber und Unterzeichnende wurden automatisch aus den Scans erkannt. Die Angaben können Fehler enthalten.
-            Wo ein Beleg vorliegt, lässt sich die Angabe auf der Detailseite im Scan prüfen.</p>
+        <p>Titel, Datum, Herausgeber und Unterzeichnende wurden automatisch aus den Scans erkannt. Die Metadaten können Fehler enthalten.
+            Wo ein Beleg vorliegt, lässt sich das auf der Detailseite im Scan prüfen.</p>
         </section>
         </div>
 {% endblock %}

@@ -131,8 +131,8 @@ Export vom {datetime.date.today():%d.%m.%Y}: {n_volumes} freigegebene Bände, {n
 
 ## Dateien
 
-- `flugblaetter.jsonl`: eine Zeile (JSON) pro Flugblatt, alle Angaben und der Volltext (`text`).
-- `flugblaetter.csv`: dieselben Angaben ohne Volltext, mehrere Werte durch `; ` getrennt.
+- `flugblaetter.jsonl`: eine Zeile (JSON) pro Flugblatt, alle Metadaten und der Volltext (`text`).
+- `flugblaetter.csv`: dieselben Metadaten ohne Volltext, mehrere Werte durch `; ` getrennt.
 - `texte/<id>.txt`: der Volltext jedes Flugblatts als einzelne Datei.
 - `flugblatt_herausgeber.csv`: Herausgeber und Unterzeichnende je Flugblatt, mit Wortlaut und Beleg aus dem Text.
 - `herausgeber.csv`: das Register der Herausgeber (`id` wie in `herausgeber_id`, Namensvarianten).
@@ -146,7 +146,7 @@ Export vom {datetime.date.today():%d.%m.%Y}: {n_volumes} freigegebene Bände, {n
 - `id`: Datei des Bandes und Seiten (`0118_0003_S127-128`); bleibt bei späteren Exporten gleich, solange die Seitengrenzen bleiben.
 - `datum`: ISO-Datum, so genau wie bekannt (`1968`, `1968-05`, `1968-05-14`); `datum_wortlaut` wie im Text.
 - `hauptexemplar`: bei weiteren Exemplaren die `id` des Hauptexemplars, sonst leer.
-- `korrigiert`: die von Hand geprüften Felder. Alle anderen Angaben hat ein Sprachmodell aus dem OCR-Text erzeugt.
+- `korrigiert`: die von Hand geprüften Felder. Alle anderen Metadaten hat ein Sprachmodell aus dem OCR-Text erzeugt.
 
 ## Grenzen
 

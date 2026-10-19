@@ -222,8 +222,10 @@ def start_assign(volume):
         raise ValueError("Zuerst die Flugblätter in Schritt 6 vorbereiten.")
     if load(TOPICS) is None:
         raise ValueError("Es gibt noch keine Themen. Sie werden einmal unter „Themen neu berechnen“ erzeugt.")
-    if importer.running(volume, ASSIGN) or importer.JOBS.get((0, RECOMPUTE), {}).get("state") == "running":
-        raise ValueError("Die Themen werden gerade berechnet. Bitte warten.")
+    if importer.running(volume, ASSIGN):
+        raise ValueError("Die Themen werden gerade zugeordnet. Bitte warten.")
+    if importer.JOBS.get((0, RECOMPUTE), {}).get("state") == "running":
+        raise ValueError("Die Themen werden gerade neu berechnet. Bitte warten.")
     job = importer.JOBS[(volume.vz, ASSIGN)] = {"state": "running", "done": 0, "total": 0, "error": "",
                                                "started": time.time(), "parts": [], "unit": "Texte eingebettet"}
 

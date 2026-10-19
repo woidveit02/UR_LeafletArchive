@@ -17,7 +17,7 @@
 
 {# previous or next: a link, or grey text where there is none #}
 {% macro step_link(url, label) -%}
-{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span class="disabled">{{ label }}</span>{% endif %}
+{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span class="disabled" aria-disabled="true">{{ label }}</span>{% endif %}
 {%- endmacro %}
 
 {# above the pages that step 6 of the import links to, back to the step; a caller adds its pager #}

@@ -11,7 +11,7 @@
                 {{ step_link(('/volumes/' ~ volume.next_vz) if volume.next_vz, 'Nächster ›') }}
             </span>
         </nav>
-        <header class="page-head page-head-detail">
+        <header class="page-head">
             <h1>{{ volume.label }}{% if volume.draft %} <span class="status-badge">nicht freigegeben</span>{% endif %}</h1>
         </header>
 

@@ -1070,7 +1070,7 @@ def explain(error):
     if code in (401, 403):
         return "OpenRouter hat den API-Key abgelehnt. Bitte unten einen anderen eintragen."
     if code == 402:
-        return "Das Guthaben bei OpenRouter ist aufgebraucht. Bereits erzeugte Angaben bleiben erhalten."
+        return "Das Guthaben bei OpenRouter ist aufgebraucht. Bereits erzeugte Metadaten bleiben erhalten."
     if code in (400, 404):
         return f"OpenRouter kennt dieses Modell nicht, oder es kann so nicht antworten ({error.response.text[:200]})."
     logger.exception("metadata failed")

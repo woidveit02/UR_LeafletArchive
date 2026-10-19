@@ -17,15 +17,15 @@ logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
 JPEG_QUALITY, DPI = 75, 400  # as pipelines/01_pdf/tiff_to_pdf.py
 STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "ocr": "Text erkennen", "trennen": "Flugblätter trennen",
-         "angaben": "Metadaten erzeugen", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
+         "angaben": "Metadaten erzeugen", "pruefen": "Prüfen und freigeben", "themen": "Themen zuordnen"}
 # what a step is for, said to somebody who does not know the system: under the step bar and as its tooltips
 STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
-             "scans": "Die gescannten Seiten des Bandes hochladen.",
-             "ocr": "Der Text der Scans wird automatisch erkannt, damit er sich lesen und durchsuchen lässt.",
-             "trennen": "Festlegen, wo ein Flugblatt endet und das nächste beginnt.",
-             "angaben": "Titel, Reihe, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
-             "pruefen": "Die Ergebnisse durchsehen und den Band in Liste, Suche und Trends aufnehmen.",
-             "themen": "Optional: Die Flugblätter werden Themen zugeordnet. Der Band ist schon nach Schritt 6 fertig."}
+             "scans": "Lade die gescannten Seiten des Bandes hoch.",
+             "ocr": "Die App erkennt den Text der Scans, damit er sich lesen und durchsuchen lässt.",
+             "trennen": "Lege fest, wo ein Flugblatt endet und das nächste beginnt.",
+             "angaben": "Ein Sprachmodell liest Titel, Reihe, Datum, Herausgeber und weitere Metadaten aus dem Text.",
+             "pruefen": "Sieh die Ergebnisse durch und gib den Band frei.",
+             "themen": "Optional: Die App ordnet die Flugblätter Themen zu. Der Band ist schon nach Schritt 6 fertig."}
 
 
 def load_entries():

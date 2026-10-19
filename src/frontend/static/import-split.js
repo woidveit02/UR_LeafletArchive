@@ -109,7 +109,7 @@
             skip.textContent = out ? 'Wieder einbeziehen' : 'Als Leerseite / Trennblatt markieren';
             skip.title = out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`;
         });
-        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Vorheriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
+        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Voriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
             <b class="${note ? '' : style}">${note || text}</b>
             <button type="button" class="button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter</button>`;
         decide.innerHTML = transitions < 1 ? '' : `<p class="split-question">Zwischen Seite ${a} und ${a + 1} trennen?</p>

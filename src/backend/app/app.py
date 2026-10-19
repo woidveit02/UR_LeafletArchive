@@ -1673,7 +1673,7 @@ def copy_blocks(leaflet):
             if b.get('type') != 'Picture']
 
 
-COPY_MESSAGES = {'angaben': 'Angaben aktualisiert.', 'gespeichert': 'Prüfung gespeichert.',
+COPY_MESSAGES = {'angaben': 'Metadaten aktualisiert.', 'gespeichert': 'Prüfung gespeichert.',
                  'zurueckgenommen': 'Prüfung zurückgenommen, es gilt wieder der automatische Vorschlag.',
                  'getrennt': 'Als verschiedene Flugblätter gespeichert.'}
 
@@ -2169,8 +2169,8 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     meta = metadata.status(volume) if step == 'angaben' and text['state'] == 'done' and segments.status(volume)['confirmed'] else None
     used = Counter(v.meta_model for v in session.query(Volume).filter_by(status=RELEASED) if v.meta_model).most_common() if meta else []
     waiting = {'scans': None if pages else 'Zuerst die Scans hochladen.',  # why "Weiter" does not work yet
-               'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis importieren.',
-               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Trennungen speichern.',
+               'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis als ZIP laden.',
+               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Prüfung abschließen.',
                'angaben': None if meta and meta['state'] == 'done' else 'Zuerst die Metadaten erzeugen.'}.get(step)
     done = ['band'] + (['scans'] if pages else []) + (['ocr'] if text['state'] == 'done' else []) \
         + (['trennen'] if segments.status(volume)['confirmed'] else [])

@@ -4,14 +4,14 @@
     <summary>Wo finde ich meinen API-Key?</summary>
     {% if service == 'datalab' %}
     <h4>Was ist Datalab, was ein API-Key?</h4>
-    <p><b>Datalab</b> ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
+    <p>Datalab ist ein Online-Dienst, der Text in Scans erkennt (OCR). Die App schickt die Scans dorthin und holt den Text zurück.
         Das kostet Geld: Es reicht das kostenlose Abo, abgerechnet wird nach der Nutzung. Dafür braucht das Datalab-Konto eine hinterlegte Zahlungsmethode oder aufgeladenes Guthaben.</p>
     {% else %}
     <h4>Was ist OpenRouter, was ein API-Key?</h4>
-    <p><b>OpenRouter</b> ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
+    <p>OpenRouter ist ein Online-Dienst, über den die App Sprachmodelle verschiedener Anbieter nutzt (zum Beispiel Claude, Gemini, GPT).
         Die App schickt den erkannten Text jedes Flugblatts dorthin und bekommt Titel, Datum und Herausgeber zurück, für die Themen außerdem Embeddings, aus denen sich die Ähnlichkeit der Texte ergibt. Abgerechnet wird nach der Nutzung über Guthaben im OpenRouter-Konto.</p>
     {% endif %}
-    <p>Der <b>API-Key</b> (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
+    <p>Der API-Key (deutsch: Schlüssel) ist eine Art langes Passwort für dieses Konto. Mit ihm darf die App den Dienst nutzen,
         und die Kosten werden dem Konto belastet. Er sollte deshalb nicht weitergegeben werden.</p>
     <h4>Wie bekomme ich einen API-Key?</h4>
     {% if service == 'datalab' %}
@@ -45,7 +45,7 @@
     <form method="post" action="{{ action }}" class="key-form">{{ fields }}
         <label>Neuer API-Key<input type="password" name="key" autocomplete="off"></label>
         <button type="submit" class="button small">Speichern</button>
-        <button type="submit" name="forget" value="true" class="link-button" formnovalidate
+        <button type="submit" name="forget" value="true" class="button text" formnovalidate
                 onclick="return confirm('API-Key entfernen? Der gespeicherte Schlüssel wird gelöscht.')">Entfernen</button>
     </form>
     {% if not finished %}{{ key_help(service) }}{% endif %}

@@ -2,10 +2,11 @@
 let mode = 'year';  // year or semester: kept when the page is swapped
 const initTrends = () => {
     const data = JSON.parse(document.getElementById('trend-data').textContent);
-    const COLORS = ['#1e5aa8', '#c2410c', '#237a50', '#8a3fa8'];
+    const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const COLORS = [token('--accent'), token('--warning'), token('--success'), '#8a3fa8'];
     const labels = data.years.map((y, i) => y.includes('/') ? [y, 'n = ' + data.totals[i], 'zusammengefasst'] : [y, 'n = ' + data.totals[i]]);
     Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
-    Chart.defaults.color = '#68707c';
+    Chart.defaults.color = token('--muted');
     Chart.defaults.maintainAspectRatio = false;
     Chart.defaults.scale.ticks.maxRotation = 0;  // years stay readable on phones
     document.querySelectorAll('.trend-swatch').forEach((s) => { s.style.background = COLORS[s.dataset.term]; });
@@ -31,7 +32,7 @@ const initTrends = () => {
         data: {labels, datasets: [...terms.map((t) => ({
             label: t.term, data: t.shares, borderColor: COLORS[data.terms.indexOf(t)],
             backgroundColor: COLORS[data.terms.indexOf(t)], pointRadius: 4, pointHoverRadius: 6, pointHitRadius: 10,
-        })), {type: 'bar', label: 'zu wenige datierte Flugblätter', data: [], backgroundColor: '#e9ebee', grouped: false, order: 99,
+        })), {type: 'bar', label: 'zu wenige datierte Flugblätter', data: [], backgroundColor: token('--surface-muted'), grouped: false, order: 99,
               barPercentage: 1, categoryPercentage: 1}]},
         options: {
             interaction: {mode: 'nearest', intersect: true},  // one point at a time, like the click

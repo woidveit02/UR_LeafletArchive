@@ -51,15 +51,15 @@
             {{ pager }}
         </nav>
         {% endif %}
-        <header class="page-head page-head-wide">
+        <header class="page-head">
             <div class="head-row">
                 <h1>Gruppe prüfen</h1>
                 {% if checked %}<span class="status-badge checked">Geprüft</span>{% endif %}
             </div>
         </header>
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare">
-            <p class="meta">Wähle das Blatt mit den richtigen Angaben, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
-                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Angaben der Gruppe zum Korrigieren; {% if simple %}mit der Wahl geht es direkt zur nächsten ungeprüften Gruppe{% else %}„speichern und weiter“ führt direkt zur nächsten ungeprüften Gruppe{% endif %}.</p>
+            <p class="meta">Wähle das Blatt mit den richtigen Metadaten, dem besten Scan und dem vollständigsten Text; es vertritt die Gruppe.
+                {% if not simple %}Hake Blätter an, die nicht dazugehören. {% endif %}Danach folgen die Metadaten der Gruppe zum Korrigieren; {% if simple %}mit der Wahl geht es direkt zur nächsten ungeprüften Gruppe{% else %}„speichern und weiter“ führt direkt zur nächsten ungeprüften Gruppe{% endif %}.</p>
             <div class="review-actions dup-more">
                 {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
                 {% if simple %}<button type="submit" name="verdict" value="different" class="button small">Das sind verschiedene Flugblätter</button>
@@ -77,8 +77,8 @@
         </form>
 
         {% if checked %}
-        <h2>Angaben der Gruppe</h2>
-        <p class="meta">Die Angaben gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Exemplar etwas
+        <h2>Metadaten der Gruppe</h2>
+        <p class="meta">Die Metadaten gelten für die ganze Gruppe und stehen beim Hauptexemplar („von Hand korrigiert“). Sagt ein Exemplar etwas
             anderes, steht sein Wert farbig darunter; „übernehmen“ setzt ihn ohne Beleg ein. Einen Beleg wählst du im Text oder Scan des Hauptexemplars.</p>
         {{ lists(org_names, series_names) }}
         {% for c in cards if c.id == left %}
@@ -104,7 +104,7 @@
             </form>
             <form id="take" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/uebernehmen" hidden></form>
             <form id="revert-{{ c.id }}" class="keep-scroll" method="post" action="/leaflets/{{ c.id }}/exemplare/zuruecksetzen" hidden
-                  onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen der Gruppe entfernen? Es gelten dann wieder die automatisch erkannten Angaben.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
+                  onsubmit="return confirm(event.submitter.value === 'all' ? 'Alle Handkorrekturen der Gruppe entfernen? Es gelten dann wieder die automatisch erkannten Metadaten.' : 'Den automatisch erkannten Wert wiederherstellen? Andere ungespeicherte Änderungen gehen verloren.')"></form>
         </div>
         {% endfor %}
         {% endif %}

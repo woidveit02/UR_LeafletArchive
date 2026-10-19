@@ -5,7 +5,7 @@
         {% macro org_row(org) %}
             <tr data-search="{{ org.search }}">
                 <td><a href="/organizations/{{ org.id }}">{{ org.name }}</a>{% if org.full_name %} <span class="org-full">{{ org.full_name }}</span>{% endif %}</td>
-                <td class="hide-narrow"><span class="spark" role="img" aria-label="Flugblätter je Jahr: {{ org.bars | selectattr(1) | map('join', ': ') | join(', ') }}">
+                <td class="hide-narrow"><span class="spark" aria-hidden="true">
                     {%- for year, n in org.bars %}{% if n %}<a href="/leaflets?org={{ org.id }}&jahr={{ year }}" tabindex="-1" title="{{ year }}: {{ n }} – in der Flugblattliste zeigen" style="height: {{ (100 * n / org.peak) | round(0) | int }}%"></a>{% else %}<i title="{{ year }}: 0"></i>{% endif %}{% endfor -%}
                 </span></td>
                 <td class="nowrap">{% if org.first %}{{ org.first }}{% if org.last != org.first %}–{{ org.last }}{% endif %}{% endif %}</td>
