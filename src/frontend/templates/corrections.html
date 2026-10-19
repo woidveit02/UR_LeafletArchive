@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from '_leaflets.html' import title %}
-{% block title %}Korrekturen – UR Leaflet Archive{% endblock %}
+{% block title %}Korrekturen{% endblock %}
 {% macro history(row) %}
                 <details class="fix-history">
                     <summary>Änderungsverlauf · {{ row.history | length }} {{ 'Eintrag' if row.history | length == 1 else 'Einträge' }}</summary>

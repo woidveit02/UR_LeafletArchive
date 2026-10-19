@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}UR Leaflet Archive{% endblock %}</title>
+    {% set page_title %}{% block title %}{% endblock %}{% endset %}
+    <title>{{ page_title ~ " – " if page_title }}Flugblattsammlung</title>
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='favicon.svg') }}">
 </head>

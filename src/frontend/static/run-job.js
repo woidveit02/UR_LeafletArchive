@@ -1,5 +1,5 @@
-// Starts the text recognition and shows its progress. The run goes on in the app, so the page may be closed;
-// without this script the form would show the raw answer.
+// Starts a run in the background (text recognition, metadata, topics) and shows its progress; the run goes on
+// in the app, so the page may be closed. Also the choices of its form: quality level, model, prompt.
 (() => {
     // leaving before the text is recognized is allowed, but asked about
     const guarded = document.querySelector('[data-leave-warning]');
@@ -33,14 +33,14 @@
     const prompt = document.getElementById('prompt');
     document.getElementById('prompt-reset')?.addEventListener('click', () => { prompt.value = prompt.dataset.default; });
 
-    const forms = document.querySelectorAll('form[data-ocr]');
+    const forms = document.querySelectorAll('form[data-job]');
     if (!forms.length) return;
-    const box = document.getElementById('ocr-progress');
+    const box = document.getElementById('job-progress');
     const bar = box.querySelector('progress');
     const text = box.querySelector('.upload-text');
-    const list = document.getElementById('ocr-parts');
-    const error = document.getElementById('ocr-error');
-    const cancel = document.getElementById('ocr-cancel');
+    const list = document.getElementById('job-parts');
+    const error = document.getElementById('job-error');
+    const cancel = document.getElementById('job-cancel');
     cancel?.addEventListener('click', async () => {
         if (!confirm(cancel.dataset.confirm)) return;
         cancel.disabled = true;

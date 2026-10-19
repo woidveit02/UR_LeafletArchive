@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Flugblätter – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import step_link, sort_select %}
+{% block title %}Flugblätter{% endblock %}
 {% block content %}
         <header class="page-head page-head-list">
             <h1>Flugblätter</h1>
@@ -27,13 +28,13 @@
                             {% if not first %}<button type="button" class="remove" title="Bedingung entfernen" aria-label="Bedingung entfernen">✕</button>{% endif %}
                         </div>
         {% endmacro %}
-        {% macro facet_entry(e, bold) %}
+        {% macro facet_entry(e) %}
                 <li{% if e.none %} class="facet-none"{% endif %}><a href="{{ e.url }}" title="{{ e.label }}{% if e.sub %} – {{ e.sub }}{% endif %}" role="checkbox" aria-checked="{{ 'true' if e.active else 'false' }}"{% if e.active %} class="active"{% endif %}>
                     <span class="facet-box" aria-hidden="true"></span><span class="facet-label">{{ e.label }}{% if e.sub %}<small>{{ e.sub }}</small>{% endif %}</span></a>
                     <span class="meta">{{ e.count }}</span></li>
         {% endmacro %}
         {# facet with its values; long lists scroll, the "none" values stay visible below #}
-        {% macro facet_list(head, entries, filter_label=None, bold=False) %}
+        {% macro facet_list(head, entries, filter_label=None) %}
         {% set regular = entries | rejectattr('none') | list %}
         {% set special = entries | selectattr('none') | list %}
         <div class="facet">
@@ -42,9 +43,9 @@
             <input type="search" class="facet-filter" placeholder="{{ filter_label }} suchen …" aria-label="{{ filter_label }} in der Liste suchen">
             {% endif %}
             <ul class="facet-list{% if regular | length > 8 %} facet-scroll{% endif %}">
-                {% for e in regular %}{{ facet_entry(e, bold) }}{% else %}{% if not special %}<li class="meta">keine</li>{% endif %}{% endfor %}
+                {% for e in regular %}{{ facet_entry(e) }}{% else %}{% if not special %}<li class="meta">keine</li>{% endif %}{% endfor %}
             </ul>
-            {% if special %}<ul class="facet-list facet-special">{% for e in special %}{{ facet_entry(e, bold) }}{% endfor %}</ul>{% endif %}
+            {% if special %}<ul class="facet-list facet-special">{% for e in special %}{{ facet_entry(e) }}{% endfor %}</ul>{% endif %}
         </div>
         {% endmacro %}
         <form method="get" action="/leaflets" class="filter">
@@ -72,7 +73,7 @@
                             {% for y in facets.years %}
                             {% if y.count %}
                             <a class="topic-year{% if y.active %} active{% endif %}" href="{{ y.url }}"{% if y.active %} aria-current="true"{% endif %}
-                               aria-label="{{ y.year }}: {{ y.count }} {{ 'Dokument' if y.count == 1 else 'Dokumente' }}">
+                               aria-label="{{ y.year }}: {{ y.count }} {{ 'Flugblatt' if y.count == 1 else 'Flugblätter' }}">
                                 <span class="topic-bar-wrap"><span>{{ y.count }}</span><span class="topic-bar" style="height: {{ y.height }}%"></span></span>
                                 <span class="topic-year-label">{{ y.year[2:] }}</span>
                             </a>
@@ -97,18 +98,7 @@
                         <p class="meta">Ein Blatt liegt oft mehrfach im Archiv. Üblicherweise steht es nur einmal in der Liste.</p>
                     </div>
                 </details>
-                <script>
-                    if (matchMedia('(max-width: 600px)').matches) document.querySelector('.facet-column').open = false;
-                    // narrow a long facet list while typing; Enter must not submit the search form
-                    document.querySelectorAll('.facet-filter').forEach((input) => {
-                        const rows = input.nextElementSibling.querySelectorAll('li');
-                        input.addEventListener('input', () => {
-                            const text = input.value.toLowerCase();
-                            rows.forEach((li) => { li.hidden = !li.textContent.toLowerCase().includes(text); });
-                        });
-                        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') e.preventDefault(); });
-                    });
-                </script>
+                <script>if (matchMedia('(max-width: 600px)').matches) document.querySelector('.facet-column').open = false;</script>
                 <div class="result-column">
                     {% if active_filters %}
                     <div class="active-filters" aria-label="Aktive Filter">
@@ -120,21 +110,14 @@
                         <p class="filter-result">
                             {%- if selected_q and leaflets %}{{ count }} Treffer für „{{ selected_q }}“
                             {%- elif selected_q %}Keine Treffer für „{{ selected_q }}“
-                            {%- elif leaflets and filtered %}{{ count }} von {{ total }} Dokumenten
-                            {%- elif leaflets %}{{ count }} {{ 'Dokument' if count == 1 else 'Dokumente' }}
-                            {%- else %}Keine Dokumente für diese Auswahl{% endif %}
+                            {%- elif leaflets and filtered %}{{ count }} von {{ total }} Flugblättern
+                            {%- elif leaflets %}{{ count }} {{ 'Flugblatt' if count == 1 else 'Flugblätter' }}
+                            {%- else %}Keine Flugblätter für diese Auswahl{% endif %}
                             {%- if leaflets and selected_q and not q_short %} · <a href="{{ trends_url }}" title="Anteil der Blätter pro Jahr, mit den gesetzten Filtern">Trend über die Jahre</a>{% endif %}</p>
-                        <label class="sort">Sortiert nach
-                            <select name="sortierung" onchange="this.form.requestSubmit()">
-                                {% set by_relevance = selected_q and not q_short and view != 'fundstellen' %}
-                                <option value="" {% if not selected_sort or selected_sort == 'datum_auf' and not by_relevance %}selected{% endif %}>{{ 'Relevanz' if by_relevance else 'Datum aufsteigend' }}</option>
-                                {% if by_relevance %}<option value="datum_auf" {% if selected_sort == 'datum_auf' %}selected{% endif %}>Datum aufsteigend</option>{% endif %}
-                                <option value="datum_ab" {% if selected_sort == 'datum_ab' %}selected{% endif %}>Datum absteigend</option>
-                                <option value="titel_auf" {% if selected_sort == 'titel_auf' %}selected{% endif %}>Titel A–Z</option>
-                                <option value="titel_ab" {% if selected_sort == 'titel_ab' %}selected{% endif %}>Titel Z–A</option>
-                                <option value="band" {% if selected_sort == 'band' %}selected{% endif %}>Band und Seite</option>
-                            </select>
-                        </label>
+                        {% set by_relevance = selected_q and not q_short and view != 'fundstellen' %}
+                        {{ sort_select(([('', 'Relevanz'), ('datum_auf', 'Datum aufsteigend')] if by_relevance else [('', 'Datum aufsteigend')])
+                                       + [('datum_ab', 'Datum absteigend'), ('titel_auf', 'Titel A–Z'), ('titel_ab', 'Titel Z–A'), ('band', 'Band und Seite')],
+                                       '' if not selected_sort or selected_sort == 'datum_auf' and not by_relevance else selected_sort, button=false) }}
                         {{ view_switch(switch_base, view, [('liste', 'Liste'), ('kacheln', 'Kacheln')]
                            + ([('fundstellen', 'Fundstellen', 'Alle Textstellen aller Treffer untereinander, nach Datum')] if selected_q else [])) }}
                         <noscript><button type="submit" class="button small">Filtern</button></noscript>
@@ -163,14 +146,14 @@
                     {% endif %}
                     {% if leaflets %}<nav class="list-pager">
                         {% if pages > 1 and view != 'fundstellen' %}<span class="pager">
-                            {% if prev_url %}<a href="{{ prev_url }}">‹ Zurück</a>{% else %}<span class="disabled">‹ Zurück</span>{% endif %}
+                            {{ step_link(prev_url, '‹ Zurück') }}
                             <span class="meta">Seite {{ page }} von {{ pages }}</span>
-                            {% if next_url %}<a href="{{ next_url }}">Weiter ›</a>{% else %}<span class="disabled">Weiter ›</span>{% endif %}
+                            {{ step_link(next_url, 'Weiter ›') }}
                         </span>{% endif %}
                         {% if view != 'fundstellen' and count > page_sizes[0] %}<label class="sort">pro Seite
                             <select name="pro_seite" onchange="this.form.requestSubmit()">{% for n in page_sizes %}<option value="{{ n }}"{% if n == size %} selected{% endif %}>{{ n }}</option>{% endfor %}</select>
                         </label>{% endif %}
-                        <a class="list-export" href="/leaflets.csv{{ detail_from }}" download title="Titel, Datum, Herausgeber, Thema und Link, ohne Volltext">{{ 'Dieses Dokument' if count == 1 else 'Alle ' ~ count ~ ' Dokumente' }} als CSV-Tabelle herunterladen</a>
+                        <a class="list-export" href="/leaflets.csv{{ detail_from }}" download title="Titel, Datum, Herausgeber, Thema und Link, ohne Volltext">{{ 'Dieses Flugblatt' if count == 1 else 'Alle ' ~ count ~ ' Flugblätter' }} als CSV-Tabelle herunterladen</a>
                     </nav>{% endif %}
                 </div>
             </div>
@@ -178,44 +161,5 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-    <script>
-        (() => {
-            const form = document.querySelector('form.filter');
-            const lines = document.getElementById('search-lines');
-            document.getElementById('add-line').addEventListener('click', () => {
-                lines.append(document.getElementById('line-template').content.cloneNode(true));
-                lines.lastElementChild.querySelector('.text').focus();
-            });
-            lines.addEventListener('click', e => {
-                const line = e.target.closest('.remove')?.closest('.search-line');
-                if (!line) return;
-                const next = line.nextElementSibling;
-                if (!next) {  // the last line stays and is emptied
-                    line.querySelector('.text').value = '';
-                } else {
-                    if (!line.classList.contains('extra')) {  // the next line becomes the first
-                        next.classList.remove('extra');
-                        next.querySelector('.operator-cell').remove();
-                    }
-                    line.remove();
-                }
-                form.requestSubmit();  // the condition is gone from the results at once
-            });
-            // the first line with a term travels as q and feld, each further one as s=operator|field|term
-            form.addEventListener('submit', () => {
-                form.querySelectorAll('input.built').forEach(input => input.remove());
-                const add = (name, value) => form.append(Object.assign(document.createElement('input'), {type: 'hidden', name, value, className: 'built'}));
-                [...lines.children].filter(line => line.querySelector('.text').value.trim()).forEach((line, i) => {
-                    const term = line.querySelector('.text').value.trim();
-                    const field = line.querySelector('.field').value;
-                    if (i === 0) {
-                        add('q', term);
-                        if (field) add('feld', field);
-                    } else {
-                        add('s', [line.querySelector('.operator').value, field, term].join('|'));
-                    }
-                });
-            });
-        })();
-    </script>
+    <script src="{{ url_for('static', path='leaflet-list.js') }}"></script>
 {% endblock %}

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %} – UR Leaflet Archive{% endblock %}
+{% block title %}{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %}{% endblock %}
 {% block app_class %}{% if split %} app-wide{% endif %}{% endblock %}
 {% block content %}
         {% from "_keys.html" import key_help, key_block with context %}
         {% from "_models.html" import model_choice %}
         {% macro progress(cancel_url, cancel_confirm) %}
-        <div id="ocr-progress" class="upload-progress" hidden>
+        <div id="job-progress" class="upload-progress" hidden>
             <progress></progress>
             <span class="meta upload-text"></span>
-            <ul id="ocr-parts" class="ocr-parts"></ul>
-            {% if cancel_url %}<button type="button" id="ocr-cancel" class="button small" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
+            <ul id="job-parts" class="job-parts"></ul>
+            {% if cancel_url %}<button type="button" id="job-cancel" class="button small" data-url="{{ cancel_url }}" data-confirm="{{ cancel_confirm }}">Abbrechen</button>{% endif %}
         </div>
         {% endmacro %}
-        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a>{% if volume %} › Band hinzufügen{% endif %}</span></nav>
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>{% if volume %}Band {{ '%03d' % volume.vz }} · {{ volume.title }}{% else %}Band hinzufügen{% endif %}</h1>
         </header>
@@ -101,7 +101,7 @@
                 <progress></progress>
                 <span class="meta upload-text"></span>
             </div>
-            <button type="submit" id="upload-button" class="button small primary upload-submit" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
+            <button type="submit" id="upload-button" class="button small primary step-start" disabled>{{ 'Scans ersetzen' if pages else 'Hochladen' }}</button>
         </form>
         {% if pages %}</details>{% endif %}
         {% elif step == 'trennen' %}
@@ -111,10 +111,10 @@
         {% else %}
         <h2>{{ steps[step] }}</h2>
         <div class="step-narrow">
-        <div class="split-work">
-            <div class="split-work-head">
+        <div class="step-panel">
+            <div class="step-panel-head">
                 <span class="split-count{{ ' done' if split.confirmed }}"></span>
-                <span class="split-work-actions">
+                <span class="step-panel-actions">
                     <button type="button" id="split-finish-page" class="button primary" hidden>Prüfung abschließen</button>
                     {% if split.confirmed %}<button type="button" id="split-open" class="button">Einteilung ansehen</button>
                     {% else %}<button type="button" id="split-open" class="button primary">Seiten prüfen</button>{% endif %}
@@ -184,7 +184,7 @@
         <p class="form-error split-error" role="alert" hidden></p>
         <p class="meta split-note" hidden></p>
         </div>
-        <div id="split-stage" class="split-stage" hidden>
+        <div id="split-stage" class="overlay" hidden>
             <div class="split-bar">
                 <span class="split-count"></span>
                 <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt die Trennung nach ihr. Fragezeichen: noch nicht entschieden, ohne Zeichen: gehören zusammen."><i class="on">▮</i> Trennung · <i class="suggested">▮</i> Vorschlag · <i class="open">?</i> offen</span>
@@ -207,19 +207,42 @@
         {% else %}
         {% set busy = ocr_job and ocr_job.state == 'running' %}
         <div class="step-narrow"{% if ocr.state != 'done' and not busy %} data-leave-warning="Der Text ist noch nicht erkannt. Trotzdem weiter?"{% endif %}>
-        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}<details class="advanced"><summary><b data-mode-label>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).label }}</b> · etwa <span data-mode-price>{{ (ocr.modes | selectattr('key', 'equalto', chosen) | first).price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary><fieldset class="mode-choice"><legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>{% for m in ocr.modes %}<label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}><span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>{% endfor %}<small class="meta">Schätzung nach der Preisliste vom {{ ocr.prices_from }}, wird in Dollar angerechnet</small></fieldset><fieldset class="mode-choice"><legend>Bildbeschreibungen</legend><label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span><span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label><label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span><span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label></fieldset><fieldset class="mode-choice"><legend>Teilgröße</legend><label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label><small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small></fieldset></details>{% endmacro %}
+        {% macro mode_select(selected, skip=false, size=50) %}{% set chosen = selected or 'accurate' %}{% set mode = ocr.modes | selectattr('key', 'equalto', chosen) | first -%}
+        <details class="advanced">
+            <summary><b data-mode-label>{{ mode.label }}</b> · etwa <span data-mode-price>{{ mode.price }}</span> für {{ ocr.pages }} Seiten · Optionen ändern</summary>
+            <fieldset class="mode-choice">
+                <legend>Qualitätsstufe und geschätzter Preis für {{ ocr.pages }} Seiten</legend>
+                {% for m in ocr.modes %}
+                <label class="mode-row"><input type="radio" name="mode" value="{{ m.key }}" data-label="{{ m.label }}" data-price="{{ m.price }}"{% if m.key == chosen %} checked{% endif %}>
+                    <span class="mode-name">{{ m.label }}</span><span class="meta">{{ m.hint }}</span><span class="mode-price">{{ m.price }}</span></label>
+                {% endfor %}
+                <small class="meta">Schätzung nach der Preisliste vom {{ ocr.prices_from }}, wird in Dollar angerechnet</small>
+            </fieldset>
+            <fieldset class="mode-choice">
+                <legend>Bildbeschreibungen</legend>
+                <label class="mode-row"><input type="radio" name="captions" value="yes"{% if not skip %} checked{% endif %}><span class="mode-name">Mit</span>
+                    <span class="meta">Voreinstellung: Datalab beschreibt jedes Bild kurz, die App zeigt das als Bildunterschrift</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="captions" value="no"{% if skip %} checked{% endif %}><span class="mode-name">Ohne</span>
+                    <span class="meta">Bilder bleiben ohne Beschreibung</span><span></span></label>
+            </fieldset>
+            <fieldset class="mode-choice">
+                <legend>Teilgröße</legend>
+                <label class="size-row">Teile mit <input type="number" name="size" min="{{ ocr.size_min }}" max="{{ ocr.size_max }}" value="{{ size }}"> Seiten</label>
+                <small class="meta">Voreinstellung 50. Zu große Teile überschreiten eventuell das Upload-Limit von Datalab.</small>
+            </fieldset>
+        </details>{% endmacro %}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if ocr_job and ocr_job.state == 'cancelled' and ocr.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
         {% if ocr_job and ocr_job.state == 'error' and ocr.state != 'done' %}<p class="form-error" role="alert">{{ ocr_job.error }}</p>{% endif %}
-        <p class="form-error" id="ocr-error" role="alert" hidden></p>
-        <div class="split-work">
+        <p class="form-error" id="job-error" role="alert" hidden></p>
+        <div class="step-panel">
         {% set finished = ocr.state == 'done' and not busy %}
-        <div class="split-work-head">
+        <div class="step-panel-head">
             <div class="step-status">
         {% if busy %}
         <p class="meta">Der Text wird erkannt. Das dauert einige Minuten. Die Seite darf geschlossen werden, die Erkennung läuft weiter.</p>
         {% elif ocr.state == 'done' %}
-        <span class="split-count done">{{ ocr.pages }} Seiten · {% if ocr.source == 'hochgeladen' %}Text importiert{% else %}Text erkannt{% endif %}</span>
+        <span class="step-result done">{{ ocr.pages }} Seiten · {% if ocr.source == 'hochgeladen' %}Text importiert{% else %}Text erkannt{% endif %}</span>
         <p class="meta">{% if ocr.source != 'hochgeladen' %}{{ ocr.source }} · {% endif %}Qualitätsstufe „{{ ocr.mode_label }}“{% if ocr.seconds %} · in {{ [1, (ocr.seconds / 60) | round | int] | max }} Min{% endif %}{% if ocr.cost %} · Kosten laut Datalab etwa {{ ocr.cost }}{% endif %}</p>
         {% elif ocr.state == 'partial' %}
         <p class="form-warn" role="status">Unterbrochen: {{ ocr.kept }} von {{ ocr.batches }} Teilen sind schon erkannt und bezahlt (Qualitätsstufe „{{ ocr.mode_label }}“). Sie werden beim Fortsetzen nicht noch einmal angefragt.</p>
@@ -229,20 +252,20 @@
         {% endif %}
 
             </div>
-            {% if finished %}<span class="split-work-actions"><button type="button" id="check-open" class="button">Texterkennung ansehen</button></span>{% endif %}
+            {% if finished %}<span class="step-panel-actions"><button type="button" id="check-open" class="button">Texterkennung ansehen</button></span>{% endif %}
         </div>
         {{ progress('/import/' ~ volume.vz ~ '/ocr/abbrechen', 'Abbrechen? Teile, die schon an Datalab gesendet sind, werden trotzdem fertig und berechnet. Was fertig ist, bleibt erhalten, die Erkennung lässt sich fortsetzen.') }}
         {% if ocr.state != 'done' or busy %}
-        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-job data-status-url="/import/{{ volume.vz }}/status?job=ocr"{% if busy %} data-running="1"{% endif %}>
             {% if busy %}{% elif ocr.state == 'partial' %}<input type="hidden" name="mode" value="{{ ocr.mode_key }}">{% if ocr.no_captions %}<input type="hidden" name="captions" value="no">{% endif %}<input type="hidden" name="size" value="{{ ocr.size }}"><p class="meta">Fortgesetzt wird in der Qualitätsstufe der schon erkannten Teile (Qualitätsstufe „{{ ocr.mode_label }}“).</p>{% else %}{{ mode_select('accurate') }}{% endif %}
             {% if not busy %}<div class="start-row">
-                <button type="submit" class="button small primary upload-submit"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
+                <button type="submit" class="button small primary step-start"{% if not ocr_key %} disabled{% endif %}>{{ 'Fortsetzen' if ocr.state == 'partial' else 'Texterkennung starten' }}</button>
                 {% if not ocr_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
             </div>
             <p class="meta">Nach der Texterkennung kannst du mit dem nächsten Schritt fortfahren.</p>{% endif %}
         </form>
         {% if ocr.state == 'partial' and not busy %}
-        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-job data-status-url="/import/{{ volume.vz }}/status?job=ocr"
               data-confirm="Von vorn beginnen? Die schon erkannten Teile gehen verloren, die Texterkennung kostet dann für alle Seiten neu.">
             <input type="hidden" name="again" value="true">
             {{ mode_select(ocr.mode_key, ocr.no_captions, ocr.size) }}
@@ -250,7 +273,7 @@
         </form>
         {% endif %}
         {% else %}
-        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=ocr"
+        <form method="post" action="/import/{{ volume.vz }}/ocr" class="step-form" data-job data-status-url="/import/{{ volume.vz }}/status?job=ocr"
               data-confirm="Den Text noch einmal erkennen? Das kostet erneut Geld (je nach Qualitätsstufe), das jetzige Ergebnis (Qualitätsstufe „{{ ocr.mode_label }}“) geht verloren.">
             <input type="hidden" name="again" value="true">
             <details class="help">
@@ -285,7 +308,7 @@
         </div>
         </div>
         {% if finished %}
-        <div id="check-stage" class="split-stage" hidden>
+        <div id="check-stage" class="overlay" hidden>
             <div id="page-check" class="page-check" data-pages="{{ ocr.pages }}" data-url="/import/{{ volume.vz }}/ocr/seiten/{n}.json"
                  data-large="/import/{{ volume.vz }}/seiten/{n}.jpg?gross=1&v={{ stamp }}" data-images="/volumes/{{ volume.vz }}/images/">
                 <div class="check-bar">
@@ -324,16 +347,16 @@
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if meta_job and meta_job.state == 'cancelled' and meta.state != 'done' %}<p class="meta">Abgebrochen.</p>{% endif %}
         {% if meta_job and meta_job.state == 'error' and meta.state != 'done' %}<p class="form-error" role="alert">{{ meta_job.error }}</p>{% endif %}
-        <p class="form-error" id="ocr-error" role="alert" hidden></p>
-        <div class="split-work">
-        <form method="post" action="/import/{{ volume.vz }}/angaben" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=angaben"{% if busy %} data-running="1"{% endif %}
+        <p class="form-error" id="job-error" role="alert" hidden></p>
+        <div class="step-panel">
+        <form method="post" action="/import/{{ volume.vz }}/angaben" class="step-form" data-job data-status-url="/import/{{ volume.vz }}/status?job=angaben"{% if busy %} data-running="1"{% endif %}
               {% if finished %} data-confirm="Die Angaben noch einmal erzeugen? Das kostet erneut, die jetzigen Angaben werden ersetzt."{% endif %}>
-        <div class="split-work-head">
+        <div class="step-panel-head">
             <div class="step-status">
         {% if busy %}
         <p class="meta">Die Angaben werden erzeugt. Das dauert einige Minuten. Die Seite darf geschlossen werden, es läuft weiter.</p>
         {% elif meta.state == 'done' %}
-        <span class="split-count done">{{ meta.count }} Flugblätter · Metadaten erzeugt</span>
+        <span class="step-result done">{{ meta.count }} Flugblätter · Metadaten erzeugt</span>
         {% if meta.flagged %}<p>{{ meta.flagged }} Flugblätter haben Hinweise der Prüfung ({% for kind, n in meta.hints.items() %}{{ kind }} {{ n }}{{ ', ' if not loop.last }}{% endfor %}).</p>{% endif %}
         <p class="meta" title="{{ meta.model }}">Modell: {{ meta.model_name }} · Kosten laut OpenRouter etwa {{ meta.cost }}</p>
         {% elif meta.state == 'stale' %}
@@ -347,10 +370,10 @@
         {% endif %}
             </div>
         {% set start %}<div class="start-row">
-                <button type="submit" class="{{ 'button small' if finished else 'button small primary upload-submit' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
+                <button type="submit" class="{{ 'button small' if finished else 'button small primary step-start' }}"{% if not meta_key %} disabled{% endif %}>{{ 'Neu erzeugen' if finished else 'Fortsetzen' if meta.state == 'partial' else 'Metadaten erzeugen' }}</button>
                 {% if not meta_key %}<span class="meta">Speichere zuerst deinen API-Key.</span>{% endif %}
             </div>{% endset %}
-            {% if not busy and not finished %}<span class="split-work-actions">{{ start }}</span>{% endif %}
+            {% if not busy and not finished %}<span class="step-panel-actions">{{ start }}</span>{% endif %}
         </div>
         {{ progress('/import/' ~ volume.vz ~ '/angaben/abbrechen', 'Abbrechen? Die laufende Anfrage wird noch fertig und berechnet. Was fertig ist, bleibt erhalten.') }}
         {% if not busy %}
@@ -362,10 +385,10 @@
                 {{ model_choice(model_top, model_names, model_prices, chosen, 'Die Zahl bei „Bände“ nennt, wie viele freigegebene Bände mit diesem Modell erzeugt wurden.') }}
             {% endset %}
             {% set prompt_fields %}
-                <label class="model-search" for="prompt">Prompt (Anweisung mit Beispielen)</label>
+                <label class="field-label" for="prompt">Prompt (Anweisung mit Beispielen)</label>
                 <textarea id="prompt" name="prompt" rows="30" spellcheck="false" data-default="{{ prompt_default }}">{{ prompt_text }}</textarea>
                 <p class="meta">Wird beim Erzeugen gespeichert und für alle Bände verwendet. <button type="button" class="button text danger" id="prompt-reset">Zurücksetzen</button></p>
-                <label class="model-search" for="batch">Batchgröße (Flugblätter pro Anfrage)</label>
+                <label class="field-label" for="batch">Batchgröße (Flugblätter pro Anfrage)</label>
                 <input type="number" id="batch" name="batch" value="{{ batch_size }}" min="1" max="{{ max_batch }}">
                 <p class="meta">Kleinere Batches sind für schwächere Modelle sicherer, kosten aber etwas mehr, weil der Prompt öfter mitgeschickt wird.</p>
             {% endset %}
@@ -411,20 +434,20 @@
         <form method="post" action="/import/{{ volume.vz }}/vorbereiten"><button type="submit" class="button small">Erneut versuchen</button></form>
         {% elif prepare.state == 'running' %}
         <p>Die Flugblätter werden für die Prüfung vorbereitet. Das dauert etwa eine halbe Minute, die Seite lädt danach neu.</p>
-        <form hidden data-ocr data-running="1" data-status-url="/import/{{ volume.vz }}/status?job=anlegen"><button type="submit"></button></form>
-        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <form hidden data-job data-running="1" data-status-url="/import/{{ volume.vz }}/status?job=anlegen"><button type="submit"></button></form>
+        <p class="form-error" id="job-error" role="alert" hidden></p>
         {{ progress('', '') }}
         {% elif not created %}
         <p class="meta">Dafür müssen zuerst die Metadaten erzeugt sein.</p>
         {% else %}
         {% set todo = (copies.open > 0) + (new_issuers | length > 0) + (hints_open > 0) %}
-        <div class="split-work">
-            <div class="split-work-head">
+        <div class="step-panel">
+            <div class="step-panel-head">
                 <div class="step-status">
-                <span class="split-count done">{{ created }} Flugblätter</span>
+                <span class="step-result done">{{ created }} Flugblätter</span>
                 <p class="meta">{% if todo %}{{ todo }} von 3 Aufgaben offen{% else %}Alle Aufgaben erledigt{% endif %}</p>
                 </div>
-                <span class="split-work-actions"><a class="button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
+                <span class="step-panel-actions"><a class="button" href="/volumes/{{ volume.vz }}?ansicht=liste">Alle Flugblätter ansehen</a></span>
             </div>
             <ol class="task-list">
                 <li class="task{{ ' done' if not copies.open }}">
@@ -506,26 +529,26 @@
         {% else %}
         {% set busy = topic_job and topic_job.state == 'running' %}
         {% if topic_job and topic_job.state == 'error' %}<p class="form-error" role="alert">{{ topic_job.error }}</p>{% endif %}
-        <p class="form-error" id="ocr-error" role="alert" hidden></p>
-        <div class="split-work">
-        <form method="post" action="/import/{{ volume.vz }}/themen" class="step-form" data-ocr data-status-url="/import/{{ volume.vz }}/status?job=themen"{% if busy %} data-running="1"{% endif %}
+        <p class="form-error" id="job-error" role="alert" hidden></p>
+        <div class="step-panel">
+        <form method="post" action="/import/{{ volume.vz }}/themen" class="step-form" data-job data-status-url="/import/{{ volume.vz }}/status?job=themen"{% if busy %} data-running="1"{% endif %}
               {% if topic_state.assigned %} data-confirm="Die Themen dieses Bandes neu zuordnen? Die jetzige Zuordnung wird ersetzt."{% endif %}>
-        <div class="split-work-head">
+        <div class="step-panel-head">
             <div class="step-status">
             {% if busy %}
             <p class="meta">Die Themen werden zugeordnet. Beim ersten Mal holt die App auch die Embeddings aller freigegebenen Flugblätter, das dauert einige Minuten.</p>
             {% elif topic_state.assigned %}
-            <span class="split-count done">{{ topic_state.assigned }} von {{ topic_state.leaflets }} Flugblättern mit Thema</span>
+            <span class="step-result done">{{ topic_state.assigned }} von {{ topic_state.leaflets }} Flugblättern mit Thema</span>
             <p class="meta">{% if topic_state.uncertain %}{{ topic_state.uncertain | length }} davon unsicher, sie stehen unten.{% else %}Alle sicher zugeordnet.{% endif %}
                 {% if topic_state.assigned < topic_state.leaflets %}Flugblätter mit sehr wenig Text bekommen kein Thema.{% endif %}</p>
             {% else %}
             <p>Jedes Flugblatt bekommt das Thema der fünf Flugblätter, deren Text seinem am ähnlichsten ist, und einen Punkt auf der Themenkarte neben ihnen.
                 Sind sich diese Nachbarn nicht einig, oder ist schon der ähnlichste wenig ähnlich, gilt die Zuordnung als unsicher.
                 Die Ähnlichkeit berechnet das Modell bge-m3 über OpenRouter; das kostet weniger als einen Cent je Band.</p>
-            <p class="meta">Neue Themen entstehen dabei nicht. Dafür gibt es <a href="/verwaltung/themen">Themen neu berechnen</a>.</p>
+            <p class="meta">Neue Themen entstehen dabei nicht. Dafür gibt es <a href="/verwaltung/themen/neu">Themen neu berechnen</a>.</p>
             {% endif %}
             </div>
-            {% if not busy %}<span class="split-work-actions"><button type="submit" class="{{ 'button small' if topic_state.assigned else 'button small primary' }}"{% if not topic_key %} disabled{% endif %}>{{ 'Neu zuordnen' if topic_state.assigned else 'Themen zuordnen' }}</button></span>{% endif %}
+            {% if not busy %}<span class="step-panel-actions"><button type="submit" class="{{ 'button small' if topic_state.assigned else 'button small primary' }}"{% if not topic_key %} disabled{% endif %}>{{ 'Neu zuordnen' if topic_state.assigned else 'Themen zuordnen' }}</button></span>{% endif %}
         </div>
         {{ progress('', '') }}
         </form>
@@ -558,16 +581,9 @@
         </div>
 {% endblock %}
 {% block scripts %}
-    {% if not volume %}
-    <script>
-        // the link of the chosen unit in the findmittel, to be overwritten if needed
-        const unit = document.getElementById('vz'), link = document.getElementById('portal_url');
-        unit.addEventListener('change', () => { link.value = unit.selectedOptions[0].dataset.portal; });
-    </script>
-    {% endif %}
     <script src="{{ url_for('static', path='import-upload.js') }}"></script>
     {% if split %}<script src="{{ url_for('static', path='import-split.js') }}"></script>{% endif %}
-    {% if step in ('ocr', 'angaben', 'pruefen', 'themen') %}<script src="{{ url_for('static', path='import-ocr.js') }}"></script>{% endif %}
+    {% if step in ('ocr', 'angaben', 'pruefen', 'themen') %}<script src="{{ url_for('static', path='run-job.js') }}"></script>{% endif %}
     {% if step == 'ocr' %}
     <script src="{{ url_for('static', path='page-pair.js') }}"></script>
     <script src="{{ url_for('static', path='import-check.js') }}"></script>{% endif %}

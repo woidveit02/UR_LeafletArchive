@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}API-Keys – UR Leaflet Archive{% endblock %}
+{% block title %}API-Keys{% endblock %}
 {% block content %}
         {% from "_keys.html" import key_help, key_block with context %}
-        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › API-Keys</span></nav>
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>API-Keys</h1>
         </header>
-        <div class="topic-admin">
+        <div class="admin-body">
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if saved %}<p class="form-ok" role="status">Gespeichert.</p>{% endif %}
         <p>Einige Schritte beim Einlesen eines Bandes nutzen kostenpflichtige Online-Dienste. Die Schlüssel gelten für alle Bände; ein Schlüssel aus der .env hat Vorrang vor einem hier gespeicherten.</p>

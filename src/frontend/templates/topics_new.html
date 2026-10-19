@@ -1,29 +1,29 @@
 {% extends "base.html" %}
-{% block title %}{{ 'Neue Themen prüfen' if review else 'Themen neu berechnen' }} – UR Leaflet Archive{% endblock %}
+{% block title %}{{ 'Neue Themen prüfen' if review else 'Themen neu berechnen' }}{% endblock %}
 {% block content %}
         {% from "_topics.html" import topic_map, topic_rows with context %}
         {% from "_models.html" import model_choice %}
-        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › <a href="/verwaltung/themen">Themen</a> › {{ 'Neue Themen prüfen' if review else 'Neu berechnen' }}</span></nav>
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › <a href="/verwaltung/themen">Themen</a></span></nav>
         <header class="page-head">
             <h1>{{ 'Neue Themen prüfen' if review else 'Themen neu berechnen' }}</h1>
         </header>
-        <div class="topic-admin">
+        <div class="admin-body">
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if job.state == 'error' %}<p class="form-error" role="alert">{{ job.error }}</p>{% endif %}
-        <p class="form-error" id="ocr-error" role="alert" hidden></p>
+        <p class="form-error" id="job-error" role="alert" hidden></p>
         {% if review %}
-        <div class="split-work-head review-summary">
+        <div class="step-panel-head review-summary">
             <div class="step-status">
-                <span class="split-count">{{ review.topics | length }} Themen{% if review.split %} · {{ review.split | length }} bisherige aufgeteilt{% endif %}</span>
+                <span class="step-result">{{ review.topics | length }} Themen{% if review.split %} · {{ review.split | length }} bisherige aufgeteilt{% endif %}</span>
                 <p class="meta">Noch nicht übernommen; bis dahin gelten die bisherigen Themen.</p>
             </div>
-            <span class="split-work-actions">
+            <span class="step-panel-actions">
                 <button type="submit" form="discard-form" class="button">Neuberechnung verwerfen</button>
                 <button type="submit" form="accept-form" class="button primary">Neue Einteilung übernehmen ({{ review.topics | length }} Themen)</button>
             </span>
         </div>
         <p>Gruppiert hat die App nach der Ähnlichkeit der Texte, berechnet mit dem Modell bge-m3. Die Titel hat {{ ('das Sprachmodell ' ~ review.label_model) if review.label_model else 'ein Sprachmodell' }} vorgeschlagen. Prüfe sie nach den Leitlinien: 2 bis 6 Wörter, den Inhalt benennen statt der Textsorte, neutral formulieren.
-            Übernommen werden die Titel so, wie sie in den Feldern stehen.{% if offers %}{% endif %}</p>
+            Übernommen werden die Titel so, wie sie in den Feldern stehen.</p>
         {{ topic_map(map_data) }}
         <form method="post" action="/verwaltung/themen/neu/verwerfen" id="discard-form" hidden
               onsubmit="return confirm('Die Neuberechnung verwerfen? Die bisherigen Themen bleiben.')"></form>
@@ -49,12 +49,12 @@
             Das Ergebnis kannst du prüfen, bevor es die bisherigen Themen ersetzt. Die Berechnung dauert einige Minuten.
             Sie lohnt sich, wenn mehrere neue Bände dazugekommen sind.</p>
         {% if not key %}<p class="form-warn">Es fehlt der Zugang zu OpenRouter. Hinterlege den API-Key unter <a href="/verwaltung/api-keys">Verwaltung › API-Keys</a>.</p>{% endif %}
-        <form method="post" action="/verwaltung/themen/neu" class="step-form" data-ocr data-status-url="/verwaltung/themen/neu/status"{% if busy %} data-running="1"{% endif %}>
+        <form method="post" action="/verwaltung/themen/neu" class="step-form" data-job data-status-url="/verwaltung/themen/neu/status"{% if busy %} data-running="1"{% endif %}>
             {% if not busy %}
-            <label class="model-search" for="n_topics">Zahl der Themen</label>
+            <label class="field-label" for="n_topics">Zahl der Themen</label>
             <input type="number" class="count-input" id="n_topics" name="n_topics" value="{{ n_topics }}" min="5" max="100">
             <p class="meta">Höchstens so viele Themen bildet die App. Findet sie weniger klar getrennte Gruppen, werden es weniger.</p>
-            <label class="model-search" for="model-choice">Sprachmodell für die Titelvorschläge</label>
+            <label class="field-label" for="model-choice">Sprachmodell für die Titelvorschläge</label>
             {% if model_gone %}<p class="form-warn">Das Modell der bisherigen Titel ({{ used_model }}) gibt es bei OpenRouter nicht mehr.
                 Vorausgewählt ist das stärkste Modell, das für diesen Lauf höchstens etwa 0,10 $ kostet. Die Titel klingen dann womöglich etwas anders als die bisherigen.</p>{% endif %}
             {{ model_choice(model_top, model_names, model_prices, chosen, 'Voreingestellt ist das Modell der bisherigen Titel. Die Schätzung umfasst die Titelvorschläge; die Embeddings kommen meist aus dem Zwischenspeicher, beim ersten Lauf kosten sie etwa 0,02 $.') }}
@@ -62,16 +62,16 @@
             {% else %}
             <p class="meta">Die Themen werden berechnet. Die Seite darf geschlossen werden, es läuft weiter.</p>
             {% endif %}
-            <div id="ocr-progress" class="upload-progress" hidden>
+            <div id="job-progress" class="upload-progress" hidden>
                 <progress></progress>
                 <span class="meta upload-text"></span>
-                <ul id="ocr-parts" class="ocr-parts"></ul>
+                <ul id="job-parts" class="job-parts"></ul>
             </div>
         </form>
         {% endif %}
         </div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ url_for('static', path='import-ocr.js') }}"></script>
+    <script src="{{ url_for('static', path='run-job.js') }}"></script>
     {% if review %}{% from "_topics.html" import topic_map_script with context %}{{ topic_map_script(map_data) }}{% endif %}
 {% endblock %}

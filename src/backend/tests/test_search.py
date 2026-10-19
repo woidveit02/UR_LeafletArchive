@@ -484,8 +484,8 @@ def test_issuer_pages_count_documents_and_years(db):
     db.commit()
 
     listing = leaflet_app.organization_list(request("/organizations", b""), "").body.decode()
-    assert "1 Herausgeber · 4 Dokumente" in listing
-    assert "1 weitere mit weniger als 5 Dokumenten" in listing and "1 Registereinträge ohne Dokument" in listing and "Leer" not in listing
+    assert "1 Herausgeber · 4 Flugblätter" in listing
+    assert "1 weitere mit weniger als 5 Flugblättern" in listing and "1 Registereinträge ohne Flugblatt" in listing and "Leer" not in listing
     assert "1968–1969" in listing
 
     detail = leaflet_app.organization_detail(request("/organizations/asta", b""), "asta").body.decode()

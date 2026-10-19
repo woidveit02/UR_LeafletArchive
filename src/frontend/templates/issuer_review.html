@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Herausgeber zuordnen – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import step_link, review_bar %}
+{% block title %}Herausgeber zuordnen{% endblock %}
 {% block app_class %} app-wide{% endblock %}
 {% from '_metadata_fields.html' import lists %}
 {% block content %}
         {% set n = group.issuers | length %}
         {% set url = '/import/' ~ volume.vz ~ '/herausgeber' %}
-        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % volume.vz }}">
-            <span><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % volume.vz }} prüfen</b> · Herausgeber {{ nr + 1 }} von {{ total }}</span>
+        {% call review_bar(volume.vz, 'Herausgeber ' ~ (nr + 1) ~ ' von ' ~ total) %}
             <span class="pager">
-                {% if nr %}<a href="{{ url }}?nr={{ nr - 1 }}">‹ Voriger</a>{% else %}<span class="disabled">‹ Voriger</span>{% endif %}
-                {% if nr + 1 < total %}<a href="{{ url }}?nr={{ nr + 1 }}">Nächster ›</a>{% else %}<span class="disabled">Nächster ›</span>{% endif %}
+                {{ step_link((url ~ '?nr=' ~ (nr - 1)) if nr, '‹ Voriger') }}
+                {{ step_link((url ~ '?nr=' ~ (nr + 1)) if nr + 1 < total, 'Nächster ›') }}
             </span>
-        </nav>
+        {% endcall %}
         <h1>„{{ group.surface }}“</h1>
         <p class="page-intro">Diesen Herausgeber kennt das Register noch nicht. Ordnest du ihn zu, erscheint er im Filter „Herausgeber“,
             und die App erkennt diese Schreibweise auch in späteren Bänden. Unsicher? „Nächster ›“ lässt ihn offen.</p>

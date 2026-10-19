@@ -1,28 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Themen verwalten – UR Leaflet Archive{% endblock %}
+{% block title %}Themen verwalten{% endblock %}
 {% block scripts %}
-    <script>
-        // "Bearbeiten" turns the title into a field in place; "Verwerfen" brings the saved title back
-        document.addEventListener('click', (e) => {
-            const cell = e.target.closest('.topic-heading');
-            if (!cell) return;
-            const view = cell.querySelector('[data-view]'), form = cell.querySelector('[data-form]');
-            if (e.target.closest('[data-edit]')) {
-                view.hidden = true; form.hidden = false;
-                const field = form.elements.title; field.focus(); field.select();
-            } else if (e.target.closest('[data-cancel]')) {
-                form.elements.title.value = form.elements.title.defaultValue;
-                form.hidden = true; view.hidden = false;
-            }
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && e.target.closest('[data-form]')) e.target.closest('.topic-heading').querySelector('[data-cancel]').click();
-        });
-    </script>
+    <script src="{{ url_for('static', path='topics-admin.js') }}"></script>
 {% endblock %}
 {% block content %}
         {% from "_topics.html" import topic_rows with context %}
-        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › Themen</span></nav>
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head admin-head">
             <h1>Themen verwalten</h1>
             <span class="admin-actions">
@@ -30,7 +13,7 @@
                 <a class="button{{ ' primary' if candidate or due }}" href="/verwaltung/themen/neu">{{ 'Neues Ergebnis prüfen' if candidate else 'Themen neu berechnen' }}</a>
             </span>
         </header>
-        <div class="topic-admin">
+        <div class="admin-body">
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         {% if saved %}<p class="form-ok" role="status">Titel gespeichert.</p>{% endif %}
         {% if candidate %}<p class="form-warn">Eine Neuberechnung wartet auf Prüfung. Bis sie übernommen ist, gelten die Themen unten.</p>{% endif %}

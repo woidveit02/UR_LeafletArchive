@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Themen – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import sort_select %}
+{% block title %}Themen{% endblock %}
 {% block content %}
-        {% from "_topics.html" import topic_map, topic_rows, topic_map_script with context %}
+        {% from "_topics.html" import topic_map, topic_rows with context %}
         <header class="page-head page-head-list">
             <h1>Themen</h1>
             <p class="page-intro">Ein Sprachmodell hat die Flugblätter nach Textähnlichkeit zu {{ topics | length }} Themen gruppiert und aus den häufigsten Wörtern benannt. Das ist eine Schätzung, keine feste Einteilung. Unsichere Zuordnungen sind auf der Flugblattseite markiert, aber noch nicht korrigierbar.</p>
@@ -13,13 +14,7 @@
         </p>
         {{ topic_map(map_data) }}
         <form method="get" action="/themen" class="topic-sort">
-            <label class="sort">Sortiert nach
-                <select name="sortierung" onchange="this.form.submit()">
-                    <option value="" {% if sort != 'alpha' %}selected{% endif %}>Anzahl Flugblätter</option>
-                    <option value="alpha" {% if sort == 'alpha' %}selected{% endif %}>Titel A–Z</option>
-                </select>
-            </label>
-            <noscript><button type="submit" class="button small">Sortieren</button></noscript>
+            {{ sort_select([('', 'Anzahl Flugblätter'), ('alpha', 'Titel A–Z')], 'alpha' if sort == 'alpha' else '') }}
         </form>
         {% call(topic) topic_rows(topics, years) %}<a href="{{ topic.url }}">{{ topic.title }}</a>{% endcall %}
 {% endblock %}

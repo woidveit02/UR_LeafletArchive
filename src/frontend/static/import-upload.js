@@ -1,6 +1,10 @@
 // Upload of the scans with a progress bar: first the transfer to the app, then the building of the PDF,
 // which runs in the background and is polled. Without this script the form is a plain post.
 (() => {
+    // a new volume: the link of the chosen unit in the findmittel, to be overwritten if needed
+    const unit = document.getElementById('vz'), portal = document.getElementById('portal_url');
+    if (unit && portal) unit.addEventListener('change', () => { portal.value = unit.selectedOptions[0].dataset.portal; });
+
     // the browser's own file button speaks the browser's language: a German label and the chosen names instead
     document.querySelectorAll('.file-pick input').forEach((input) => {
         const name = input.parentElement.querySelector('.file-name');
@@ -13,7 +17,7 @@
         });
     });
 
-    const form = document.querySelector('form[data-status-url]:not([data-ocr])');
+    const form = document.querySelector('form[data-status-url]:not([data-job])');
     if (!form) return;
     const box = document.getElementById('upload-progress');
     const bar = box.querySelector('progress');

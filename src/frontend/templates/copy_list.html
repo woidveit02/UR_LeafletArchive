@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from '_leaflets.html' import title %}
-{% block title %}Exemplare – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import sort_select %}
+{% block title %}Exemplare{% endblock %}
 {% block content %}
         <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
@@ -34,16 +35,11 @@
             {% if band %}<input type="hidden" name="band" value="{{ band }}">{% endif %}
             <div class="filter-bar">
                 <p class="filter-result meta">Geprüfte Gruppen und Flugblätter, die bei der Prüfung aus einer Gruppe herausgenommen wurden.</p>
-                <label class="sort">Sortiert nach
-                    <select name="sortierung" onchange="this.form.submit()">
-                        {% for key, label in sorts.items() %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
-                    </select>
-                </label>
-                <noscript><button type="submit" class="button small">Sortieren</button></noscript>
+                {{ sort_select(sorts.items(), sort) }}
             </div>
         </form>
         {% endif %}
-        <table class="data-table">
+        <table class="data-table stack-narrow">
             <thead><tr><th>Gruppe</th><th>Exemplare</th><th class="num">Stand</th></tr></thead>
             <tbody>
             {% for r in rows %}

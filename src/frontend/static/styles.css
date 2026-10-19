@@ -423,15 +423,6 @@ a:hover {
     color: #9ca3af;
 }
 
-.status-badge {  /* neutral: orange marks deviating details on the same page */
-    padding: 2px 10px;
-    border-radius: 999px;
-    background: var(--surface-muted);
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
 .status-badge.checked {
     border-color: var(--success);
     background: var(--success-soft);
@@ -1409,11 +1400,6 @@ a.topic-year:focus-visible .topic-bar {
     font-size: 0.8rem;
 }
 
-.trend-more {
-    margin-top: 4px;
-    font-size: 0.8rem;
-}
-
 .trend-together {
     margin-top: 8px;
     font-size: 0.875rem;
@@ -1705,18 +1691,6 @@ a.topic-year:focus-visible .topic-bar {
     background: var(--surface-hover);
 }
 
-.row-date {
-    color: var(--ink-soft);
-    font-size: 0.9em;
-    font-variant-numeric: tabular-nums;
-}
-
-.row-date small {
-    display: block;
-    color: var(--muted);
-    font-size: 0.85em;
-}
-
 .row-main {
     grid-column: 2;
     min-width: 0;
@@ -1744,25 +1718,10 @@ abbr[title] {
     inset: 0;
 }
 
-.row-empty .row-title,
-.row-empty .row-count {
-    color: var(--muted);
-}
-
 .leaflet-list-plain li {
     grid-template-columns: 1fr 6.8em;
 }
 
-.list-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 16px;
-    padding: 0 10px 6px;
-    font-size: 0.85em;
-}
-
-.list-head .sort-link,
 .data-table .sort-link {
     display: inline-flex;
     align-items: center;
@@ -1772,17 +1731,9 @@ abbr[title] {
     white-space: nowrap;
 }
 
-.list-head .sort-link:hover,
-.list-head .sort-link.active,
 .data-table .sort-link:hover,
 .data-table .sort-link.active {
     color: var(--accent);
-}
-
-.list-head .sort-link:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
 }
 
 .sort-icon {
@@ -1796,25 +1747,8 @@ abbr[title] {
     stroke-linejoin: round;
 }
 
-.list-head .sort-link:not(.active) .sort-icon {
-    opacity: 0.5;
-}
-
-.list-head + .leaflet-list {
-    margin-top: 0;
-}
-
 .leaflet-list-plain .row-main {
     grid-column: 1;
-}
-
-.row-count {
-    grid-column: -2;
-    color: var(--ink-soft);
-    font-size: 0.9em;
-    font-variant-numeric: tabular-nums;
-    text-align: right;
-    white-space: nowrap;
 }
 
 .untitled {
@@ -1849,27 +1783,13 @@ abbr[title] {
         grid-template-columns: 1fr 6.8em;
     }
 
-    .row-date {
-        grid-column: 1;
-        grid-row: 2;
-    }
-
     .row-main {
         grid-column: 1 / -1;
         grid-row: 1;
     }
 
-    .row-count {
-        grid-column: 2;
-        grid-row: 2;
-    }
-
     .leaflet-list-plain .row-main {
         grid-column: 1;
-    }
-
-    .leaflet-list-plain .row-count {
-        grid-row: 1;
     }
 }
 
@@ -2685,13 +2605,6 @@ h1 .beleg-wrap {
 
 .form-error {
     color: #b91c1c;
-}
-
-#map {
-    width: 100%;
-    height: 70vh;
-    border: 1px solid var(--line);
-    border-radius: 12px;
 }
 
 .ocr-page {
@@ -4140,7 +4053,7 @@ a.topic-year.active .topic-bar {
 
 
 
-.button.upload-submit {
+.button.step-start {
     padding: 8px 18px;
     border-radius: var(--radius);
     font-size: 1em;
@@ -4166,12 +4079,12 @@ a.topic-year.active .topic-bar {
     max-width: 760px;
 }
 
-.step-narrow .split-work h3 {
+.step-narrow .step-panel h3 {
     margin: 16px 0 6px;
     font-size: 1rem;
 }
 
-.step-narrow .split-work > :last-child {
+.step-narrow .step-panel > :last-child {
     margin-bottom: 0;
 }
 
@@ -4357,32 +4270,12 @@ a.topic-year.active .topic-bar {
     font-size: 1em;
 }
 
-.ocr-parts {
+.job-parts {
     margin: 6px 0 0;
     padding: 0;
     list-style: none;
     font-size: 0.9em;
     color: var(--ink-soft);
-}
-
-.page-check-nav {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 12px;
-    margin: 0 0 10px;
-}
-
-.page-check-nav input {
-    width: 4.5em;
-    height: 30px;
-    padding: 2px 8px;
-    box-sizing: border-box;
-    text-align: right;
-}
-
-.page-check-nav .button.small {
-    padding: 2px 12px;
 }
 
 .help > :not(summary):not(h4) {
@@ -4516,7 +4409,7 @@ summary.link-button::-webkit-details-marker {
     width: 6em;
 }
 
-.model-search {
+.field-label {
     display: block;
     margin: 12px 0 4px;
     font-weight: 400;
@@ -4527,7 +4420,7 @@ summary.link-button::-webkit-details-marker {
     opacity: 0.5;
 }
 
-.split-work {
+.step-panel {
     max-width: 760px;
     margin: 0 0 24px;
     padding: 16px 20px;
@@ -4536,7 +4429,7 @@ summary.link-button::-webkit-details-marker {
     background: var(--surface);
 }
 
-.split-work-head {
+.step-panel-head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -4544,14 +4437,14 @@ summary.link-button::-webkit-details-marker {
     gap: 12px;
 }
 
-.split-work-actions {
+.step-panel-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
 }
 
-.split-work-actions .button[hidden] {
+.step-panel-actions .button[hidden] {
     display: none;
 }
 
@@ -4567,15 +4460,17 @@ summary.link-button::-webkit-details-marker {
     margin: 6px 0 0;
 }
 
+.step-result,
 .split-count {
     font-weight: 600;
 }
 
+.step-result.done,
 .split-count.done {
     color: var(--success);
 }
 
-.split-stage {
+.overlay {
     position: fixed;
     inset: 0;
     z-index: 1000;
@@ -4584,7 +4479,7 @@ summary.link-button::-webkit-details-marker {
     background: var(--canvas, var(--surface));
 }
 
-.split-stage[hidden] {
+.overlay[hidden] {
     display: none;
 }
 
@@ -5033,18 +4928,8 @@ body.split-lock {
     margin-bottom: 12px;
 }
 
-.step-narrow > details.help:last-child,
-.step-narrow > .key-row:last-child {
+.step-narrow > details.help:last-child {
     border-bottom: 1px solid var(--line);
-}
-
-.key-row {
-    padding: 12px 4px;
-    border-top: 1px solid var(--line);
-}
-
-.key-row > :last-child {
-    margin-bottom: 0;
 }
 
 .import-body {
@@ -5058,7 +4943,7 @@ body.split-lock {
 
 .app-wide .step-narrow,
 .app-wide .import-body > h2,
-.app-wide .split-work {
+.app-wide .step-panel {
     max-width: 760px;
     margin-inline: auto;
 }
@@ -5104,14 +4989,14 @@ body.split-lock {
     margin: 0 8px 12px;
 }
 
-.split-work {  /* open like the lists: no card, the rows keep their lines */
+.step-panel {  /* open like the lists: no card, the rows keep their lines */
     padding: 0;
     border: 0;
     border-radius: 0;
     background: none;
 }
 
-.split-work-head {
+.step-panel-head {
     align-items: flex-start;
     margin-bottom: 16px;
     padding: 0 8px;
@@ -5126,8 +5011,8 @@ body.split-lock {
     margin: 0 0 6px;
 }
 
-.split-work details.help,
-.split-work details.zip-import {
+.step-panel details.help,
+.step-panel details.zip-import {
     margin: 0;
 }
 
@@ -5271,53 +5156,54 @@ body.split-lock {
     display: none;
 }
 
-.split-work details.help > :not(summary) {
+.step-panel details.help > :not(summary) {
     margin-right: 8px;
     margin-left: 8px;
 }
 
-.split-work details.help > select,
-.split-work details.help > input[type="text"],
-.split-work details.help > textarea {
+.step-panel details.help > select,
+.step-panel details.help > input[type="text"],
+.step-panel details.help > textarea {
     width: calc(100% - 16px);
     margin-bottom: 0;
 }
 
-.split-work details.help > summary + * {
+.step-panel details.help > summary + * {
     margin-top: 4px;
 }
 
-.split-work details.help > h4 {
+.step-panel details.help > h4 {
     margin-top: 20px;
     margin-bottom: 10px;
     font-size: 1rem;
 }
 
-.split-work details.help > .model-search {
+.step-panel details.help > .field-label {
     margin-top: 18px;
     margin-bottom: 6px;
 }
 
-.split-work details.help > .meta {
+.step-panel details.help > .meta {
     margin-top: 10px;
     margin-bottom: 0;
 }
 
-.split-work details.help > details.help {
+.step-panel details.help > details.help {
     margin: 20px 0 0;
 }
 
-.split-work details.help > .start-row {
+.step-panel details.help > .start-row {
     margin-top: 20px;
     margin-bottom: 4px;
 }
 
-.split-work details.help[open] {
+.step-panel details.help[open] {
     padding-bottom: 8px;
 }
 
 .admin-head {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
@@ -5325,6 +5211,7 @@ body.split-lock {
 
 .admin-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
 }
@@ -5472,6 +5359,33 @@ body.split-lock {
     .data-table .hide-narrow {
         display: none;
     }
+
+    .data-table th,
+    .data-table td {
+        padding: 10px 6px;
+    }
+
+    /* one row under the other: title, copies, state */
+    .data-table.stack-narrow thead {
+        display: none;
+    }
+
+    .data-table.stack-narrow tbody,
+    .data-table.stack-narrow tr,
+    .data-table.stack-narrow td {
+        display: block;
+    }
+
+    .data-table.stack-narrow tr {
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .data-table.stack-narrow td {
+        padding: 2px 0;
+        border: 0;
+        text-align: left;
+    }
 }
 
 .data-table.sticky th {
@@ -5554,7 +5468,7 @@ h2 .count {
     font-size: 0.8rem;
 }
 
-.split-work > details:last-of-type {  /* the rows end with a line, as a list does */
+.step-panel > details:last-of-type {  /* the rows end with a line, as a list does */
     border-bottom: 1px solid var(--line);
 }
 
@@ -5594,6 +5508,7 @@ h2 .count {
 
 .fix-fields dd {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .fix-fields dd .meta {
@@ -5615,11 +5530,11 @@ h2 .count {
     font-size: 0.9rem;
 }
 
-.split-work .fix-list {
+.step-panel .fix-list {
     margin: 0 8px 12px;
 }
 
-.split-work .fix-list > li {
+.step-panel .fix-list > li {
     padding: 10px 0;
 }
 
@@ -5642,6 +5557,7 @@ h2 .count {
     padding: 2px 10px;
     border: 1px solid var(--warning);
     border-radius: 999px;
+    background: var(--surface-muted);
     color: var(--warning);
     font-size: 0.85rem;
     font-weight: 600;
@@ -5721,7 +5637,7 @@ h2 .count {
     margin-top: 8px;
 }
 
-.split-work .task h3 {
+.step-panel .task h3 {
     min-height: 26px;
     margin-top: 0;
     line-height: 26px;
@@ -6189,7 +6105,7 @@ h2 .count {
     }
 }
 
-.topic-admin > p, .topic-admin > form > p, .topic-admin > form > label {
+.admin-body > p, .admin-body > form > p, .admin-body > form > label {
     max-width: 50rem;
 }
 
@@ -6202,11 +6118,6 @@ h2 .count {
     padding: 12px 0;
     border-bottom: 1px solid var(--line);
     background: var(--surface);
-}
-
-.topic-examples ul {
-    margin: 4px 0 0;
-    padding-left: 18px;
 }
 
 form.topic-title-row {
@@ -6329,6 +6240,6 @@ form input.count-input {
 }
 
 
-.topic-admin > .form-warn {
+.admin-body > .form-warn {
     font-weight: 400;
 }

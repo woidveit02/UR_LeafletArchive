@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% block title %}{{ org.name }} – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import step_link, sort_select %}
+{% block title %}{{ org.name }}{% endblock %}
 {% block content %}
         <nav class="detail-nav">
             <span class="breadcrumb"><a href="/organizations">Herausgeber</a></span>
             <span>
-                {% if org.prev_id %}<a href="/organizations/{{ org.prev_id }}">‹ Vorherige</a>{% else %}<span class="disabled">‹ Vorherige</span>{% endif %}
-                {% if org.next_id %}<a href="/organizations/{{ org.next_id }}">Nächste ›</a>{% else %}<span class="disabled">Nächste ›</span>{% endif %}
+                {{ step_link(('/organizations/' ~ org.prev_id) if org.prev_id, '‹ Voriger') }}
+                {{ step_link(('/organizations/' ~ org.next_id) if org.next_id, 'Nächster ›') }}
             </span>
         </nav>
         <header class="page-head page-head-detail">
@@ -16,39 +17,39 @@
             <dt>Kürzel</dt>
             <dd>{{ org.name }}</dd>
             <dt>Langform</dt>
-            <dd>{{ org.full_name if org.full_name else 'n.a.' }}</dd>
+            <dd>{{ org.full_name if org.full_name else '–' }}</dd>
             <dt>Typ</dt>
-            <dd>{{ org.type if org.type else 'n.a.' }}</dd>
+            <dd>{{ org.type if org.type else '–' }}</dd>
             <dt>Zeitraum</dt>
-            <dd>{{ org.period if org.period else 'n.a.' }}
-                {%- if org.outside %}{% set n = org.outside | sum(attribute=1) %} <span class="meta">({{ n }} {{ 'Dokument' if n == 1 else 'Dokumente' }} außerhalb der Findmittel-Jahre:
+            <dd>{{ org.period if org.period else '–' }}
+                {%- if org.outside %}{% set n = org.outside | sum(attribute=1) %} <span class="meta">({{ n }} {{ 'Flugblatt' if n == 1 else 'Flugblätter' }} außerhalb der Findmittel-Jahre:
                 {% for y, k in org.outside %}<a href="/leaflets?org={{ org.id }}&jahr={{ y }}">{{ y }}</a>{% if not loop.last %}, {% endif %}{% endfor %})</span>{% endif %}</dd>
-            <dt>Dokumente</dt>
+            <dt>Flugblätter</dt>
             <dd>{{ org.count }}</dd>
             <dt>Schreibweisen</dt>
-            <dd>{{ org.variants | join(', ') if org.variants else 'n.a.' }}</dd>
+            <dd>{{ org.variants | join(', ') if org.variants else '–' }}</dd>
             <dt>Jahre (laut Findmittel)</dt>
-            <dd>{{ org.jahre if org.jahre else 'n.a.' }}</dd>
+            <dd>{{ org.jahre if org.jahre else '–' }}</dd>
             <dt>Bände laut Findmittel</dt>
             <dd>
-                {% for v in org.volumes %}<a href="/volumes/{{ v.vz }}" title="{{ v.title }}">Band {{ '%03d' % v.vz }}</a>{% if not loop.last %} · {% endif %}{% else %}n.a.{% endfor %}
+                {% for v in org.volumes %}<a href="/volumes/{{ v.vz }}" title="{{ v.title }}">Band {{ '%03d' % v.vz }}</a>{% if not loop.last %} · {% endif %}{% else %}–{% endfor %}
             </dd>
             <dt>Quelle</dt>
-            <dd>{{ org.notes if org.notes else 'n.a.' }}</dd>
+            <dd>{{ org.notes if org.notes else '–' }}</dd>
         </dl>
 
         {% if org.count %}
         <div class="section-head"><h2>Verlauf</h2></div>
-        <div class="topic-years history" aria-label="Dokumente je Jahr" style="grid-template-columns: repeat({{ org.bars | length }}, minmax(0, 1fr))">
+        <div class="topic-years history" aria-label="Flugblätter je Jahr" style="grid-template-columns: repeat({{ org.bars | length }}, minmax(0, 1fr))">
             {% for year, n, undated in org.bars %}
-            {% set label = year ~ ': ' ~ n ~ ' Dokumente' ~ (', davon ' ~ undated ~ ' ohne Datum (Jahr des Bandes)' if undated else '') %}
+            {% set label = year ~ ': ' ~ n ~ ' Flugblätter' ~ (', davon ' ~ undated ~ ' ohne Datum (Jahr des Bandes)' if undated else '') %}
             <a class="topic-year" href="/leaflets?org={{ org.id }}&jahr={{ year }}" title="{{ label }}" aria-label="{{ label }}">
                 <span class="topic-bar-wrap"><span class="topic-year-pct">{{ n or '' }}</span>{% if n %}<span class="topic-bar" style="height: {{ (100 * n / org.peak) | round(0) | int }}%">{% if undated %}<i style="height: {{ (100 * undated / n) | round(0) | int }}%"></i>{% endif %}</span>{% else %}<span class="history-none"></span>{% endif %}</span>
                 <span class="topic-year-label">{{ year }}</span>
             </a>
             {% endfor %}
         </div>
-        <p class="meta history-key">Heller: Dokumente ohne Datum, gezählt im Jahr ihres Bandes.</p>
+        <p class="meta history-key">Heller: Flugblätter ohne Datum, gezählt im Jahr ihres Bandes.</p>
         {% if org.topics or org.partners %}
         <div class="org-facts">
             {% if org.topics %}<section><h3>Häufigste Themen</h3><ol>
@@ -68,14 +69,8 @@
             <a class="section-link" href="/leaflets?org={{ org.id }}">In der Flugblattliste filtern →</a>
             <form method="get" class="sort-form">
                 {% if org.view != 'liste' %}<input type="hidden" name="ansicht" value="{{ org.view }}">{% endif %}
-                <label class="sort">Sortiert nach
-                    <select name="sortierung" onchange="this.form.requestSubmit()">
-                        {% for key, label in [('', 'Datum aufsteigend'), ('datum_ab', 'Datum absteigend'), ('titel_auf', 'Titel A–Z'), ('titel_ab', 'Titel Z–A'), ('band', 'Band und Seite')] %}
-                        <option value="{{ key }}"{% if org.sort == (key or 'datum_auf') %} selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <noscript><button type="submit" class="button small">Sortieren</button></noscript>
+                {{ sort_select([('', 'Datum aufsteigend'), ('datum_ab', 'Datum absteigend'), ('titel_auf', 'Titel A–Z'), ('titel_ab', 'Titel Z–A'), ('band', 'Band und Seite')],
+                               '' if org.sort == 'datum_auf' else org.sort) }}
             </form>
             {% if org.has_thumbs %}{{ view_switch('/organizations/' ~ org.id ~ ('?sortierung=' ~ org.sort if org.sort != 'datum_auf' else ''), org.view,
                 [('liste', 'Liste'), ('kacheln', 'Kacheln')]) }}{% endif %}
