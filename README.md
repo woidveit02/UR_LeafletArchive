@@ -1,134 +1,75 @@
 # UR Leaflet Archive
 
-Eine Anwendung zum Durchsuchen der Flugblattsammlung im Universitätsarchiv Regensburg (Rep. 118, 1967–1973). Sie zeigt die Flugblätter mit Scan, OCR-Transkription und automatisch extrahierten Metadaten, außerdem die Organisationen und Bände aus dem Findmittel des Archivs.
+Die Allgemeine Flugblattsammlung des Universitätsarchivs Regensburg (Rep. 118) enthält Flugblätter aus der Studentenbewegung der Jahre 1967 bis 1973. Dieses Repository macht sie durchsuchbar: 1 927 Exemplare aus 14 Bänden mit Scan, erkanntem Text, Titel, Datum, Herausgebern und Thema. Es entstand in einem Praxisseminar im Sommersemester 2026 und enthält die Anwendung, den Projektbericht und die Werkzeuge, mit denen weitere Bände eingelesen werden.
 
-## Setup
-1. Repo klonen und mit `cd UR_LeafletArchive` hineinwechseln.
-2. Den Ordner `UR_LeafletArchive_data` mit Scans und OCR-Daten aus Drive lokal ablegen.
+![Leseansicht eines Flugblatts](docs/abbildungen/app_leseansicht.png)
+
+## Schnellstart
+
+Voraussetzung ist Docker mit Docker Compose.
+
+1. Repository klonen und hineinwechseln: `cd UR_LeafletArchive`.
+2. Den Ordner `UR_LeafletArchive_data` mit Scans und Texterkennung aus Drive lokal ablegen.
 3. `.env.example` nach `.env` kopieren und dort den Pfad zu diesem Ordner eintragen.
-4. Mit `docker compose up` starten. Die Anwendung läuft dann unter http://localhost:8000/. Beim ersten Start legt sie die Datenbank an und füllt sie.
-5. Im Log (`docker compose logs backend`) muss „Data folder ok“ stehen. Andernfalls sagt die Meldung, was am Pfad nicht stimmt.
+4. `docker compose up` starten. In der Ausgabe muss „Data folder ok“ stehen. Sonst nennt die Meldung, was am Pfad nicht stimmt, und die Anwendung zeigt oben auf jeder Seite einen Hinweis.
+5. http://localhost:8000/ öffnen. Beim ersten Start legt die Anwendung die Datenbank an und rendert im Hintergrund die Vorschaubilder; das dauert einige Minuten.
 
-Ändert ein Pull das `Dockerfile` oder `requirements.txt`, muss das Image neu gebaut werden: `docker compose up -d --build`. Beim Start rendert die Anwendung im Hintergrund die Vorschaubilder für die Kachelansicht. Das dauert beim ersten Mal einige Minuten; danach liegen sie im Datenordner unter `.thumbs/`.
+Nach einem Pull: Hat sich `Dockerfile` oder `requirements.txt` geändert, mit `docker compose up -d --build` neu bauen. Hat sich etwas in `data/` oder am Datenbankschema geändert, die Datenbank löschen und neu starten:
 
-Der Pfad in `.env` zeigt auf den Datenordner selbst, nicht auf einen Band darin:
+```bash
+rm src/backend/leaflet_database.db      # Windows: del src\backend\leaflet_database.db
+docker compose restart
+```
+
+Die Anwendung hat keine Anmeldung und ist deshalb nur auf dem eigenen Rechner erreichbar. Wie sie auf einem Server mit Passwort läuft, steht in [`docs/handbuch/betrieb.md`](docs/handbuch/betrieb.md).
+
+## Was die Anwendung kann
+
+Die Anwendung durchsucht den ganzen Text und zeigt die Fundstellen. Die Treffer lassen sich nach Jahr, Herausgeber, Thema und Textsorte filtern; dazu kommen Trends über die Jahre und eigene Seiten für Themen, Organisationen und Bände. Jedes Flugblatt zeigt Scan und Text nebeneinander, jede Angabe mit ihrem Beleg im Text.
+
+Angaben lassen sich von Hand korrigieren, Mehrfachexemplare prüfen und der Bestand als ZIP exportieren. Neue Bände kommen in sieben Schritten von den Scans bis zur Freigabe dazu, im Browser oder in der Kommandozeile ([Anleitung](docs/handbuch/band-einlesen.md)).
+
+## Aufbau
+
+```
+data/           Quelle der Datenbank: Metadaten je Band, Korrekturen, Register, Themen
+docs/           Projektbericht, Handbücher, Glossar (MkDocs)
+scripts/        Werkzeuge neben der Anwendung: Textauswertung, Scans, Abbildungen, Bericht als PDF
+src/backend/    Anwendung (FastAPI, SQLite), Import, Tests
+src/frontend/   Templates, Stylesheets, Skripte im Browser
+```
+
+Die Dateien in `data/` sind maßgeblich und gehören ins Repository; die Datenbank wird aus ihnen gebaut. Scans und Texterkennung liegen wegen ihrer Größe im Datenordner außerhalb:
 
 ```
 UR_LeafletArchive_data/
 ├── Nr. 001 (1967)/
-│   ├── 0118_0001.pdf          # Scan des Bandes
+│   ├── 0118_0001.pdf               # Scan des Bandes
+│   ├── 0118_0001.segments.json     # wo ein Flugblatt endet
 │   └── 0118_0001/
-│       ├── 0118_0001.json     # OCR (Datalab)
-│       └── <hash>_img.jpg     # Abbildungen aus der OCR
+│       ├── 0118_0001.json          # Texterkennung (Datalab)
+│       └── <hash>_img.jpg          # Abbildungen aus der Texterkennung
 ├── Nr. 002 (1968)/
-│   └── …
 └── …
 ```
 
-Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noch OCR-Text.
-
-## Ansichten
-
-| Seite | Route | Inhalt |
-|-------|-------|--------|
-| Start | `/` | Kurze Einführung, Zahlen, ausgewählte Flugblätter, Zeitleiste |
-| Flugblätter | `/leaflets` | Volltextsuche und Liste mit Filterspalte (Jahr, Herausgeber, Thema, Textsorte, Reihe, Datierung); Ansichten Liste, Kacheln und Fundstellen |
-| Flugblatt | `/leaflets/{id}` | Scan mit OCR-Boxen neben der Transkription, Metadaten mit Fundstellen |
-| Themen | `/themen` | Themen mit Flugblattanzahl und Jahresverteilung |
-| Organisationen | `/organizations` | Normdatei der herausgebenden Gruppen |
-| Organisation | `/organizations/{id}` | Angaben laut Findmittel, Bände, Flugblätter |
-| Bände | `/volumes` | Verzeichnungseinheiten 1967–1973, gegliedert wie im Findmittel |
-| Band | `/volumes/{vz}` | Findmittel-Titel, Signatur, Organisationen, Link ins Archivportal-D |
-| Korrigieren | `/leaflets/{id}?bearbeiten` | Titel, Datum, Textsorte, Herausgeber, Unterzeichnende sowie Reihe und Nummer von Hand korrigieren, mit Beleg im Scan |
-| Korrekturen | `/korrekturen` | Korrekturen und Prüfungen von Exemplaren, die nach einer Änderung der Segmentgrenzen nicht mehr angewendet werden |
-| Exemplare | `/exemplare` | Alle Gruppen desselben Blatts an mehreren Stellen im Bestand mit dem Stand der Prüfung; Einstieg in die Prüfung der ungeprüften Gruppen nacheinander |
-| Exemplare prüfen | `/leaflets/{id}/exemplare` | Vorschau-Karten der Blätter einer Gruppe: dieselben Flugblätter? Hauptexemplar wählen oder „Verschiedene Flugblätter“, danach öffnet sich die nächste ungeprüfte Gruppe. Darunter Scans und OCR-Text mit markierten Abweichungen. Die Angaben der Gruppe werden dort beim Hauptexemplar wie auf der Detailseite korrigiert (Belege im Text und Scan des Hauptexemplars); Exemplare sind gekennzeichnet und verweisen darauf; Werte, die ein Exemplar abweichend nennt, lassen sich mit „übernehmen“ ins Hauptexemplar einsetzen. Beide Seiten nutzen `_metadata_fields.html`, `meta-form.js` und `read_metadata_form`/`save_metadata` |
-
-Jede Korrektur steht als eigene Zeile in `data/corrections.jsonl`. Beim Aufbau der Datenbank werden die Korrekturen zuletzt angewendet, und zwar nur auf ein Flugblatt mit genau derselben Seitenspanne. „Alle Handkorrekturen entfernen“ und „wiederherstellen“ hängen eine Zeile mit `"field": "revert"` an, gelöscht wird dabei nichts. Diese Zeile hebt alle früheren Zeilen des Flugblatts auf (`"value": "all"`) oder nur die eines Feldes. Die Datei gehört ins Repo.
-
-Die Prüfung der möglichen Exemplare steht als eigene Zeile je Gruppe in `data/copy_decisions.jsonl` (Mitglieder, ausgeschlossene Blätter, Hauptexemplar). Blätter werden über Band und Seitenspanne angesprochen, nie über die Gruppennummer aus `copies.tsv`, denn die ändert sich bei jedem Lauf von `find_copies.py`. Ändert sich eine Segmentgrenze, wird die Prüfung nicht angewendet, sondern auf `/korrekturen` aufgeführt. „Prüfung zurücknehmen“ hängt eine Zeile mit `"revert"` an, gelöscht wird nichts. Die Datei gehört ins Repo.
-
-Die Anwendung hat keine Anmeldung. Bevor sie außerhalb des eigenen Rechners erreichbar ist, muss das Bearbeiten abgesichert werden.
-
-Auf der Flugblatt-Seite sind Scan und Transkription verknüpft: Fährt man über einen Textblock, markiert die Seite die zugehörige Stelle im Scan, und umgekehrt. Bände haben ihre Vz-Nummer als Adresse (`/volumes/2` = Nr. 002), damit die Adressen beim Neuaufbau der Datenbank gleich bleiben.
-
-Die Suche auf `/leaflets` durchsucht Titel, Reihe, Herausgeber und OCR-Text (SQLite FTS5 mit Trigrammen). Sie findet auch Wortteile, „versammlung“ trifft also „Vo11versammlung“. Mehrere Wörter müssen alle vorkommen, Wörter in Anführungszeichen als Wortfolge. „daß“ und „dass“ finden sich gegenseitig, am Zeilenende getrennte Wörter werden zusammengezogen. Begriffe unter 3 Zeichen werden nur in Titel und Reihe gesucht. Auf den anderen Seiten führt das Suchfeld in der Kopfleiste dorthin.
-
-Jeder Treffer zeigt bis zu drei Fundstellen, ein Klick springt auf der Flugblatt-Seite zur markierten Stelle. Die Ansicht „Fundstellen“ listet alle Textstellen aller Treffer nach Datum, zum Beispiel um zu vergleichen, wie verschiedene Gruppen einen Begriff verwenden. Die Zahlen in der Filterspalte gelten für die aktuelle Auswahl. „nicht im Register“ sammelt Blätter mit einem Herausgeber, der keiner Organisation zugeordnet ist.
-
-Der Suchindex entsteht beim Aufbau der Datenbank. Nach Änderungen an `search.py` die Datenbank löschen und neu starten.
-
-## Daten
-
-Die Datenbank entsteht aus den JSON-Dateien in [`data/`](data/). Diese Dateien sind maßgeblich und liegen in Git, Scans und OCR dagegen in Drive.
-
-| Datei | Inhalt | Herkunft |
-|-------|--------|----------|
-| `nr001_metadata.json`, `nr002_metadata.json`, … | Titel, Datum, Textsorte, Herausgeber je Flugblatt. Jeder Band mit einer solchen Datei wird importiert | LLM-Extraktion im Pipeline-Repo |
-| [`copies.tsv`](data/copies.tsv) | Mögliche Exemplare desselben Blatts | Textvergleich im Pipeline-Repo (`find_copies.py`) |
-| `corrections.jsonl` | Handkorrekturen | Bearbeiten in der App |
-| `copy_decisions.jsonl` | Geprüfte Gruppen von Exemplaren | Vergleichsseite in der App |
-| [`organizations.json`](data/organizations.json) | Normdatei der Organisationen | Findmittel (Entwurf, noch nicht bereinigt) |
-| [`topics.json`](data/topics.json) | Themen und Zuordnungen zu Flugblättern; unsichere Zuordnungen werden markiert | Topic-Modelling |
-| [`volumes.json`](data/volumes.json) | Bände mit Titel, Signatur, Link ins Archivportal-D | Findmittel |
-
-Importiert sind Nr. 001 bis Nr. 014 (1967–1973). Nr. 015 ist nicht digitalisiert und erscheint nur in der Bandliste.
-
-Ändert ein Pull etwas in `data/` oder am Datenbankschema (`models.py`), oder wurde der Datenordner erst nachträglich eingebunden, dann die Datenbank löschen und neu starten. Ein Neubau des Images (`--build`) ist nur nötig, wenn sich die Abhängigkeiten ändern.
-
-```
-del srcackend\leaflet_database.db      # Windows (cmd/PowerShell); Git Bash: rm src/backend/leaflet_database.db
-docker compose restart
-```
-
-## Tests & Codestil
-
-Die Tests in [`src/backend/tests/`](src/backend/tests/) decken die Datenbank, die Prüfung des Datenordners, Datumsangaben, Herausgeber, Reihen, Exemplare und Korrekturen ab:
-
-```bash
-cd src
-python -m pytest backend/tests
-```
-
-Den Codestil prüft `pycodestyle .`. Commits folgen den Conventional Commits.
+Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noch Text.
 
 ## Dokumentation
 
-Bericht und Handbücher liegen in [`docs/`](docs/) und werden mit MkDocs angezeigt. Einmal installieren, am besten in einem eigenen venv:
+Der Projektbericht und die Lesepfade für Archiv, Forschung und Entwicklung beginnen in [`docs/README.md`](docs/README.md). Code, Datenformate und Tests beschreibt [`docs/handbuch/entwicklung.md`](docs/handbuch/entwicklung.md), die Werkzeuge neben der Anwendung [`scripts/README.md`](scripts/README.md).
+
+Als Website lässt sich die Dokumentation so ansehen:
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -r docs/requirements.txt
+python -m mkdocs serve -a 127.0.0.1:8001
 ```
 
-Dann im Repo `python -m mkdocs serve -a 127.0.0.1:8001` und http://127.0.0.1:8001 öffnen; Änderungen erscheinen beim Speichern. Den Bericht als PDF erzeugt `python scripts/bericht_pdf.py`, dafür braucht es zusätzlich pandoc und eine LaTeX-Installation mit xelatex.
+Das Arbeits-Repository des Projekts mit der Evaluation der Texterkennung und den ersten Metadatenläufen ist archiviert: https://github.com/Alphazerfall/flugblatt_praxisseminarSS26
 
-## Projektstruktur
+## Lizenz
 
-```
-.
-├── data/                          # Quelle für die DB (siehe Daten)
-├── src/
-│   ├── backend/
-│   │   ├── app/
-│   │   │   ├── database/
-│   │   │   │   ├── corrections.py     # Handkorrekturen lesen, anhängen, anwenden
-│   │   │   │   ├── createDatabase.py  # Erstellung der DB
-│   │   │   │   ├── fillDatabase.py    # Füllt die DB aus den JSONs, prüft den Datenordner
-│   │   │   │   ├── models.py          # DB-Struktur
-│   │   │   │   └── session.py
-│   │   │   ├── app.py                 # Routen (FastAPI)
-│   │   │   ├── main.py                # Erstellt und füllt die DB beim Start
-│   │   │   ├── pdf_service.py         # Rendert Scan-Seiten aus den PDFs
-│   │   │   └── warm_thumbs.py         # Erzeugt beim Start die Vorschaubilder
-│   │   ├── tests/
-│   │   ├── Dockerfile
-│   │   └── requirements.txt
-│   └── frontend/
-│       ├── static/                    # Stylesheet, Favicon
-│       └── templates/                 # HTML-Templates
-├── .env.example                       # Vorlage für .env (Pfad zum Datenordner)
-├── docker-compose.yml
-└── LICENCE                            # MIT-Lizenz
-```
+MIT, siehe [`LICENSE`](LICENSE).

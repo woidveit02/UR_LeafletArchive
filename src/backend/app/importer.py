@@ -15,7 +15,7 @@ from .database.models import DRAFT, RELEASED, Leaflet, LeafletIssuer, Page, Volu
 
 logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
-JPEG_QUALITY, DPI = 75, 400  # as pipelines/01_pdf/tiff_to_pdf.py
+JPEG_QUALITY, DPI = 75, 400  # as the scans of the project; scripts/tiff_to_pdf.py too
 STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "ocr": "Text erkennen", "trennen": "Flugblätter trennen",
          "angaben": "Metadaten erzeugen", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
 # what a step is for, said to somebody who does not know the system: under the step bar and as its tooltips

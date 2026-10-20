@@ -1,4 +1,4 @@
-"""Text recognition of a volume's scan with Datalab, with the batches and settings of pipelines/02_ocr/flugblatt_convert.py.
+"""Text recognition of a volume's scan with Datalab, with the batches and settings the 14 volumes of the project were recognized with.
 Finished batches are kept; the merged result is <stem>/<stem>.json plus pictures, which fillDatabase.load_pages reads.
 A result can also be downloaded and loaded again as ZIP."""
 import base64

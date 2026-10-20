@@ -1,6 +1,6 @@
 """Overview for chapter 1.5: one leaflet (850) through all steps, as a strip of real details.
 
-    python scripts/abbildung_ablauf.py   (after abbildungen_scans.py and abbildungen_app.py; app on localhost:8000)
+    python scripts/workflow_figure.py   (after scan_figures.py and app_screenshots.py; app on localhost:8000)
 
 Writes docs/abbildungen/ablauf.png.
 """

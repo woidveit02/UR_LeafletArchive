@@ -1,6 +1,6 @@
 """Screenshots of the running app for the report (needs playwright: pip install playwright; playwright install chromium).
 
-    python scripts/abbildungen_app.py      (app on http://localhost:8000)
+    python scripts/app_screenshots.py      (app on http://localhost:8000)
 
 Only read-only pages of released volumes; never the import of drafts.
 """

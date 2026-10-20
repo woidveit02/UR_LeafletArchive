@@ -1,12 +1,12 @@
 # 8 Das Korpus in Zahlen
 
-Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Alle Zahlen stammen aus `kennzahlen.md` (Stand 13.10.2026).
+Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Alle Zahlen stammen aus `kennzahlen.md` (Stand 17.10.2026).
 
 ## 8.1 Drei Ebenen
 
 - Seite (4 464), Exemplar (1 927), Flugblatt (1 547, vertreten durch sein Hauptexemplar).
 - Begriffe: „Flugblatt“ meint wie im Namen der Sammlung jedes Stück, auch Einladungen und Broschüren. „Exemplar“ ist ein physisches Stück; weitere Exemplare heißen im Archiv „Doppelstücke“. Als Textsorte meint „Flugblatt“ enger das einzelne Blatt mit Aufruf oder Stellungnahme.
-- Neuschnitt ohne neue Texterkennung möglich, weil Seiten und Flugblätter getrennt gespeichert sind [aus alter Fassung 7.1].
+- Neuschnitt ohne neue Texterkennung möglich, weil Seiten und Flugblätter getrennt gespeichert sind.
 
 ## 8.2 Zählregeln
 
@@ -29,7 +29,7 @@ Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die 
 
 ![Flugblätter nach Seitenzahl](../abbildungen/2_seitenlaenge.png)
 
-<!-- Abbildungen aus flugblatt_praxisseminarSS26/notebooks/praesentation_plots.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
+<!-- Abbildungen aus scripts/corpus_figures.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
 
 ## 8.4 Lesart
 

@@ -1,4 +1,4 @@
-"""Copies of a new volume's leaflets in the other volumes, as find_copies.py of the pipeline finds them: the same
+"""Copies of a new volume's leaflets in the other volumes, as the project's search over all volumes (find_copies.py) found them: the same
 text despite OCR noise (5-gram Jaccard). find_copies.py compares all volumes and needs embeddings to pick the pairs;
 one volume against the rest is few enough pairs to compare directly. The hits become rows of copies.tsv, so the
 reviews in copy_decisions.jsonl stay as they are and a hit to a checked group shows as a new hit there."""

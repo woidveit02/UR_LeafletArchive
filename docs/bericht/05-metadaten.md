@@ -25,23 +25,23 @@ Ab 1969 tragen manche Blätter einen Eingangsstempel auf der Vorderseite; bis 20
 
 ## 5.3 Verfahren
 
-Am 22.09.2026 wurden zuerst vier Modelle an Band 002 getestet: Gemini 2.5 Flash, GPT-5 mini, Qwen3 235B und Claude Sonnet 4.5. Für die Bände 1–14 kam danach Claude Sonnet 4.5 (`anthropic/claude-sonnet-4.5`) zum Einsatz. Es wurde über OpenRouter mit Prompt v2 und 20 Flugblättern je Anfrage aufgerufen. Die Nummern 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`), die Nummern 005–014 aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen liegen in `pipelines/04_metadata/prompt_versions/`.
+Am 22.09.2026 wurden zuerst vier Modelle an Band 002 getestet: Gemini 2.5 Flash, GPT-5 mini, Qwen3 235B und Claude Sonnet 4.5. Für die Bände 1–14 kam danach Claude Sonnet 4.5 (`anthropic/claude-sonnet-4.5`) zum Einsatz. Es wurde über OpenRouter mit Prompt v2 und 20 Flugblättern je Anfrage aufgerufen. Die Nummern 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`), die Nummern 005–014 aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen liegen im Arbeits-Repository (Kap. 12.5).
 
-Das Modell antwortet mit JSON nach einem festen Schema. Der Prompt steht in `pipelines/04_metadata/prompt_v2.py` (Arbeits-Repository). Für jedes Feld gilt eine Belegpflicht: Das Modell nennt zuerst die wörtliche Textstelle und die OCR-Blöcke und erst danach den Wert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im OCR-Text steht.
+Das Modell antwortet mit JSON nach einem festen Schema. Der Prompt, den die Anwendung verwendet, steht in `src/backend/app/metadata_prompt.txt`. Für jedes Feld gilt eine Belegpflicht: Das Modell nennt zuerst die wörtliche Textstelle und die OCR-Blöcke und erst danach den Wert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im OCR-Text steht.
 
-Die Herausgeber werden einem Register zugeordnet, das aus dem Findmittel aufgebaut wurde. Es enthält zu jeder Organisation einen kanonischen Namen, das Kürzel und die Schreibvarianten. Die Zuordnung übernimmt `pipelines/04_metadata/org_match.py`. Einen Abgleich mit der GND gibt es nicht, weil nur sehr wenige Gruppen einen GND-Eintrag haben. Das Jahr wird aus dem Datum auf dem Blatt genommen. Fehlt es, wird das Jahr des Bandes verwendet.
+Die Herausgeber werden einem Register zugeordnet, das aus dem Findmittel aufgebaut wurde. Es enthält zu jeder Organisation einen kanonischen Namen, das Kürzel und die Schreibvarianten. Einen Abgleich mit der GND gibt es nicht, weil nur sehr wenige Gruppen einen GND-Eintrag haben. Das Jahr wird aus dem Datum auf dem Blatt genommen. Fehlt es, wird das Jahr des Bandes verwendet.
 
 ![Flugblatt 850 mit den Belegstellen der Metadaten](../abbildungen/metadaten_belege.png)
 
 *Abbildung: Belegstellen der Metadaten für Flugblatt 850 (Band 006, S. 394). Das Modell trennt das Datum auf dem Blatt (8.2.72) vom Eingangsstempel des Archivs (10. Feb. 1972) und nennt für jeden Wert den Block, aus dem er stammt.*
 
-<!-- Abbildungen aus scripts/abbildungen_scans.py (App muss laufen); anderes Flugblatt: python scripts/abbildungen_scans.py <id> -->
+<!-- Abbildungen aus scripts/scan_figures.py (App muss laufen); anderes Flugblatt: python scripts/scan_figures.py <id> -->
 
 ## 5.4 Qualität
 
 Die Belegprüfung der Pipeline bestehen 1 731 von 2 000 Segmenten (86,5 %) ohne Beanstandung. Sie ist in `check_grounding` in `extract_metadata_v2.py` umgesetzt, die Ergebnisse stehen unter `grounding` in `data/nr0XX_metadata.json`. Die Prüfung zeigt allerdings nur, ob die Angaben belegt sind, nicht, ob sie stimmen.
 
-Um die Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 noch einmal mit dem Prompt der Bände 005–014 verarbeitet (`claude-r12`). Gegenüber den früheren Fassungen änderten sich bei 464 Flugblättern das Datum in 25 Fällen (5 %), die Textsorte in 24 (5 %), die Herausgeber in 58 (13 %, teils nur andere Schreibweisen) und der Titel in 115 (25 %, meist Länge und Zeichensetzung). Die Belegprüfung fiel leicht schlechter aus (86,2/90,6/89,2 % gegenüber 84,5/87,7/85,1 %). Die App behält deshalb die früheren Läufe. Die neuen liegen als `*.metadata.claude-r12.json` in `data/raw/` des Arbeits-Repositorys. In den Unterschieden mischen sich Zufall und Prompt-Änderung.
+Um die Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 noch einmal mit dem Prompt der Bände 005–014 verarbeitet (`claude-r12`). Gegenüber den früheren Fassungen änderten sich bei 464 Flugblättern das Datum in 25 Fällen (5 %), die Textsorte in 24 (5 %), die Herausgeber in 58 (13 %, teils nur andere Schreibweisen) und der Titel in 115 (25 %, meist Länge und Zeichensetzung). Die Belegprüfung fiel leicht schlechter aus (86,2/90,6/89,2 % gegenüber 84,5/87,7/85,1 %). Die App behält deshalb die früheren Läufe. Die neuen Läufe liegen im Arbeits-Repository (Kap. 12.5). In den Unterschieden mischen sich Zufall und Prompt-Änderung.
 
 Wie gut sich die Ergebnisse bei gleichem Prompt wiederholen lassen, ist noch offen: [offen: zweiter Lauf mit `claude-r12` über dieselben Bände, dann Vergleich r12 gegen r12].
 

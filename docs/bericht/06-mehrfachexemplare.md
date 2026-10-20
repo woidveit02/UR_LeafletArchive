@@ -12,7 +12,7 @@ Zwei Exemplare werden nie buchstabengleich erkannt, weil die Texterkennung bei j
 
 ## 6.3 Verfahren
 
-Für den Bestand wurden die Mehrfachexemplare in der Pipeline gesucht (`pipelines/01_pdf/find_copies.py` im Arbeits-Repository). Kandidaten ergeben sich aus der Ähnlichkeit der bge-m3-Embeddings ab einem Kosinuswert von 0,85. Bestätigt werden sie über Zeichen-5-Gramme auf normalisiertem Text. Die Schwellen sind an der Verteilung über alle Bände kalibriert: Ab einem Jaccard-Wert von 0,75 gilt ein Paar als Exemplar, zwischen 0,5 und 0,75 als mögliche Fassung, die von Hand geprüft wird. Darunter teilen zwei Blätter meist nur Bausteine wie Formulare oder Wahllisten.
+Für den Bestand wurden die Mehrfachexemplare über alle Bände hinweg gesucht. Kandidaten ergeben sich aus der Ähnlichkeit der bge-m3-Embeddings ab einem Kosinuswert von 0,85. Bestätigt werden sie über Zeichen-5-Gramme auf normalisiertem Text. Die Schwellen sind an der Verteilung über alle Bände kalibriert: Ab einem Jaccard-Wert von 0,75 gilt ein Paar als Exemplar, zwischen 0,5 und 0,75 als mögliche Fassung, die von Hand geprüft wird. Darunter teilen zwei Blätter meist nur Bausteine wie Formulare oder Wahllisten.
 
 Steckt ein Flugblatt fast ganz in einem deutlich längeren, wird es als „enthalten“ markiert; das weist auf einen fehlenden Schnitt hin. Unter 150 Zeichen Text ist kein Vergleich möglich.
 

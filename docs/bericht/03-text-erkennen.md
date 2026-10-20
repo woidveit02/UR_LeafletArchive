@@ -30,7 +30,7 @@ Kandidaten haben wir auf drei Wegen gefunden: über die Technical Reports der En
 
 ## 3.3 Kandidaten und Merkmale
 
-Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen unter `pipelines/02_ocr/` im Arbeits-Repository.
+Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen im Arbeits-Repository (Kap. 12.5).
 
 | System | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
 |---|---|---|---|---|
@@ -86,7 +86,7 @@ Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogene
 
 ## 3.5 Vorauswahl
 
-Nach einer ersten Durchsicht der Ausgaben auf dem Testkorpus schieden sechs Systeme aus. GLM-OCR, Claude Sonnet 5 und Gemini 3.5 Flash lieferten nur Text, ohne Bounding Boxes und ohne Blocktypen. Ihnen fehlt damit eine Layouterkennung, die Tabellen, Listen und mehrspaltige Seiten als solche wiedergibt. Qwen3-VL erkannte den Text gut, gliederte die Seite aber ebenfalls nicht. PaddleOCR erkannte das Layout häufig falsch. MinerU erkannte das Layout, lieferte aber eine geringere Textgenauigkeit. Die besten Ergebnisse erzielten die Datalab API (Chandra OCR 2) und Mistral OCR 4, die damit in die engere Wahl kamen.
+Nach einer ersten Durchsicht der Ausgaben auf dem Testkorpus schieden sechs Systeme aus. GLM-OCR, Claude Sonnet 5 und Gemini 3.5 Flash lieferten nur Text, ohne Bounding Boxes und ohne Blocktypen. Ihnen fehlt damit eine Layouterkennung, die Tabellen, Listen und mehrspaltige Seiten als solche wiedergibt. Qwen3-VL erkannte den Text gut, gliederte die Seite aber ebenfalls nicht. PaddleOCR erkannte das Layout häufig falsch. MinerU erkannte das Layout, lieferte aber eine geringere Textgenauigkeit. Die besten Ergebnisse erzielten die Datalab API, die eine verbesserte Fassung von Chandra OCR 2 einsetzt, und Mistral OCR 4, die damit in die engere Wahl kamen.
 
 Beide Systeme haben auf dem Testkorpus vieles gemeinsam. Sie erkennen auch komplexe Layouts, gliedern die Seite in Blöcke mit Lage und Typ und kommen mit Handschrift gut zurecht. Beide erzeugen Beschreibungen für Abbildungen, Mistral OCR 4 kostet über die API 4 $ je 1 000 Seiten, die Datalab API im Modus `accurate` 10 $ (Preise Stand August 2026, siehe 3.9). Beide Anbieter veröffentlichen eigene Benchmark-Ergebnisse für Deutsch (Datalab) bzw. für die westeuropäische Sprachgruppe (Mistral). Im olmOCR-Bench geben die Anbieter 86,7 ± 0,8 Punkte für die Datalab API [@chandra2] und 85,20 Punkte für Mistral OCR 4 an [@mistralocr4]. Das sind Herstellerangaben, die wir nicht selbst nachgemessen haben, und der Abstand liegt innerhalb der Unsicherheit des Benchmarks. Mistral OCR 4 liefert zusätzlich für jedes Wort einen Confidence-Wert und war in unserem Test schneller: Die 100 Testseiten waren in 14 bis 22 Sekunden verarbeitet.
 
@@ -107,7 +107,7 @@ Zu Abbildungen erzeugte Datalab zutreffende Beschreibungen in englischer Sprache
 
 ## 3.7 Goldstandard
 
-Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstellt. Dazu wurde die Datalab-Ausgabe des Testkorpus im Korrekturmodus des OCR-Viewers Block für Block gegen den Scan geprüft und berichtigt. Eine Seite galt als fertig, wenn jeder Block als geprüft oder unleserlich markiert und Layout und Lesereihenfolge bewertet waren. Die Fehlerraten wurden mit dinglehopper berechnet (Ablauf: `pipelines/03_eval/README.md` im Arbeits-Repository). Die Seiten 1 bis 5 bearbeiteten alle drei Personen, um die Übereinstimmung zwischen ihnen zu prüfen. Insgesamt entstanden bis zum 03.08.2026 113 Seitenannotationen, davon 105 vollständige, die in die Auswertung eingingen. Die Kürzel in den Tabellen stehen für Felix Lindner (fl), Sebastian Simbeck (ss) und Veith Korpies (vk).
+Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstellt. Dazu wurde die Datalab-Ausgabe des Testkorpus im Korrekturmodus des OCR-Viewers, eines eigenen Werkzeugs für den Vergleich der Systeme, Block für Block gegen den Scan geprüft und berichtigt. Eine Seite galt als fertig, wenn jeder Block als geprüft oder unleserlich markiert und Layout und Lesereihenfolge bewertet waren. Die Fehlerraten wurden mit dinglehopper berechnet. Die Seiten 1 bis 5 bearbeiteten alle drei Personen, um die Übereinstimmung zwischen ihnen zu prüfen. Insgesamt entstanden bis zum 03.08.2026 113 Seitenannotationen, davon 105 vollständige, die in die Auswertung eingingen. Die Kürzel in den Tabellen stehen für Felix Lindner (fl), Sebastian Simbeck (ss) und Veith Korpies (vk).
 
 | Person | Seiten | CER (Mittel je Seite) | WER (Mittel je Seite) | CER (längengewichtet) | WER (längengewichtet) |
 |---|---|---|---|---|---|
@@ -160,4 +160,4 @@ Der Goldstandard entstand durch Nachkorrektur der Datalab-Ausgabe. Wer eine vorh
 
 Die drei Personen haben im qualitativen Vergleich ohne gemeinsames Bewertungsschema notiert, was ihnen auffiel. Ihre Beobachtungen lassen sich daher nicht auszählen und widersprechen sich in Einzelfällen, etwa bei der Sperrschrift. Die Benchmark-Werte in 3.5 sind Angaben der Anbieter und wurden nicht überprüft.
 
-Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt; Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository sind deshalb der eigentliche Beleg für den Test.
+Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt; Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository (Kap. 12.5) sind deshalb der eigentliche Beleg für den Test.

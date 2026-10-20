@@ -1,7 +1,7 @@
 """Step 4 of an import: where one leaflet ends and the next begins in the scan.
 
-The result is <stem>.segments.json next to the scan PDF, the file format of flugblatt_splitter and the
-pipeline. A cut after page n means that page n + 1 starts a new leaflet.
+The result is <stem>.segments.json next to the scan PDF, the file format the
+14 volumes of the project were cut in. A cut after page n means that page n + 1 starts a new leaflet.
 """
 import json
 import re

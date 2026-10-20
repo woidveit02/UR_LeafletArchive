@@ -1,6 +1,6 @@
 """Scan figures for the report: OCR blocks and metadata evidence drawn onto pages of the running app.
 
-    python scripts/abbildungen_scans.py [flugblatt-id] [seite]   (app on http://localhost:8000)
+    python scripts/scan_figures.py [flugblatt-id] [seite]   (app on http://localhost:8000)
 
 Writes ocr_bloecke.png, metadaten_belege.png and ocr_schwierigkeiten.png to docs/abbildungen/.
 """
