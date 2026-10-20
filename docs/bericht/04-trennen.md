@@ -1,48 +1,58 @@
 # 4 Flugblätter trennen
 
-Ein Band ist ein Stapel Seiten ohne markierte Grenzen. Die 14 Bände wurden von Hand in 1 927 Exemplare getrennt. Für neue Bände schlägt die Anwendung Trennungen vor. Etwa drei von vier Vorschlägen stimmen, deshalb bestätigt ein Mensch jeden Übergang.
+Ein Band unseres Gesamtbestandes umfasst eine Menge an Einzelseiten, deren Zugehörigkeit zu einem bestimmten Flugblatt nicht direkt vermerkt ist. Da Flugblätter sowohl aus einer einzelnen als auch aus mehreren Seiten bestehen können, ist es wichtig, die Übergänge zwischen zwei Blättern klar zu kennzeichnen. Deshalb werden die Seiten eines jeden Bandes in einzelne Flugblätter unterteilt, woraus eine Gesamtzahl von 1927 Exemplaren für den gesamten Bestand resultiert. Dieser Prozess ist auch beim Importieren neuer Bände innerhalb der Anwendung notwendig. Hier sollen Vorschläge für Trennungen dem Nutzer helfen und diesen Arbeitsschritt beschleunigen. Etwa drei von vier dieser Vorschläge können korrekt übernommen werden, weshalb eine manuelle Bestätigung notwednig ist.
 
 ## 4.1 Aufgabe
 
-In diesem Schritt wird festgelegt, welche Seiten zusammen ein Flugblatt bilden. Davon hängt ab, was später ein Datensatz ist. Die Texterkennung lief vor der Trennung, weil die Hinweise auf den Anfang eines Blatts im Text stehen: Kopfzeilen, Stempel und Datumsangaben.
+In diesem Schritt wird festgelegt, welche Bandseiten gemeinsam ein einzelnes Flugblatt bilden. Diese Bestimmung legt fest, welche Einzelseiten ein durchsuchbares Flugblattobjekt bilden. Die Texterkennung erfolgt bereits vor der Seitentrennung, da wichtige Hinweise auf den Beginn eines neuen Flugblatts, wie Kopfzeilen, Stempel oder auch Datumsangaben aus dem Text gewonnen werden. Diese Merkmale bilden zudem eine wichtige Grundlage für die automatisiert generierten Vorschläge für Trennungen während des Imports.
 
 ## 4.2 Herausforderungen
 
-Nicht jedes Flugblatt ist ein einzelnes Blatt. Es gibt mehrseitige Hefte und Anlagen, Rückseiten ohne eigenen Kopf sowie Trennblätter und leere Seiten. In den Bänden von 1973 finden sich zudem wenige auswertbare Kopfzeilen und Stempel. Für die Grenzfälle braucht es feste Regeln. Sie ergaben sich bei der Durchsicht der Grenzen am 29.09.2026:
+Start- und Enseite einzelner Flugblätter sind nicht immer eindeutig erkennbar. Grenzfälle, wie Hefte und Anlagen, Rückseiten ohne eigenen Kopf sowie Trennblätter sind Beispiele für entstehende Herausforderungen beim Abgrenzen der Exemplare. Insbesondere in den Bänden des Jahrgangs 1973 sind zudem nur wenige aussagekräftige Kopfzeilen und Stempel vorhanden, die zur Identifikation von Trennstellen herangezogen werden können. Daher müssen für uneindeutige Fälle einheitliche Regeln festgelegt werden, um eine Trennung des Bestandes so neutral und konsisten wie möglich zu gestalten.
 
-- Hefte und Dokumentationen bleiben ein Flugblatt, auch wenn einzelne Beiträge eigene Kopfleisten tragen. Ein Beispiel ist das Fachbereichsinfo Nr. 10 in Band 005 mit den Heftseiten 1 bis 25 (S. 444–470).
-- Eine Rückseite gehört zum Blatt, auch wenn sie nach einem „b. w.“ einen eigenen Kopf trägt.
-- Trägt die Rückseite einen anderen Text mit eigenem Herausgeber, wird sie ein eigenes Flugblatt. So liegen in Band 013 AStA-Infos auf der Rückseite einer Bekanntmachung des Ältestenrats vom 22.06.1973, vermutlich auf schon bedrucktes Papier gedruckt.
-- Mehrfachexemplare bleiben eigene Exemplare und werden erst im nächsten Schritt zusammengeführt (Kap. 6).
-- Vertauschte Seiten werden nicht umsortiert, sondern im Segment vermerkt.
+Folgende Regeln ergaben sich während der manuellen Abgrenzung der Flugblattseiten am 29.09.2026:
 
-Für angehängte Resolutionen und für Pressespiegel wurde keine Regel festgelegt.
+- Zusammengehörige Hefte und Dokumentationen bleiben ein Flugblatt, auch wenn einzelne Beiträge eigene Kopfzeilen aufweisen. Ein Beispiel hierfür ist das *Fachbereichsinfo Nr. 10* in Band 005 mit den Heftseiten 1 bis 25 (S. 444–470).
+- Eine Rückseite wird einem offensichtlich zugehörigen Flugblatt zugeordnet, auch wenn sie nach einem „b. w.“ ("bitte wenden") eine eigene Kopfzeile aufweist.
+- Trägt eine Rückseite einen eigenständigen Text mit eigenem anderen Herausgeber als die Vorderseite, wird sie ein als separates Flugblatt gekennzeichnet. So befinden sich beispielsweise in Band 013 AStA-Informationen auf der Rückseite einer Bekanntmachung des Ältestenrats vom 22.06.1973.
+- Mehrfachexemplare werden zunächst als separate Exemplare behandelt und erst im nächsten Schritt zusammengeführt (siehe Kap. 6).
+- Seiten, die innerhalb eines Flugblattes eine falsche Reihenfolge aufweisen, werden in diesem Schritt nicht direkt umsortiert. Stattdessen wird der Fehler im jeweiligen Segment vermerkt.
+
+Für angehängte Resolutionen und Pressespiegel wurden bislang keine eindeutigen Regeln festgelegt.
 
 ## 4.3 Verfahren
 
-Die 14 Bände dieses Projekts wurden von Hand mit einem eigenen Werkzeug getrennt, dessen Aufgabe heute Schritt 4 der Anwendung übernimmt. Die Arbeit war auf drei Personen aufgeteilt und im August abgeschlossen. An Band 002 wurde die Trennung von Hand mit der automatischen Segmentierung von Datalab verglichen. Von Hand entstanden 59 Segmente, automatisch 13. Alle 13 automatischen Schnitte stehen auch in der Trennung von Hand, keiner kommt nur automatisch vor. Die automatische Segmentierung setzt also kaum falsche Schnitte, lässt aber die meisten aus: 46 von 59. Sie wurde deshalb nicht verwendet. Keine der beiden Trennungen war zu diesem Zeitpunkt geprüft, der Vergleich zeigt also nur die Art der Abweichung.
+Die 14 Bände dieses Projekts wurden mithilfe des Werkzeugs `flugblatt_splitter` manuell abgegrenzt. Die Arbeit wurde gleichmäßig auf drei Personen verteilt und im August abgeschlossen. Für Band 002 wurde die manuelle Trennung mit einer automatischen Segmentierung durch Datalab verglichen. Während bei der händischen Trennung 59 Segmente entstanden, erkannte Datalab lediglich 13 einzelne Flugblätter. Dabei wurden alle 13 automatischen Segmentierungen auch manuell vorgenommen. Es wurden demnach keine Schnitte durch Datalab gesetzt, die zuvor nicht auch händisch festgelegt wurden. 46 der 59 manuellen Segmentierungen wurden jedoch von Datalab übersehen. Da keine der beiden Trennungen zu diesem Zeitpunkt qualitativ überprüft worden war, konnte aus diesem Schritt lediglich abgeleitet werden, inwiefern sich die Entscheidungen unterschieden. Dennoch wurde eine Vollautomatisierung aufgrund dieser Beobachtungen für weitere Segmentierungen ausgeschlossen.
 
-Für neue Bände berechnet die Anwendung einen eigenen Vorschlag aus dem erkannten Text (`src/backend/app/boundaries.py`). Sie bewertet jeden Seitenübergang anhand von 14 Merkmalen und verrechnet sie mit einem naiven Bayes-Klassifikator. Die Gewichte wurden an den Bänden 1–14 gelernt, eine Trennung wird ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Das Verfahren läuft lokal und braucht kein Sprachmodell.
+Für den Import neuer Bände werden gestützt auf den erkennten Text (`src/backend/app/boundaries.py`) Vorschläge zur Segmentierung bereitgestellt. Jeder Seitenübergang wird hierbei anhand von 14 Merkmalen bewertet und einem naiven Bayes-Klassifikator verrechnet. Die zugrundeliegenden Gewichte wurden mithilfe der manuellen Segmentierung der Bände 1–14 erarbeitet. Demnach wird eine Trennung ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Dieses Verfahren läuft lokal und ohne Zuhilfenahme eines Sprachmodells.
 
-Für den Anfang eines neuen Blatts sprechen ein Eingangsstempel, ein Datum in der Kopfzeile, eine Kopfleiste mit Gruppenkürzeln, ein Impressum oder eine fast leere Seite davor und wenige gemeinsame Wörter mit der vorigen Seite. Dagegen sprechen eine Seitenzahl wie „- 2 -“, ein Trennstrich oder „b. w.“ am Ende der vorigen Seite, „Fortsetzung“ am Seitenanfang und viele gemeinsame Wörter.
+Als Hinweise auf den Beginn eines neuen Flugblatts dienen beispielsweise Eingangsstempel, Datumsangaben in der Kopfzeile, eine Kopfleiste mit Gruppenkürzeln und Impressen sowie eine nahezu leere vorausgehende Seite oder auch eine geringe Anzahl gemeinsamer Wörter mit der vorangegangenen Seite. Gegen eine neue Trennstelle sprechen beispielsweise Seitenzahlen wie „- 2 -“, Trennstriche oder ein „b. w.“ am Ende der vorherigen Seite. Auch wörtliche Hinweise, wie „Fortsetzung“ am Seitenanfang sowie eine große Anzahl gemeinsamer Wörter zwischen zwei aufeinanderfolgenden Seiten deuten auf ein fortlaufendes Flugblatt hin.
 
-Für die Bände 13 und 14 kommt eine Locherkennung hinzu. Sind die Abheftlöcher nur rechts zu sehen, ist die Seite eine Rückseite und beginnt kein neues Flugblatt. Alternativ lässt sich eine Liste übernehmen, die beim Scannen notiert wurde.
+Für die Bände 13 und 14 wurde zusätzlich eine Locherkennung eingeführt. Sind die Abheftlöcher nur auf der rechten Seite erkennbar, wir die Seite als Rückseite eingeordnet und demnach kein Beginn eines neuen Flugblattes vermutet. 
+
+Um den Sektionierungsvorgang zu beschleunigen, wird zusätzlich die Möglichkeit geboten, eine vorannotierte Liste während des Imports zu übergeben, welche sämtliche dokumentierte Trennstellen beinhaltet. Dadurch kann die Sektionierung sofort automaisch durchgeführt werden und eine nachträgliche manuelle Trennung kann umgangen werden. 
+
+*TODO: Beispielbild einer Liste oder Feature hinzufügen*
 
 ## 4.4 Qualität
 
-Gemessen wurde so, wie es bei einem neuen Band wäre: Jeder Band wurde mit Gewichten geprüft, die nur aus den übrigen 13 Bänden gelernt waren. Statt 1 986 Trennungen von Hand bleiben dann 904 Korrekturen, 54 % weniger. Die Präzision liegt bei 0,73, etwa jeder vierte Vorschlag ist also falsch. Die Trefferquote liegt bei 0,84, etwa jede sechste echte Trennung fehlt. Mit der Locherkennung sinken die Korrekturen auf den Bänden 13 und 14 von 163 auf 120.
+Um die Qualität der Vorschläge zu messen, wurde eine Simulation angestellt, wobei jeder einzelne Band mit Gewichten ausgewertet wurde, die anhand der übrigen 13 Bände erlernt wurden. Das Ergbnis zeigte, dass anstelle von ursprünglich 1 986 notwendigen Trennungen nunmehr 904 manuelle Korrekturen vorgenommen werden mussten, um den Bestand korrekt zu separieren. Dies stellt eine Reduktion des Korrekturaufwands um rund 54% dar.
 
-Zusätzlich wurde ein Teil von Band 14 ab Seite 449 als neuer Band importiert. Von 50 Übergängen mussten 13 korrigiert werden: 11 Trennungen fehlten, 2 waren zu viel.
+Die Präzision der Trennsvorschläge entspricht laut unseres Tests 0,73. Somit ist etwa jeder vierte vorgeschlagene Schnitt fehlerhaft. Die Trefferquote konnte auf 0,84 beziffert werden, wonach ungefähr jede sechste manuell Vorgenommene Trennstelle nicht Teil der automatisierten Vorschläge war. Die zusätzliche Locherkennung konnte die Anzahl erforderlicher Korrekturen in den Bänden 13 und 14 von insgesamt 163 auf nur noch 120 reduzieren. 
 
-Die Messung hat Grenzen. Die Referenz, also die Trennung der Bände 1–14, ist selbst nur teilweise geprüft. Ob zusätzlich gegen die Archivtitel 1968/69 geprüft wurde, ist offen (siehe 5.4).
+Als weiterer Teil der Qualitätsübeprüfung wurde ein Teil des 14. Bandes ab Seite 449 testweise neu importiert. Von 50 untersuchten Seitenübergängen mussten 13 korrigiert werden, während elf erforderliche Trennstellen zu viel vorgeschlagen wurden.
+
+Die genannten Ergebnisse sind nur eingeschränkt aussagekräftig. Die manuelle Trennung der Bände 1 bis 14, die bei diesen Tests als "Goldstandard" fungiert wurde bislang selbst nur teilweise validiert. Somit besteht die Möglichkeit eigener Fehler, welche die Bewertung der automatisierten Vorschläge verfälschen können. 
 
 ## 4.5 Manuelle Prüfung
 
-In der Anwendung wird jeder Übergang bestätigt oder geändert. Dazu zeigt sie zwei benachbarte Seiten groß nebeneinander, mit Tasten zum Trennen und Zusammenfügen. Wie lange das Trennen der 14 Bände gedauert hat, ist noch offen [offen].
+In der Anwendung soll jeder Seitenübergang manuell geprüft werden. Hierbei soll die vorgeschlagene Aktion ("trennen" oder "nicht trennen") ausgewählt werden. Zwei aufeinanderfolgende Bandseiten werden hierbei nebeneinander visualisiert. Über entsprechende Schaltflächen bzw. Tastenkürzel kann bestimmt werden, ob eine Trennung zwischen diesen beiden Elementen erfolgen soll. Eine manuelle Trennung mithilfe automatisiserter Vorschläge konnte bei eigens durchgeführten Tests in der Regel innerhalb von 3 - 10 Sekunden erfolgen.
 
 ## 4.6 Ergebnis und Kosten
 
-Die 4 464 Seiten ergeben 1 927 Exemplare. 115 Seiten gehören zu keinem Flugblatt: 102 davon haben keinen Text, 8 wenig Text und 5 echten Text; diese fünf sollten noch geprüft werden. Kosten entstehen keine, weil das Verfahren lokal läuft.
+Die 4 464 Seiten des Gesamtbestandes wurden in 1 927 eigenständige Flugblattexemplare unterteilt. Hinzu kommen 115 Seiten, die keinem Flugblatt zugeordnet werden konnten. Hierbei handelt es sich in der Regel um Trennblätter oder leere Rückseiten. Fünf dieser Seiten wiesen dennoch potenziell relevanten Text auf und sollten daher nochmals überprüft werden.
+
+Aufgrund der vollständig lokalen Verarbeitung entstehen für diesen Arbeitsschritt keine zusätzlichen Kosten für externe Dienste oder cloudbasierte Sprachmodelle innerhalb der Anwendung.
 
 ![Bandansicht der Anwendung um Seite 394 von Band 006](../abbildungen/app_band.png)
 
@@ -50,4 +60,6 @@ Die 4 464 Seiten ergeben 1 927 Exemplare. 115 Seiten gehören zu keinem Flugblat
 
 ## 4.7 Hinweise zur Weiterentwicklung
 
-Der Code liegt in `src/backend/app/boundaries.py` und `src/backend/app/segments.py`. Wächst der Bestand deutlich, sollten die Gewichte neu gelernt werden; das übernimmt `scripts/learn_boundary_weights.py`. Rückseiten bleiben die größte Schwäche des Verfahrens.
+Die Implementierung der Trennvorschläge befindet sich in src/backend/app/boundaries.py und src/backend/app/segments.py. Die Herkunft der verwendeten Merkmale und Gewichte ist im Arbeits-Repository unter pipelines/01_pdf/ auffindbar. 
+
+Bei einer wesentlichen Erweiterung des Bestandes sollte vor dem Import geprüft werden, ob eine wiederholte Anpassung der Gewichte erfoderlich sein könnte. Als besondere Herausfoderung für eine Weiterentwicklung erweist sich die zuverlässige Erkennung von Rückseiten. Diese weisen oftmals keinerlei eindeuiger Merkmale auf, die auf das Ende bzw. einen Anfang eines Flugblattes hindeuten.
