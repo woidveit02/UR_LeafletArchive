@@ -1,6 +1,8 @@
 # 1 Einleitung
 
-Dieses Wiki dient zur Dokumentation des Projekts. Informationen zu Handhabung beziehungsweise Funktion der Anwendung befinden sich im Bereich "Handbuch".  
+Das Projekt begann mit einer ersten Besprechung mit Professor Wolff und unserem Projektbetreuer Thomas Schmidt am 12.05.2026. In dieser Besprechung wurde ins von Professor Wolff eine erste Einleitung in das Thema gegeben. So wurden wir über die geschichtlichen Hintergründe (die im Folgenden erläutert werden) informiert, und es wurde die Schaffung eines digitalen Flugblattarchivs als Projektziel diskutiert. Zu diesem Termin wurde auch gleich das erste Dokumentationsobjekt geschaffen, ein Google Docs Dokument, in dem fortan wichtige Inhalte aller Besprechungen und generell relevante Informationen für das Projekt festgehalten wurden. Sämtliche weiteren Informationen zur Projektorganisation befinden sich im Kapitel 12.
+
+Im nächsten Treffen am 20.05.2026 durften wir Herrn Dr. Andreas Becker kennenlernen, dieser war für die Dauer unseres Projekts unser Ansprechpartner zum Archiv. In dieser BEsprechung erhielten wir von Herrn Becker eine spannende und detaillierte Einführung über die historische Entstehung der Flugblattsammlung im Archiv und die geschichtlichen und politischen Hintergründe der Anfangszeit der Universität Regensburg.
 
 ## 1.1 Motivation und Ausgangslage
 
