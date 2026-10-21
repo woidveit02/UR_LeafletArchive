@@ -2219,23 +2219,41 @@ def import_volume_or_404(vz):
     return volume
 
 
+def looks_state(volume, seen):
+    """How far measuring the scan for the suggestions is: {"state": "done" | "running" | "error" | "none", ...};
+    seen: segments.load_looks(volume)."""
+    if seen is not None:
+        return {"state": "done"}
+    job = importer.JOBS.get((volume.vz, segments.LOOKS_JOB), {})
+    shown = {k: job[k] for k in ("state", "done", "total", "error", "started") if k in job}
+    return shown if shown.get("state") not in (None, "done") else {"state": "none"}
+
+
 def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     volume = import_volume_or_404(vz)
     created = importer.n_leaflets(volume)
-    if created and volume.status == RELEASED and step not in ('pruefen', importer.TOPICS_STEP) \
-            or step not in (*importer.STEPS, importer.TOPICS_STEP):
+    if created and volume.status == RELEASED and step in importer.STEPS and step != 'pruefen':
+        return import_page(request, vz, 'pruefen', f"Band {vz:03d} ist freigegeben. Um „{importer.STEPS[step]}“ "
+                           "zu ändern, nimm unten zuerst die Freigabe zurück.", 409)
+    if step not in (*importer.STEPS, importer.TOPICS_STEP):
         raise HTTPException(404)
     prepare = importer.JOBS.get((vz, metadata.PREPARE), {})
     flagged = metadata.flagged_leaflets(volume) if step == 'pruefen' and created else []
-    if step == 'pruefen' and not created and prepare.get('state') not in ('running', 'error')             and metadata.status(volume)['state'] == 'done':
+    if step == 'pruefen' and not created and prepare.get('state') not in ('running', 'error') \
+            and metadata.status(volume)['state'] == 'done':
         metadata.start_create(volume)  # a draft, made again after a change in the steps before
         prepare = importer.JOBS[(vz, metadata.PREPARE)]
     pages = importer.page_count(volume) if volume.stem else None
+    if pages and volume.status == DRAFT and step in ('scans', 'ocr', 'trennen'):
+        segments.start_looks(volume)  # in the background: ready long before the cuts are chosen
     stamp = importer.scan_stamp(volume)  # a new scan gets new image addresses
+    seen = segments.load_looks(volume) if step == 'trennen' and pages else None
     split = {"pages": pages, "thumb": f"/import/{vz}/seiten/{{n}}.jpg?v={stamp}",
              "large": f"/import/{vz}/seiten/{{n}}.jpg?gross=1&v={stamp}",
-             **segments.status(volume),
-             "saveUrl": f"/import/{vz}/trennen",
+             **segments.status(volume), "reasons": segments.reasons(volume), "looks": looks_state(volume, seen),
+             "spots": [{"size": p["size"], **p["spots"]} for p in seen or []],
+             "saveUrl": f"/import/{vz}/trennen", "looksUrl": f"/import/{vz}/status?job={segments.LOOKS_JOB}",
+             "resetUrl": f"/import/{vz}/zuruecksetzen",
              "textUrl": f"/import/{vz}/vorschlag-text", "listUrl": f"/import/{vz}/liste", "name": volume.stem} if step == 'trennen' and pages else None
     text = ocr.status(volume)
     meta = metadata.status(volume) if step == 'angaben' and text['state'] == 'done' and segments.status(volume)['confirmed'] else None
@@ -2317,17 +2335,20 @@ def import_discard(vz: int):
     return RedirectResponse("/verwaltung", 303)
 
 
-RESETS = {"vorschau": "scans", "text": "ocr", "metadaten": "angaben"}  # what can be reset, on which step
+# what can be reset, on which step
+RESETS = {"vorschau": "scans", "text": "ocr", "bildwerte": "trennen", "metadaten": "angaben"}
 
 
 @app.post("/import/{vz}/zuruecksetzen")
 def import_reset(request: Request, vz: int, was: str = Form(...)):
     """Throws away the result of a step, so it can be done again: the page images (made anew when shown), the
-    recognized text with what was made from it, or the metadata. For those who cannot reach the files."""
+    recognized text with what was made from it, the looks of the pages (measured again) or the metadata. For those
+    who cannot reach the files."""
     if was not in RESETS:
         raise HTTPException(404)
     volume = import_volume_or_404(vz)
-    if any(importer.running(volume, job) for job in ("scans", ocr.JOB, metadata.JOB, metadata.PREPARE)):
+    jobs = ("scans", ocr.JOB, metadata.JOB, metadata.PREPARE) + ((segments.LOOKS_JOB,) if was == "bildwerte" else ())
+    if any(importer.running(volume, job) for job in jobs):
         return import_page(request, vz, RESETS[was], "Gerade läuft ein Vorgang für diesen Band. Bitte warten, bis er fertig ist.", 409)
     if was == "vorschau":
         with pdf_service._lock:
@@ -2335,11 +2356,15 @@ def import_reset(request: Request, vz: int, was: str = Form(...)):
             importer.drop_thumbs(volume.stem)
     elif was == "text":
         shutil.rmtree(importer.ocr_dir(editable(vz)), ignore_errors=True)  # the metadata lives there too
+        importer.JOBS.pop((vz, ocr.JOB), None)
+    elif was == "bildwerte":
+        segments.looks_path(volume).unlink(missing_ok=True)
+        segments.start_looks(volume)
     else:
         editable(vz)
         for path in [metadata.result_path(volume), *importer.ocr_dir(volume).glob("metadata-*.jsonl")]:
             path.unlink(missing_ok=True)
-    importer.JOBS.pop((vz, ocr.JOB if was == "text" else metadata.JOB), None)
+        importer.JOBS.pop((vz, metadata.JOB), None)
     return RedirectResponse(f"/import/{vz}?schritt={RESETS[was]}", 303)
 
 
@@ -2473,7 +2498,8 @@ async def import_cuts(request: Request, vz: int):
     """Saves what was chosen on the page: {"cuts": [page, ...], "excluded": [page, ...], "suggested": [page, ...],
     "reviewed": [page, ...], "hints": [page, ...], "finish": bool}, each cut the last page of a leaflet, each excluded page left out of every
     leaflet, "suggested" the cuts nobody has decided, "reviewed" the transitions found to belong together, "hints" the
-    transitions where the text suggests an overlooked cut."""
+    transitions where the text suggests an overlooked cut; "forget": true when the division no longer comes from the
+    last suggestion (a list, a fresh start), so its reasons go."""
     volume = editable(vz)
     pages = importer.page_count(volume) if volume.stem else None
     body = await request.json()
@@ -2484,6 +2510,8 @@ async def import_cuts(request: Request, vz: int):
         return JSONResponse({'error': 'Die Trennungen passen nicht zu den hochgeladenen Seiten.'}, status_code=400)
     doc = segments.save(volume, cuts, pages, excluded=excluded, suggested=suggested, reviewed=reviewed,
                         hints=hints, finished=bool(body.get('finish')))
+    if body.get('forget'):
+        segments.reasons_path(volume).unlink(missing_ok=True)
     return JSONResponse({'ok': True, 'count': sum(not s.get('no_content') for s in doc['segments'])})
 
 
@@ -2724,9 +2752,15 @@ def import_key(request: Request, vz: int, key: str = Form(''), forget: bool = Fo
 
 
 @app.post("/import/{vz}/vorschlag-text")
-def import_suggest_from_text(vz: int):
+async def import_suggest(request: Request, vz: int):
+    """Suggests the cuts, from the text and, unless {"images": false}, from the look of the scan."""
     try:
-        count = segments.suggest_from_text(import_volume_or_404(vz))
+        body = await request.json()
+    except ValueError:
+        body = {}
+    images = not (isinstance(body, dict) and body.get("images") is False)
+    try:
+        count = segments.suggest(editable(vz), images)
     except ValueError as error:
         return JSONResponse({'error': str(error)}, status_code=400)
     return JSONResponse({'ok': True, 'count': count})

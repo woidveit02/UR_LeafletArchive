@@ -137,9 +137,9 @@ def discard(volume):
     """
     if n_leaflets(volume) and volume.status != DRAFT:
         raise ValueError("Dieser Band ist schon freigegeben und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben", "anlegen")):
+    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben", "anlegen", "bild")):
         raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "ocr", "angaben", "anlegen"):
+    for kind in ("scans", "ocr", "angaben", "anlegen", "bild"):
         JOBS.pop((volume.vz, kind), None)
     if volume.stem:
         target = scan_path(volume)
@@ -148,7 +148,8 @@ def discard(volume):
             target.unlink(missing_ok=True)
         except OSError as error:
             raise ValueError(storage_problem(error, target)) from error
-        target.with_name(f"{volume.stem}.segments.json").unlink(missing_ok=True)
+        for kind in ("segments", "looks", "reasons"):
+            target.with_name(f"{volume.stem}.{kind}.json").unlink(missing_ok=True)
         shutil.rmtree(ocr_dir(volume), ignore_errors=True)
         drop_thumbs(volume.stem)
         try:
@@ -283,6 +284,8 @@ def build(kind, paths, target, progress=lambda text, done=0, total=0: None):
             pdf_service._doc_cache.pop(str(target), None)  # a replaced scan must not stay cached
             drop_thumbs(target.stem)
             shutil.rmtree(target.parent / target.stem, ignore_errors=True)  # the text belongs to the old scan
+            for kind in ("looks", "reasons"):  # and so do the looks of its pages
+                target.with_name(f"{target.stem}.{kind}.json").unlink(missing_ok=True)
             result.replace(target)
     except OSError as error:
         raise ValueError(storage_problem(error, target)) from error

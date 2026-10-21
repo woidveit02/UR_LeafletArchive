@@ -20,6 +20,7 @@
     --danger: #a83535;
     --attention: #d97706;  /* picking evidence, split suggestions */
     --attention-soft: #fffbeb;
+    --suggest: color-mix(in srgb, var(--attention) 75%, black);  /* split suggestions, lines and text alike */
     --mark: #ffe58a;  /* search hits */
     --mark-line: #d9a21b;
     --bar: #93b4f5;  /* year bars */
@@ -3801,78 +3802,7 @@ a.topic-year.active .topic-bar {
 
 .step-form {
     max-width: 52rem;
-}
-
-
-
-
-
-
-
-
-.split-help-text {
-    color: var(--ink);
-    font-size: var(--text-md);
-}
-
-.split-help-text > p,
-.split-help-text > ol {
-    margin: 0 0 12px;
-}
-
-.split-help-text li {
-    margin-bottom: 8px;
-}
-
-.split-help-text .advanced {
-    margin: 0;
-    border-top: 1px solid var(--line);
-}
-
-.split-help-text .advanced:last-child {
-    border-bottom: 1px solid var(--line);
-}
-
-.split-help-text .advanced > summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0;
-    padding: 12px 4px;
-    list-style: none;
-    cursor: pointer;
-}
-
-.split-help-text .advanced > summary::-webkit-details-marker {
-    display: none;
-}
-
-.split-help-text .advanced > summary::after {
-    content: "▾";
-    color: var(--muted);
-}
-
-.split-help-text .advanced[open] > summary::after {
-    content: "▴";
-}
-
-.split-help-text h3 {
-    margin: 12px 0 4px;
-    font-size: var(--text-md);
-    break-after: avoid;
-}
-
-.split-help-text h3:first-child {
-    margin-top: 0;
-}
-
-.split-help-text ul,
-.split-help-text ol {
-    margin: 0;
-    padding-left: 1.3rem;
-}
-
-.step-head {  /* back and next left and right of the steps, the same place on every page */
+}.step-head {  /* back and next left and right of the steps, the same place on every page */
     display: grid;
     grid-template-columns: 6.5rem minmax(0, 1fr) 6.5rem;
     align-items: start;
@@ -3946,28 +3876,7 @@ a.topic-year.active .topic-bar {
 
 .split-start .file-pick label {
     font-weight: 600;
-}
-
-.split-example {
-    margin: 4px 0 8px;
-    padding: 10px 14px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-muted);
-    font-size: var(--text-sm);
-    break-inside: avoid;
-    overflow-x: auto;
-}
-
-.split-help-text code {
-    padding: 1px 6px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    background: var(--surface-muted);
-    font-size: 0.9em;
-}
-
-.drop-zone {
+}.drop-zone {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4012,12 +3921,24 @@ a.topic-year.active .topic-bar {
     margin: 0 0 12px;
 }
 
+/* downloads and resets: one quiet line, the details in the tooltips and the question before */
 .step-trouble {
-    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 18px;
+    max-width: 760px;  /* as .step-narrow */
+    margin: 56px auto 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-xs);
 }
 
-.step-trouble .release-row {
-    padding: 12px 0;
+.step-trouble h3 {
+    margin: 0;
+    color: var(--muted);
+    font-size: inherit;
+    font-weight: 600;
 }
 
 .pick-order {
@@ -4379,13 +4300,208 @@ summary.button.text::-webkit-details-marker {
 
 .split-start {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
     margin-top: 12px;
 }
 
+.split-help {  /* the help of step 4 */
+    margin: 0 8px 12px;
+    max-width: 70ch;
+}
+
+.split-help h3 {
+    margin: 18px 0 6px;
+    font-size: var(--text-md);
+}
+
+.split-help p,
+.split-help ul {
+    margin: 0 0 10px;
+}
+
+.split-help ul {
+    padding-left: 20px;
+}
+
+.split-help ul.split-keys {
+    padding: 0;
+    list-style: none;
+}
+
+.split-keys li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.split-key {  /* the marks of the page strip, small */
+    flex: 0 0 22px;
+    height: 22px;
+    background: none;
+}
+
+.split-key.on {
+    background: linear-gradient(var(--ink), var(--ink)) center / 4px 100% no-repeat;
+}
+
+.split-key.suggested {
+    background: repeating-linear-gradient(to bottom, var(--suggest) 0 6px, transparent 6px 10px) center / 4px 100% no-repeat;
+}
+
+.split-key.open {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--muted);
+    color: #fff;
+    font: 700 13px/1 system-ui, sans-serif;
+    font-style: normal;
+}
+
+.split-key.blank {
+    background: repeating-linear-gradient(-45deg, var(--line-strong) 0 4px, transparent 4px 8px);
+}
+
+.split-shortcuts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 14px;
+    margin: 0;
+}
+
+.split-shortcuts dd {
+    margin: 0;
+}
+
+.split-help kbd {
+    padding: 0 5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    font: inherit;
+    font-size: 0.85em;
+}
+
+.split-list-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    margin: 0 0 14px;
+}
+
+.split-sample {
+    margin: 6px 0 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-muted);
+    font-size: var(--text-sm);
+    overflow-x: auto;
+}
+
 .split-start .meta {
     margin: 6px 0 0;
+}
+
+.step-panel > .split-note,
+.step-panel > .split-error {
+    margin: -8px 8px 12px;
+}
+
+.split-scale {  /* between the buttons: where the suggestion leans, from the middle */
+    position: relative;
+    display: grid;
+    justify-self: center;
+    gap: 2px;
+    width: min(100%, 240px);
+    padding-bottom: 10px;
+    color: var(--muted);
+    font-size: var(--text-xs);
+}
+
+.split-scale-track {
+    position: relative;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--surface-muted);
+}
+
+.split-scale-track i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 4px;
+    background: var(--ink-soft);
+}
+
+.split-scale-track i.cut {
+    background: var(--suggest);
+}
+
+.split-scale-track::after {  /* 50 %: from here on a cut is suggested */
+    content: "";
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: calc(50% - 1px);
+    width: 2px;
+    background: var(--ink);
+}
+
+.split-scale b {  /* the score, centred above the bar */
+    justify-self: center;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+}
+
+.split-scale b.cut {
+    color: var(--suggest);
+}
+
+.split-reasons {  /* what the score is made of, under the buttons */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+}
+
+.split-reasons b {
+    font-variant-numeric: tabular-nums;
+}
+
+.split-reasons .pro b {
+    color: var(--success);
+}
+
+.split-reasons .con b {
+    color: var(--danger);
+}
+
+.split-reasons .split-sum b {
+    color: var(--ink);
+}
+
+@container (max-width: 640px) {  /* narrow: the bar above, decisions below it, the blank pages under them */
+    .split-buttons {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "scale scale" "keep cut";
+    }
+
+    .split-scale {
+        grid-area: scale;
+    }
+
+    .split-buttons [data-act="keep"] {
+        grid-area: keep;
+    }
+
+    .split-buttons [data-act="cut"] {
+        grid-area: cut;
+    }
 }
 
 .step-result,
@@ -4503,14 +4619,70 @@ summary.button.text::-webkit-details-marker {
     color: var(--muted);
 }
 
-.split-skip {
-    padding: 0 4px;
-    border: none;
-    background: none;
+.split-sheet {
+    position: relative;
+}
+
+.split-marks {  /* over the scan, scaled like it; shown while the pointer is on the page */
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+
+.split-sheet:hover .split-marks {
+    opacity: 1;
+}
+
+.split-marks rect {
+    fill: none;
+    stroke-width: 2.5px;
+    vector-effect: non-scaling-stroke;
+}
+
+.split-marks .hole {
+    stroke: #d6336c;
+}
+
+.split-marks .blue {
+    stroke: var(--accent);
+}
+
+.split-page-no,
+.split-skip {  /* small boxes at the foot of a page: its number in the middle, "leer" at the outer side */
+    position: absolute;
+    bottom: 6px;
+    padding: 1px 6px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
     color: var(--muted);
-    font-size: var(--text-sm);
-    text-decoration: underline;
+    font: inherit;
+    font-size: var(--text-xs);
     cursor: pointer;
+}
+
+.split-page-no {
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--ink-soft);
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.split-pair > :first-child .split-skip {
+    left: 6px;
+}
+
+.split-pair > :last-child .split-skip {
+    right: 6px;
+}
+
+.split-skip[aria-pressed="true"] {
+    color: var(--ink);
 }
 
 .split-page.current,
@@ -4571,7 +4743,7 @@ summary.button.text::-webkit-details-marker {
 }
 
 .split-cut.suggested {
-    background: repeating-linear-gradient(to bottom, var(--attention) 0 10px, transparent 10px 16px) center / 4px 100% no-repeat;
+    background: repeating-linear-gradient(to bottom, var(--suggest) 0 10px, transparent 10px 16px) center / 4px 100% no-repeat;
 }
 
 .split-cut.checked {
@@ -4630,7 +4802,7 @@ summary.button.text::-webkit-details-marker {
 }
 
 .split-legend i.suggested {
-    color: var(--attention);
+    color: var(--suggest);
 }
 
 .split-pair {
@@ -4676,26 +4848,17 @@ summary.button.text::-webkit-details-marker {
 }
 
 .split-join.suggested {
-    background: repeating-linear-gradient(to bottom, var(--attention) 0 10px, transparent 10px 16px) center top / 4px calc(100% - 44px) no-repeat;
+    background: repeating-linear-gradient(to bottom, var(--suggest) 0 10px, transparent 10px 16px) center / 4px 100% no-repeat;
 }
 
-.split-join.suggested::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 44px;
-    background: #fff;
-}
-
-.split-join.suggested::after {
+.split-join.suggested::after {  /* at the foot of the line, over the pages next to it */
     content: "✂";
     position: absolute;
+    z-index: 1;
     bottom: 8px;
     left: 50%;
     transform: translateX(-50%) rotate(-90deg);
-    color: var(--attention);
+    color: var(--suggest);
     font-size: var(--text-xl);
     line-height: 1;
 }
@@ -4734,6 +4897,7 @@ summary.button.text::-webkit-details-marker {
 }
 
 .split-decide {
+    container-type: inline-size;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -4750,17 +4914,14 @@ summary.button.text::-webkit-details-marker {
 }
 
 .split-nav .suggested {
-    color: var(--attention);
+    color: var(--suggest);
 }
 
-.split-question {
-    margin: 0 0 6px;
-    font-weight: 600;
-}
 
 .split-buttons {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
     gap: 8px;
 }
 
@@ -4783,7 +4944,6 @@ summary.button.text::-webkit-details-marker {
     font: inherit;
     font-size: 0.85em;
     line-height: 1.3;
-    opacity: 0.85;
 }
 
 .split-sheet {
@@ -4812,29 +4972,6 @@ summary.button.text::-webkit-details-marker {
     background: transparent;
 }
 
-.split-sheet.excluded figcaption {
-    background: var(--surface);
-}
-
-.split-sheet.excluded figcaption b::after {
-    content: " · Leerseite";
-}
-
-.split-sheet figcaption b {
-    white-space: nowrap;
-}
-
-.split-sheet figcaption {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    min-height: 28px;
-    margin-top: 4px;
-    padding: 0 18px;  /* clear of the scissors in the middle */
-    color: var(--muted);
-    font-size: var(--text-sm);
-}
 
 body.split-lock {
     overflow: hidden;
@@ -4873,47 +5010,34 @@ body.split-lock {
 }
 
 .step-narrow details.help > summary,
-.step-narrow details.zip-import > summary,
-.split-help-text .advanced > summary {
+.step-narrow details.zip-import > summary {
     padding: 14px 8px;
     font-weight: 400;
     transition: background 0.15s;
 }
 
 .step-narrow details.help > summary:hover,
-.step-narrow details.zip-import > summary:hover,
-.split-help-text .advanced > summary:hover {
+.step-narrow details.zip-import > summary:hover {
     background: var(--surface-muted);
 }
 
 .step-narrow details.help > summary::after,
 .step-narrow details.zip-import > summary::after,
 .step-narrow details.help[open] > summary::after,
-.step-narrow details.zip-import[open] > summary::after,
-.split-help-text .advanced > summary::after,
-.split-help-text .advanced[open] > summary::after {
+.step-narrow details.zip-import[open] > summary::after {
     content: "▾";
     transition: transform 0.15s;
 }
 
 .step-narrow details.help[open] > summary::after,
-.step-narrow details.zip-import[open] > summary::after,
-.split-help-text .advanced[open] > summary::after {
+.step-narrow details.zip-import[open] > summary::after {
     transform: rotate(180deg);
 }
 
 .step-narrow details.help > p,
-.step-narrow details.help > ol,
-.split-help-text .advanced > p {
+.step-narrow details.help > ol {
     max-width: 70ch;
-}
-
-.split-help-text .advanced > p,
-.split-help-text .advanced > pre {
-    margin: 0 8px 12px;
-}
-
-.step-panel {  /* open like the lists: no card, the rows keep their lines */
+}.step-panel {  /* open like the lists: no card, the rows keep their lines */
     max-width: 760px;
     margin: 0 0 24px;
     padding: 0;
@@ -4930,6 +5054,14 @@ body.split-lock {
     align-items: flex-start;
     margin-bottom: 16px;
     padding: 0 8px;
+}
+
+.step-status {
+    flex: 1 1 16rem;  /* wraps its text before the actions leave the right side */
+}
+
+.step-panel-actions {
+    margin-left: auto;
 }
 
 .step-status > :last-child {

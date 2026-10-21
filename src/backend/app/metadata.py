@@ -997,7 +997,7 @@ def status(volume):
     named = [r for r in doc["segments"] if not r.get("no_content")]
     return {"state": "done" if [(r["start_page"], r["end_page"]) for r in doc["segments"]] == ranges else "stale",
             "model": doc.get("model"), "model_name": dict((m[0], m[1]) for m in models()).get(doc.get("model"), doc.get("model")),
-            "cost": ocr.dollar(doc.get("cost") or 0), "count": len(named),
+            "cost": ocr.dollar(doc.get("cost") or 0), "seconds": doc.get("seconds"), "count": len(named),
             "now": sum(not s.get("no_content") for s in segs),
             "same": len({(s["start_page"], s["end_page"]) for s in segs if not s.get("no_content")} & set(earlier(volume)[2])),
             "flagged": sum(bool(remarks(r)) for r in named), "hints": hint_counts(named)}
@@ -1057,6 +1057,7 @@ def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
                 job["state"] = "cancelled"
                 return
             doc["prompt"] = prompt_id(template)
+            doc["seconds"] = round(time.time() - job["started"])  # of this run, without one interrupted before
             result_path(volume).write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
             job["state"] = "done"
         except Exception as error:  # report from the thread

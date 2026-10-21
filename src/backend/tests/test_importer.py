@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import math
 import time
 import zipfile
 
@@ -528,7 +529,7 @@ def test_draft_opens_at_the_step_it_has_reached(scan, monkeypatch):
 def test_cuts_from_the_text(scan):
     from backend.app import boundaries, segments
     with pytest.raises(ValueError, match="noch nicht erkannt"):
-        segments.suggest_from_text(scan)
+        segments.suggest(scan)
     assert segments.missed_cuts(scan, [9], [], 120) is None  # no text, no hints
     # no hint, no cut: a page without any feature stays below the threshold (check again after learning new weights)
     assert boundaries.probability(set()) < boundaries.MIN_PROBABILITY
@@ -547,11 +548,50 @@ def test_cuts_from_the_text(scan):
     ocr.result_path(scan).write_text(json.dumps({"children": pages}), encoding="utf-8")
     blocks = boundaries.page_blocks(ocr.result_path(scan))
     assert boundaries.features(blocks[49], blocks[48]) == set()
-    assert segments.suggest_from_text(scan) == 2
+    assert segments.suggest(scan) == 2
     status = segments.status(scan)
     assert (status["cuts"], status["suggested"], status["confirmed"]) == ([9, 29], [9, 29], False)
+    why = segments.reasons(scan)  # for every transition, from the text alone while the scan is not measured
+    assert not why["images"] and len(why["transitions"]) == 119 and why["transitions"][8][0] >= 0.5
+    # looks of another scan do not count
+    from backend.app import looks
+    other = {"version": looks.VERSION, "scan": importer.scan_stamp(scan) - 1, "pages": []}
+    segments.write(segments.looks_path(scan), other)
+    assert segments.load_looks(scan) is None
+    # with the looks of this scan its blank pages are left out
+    look = {"size": [595, 842], "paper": [230, 228, 220], "ink": 0.05, "margins": [0.1] * 4, "blank": False,
+            "sign": False, "stamp": False, "holes": "none", "spots": {"holes": [], "blue": []}}
+    pages = [look] * 49 + [look | {"blank": True, "ink": 0.0}] + [look] * 70
+    other["scan"], other["pages"] = importer.scan_stamp(scan), pages
+    segments.write(segments.looks_path(scan), other)
+    segments.suggest(scan)
+    assert segments.status(scan)["excluded"] == [50] and segments.reasons(scan)["images"]
     segments.save(scan, [9, 29, 60], 120)  # saved by somebody: nothing is a suggestion any more
     assert (segments.status(scan)["suggested"], segments.status(scan)["confirmed"]) == ([], True)
     # a list without the cut after 30 gets it as a hint; its own cuts and the ones a left-out page forces are no hints
     assert segments.missed_cuts(scan, [9, 60], [], 120) == [29]
     assert segments.missed_cuts(scan, [9], [30], 120) == []
+
+
+# Tests if the reasons of a suggestion add up to its probability, strongest for first, with only the strongest word
+# for a cut counted, and if the scan adds to the text: holes on the right make a page the back of the sheet before.
+def test_reasons_of_a_suggestion():
+    from backend.app import boundaries
+    previous = [("Text", "Wir fordern alle auf.\nVerantwortlich: A. Muster, Eigendruck")]
+    page = [("Text", "UB Regensburg eingelaufen am: 1. FEB. 1973"), ("Text", "Alle Gruppen protestieren heute")]
+    p, reasons = boundaries.explain(page, previous)
+    assert p == pytest.approx(1 / (1 + math.exp(-(boundaries.PRIOR + sum(w for _, w in reasons)))))
+    assert [w for _, w in reasons] == sorted((w for _, w in reasons), reverse=True)
+    labels = [label for label, _ in reasons]
+    assert "Eingangsstempel" in labels and "Impressum auf der Seite davor" in labels
+    # only the strongest word for a cut counts: "eingelaufen" is stronger than "eigendruck"
+    assert [label for label in labels if "„" in label] == ["„eingelaufen“ am Seitenanfang"]
+
+    look = {"size": [595, 842], "paper": [230, 228, 220], "ink": 0.05, "margins": [0.1, 0.1, 0.1, 0.1],
+            "blank": False, "sign": False, "stamp": False, "holes": "none"}
+    plain = [("Text", "und deshalb fordern wir die Abschaffung")]
+    alone = boundaries.explain(plain, previous)[0]
+    assert boundaries.explain(plain, previous, None, look)[0] == alone  # without the looks of both pages: text only
+    back, reasons = boundaries.explain(plain, previous, look | {"holes": "right"}, look)
+    assert back < alone and ("Löcher rechts: Rückseite", boundaries.IMAGE_WEIGHTS["back"]) in reasons
+    assert ("gleiche Papierfarbe", boundaries.IMAGE_WEIGHTS["paper_same"]) in reasons
