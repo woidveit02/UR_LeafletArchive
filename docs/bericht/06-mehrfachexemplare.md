@@ -1,24 +1,26 @@
 # 6 Mehrfachexemplare zusammenführen
 
-Etwa ein Fünftel der 1 927 Exemplare sind weitere Stücke eines Flugblatts, das schon vorliegt. Die Anwendung findet sie über Textähnlichkeit, ein Mensch bestätigt jede Gruppe und wählt ein Hauptexemplar. Alle Exemplare bleiben als eigene Datensätze erhalten.
+Etwa ein Fünftel der 1 927 Exemplare sind weitere identische Versionen eines bereits im Bestand vorhandenen Flugblatts. Potenzielle Mehrfachexemplare werden zunächst in der Anwendung anhand von Textähnlichkeit gekennzeichnet. Mithilfe eines integrierten Tools kann die Zuordnung anschließend manuell überprüft und bestätigt werden. Bei diesem Schritt wird ein sogenanntes Hauptexemplar bestimmt. Alle Exemplare bleiben auch nach der Kontrolle als eigenständige Datensätze vorhanden.
 
 ## 6.1 Aufgabe
 
-Ziel ist, Exemplare desselben Flugblatts zu finden, damit jedes Flugblatt nur einmal zählt. Die Mehrfachexemplare sind nach der Sammlungspraxis gewollt: Das Archiv behielt Doppelexemplare, um etwa in Ausstellungen auch die Rückseite zeigen zu können [@uar-rep118] (Kap. 2.5). Sie sind also kein Fehler der Digitalisierung.
+Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um bei späteren Auswertungen bzw. Datenanalysen jeden Inhalt nur einfach zu behandeln. Das Auftreten dieser Mehrfachexemplare ist Teil der Sammlungspraxis: Nach Möglichkeit bewahrt das Archiv bewusst mehrere Versionen des gleichen Flugblatts auf, um bspw. bei Ausstellungen auch die Rückseite präsentieren zu können [@uar-rep118] (Kap. 2.5). Es handelt sich dabei also nicht um einen Digitalisierungsfehler, welcher behoben werden muss, sondern um eine Eigenschaft des Bestandes, die bei einer Auswertung Berücksichtigung erfodert.
 
 ## 6.2 Herausforderungen
 
-Zwei Exemplare werden nie buchstabengleich erkannt, weil die Texterkennung bei jedem Scan etwas anders liest. Ein exakter Textvergleich reicht deshalb nicht. Exemplare liegen oft im selben Band, teils auch in verschiedenen; das „Theoriepapier Nr. 4“ des RCDS etwa liegt viermal in Band 007. Geänderte Nachdrucke, also Fassungen eines Flugblatts, sind inhaltlich interessant und sollen nicht verschwinden.
+Selbst bei identischen Inhalten unterscheiden sich die erkannten Texte mehrerer Exemplare oft geringfügig, da bei jedem Scan unterschiedliche OCR-Fehler auftreten können. Für eine zuverlässige Erkennung von Mehrfachexemplaren ist ein ausschließlicher direkter Textvergleich somit nicht ausreichend. Zusätzlich konnte beobachtet werden, dass identische Exemplare sowohl innerhalb desselben Bandes als auch über mehrere Bände hinweg vorkommen können. So liegt das "Theoriepapier Nr. 4 " des RCDS bspw. viermal in Band 7 vor. Gleichzeitig müssen Nachdrucke, die den Inhalt verändern, als eigene Fassungen erkennbar bleiben, um inhaltliche Untersuchungen aufgrund ihrer Unterschiede anstellen zu können.
+
+*TODO: Ein Beispiel raussuchen, wo sich Mehrfachexemplare über mehrere Bände hinweg verteilen.*
 
 ## 6.3 Verfahren
 
-Für den Bestand wurden die Mehrfachexemplare über alle Bände hinweg gesucht. Kandidaten ergeben sich aus der Ähnlichkeit der bge-m3-Embeddings ab einem Kosinuswert von 0,85. Bestätigt werden sie über Zeichen-5-Gramme auf normalisiertem Text. Die Schwellen sind an der Verteilung über alle Bände kalibriert: Ab einem Jaccard-Wert von 0,75 gilt ein Paar als Exemplar, zwischen 0,5 und 0,75 als mögliche Fassung, die von Hand geprüft wird. Darunter teilen zwei Blätter meist nur Bausteine wie Formulare oder Wahllisten.
+Die Suche nach Mehrfachexemplaren wurde über alle Bände des Bestands hinweg durchgeführt. Kandidaten ergeben sich aus der Ähnlichkeit der bge-m3-Embeddings ab einem Kosinuswert von 0,85. Bestätigt werden sie über Zeichen-5-Gramme auf normalisiertem Text. Die Schwellen sind an der Verteilung über alle Bände kalibriert: Ab einem Jaccard-Wert von 0,75 gilt ein Paar als Exemplar, zwischen 0,5 und 0,75 als mögliche Fassung, die von Hand geprüft wird. Darunter teilen zwei Blätter meist nur Bausteine wie Formulare oder Wahllisten.
 
-Steckt ein Flugblatt fast ganz in einem deutlich längeren, wird es als „enthalten“ markiert; das weist auf einen fehlenden Schnitt hin. Unter 150 Zeichen Text ist kein Vergleich möglich.
+Enthält ein deutlich längerer Text nahezu vollständig den Text eines kürzeren Flugblatts, wird dies als „enthalten“ markiert. Ein derartiger Fall kann auf einen nicht erkannten Schnitt zwischen zwei Flugblättern hinweisen. Bei Texten mit weniger als 150 Zeichen ist kein Vergleich möglich.
 
-Beim Import neuer Bände arbeitet die Anwendung ohne Embeddings. Sie filtert Kandidaten über seltene Wörter vor und wendet dann dieselbe 5-Gramm-Schwelle an.
+Beim Import neuer Bände werden keine Embeddings verwendet. In diesem Fall grenzt die Anwendung zunächst mögliche Kandidaten anhand seltener Wörter ein. Anschließend wird die Textähnlichkeit mit derselben 5-Gramm-Methode wie zuvor und den beschriebenen Schwellenwerten bewertet.
 
-Mehrfachexemplare werden markiert, nicht zusammengelegt. Jedes Exemplar bleibt ein eigener Datensatz mit eigener Stelle im Karton, eigenen Stempeln und Vermerken. Auch die Metadaten werden je Exemplar erzeugt.
+Mehrfachexemplare werden als solche markiert, jedoch nicht direkt zusammengeführt. Jedes Exemplar bleibt ein eigständiger Datensatz mit eigener Stelle im Karton, individuellen Stempeln und Vermerken. Auch die Metadaten werden für jedes Exemplar einzeln erzeugt. In Listen, bei Asuwertungen und Exporten vertritt das Hauptexemplar die Gruppe der Mehrfachexemplare. Informationen der übrigen Versionen bleiben erhalten.
 
 ## 6.4 Qualität
 
