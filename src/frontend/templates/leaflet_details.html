@@ -17,7 +17,7 @@
         {% endcall %}
         {% endif %}
         <nav class="detail-nav">
-            {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← Zurück zu den Ergebnissen</a></span>
+            {% if leaflet.back_url %}<span class="breadcrumb"><a class="back-link" href="{{ leaflet.back_url }}">← {{ leaflet.back_label }}</a></span>
             {% elif leaflet.featured %}<span class="breadcrumb"><a href="/">Startseite</a> › Ausgewählte Flugblätter</span>
             {% else %}<span class="breadcrumb"><a href="/leaflets">Flugblätter</a> › {% if leaflet.selection %}<a href="/leaflets{{ leaflet.qs }}">{{ leaflet.selection }}</a>{% else %}<a href="/volumes/{{ leaflet.volume_vz }}">{{ leaflet.volume }}</a>{% endif %}</span>{% endif %}
             <span class="pager">
@@ -29,7 +29,7 @@
     {% set main_copy = leaflet.copies | selectattr('main') | list %}
     {% if leaflet.copies and leaflet.copies_checked and not leaflet.copy_main and main_copy %}
         <p class="alt-note"><span class="role alt">Weiteres Exemplar</span> Dasselbe Blatt wie das Hauptexemplar
-            <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die Metadaten der Gruppe stehen dort.
+            <a href="/leaflets/{{ main_copy[0].id }}">{{ main_copy[0].label }}</a>. Die gemeinsamen Metadaten stehen dort.
             <a href="/leaflets/{{ leaflet.id }}/exemplare">Exemplare vergleichen</a></p>
     {% endif %}
     {% from '_metadata_fields.html' import title_field, date_field, received_field, issuers_field, signatories_field, series_field, doc_type_field, lists %}

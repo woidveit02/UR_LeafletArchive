@@ -179,7 +179,9 @@
     "full_name": "",
     "type": "",
     "variants": [
-      "Aktion Demokratische Hochschule"
+      "Aktion Demokratische Hochschule",
+      "Aktionsgruppe Universität",
+      "ADH - Gruppe Universität"
     ],
     "jahre": [
       "1973"
@@ -2706,7 +2708,8 @@
     "variants": [
       "Fachschaft Geschichte",
       "Arbeitsausschuß der Historischen Fachschaft",
-      "FS Geschichte"
+      "FS Geschichte",
+      "Fachschaftsrat Geschichte"
     ],
     "jahre": [],
     "vz": [],
@@ -3182,7 +3185,8 @@
     "full_name": "",
     "type": "",
     "variants": [
-      "Zentralrat der Fachschaften"
+      "Zentralrat der Fachschaften",
+      "Fachschaftszentralrat"
     ],
     "jahre": [],
     "vz": [],
@@ -3277,5 +3281,29 @@
     "jahre": [],
     "vz": [],
     "notes": "in der App angelegt, getrennt von der Fachschaft"
+  },
+  {
+    "org_id": "dkp",
+    "name": "DKP",
+    "full_name": "DKP",
+    "type": "",
+    "variants": [
+      "DKP"
+    ],
+    "jahre": [],
+    "vz": [],
+    "notes": "in der App angelegt"
+  },
+  {
+    "org_id": "arbeiterbund_f_r_den_wiederaufbau_der_kpd",
+    "name": "Arbeiterbund für den Wiederaufbau der KPD",
+    "full_name": "Arbeiterbund für den Wiederaufbau der KPD",
+    "type": "",
+    "variants": [
+      "Arbeiterbund für den Wiederaufbau der KPD"
+    ],
+    "jahre": [],
+    "vz": [],
+    "notes": "in der App angelegt"
   }
 ]

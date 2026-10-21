@@ -3,8 +3,10 @@
 (() => {
     // leaving before the text is recognized is allowed, but asked about
     const guarded = document.querySelector('[data-leave-warning]');
-    document.querySelector('.step-head')?.addEventListener('click', (e) => {
-        if (guarded && e.target.closest('a') && !confirm(guarded.dataset.leaveWarning)) e.preventDefault();
+    document.querySelector('.step-head')?.addEventListener('click', (e) => {  // only going on, not back
+        const link = e.target.closest('a');
+        const ahead = link && (link.closest('.step-next') || link.matches('.todo, [aria-current] ~ a'));
+        if (guarded && ahead && !confirm(guarded.dataset.leaveWarning)) e.preventDefault();
     });
 
     // the folded quality shows the level and its price, which follow the choice

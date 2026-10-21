@@ -94,14 +94,16 @@ def test_folder_with_other_files_and_wrong_files(folders):
     assert importer.page_count(volume) is None
 
 
-# Tests if the scan PDF is built in the background and the job reports the pages done, then "done".
-def test_background_job_reports_progress(folders):
+# Tests if the scan PDF is built in the background and the job says what it is doing, then "done".
+def test_background_job_reports_progress(folders, monkeypatch):
     import time
     _, db = folders
     volume = db.query(Volume).one()
+    phases = []
+    copy = importer.copy_with_progress
+    monkeypatch.setattr(importer, "copy_with_progress", lambda *a: phases.append(job["phase"]) or copy(*a))
     importer.start_scans(volume, [(f"{n}.tif", io.BytesIO(image())) for n in "abc"])
     job = importer.JOBS[(volume.vz, "scans")]
-    assert job["total"] == 3
     with pytest.raises(ValueError, match="läuft schon"):
         if job["state"] != "running":
             pytest.skip("finished before the second upload")
@@ -110,7 +112,26 @@ def test_background_job_reports_progress(folders):
         if job["state"] != "running":
             break
         time.sleep(0.05)
-    assert (job["state"], job["done"]) == ("done", 3) and importer.page_count(volume) == 3
+    assert job["state"] == "done" and importer.page_count(volume) == 3
+    assert phases == ["PDF wird erstellt"] and job["phase"].startswith("Alte Vorschaubilder")
+
+
+# Tests if a volume scanned in several folders (15.1, 15.2, ..., 15.10) with a PDF each becomes one PDF in the order
+# of the folders.
+def test_pdfs_in_several_folders_are_joined_in_order(folders):
+    _, db = folders
+    volume = db.query(Volume).one()
+
+    def pdf(width):
+        doc = pymupdf.open()
+        doc.new_page(width=width, height=100)
+        return io.BytesIO(doc.tobytes())
+    files = [("15.10/scan.pdf", pdf(30)), ("15.2/scan.pdf", pdf(20)), ("15.1/scan.pdf", pdf(10))]
+    assert importer.save_scans(volume, files) == 3
+    with pymupdf.open(importer.scan_path(volume)) as doc:
+        assert [p.rect.width for p in doc] == [10, 20, 30]
+    with pytest.raises(ValueError, match="nicht beides"):
+        importer.save_scans(volume, [("a.pdf", pdf(10)), ("b.tif", io.BytesIO(image()))])
 
 
 # Tests if discarding removes the scan and gives the unit back: an added volume disappears, an archive unit
@@ -401,6 +422,60 @@ def test_text_step_page(scan, monkeypatch):
     with pytest.raises(ValueError, match="OpenRouter"):
         metadata.start(scan, "a/b", [])
 
+
+# Tests if "Neu erzeugen" after a finished run asks the model again instead of taking the kept answers, and if the
+# price says so; after a new split the leaflets with the same pages are still taken over.
+def test_metadata_again_asks_again(scan, monkeypatch):
+    from backend.app import metadata, segments
+    fake_datalab(monkeypatch, [])
+    ocr.start(scan)
+    wait_for(scan)
+    segments.save(scan, [60], 120)
+    asked = []
+    monkeypatch.setattr(metadata, "extract", lambda key, model, prompt, state, cost: asked.append(model) or {})
+    monkeypatch.setattr(metadata, "models", lambda: [("a/b", "Modell B", 1e-6, 2e-6)])
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-test-9999")
+    totals, recheck = [], metadata.recheck  # the job's total before the next phase: the leaflets asked for
+    monkeypatch.setattr(metadata, "recheck", lambda *a: totals.append(importer.JOBS[(scan.vz, metadata.JOB)]["total"]) or recheck(*a))
+
+    def run():
+        asked.clear()
+        metadata.start(scan, "a/b", [])
+        job = importer.JOBS[(scan.vz, metadata.JOB)]
+        for _ in range(200):
+            if job["state"] != "running":
+                break
+            time.sleep(0.05)
+        assert job["state"] == "done", job
+        return totals[-1]
+    assert run() == 2 and asked and metadata.status(scan)["state"] == "done"
+    assert metadata.prices(scan)["a/b"] == "etwa 0,00 $" and metadata.prices(scan, fresh=True)["a/b"] != "etwa 0,00 $"
+    assert run() == 2  # asked again, not taken from the kept answers
+    segments.save(scan, [30, 60], 120)  # 1-30 and 31-60 are new, 61-120 stays
+    assert run() == 2
+
+# Tests if "Probleme beheben" throws away just what it says: the text takes the metadata with it, the cuts stay.
+def test_resets_without_access_to_the_files(scan, monkeypatch):
+    import backend.app.app as leaflet_app
+    from backend.app import metadata, pdf_service, segments
+    from backend.app.database import fillDatabase
+    monkeypatch.setattr(leaflet_app, "session", fillDatabase.session)
+    fake_datalab(monkeypatch, [])
+    ocr.start(scan)
+    wait_for(scan)
+    segments.save(scan, [60], 120)
+    metadata.result_path(scan).write_text("{}", encoding="utf-8")
+    (importer.ocr_dir(scan) / "metadata-1234abcd.jsonl").write_text("", encoding="utf-8")
+    pdf_service.render_thumb(importer.scan_path(scan), 1, height=100)
+    assert list(pdf_service.THUMB_DIR.glob(f"{scan.stem}-*"))
+
+    leaflet_app.import_reset(None, scan.vz, "vorschau")
+    assert not list(pdf_service.THUMB_DIR.glob(f"{scan.stem}-*"))
+    leaflet_app.import_reset(None, scan.vz, "metadaten")
+    assert not metadata.result_path(scan).exists() and not list(importer.ocr_dir(scan).glob("metadata-*"))
+    assert ocr.status(scan)["state"] == "done"
+    leaflet_app.import_reset(None, scan.vz, "text")
+    assert ocr.status(scan)["state"] == "none" and segments.status(scan)["cuts"] == [60] and importer.page_count(scan) == 120
 
 # Tests if the leaflet page names what is known about the text recognition and leaves out the rest.
 def test_describe_text_recognition():

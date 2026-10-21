@@ -61,7 +61,7 @@
         paint();
         document.querySelectorAll('.split-count').forEach((e) => {
             e.classList.toggle('done', data.confirmed && !dirty);
-            e.textContent = `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ${data.confirmed && !dirty ? 'Prüfung abgeschlossen' : complete() && !dirty ? 'alle Übergänge geprüft' : `${all.filter(decided).length} von ${transitions} Übergängen geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
+            e.textContent = `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ${data.confirmed && !dirty ? 'Einteilung abgeschlossen' : complete() && !dirty ? 'alle Übergänge geprüft' : `${all.filter(decided).length} von ${transitions} Übergängen geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
                 dirty ? ' · speichert …' : data.confirmed ? '' : data.saved ? '' : ' · noch nicht gesetzt'}`;
         });
         finish.hidden = complete() && !dirty && data.confirmed;
@@ -69,7 +69,8 @@
         outside.hidden = !ready;
         $('split-open').classList.toggle('primary', !ready && !data.confirmed);
         const missing = all.filter((a) => !decided(a)).length;
-        finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Übergänge${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Übergänge sind geprüft';
+        finish.textContent = missing ? `Noch ${missing} offen →` : 'Einteilung abschließen';
+        finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Übergänge${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Übergänge sind geprüft: Einteilung übernehmen und zur Übersicht';
         renderView();
     };
     const decided = (a) => forced(a) || (excluded.has(a) && excluded.has(a + 1)) || (!suggested.has(a) && !hints.has(a) && (cuts.has(a) || reviewed.has(a)));
@@ -106,12 +107,12 @@
             const out = excluded.has(a + i), skip = f.querySelector('.split-skip');
             f.classList.toggle('excluded', out);
             skip.setAttribute('aria-pressed', out);
-            skip.textContent = out ? 'Wieder einbeziehen' : 'Als Leerseite / Trennblatt markieren';
-            skip.title = out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`;
+            skip.innerHTML = `${out ? 'Wieder einbeziehen' : 'Leerseite / Trennblatt'} <kbd>${i ? 'Shift+L' : 'L'}</kbd>`;
+            skip.title = (out ? `Seite ${a + i} wieder einbeziehen` : `Seite ${a + i} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`) + ` (Taste ${i ? 'Shift+L' : 'L'})`;
         });
-        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Voriger Übergang (←)"${a < 2 ? ' disabled' : ''}>Zurück</button>
+        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Voriger Übergang (←)"${a < 2 ? ' disabled' : ''}><kbd>←</kbd> Zurück</button>
             <b class="${note ? '' : style}">${note || text}</b>
-            <button type="button" class="button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter</button>`;
+            <button type="button" class="button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter <kbd>→</kbd></button>`;
         decide.innerHTML = transitions < 1 ? '' : `<p class="split-question">Zwischen Seite ${a} und ${a + 1} trennen?</p>
             <div class="split-buttons"><button type="button" class="button" data-act="cut" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Ja, trennen <kbd>T</kbd></button>
             <button type="button" class="button" data-act="keep" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}>Nein, gehören zusammen <kbd>Z</kbd></button></div>`;
@@ -179,14 +180,16 @@
 
     right.addEventListener('click', (e) => {
         const skip = e.target.closest('[data-out]');
-        if (!skip) return;
-        const page = Number(skip.dataset.out), marking = !excluded.has(page);
+        if (skip) leaveOut(Number(skip.dataset.out));
+    });
+    const leaveOut = (page) => {
+        const marking = !excluded.has(page);
         change(() => {
             marking ? excluded.add(page) : excluded.delete(page);
             [page - 1, page].filter((c) => c > 0 && c < data.pages).forEach((c) => { cuts.add(c); suggested.delete(c); hints.delete(c); });
         });
         if (marking && page < data.pages) go(all.slice(page).find((x) => !decided(x)) || page + 1, true);  // on to the next open transition
-    });
+    };
 
     const paint = () => {
         left.querySelectorAll('.current, .next').forEach((e) => e.classList.remove('current', 'next', 'joined'));
@@ -218,21 +221,35 @@
         return result;
     };
     const saved = async (url, body) => {
+        clearTimeout(timer);
+        await queue;
         try { await post(url, body); dirty = false; location.reload(); } catch (e) { fail(e.message); }
     };
 
     const body = (done) => ({ cuts: sorted(cuts), excluded: sorted(excluded), suggested: sorted(suggested), reviewed: sorted(reviewed), hints: sorted(hints), finish: done && complete() });
-    let timer = null, changed = false;
-    const flush = async (finishing = false) => {
-        clearTimeout(timer);
+    // one save at a time: parallel ones could arrive out of order and an older state would win
+    let timer = null, changed = false, version = 0, queue = Promise.resolve();
+    const store = async (finishing) => {
         if (!dirty && !finishing) return;
-        const stored = body(finishing || data.confirmed);
-        dirty = false;
-        try { await post(data.saveUrl, stored); data.saved = true; data.confirmed = stored.finish; changed = true; } catch (e) { dirty = true; fail(e.message); }
+        const stored = body(finishing || data.confirmed), sent = version;
+        try {
+            await post(data.saveUrl, stored);
+            data.saved = changed = true;
+            if (version === sent) { dirty = false; data.confirmed = stored.finish; }
+        } catch (e) { fail(e.message); }
         render();
     };
-    const touch = () => { dirty = true; data.confirmed = false; clearTimeout(timer); timer = setTimeout(flush, 600); };
-    finish.addEventListener('click', () => complete() ? flush(true) : nextOpen());
+    const flush = (finishing = false) => { clearTimeout(timer); return (queue = queue.then(() => store(finishing))); };
+    const touch = () => { dirty = true; version += 1; data.confirmed = false; clearTimeout(timer); timer = setTimeout(flush, 600); };
+    finish.addEventListener('click', async () => {
+        if (!complete()) return nextOpen();
+        await flush(true);
+        if (data.confirmed) location.reload();  // done: back to the step, where "Weiter" is free now
+    });
+    $('split-clear').addEventListener('click', () => {
+        if (!confirm('Alle Trennungen, Leerseiten und Entscheidungen löschen und von vorn beginnen?')) return;
+        saved(data.saveUrl, { cuts: [], excluded: [], suggested: [], reviewed: [], hints: [], finish: false });
+    });
     outside.addEventListener('click', async () => { await flush(true); if (data.confirmed) location.reload(); });
     $('split-suggest-text').addEventListener('click', () => {
         if ((data.saved || cuts.size) && !confirm('Vorschlag übernehmen? Die vorhandenen Trennungen werden ersetzt.')) return;
@@ -314,6 +331,9 @@
             if (step > 0) forward(); else go(page - 1);
         } else if (e.key.toLowerCase() === 'u') {
             travel(undo, redo);
+        } else if (e.key.toLowerCase() === 'l') {
+            e.preventDefault();
+            leaveOut(Math.min(page + (e.shiftKey ? 1 : 0), data.pages));  // L the left page, Shift+L the right one
         } else if (['t', 's', 'z', 'n'].includes(e.key.toLowerCase()) || (e.key === 'Enter' && !e.target.closest('.split-bar, .split-decide button'))) {
             e.preventDefault();
             if (transitions > 0 && !forced(page)) decideAt(!'zn'.includes(e.key.toLowerCase()));  // left hand splits, right hand keeps

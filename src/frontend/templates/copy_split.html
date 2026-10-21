@@ -21,6 +21,6 @@
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare" class="review-actions dup-more">
             {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
             <button type="submit" name="revert" value="1" class="button text">Prüfung zurücknehmen</button>
-            {% if next %}<a class="button small primary review-next" href="/leaflets/{{ next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+            {% if next %}<a class="button small primary review-next" href="/leaflets/{{ next }}/exemplare">Weiter zum nächsten ungeprüften Mehrfachexemplar ›</a>{% endif %}
         </form>
 {% endblock %}

@@ -1,0 +1,4031 @@
+{
+  "created": "2026-10-20T13:09:17.105867",
+  "model": "anthropic/claude-sonnet-4.5",
+  "backend": "openrouter",
+  "cost": 2.1057,
+  "prompt_tokens": 581242,
+  "answer_tokens": 24130,
+  "reasoning_tokens": 0,
+  "grounding": {
+    "checked": 83,
+    "flagged": 10
+  },
+  "segments": [
+    {
+      "id": 1,
+      "title": "",
+      "date": "",
+      "start_page": 1,
+      "end_page": 1,
+      "confirmed": true,
+      "no_content": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0
+    },
+    {
+      "id": 2,
+      "title": "Heute Di 17 oo HO 2. Filmbericht von einer Reise durch die befreiten Gebiete Mozambiques. BRD Imperialismus im südlichen Afrika",
+      "date": "",
+      "start_page": 2,
+      "end_page": 3,
+      "confirmed": true,
+      "title_evidence": "HEUTE\nDI 17\noo\nHO 2\n- FILMBERICHT von einer\nReise durch die befrei-\nten Gebiete Mozambiques\n- BRD Imperialismus\nim südlichen Afrika",
+      "title_blocks": [
+        "2-5",
+        "2-6",
+        "2-7"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AKTION DRITTE WELT\nASTA-AUSLANDSREFERAT",
+          "blocks": [
+            "2-1"
+          ],
+          "surface": "Aktion Dritte Welt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "AKTION DRITTE WELT\nASTA-AUSLANDSREFERAT",
+          "blocks": [
+            "2-1"
+          ],
+          "surface": "AStA-Auslandsreferat",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "einladung",
+      "confidence": 0.75,
+      "received_date": "1973-02-06",
+      "received_evidence": "6. FEB. 1973",
+      "received_blocks": [
+        "2-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 3,
+      "title": "Wußten Sie schon, daß in den portugiesischen Kolonien...",
+      "date": "",
+      "start_page": 4,
+      "end_page": 7,
+      "confirmed": true,
+      "title_evidence": "Wußten Sie schon, daß\nin den portu-\ngiesischen\nKolonien...",
+      "title_blocks": [
+        "4-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "A3W",
+          "blocks": [
+            "5-17"
+          ],
+          "surface": "A3W",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "a3w"
+          ]
+        }
+      ],
+      "date_evidence": "DO, 31. 5.",
+      "date_blocks": [
+        "5-16"
+      ],
+      "date_text": "31.5.1973",
+      "date_iso": "1973-05-31",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 4,
+      "title": "",
+      "date": "",
+      "start_page": 8,
+      "end_page": 8,
+      "confirmed": true,
+      "no_content": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0
+    },
+    {
+      "id": 5,
+      "title": "Aktionskommittee gegen die Einschüchterung der BHG-Opposition - Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 9,
+      "end_page": 9,
+      "confirmed": true,
+      "title_evidence": "Aktionskommittee\nGegen die Einschüchterung\nder BHG-Opposition\n- Solidarität mit den Lehrassistenten",
+      "title_blocks": [
+        "9-2"
+      ],
+      "title_type": "original",
+      "series": "AKO",
+      "issue": "7",
+      "issuers": [
+        {
+          "evidence": "AKO 7",
+          "blocks": [
+            "9-1"
+          ],
+          "surface": "AKO",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich: St. Eggerdinger, 84 Regensburg, Universitätsstr. 31",
+          "blocks": [
+            "9-10"
+          ],
+          "surface": "St. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "3.4.73",
+      "date_blocks": [
+        "9-4"
+      ],
+      "date_text": "3.4.1973",
+      "date_iso": "1973-04-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "AKO 7",
+        "Bisher unterstützt von: DAB, DF, FSR WiWi, KHB/ML und Einzelpersonen"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 6,
+      "title": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition - Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 10,
+      "end_page": 10,
+      "confirmed": true,
+      "title_evidence": "Aktionskomitee\nGegen die Einschüchterung\nder BHG-Opposition-\nSolidarität mit den Lehrassistenten",
+      "title_blocks": [
+        "10-1"
+      ],
+      "title_type": "original",
+      "series": "AKO",
+      "issue": "6",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee\nGegen die Einschüchterung\nder BHG-Opposition-\nSolidarität mit den Lehrassistenten",
+          "blocks": [
+            "10-1"
+          ],
+          "surface": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "Presserechtlich: St. Eggerdinger, 84 Regensburg, Universitätsstr. 31",
+          "blocks": [
+            "10-11"
+          ],
+          "surface": "St. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "3. 4. 73",
+      "date_blocks": [
+        "10-4"
+      ],
+      "date_text": "3.4.1973",
+      "date_iso": "1973-04-03",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "AKO 6",
+        "Bisher unterstützt von: DAB, DF, FSR WiWi, KHB(ML) und Einzelpersonen"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 7,
+      "title": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition - Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 11,
+      "end_page": 11,
+      "confirmed": true,
+      "title_evidence": "Aktionskomitee\nGegen die Einschüchterung\nder BHG-Opposition\n- Solidarität mit den Lehrassistenten",
+      "title_blocks": [
+        "11-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee\nGegen die Einschüchterung\nder BHG-Opposition\n- Solidarität mit den Lehrassistenten",
+          "blocks": [
+            "11-1"
+          ],
+          "surface": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "presserechl.: St. Eggerdinger, 84 Regensburg, Universität. 24",
+          "blocks": [
+            "11-16"
+          ],
+          "surface": "St. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechl."
+        }
+      ],
+      "date_evidence": "2. 4. 73",
+      "date_blocks": [
+        "11-4"
+      ],
+      "date_text": "2.4.1973",
+      "date_iso": "1973-04-02",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "Bisher unterstützt von: DAB, DF, FSR WiWi, KHB/ML und Einzelpersonen"
+      ],
+      "received_date": "1973-04-02",
+      "received_evidence": "UB Regensburg eingelauten stamp with date 2. APR. 1973 and a blue 'F' mark.",
+      "received_blocks": [
+        "11-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 8,
+      "title": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition - Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 12,
+      "end_page": 12,
+      "confirmed": true,
+      "title_evidence": "Aktionskomitee\nGegen die Einschüchterung\nder BHG-Opposition\n- Solidarität mit den Lehrassistenten",
+      "title_blocks": [
+        "12-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AkO 3",
+          "blocks": [
+            "12-2"
+          ],
+          "surface": "AkO",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "presserechtl. : EGGERDINGER, 84 R , Universitätsstr. 31",
+          "blocks": [
+            "12-20"
+          ],
+          "surface": "Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl."
+        }
+      ],
+      "date_evidence": "28. 3. 73",
+      "date_blocks": [
+        "12-4"
+      ],
+      "date_text": "28.3.1973",
+      "date_iso": "1973-03-28",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "AkO 3",
+        "Bisher unterstützt von: DAB, DF, FSR WiWi, KHB/ML"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 9,
+      "title": "Gründungserklärung",
+      "date": "",
+      "start_page": 13,
+      "end_page": 17,
+      "confirmed": true,
+      "title_evidence": "GRÜNDUNGSERKLÄRUNG",
+      "title_blocks": [
+        "13-4"
+      ],
+      "title_type": "original",
+      "series": "AKO",
+      "issue": "1",
+      "issuers": [
+        {
+          "evidence": "AKTIONSKOMITEE GEGEN DIE EINSCHÜCHTERUNG DER\nBHG-OPPOSITION/ SOLIDARITÄT MIT DEN LEHRASSISTENTEN",
+          "blocks": [
+            "13-1"
+          ],
+          "surface": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition/Solidarität mit den Lehrassistenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. Verantw. S. Eggerdinger, Universitätsstr.",
+          "blocks": [
+            "13-16"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. Verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "AKO 1",
+        "Bisher unterstützt von DAB, DF, KHB(M) und Einzelpersonen."
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 10,
+      "title": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition / Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 18,
+      "end_page": 20,
+      "confirmed": true,
+      "title_evidence": "AKTIONSKOMITEE GEGEN DIE EINSCHÜCHTERUNG DER\nBHG-OPPOSITION/ SOLIDARITÄT MIT DEN LEHRASSISTENTEN",
+      "title_blocks": [
+        "18-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AK01",
+          "blocks": [
+            "18-1"
+          ],
+          "surface": "Aktionskomitee gegen die Einschüchterung der BHG-Opposition / Solidarität mit den Lehrassistenten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "ako"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. Verantw. S. Eggerdinger, Universitätsktr.",
+          "blocks": [
+            "18-16"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. Verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "Bisher unterstützt von DAB, DF, KHB(M) und Einzelpersonen."
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 11,
+      "title": "",
+      "date": "",
+      "start_page": 21,
+      "end_page": 21,
+      "confirmed": true,
+      "no_content": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0
+    },
+    {
+      "id": 12,
+      "title": "Ein neuer Höhepunkt in der Auseinandersetzung um den BHG Entwurf",
+      "date": "",
+      "start_page": 22,
+      "end_page": 23,
+      "confirmed": true,
+      "title_evidence": "EIN NEUER HÖHEPUNKT\nin der Auseinandersetzung um den BHG ENTWURF",
+      "title_blocks": [
+        "22-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtl. verantwortl.\nP.Skalla, 8Mü2 Arcisstr.16",
+          "blocks": [
+            "23-8"
+          ],
+          "surface": "P. Skalla",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantwortl."
+        },
+        {
+          "evidence": "AKTION DEMOKRATISCHE HOCHSCHULE\nVerband Deutscher Studentenschaften\nBayerische Assistentenkonferenz\nBund Demokratischer Wissenschaftler\nGEW - Bayern-Fachgruppe Hochschulen\nÖTV - Kreisverwaltung München-Fachgruppe\nHochschulen",
+          "blocks": [
+            "23-17"
+          ],
+          "surface": "Aktion Demokratische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_demokratische_hochschule"
+          ]
+        }
+      ],
+      "date_evidence": "28.11.",
+      "date_blocks": [
+        "23-14"
+      ],
+      "date_text": "28.11.1973",
+      "date_iso": "1973-11-28",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 13,
+      "title": "Gemeinsames Vorgehen von Assistenten u. Studenten im Kampf gegen Hochschul- u. Hochschullehrergesetz",
+      "date": "",
+      "start_page": 24,
+      "end_page": 24,
+      "confirmed": true,
+      "title_evidence": "Gemeinsames Vorgehen von Assistenten u. Studenten\nim Kampf gegen Hochschul- u. Hochschullehrergesetz",
+      "title_blocks": [
+        "24-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ADH - Gruppe Universität",
+          "blocks": [
+            "24-12"
+          ],
+          "surface": "ADH - Gruppe Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-18",
+      "received_evidence": "18. JUNI 1973",
+      "received_blocks": [
+        "24-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 14,
+      "title": "Demokratische Studienreform — Alternative zum BHG",
+      "date": "",
+      "start_page": 25,
+      "end_page": 26,
+      "confirmed": true,
+      "title_evidence": "DEMOKRATISCHE STUDIENREFORM — ALTERNATIVE ZUM BHG",
+      "title_blocks": [
+        "25-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AKTION DEMOKRATISCHE\nHOCHSCHULE",
+          "blocks": [
+            "25-1"
+          ],
+          "surface": "Aktion Demokratische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_demokratische_hochschule"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. : Christl Burger",
+          "blocks": [
+            "26-10"
+          ],
+          "surface": "Christl Burger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "AKTION DEMOKRATISCHE HOCHSCHULE"
+      ],
+      "received_date": "1972-05-14",
+      "received_evidence": "14. MAI 1972",
+      "received_blocks": [
+        "25-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 15,
+      "title": "Demokratische Studienreform — Alternative zum BHG",
+      "date": "",
+      "start_page": 27,
+      "end_page": 28,
+      "confirmed": true,
+      "title_evidence": "DEMOKRATISCHE STUDIENREFORM — ALTERNATIVE ZUM BHG",
+      "title_blocks": [
+        "27-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AKTION DEMOKRATISCHE\nHOCHSCHULE",
+          "blocks": [
+            "27-1"
+          ],
+          "surface": "Aktion Demokratische Hochschule",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_demokratische_hochschule"
+          ]
+        },
+        {
+          "evidence": "Presserechtl. : Christl Burger",
+          "blocks": [
+            "28-10"
+          ],
+          "surface": "Christl Burger",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_issuer": [
+        "AKTION DEMOKRATISCHE HOCHSCHULE"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 16,
+      "title": "Es muss etwas geschehen gegen das BHG!!!",
+      "date": "",
+      "start_page": 29,
+      "end_page": 29,
+      "confirmed": true,
+      "title_evidence": "ES MUSS ETWAS GESCHEHEN\nGEGEN DAS BHG!!!",
+      "title_blocks": [
+        "29-3",
+        "29-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantw. Aktionsgruppe \"Universität\"",
+          "blocks": [
+            "29-19"
+          ],
+          "surface": "Aktionsgruppe Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Di., 16.1.73",
+      "date_blocks": [
+        "29-16"
+      ],
+      "date_text": "16.1.1973",
+      "date_iso": "1973-01-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 17,
+      "title": "Es muss etwas geschehen gegen das BHG!!!",
+      "date": "",
+      "start_page": 30,
+      "end_page": 30,
+      "confirmed": true,
+      "title_evidence": "ES MUSS ETWAS GESCHEHEN\nGEGEN DAS BHG!!!",
+      "title_blocks": [
+        "30-3",
+        "30-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "verantw. Aktionsgruppe \"Universität\"",
+          "blocks": [
+            "30-18"
+          ],
+          "surface": "Aktionsgruppe Universität",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Di., 16.1.73",
+      "date_blocks": [
+        "30-15"
+      ],
+      "date_text": "16.1.1973",
+      "date_iso": "1973-01-16",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 18,
+      "title": "",
+      "date": "",
+      "start_page": 31,
+      "end_page": 31,
+      "confirmed": true,
+      "no_content": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.0
+    },
+    {
+      "id": 19,
+      "title": "Mitbürger!",
+      "date": "",
+      "start_page": 32,
+      "end_page": 33,
+      "confirmed": true,
+      "title_evidence": "Mitbürger !",
+      "title_blocks": [
+        "32-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl. verantw.: J. Wolf, 84 Regensburg, Kumpfmühlerstr. 40 b",
+          "blocks": [
+            "33-3"
+          ],
+          "surface": "J. Wolf",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw."
+        },
+        {
+          "evidence": "AKTION ROTER PUNKT\nGEGEN FAHRPREISERHÖHUNG",
+          "blocks": [
+            "32-3"
+          ],
+          "surface": "Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "am Di., 6.2.",
+      "date_blocks": [
+        "32-5"
+      ],
+      "date_text": "6.2.1973",
+      "date_iso": "1973-02-06",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "received_date": "1979-02-09",
+      "received_evidence": "eingelaufen am: 9. FEB. 1979",
+      "received_blocks": [
+        "32-2"
+      ],
+      "received_year_uncertain": true,
+      "_grounding": [
+        "date: Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Mitbürger!",
+      "date": "",
+      "start_page": 34,
+      "end_page": 39,
+      "confirmed": true,
+      "title_evidence": "Mitbürger !",
+      "title_blocks": [
+        "34-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtl.verantwortlich: J.Wolf, 84 Regensburg\nKumpfmühler Str. 40b",
+          "blocks": [
+            "39-15"
+          ],
+          "surface": "J. Wolf",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl.verantwortlich"
+        },
+        {
+          "evidence": "Aktion Roter Punkt Stoppt die Fahrpreiserhöhung",
+          "blocks": [
+            "34-1"
+          ],
+          "surface": "Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "issuer 'J. Wolf': Name 'J. Wolf' nicht im Beleg"
+      ]
+    },
+    {
+      "id": 21,
+      "title": "Verhindern wir den Stadtratsbeschluss!",
+      "date": "",
+      "start_page": 40,
+      "end_page": 41,
+      "confirmed": true,
+      "title_evidence": "VERHINDERN WIR DEN\nSTADTRATSBESCHLUSS !",
+      "title_blocks": [
+        "40-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl. verantw.: J. Wolf, 84 Regensburg, Kumpfmühlerstr. 40 b",
+          "blocks": [
+            "41-7"
+          ],
+          "surface": "J. Wolf",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw."
+        },
+        {
+          "evidence": "AKTION ROTER PUNKT :",
+          "blocks": [
+            "40-1"
+          ],
+          "surface": "Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "Am Montag, dem 19.2.",
+      "date_blocks": [
+        "41-1"
+      ],
+      "date_text": "19.2.1973",
+      "date_iso": "1973-02-19",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 22,
+      "title": "Verhindern wir den Stadtratsbeschluss!",
+      "date": "",
+      "start_page": 42,
+      "end_page": 43,
+      "confirmed": true,
+      "title_evidence": "VERHINDERN WIR DEN\nSTADTRATS BESCHLUSS !",
+      "title_blocks": [
+        "42-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "presserechtl. verantw.: J. Wolf, 84 Regensburg, Kumpfmühlerstr. 40 b",
+          "blocks": [
+            "43-7"
+          ],
+          "surface": "J. Wolf",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw."
+        },
+        {
+          "evidence": "AKTION ROTER PUNKT :",
+          "blocks": [
+            "42-1"
+          ],
+          "surface": "Aktion Roter Punkt",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktion_roter_punkt"
+          ]
+        }
+      ],
+      "date_evidence": "Am 22. Februar",
+      "date_blocks": [
+        "42-8"
+      ],
+      "date_text": "22.2.1973",
+      "date_iso": "1973-02-22",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-02-16",
+      "received_evidence": "16. FEB. 1973",
+      "received_blocks": [
+        "42-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 23,
+      "title": "Aufruf zur universitären Gründungsversammlung des Aktionskommittees gegen die Erpressung von Demokraten - Solidarität mit den Lehrassistenten im FB WiWi",
+      "date": "",
+      "start_page": 44,
+      "end_page": 45,
+      "confirmed": true,
+      "title_evidence": "Aufruf\nzur universitären Gründungsversammlung\ndes Aktionskommittees\n• gegen die Erpressung von Demokraten -\nSolidarität mit den Lehrassistenten\nim FB WiWi",
+      "title_blocks": [
+        "45-1",
+        "45-2",
+        "45-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee gegen die Erpressung von Demokraten",
+          "blocks": [
+            "44-1"
+          ],
+          "surface": "Aktionskomitee gegen die Erpressung von Demokraten",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_erpressung_von_demokraten"
+          ]
+        },
+        {
+          "evidence": "presserechtlich:\nS. Eggerdinger",
+          "blocks": [
+            "45-10"
+          ],
+          "surface": "S. Eggerdinger",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtlich"
+        }
+      ],
+      "date_evidence": "12.3.73",
+      "date_blocks": [
+        "45-6"
+      ],
+      "date_text": "12.3.1973",
+      "date_iso": "1973-03-12",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_retried_issuer": [
+        "Aktionskomitee gegen die Erpressung von Demokraten"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 24,
+      "title": "Initiative zur Gründung eines Aktionskomitees gegen die Erpressung von Demokraten - Solidarität mit den Lehrassistenten",
+      "date": "",
+      "start_page": 46,
+      "end_page": 47,
+      "confirmed": true,
+      "title_evidence": "Initiative zur Gründung eines AKTIONSKOMITEES gegen die Erpressung von Demokraten - Solidarität mit den Lehrassistenten",
+      "title_blocks": [
+        "46-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "F A C H S C H A F T S R A T W I R T S C H A F T S -\nW I S S E N S C H A F T",
+          "blocks": [
+            "46-2"
+          ],
+          "surface": "Fachschaftsrat Wirtschaftswissenschaft",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "12.3.73",
+      "date_blocks": [
+        "46-4"
+      ],
+      "date_text": "12.3.1973",
+      "date_iso": "1973-03-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 25,
+      "title": "1. September: Antikriegstag",
+      "date": "",
+      "start_page": 48,
+      "end_page": 51,
+      "confirmed": true,
+      "title_evidence": "1. September\nANTIKRIEGSTAG",
+      "title_blocks": [
+        "48-1",
+        "48-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Arbeiterbund für den Wiederaufbau der KPD",
+          "blocks": [
+            "49-16"
+          ],
+          "surface": "Arbeiterbund für den Wiederaufbau der KPD",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Presserechtl. verantw. Klaus Grenzheuser, 84 Regensburg, Goldene-Bären-Str. 5",
+          "blocks": [
+            "49-20"
+          ],
+          "surface": "Klaus Grenzheuser",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "Freitag 31.8.73",
+      "date_blocks": [
+        "49-19"
+      ],
+      "date_text": "31.8.1973",
+      "date_iso": "1973-08-31",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 26,
+      "title": "Flugblätter zum Berufsverbot 1973",
+      "date": "",
+      "start_page": 52,
+      "end_page": 52,
+      "confirmed": true,
+      "title_evidence": "Flugblätter zum\nBerufsverbot\n1973",
+      "title_blocks": [
+        "52-1",
+        "52-2",
+        "52-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.5,
+      "_grounding": []
+    },
+    {
+      "id": 27,
+      "title": "Richtigstellung zu Beschuldigungen seitens KHB, DF",
+      "date": "",
+      "start_page": 53,
+      "end_page": 54,
+      "confirmed": true,
+      "title_evidence": "Richtigstellung zu\nBeschuldigungen seitens KHB, DF",
+      "title_blocks": [
+        "53-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee gegen die Berufsverbote",
+          "blocks": [
+            "53-1",
+            "53-2"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        },
+        {
+          "evidence": "Verantw. Fred Karl 8401 Oberisling Kirchweg 13",
+          "blocks": [
+            "54-9"
+          ],
+          "surface": "Fred Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-12-10",
+      "received_evidence": "A rectangular library stamp with a double-line border. The text 'n die' is printed at the top. Below it, the word 'neuen' is visible. At the bottom, the date 'am: 10. DEZ. 1973' is printed. Faint, mirrored text is visible through the paper from the reverse side of the stamp.",
+      "received_blocks": [
+        "53-3"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 28,
+      "title": "Dokumentation zum Berufsverbot für Fred Karl",
+      "date": "",
+      "start_page": 55,
+      "end_page": 55,
+      "confirmed": true,
+      "title_evidence": "Dokumentation\nzum Berufsverbot\nfür Fred Karl",
+      "title_blocks": [
+        "55-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: \"Aktionskomitee gegen die Berufsverbote\"\nRegensburg (GEW, AStA Uni, Vereinigung\nder Wissenschaftlichen Mitarbeiter an der\nUni Regensburg)",
+          "blocks": [
+            "55-3"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        }
+      ],
+      "date_evidence": "vom 25. - 29. Oktober 1973",
+      "date_blocks": [
+        "55-6"
+      ],
+      "date_text": "25.-29. Oktober 1973",
+      "date_iso": "1973-10",
+      "date_type": "event",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 29,
+      "title": "Schluß mit der Hexenjagd",
+      "date": "",
+      "start_page": 56,
+      "end_page": 71,
+      "confirmed": true,
+      "title_evidence": "Schluß mit\nder Hexenjagd",
+      "title_blocks": [
+        "56-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "55-6",
+        "55-3"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 30,
+      "title": "Erstes offenes Berufsverbot an der Uni Regensburg",
+      "date": "",
+      "start_page": 72,
+      "end_page": 73,
+      "confirmed": true,
+      "title_evidence": "Erstes offenes\nBerufsverbot\nan der Uni\nRegensburg",
+      "title_blocks": [
+        "72-2"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-Info",
+          "blocks": [
+            "72-1",
+            "72-21",
+            "72-22"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        },
+        {
+          "evidence": "Veranstalter:\nASTA u. FSR-Expol",
+          "blocks": [
+            "72-21",
+            "72-22"
+          ],
+          "surface": "FSR-Expol",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 31,
+      "title": "Fachschaftsinformationen Psychologie",
+      "date": "",
+      "start_page": 74,
+      "end_page": 78,
+      "confirmed": true,
+      "title_evidence": "Fachschafts-\nINFORMATIONENPsychologie",
+      "title_blocks": [
+        "75-1"
+      ],
+      "title_type": "original",
+      "series": "Fachschaftsinformationen",
+      "issue": "Nr. 1",
+      "issuers": [
+        {
+          "evidence": "REDAKTIONSAUSSCHUSS des FSR PSYCH.",
+          "blocks": [
+            "75-11"
+          ],
+          "surface": "Fachschaftsrat Psychologie",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "7.11.73",
+      "date_blocks": [
+        "75-4"
+      ],
+      "date_text": "7.11.1973",
+      "date_iso": "1973-11-07",
+      "date_type": "issued",
+      "doc_type": "zeitschrift",
+      "confidence": 0.85,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 35%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 32,
+      "title": "Protokolle des FS-Zentralrats",
+      "date": "",
+      "start_page": 79,
+      "end_page": 81,
+      "confirmed": true,
+      "title_evidence": "Protokolle des FS-ZENTRALRATS",
+      "title_blocks": [
+        "79-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaftszentralrat",
+          "blocks": [
+            "79-18"
+          ],
+          "surface": "Fachschaftszentralrat",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "protokoll",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 33,
+      "title": "Das Regensburger Aktionskomitee gegen die Berufsverbote",
+      "date": "",
+      "start_page": 82,
+      "end_page": 83,
+      "confirmed": true,
+      "title_evidence": "Das Regensburger\nAKTIONSKOMITEE\nGEGEN\nDIE\nBERUFSVERBOTE",
+      "title_blocks": [
+        "82-2",
+        "82-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee gegen die Berufsverbote",
+          "blocks": [
+            "82-3"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        },
+        {
+          "evidence": "Verantw. : Alfred Gruber, Universitätsstr. 31",
+          "blocks": [
+            "83-13"
+          ],
+          "surface": "Alfred Gruber",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "12.11.73",
+      "date_blocks": [
+        "82-1"
+      ],
+      "date_text": "12.11.1973",
+      "date_iso": "1973-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 34,
+      "title": "Das Regensburger Aktionskomitee gegen die Berufsverbote",
+      "date": "",
+      "start_page": 84,
+      "end_page": 85,
+      "confirmed": true,
+      "title_evidence": "Das Regensburger\nAKTIONSKOMITEE\nGEGEN\nDIE\nBERUFSVERBOTE",
+      "title_blocks": [
+        "84-2",
+        "84-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee gegen die Berufsverbote",
+          "blocks": [
+            "84-3"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        },
+        {
+          "evidence": "Verantw. : Alfred Guber, Universitätsstr. 31",
+          "blocks": [
+            "85-11"
+          ],
+          "surface": "Alfred Guber",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "12.11.73",
+      "date_blocks": [
+        "84-1"
+      ],
+      "date_text": "12.11.1973",
+      "date_iso": "1973-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 35,
+      "title": "Das Regensburger Aktionskomitee gegen die Berufsverbote",
+      "date": "",
+      "start_page": 86,
+      "end_page": 87,
+      "confirmed": true,
+      "title_evidence": "Das Regensburger\nAKTIONSKOMITEE\nGEGEN\nDIE\nBERUFSVERBOTE",
+      "title_blocks": [
+        "86-2",
+        "86-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Aktionskomitee gegen die Berufsverbote",
+          "blocks": [
+            "86-3"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        },
+        {
+          "evidence": "Verantw.: Alfred Gruher, Universitätsstr. 31",
+          "blocks": [
+            "87-20"
+          ],
+          "surface": "Alfred Gruher",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantw."
+        }
+      ],
+      "date_evidence": "12.11.73",
+      "date_blocks": [
+        "86-1"
+      ],
+      "date_text": "12.11.1973",
+      "date_iso": "1973-11-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 36,
+      "title": "Dokumentation zum Berufsverbot für Fred Karl",
+      "date": "",
+      "start_page": 88,
+      "end_page": 88,
+      "confirmed": true,
+      "title_evidence": "Dokumentation\nzum Berufsverbot\nfür Fred Karl",
+      "title_blocks": [
+        "88-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: \"Aktionskomitee gegen die Berufsverbote\"\nRegensburg (GEW, AStA Uni, Vereinigung\nder Wissenschaftlichen Mitarbeiter an der\nUni Regensburg)",
+          "blocks": [
+            "88-3"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        }
+      ],
+      "date_evidence": "vom 25. - 29. Oktober 1973",
+      "date_blocks": [
+        "88-6"
+      ],
+      "date_text": "25.-29. Oktober 1973",
+      "date_iso": "1973-10",
+      "date_type": "event",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "received_date": "1973-10-31",
+      "received_evidence": "eingelaufen am 31. OKT. 1973",
+      "received_blocks": [
+        "88-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 37,
+      "title": "Schluß mit der Hexenjagd",
+      "date": "",
+      "start_page": 89,
+      "end_page": 103,
+      "confirmed": true,
+      "title_evidence": "Schluß mit\nder Hexenjagd",
+      "title_blocks": [
+        "89-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.85,
+      "_foreign_blocks": [
+        "88-6",
+        "88-3"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 38,
+      "title": "",
+      "date": "",
+      "start_page": 104,
+      "end_page": 104,
+      "confirmed": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_foreign_blocks": [
+        "88-6",
+        "88-3"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 39,
+      "title": "Erstes offenes Berufsverbot an der Uni Regensburg",
+      "date": "",
+      "start_page": 105,
+      "end_page": 106,
+      "confirmed": true,
+      "title_evidence": "Erstes offenes\nBerufsverbot\nan der Uni\nRegensburg",
+      "title_blocks": [
+        "105-2"
+      ],
+      "title_type": "original",
+      "series": "AStA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "ASTA-Info",
+          "blocks": [
+            "105-1",
+            "105-21",
+            "105-22"
+          ],
+          "surface": "AStA",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 40,
+      "title": "Resolution zum Einstellungsverbot von Fred Karl",
+      "date": "",
+      "start_page": 107,
+      "end_page": 107,
+      "confirmed": true,
+      "title_evidence": "Resolution zum Einstellungsverbot von Fred Karl",
+      "title_blocks": [
+        "107-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Daheim Sack\n(Lehrstühle für Soziologie)",
+          "blocks": [
+            "107-11"
+          ],
+          "surface": "Daheim",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Daheim Sack\n(Lehrstühle für Soziologie)",
+          "blocks": [
+            "107-11"
+          ],
+          "surface": "Sack",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "107-12"
+          ],
+          "surface": "Viernstein",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "107-12"
+          ],
+          "surface": "Weingarten",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "107-12"
+          ],
+          "surface": "König",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "107-12"
+          ],
+          "surface": "Ullrich",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "107-12"
+          ],
+          "surface": "Höhmann",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "107-13"
+          ],
+          "surface": "Klassen",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "107-13"
+          ],
+          "surface": "Aust",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "107-13"
+          ],
+          "surface": "Koppold",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "107-13"
+          ],
+          "surface": "Wöcherl",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "107-13"
+          ],
+          "surface": "Flatschka",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Dornig",
+          "blocks": [
+            "107-14"
+          ],
+          "surface": "Wessoly",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Dornig",
+          "blocks": [
+            "107-14"
+          ],
+          "surface": "H.Karl",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Dornig",
+          "blocks": [
+            "107-14"
+          ],
+          "surface": "Wechselberger",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Dornig",
+          "blocks": [
+            "107-14"
+          ],
+          "surface": "Dornig",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "Regensburg, den 16.Okt. 1973",
+      "date_blocks": [
+        "107-10"
+      ],
+      "date_text": "16. Oktober 1973",
+      "date_iso": "1973-10-16",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 41,
+      "title": "Dokumentation zum Berufsverbot für Fred Karl",
+      "date": "",
+      "start_page": 108,
+      "end_page": 108,
+      "confirmed": true,
+      "title_evidence": "Dokumentation\nzum Berufsverbot\nfür Fred Karl",
+      "title_blocks": [
+        "108-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Herausgeber: \"Aktionskomitee gegen die Berufsverbote\"\nRegensburg (GEW, AStA Uni, Vereinigung\nder Wissenschaftlichen Mitarbeiter an der\nUni Regensburg)",
+          "blocks": [
+            "108-2"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        }
+      ],
+      "date_evidence": "vom 25.- 29. Oktober 1973",
+      "date_blocks": [
+        "108-5"
+      ],
+      "date_text": "25.-29. Oktober 1973",
+      "date_iso": "1973-10",
+      "date_type": "event",
+      "doc_type": "broschuere",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 42,
+      "title": "Schluß mit der Hexenjagd",
+      "date": "",
+      "start_page": 109,
+      "end_page": 112,
+      "confirmed": true,
+      "title_evidence": "Schluß mit\nder Hexenjagd",
+      "title_blocks": [
+        "109-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.75,
+      "_foreign_blocks": [
+        "108-5",
+        "108-2"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 43,
+      "title": "",
+      "date": "",
+      "start_page": 113,
+      "end_page": 124,
+      "confirmed": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_foreign_blocks": [
+        "109-1",
+        "108-5",
+        "108-2"
+      ],
+      "_grounding": []
+    },
+    {
+      "id": 44,
+      "title": "Erstes offenes Berufsverbot an der Uni Regensburg",
+      "date": "",
+      "start_page": 125,
+      "end_page": 125,
+      "confirmed": true,
+      "title_evidence": "Erstes offenes\nBerufsverbot\nan der Uni\nRegensburg",
+      "title_blocks": [
+        "125-2"
+      ],
+      "title_type": "original",
+      "series": "ASTA-Info",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "V.i.S.d.P.:\nASTA d. Uni Regensburg",
+          "blocks": [
+            "125-2",
+            "125-22",
+            "125-23"
+          ],
+          "surface": "AStA der Universität Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "asta"
+          ],
+          "_merged": [
+            "AStA"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "title: Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 45,
+      "title": "Erstes offenes Berufsverbot an der Uni. Mitteilung des Allgemeinen Studentenausschusses / Diplomsoziologe Fred Karl betroffen",
+      "date": "",
+      "start_page": 126,
+      "end_page": 126,
+      "confirmed": true,
+      "title_evidence": "„Erstes offenes Berufsverbot an der Uni\"\nMitteilung des Allgemeinen Studentenausschusses / Diplomsoziologe Fred Karl betroffen",
+      "title_blocks": [
+        "126-4",
+        "126-5"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "Samstag, 29. Sept. / Sonntag, 30. Sept. 1973",
+      "date_blocks": [
+        "126-2"
+      ],
+      "date_text": "29./30. September 1973",
+      "date_iso": "1973-09",
+      "date_type": "issued",
+      "doc_type": "unklar",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 46,
+      "title": "Resolution zum Einstellungsverbot von Fred Karl",
+      "date": "",
+      "start_page": 127,
+      "end_page": 133,
+      "confirmed": true,
+      "title_evidence": "Resolution zum Einstellungsverbot von Fred Karl",
+      "title_blocks": [
+        "127-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Daheim\nSack\n(Lehrstühle für Soziologie)",
+          "blocks": [
+            "127-11"
+          ],
+          "surface": "Daheim",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Daheim\nSack\n(Lehrstühle für Soziologie)",
+          "blocks": [
+            "127-11"
+          ],
+          "surface": "Sack",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Viernstein",
+          "role": "signatory",
+          "function": "wiss.Mitarbeiter im Fach Soziologie",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Weingarten",
+          "role": "signatory",
+          "function": "wiss.Mitarbeiter im Fach Soziologie",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "König",
+          "role": "signatory",
+          "function": "wiss.Mitarbeiter im Fach Soziologie",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Ullrich",
+          "role": "signatory",
+          "function": "wiss.Mitarbeiter im Fach Soziologie",
+          "marker": ""
+        },
+        {
+          "evidence": "Viernstein Weingarten König Ullrich Höhmann\n(wiss.Mitarbeiter im Fach Soziologie)",
+          "blocks": [
+            "127-12"
+          ],
+          "surface": "Höhmann",
+          "role": "signatory",
+          "function": "wiss.Mitarbeiter im Fach Soziologie",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "127-13"
+          ],
+          "surface": "Klassen",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "127-13"
+          ],
+          "surface": "Aust",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "127-13"
+          ],
+          "surface": "Koppold",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "127-13"
+          ],
+          "surface": "Wöcherl",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Klassen Aust Koppold Wöcherl Flatschka",
+          "blocks": [
+            "127-13"
+          ],
+          "surface": "Flatschka",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Doßnig\n(Mitglieder des Fachschaftsrats SozPol)",
+          "blocks": [
+            "127-14"
+          ],
+          "surface": "Wessoly",
+          "role": "signatory",
+          "function": "Mitglieder des Fachschaftsrats SozPol",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Doßnig\n(Mitglieder des Fachschaftsrats SozPol)",
+          "blocks": [
+            "127-14"
+          ],
+          "surface": "H.Karl",
+          "role": "signatory",
+          "function": "Mitglieder des Fachschaftsrats SozPol",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Doßnig\n(Mitglieder des Fachschaftsrats SozPol)",
+          "blocks": [
+            "127-14"
+          ],
+          "surface": "Wechselberger",
+          "role": "signatory",
+          "function": "Mitglieder des Fachschaftsrats SozPol",
+          "marker": ""
+        },
+        {
+          "evidence": "Wessoly H.Karl Wechselberger Doßnig\n(Mitglieder des Fachschaftsrats SozPol)",
+          "blocks": [
+            "127-14"
+          ],
+          "surface": "Doßnig",
+          "role": "signatory",
+          "function": "Mitglieder des Fachschaftsrats SozPol",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "Regensburg, den 16.Okt. 1973",
+      "date_blocks": [
+        "127-10"
+      ],
+      "date_text": "16. Oktober 1973",
+      "date_iso": "1973-10-16",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 47,
+      "title": "Weg mit dem Berufsverbot!!",
+      "date": "",
+      "start_page": 134,
+      "end_page": 137,
+      "confirmed": true,
+      "title_evidence": "WEG mit dem BERUFSVERBOT !!",
+      "title_blocks": [
+        "134-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "AKTIONSKOMITEE GEGEN DIE BERUFSVERBOTE (Presserechtlich: H.\nClapproth, R., Annahofstr. 14)",
+          "blocks": [
+            "135-8"
+          ],
+          "surface": "Aktionskomitee gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "aktionskomitee_gegen_die_berufsverbote"
+          ]
+        },
+        {
+          "evidence": "AKTIONSKOMITEE GEGEN DIE BERUFSVERBOTE (Presserechtlich: H.\nClapproth, R., Annahofstr. 14)",
+          "blocks": [
+            "135-8"
+          ],
+          "surface": "H. Clapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "18. Sep. 1973",
+      "date_blocks": [
+        "134-2"
+      ],
+      "date_text": "18. September 1973",
+      "date_iso": "1973-09-18",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 48,
+      "title": "Freiheit im Beruf - Demokratie im Betrieb!",
+      "date": "",
+      "start_page": 138,
+      "end_page": 142,
+      "confirmed": true,
+      "title_evidence": "FREIHEIT IM BERUF - 2\nDEMOKRATIE IM BETRIEB!",
+      "title_blocks": [
+        "138-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Initiative gegen die Berufsverbote (Gewerkschaft Erziehung und Wissenschaft/KV Regensburg, Allgemeiner Studentenausschuß und Vereinigung der wissenschaftlichen Mitarbeiter der Universität Regensburg)",
+          "blocks": [
+            "138-3"
+          ],
+          "surface": "Initiative gegen die Berufsverbote",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 49,
+      "title": "Aufruf zur Demonstration gegen das BHG, am 28. Juni in München",
+      "date": "",
+      "start_page": 143,
+      "end_page": 146,
+      "confirmed": true,
+      "title_evidence": "AUFRUF ZUR DEMONSTRATION GEGEN DAS BHG, am 28.Juni in München.",
+      "title_blocks": [
+        "143-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "am 28.Juni in München",
+      "date_blocks": [
+        "143-2"
+      ],
+      "date_text": "28. Juni",
+      "date_iso": "1973-06-28",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-06-26",
+      "received_evidence": "A rectangular library stamp with a double-line border. Inside, the text 'UB Reg. 1' is at the top, followed by 'Eingeliquen' in a slightly smaller font. Below that, the date '26. JUNI 1973' is printed in a bold, sans-serif font, with a horizontal line underneath it.",
+      "received_blocks": [
+        "143-1"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 50,
+      "title": "Bayerische Assistentenkonferenz zur Aktionswoche gegen das Bayer. Hochschulgesetz und Hochschullehrergesetz",
+      "date": "",
+      "start_page": 147,
+      "end_page": 148,
+      "confirmed": true,
+      "title_evidence": "Bayerische\nAssisstentenkonferenz\nzur Aktionswoche\ngegen das\nBayer. Hochschulgesetz\nund\nHochschullehrergesetz",
+      "title_blocks": [
+        "147-1",
+        "147-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Geschäftsführender Vorstand der\nBAYERISCHEN ASSISTENTENKONFERENZ",
+          "blocks": [
+            "148-11"
+          ],
+          "surface": "Bayerische Assistentenkonferenz",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "bayerische_assistentenkonferenz"
+          ]
+        },
+        {
+          "evidence": "gez. Feuerstack\n(Dr. Rainer Feuerstack)",
+          "blocks": [
+            "148-7",
+            "148-8"
+          ],
+          "surface": "Dr. Rainer Feuerstack",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        },
+        {
+          "evidence": "gez. Vollmuth\n(Joachim Vollmuth)",
+          "blocks": [
+            "148-9",
+            "148-10"
+          ],
+          "surface": "Joachim Vollmuth",
+          "role": "signatory",
+          "function": "",
+          "marker": "gez."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": [
+        "title: Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 51,
+      "title": "Aktionswoche gegen das Bayerische Hochschulgesetz",
+      "date": "",
+      "start_page": 149,
+      "end_page": 149,
+      "confirmed": true,
+      "title_evidence": "AKTIONSWOCH\ngegen das\nBayerische Hochschulgesetz",
+      "title_blocks": [
+        "149-2",
+        "149-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "vom 22. Jan. - 25. Jan. 1973",
+      "date_blocks": [
+        "149-4"
+      ],
+      "date_text": "22.-25. Januar 1973",
+      "date_iso": "1973-01",
+      "date_type": "event",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 52,
+      "title": "Solidarität mit Chiles Volksregierung!",
+      "date": "",
+      "start_page": 150,
+      "end_page": 151,
+      "confirmed": true,
+      "title_evidence": "Solidarität mit Chiles\nVolksregierung!",
+      "title_blocks": [
+        "150-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtl. h klapproth, annahofstr. 14",
+          "blocks": [
+            "151-1"
+          ],
+          "surface": "h klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 53,
+      "title": "Solidarität mit Chiles Volksregierung!",
+      "date": "",
+      "start_page": 152,
+      "end_page": 152,
+      "confirmed": true,
+      "title_evidence": "Solidarität mit Chiles Volksregierung!",
+      "title_blocks": [
+        "152-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtl. h Klapproth, annahofstr. 14",
+          "blocks": [
+            "152-12"
+          ],
+          "surface": "h Klapproth",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-09-14",
+      "received_evidence": "14. SEP. 1973",
+      "received_blocks": [
+        "152-13"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 54,
+      "title": "Die chilenische Tragödie",
+      "date": "",
+      "start_page": 153,
+      "end_page": 156,
+      "confirmed": true,
+      "title_evidence": "DIE CHILENISCHE\nTRAGÖDIE",
+      "title_blocks": [
+        "153-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Der Verfasser des folgenden Artikels, Rechtsreferendar Hubert F e x e r",
+          "blocks": [
+            "153-2"
+          ],
+          "surface": "Hubert Fexer",
+          "role": "signatory",
+          "function": "Rechtsreferendar",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 55,
+      "title": "Revolucion sin derecho es dictadura",
+      "date": "",
+      "start_page": 157,
+      "end_page": 157,
+      "confirmed": true,
+      "title_evidence": "\" REVOLUCION SIN DERECHO ES DICTADURA \"",
+      "title_blocks": [
+        "157-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "H.F.",
+          "blocks": [
+            "157-3"
+          ],
+          "surface": "H.F.",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "broschuere",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 56,
+      "title": "Aktuelles - Fortsetzung: Tips für Erstsemester",
+      "date": "",
+      "start_page": 158,
+      "end_page": 158,
+      "confirmed": true,
+      "title_evidence": "A K T U E L L E S - Fortsetzung\nTIPS\nfür E r s t s e m e s t e r",
+      "title_blocks": [
+        "158-1",
+        "158-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Einen guten Studienanfang, Euer RCDS",
+          "blocks": [
+            "158-8"
+          ],
+          "surface": "RCDS",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "rcds"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 57,
+      "title": "Solidarität mit dem Volk von Chile jetzt. Der faschistische Putsch darf nicht durchkommen!",
+      "date": "",
+      "start_page": 159,
+      "end_page": 160,
+      "confirmed": true,
+      "title_evidence": "Solidarität\nmit dem Volk von\nChile\njetzt\nDer faschistische Putsch darf nicht durchkommen !",
+      "title_blocks": [
+        "159-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "- Erklärung des Bundesvorstandes des MSB SPARTAKUS -",
+          "blocks": [
+            "159-4"
+          ],
+          "surface": "MSB Spartakus",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantwortl. Sepp Aigner, 84 Grünthal. Keilbergstr. 6",
+          "blocks": [
+            "160-15"
+          ],
+          "surface": "Sepp Aigner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 58,
+      "title": "Solidarität mit dem Volk von Chile jetzt. Der faschistische Putsch darf nicht durchkommen!",
+      "date": "",
+      "start_page": 161,
+      "end_page": 162,
+      "confirmed": true,
+      "title_evidence": "Solidarität\nmit dem Volk von\nChile\njetztDer faschistische Putsch darf nicht durchkommen !",
+      "title_blocks": [
+        "161-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "- Erklärung des Bundesvorstandes des MSB SPARTAKUS -",
+          "blocks": [
+            "161-2"
+          ],
+          "surface": "MSB Spartakus",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "msb"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantwortl. Sepp Aigner, 84 Grünthal, Keilbergstr. 6",
+          "blocks": [
+            "162-15"
+          ],
+          "surface": "Sepp Aigner",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantwortl."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 59,
+      "title": "Der Schah tötet acht Patrioten ermorden",
+      "date": "",
+      "start_page": 163,
+      "end_page": 163,
+      "confirmed": true,
+      "title_evidence": "Der Schah tötet acht Patrioten ermorden",
+      "title_blocks": [
+        "163-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "CONFEDERATION OF IRANIAN STUDENTS (NATIONAL UNION)",
+          "blocks": [
+            "163-7"
+          ],
+          "surface": "CISNU",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "cisnu"
+          ]
+        }
+      ],
+      "date_evidence": "7. 6. 1973",
+      "date_blocks": [
+        "163-4"
+      ],
+      "date_text": "7. Juni 1973",
+      "date_iso": "1973-06-07",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 26%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 60,
+      "title": "Der Schah läßt acht Patrioten ermorden!",
+      "date": "",
+      "start_page": 164,
+      "end_page": 165,
+      "confirmed": true,
+      "title_evidence": "Der Schah läßt acht Patrioten ermorden!",
+      "title_blocks": [
+        "164-10"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "CISNU-Vorstand",
+          "blocks": [
+            "164-9",
+            "165-4"
+          ],
+          "surface": "CISNU-Vorstand",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "cisnu"
+          ],
+          "_merged": [
+            "CISNU"
+          ]
+        }
+      ],
+      "date_evidence": "1. 6. 1973",
+      "date_blocks": [
+        "164-6"
+      ],
+      "date_text": "1. Juni 1973",
+      "date_iso": "1973-06-01",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-05",
+      "received_evidence": "5. JUNI 1973",
+      "received_blocks": [
+        "164-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 19%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 61,
+      "title": "Militätkommandos erstürmten die iranischen Universitäten und ermordenten mindestens 17 Studenten",
+      "date": "",
+      "start_page": 166,
+      "end_page": 167,
+      "confirmed": true,
+      "title_evidence": "MILITÄTKOMMANDOS ERSTÜRMTEN DIE IRANISCHEN UNIVERSITÄTEN UND\nERMORDENTEN MINDESTENS 17 STUDENTEN.",
+      "title_blocks": [
+        "166-10"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Vorstand der CISNU",
+          "blocks": [
+            "166-9",
+            "167-5"
+          ],
+          "surface": "Vorstand der CISNU",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "cisnu"
+          ],
+          "_merged": [
+            "CISNU"
+          ]
+        },
+        {
+          "evidence": "Verantwortl. ASIA - Ausland",
+          "blocks": [
+            "167-6"
+          ],
+          "surface": "ASIA - Ausland",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortl."
+        }
+      ],
+      "date_evidence": "Berlin-West,den 12.4.1973",
+      "date_blocks": [
+        "166-6"
+      ],
+      "date_text": "12. April 1973",
+      "date_iso": "1973-04-12",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-04-19",
+      "received_evidence": "A purple ink stamp from the FBI Research Division, dated April 19, 1973. The stamp is tilted and contains the text 'FBI RESEARCH DIVISION' and 'am: 19. APR. 1973'.",
+      "received_blocks": [
+        "166-8"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 62,
+      "title": "Das DAB hat das Flugblatt des MSB-Spartakus Erklärung zur Lage des Demokratischen Aktionsbündnisses zur Kenntnis genommen ...",
+      "date": "",
+      "start_page": 168,
+      "end_page": 168,
+      "confirmed": true,
+      "title_evidence": "Das DAB hat das Flugblatt des MSB- Spartakus \"Erklärung zur Lage des\nDemokratischen Aktionsbündnisses\" zur Kenntnis genommen.",
+      "title_blocks": [
+        "168-2"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DAB-DAB-DAB-DAB-DAB-DAB-DAB-DAB-DAB-DAB- DAB-DAB-DAB-DAB-DAB-DAB",
+          "blocks": [
+            "168-1"
+          ],
+          "surface": "DAB",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dab"
+          ]
+        },
+        {
+          "evidence": "Presser. Lux",
+          "blocks": [
+            "168-8"
+          ],
+          "surface": "Lux",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presser."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 63,
+      "title": "Offener Brief: Offener brief zum wahlaufruf des kreisvorstandes der Regensburger jungsozialisten",
+      "date": "",
+      "start_page": 169,
+      "end_page": 175,
+      "confirmed": true,
+      "title_evidence": "OFFENER BRIEF\nOffener brief zum wahlauf-ruf des kreisvorstandes der\nRegensburger jungsozialisten",
+      "title_blocks": [
+        "169-1",
+        "169-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Vli Hammer\nWerner Schönbach\nGustl Tham",
+          "blocks": [
+            "170-4"
+          ],
+          "surface": "Vli Hammer",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Vli Hammer\nWerner Schönbach\nGustl Tham",
+          "blocks": [
+            "170-4"
+          ],
+          "surface": "Werner Schönbach",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        },
+        {
+          "evidence": "Vli Hammer\nWerner Schönbach\nGustl Tham",
+          "blocks": [
+            "170-4"
+          ],
+          "surface": "Gustl Tham",
+          "role": "signatory",
+          "function": "",
+          "marker": ""
+        }
+      ],
+      "date_evidence": "Regensburg, 22.11.73",
+      "date_blocks": [
+        "170-3"
+      ],
+      "date_text": "22. November 1973",
+      "date_iso": "1973-11-22",
+      "date_type": "issued",
+      "doc_type": "offener_brief",
+      "confidence": 0.85,
+      "received_date": "1973-11-26",
+      "received_evidence": "26. NOV. 1973",
+      "received_blocks": [
+        "169-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "title_evidence nicht im Text",
+        "date_type=issued, aber der Beleg steht mitten im Text (Position 27%) - vermutlich kein Erscheinungsdatum"
+      ]
+    },
+    {
+      "id": 64,
+      "title": "Kriegsursachen erkennen",
+      "date": "",
+      "start_page": 176,
+      "end_page": 178,
+      "confirmed": true,
+      "title_evidence": "KRIEGS\nURSACHEN\nERKENNEN",
+      "title_blocks": [
+        "176-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Deutsche Friedensgesellschaft/Internationale der Kriegsdienstgegner\n(DFG-IDK) Gruppe Regensburg, Ecke Schwanenplatz/Pfluggasse",
+          "blocks": [
+            "178-9"
+          ],
+          "surface": "DFG-IDK",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dfg"
+          ]
+        },
+        {
+          "evidence": "presser.verantw.:Walter Simböck 8401Oberhinkofen,Birkenstr.5 /IDK-Druck",
+          "blocks": [
+            "178-11"
+          ],
+          "surface": "Walter Simböck",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser.verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 65,
+      "title": "Filmhinweis (Fernsehen)",
+      "date": "",
+      "start_page": 179,
+      "end_page": 180,
+      "confirmed": true,
+      "title_evidence": "F I L M H I N W E I S ( F E R N S E H E N )",
+      "title_blocks": [
+        "179-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Deutsche Friedensgesellschaft/Internationale der Kriegsdienstgegner\n(DFG-IDK) Gruppe Regensburg, Ecke Schwanenplatz/Pfluggasse",
+          "blocks": [
+            "179-9"
+          ],
+          "surface": "Deutsche Friedensgesellschaft/Internationale der Kriegsdienstgegner (DFG-IDK) Gruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dfg"
+          ]
+        },
+        {
+          "evidence": "presser.verantw.:Walter Simböck 8401Oberhinkofen,Birkenstr.5",
+          "blocks": [
+            "179-11"
+          ],
+          "surface": "Walter Simböck",
+          "role": "signatory",
+          "function": "",
+          "marker": "presser.verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-05-14",
+      "received_evidence": "14. MAI 1973",
+      "received_blocks": [
+        "179-5"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "issuer 'Deutsche Friedensgesellschaft/Internationale der Kriegsdienstgegner (DFG-IDK) Gruppe Regensburg': Beleg steht nicht in den genannten Blöcken",
+        "issuer 'Walter Simböck': Beleg steht nicht in den genannten Blöcken"
+      ]
+    },
+    {
+      "id": 66,
+      "title": "DKP-HS Regensburg 1973",
+      "date": "",
+      "start_page": 181,
+      "end_page": 181,
+      "confirmed": true,
+      "title_evidence": "DKP-HS Regensburg\n1973",
+      "title_blocks": [
+        "181-1",
+        "181-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DKP-HS Regensburg",
+          "blocks": [
+            "181-1"
+          ],
+          "surface": "DKP-Hochschulgruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dkp_hochschulgruppe_regensburg"
+          ]
+        }
+      ],
+      "date_evidence": "1973",
+      "date_blocks": [
+        "181-2"
+      ],
+      "date_text": "1973",
+      "date_iso": "1973",
+      "date_type": "issued",
+      "doc_type": "unklar",
+      "confidence": 0.6,
+      "_grounding": []
+    },
+    {
+      "id": 67,
+      "title": "Kommunist extra: Arbeitskämpfe 73",
+      "date": "",
+      "start_page": 182,
+      "end_page": 188,
+      "confirmed": true,
+      "title_evidence": "KOMMUNIST\nDKP - HS - GRUPPE REGENSBURG\nextra\nARBEITSKÄMPFE\n73",
+      "title_blocks": [
+        "182-5",
+        "182-6",
+        "182-7",
+        "182-8",
+        "182-9"
+      ],
+      "title_type": "original",
+      "series": "Kommunist",
+      "issue": "extra",
+      "issuers": [
+        {
+          "evidence": "DKP - HS - GRUPPE REGENSBURG",
+          "blocks": [
+            "182-6"
+          ],
+          "surface": "DKP-Hochschulgruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dkp_hochschulgruppe_regensburg"
+          ]
+        },
+        {
+          "evidence": "Eigendr. i. Selbstverl.; verantw. f.d. Inh.: M. Reiss, C.M.v.Weberstr.",
+          "blocks": [
+            "182-18"
+          ],
+          "surface": "M. Reiss",
+          "role": "signatory",
+          "function": "",
+          "marker": "verantw. f.d. Inh."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "_retried_signatory": true,
+      "received_date": "1973-12-14",
+      "received_evidence": "14. DEZ. 1973",
+      "received_blocks": [
+        "182-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": [
+        "Unterzeichner fehlt (Verantwortlich-Zeile): Rgbg"
+      ]
+    },
+    {
+      "id": 68,
+      "title": "Hochschulgruppe Regensburg: Zum Festival",
+      "date": "",
+      "start_page": 189,
+      "end_page": 190,
+      "confirmed": true,
+      "title_evidence": "HOCHSCHULGRUPPE\nREGENSBURG\n: ZUM\nFESTIVAL",
+      "title_blocks": [
+        "189-1",
+        "189-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Presserechtlich: Matthias Reiss, 84 Regensburg, C.-M.-v.-Weber Str. 7d\nEigendruck im Selbstverlag",
+          "blocks": [
+            "190-9"
+          ],
+          "surface": "Matthias Reiss",
+          "role": "signatory",
+          "function": "",
+          "marker": "Presserechtlich"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 69,
+      "title": "Pol. Frühschoppen zum Thema »Freiheit im Sozialismus«",
+      "date": "",
+      "start_page": 191,
+      "end_page": 192,
+      "confirmed": true,
+      "title_evidence": "Pol.Frühschoppen\nzum Thema\n»Freiheit im\nSozialismus«",
+      "title_blocks": [
+        "191-4",
+        "191-5",
+        "191-6"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DKP-Hochschulgruppe\nRegensburg",
+          "blocks": [
+            "191-9"
+          ],
+          "surface": "DKP-Hochschulgruppe Regensburg",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "dkp_hochschulgruppe_regensburg"
+          ]
+        },
+        {
+          "evidence": "Verantwortlich für den Inhalt:\nMarian Decker, 84 Regensburg, Badstr.22",
+          "blocks": [
+            "191-10",
+            "191-11"
+          ],
+          "surface": "Marian Decker",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
+        }
+      ],
+      "date_evidence": "Sonntag, 15.7. um 10 Uhr",
+      "date_blocks": [
+        "191-7"
+      ],
+      "date_text": "Sonntag, 15.7.1973, 10 Uhr",
+      "date_iso": "1973-07-15",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "received_date": "1973-07-13",
+      "received_evidence": "13. JULI 1973",
+      "received_blocks": [
+        "191-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 70,
+      "title": "1. Mai '73: Gegen das Großkapital",
+      "date": "",
+      "start_page": 193,
+      "end_page": 193,
+      "confirmed": true,
+      "title_evidence": "1. MAI\nGegen das\n'73\nGroßkapital",
+      "title_blocks": [
+        "193-1",
+        "193-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Öffentliche Maiveranstaltung der DKP",
+          "blocks": [
+            "193-5"
+          ],
+          "surface": "DKP",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "Freitag, 27. April 73 - 19.30 Uhr",
+      "date_blocks": [
+        "193-6"
+      ],
+      "date_text": "Freitag, 27. April 1973, 19.30 Uhr",
+      "date_iso": "1973-04-27",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.9,
+      "_grounding": []
+    },
+    {
+      "id": 71,
+      "title": "DKP: Heraus zum Kampfmai '73",
+      "date": "",
+      "start_page": 194,
+      "end_page": 194,
+      "confirmed": true,
+      "title_evidence": "DKP: HERAUS ZUM KAMPFMAI '73",
+      "title_blocks": [
+        "194-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "DEUTSCHE KOMMUNISTISCHE PARTEI\n– Parteivorstand –",
+          "blocks": [
+            "194-22",
+            "194-23"
+          ],
+          "surface": "DKP",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        },
+        {
+          "evidence": "Verantwortlich für den Inhalt: A. Konhäuser, Nürnberg, Fürther Str. 92",
+          "blocks": [
+            "194-24"
+          ],
+          "surface": "A. Konhäuser",
+          "role": "signatory",
+          "function": "",
+          "marker": "Verantwortlich für den Inhalt"
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 72,
+      "title": "",
+      "date": "",
+      "start_page": 195,
+      "end_page": 196,
+      "confirmed": true,
+      "title_evidence": "",
+      "title_blocks": [],
+      "title_type": "",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "unklar",
+      "confidence": 0.3,
+      "_grounding": []
+    },
+    {
+      "id": 73,
+      "title": "Fachschaft Geschichte",
+      "date": "",
+      "start_page": 197,
+      "end_page": 197,
+      "confirmed": true,
+      "title_evidence": "Fachschaft Geschichte - Fachschaft Geschichte - Fachschaft Geschichte",
+      "title_blocks": [
+        "197-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaft Geschichte - Fachschaft Geschichte - Fachschaft Geschichte",
+          "blocks": [
+            "197-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.75,
+      "_grounding": []
+    },
+    {
+      "id": 74,
+      "title": "Fachschaft Geschichte: Arbeitskreise",
+      "date": "",
+      "start_page": 198,
+      "end_page": 199,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\narbeitskreise",
+      "title_blocks": [
+        "198-1",
+        "198-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "198-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 75,
+      "title": "Fachschaftsrat Geschichte: Arbeitskreis \"Osteuropäische Geschichte\"",
+      "date": "",
+      "start_page": 200,
+      "end_page": 202,
+      "confirmed": true,
+      "title_evidence": "Fachschaftsrat Geschichte ----- Fachschaftsrat Geschichte\nARBEITSKREIS\n\"OSTEUROPÄISCHE GESCHICHTE\"",
+      "title_blocks": [
+        "200-1",
+        "200-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaftsrat Geschichte ----- Fachschaftsrat Geschichte",
+          "blocks": [
+            "200-1"
+          ],
+          "surface": "Fachschaftsrat Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": []
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 76,
+      "title": "Fachschaft Geschichte: Info zu den Wahlen",
+      "date": "",
+      "start_page": 203,
+      "end_page": 205,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE FACHSCHAFT GESCHICHTE FACHSCHAFT GESCHICHTE\nINFO zu den WAHLEN",
+      "title_blocks": [
+        "203-1",
+        "203-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE FACHSCHAFT GESCHICHTE FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "203-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 77,
+      "title": "Fachschaft Geschichte: \"Bruder quäl'dich nicht - stirb schneller!\" Django",
+      "date": "",
+      "start_page": 206,
+      "end_page": 207,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\n\"BRUDER QUÄL'DICH NICHT-\nSTIRB SCHNELLER!\"\nDJANGO",
+      "title_blocks": [
+        "206-1",
+        "206-2",
+        "206-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "206-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 78,
+      "title": "Fachschaft Geschichte: \"Bruder quäl'dich nicht - stirb schneller!\" Django",
+      "date": "",
+      "start_page": 208,
+      "end_page": 209,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\n\"BRUDER QUÄL'DICH NICHT-\nSTIRB SCHNELLER!\"\nDJANGO",
+      "title_blocks": [
+        "208-1",
+        "208-2",
+        "208-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "208-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "received_date": "1973-06-27",
+      "received_evidence": "A rectangular library stamp from Regensburg, dated 27. JUNI 1973. The stamp is tilted and contains the text 'Regensburg', 'Angelsaufen', and '27. JUNI 1973'.",
+      "received_blocks": [
+        "208-4"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 79,
+      "title": "Fachschaft Geschichte: Geschichtsstudenten, beteiligt Euch aktiv am Streik vom 18.-28.6",
+      "date": "",
+      "start_page": 210,
+      "end_page": 211,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\nGeschichtsstudenten, beteiligt Euch aktiv am Streik vom 18.-28.6",
+      "title_blocks": [
+        "210-1",
+        "210-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "210-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 80,
+      "title": "Fachschaft Geschichte: Geschichtsstudenten, beteiligt Euch aktiv am Streik vom 18.-28.6",
+      "date": "",
+      "start_page": 212,
+      "end_page": 214,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\nGeschichtsstudenten, beteiligt Euch aktiv am Streik: Juli 1973. -28.6",
+      "title_blocks": [
+        "212-1",
+        "212-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "212-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 81,
+      "title": "Fachbereichsrat Geschichte, Gesellschaft, Politik, Geographie (GGP)",
+      "date": "",
+      "start_page": 215,
+      "end_page": 219,
+      "confirmed": true,
+      "title_evidence": "Fachbereichsrat Geschichte, Gesellschaft, Politik, Geographie\n( GGP )",
+      "title_blocks": [
+        "215-1"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.7,
+      "_grounding": []
+    },
+    {
+      "id": 82,
+      "title": "Fachschaft Geschichte: AK moderne dt. Sozial- u. Wirtschaftsgeschichte",
+      "date": "",
+      "start_page": 220,
+      "end_page": 221,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\nak: moderne dt. sozial- u. wirtschafts-\ngeschichte",
+      "title_blocks": [
+        "220-1",
+        "220-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "220-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "11. Mai 1973",
+      "date_blocks": [
+        "220-3"
+      ],
+      "date_text": "11. Mai 1973",
+      "date_iso": "1973-05-11",
+      "date_type": "issued",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 83,
+      "title": "SIG Studentische Interessenvertretung Geschichte: Ouverture",
+      "date": "",
+      "start_page": 222,
+      "end_page": 222,
+      "confirmed": true,
+      "title_evidence": "sig\nSTUDENTISCHE INTERESSENVERTRETUNG\nGESCHICHTE\nsig\nOUVERTURE",
+      "title_blocks": [
+        "222-1",
+        "222-2",
+        "222-3",
+        "222-4"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "S I G studentische Interessenvertretung Geschichte S I G",
+          "blocks": [
+            "222-11"
+          ],
+          "surface": "SIG",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "sig"
+          ]
+        },
+        {
+          "evidence": "presserechtl. verantw.: e.greipl, 84R.dechbettener str. 20",
+          "blocks": [
+            "222-18"
+          ],
+          "surface": "e.greipl",
+          "role": "signatory",
+          "function": "",
+          "marker": "presserechtl. verantw."
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.8,
+      "_grounding": []
+    },
+    {
+      "id": 84,
+      "title": "Fachschaft Geschichte: Vollversammlung für Historiker!",
+      "date": "",
+      "start_page": 223,
+      "end_page": 224,
+      "confirmed": true,
+      "title_evidence": "FACHSCHAFT GESCHICHTE\nVOLLVERSAMMLUNG für HISTORIKER !",
+      "title_blocks": [
+        "223-1",
+        "223-2"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "223-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "di\n22.5.",
+      "date_blocks": [
+        "223-6"
+      ],
+      "date_text": "Dienstag, 22.5.1973",
+      "date_iso": "1973-05-22",
+      "date_type": "event",
+      "doc_type": "einladung",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 85,
+      "title": "Die Hochschullehrer, die den das Lehramt an den Gymnasien anstrebenden Studenten ...",
+      "date": "",
+      "start_page": 225,
+      "end_page": 225,
+      "confirmed": true,
+      "title_evidence": "Die Hochschullehrer, die den das Lehramt an den Gymnasien anstrebenden Studenten Lehrveranstaltungen anbieten",
+      "title_blocks": [
+        "225-2"
+      ],
+      "title_type": "incipit",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "Fachschaft Geschichte - Fachschaft Geschichte - Fachschaft Geschichte",
+          "blocks": [
+            "225-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "_grounding": []
+    },
+    {
+      "id": 86,
+      "title": "Betrifft: Änderung der Examensordnung",
+      "date": "",
+      "start_page": 226,
+      "end_page": 228,
+      "confirmed": true,
+      "title_evidence": "Betrifft: Änderung der Examensordnung",
+      "title_blocks": [
+        "226-3"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FACHSCHAFT GESCHICHTE",
+          "blocks": [
+            "226-1"
+          ],
+          "surface": "Fachschaft Geschichte",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_geschichte"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.9,
+      "received_date": "1973-01-29",
+      "received_evidence": "eingelaufen am: 29. JAN. 1973",
+      "received_blocks": [
+        "226-2"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    },
+    {
+      "id": 87,
+      "title": "Persönliche Bekanntschaft gibt Ausslag bei Assistentenstellenbesetzung",
+      "date": "",
+      "start_page": 229,
+      "end_page": 230,
+      "confirmed": true,
+      "title_evidence": "Persönliche Bekanntschaft\ngibt Ausslag bei\nAssistentenstellenbesetzung",
+      "title_blocks": [
+        "229-8"
+      ],
+      "title_type": "original",
+      "series": "",
+      "issue": "",
+      "issuers": [
+        {
+          "evidence": "FS Pädagogik",
+          "blocks": [
+            "230-3"
+          ],
+          "surface": "Fachschaft Pädagogik",
+          "role": "issuer",
+          "function": "",
+          "marker": "",
+          "org_ids": [
+            "fachschaft_p_dagogik"
+          ]
+        }
+      ],
+      "date_evidence": "",
+      "date_blocks": [],
+      "date_text": "",
+      "date_iso": "",
+      "date_type": "undated",
+      "doc_type": "flugblatt",
+      "confidence": 0.85,
+      "received_date": "1973-05-02",
+      "received_evidence": "2. MAI 1973",
+      "received_blocks": [
+        "229-7"
+      ],
+      "received_year_uncertain": false,
+      "_grounding": []
+    }
+  ],
+  "prompt": "81af87a1",
+  "source_pdf": "0118_0015.pdf"
+}

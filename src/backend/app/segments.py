@@ -64,7 +64,9 @@ def save(volume, cuts, page_count, confirmed=True, excluded=(), suggested=(), re
         doc["reviewed"] = sorted(reviewed)
     if hints:
         doc["hints"] = sorted(hints)
-    path(volume).write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    part = path(volume).with_name(path(volume).name + ".part")  # a broken write must not leave half a file
+    part.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    part.replace(path(volume))
     return doc
 
 

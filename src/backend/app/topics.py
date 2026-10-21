@@ -226,7 +226,7 @@ def start_assign(volume):
         raise ValueError("Die Themen werden gerade zugeordnet. Bitte warten.")
     if importer.JOBS.get((0, RECOMPUTE), {}).get("state") == "running":
         raise ValueError("Die Themen werden gerade neu berechnet. Bitte warten.")
-    job = importer.JOBS[(volume.vz, ASSIGN)] = {"state": "running", "done": 0, "total": 0, "error": "",
+    job = importer.JOBS[(volume.vz, ASSIGN)] = {"state": "running", "done": 0, "total": 0, "error": "", "phase": "Texte werden eingebettet",
                                                "started": time.time(), "parts": [], "unit": "Texte eingebettet"}
 
     def go():
@@ -236,6 +236,7 @@ def start_assign(volume):
             new, known = texts({a: lf for a, lf in mine.items() if is_main(lf)}), texts(others)
             vectors = embed(key, list(known.values()) + list(new.values()), job)
             old, fresh = vectors[:len(known)], vectors[len(known):]
+            job.update(phase="Themen und Kartenpunkte werden zugeordnet", done=0, total=0)
             topics = dict(zip(new, neighbour_topics(old, [others[a].topic_id for a in known], fresh)))
             placed = [i for i, a in enumerate(known) if others[a].x is not None]
             known_xy = [(others[a].x, others[a].y) for a in known]

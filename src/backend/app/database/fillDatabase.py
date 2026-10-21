@@ -54,7 +54,7 @@ def copy_review():
                 for lf, stem in session.query(Leaflet, Volume.stem).join(Volume)}
     stems = dict(session.query(Volume.label, Volume.stem))
     groups, unresolved = copy_decisions.resolve(
-        copy_groups(stems), corrections.load(COPY_DECISIONS), set(leaflets))
+        copy_groups(stems), copy_decisions.follow(corrections.load(COPY_DECISIONS), set(leaflets)), set(leaflets))
     return groups, unresolved, leaflets
 
 

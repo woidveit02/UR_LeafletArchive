@@ -284,8 +284,10 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
 
     def run():
         try:
+            job["phase"] = "Verbindung zu Datalab"
             client = make_client(key)
             pipeline_id = find_or_create_pipeline(client, mode, captions)
+            job["phase"] = "Seiten werden erkannt"
             parts = [{"first": first, "last": last, "kept": batch_path(volume, first, last).is_file(), "since": started}
                      for first, last in batches(pages, size)]
             for part in parts:
@@ -306,6 +308,7 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
             with ThreadPoolExecutor(CONCURRENCY) as pool:
                 list(pool.map(one, parts))  # the first failure ends the run; running batches finish and are kept
             if all(p["state"] == "fertig" for p in parts):
+                job["phase"] = "Ergebnis wird zusammengesetzt"
                 merge(volume, pages, variant(mode, captions), round(time.time() - started), size)
                 job["state"] = "done"
             else:

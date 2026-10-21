@@ -2,7 +2,6 @@
 {% from '_ui.html' import step_link, review_bar %}
 {% block title %}Herausgeber zuordnen{% endblock %}
 {% block app_class %} app-wide{% endblock %}
-{% from '_metadata_fields.html' import lists %}
 {% block content %}
         {% set n = group.issuers | length %}
         {% set url = '/import/' ~ volume.vz ~ '/herausgeber' %}
@@ -31,7 +30,6 @@
                    src="/leaflets/{{ leaflet.id }}/pages/{{ (issuer.blocks[0].split('-')[0] if issuer.blocks else leaflet.start_page) }}.png" alt="Scan der Seite"></a>
             </section>
             <form method="post" action="{{ url }}" class="issuer-choice">
-                {{ lists(org_names, []) }}
                 <input type="hidden" name="surface" value="{{ group.surface }}">
                 <input type="hidden" name="nr" value="{{ nr }}">
                 {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
@@ -46,15 +44,21 @@
                     {% else %}
                     <p class="meta">Keine ähnlich geschriebene Organisation im Register.</p>
                     {% endfor %}
-                    <label><input type="radio" name="choice" value="andere" required>
-                        <span>andere: <input type="text" name="other" list="org-names" placeholder="Register durchsuchen …" autocomplete="off"
-                                             aria-label="Organisation aus dem Register" oninput="this.form.choice.value = 'andere'"></span></label>
+                </fieldset>
+                <fieldset>
+                    <legend>Andere Organisation aus dem Register</legend>
+                    <input type="text" id="org-query" placeholder="Kürzel oder Name eingeben" aria-label="Register durchsuchen" autocomplete="off">
+                    <p id="org-count" class="meta org-hits" aria-live="polite"></p>
+                    <div id="org-results" class="org-results"></div>
+                    <script type="application/json" id="org-register">{{ register | tojson }}</script>
                 </fieldset>
                 <fieldset>
                     <legend>Neu im Register</legend>
                     <label><input type="radio" name="choice" value="neu" required>
                         <span>Neue Organisation „{{ group.surface }}“{% if candidates %} <span class="meta">(prüfe zuerst die Vorschläge oben)</span>{% endif %}<br>
-                        <input type="text" name="full_name" placeholder="Langform, falls bekannt" aria-label="Langform" oninput="this.form.choice.value = 'neu'"></span></label>
+                        <span class="org-new-fields">
+                            <input type="text" name="short" placeholder="Kürzel, falls es eins gibt (etwa LSD)" aria-label="Kürzel" oninput="this.form.choice.value = 'neu'">
+                            <input type="text" name="full_name" placeholder="Langform, falls bekannt" aria-label="Langform" oninput="this.form.choice.value = 'neu'"></span></span></label>
                 </fieldset>
                 <fieldset>
                     <legend>Kein Herausgeber</legend>
@@ -68,4 +72,7 @@
                         {% for lf, _ in group.issuers %}{{ 'S. ' if loop.first }}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
             </form>
         </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', path='issuer-search.js') }}"></script>
 {% endblock %}

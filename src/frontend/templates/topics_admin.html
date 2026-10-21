@@ -9,8 +9,7 @@
         <header class="page-head admin-head">
             <h1>Themen verwalten</h1>
             <span class="admin-actions">
-                {% set due = later | selectattr('0.status', 'equalto', 'freigegeben') | list %}
-                <a class="button{{ ' primary' if candidate or due }}" href="/verwaltung/themen/neu">{{ 'Neues Ergebnis prüfen' if candidate else 'Themen neu berechnen' }}</a>
+                <a class="button{{ ' primary' if candidate or since | length > 1 }}" href="/verwaltung/themen/neu">{{ 'Neues Ergebnis prüfen' if candidate else 'Themen neu berechnen' }}</a>
             </span>
         </header>
         <div class="admin-body">
@@ -19,13 +18,15 @@
         {% if candidate %}<p class="form-warn">Eine Neuberechnung wartet auf Prüfung. Bis sie übernommen ist, gelten die Themen unten.</p>{% endif %}
         <dl class="topic-run">
             <dt>Letzte Berechnung</dt><dd>{{ run_date or 'unbekannt' }}{% if run_volumes %} · {{ topics | length }} Themen über die Bände {{ run_span }}{% endif %}</dd>
+            {% if since %}<dt>Seitdem freigegeben</dt><dd>{{ since | length }} {{ 'Band' if since | length == 1 else 'Bände' }} ({% for v in since %}{{ '%03d' % v.vz }}{{ ', ' if not loop.last }}{% endfor %}).
+                Neu berechnen lohnt sich erst nach mehreren neuen Bänden, denn dabei können sich die Themen aller Bände ändern.</dd>{% endif %}
         </dl>
         {% for v, day in later %}
         <div class="form-warn topic-later">
             <p>Band {{ '%03d' % v.vz }} ist nicht in der Themenberechnung enthalten{% if v.status != 'freigegeben' %} · noch nicht freigegeben{% endif %}</p>
             <p>Seine Flugblätter haben am {{ day }} vorläufig das Thema bekommen, das unter ihren fünf ähnlichsten Flugblättern überwiegt.
                 {% if v.status == 'freigegeben' %}Eine Neuberechnung bezieht den Band ein und kann dabei die Themen aller Bände verändern.
-                {% else %}In eine Neuberechnung geht er erst nach der Freigabe ein; danach Schritt 7 noch einmal ausführen.{% endif %}</p>
+                {% else %}In eine Neuberechnung geht er erst nach der Freigabe ein; danach die Themen in seinem Schritt 6 noch einmal zuordnen.{% endif %}</p>
         </div>
         {% endfor %}
         <p>Titel erscheinen auf der Themenseite, in den Filtern und auf den Flugblattseiten. Gute Titel benennen den Inhalt neutral in 2 bis 6 Wörtern, nicht die Textsorte.</p>

@@ -1,6 +1,7 @@
 import logging
 import math
 import re
+import shutil
 import time
 import unicodedata
 from collections import Counter, defaultdict
@@ -38,7 +39,18 @@ app = FastAPI(title="UR Leaflet Archive")
 
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+
+
+class FreshStaticFiles(StaticFiles):
+    """Without this the browser keeps scripts for a while unasked and runs an old one after an update; now it asks
+    every time and gets 304 if nothing changed."""
+    def file_response(self, *args, **kwargs):
+        response = super().file_response(*args, **kwargs)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
+app.mount("/static", FreshStaticFiles(directory=BASE_DIR / "static"), name="static")
 
 
 DOC_TYPES = {
@@ -167,12 +179,13 @@ def org_label(org):
     return f"{org.full_name} ({org.name})" if org.full_name else org.name
 
 
-def automatic_text(leaflet):
-    """Corrected field -> value as extracted automatically, for display."""
+def automatic_text(leaflet, series=None, record=None):
+    """Corrected field -> value as extracted automatically, for display. For many leaflets the caller passes the series
+    names and the record, each read once: reading them per leaflet takes seconds."""
     if not leaflet.corrected:
         return {}
-    r = automatic_record(leaflet)
-    auto = automatic_values(r, series_names(VOLUMES))
+    r = record or automatic_record(leaflet)
+    auto = automatic_values(r, series_names(VOLUMES) if series is None else series)
     names = lambda role: ', '.join(i['surface'] for i in r.get('issuers', [])
                                    if i['role'] == role)
     text = {'title': auto['title'],
@@ -1101,8 +1114,15 @@ def detail_page(request, leaflet, edit=None, error=None):
     selection = list_params(request)
     from_results = 'ergebnisse' in request.query_params
     from_featured = 'auswahl' in request.query_params  # coming from the selection on the start page
-    siblings = ([lf.id for lf in featured_leaflets()] if from_featured
-                else [i['leaflet'].id for i in filtered_items(selection)] if selection or from_results else [])
+    from_fixes = 'korrekturen' in request.query_params
+    if from_fixes:  # coming from /korrekturen: page through the leaflets with the chosen corrections
+        fix_field, fix_band = correction_selection(request.query_params['korrekturen'])
+        selection, from_results, from_featured = [], False, False
+        siblings = list(dict.fromkeys(r['leaflet'].id for vz, r, e in corrected_fields()[0]
+                                      if (not fix_field or e['field'] == fix_field) and (not fix_band or vz == fix_band)))
+    else:
+        siblings = ([lf.id for lf in featured_leaflets()] if from_featured
+                    else [i['leaflet'].id for i in filtered_items(selection)] if selection or from_results else [])
     if leaflet.id not in siblings:
         selection, from_results, from_featured = [], False, False
         siblings = [row.id for row in session.query(Leaflet.id)
@@ -1148,9 +1168,13 @@ def detail_page(request, leaflet, edit=None, error=None):
         'next_id': siblings[pos + 1] if pos + 1 < len(siblings) else None,
         'position': pos + 1,
         'in_volume': len(siblings),
-        'qs': '?auswahl=1' if from_featured else '?' + urlencode(selection + (shown + [('ergebnisse', '1')] if from_results else [])) if selection or from_results else '',
+        'qs': '?auswahl=1' if from_featured else '?' + urlencode(selection + (shown + [('ergebnisse', '1')] if from_results else [])) if selection or from_results
+              else '?' + urlencode({'korrekturen': request.query_params['korrekturen']}) if from_fixes else '',
         'featured': from_featured,
-        'back_url': back_url,
+        'back_url': (f"/korrekturen?{urlencode([(k, v) for k, v in (('feld', fix_field), ('band', fix_band)) if v])}#l{leaflet.id}"
+                     if from_fixes else back_url),
+        'back_label': ('Korrekturen' + ''.join(f" · {v}" for v in (corrections.FIELDS.get(fix_field), fix_band and f"Band {fix_band:03d}") if v)
+                       if from_fixes else 'Zurück zu den Ergebnissen'),
         'selection': ' · '.join(filter(None, selection_labels)),
         'highlight': [v for t in search.terms(chosen.get('q', '')) for v in search.variants(t)],
         'volume': volume.name if volume else '',
@@ -1379,7 +1403,8 @@ def copy_rows():
                      'state': 'neu' if group['new'] else 'geprueft' if main.copies_checked else 'offen',
                      'order': (volume.vz, first.start_page), 'volumes': {v.vz for _, v in group['members']} | group['hit_vz'],
                      'anchors': [(v.stem, lf.start_page, lf.end_page) for lf, v in group['members']],
-                     'labels': [f"{v.label}, {page_range(lf.start_page, lf.end_page)}" + (' (Hauptexemplar)' if lf is main and main.copies_checked else '')
+                     'labels': [f"Band {v.vz:03d}, S. {lf.start_page}" + (f"–{lf.end_page}" if lf.end_page != lf.start_page else '')
+                                + (' (Hauptexemplar)' if lf is main and main.copies_checked else '')
                                 for lf, v in group['members']]})
     return rows
 
@@ -1910,7 +1935,7 @@ def save_copy_review(leaflet, form):
         rejected = [lf for lf in members + candidates if lf not in kept]
         main = next((lf for lf in kept if lf.id in ids('main')), None)
         if main is None:
-            raise HTTPException(400, "Das Hauptexemplar muss zur Gruppe gehören.")
+            raise HTTPException(400, "Das Hauptexemplar muss eines der Exemplare sein.")
         rejected = [segment(lf) for lf in rejected]
         seen = {copy_decisions.anchor(a) for a in rejected + [segment(lf) for lf in kept]}
         for e in reviews:  # what an earlier review of the group rejected stays rejected, it is not a new hit
@@ -1968,7 +1993,11 @@ def correction_text(e):
     if field == 'revert':
         return 'Rücknahme', 'alle früheren Korrekturen' if value == 'all' else corrections.FIELDS.get(value, value)
     if field == 'date':
-        value = (iso_to_text(value['iso']) or value['iso']) + (f" ({value['type']})" if value.get('type') else '')
+        kind = DATE_TYPE_LABELS.get(value.get('type'), value.get('type'))
+        if value.get('type') == 'undated' and not value.get('iso'):
+            value = 'ohne Datum'
+        else:
+            value = (iso_to_text(value['iso']) or value['iso']) + (f" ({kind})" if kind else '')
     elif field == 'series' and isinstance(value, dict):  # early lines hold the name alone
         value = ', '.join(filter(None, [value['name'], value['issue']]))
     elif field == 'issuers':
@@ -1976,6 +2005,10 @@ def correction_text(e):
                           for i in value)
     elif field == 'signatories':
         value = ', '.join(i['name'] for i in value)
+    elif field == 'received':
+        value = german_date(value)
+    elif field == 'doc_type':
+        value = DOC_TYPES.get(value, value)
     return corrections.FIELDS.get(field, field), value
 
 
@@ -1984,21 +2017,54 @@ def in_force(entries):
     return list({e['field']: e for e in corrections.active(entries)}.values())
 
 
-@app.get("/korrekturen")
-def correction_list(request: Request):
+def corrected_fields():
+    """(volume number, leaflet, line in force) for each corrected field, by volume and page; and the page ranges."""
     volumes = {v.stem: v for v in session.query(Volume) if v.stem}
     rows = correction_rows(volumes, corrections.by_segment(corrections.load(CORRECTIONS)))
+    found = [(volumes[r['stem']].vz, r, e) for r in sorted((r for r in rows if r['leaflet']), key=lambda r: (volumes[r['stem']].vz, r['start']))
+             for e in in_force(r['entries'])]
+    return found, rows, volumes
+
+
+def correction_selection(value):
+    """The choice on /korrekturen carried along to the leaflets as korrekturen=<field>-<volume>: (field, volume number)."""
+    field, _, band = (value or '').partition('-')
+    return field if field in corrections.FIELDS else '', int(band) if band.isdigit() else 0
+
+
+@app.get("/korrekturen")
+def correction_list(request: Request, feld: str = '', band: int = 0):
+    """Every corrected field in force, by volume and page, with the value the model had found; feld= and band= narrow it."""
+    found, rows, volumes = corrected_fields()
     for r in rows:
         r['now'] = [correction_text(e) for e in in_force(r['entries'])]
-        r['history'] = [(*correction_text(e), german_date(e['at'])) for e in r['entries']]
-        r['at'] = german_date(max(e['at'] for e in r['entries']))
+    changes, autos, records, series = [], {}, {}, None
+    for vz, r, e in found:
+        if id(r) not in autos:
+            try:
+                series = series_names(VOLUMES) if series is None else series
+                if vz not in records:
+                    records[vz] = {(x["start_page"], x["end_page"]): x for x in fillDatabase.load_json(f"nr{vz:03d}_metadata.json")["segments"]}
+                autos[id(r)] = automatic_text(r['leaflet'], series, records[vz].get((r['start'], r['end'])))
+            except OSError:  # no metadata file to compare with
+                autos[id(r)] = {}
+        label, value = correction_text(e)
+        changes.append({'leaflet': r['leaflet'], 'vz': vz, 'pages': f"{r['start']}–{r['end']}" if r['end'] != r['start'] else str(r['start']),
+                        'field': e['field'], 'label': label, 'old': autos[id(r)].get(e['field']) or '', 'new': value,
+                        'at': german_date(e['at'][:10]), 'day': '.'.join(reversed(e['at'][5:10].split('-'))) + '.'})
+    fields = Counter(c['field'] for c in changes)
+    shown = [c for c in changes if (not feld or c['field'] == feld) and (not band or c['vz'] == band)]
+    for before, c in zip([None] + shown, shown):
+        c['first'] = not before or before['leaflet'] is not c['leaflet']
     copies = [{'at': review_date(r['at']), 'members': [
         f"{volumes[a['volume']].label if a['volume'] in volumes else a['volume']}, "
         f"{page_range(a['start_page'], a['end_page'])}" for a in r['members']]}
         for r in copy_review()[1]]
-    return templates.TemplateResponse(
-        request, "corrections.html", {"rows": [r for r in rows if not r['leaflet'] and r['now']], "copies": copies,
-                                      "saved": sorted((r for r in rows if r['leaflet']), key=lambda r: max(e['at'] for e in r['entries']), reverse=True)})
+    return templates.TemplateResponse(request, "corrections.html", {
+        "rows": [r for r in rows if not r['leaflet'] and r['now']], "copies": copies, "changes": shown, "total": len(changes),
+        "leaflets": len({id(c['leaflet']) for c in changes}), "feld": feld, "band": band, "carry": f"{feld}-{band or ''}",
+        "fields": [(f, corrections.FIELDS[f], fields[f]) for f in sorted(fields, key=lambda f: -fields[f])],
+        "bands": sorted({c['vz'] for c in changes})})
 
 
 @app.post("/korrekturen/zuordnen")
@@ -2073,9 +2139,14 @@ def import_list(error: str = ''):
     return RedirectResponse('/verwaltung' + (f"?{urlencode({'error': error})}" if error else ''), 301)
 
 
+# a running job tells where a draft is better than its files: during an upload the old scan or none is there yet
+JOB_STEPS = {"scans": ("scans", "Scans werden zusammengefügt"), ocr.JOB: ("ocr", "Text wird erkannt"),
+             metadata.JOB: ("angaben", "Metadaten werden erzeugt"), metadata.PREPARE: ("pruefen", "Flugblätter werden angelegt")}
+
+
 @app.get("/verwaltung")
 def admin_page(request: Request, error: str = ''):
-    """Where each volume stands, with the open duplicates and corrections, and the imports in progress."""
+    """What is open (imports, copy groups, corrections, topics), one line each, and where each released volume stands."""
     leaflets = Counter(vid for (vid,) in session.query(Leaflet.volume_id))
     volumes = session.query(Volume).order_by(Volume.vz).all()
     # the page table is big and has no index on the volume: count only where the volume does not know its pages
@@ -2086,24 +2157,24 @@ def admin_page(request: Request, error: str = ''):
     open_groups = [g for g in groups if g['state'] != 'geprueft']
     fix_rows = correction_rows({v.stem: v for v in volumes if v.stem}, corrections.by_segment(corrections.load(CORRECTIONS)))
     fixes = Counter(r['leaflet'].volume_id for r in fix_rows if r['leaflet'] and corrections.active(r['entries']))
-    added = {e["vz"] for e in importer.load_entries() if e.get("added")}
     steps = list(importer.STEPS)
-    drafts = []
+    with_topics = Counter(vid for (vid,) in session.query(Leaflet.volume_id).filter(Leaflet.topic_id.isnot(None)))
+    rows = []
     for v in volumes:
+        mine = [g for g in open_groups if v.vz in g['volumes']]
+        # an open group is the job of its newest volume, which brought it; the older ones only wait for it
+        row = {"vz": v.vz, "title": v.title, "pages": v.n_pages or pages[v.id], "leaflets": leaflets[v.id],
+               "groups": sum(v.vz in g['volumes'] for g in groups), "open": sum(max(g['volumes']) == v.vz for g in mine)}
         if v.status == RELEASED and leaflets[v.id]:
-            continue
-        step = resume_step(v)
-        # an archive unit without scans has nothing to delete: it would stay in the list as "not digitized"
-        drafts.append({"vz": v.vz, "title": v.title, "step": importer.STEPS[step], "n": steps.index(step) + 1,
-                       "deletable": bool(v.stem) or v.vz in added})
+            row.update(draft=False, topics=bool(with_topics[v.id]), issuers=len(organizations.unmatched(v.vz)))
+        else:
+            busy = next((job for job in JOB_STEPS if importer.running(v, job)), None)
+            step = JOB_STEPS[busy][0] if busy else resume_step(v)
+            row.update(draft=True, step=JOB_STEPS[busy][1] if busy else importer.STEPS[step], n=steps.index(step) + 1)
+        rows.append(row)
     return templates.TemplateResponse(request, "admin.html", {
-        "volumes": [{"vz": v.vz, "title": v.title, "leaflets": leaflets[v.id], "pages": v.n_pages or pages[v.id],
-                     "groups": sum(v.vz in g['volumes'] for g in groups),
-                     "open": sum(v.vz in g['volumes'] for g in open_groups), "fixes": fixes[v.id]}
-                    for v in volumes if v.status == RELEASED and leaflets[v.id]],
-        "drafts": drafts, "n_steps": len(steps), "units": importer.free_units(),
-        "groups": len(groups), "open": len(open_groups),
-        "fixes": sum(fixes.values()), "unmatched": sum(not r['leaflet'] and bool(in_force(r['entries'])) for r in fix_rows),
+        "rows": rows, "n_steps": len(steps), "units": importer.free_units(), "all_units": len(volumes) + len(importer.free_units()),
+        "fixes": sum(fixes.values()), "open_groups": len(open_groups), "unmatched": sum(not r['leaflet'] and bool(in_force(r['entries'])) for r in fix_rows),
         "topics": session.query(Topic).count(), "candidate": len((topics.load(topics.CANDIDATE) or {"topics": []})["topics"]),
         "error": error})
 
@@ -2151,7 +2222,8 @@ def import_volume_or_404(vz):
 def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     volume = import_volume_or_404(vz)
     created = importer.n_leaflets(volume)
-    if created and volume.status == RELEASED and step not in ('pruefen', 'themen') or step not in importer.STEPS:
+    if created and volume.status == RELEASED and step not in ('pruefen', importer.TOPICS_STEP) \
+            or step not in (*importer.STEPS, importer.TOPICS_STEP):
         raise HTTPException(404)
     prepare = importer.JOBS.get((vz, metadata.PREPARE), {})
     flagged = metadata.flagged_leaflets(volume) if step == 'pruefen' and created else []
@@ -2170,7 +2242,7 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
     used = Counter(v.meta_model for v in session.query(Volume).filter_by(status=RELEASED) if v.meta_model).most_common() if meta else []
     waiting = {'scans': None if pages else 'Zuerst die Scans hochladen.',  # why "Weiter" does not work yet
                'ocr': None if text['state'] == 'done' else 'Zuerst den Text erkennen oder ein fertiges Ergebnis als ZIP laden.',
-               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Prüfung abschließen.',
+               'trennen': None if segments.status(volume)['confirmed'] else 'Zuerst die Einteilung abschließen.',
                'angaben': None if meta and meta['state'] == 'done' else 'Zuerst die Metadaten erzeugen.'}.get(step)
     done = ['band'] + (['scans'] if pages else []) + (['ocr'] if text['state'] == 'done' else []) \
         + (['trennen'] if segments.status(volume)['confirmed'] else [])
@@ -2185,7 +2257,7 @@ def import_page(request, vz, step, error='', status_code=200, uploaded=False):
         "default_model": (used[0][0] if used else metadata.DEFAULT_MODEL) if meta else None,
         "model_names": [m[:2] for m in metadata.models()] if meta else [],
         "model_top": metadata.top_models(used) if meta else [],
-        "model_prices": metadata.prices(volume) if meta else {},
+        "model_prices": metadata.prices(volume, meta['state'] == 'done') if meta else {},
         "prompt_text": metadata.prompt_text() if meta else '', "prompt_default": metadata.default_prompt() if meta else '',
         "batch_size": metadata.BATCH_SIZE, "max_batch": metadata.MAX_BATCH,
         "created": created, "prepare": prepare if step == 'pruefen' and not created else {}, "flagged": flagged,
@@ -2245,6 +2317,32 @@ def import_discard(vz: int):
     return RedirectResponse("/verwaltung", 303)
 
 
+RESETS = {"vorschau": "scans", "text": "ocr", "metadaten": "angaben"}  # what can be reset, on which step
+
+
+@app.post("/import/{vz}/zuruecksetzen")
+def import_reset(request: Request, vz: int, was: str = Form(...)):
+    """Throws away the result of a step, so it can be done again: the page images (made anew when shown), the
+    recognized text with what was made from it, or the metadata. For those who cannot reach the files."""
+    if was not in RESETS:
+        raise HTTPException(404)
+    volume = import_volume_or_404(vz)
+    if any(importer.running(volume, job) for job in ("scans", ocr.JOB, metadata.JOB, metadata.PREPARE)):
+        return import_page(request, vz, RESETS[was], "Gerade läuft ein Vorgang für diesen Band. Bitte warten, bis er fertig ist.", 409)
+    if was == "vorschau":
+        with pdf_service._lock:
+            pdf_service._doc_cache.pop(str(importer.scan_path(volume)), None)
+            importer.drop_thumbs(volume.stem)
+    elif was == "text":
+        shutil.rmtree(importer.ocr_dir(editable(vz)), ignore_errors=True)  # the metadata lives there too
+    else:
+        editable(vz)
+        for path in [metadata.result_path(volume), *importer.ocr_dir(volume).glob("metadata-*.jsonl")]:
+            path.unlink(missing_ok=True)
+    importer.JOBS.pop((vz, ocr.JOB if was == "text" else metadata.JOB), None)
+    return RedirectResponse(f"/import/{vz}?schritt={RESETS[was]}", 303)
+
+
 @app.post("/import/{vz}/vorbereiten")
 def import_prepare_again(vz: int):
     editable(vz)  # takes the leaflets back, if there are any
@@ -2277,12 +2375,21 @@ def import_issuers(request: Request, vz: int, nr: int = 0, blatt: int = 0, fehle
         "leaflet": leaflet, "issuer": issuer, "date": iso_to_text(leaflet.date_iso), "others": others,
         "pages": page_range(leaflet.start_page, leaflet.end_page),
         "candidates": [(org, form, *in_holdings(org.id)) for org, form in organizations.candidates(group['surface'])],
-        "org_names": [org_label(o) for o in sorted(session.query(Organization), key=org_sort_key)]})
+        "register": register_rows()})
+
+
+def register_rows():
+    """The organizations of the register for the search on the issuer page, most leaflets first."""
+    counts = dict(released_leaflets().join(LeafletIssuer, LeafletIssuer.leaflet_id == Leaflet.id)
+                  .filter(LeafletIssuer.role == 'issuer', LeafletIssuer.org_id.isnot(None))
+                  .with_entities(LeafletIssuer.org_id, func.count(func.distinct(Leaflet.id))).group_by(LeafletIssuer.org_id))
+    return sorted(({"id": o.id, "name": o.name, "full": o.full_name or "", "variants": o.variants or [], "n": counts.get(o.id, 0)}
+                   for o in session.query(Organization)), key=lambda r: (-r["n"], r["name"].casefold()))
 
 
 @app.post("/import/{vz}/herausgeber")
 def import_issuer(vz: int, surface: str = Form(...), choice: str = Form(...), other: str = Form(''),
-                  full_name: str = Form(''), nr: int = Form(0)):
+                  full_name: str = Form(''), short: str = Form(''), nr: int = Form(0)):
     import_volume_or_404(vz)
     key = organizations.key(surface)
     group = next((g for g in organizations.unmatched(vz) if organizations.key(g['surface']) == key), None)
@@ -2304,7 +2411,7 @@ def import_issuer(vz: int, surface: str = Form(...), choice: str = Form(...), ot
                                 + [{'name': surface.strip(), 'details': '', 'blocks': list(issuer.blocks or [])}], []))
             save_corrections(leaflet, changes)
     elif choice == 'neu' or session.get(Organization, choice):
-        organizations.decide(surface, choice, full_name)
+        organizations.decide(surface, choice, full_name, short)
     else:
         raise HTTPException(400)
     return RedirectResponse(f"/import/{vz}/herausgeber?nr={nr}", 303)
@@ -2523,7 +2630,7 @@ def topics_admin(request: Request, error: str = '', gespeichert: int = 0):
 def topic_volumes(doc):
     """The volumes the topic run computed, and those assigned later in step 7 (with the day)."""
     if not doc:
-        return {"run_volumes": [], "later": []}
+        return {"run_volumes": [], "later": [], "since": []}
     later = doc.get("assigned_later", {})
     by_stem = {v.stem: v for v in session.query(Volume) if v.stem}
     stems = sorted({r["volume"] for r in doc["leaflets"]} - set(later), key=lambda st: by_stem[st].vz if st in by_stem else 0)
@@ -2534,7 +2641,9 @@ def topic_volumes(doc):
         if i + 1 == len(numbers) or numbers[i + 1] != n + 1:
             spans.append(f"{start:03d}" if start == n else f"{start:03d}–{n:03d}")
             start = None
-    return {"run_volumes": [by_stem[st] for st in stems if st in by_stem], "run_span": ", ".join(spans),
+    with_leaflets = {vid for (vid,) in session.query(Leaflet.volume_id).distinct()}
+    since = [v for v in sorted(by_stem.values(), key=lambda v: v.vz) if v.status == RELEASED and v.id in with_leaflets and v.stem not in stems]
+    return {"run_volumes": [by_stem[st] for st in stems if st in by_stem], "run_span": ", ".join(spans), "since": since,
             "later": sorted(((by_stem[st], german_date(day)) for st, day in later.items() if st in by_stem), key=lambda p: p[0].vz)}
 
 

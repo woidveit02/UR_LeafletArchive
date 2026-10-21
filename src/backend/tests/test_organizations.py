@@ -42,3 +42,9 @@ def test_decide(tmp_path, monkeypatch):
     register = {o["org_id"]: o["variants"] for o in json.loads((tmp_path / "organizations.json").read_text(encoding="utf-8"))}
     assert register == {"asta": ["AStA", "ASTA."], "fachschaft_chemie": ["Fachschaft Chemie"]}
     assert fillDatabase.issuer_org_ids({"surface": "ASTA.", "org_ids": []}, fillDatabase.variant_index(), {"asta"}) == ["asta"]
+
+    # a new organization with a short name: named by it, the spelling in the text becomes its long form
+    assert organizations.decide("Liberaler Studentenbund Deutschlands", "neu", short="LSD") == "lsd"
+    entry = json.loads((tmp_path / "organizations.json").read_text(encoding="utf-8"))[-1]
+    assert (entry["name"], entry["full_name"], entry["variants"]) == ("LSD", "Liberaler Studentenbund Deutschlands",
+                                                                      ["Liberaler Studentenbund Deutschlands", "LSD"])

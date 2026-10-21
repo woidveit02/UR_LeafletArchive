@@ -18,6 +18,9 @@
         </header>
         {% set keys = steps.keys() | list %}
         {% set done = done or [] %}
+        {% if step == 'themen' %}
+        <p class="meta step-count"><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6: {{ steps['pruefen'] }}</a> · {{ step_help[step] }}</p>
+        {% else %}
         <p class="meta step-count">Schritt {{ keys.index(step) + 1 }} von {{ keys | length }}: {{ step_help[step] }}</p>
         {% set i = keys.index(step) %}
         {% set locked = volume and volume.status == 'freigegeben' and created %}
@@ -26,7 +29,7 @@
         <nav class="view-switch step-switch" aria-label="Schritte">
             {% for key, label in steps.items() %}
             {% set mark = '✓ ' if key in done and key != step else '' %}
-            {% if locked and key not in ('pruefen', 'themen') %}<a aria-disabled="true" class="todo" title="Der Band ist freigegeben, dieser Schritt ist gesperrt.">{{ loop.index }}. {{ label }}</a>
+            {% if locked and key != 'pruefen' %}<a aria-disabled="true" class="todo" title="Der Band ist freigegeben, dieser Schritt ist gesperrt.">{{ loop.index }}. {{ label }}</a>
             {% elif volume %}<a href="/import/{{ volume.vz }}?schritt={{ key }}" title="{{ step_help[key] }}"{% if key == step %} aria-current="page"{% elif key in done %} class="done"{% else %} class="todo"{% endif %}>{{ mark }}{{ loop.index }}. {{ label }}</a>
             {% else %}<a title="{{ step_help[key] }}"{% if key == step %} href="/import/neu" aria-current="page"{% else %} aria-disabled="true" class="todo"{% endif %}>{{ loop.index }}. {{ label }}</a>{% endif %}
             {% endfor %}
@@ -37,6 +40,7 @@
             {% elif i + 1 < keys | length %}{% if waiting %}<span class="step-button disabled" aria-disabled="true" title="{{ waiting }}">Weiter →</span>{% else %}<a class="step-button" href="/import/{{ volume.vz }}?schritt={{ keys[i + 1] }}" title="{{ steps[keys[i + 1]] }}">Weiter →</a>{% endif %}{% endif %}
         </span>
         </div>
+        {% endif %}
         <div class="import-body">
         {% if step == 'band' and not volume %}
         <h2>{{ steps[step] }}</h2>
@@ -70,28 +74,23 @@
         {% elif step == 'scans' %}
         <h2>{{ steps[step] }}</h2>
         <div class="step-narrow">
-        {% if uploaded and pages %}<p class="form-ok" role="status">✓ Upload abgeschlossen</p>{% endif %}
-        {% if pages %}<p class="current-scans">Aktuell gespeichert: {{ pages }} Seiten</p>{% endif %}
+        {% if uploaded and pages %}<p class="form-ok" role="status">Upload abgeschlossen.</p>{% endif %}
+        {% if pages %}<p class="form-ok current-scans">✓ Aktuell gespeichert: {{ pages }} Seiten</p>{% endif %}
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
         <p class="form-error" id="upload-error" role="alert" hidden></p>
         {% if pages %}<details class="help"{% if running or error %} open{% endif %}><summary>Andere Scans hochladen</summary>{% endif %}
         <form method="post" action="/import/{{ volume.vz }}/scans" enctype="multipart/form-data" class="meta-form step-form"
               data-status-url="/import/{{ volume.vz }}/status"{% if running %} data-running="1"{% endif %}>
             <div id="drop-zone" class="drop-zone">
-                <p class="drop-title">Scan-PDF hierher ziehen</p>
-                <p class="meta">Die Scans des Bandes als eine PDF-Datei</p>
+                <p class="drop-title">Scans hierher ziehen</p>
+                <p class="meta">PDF- oder TIFF-Dateien, einzeln oder als Ordner. Mehrere Dateien und Unterordner (etwa 15.1, 15.2) werden nach Ordner und Dateiname sortiert und zu einem PDF zusammengefügt.</p>
                 <div class="drop-actions">
-                    <span class="file-pick"><input type="file" id="pdf" name="scans" accept=".pdf">
-                        <label for="pdf" class="button small">PDF-Datei wählen</label></span>
-                </div>
-                <div class="drop-alt">
-                    <p class="meta">Oder einzelne TIFF-Scans: Sie werden nach Dateiname sortiert und zu einem PDF zusammengefügt.</p>
-                    <div class="drop-actions">
-                        <span class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
-                            <label for="folder" class="button small">Ordner mit TIFFs wählen</label></span>
-                        <span class="file-pick"><input type="file" id="tiffs" name="scans" accept=".tif,.tiff" multiple>
-                            <label for="tiffs" class="button small">TIFF-Dateien wählen</label></span>
-                    </div>
+                    <span class="file-pick"><input type="file" id="pdf" name="scans" accept=".pdf" multiple>
+                        <label for="pdf" class="button small">PDF-Dateien wählen</label></span>
+                    <span class="file-pick"><input type="file" id="tiffs" name="scans" accept=".tif,.tiff" multiple>
+                        <label for="tiffs" class="button small">TIFF-Dateien wählen</label></span>
+                    <span class="file-pick"><input type="file" id="folder" name="folder" webkitdirectory>
+                        <label for="folder" class="button small">Ordner wählen</label></span>
                 </div>
             </div>
             <p id="pick-summary" class="pick-summary">Nichts ausgewählt</p>
@@ -115,7 +114,7 @@
             <div class="step-panel-head">
                 <span class="split-count{{ ' done' if split.confirmed }}"></span>
                 <span class="step-panel-actions">
-                    <button type="button" id="split-finish-page" class="button primary" hidden>Prüfung abschließen</button>
+                    <button type="button" id="split-finish-page" class="button primary" hidden>Einteilung abschließen</button>
                     {% if split.confirmed %}<button type="button" id="split-open" class="button">Einteilung ansehen</button>
                     {% else %}<button type="button" id="split-open" class="button primary">Seiten prüfen</button>{% endif %}
                 </span>
@@ -125,7 +124,7 @@
                 <div class="split-start">
                     <div>
                         <button type="button" id="split-suggest-text" class="button">Aus Text vorschlagen</button>
-                        <p class="meta">Schlägt Trennungen anhand von Merkmalen im erkannten Text vor, etwa Eingangsstempel, Datum in der Kopfzeile oder Impressum auf der vorigen Seite. Die Vorschläge sind nicht verlässlich, prüfe jeden einzeln.</p>
+                        <p class="meta">Schlägt Trennungen anhand von Merkmalen im erkannten Text vor, etwa Eingangsstempel, Datum in der Kopfzeile oder Impressum auf der vorigen Seite. Ersetzt die aktuelle Einteilung. Die Vorschläge sind nicht verlässlich, prüfe jeden einzeln.</p>
                     </div>
                     <div>
                         <span class="file-pick">
@@ -133,6 +132,10 @@
                             <label for="split-list" class="button">Liste laden</label>
                         </span>
                         <p class="meta">Eine fertige Einteilung als Textdatei übernehmen, eine Zeile pro Flugblatt.</p>
+                    </div>
+                    <div>
+                        <button type="button" id="split-clear" class="button">Von vorn beginnen</button>
+                        <p class="meta">Löscht alle Trennungen, Leerseiten und Entscheidungen, auch die von Hand gesetzten.</p>
                     </div>
                 </div>
             </details>
@@ -143,7 +146,7 @@
                 <ol>
                     <li>Trennungen aus dem Text vorschlagen lassen, eine Liste laden oder von Hand beginnen.</li>
                     <li>Mit „Seiten prüfen“ bei jedem Paar benachbarter Seiten entscheiden, ob mit der rechten ein neues Flugblatt beginnt. Jeder Vorschlag muss bestätigt oder verworfen werden.</li>
-                    <li>Sind alle Übergänge geprüft, „Prüfung abschließen“. Änderungen werden laufend gespeichert, du kannst jederzeit unterbrechen.</li>
+                    <li>Sind alle Übergänge geprüft, „Einteilung abschließen“. Änderungen werden laufend gespeichert, mit „Zur Übersicht“ kannst du jederzeit unterbrechen.</li>
                 </ol>
                 <details class="advanced">
                     <summary>Ein neues Flugblatt erkennen</summary>
@@ -151,7 +154,7 @@
                         am Seitenkopf, ein Impressum („Verantwortlich“, „V. i. S. d. P.“) auf der Seite davor sowie ein anderer Herausgeber oder ein anderes Thema.</p>
                     <p>Dagegen sprechen eine fortlaufende Seitenzahl am Seitenanfang („- 2 -“), ein Text, der mitten im Satz einsetzt, und „b. w.“ oder „bitte wenden!“ auf der Seite davor.
                         Die Rückseite gehört dann dazu, auch mit eigener Kopfleiste. Ein einzelnes Merkmal reicht nicht immer: Auch in einem mehrseitigen Flugblatt kommen neue Überschriften, Daten oder Impressen vor.</p>
-                    <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Als Leerseite / Trennblatt markieren“, die Trennungen davor und danach setzen sich von selbst,
+                    <p>Leere Seiten, Trennblätter und Umschläge gehören zu keinem Flugblatt. Klicke unter der großen Seite auf „Leerseite / Trennblatt“ oder drücke L, die Trennungen davor und danach setzen sich von selbst,
                         die Seite wird nicht mitgezählt. Trägt eine Rückseite einen anderen Text mit eigenem Herausgeber, ist sie ein eigenes Flugblatt. Hefte, Pressespiegel und Kalenderseiten mit eigenem Datum
                         je Seite sind meist ein Flugblatt. Im Zweifel nicht schneiden.</p>
                 </details>
@@ -171,8 +174,8 @@
                     <summary>Bedienung und Tastenkürzel</summary>
                     <p>Links stehen alle Seiten, rechts immer zwei benachbarte groß. Ein Klick auf eine Seite links zeigt sie mit ihrer Nachbarseite. Nach „Ja, trennen“ (T) oder „Nein, gehören zusammen“ (Z)
                         zeigt die Ansicht den nächsten offenen Übergang. Mit „Weiter“ (Taste →) gehst du ohne Entscheidung zum nächsten. Wo nichts vorgeschlagen ist, gilt der Übergang damit als geprüft.
-                        Auch der Streifen rechts neben jeder Vorschauseite setzt oder entfernt die Trennung. „Prüfung abschließen“ springt zum nächsten offenen Übergang, solange noch einer fehlt.</p>
-                    <p>Tasten: Pfeile blättern, T (links) trennt, Z (rechts) lässt zusammen, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc schließt die Ansicht.</p>
+                        Auch der Streifen rechts neben jeder Vorschauseite setzt oder entfernt die Trennung. Solange Übergänge fehlen, springt „Noch … offen“ zum nächsten.</p>
+                    <p>Tasten: Pfeile blättern, T (links) trennt, Z (rechts) lässt zusammen, L markiert die linke Seite als Leerseite, Shift+L die rechte, U oder Strg+Z macht einen Schritt rückgängig, Strg+Y wiederholt ihn, Esc führt zur Übersicht. Die Tasten stehen auch auf den Knöpfen.</p>
                 </details>
                 </div>
             </details>
@@ -186,10 +189,10 @@
                 <span class="split-count"></span>
                 <span class="split-legend" title="Der Streifen rechts an einer Seite setzt oder entfernt die Trennung nach ihr. Fragezeichen: noch nicht entschieden, ohne Zeichen: gehören zusammen."><i class="on">▮</i> Trennung · <i class="suggested">▮</i> Vorschlag · <i class="open">?</i> offen</span>
                 <span class="split-end">
-                    <button type="button" id="split-undo" class="button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig</button>
+                    <button type="button" id="split-undo" class="button" data-act="undo" title="Rückgängig (U oder Strg+Z)" disabled>Rückgängig <kbd>U</kbd></button>
                     <button type="button" id="split-redo" class="button" data-act="redo" title="Wiederholen (Strg+Y)" disabled>Wiederholen</button>
-                    <button type="button" id="split-finish" class="button primary" title="Möglich, wenn jeder Übergang geprüft und kein Vorschlag mehr offen ist">Prüfung abschließen</button>
-                    <button type="button" id="split-close" class="button" title="Schließen (Esc)">✕ Schließen</button>
+                    <button type="button" id="split-finish" class="button primary">Einteilung abschließen</button>
+                    <button type="button" id="split-close" class="button" title="Gespeichert wird laufend, du kannst später weitermachen (Esc)">Zur Übersicht <kbd>Esc</kbd></button>
                 </span>
             </div>
             <p class="form-error split-error" role="alert" hidden></p>
@@ -479,11 +482,13 @@
                     <button type="submit" class="button">Freigabe zurücknehmen</button></form>
             </div>
             {% endif %}
+            <p class="meta topics-next">Optional: <a href="/import/{{ volume.vz }}?schritt=themen">Themen zuordnen</a>. Die Flugblätter bekommen die bestehenden Themen ihrer ähnlichsten Nachbarn.
+                Neue Themen zu berechnen lohnt sich erst, wenn mehrere neue Bände dazugekommen sind.</p>
         </div>
         {% endif %}
         </div>
         {% elif step == 'themen' %}
-        <h2>{{ steps[step] }}</h2>
+        <h2>Themen zuordnen</h2>
         <div class="step-narrow">
         {% if not topic_state %}
         <p class="meta">Dafür müssen zuerst die Flugblätter in Schritt 6 vorbereitet sein.</p>
@@ -540,6 +545,24 @@
         </div>
         {% endif %}
         </div>
+        {% endif %}
+        {% if volume and volume.status == 'entwurf' and step != 'band' %}
+        {% macro reset(what, label, text, question) %}
+            <div class="release-row"><p class="meta">{{ text }}</p>
+                <form method="post" action="/import/{{ volume.vz }}/zuruecksetzen" onsubmit="return confirm('{{ question }}')">
+                    <input type="hidden" name="was" value="{{ what }}">
+                    <button type="submit" class="button small">{{ label }}</button></form></div>
+        {% endmacro %}
+        <section class="step-trouble">
+            <h3>Probleme beheben</h3>
+            {% if step == 'scans' and pages %}{{ reset('vorschau', 'Vorschaubilder neu erzeugen', 'Wenn Seiten falsch, veraltet oder gar nicht angezeigt werden.', 'Die Vorschaubilder neu erzeugen? Das dauert beim nächsten Anzeigen etwas länger.') }}{% endif %}
+            {% if step == 'ocr' and ocr.state != 'none' %}{{ reset('text', 'Erkannten Text verwerfen', 'Löscht das Ergebnis der Texterkennung, auch halb fertige Teile, und die Metadaten. Scans und Einteilung bleiben.', 'Den erkannten Text und die Metadaten löschen? Eine neue Erkennung kostet erneut.') }}{% endif %}
+            {% if step == 'angaben' and meta and meta.state != 'none' %}{{ reset('metadaten', 'Metadaten verwerfen', 'Löscht die erzeugten Metadaten und Zwischenstände. Text und Einteilung bleiben.', 'Die Metadaten löschen? Sie neu zu erzeugen kostet erneut.') }}{% endif %}
+            <div class="release-row"><p class="meta">Löscht alles, was für diesen Band hochgeladen und erzeugt wurde. Danach lässt er sich neu beginnen.</p>
+                <form method="post" action="/import/{{ volume.vz }}/loeschen"
+                      onsubmit="return confirm('Den Entwurf Band {{ '%03d' % volume.vz }} wirklich löschen? Die hochgeladenen Scans, der erkannte Text und die Metadaten gehen verloren. Der Band im Archiv bleibt unberührt.')">
+                    <button type="submit" class="button small danger">Entwurf löschen</button></form></div>
+        </section>
         {% endif %}
         </div>
 {% endblock %}

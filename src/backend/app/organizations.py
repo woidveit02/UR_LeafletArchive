@@ -41,19 +41,22 @@ def candidates(surface):
     return [(org, form) for _, org, form in sorted(scored.values(), key=lambda s: -s[0])[:SHOWN]]
 
 
-def decide(surface, choice, full_name=""):
-    """choice: "neu" (a new organization named so) or the id of a known organization the spelling belongs to.
-    Returns the organization's id."""
-    session, k, surface = fillDatabase.session, key(surface), surface.strip()
+def decide(surface, choice, full_name="", short=""):
+    """choice: "neu" (a new organization named so, or by its short name if given) or the id of a known organization
+    the spelling belongs to. Returns the organization's id."""
+    session, k, surface, short = fillDatabase.session, key(surface), surface.strip(), short.strip()
     orgs = fillDatabase.load_json("organizations.json")
     if choice == "neu":
-        base = re.sub(r"[^a-z0-9]+", "_", surface.casefold()).strip("_") or "org"
+        name = short or surface
+        full_name = full_name.strip() or (surface if short and short != surface else "")
+        variants = [surface] + [short] * bool(short and short != surface)
+        base = re.sub(r"[^a-z0-9]+", "_", name.casefold()).strip("_") or "org"
         taken = {o["org_id"] for o in orgs}
         org_id = next(i for i in [base] + [f"{base}_{n}" for n in range(2, 99)] if i not in taken)
-        entry = {"org_id": org_id, "name": surface, "full_name": full_name.strip(), "type": "", "variants": [surface],
+        entry = {"org_id": org_id, "name": name, "full_name": full_name, "type": "", "variants": variants,
                  "jahre": [], "vz": [], "notes": "in der App angelegt"}
         orgs.append(entry)
-        session.add(Organization(id=org_id, name=surface, full_name=entry["full_name"], type="", variants=[surface],
+        session.add(Organization(id=org_id, name=name, full_name=full_name, type="", variants=variants,
                                  jahre=[], vz=[], notes=entry["notes"]))
     else:
         org_id = choice

@@ -719,7 +719,7 @@ def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, 
     batches = [todo[i:i + batch_size] for i in range(0, len(todo), batch_size)]
     state, cost = {}, []
     job.update(parts=[{"label": f"{len(b)} {'Flugblatt' if len(b) == 1 else 'Flugblätter'}", "state": "wartet"} for b in batches], cost=0.0,
-               done=0, total=len(todo), unit="Flugblatt fertig" if len(todo) == 1 else "Flugblättern fertig")
+               phase="Metadaten werden erzeugt", done=0, total=len(todo), unit="Flugblatt fertig" if len(todo) == 1 else "Flugblättern fertig")
     for part, batch in zip(job["parts"], batches):
         if job.get("cancel"):
             return None
@@ -735,9 +735,12 @@ def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, 
         part["state"] = "fertig"
         job.update(cost=spent(cost)["cost"], done=job["done"] + len(batch))
 
-    for sid, foreign, unsigned, edge in recheck(done, segs, texts, pages, forms):
+    again = recheck(done, segs, texts, pages, forms)
+    job.update(phase="Auffällige Flugblätter werden einzeln nachgefragt", done=0, total=len(again), unit="nachgefragt")
+    for sid, foreign, unsigned, edge in again:
         if job.get("cancel"):
             return None
+        job["done"] += 1
         hint = []
         if unsigned:
             hint.append(f"Die Verantwortlich-Zeile nennt {', '.join(unsigned)} - fehlen diese Personen als signatory?")
@@ -756,6 +759,7 @@ def run(segs, pages, year, key, model, known_orgs, forms, checkpoint, job=None, 
             keep([{**take_retry(done[sid], new, foreign, unsigned, edge, texts[sid][1]), "id": sid}])
         job["cost"] = spent(cost)["cost"]
 
+    job.update(phase="Belege werden im Text geprüft", done=0, total=0)
     results = finish(done, segs, texts, pages, year, forms)
     flagged = sum(bool(r.get("_grounding")) for r in results if not r.get("no_content"))
     checked = sum(not r.get("no_content") for r in results)
@@ -999,13 +1003,14 @@ def status(volume):
             "flagged": sum(bool(remarks(r)) for r in named), "hints": hint_counts(named)}
 
 
-def prices(volume):
-    """{model id: estimated price of a run in dollar as text} for the models OpenRouter lists."""
+def prices(volume, fresh=False):
+    """{model id: estimated price of a run in dollar as text} for the models OpenRouter lists. fresh: every leaflet is
+    asked again, as after a finished run."""
     if not ocr.result_path(volume).is_file():
         return {}
     pages = page_blocks(ocr.result_path(volume))
     todo = [s for s in leaflets(volume) if not s.get("no_content")]
-    before_model, _, before = earlier(volume)
+    before_model, _, before = earlier(volume) if not fresh else (None, None, {})
 
     def price(asked, p_in, p_out):
         chars = sum(len(segment_texts(pages, s["start_page"], s["end_page"])[0]) for s in asked)
@@ -1026,7 +1031,7 @@ def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
     if ocr.status(volume)["state"] != "done":
         raise ValueError("Zuerst den Text erkennen.")
     if not segments.status(volume)["confirmed"]:
-        raise ValueError("Zuerst die Flugblätter trennen und die Prüfung abschließen.")
+        raise ValueError("Zuerst die Flugblätter trennen und die Einteilung abschließen.")
     if importer.running(volume, JOB):
         raise ValueError("Die Metadaten werden schon erzeugt. Bitte warten.")
     if not 1 <= batch_size <= MAX_BATCH:
@@ -1035,7 +1040,10 @@ def start(volume, model, orgs, prompt="", batch_size=BATCH_SIZE):
         save_prompt(prompt)
     template = prompt_text()
     segs, year = leaflets(volume), volume.year
-    before_model, before_prompt, before = earlier(volume)
+    again = status(volume)["state"] == "done"  # "Neu erzeugen": the answers kept for these leaflets would be taken over unasked
+    if again:
+        checkpoint_path(volume, segs).unlink(missing_ok=True)
+    before_model, before_prompt, before = (None, None, {}) if again else earlier(volume)
     seed = before if before_model == model and before_prompt in (None, prompt_id(template)) else {}  # an answer of another model or prompt does not carry over
     job = importer.JOBS[(volume.vz, JOB)] = {"state": "running", "done": 0, "total": 0, "error": "",
                                             "started": time.time(), "parts": [], "unit": "Flugblättern fertig"}

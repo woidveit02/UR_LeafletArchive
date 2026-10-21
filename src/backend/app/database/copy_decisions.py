@@ -12,6 +12,22 @@ def anchor(a):
     return a["volume"], a["start_page"], a["end_page"]
 
 
+def follow(lines, known):
+    """The reviews with each page range that is gone moved to the one leaflet lying there now, as when its last page
+    was marked blank later. With two leaflets there (a new cut) or none, the range stays and the review unresolved."""
+    ranges = {}
+    for volume, start, end in known:
+        ranges.setdefault(volume, []).append((start, end))
+
+    def moved(a):
+        if anchor(a) in known:
+            return a
+        here = [(s, e) for s, e in ranges.get(a["volume"], []) if s <= a["end_page"] and e >= a["start_page"]]
+        return {**a, "start_page": here[0][0], "end_page": here[0][1]} if len(here) == 1 else a
+    return [{**r, "members": [moved(a) for a in r["members"]], "rejected": [moved(a) for a in r["rejected"]],
+             "canonical": moved(r["canonical"])} if "members" in r else r for r in lines]
+
+
 def append(path, line):
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
     with _lock, open(path, "a", encoding="utf-8") as f:
