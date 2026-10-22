@@ -36,9 +36,11 @@ Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei w
 
 ## 6.6 Ergebnis und Kosten
 
-Die 1 927 Exemplare ergeben 1 547 Flugblätter; 380 sind weitere Exemplare (19,7 %). Sie sind ungleich verteilt: In den Bänden von 1968 bis 1971 liegt ihr Anteil zwischen 10 und 15 %, 1972 bei 24 % und 1973 bei 23 %. Ohne diesen Schritt wäre jede Zählung um ein Fünftel zu hoch, für 1972 und 1973 um ein Viertel.
+Aus den 1 927 Exemplaren ergeben sich insgesamt 1 547 eigenständige Flugblätter. Die übrigen 280 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
 
-Alle Zählungen der Anwendung, also Startseite, Liste, Herausgeber, Themen und Trends, nehmen jedes Flugblatt einmal. Die Suche geht durch alle Exemplare und zeigt das Hauptexemplar an. Kosten entstehen keine.
+Sämtliche Angaben von Zahlen innehralb der Anwendung, die bspw. Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
+
+
 
 ![Anteil der Mehrfachexemplare nach Bandjahr](../abbildungen/3_mehrfachexemplare.png)
 
@@ -48,4 +50,4 @@ Alle Zählungen der Anwendung, also Startseite, Liste, Herausgeber, Themen und T
 
 ## 6.7 Hinweise zur Weiterentwicklung
 
-Fassungen werden bisher nicht automatisch gruppiert. Der erste Themenlauf rechnete über alle Exemplare; die Neuberechnung in der Anwendung nimmt nur die Hauptexemplare (Kap. 7).
+Abweichende Fassungen eines Flugblatts werden bislang nicht automatisch gruppiert. Sie bleiben daher als eigenständige Flugblätter erhalten. Das erste Topic-Modelling wurde über alle Exemplare des Bestandes hinweg durchgeführt. Bei einer Neuberechnung innerhalb der Anwendung werden dagegen in Zukunft nur die Hauptexemplare berücksichtigt (Kap. 7).
