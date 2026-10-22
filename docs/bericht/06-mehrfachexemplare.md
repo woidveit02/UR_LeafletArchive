@@ -50,4 +50,4 @@ Sämtliche Angaben von Zahlen innehralb der Anwendung, die bspw. Herausgeber, Th
 
 ## 6.7 Hinweise zur Weiterentwicklung
 
-Abweichende Fassungen eines Flugblatts werden bislang nicht automatisch gruppiert. Sie bleiben daher als eigenständige Flugblätter erhalten. Das erste Topic-Modelling wurde über alle Exemplare des Bestandes hinweg durchgeführt. Bei einer Neuberechnung innerhalb der Anwendung werden dagegen in Zukunft nur die Hauptexemplare berücksichtigt (Kap. 7).
+Abweichende Fassungen eines Flugblatts werden bislang nicht automatisch gruppiert. Sie bleiben daher als eigenständige Flugblätter erhalten. Das erste Topic-Modelling wurde über alle Exemplare des Bestandes hinweg durchgeführt. Bei einer Neuberechnung innerhalb der Anwendung werden dagegen in Zukunft nur die Hauptexemplare berücksichtigt (siehe Kapitel 7).

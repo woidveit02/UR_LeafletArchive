@@ -28,7 +28,7 @@ Da in den Flugblättern oft Namen von Personen fallen, wurde das Thema Datenschu
 
 ## 10.4 Ausblick
 
-Es gibt viele potentielle Veränderungen, Verbesserungen oder Tests, die im Projekt verwirklicht werden könnten und obrige Problemfelder (zumindest teilweise oder ganz) lösen können. Da die Grundstruktur der Anwendung solide steht, sollte in Zukunft der Fokus auf einer Verbesserung der automatisierten Datenverarbeitung liegen. 
+Es gibt viele potentielle Veränderungen, Verbesserungen oder Tests, die im Projekt verwirklicht werden könnten und obige Problemfelder (zumindest teilweise oder ganz) lösen können. Da die Grundstruktur der Anwendung solide steht, sollte in Zukunft der Fokus auf einer Verbesserung der automatisierten Datenverarbeitung liegen. 
 
 Eine einfache und notwendige Verbesserung ist natürlich das kontinuierliche Hinzufügen neuer Flugblätter, vor allem der verbleibenden Bände des Jahres 1973.
 
@@ -40,4 +40,8 @@ Ein System zur Fuzzy-Suche könnte zudem die Auswirkungen fehlerhaften OCRs verm
 
 Ein weiteres Datenverarbeitungssystem, das als neues Feature hinzugefügt werden kann, ist Named entity Recognition, das erwähnte Personen und Orte als eigene Felder erkennt, vor allekm mit Belegstellen, mit OCR-Fehlern und Schreibvarianten (Obermair, Obermaier). Der Aufwand liegt weniger in der Erkennung als im Zusammenführen der Varianten und in der Messung an einer Stichprobe.
 
-Zudem sollte und könnte das System vor einer langfristigen Nutzung ausgieig getestet werden. Wie bereits erwähnt sind viele Variablen, Einstellungen oder Designentscheidungen nur das Produkt gradueller iterativer Verbesserung, meist basierend auf subjektiver Einschätzung durch die Entwickler. So wäre es sinnvoll, zu ermitteln, wie das System denn objektiv peformt. Beispielsweise die Korrektheit der extrahierten Metadaten könnte ermitelt werden, oder die reale Character Error Rate des OCR.
+Zudem sollte und könnte das System vor einer langfristigen Nutzung ausgbieig getestet werden. Wie bereits erwähnt sind viele Variablen, Einstellungen oder Designentscheidungen nur das Produkt gradueller iterativer Verbesserung, meist basierend auf subjektiver Einschätzung durch die Entwickler. So wäre es sinnvoll, zu ermitteln, wie das System denn objektiv peformt. Beispielsweise die Korrektheit der extrahierten Metadaten könnte ermittelt werden, oder die reale Character Error Rate des OCR.
+
+Seitens des Universitätsarchivs wurde großes Interesse an der Anwendung bekundet und der Wunsch geäußert, diese auch über das Projektende hinaus nutzen zu können. Eine mögliche Umsetzung wäre die Bereitstellung auf einem Universitätsserver, sodass die Anwendung dem Archiv dauerhaft zur Verfügung steht. Damit wäre jedoch auch ein fortlaufender Betreuungsaufwand verbunden. Dazu zählen insbesondere die Behebung auftretender Fehler, die Anpassung an technische Änderungen sowie gegebenenfalls eine Hilfestellung beim Import weiterer Bände. Um diese Herausforderungen in Zukunft einzugrenzen, wurde während der Entwicklung darauf geachtet, die Anwendung so robust, wartbar und nutzerfreundlich wie möglich zu gestalten. Eine ausführliche Dokumentation soll zudem sicherstellen, dass Einarbeitungszeit in die Anwendung auch für externe Nutzer so gering wie möglich ausfällt.
+
+Aufgrund des positiven Interesses seitens des Universitätsarchivs haben wir uns dazu entschieden, das Gespräch mit den Verantwortlichen zu suchen und gemeinsam eine Lösung für die zukünftige Bereitstellung und Betreuung der Anwendung zu erarbeiten. Dabei sollen insbesondere die technischen und organisatorischen Voraussetzungen für einen dauerhaften Betrieb sowie die Zuständigkeiten für Wartung, Fehlerbehebung und den Import weiterer Bände geklärt werden.
