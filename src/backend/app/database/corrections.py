@@ -1,4 +1,4 @@
-"""Manual corrections, one JSON line per field (format: docs/handbuch/entwicklung.md). A correction is applied only to the
+"""Manual corrections, one JSON line per field (format: docs/handbuch/weiterentwickeln.md). A correction is applied only to the
 segment with exactly the page range it was made for; after a boundary change
 it stays in the file and is listed under /korrekturen for review."""
 import html

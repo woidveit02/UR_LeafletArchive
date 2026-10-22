@@ -65,7 +65,7 @@
         paint();
         document.querySelectorAll('.split-count').forEach((e) => {
             e.classList.toggle('done', data.confirmed && !dirty);
-            e.textContent = !data.saved && !dirty && !cuts.size ? 'Noch keine Einteilung' : `${(data.confirmed && !dirty) || complete() ? `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ` : ''}${data.confirmed && !dirty ? 'Einteilung abgeschlossen' : complete() && !dirty ? 'alle Übergänge geprüft' : `${all.filter(decided).length} von ${transitions} Übergängen geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
+            e.textContent = !data.saved && !dirty && !cuts.size ? 'Noch keine Einteilung' : `${(data.confirmed && !dirty) || complete() ? `${leaflet} ${leaflet === 1 ? 'Flugblatt' : 'Flugblätter'} · ` : ''}${data.confirmed && !dirty ? 'Einteilung abgeschlossen' : complete() && !dirty ? 'alle Seitenwechsel geprüft' : `${all.filter(decided).length} von ${transitions} Seitenwechseln geprüft`}${hints.size ? ` · ${hints.size} ${hints.size === 1 ? 'mögliche fehlende Trennung' : 'mögliche fehlende Trennungen'}` : ''}${
                 dirty ? ' · speichert …' : data.confirmed ? '' : data.saved ? '' : ' · noch nicht gesetzt'}`;
         });
         finish.hidden = complete() && !dirty && data.confirmed;
@@ -75,7 +75,7 @@
         summary();
         const missing = all.filter((a) => !decided(a)).length;
         finish.textContent = missing ? `Noch ${missing} offen →` : 'Einteilung abschließen';
-        finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Übergänge${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Übergänge sind geprüft: Einteilung übernehmen und zur Übersicht';
+        finish.title = missing ? `Zum Abschließen fehlen noch ${missing} Seitenwechsel${suggested.size + hints.size ? ` (davon ${suggested.size + hints.size} Trennvorschläge)` : ''}. Ein Klick springt zum nächsten.` : 'Alle Seitenwechsel sind geprüft:Einteilung übernehmen und zur Übersicht';
         renderView();
     };
     const decided = (a) => forced(a) || (excluded.has(a) && excluded.has(a + 1)) || (!suggested.has(a) && !hints.has(a) && (cuts.has(a) || reviewed.has(a)));
@@ -209,7 +209,7 @@
         if (a >= transitions) return;
         const next = all.slice(a).find((x) => !decided(x)) || a + 1;
         const skipped = next - a - 1;
-        go(next, true, skipped ? `${skipped} bereits entschiedene${skipped === 1 ? 'r Übergang' : ' Übergänge'} übersprungen` : '');
+        go(next, true, skipped ? `${skipped} bereits entschiedene${skipped === 1 ? 'r' : ''} Seitenwechsel übersprungen` : '');
     };
     const nextOpen = () => {
         const a = at(), open = [...all.slice(a), ...all.slice(0, a - 1)].find((x) => !decided(x));

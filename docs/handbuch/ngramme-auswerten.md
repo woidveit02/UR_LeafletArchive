@@ -1,6 +1,6 @@
-# N-Gramm-Werkzeug
+# N-Gramme auswerten
 
-`scripts/ngrams.py` zählt Wörter und Wortfolgen in den OCR-Texten: häufigste N-Gramme, Verläufe über die Jahre, typische Wörter eines Jahres, Kollokationen und Belegstellen. Es braucht nur Python, keine weiteren Pakete und keine API-Schlüssel.
+`scripts/ngrams.py` zählt Wörter und Wortfolgen in den OCR-Texten: häufigste N-Gramme, Verläufe über die Jahre, typische Wörter eines Jahres, Kollokationen und Belegstellen. Es braucht nur Python, keine weiteren Pakete und keine API-Keys.
 
 ```bash
 python scripts/ngrams.py <befehl> [optionen]
@@ -77,7 +77,7 @@ Optionen: `-n` (Standard 2), `--top` (Standard 20), `--raw`.
 
 ## `trend`: Häufigkeit je Jahr
 
-Wörter und Wortfolgen in Anführungszeichen, je 10 000 Token:
+Häufigkeit je 10 000 Token. Wortfolgen stehen in Anführungszeichen:
 
 ```bash
 python scripts/ngrams.py trend notstand vietnam streik berufsverbot mitbestimmung "numerus clausus" "kampf gegen"
@@ -99,7 +99,7 @@ pro 10.000 Token              1967    1968    1969    1970    1971    1972    19
 
 ## `keyness`: was für ein Jahr typisch ist
 
-Vergleicht jedes Jahr mit allen übrigen (Dunnings G²). Die Suchwörter muss man dafür nicht kennen.
+Vergleicht jedes Jahr mit allen übrigen (Dunnings G²). Die Suchwörter muss man dafür nicht kennen. In Klammern steht, wie oft das Wort in dem Jahr vorkommt.
 
 ```bash
 python scripts/ngrams.py keyness --top 6
@@ -168,6 +168,7 @@ Die beiden Belege von 1973 stammen aus zwei Exemplaren desselben Blatts, die die
 ## Grenzen
 
 - Wörter werden nicht auf ihre Grundform gebracht: `studenten` und `student` zählen getrennt.
+- Mehrfachexemplare zählen mehrfach. Das Skript liest alle Seiten aller Bände und weiß nicht, welche Blätter Exemplare desselben Flugblatts sind ([Kapitel 6](../bericht/06-mehrfachexemplare.md)). Ein oft verteiltes Blatt hebt seine Wörter deshalb in `top`, `trend` und `keyness` an; das `kwic`-Beispiel oben zeigt zwei Exemplare nebeneinander. Die Trends der Anwendung zählen jedes Flugblatt dagegen einmal.
 - Gezählt wird nach Seiten und Token, nicht nach Flugblättern. Fragen wie „auf wie vielen Blättern steht X“ oder „welche Gruppe schreibt was“ beantwortet der Export der Anwendung (Beispiele im Notebook `vertiefung/forschungsfragen.ipynb`).
 - Fehler der Texterkennung bleiben stehen. `keyness` findet sie gut.
 - G² dient hier nur zum Sortieren, nicht als Test mit Schwellenwert.

@@ -9,7 +9,7 @@
 
 Liest die Texterkennung aus dem Scan-Ordner (--ordner, sonst LEAFLET_PDF_HOST_DIR aus .env) und das Jahr jedes
 Bandes aus data/volumes.json. Der Text wird im Scan-Ordner unter .ngrams/ zwischengespeichert.
-Anleitung: docs/handbuch/ngrams.md. Braucht nur die Standardbibliothek.
+Anleitung: docs/handbuch/ngramme-auswerten.md. Braucht nur die Standardbibliothek.
 """
 import argparse
 import html

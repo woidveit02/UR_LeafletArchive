@@ -20,14 +20,13 @@ Nach einem Pull: Hat sich `Dockerfile` oder `requirements.txt` geändert, mit `d
 rm src/backend/leaflet_database.db      # Windows: del src\backend\leaflet_database.db
 docker compose restart
 ```
-
-Die Anwendung hat keine Anmeldung und ist deshalb nur auf dem eigenen Rechner erreichbar. Wie sie auf einem Server mit Passwort läuft, steht in [`docs/handbuch/betrieb.md`](docs/handbuch/betrieb.md).
+Die Anwendung hat keine Anmeldung und ist deshalb nur auf dem eigenen Rechner erreichbar. Wie sie auf einem Server mit Passwort läuft, steht in [`docs/handbuch/installieren-und-betreiben.md`](docs/handbuch/installieren-und-betreiben.md).
 
 ## Was die Anwendung kann
 
 Die Anwendung durchsucht den ganzen Text und zeigt die Fundstellen. Die Treffer lassen sich nach Jahr, Herausgeber, Thema und Textsorte filtern; dazu kommen Trends über die Jahre und eigene Seiten für Themen, Organisationen und Bände. Jedes Flugblatt zeigt Scan und Text nebeneinander, jede Angabe mit ihrem Beleg im Text.
 
-Angaben lassen sich von Hand korrigieren, Mehrfachexemplare prüfen und der Bestand als ZIP exportieren. Neue Bände kommen in sieben Schritten von den Scans bis zur Freigabe dazu, im Browser oder in der Kommandozeile ([Anleitung](docs/handbuch/band-einlesen.md)).
+Metadaten lassen sich von Hand korrigieren, Mehrfachexemplare prüfen und der Bestand als ZIP exportieren ([Anleitung](docs/handbuch/recherchieren-und-pflegen.md)). Neue Bände kommen in sechs Schritten von den Scans bis zur Freigabe dazu, im Browser oder in der Kommandozeile ([Anleitung](docs/handbuch/neue-baende-importieren.md)).
 
 ## Aufbau
 
@@ -57,7 +56,7 @@ Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noc
 
 ## Dokumentation
 
-Der Projektbericht und die Lesepfade für Archiv, Forschung und Entwicklung beginnen in [`docs/README.md`](docs/README.md). Code, Datenformate und Tests beschreibt [`docs/handbuch/entwicklung.md`](docs/handbuch/entwicklung.md), die Werkzeuge neben der Anwendung [`scripts/README.md`](scripts/README.md).
+Der Projektbericht und die Lesepfade für Archiv, Forschung und Entwicklung beginnen in [`docs/README.md`](docs/README.md). Code, Datenformate und Tests beschreibt [`docs/handbuch/weiterentwickeln.md`](docs/handbuch/weiterentwickeln.md), die Werkzeuge neben der Anwendung [`scripts/README.md`](scripts/README.md).
 
 Als Website lässt sich die Dokumentation so ansehen:
 

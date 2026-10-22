@@ -7,7 +7,7 @@ Diese Dokumentation beschreibt, wie aus den Scans der Allgemeinen Flugblattsamml
 | Teil | Inhalt |
 |---|---|
 | [`bericht/`](bericht/) | Projektbericht: Vorgehen, Entscheidungen, Evaluation. Kapitel in der Reihenfolge, in der ein Band verarbeitet wird. Ältere Fassungen liegen in `arbeitsdokumente/alte-gliederung/`. |
-| [`handbuch/`](handbuch/) | Anleitungen: neuen Band einlesen, N-Gramm-Werkzeug, Betrieb, Entwicklung. |
+| [`handbuch/`](handbuch/) | Anleitungen: Recherchieren und pflegen, Neue Bände importieren, N-Gramme auswerten, Installieren und betreiben, Weiterentwickeln. |
 | [`vertiefung/`](vertiefung/) | Detailstudien, auf die der Bericht verweist. |
 | [`kennzahlen.md`](kennzahlen.md) | Alle Zahlen zum Korpus mit Datum. Einzige Quelle für Zahlen im Bericht. |
 | [`glossar.md`](glossar.md) | Begriffe. |
@@ -18,9 +18,9 @@ Die Belege zur OCR-Evaluation liegen im archivierten Arbeits-Repository (Bericht
 
 ## Lesepfade
 
-- **Universitätsarchiv:** [Kurzfassung](bericht/00-kurzfassung.md), [Neuen Band einlesen](handbuch/band-einlesen.md), dann [Kapitel 8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md).
+- **Universitätsarchiv:** [Kurzfassung](bericht/00-kurzfassung.md), [Recherchieren und pflegen](handbuch/recherchieren-und-pflegen.md), [Neue Bände importieren](handbuch/neue-baende-importieren.md), dann [Kapitel 8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md).
 - **Forschung:** [Kapitel 2 Bestand](bericht/02-bestand.md), [8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md), dann das Notebook unter `vertiefung/`.
-- **Entwicklung:** [Entwicklung](handbuch/entwicklung.md), [Betrieb](handbuch/betrieb.md), Kapitel 4–7 (je Abschnitt „Hinweise zur Weiterentwicklung“) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
+- **Entwicklung:** [Weiterentwickeln](handbuch/weiterentwickeln.md), [Installieren und betreiben](handbuch/installieren-und-betreiben.md), Kapitel 4–7 (je Abschnitt „Hinweise zur Weiterentwicklung“) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
 
 ## Bericht
 

@@ -26,6 +26,7 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 - Korrekturen und Exemplar-Prüfungen, die nach einer neuen Trennung nicht mehr passen, unter Verwaltung › Korrekturen.
 - Entwürfe löschen und Freigaben zurücknehmen (Verwaltung).
 - Export als ZIP und CSV.
+- Anleitung: [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md).
 
 ## 9.4 Import neuer Bände
 
@@ -34,7 +35,7 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 - Die API-Keys für Datalab und OpenRouter lassen sich unter Verwaltung › API-Keys eintragen.
 - Bis zur Freigabe ist der Band ein Entwurf und in Liste, Suche und Trends unsichtbar.
 - Kostenschätzung vor der Texterkennung und den Metadaten; unterbrochene Schritte lassen sich fortsetzen.
-- Anleitung: `handbuch/band-einlesen.md`.
+- Anleitung: [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
 
 ## 9.5 Architektur und Datenmodell
 
@@ -49,7 +50,7 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
-- N-Gramm-Werkzeug (`scripts/ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung in `handbuch/ngrams.md`.
+- N-Gramm-Werkzeug (`scripts/ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung: [N-Gramme auswerten](../handbuch/ngramme-auswerten.md).
 - `scripts/tiff_to_pdf.py` fügt TIFF-Scans zu einem PDF zusammen, `scripts/learn_boundary_weights.py` lernt die Gewichte der Textmerkmale des Trennvorschlags neu (Kap. 4.8). Übersicht in `scripts/README.md`.
 - Notebook `vertiefung/forschungsfragen.ipynb`: zeigt, wie sich der Export für Auswertungen nutzen lässt. Die Fragen sind Beispiele, keine Ergebnisse des Projekts.
 

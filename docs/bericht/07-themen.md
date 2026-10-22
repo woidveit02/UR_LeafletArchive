@@ -14,7 +14,7 @@ Viele Flugblätter behandeln mehrere Themen, das wurde zum aktuellen Stand noch 
 
 ## 7.3 Verfahren
 
-Vor der Berechnung wird der Text bereinigt. Aus der Texterkennung bleiben nur die Textblöcke,  Bilder, Kopf- und Fußzeilen fallen weg. Vermerke des Archivs wie „Ablage“ mit Eingangsstempel, „z. K.“ oder „Erbitte Rückgabe“ werden entfernt. Flugblätter mit weniger als 50 Zeichen Text gehen nicht ein, längere Texte werden nach 16000 Zeichen abgeschnitten. Silbentrennungen werden nicht zusammengeführt und Gruppenkürzel nicht vereinheitlicht. Das macht nur das N-Gramm-Werkzeug (`handbuch/ngrams.md`). Die Anwendung bereitet den Text beim Zuordnen neuer Bände und bei der Neuberechnung genauso auf.
+Vor der Berechnung wird der Text bereinigt. Aus der Texterkennung bleiben nur die Textblöcke,  Bilder, Kopf- und Fußzeilen fallen weg. Vermerke des Archivs wie „Ablage“ mit Eingangsstempel, „z. K.“ oder „Erbitte Rückgabe“ werden entfernt. Flugblätter mit weniger als 50 Zeichen Text gehen nicht ein, längere Texte werden nach 16000 Zeichen abgeschnitten. Silbentrennungen werden nicht zusammengeführt und Gruppenkürzel nicht vereinheitlicht. Das macht nur das N-Gramm-Werkzeug (`handbuch/ngramme-auswerten.md`). Die Anwendung bereitet den Text beim Zuordnen neuer Bände und bei der Neuberechnung genauso auf.
 
 Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab, bis zu einer Länge von 8192 Token. BERTopic gruppiert diese Vektoren mit UMAP und HDBSCAN zu 50 Themen, die anschließend auf 40 zusammengefasst werden. Für die Schlagwörter eines Themas zählen nur Substantive in ihrer Grundform (spaCy, Modell `de_core_news_lg`). Stoppwörter und Kürzel von Organisationen werden dabei nicht berücksichtigt. 
 
