@@ -82,8 +82,8 @@
             job = await (await fetch(url)).json();
             skew = job.now - Date.now() / 1000;
             if (job.state === 'running') render();
-            else if (['done', 'error', 'cancelled'].includes(job.state)) {
-                location.reload();  // the page shows the result or the reason
+            else if (['done', 'error', 'cancelled', 'idle'].includes(job.state)) {
+                location.reload();  // the page shows the result or the reason; idle: the app restarted and lost the run
                 return;
             }
         } catch (e) { /* app restarting: try again */ }

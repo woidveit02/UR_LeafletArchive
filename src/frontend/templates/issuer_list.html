@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from '_leaflets.html' import result_list %}
+{% block title %}Herausgeber zuordnen{% endblock %}
+{% block content %}
+        <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
+        <header class="page-head">
+            <h1>Herausgeber zuordnen</h1>
+            <p class="page-intro">Jedes Flugblatt soll seinen Herausgeber im Register haben, oder es ist entschieden, dass es keinen gibt.
+                Offen sind Schreibweisen, die das Register noch nicht kennt, und Flugblätter, bei denen kein Herausgeber erkannt wurde.
+                Ein Klick öffnet die Stelle im Scan, an der du zuordnest.</p>
+            {% if band %}<p class="meta">Nur Band {{ '%03d' % band }} · <a href="/verwaltung/herausgeber?status={{ status }}">alle Bände</a></p>{% endif %}
+        </header>
+        {% set in_band = '&band=' ~ band if band else '' %}
+        <div class="copy-bar">
+            <nav class="view-switch" aria-label="Stand">
+                {% for key, label in states.items() %}
+                <a href="/verwaltung/herausgeber?status={{ key }}{{ in_band }}"{% if status == key %} aria-current="page"{% endif %}>{{ label }} ({{ counts[key] }})</a>
+                {% endfor %}
+            </nav>
+            {% if status == 'offen' and counts.offen %}<a class="button primary" href="{{ review }}">Offene durchgehen →</a>{% endif %}
+        </div>
+        {% if status == 'offen' %}
+        {% if unknown %}
+        <h2>Schreibweise nicht im Register <span class="count">· {{ unknown_spellings }}</span></h2>
+        <p class="meta">Die schräg gesetzten Herausgeber kennt das Register noch nicht.</p>
+        {{ result_list(unknown) }}
+        {% endif %}
+        {% if nameless %}
+        <h2>Kein Herausgeber erkannt <span class="count">· {{ nameless | length }}</span></h2>
+        {{ result_list(nameless) }}
+        {% endif %}
+        {% if not counts.offen %}<p class="empty">Nichts offen.</p>{% endif %}
+        {% else %}
+        <p class="meta">Bei diesen Flugblättern ist festgehalten, dass keine Gruppe sie herausgegeben hat. Ändern lässt sich das auf der Seite des Flugblatts.</p>
+        {% for value, label in decisions.items() if by_value[value] %}
+        <h2>{{ label }} <span class="count">· {{ by_value[value] | length }}</span></h2>
+        {{ result_list(by_value[value]) }}
+        {% else %}
+        <p class="empty">Noch nichts entschieden.</p>
+        {% endfor %}
+        {% endif %}
+{% endblock %}

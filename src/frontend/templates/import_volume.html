@@ -122,7 +122,8 @@
                     <button type="button" id="split-suggest-text" class="button">Neu vorschlagen</button>{% endif %}
                 </span>
             </div>
-            <div id="split-scans" class="upload-progress" hidden><progress></progress><span class="meta upload-text"></span></div>
+            <div id="split-scans" class="upload-progress" hidden><progress></progress><span class="meta upload-text"></span>
+                <button type="button" id="split-scans-stop" class="button small" title="Die Vorschläge kommen dann nur aus dem Text. Neu starten lässt es sich danach jederzeit.">Abbrechen</button></div>
             <p class="form-error split-error" role="alert" hidden></p>
             <p class="form-ok split-note" role="status" hidden></p>
             {% if not split.saved %}
@@ -427,7 +428,8 @@ x 4      Seite 4 ist leer
         {% elif not created %}
         <p class="meta">Dafür müssen zuerst die Metadaten erzeugt sein.</p>
         {% else %}
-        {% set todo = (copies.open > 0) + (new_issuers | length > 0) + (hints_open > 0) %}
+        {% set issuers_open = new_issuers | length + no_issuer | length %}
+        {% set todo = (copies.open > 0) + (issuers_open > 0) + (hints_open > 0) %}
         <div class="step-panel">
             <div class="step-panel-head">
                 <div class="step-status">
@@ -450,16 +452,18 @@ x 4      Seite 4 ist leer
                     <p class="meta">Die App hat den Text jedes Flugblatts mit allen Bänden verglichen und keine Exemplare gefunden.</p>
                     {% endif %}
                 </li>
-                <li class="task{{ ' done' if not new_issuers }}" id="herausgeber">
-                    <h3>Herausgeber zuordnen <span class="task-state">{% if new_issuers %}{{ new_issuers | length }} offen{% else %}erledigt{% endif %}</span></h3>
-                    {% if new_issuers %}
-                    <p>Diese Herausgeber kennt das Register noch nicht. Ordne jeden einmal einer Organisation zu oder lege ihn neu an. Dann erscheint er im Filter
-                        „Herausgeber“, und die App erkennt ihn auch in späteren Bänden.</p>
+                <li class="task{{ ' done' if not issuers_open }}" id="herausgeber">
+                    <h3>Herausgeber zuordnen <span class="task-state">{% if issuers_open %}{{ issuers_open }} offen{% else %}erledigt{% endif %}</span></h3>
+                    {% if issuers_open %}
+                    <p>Jedes Flugblatt soll seinen Herausgeber im Register haben, oder es ist entschieden, dass es keinen gibt.
+                        {% if new_issuers %}{{ new_issuers | length }} Herausgeber kennt das Register noch nicht: Ordne jeden einmal zu oder lege ihn neu an,
+                        dann erkennt die App ihn auch in späteren Bänden.{% endif %}
+                        {% if no_issuer %}Bei {{ no_issuer | length }} {{ 'Flugblatt' if no_issuer | length == 1 else 'Flugblättern' }} wurde kein Herausgeber erkannt: Ordne einen zu,
+                        oder halte fest, dass nur Personen unterschreiben oder sich keiner feststellen lässt.{% endif %}</p>
+                    <p class="task-actions"><a class="button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a>
+                        <a class="button text" href="/verwaltung/herausgeber?band={{ volume.vz }}">Liste</a></p>
                     {% else %}
-                    <p>Alle Herausgeber dieses Bandes stehen schon im Register.</p>
-                    {% endif %}
-                    {% if new_issuers %}
-                    <p class="task-actions"><a class="button primary" href="/import/{{ volume.vz }}/herausgeber">Herausgeber zuordnen</a></p>
+                    <p>Alle Herausgeber dieses Bandes stehen im Register, und bei jedem Flugblatt ohne Herausgeber ist entschieden, warum.</p>
                     {% endif %}
                 </li>
                 <li class="task{{ ' done' if not hints_open }}">
@@ -583,9 +587,9 @@ x 4      Seite 4 ist leer
             <button type="button" id="split-clear" class="button text" title="Löscht alle Trennungen, Leerseiten und Entscheidungen, auch die von Hand gesetzten.">Einteilung löschen</button>
             {% endif %}
             {% if step == 'angaben' and meta and meta.state != 'none' %}{{ reset('metadaten', 'Metadaten löschen', 'Die erzeugten Metadaten und Zwischenstände löschen? Text und Einteilung bleiben. Sie neu zu erzeugen kostet erneut.') }}{% endif %}
-            <form method="post" action="/import/{{ volume.vz }}/loeschen"
-                  onsubmit="return confirm('Den Entwurf Band {{ '%03d' % volume.vz }} wirklich löschen? Die hochgeladenen Scans, der erkannte Text und die Metadaten gehen verloren. Der Band im Archiv bleibt unberührt.')">
-                <button type="submit" class="button text danger" title="Löscht alles, was für diesen Band hochgeladen und erzeugt wurde. Danach lässt er sich neu beginnen.">Ganzen Entwurf löschen</button></form>
+            <form method="post" action="/import/{{ volume.vz }}/loeschen" class="step-trouble-end"
+                  onsubmit="return confirm('Den Entwurf Band {{ '%03d' % volume.vz }} wirklich löschen? Die hochgeladenen Scans, der erkannte Text und die Metadaten gehen verloren, laufende Schritte werden abgebrochen. Der Band im Archiv bleibt unberührt.')">
+                <button type="submit" class="button text danger" title="Löscht alles, was für diesen Band hochgeladen und erzeugt wurde. Danach lässt er sich neu beginnen.">Entwurf löschen</button></form>
         </section>
         {% endif %}
         </div>

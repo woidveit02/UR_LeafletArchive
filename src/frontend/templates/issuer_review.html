@@ -4,49 +4,68 @@
 {% block app_class %} app-wide{% endblock %}
 {% block content %}
         {% set n = group.issuers | length %}
-        {% set url = '/import/' ~ volume.vz ~ '/herausgeber' %}
-        {% call review_bar(volume.vz, 'Herausgeber ' ~ (nr + 1) ~ ' von ' ~ total) %}
+        {% set url = '/import/' ~ vz ~ '/herausgeber' %}
+        {% set pager %}
             <span class="pager">
                 {{ step_link((url ~ '?nr=' ~ (nr - 1)) if nr, '‹ Voriger') }}
                 {{ step_link((url ~ '?nr=' ~ (nr + 1)) if nr + 1 < total, 'Nächster ›') }}
             </span>
-        {% endcall %}
-        <h1>„{{ group.surface }}“</h1>
-        <p class="page-intro">Diesen Herausgeber kennt das Register noch nicht. Ordnest du ihn zu, erscheint er im Filter „Herausgeber“,
-            und die App erkennt diese Schreibweise auch in späteren Bänden. Unsicher? „Nächster ›“ lässt ihn offen.</p>
+        {% endset %}
+        {% if volume %}{% call review_bar(volume.vz, 'Herausgeber ' ~ (nr + 1) ~ ' von ' ~ total) %}{{ pager }}{% endcall %}
+        {% else %}<nav class="review-bar" aria-label="Herausgeber aller Bände">
+            <span><a href="/verwaltung/herausgeber">← Liste</a> · <b>Herausgeber aller freigegebenen Bände</b> · Herausgeber {{ nr + 1 }} von {{ total }}</span>
+            {{ pager }}
+        </nav>{% endif %}
+        <h1>{{ leaflet.title or 'Ohne erkannten Titel' }}</h1>
+        <p class="meta">{{ date or 'ohne Datum' }} · Band {{ '%03d' % group.vz[leaflet.id] }}, {{ pages }} ·
+            <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener">Seite des Flugblatts ↗</a></p>
         <div class="issuer-review">
             <section>
-                <p><b>{{ leaflet.title or 'Ohne erkannten Titel' }}</b><br>
-                    <span class="meta">{{ date or 'ohne Datum' }} · {{ pages }}{% if others %} · weitere Herausgeber: {{ others | join(', ') }}{% endif %}</span></p>
+                {% if issuer %}
+                <p class="issuer-surface"><span class="meta">Herausgeber im Text, noch nicht im Register</span><br>
+                    <b>„{{ group.surface }}“</b>{% if others %}<br><span class="meta">weitere Herausgeber: {{ others | join(', ') }}</span>{% endif %}</p>
+                <p class="meta">Ordnest du ihn zu, erscheint er im Filter „Herausgeber“, und die App erkennt diese Schreibweise auch in
+                    späteren Bänden. Nennt sie mehrere Herausgeber, wähle alle, auch eine neue Organisation dazu. Unsicher? „Nächster ›“ lässt ihn offen.</p>
+                {% else %}
+                <p class="issuer-surface"><span class="meta">Herausgeber</span><br><b>Kein Herausgeber erkannt</b>
+                    {% if signatories %}<br><span class="meta">Unterzeichnende: {{ signatories | join(', ') }}</span>{% endif %}</p>
+                <p class="meta">Steht auf dem Blatt doch ein Herausgeber, ordne ihn zu. Sonst halte unten fest, warum es keinen gibt.
+                    {% if blocks %}Markiert sind die Stellen, die nach einem Impressum klingen („Verantwortlich“, „Eigendruck“ …).{% endif %}
+                    Unsicher? „Nächster ›“ lässt es offen.</p>
+                {% endif %}
                 <p class="meta">
                     {% if n > 1 %}Flugblatt {{ blatt + 1 }} von {{ n }}:
                     {% if blatt %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt - 1 }}">‹ voriges</a>{% endif %}
                     {% if blatt + 1 < n %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt + 1 }}">nächstes ›</a>{% endif %} · {% endif %}
-                    <a href="/leaflets/{{ leaflet.id }}?bearbeiten" target="_blank" rel="noopener">Dieses Blatt anders zuordnen</a></p>
-                {% if issuer.blocks %}
-                <img class="issuer-evidence" src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ issuer.blocks | join(',') }}" alt="Stelle im Scan, an der „{{ group.surface }}“ steht">
+                    <a href="/leaflets/{{ leaflet.id }}?bearbeiten" target="_blank" rel="noopener">{{ 'Dieses Blatt anders zuordnen' if issuer else 'Blatt bearbeiten, etwa Unterzeichnende eintragen' }}</a></p>
+                {% if blocks %}
+                <img class="issuer-evidence" src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ blocks | join(',') }}" alt="{{ 'Stelle im Scan, an der „' ~ group.surface ~ '“ steht' if issuer else 'Stellen im Scan, die nach einem Impressum klingen' }}">
                 {% endif %}
                 <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener"><img class="issuer-page" loading="lazy"
-                   src="/leaflets/{{ leaflet.id }}/pages/{{ (issuer.blocks[0].split('-')[0] if issuer.blocks else leaflet.start_page) }}.png" alt="Scan der Seite"></a>
+                   src="/leaflets/{{ leaflet.id }}/pages/{{ (blocks[0].split('-')[0] if blocks else leaflet.start_page) }}.png" alt="Scan der Seite"></a>
             </section>
             <form method="post" action="{{ url }}" class="issuer-choice">
                 <input type="hidden" name="surface" value="{{ group.surface }}">
+                <input type="hidden" name="leaflet" value="{{ leaflet.id }}">
                 <input type="hidden" name="nr" value="{{ nr }}">
                 {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+                {% if issuer %}
                 <fieldset>
                     <legend>Schreibweise einer bekannten Organisation</legend>
+                    {% if candidates %}<div class="org-results">
                     {% for org, form, count, first, last in candidates %}
-                    <label><input type="radio" name="choice" value="{{ org.id }}" required>
-                        <span><b>{{ org.full_name or org.name }}</b>{% if org.full_name %} ({{ org.name }}){% endif %}<br>
-                        <span class="meta">{% if form not in (org.name, org.full_name) %}ähnliche Schreibweise: „{{ form }}“ · {% endif %}
-                            {% if count %}im Bestand: {{ count }} {{ 'Flugblatt' if count == 1 else 'Flugblätter' }}, {{ first }}{% if last != first %}–{{ last }}{% endif %}{% else %}noch kein Flugblatt im Bestand{% endif %}
-                            · <a href="/organizations/{{ org.id }}" target="_blank" rel="noopener">ansehen ↗</a></span></span></label>
-                    {% else %}
-                    <p class="meta">Keine ähnlich geschriebene Organisation im Register.</p>
+                    <label><input type="checkbox" name="choice" value="{{ org.id }}">
+                        <span><span class="org-name">{{ org.name }}</span>{% if org.full_name and org.full_name != org.name %} <span class="meta org-full">{{ org.full_name }}</span>{% endif %}
+                            {% if form not in (org.name, org.full_name) %}<br><span class="meta">ähnlich: „{{ form }}“</span>{% endif %}</span>
+                        <span class="meta org-count">{% if count %}<a href="/leaflets?org={{ org.id }}" target="_blank" rel="noopener" title="Die Flugblätter in einem neuen Tab">{{ count }} {{ 'Flugblatt' if count == 1 else 'Flugblätter' }}, {{ first }}{% if last != first %}–{{ last }}{% endif %} ↗</a>{% else %}noch keins{% endif %}</span></label>
                     {% endfor %}
+                    </div>{% else %}
+                    <p class="meta">Keine ähnlich geschriebene Organisation im Register.</p>
+                    {% endif %}
                 </fieldset>
+                {% endif %}
                 <fieldset>
-                    <legend>Andere Organisation aus dem Register</legend>
+                    <legend>{{ 'Andere Organisation' if issuer else 'Organisation' }} aus dem Register</legend>
                     <input type="text" id="org-query" placeholder="Kürzel oder Name eingeben" aria-label="Register durchsuchen" autocomplete="off">
                     <p id="org-count" class="meta org-hits" aria-live="polite"></p>
                     <div id="org-results" class="org-results"></div>
@@ -54,22 +73,32 @@
                 </fieldset>
                 <fieldset>
                     <legend>Neu im Register</legend>
-                    <label><input type="radio" name="choice" value="neu" required>
-                        <span>Neue Organisation „{{ group.surface }}“{% if candidates %} <span class="meta">(prüfe zuerst die Vorschläge oben)</span>{% endif %}<br>
+                    <label><input type="checkbox" name="choice" value="neu" id="org-new">
+                        {% if issuer %}<span>Neue Organisation „{{ group.surface }}“{% if candidates %} <span class="meta">(prüfe zuerst die Vorschläge oben)</span>{% endif %}<br>
+                        <span class="meta">Nennt der Text mehrere Herausgeber, trage hier den Namen der neuen ein.</span><br>
+                        {% else %}<span>Neue Organisation<br><span class="meta">Mit Kürzel oder Langform, so wie sie auf dem Blatt steht.</span><br>{% endif %}
                         <span class="org-new-fields">
-                            <input type="text" name="short" placeholder="Kürzel, falls es eins gibt (etwa LSD)" aria-label="Kürzel" oninput="this.form.choice.value = 'neu'">
-                            <input type="text" name="full_name" placeholder="Langform, falls bekannt" aria-label="Langform" oninput="this.form.choice.value = 'neu'"></span></span></label>
+                            <input type="text" name="short" placeholder="Kürzel, falls es eins gibt (etwa LSD)" aria-label="Kürzel" data-new>
+                            <input type="text" name="full_name" placeholder="Langform, falls bekannt" aria-label="Langform" data-new></span></span></label>
                 </fieldset>
                 <fieldset>
                     <legend>Kein Herausgeber</legend>
-                    <label><input type="radio" name="choice" value="person" required>
+                    {% if issuer %}
+                    <label><input type="radio" name="choice" value="person" data-none>
                         <span>Eine Person: zu den Unterzeichnenden verschieben</span></label>
-                    <label><input type="radio" name="choice" value="erwaehnt" required>
+                    <label><input type="radio" name="choice" value="erwaehnt" data-none>
                         <span>Nur erwähnt: als Herausgeber entfernen</span></label>
+                    {% else %}
+                    <label><input type="radio" name="choice" value="personen" data-none>
+                        <span>Nur Personen: Es unterschreiben Einzelne, keine Gruppe{% if not signatories %} <span class="meta">(trage sie auf der Seite des Blatts bei den Unterzeichnenden ein)</span>{% endif %}</span></label>
+                    <label><input type="radio" name="choice" value="unbekannt" data-none>
+                        <span>Nicht feststellbar: Das Blatt nennt niemanden</span></label>
+                    {% endif %}
                 </fieldset>
-                <p class="issuer-save"><button type="submit" class="button primary">Speichern &amp; weiter</button>
+                <p class="issuer-save"><span id="issuer-summary" class="issuer-summary" aria-live="polite" data-surface="{{ group.surface }}" data-others="{{ others | join(', ') }}">Noch nichts gewählt.</span>
+                    <button type="submit" class="button primary">Speichern &amp; weiter</button>
                     <span class="meta">gilt für {{ 'das Flugblatt' if n == 1 else 'alle ' ~ n ~ ' Flugblätter' }}:
-                        {% for lf, _ in group.issuers %}{{ 'S. ' if loop.first }}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
+                        {% for lf, _ in group.issuers %}{% if not volume %}{{ 'Band %03d S. ' % group.vz[lf.id] if loop.first or group.vz[lf.id] != group.vz[loop.previtem[0].id] }}{% else %}{{ 'S. ' if loop.first }}{% endif %}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
             </form>
         </div>
 {% endblock %}

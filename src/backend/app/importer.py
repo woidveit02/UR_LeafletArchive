@@ -62,12 +62,6 @@ def ocr_dir(volume):
     return scan_path(volume).parent / volume.stem
 
 
-def pending_volumes():
-    """Volumes without leaflets yet: not digitized, or a draft in progress."""
-    session = fillDatabase.session
-    return [v for v in session.query(Volume).order_by(Volume.vz) if not n_leaflets(v)]
-
-
 def free_units():
     """The archive's units (findmittel.tsv, all 85 of 1967-2024) that have no entry in volumes.json yet."""
     known = {e["vz"] for e in load_entries()}
@@ -137,10 +131,10 @@ def discard(volume):
     """
     if n_leaflets(volume) and volume.status != DRAFT:
         raise ValueError("Dieser Band ist schon freigegeben und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben", "anlegen", "bild")):
-        raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "ocr", "angaben", "anlegen", "bild"):
-        JOBS.pop((volume.vz, kind), None)
+    if running(volume, "anlegen"):  # writes to the database; takes only moments
+        raise ValueError("Die Flugblätter werden gerade angelegt. Bitte warten, bis das fertig ist.")
+    for job_key in [k for k in JOBS if k[0] == volume.vz]:
+        JOBS.pop(job_key)["cancel"] = True  # a running job stops and keeps nothing
     if volume.stem:
         target = scan_path(volume)
         pdf_service._doc_cache.pop(str(target), None)
@@ -313,9 +307,14 @@ def start_scans(volume, files):
     job = JOBS[(volume.vz, "scans")] = {"state": "running", "phase": "Wird gestartet", "done": 0, "total": 0,
                                         "started": time.time(), "error": ""}
 
+    def report(text, done=0, total=0):
+        if job.get("cancel"):  # the draft was deleted
+            raise ValueError("Der Entwurf wurde gelöscht.")
+        job.update(phase=text, done=done, total=total)
+
     def run():
         try:
-            build(kind, paths, target, lambda text, done=0, total=0: job.update(phase=text, done=done, total=total))
+            build(kind, paths, target, report)
             job.update(state="done")
         except ValueError as error:
             job.update(state="error", error=str(error))
@@ -331,5 +330,5 @@ def page_count(volume):
     path = scan_path(volume)
     if not path.is_file():
         return None
-    with pymupdf.open(path) as doc:
-        return doc.page_count
+    with pdf_service._lock:  # the cached document: every thumbnail asks, and opening a big scan each time is slow
+        return pdf_service.get_document(path).page_count

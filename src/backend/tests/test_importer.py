@@ -43,7 +43,7 @@ def folders(tmp_path, monkeypatch):
 
 # Tests if a unit of the findmittel becomes a draft volume with its data, and an unknown or taken number is refused.
 def test_new_volume_is_a_draft_from_the_findmittel(folders):
-    tmp_path, db = folders
+    tmp_path, _ = folders
     assert [u["vz"] for u in importer.free_units()] == [16, 17]
     volume = importer.new_volume(16, portal_url=" ")
     assert volume.portal_url == "https://portal.example/16"  # the link of the findmittel unless one is typed in
@@ -54,7 +54,6 @@ def test_new_volume_is_a_draft_from_the_findmittel(folders):
         with pytest.raises(ValueError, match="im Findmittel nicht"):
             importer.new_volume(taken)
     assert [e["vz"] for e in json.loads((tmp_path / "volumes.json").read_text(encoding="utf-8"))] == [15, 16]
-    assert importer.pending_volumes() == db.query(Volume).order_by(Volume.vz).all()
 
 
 # Tests if the portal link can be changed or removed, in volumes.json and in the database.
@@ -151,7 +150,9 @@ def test_discard_volume(folders, monkeypatch):
     assert (archive_unit.stem, archive_unit.digitized, archive_unit.status) == (None, False, "freigegeben")
 
     added = importer.new_volume(16)
+    job = importer.JOBS[(16, "bild")] = {"state": "running"}  # a running job does not stop it, it is told to end
     importer.discard(added)
+    assert job["cancel"] and (16, "bild") not in importer.JOBS
     assert db.query(Volume).filter_by(vz=16).count() == 0
     assert [u["vz"] for u in importer.free_units()] == [16, 17]  # number free again
 

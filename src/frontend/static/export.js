@@ -2,10 +2,19 @@
 const form = document.getElementById('export-form');
 const status = document.getElementById('export-status');
 const button = form.querySelector('button');
+const count = document.getElementById('export-count');
+const counted = () => {
+    const chosen = [...form.querySelectorAll('[name=band]:checked')];
+    const leaflets = chosen.reduce((n, box) => n + Number(box.dataset.leaflets), 0);
+    count.textContent = `${chosen.length} ${chosen.length === 1 ? 'Band' : 'Bände'} · ${leaflets.toLocaleString('de-DE')} Flugblätter gewählt`;
+};
 form.querySelectorAll('[data-all]').forEach(a => a.addEventListener('click', e => {
     e.preventDefault();
     form.querySelectorAll('[name=band]').forEach(box => box.checked = !!a.dataset.all);
+    counted();
 }));
+form.addEventListener('change', counted);
+counted();
 form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!form.querySelector('[name=band]:checked')) {

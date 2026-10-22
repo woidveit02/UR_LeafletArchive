@@ -151,6 +151,9 @@
             } else if (job.state === 'error') {
                 fail(job.error);
                 return;
+            } else if (job.state === 'idle') {
+                fail('Die App wurde neu gestartet, der Upload ist abgebrochen. Bitte noch einmal hochladen.');
+                return;
             }
         } catch (e) { /* app restarting: try again */ }
         setTimeout(poll, 1000);

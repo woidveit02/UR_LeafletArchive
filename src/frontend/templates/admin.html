@@ -6,36 +6,51 @@
         <header class="page-head admin-head">
             <div>
                 <h1>Verwaltung</h1>
-                <p class="meta">{{ released | length }} von {{ all_units }} Bänden eingelesen</p>
+                <p class="meta">{{ released | length }} von {{ all_units }} Bänden des Bestands freigegeben{% if drafts %} · {{ drafts | length }} {{ 'Entwurf' if drafts | length == 1 else 'Entwürfe' }}{% endif %}</p>
             </div>
-            {% if units %}<a class="button{{ '' if drafts else ' primary' }}" href="/import/neu">Band hinzufügen</a>{% endif %}
+            {% if units %}<a class="button primary" href="/import/neu">Band hinzufügen</a>{% endif %}
         </header>
         <nav class="admin-actions admin-links" aria-label="Bereiche">
-            <a class="button small" href="/exemplare{{ '?status=offen' if open_groups }}">Mehrfachexemplare{% if open_groups %} · <span class="todo">{{ open_groups }} zu prüfen</span>{% endif %}</a>
-            <a class="button small" href="/korrekturen">Korrekturen{% if unmatched %} · <span class="todo">{{ unmatched }} ohne Zuordnung</span>{% endif %}</a>
-            <a class="button small" href="{{ '/verwaltung/themen/neu' if candidate else '/verwaltung/themen' }}">Themen{% if candidate %} · <span class="todo">{{ candidate }} neue zu prüfen</span>{% endif %}</a>
-            <a class="button small" href="/verwaltung/export">Datensatz exportieren</a>
-            <a class="button small" href="/verwaltung/api-keys">API-Keys</a>
+            <a class="button" href="/exemplare{{ '?status=offen' if open_groups }}" title="Flugblätter, die mehrfach im Bestand liegen: offen sind die noch nicht geprüften">Mehrfachexemplare{% if open_groups %} · <span class="todo">{{ open_groups }} offen</span>{% endif %}</a>
+            <a class="button" href="/verwaltung/herausgeber" title="Flugblätter, deren Herausgeber noch nicht im Register steht oder gar nicht erkannt wurde">Herausgeber zuordnen{% if issuers %} · <span class="todo">{{ issuers }} offen</span>{% endif %}</a>
+            <a class="button" href="/korrekturen" title="Korrekturen von Hand: offen sind die, deren Flugblatt sich seitdem geändert hat">Korrekturen{% if unmatched %} · <span class="todo">{{ unmatched }} offen</span>{% endif %}</a>
+            <a class="button" href="{{ '/verwaltung/themen/neu' if candidate else '/verwaltung/themen' }}" title="Themen der Flugblätter: offen sind neu berechnete, die noch zu prüfen sind">Themen{% if candidate %} · <span class="todo">{{ candidate }} offen</span>{% endif %}</a>
+            <a class="button admin-tools" href="/verwaltung/export">Datensatz exportieren</a>
+            <a class="button" href="/verwaltung/api-keys">API-Keys</a>
         </nav>
         {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
 
-        {% if drafts %}
-        <h2>In Bearbeitung</h2>
-        <ul class="open-list">
-            {% for v in drafts %}
-            <li><a href="/import/{{ v.vz }}">Band {{ '%03d' % v.vz }} · {{ v.title }}</a>
-                <span class="open-state"><progress max="{{ n_steps }}" value="{{ v.n - 1 }}" aria-hidden="true"></progress>Schritt {{ v.n }} von {{ n_steps }}: {{ v.step }}</span>
-                <span class="open-actions"><a class="button small primary" href="/import/{{ v.vz }}">Fortsetzen</a></span></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        <h2>Freigegeben</h2>
-        <table class="data-table admin-volumes">
-            <thead><tr><th>Band</th><th class="hide-narrow">Titel</th><th class="num hide-narrow">Seiten</th><th class="num hide-narrow">Flugblätter</th>
+        {# one table for drafts and released volumes, so their columns line up; each group has its heading and column names #}
+        {% macro group_head(title) %}
+            <tr class="table-group"><th colspan="7"><h2>{{ title }}</h2></th></tr>
+            <tr class="table-head"><th>Band</th><th class="hide-narrow">Titel</th><th class="num hide-narrow">Seiten</th><th class="num hide-narrow">Flugblätter</th>
                 <th class="num hide-narrow" title="Flugblätter, die im Bestand mehr als einmal vorkommen. In Liste, Suche und Trends zählt jedes nur einmal.">Mehrfach vorhanden</th>
-                <th>Offen</th><th><span class="visually-hidden">Aktion</span></th></tr></thead>
+                <th class="admin-open">Offen</th><th><span class="visually-hidden">Aktion</span></th></tr>
+        {% endmacro %}
+        <table class="data-table admin-volumes">
+            {% if drafts %}
             <tbody>
+            {{ group_head('Entwürfe') }}
+            {% for v in drafts %}
+            <tr>
+                <td><a href="/import/{{ v.vz }}">{{ '%03d' % v.vz }}</a></td>
+                <td class="hide-narrow"><a href="/import/{{ v.vz }}">{{ v.title }}</a></td>
+                <td class="num hide-narrow">{{ v.pages or '–' }}</td>
+                <td class="num hide-narrow" title="Erst nach Schritt 6 bekannt">?</td>
+                <td class="num hide-narrow" title="Erst nach Schritt 6 bekannt">?</td>
+                <td class="admin-open"><span class="step-dots" title="Schritt {{ v.n }} von {{ n_steps }}">{% for n in range(1, n_steps + 1) %}<span{% if n < v.n %} class="done"{% elif n == v.n %} class="now"{% endif %}></span>{% endfor %}</span>
+                    <span class="step-label">{{ v.n }}. {{ v.step }}</span></td>
+                <td class="admin-action"><a class="button small" href="/import/{{ v.vz }}">Fortsetzen</a>
+                    <details class="row-menu"><summary title="Weitere Optionen" aria-label="Weitere Optionen">⋯</summary>
+                        <form method="post" action="/import/{{ v.vz }}/loeschen"
+                              onsubmit="return confirm('Den Entwurf Band {{ '%03d' % v.vz }} wirklich löschen? Die hochgeladenen Scans, der erkannte Text und die Metadaten gehen verloren, laufende Schritte werden abgebrochen. Der Band im Archiv bleibt unberührt.')">
+                            <button type="submit" class="button text danger" title="Löscht alles, was für diesen Band hochgeladen und erzeugt wurde. Danach lässt er sich neu beginnen.">Entwurf löschen</button></form></details></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            {% endif %}
+            <tbody>
+            {{ group_head('Freigegeben') }}
             {% for v in released %}
             <tr>
                 <td><a href="/volumes/{{ v.vz }}">{{ '%03d' % v.vz }}</a></td>
@@ -45,9 +60,13 @@
                 <td class="num hide-narrow">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{{ v.groups }}</a>{% else %}–{% endif %}</td>
                 <td class="admin-open">
                     {%- if v.open %}<a class="todo" href="/exemplare?band={{ v.vz }}&status=offen">{{ v.open }} {{ 'mögliches Mehrfachexemplar' if v.open == 1 else 'mögliche Mehrfachexemplare' }} prüfen</a>{% endif %}
-                    {%- if v.issuers %}<a class="todo" href="/import/{{ v.vz }}/herausgeber">{{ v.issuers }} {{ 'Herausgeber' }} zuordnen</a>{% endif %}
+                    {%- if v.issuers %}<a class="todo" href="/verwaltung/herausgeber?band={{ v.vz }}">{{ v.issuers }} Herausgeber zuordnen</a>{% endif %}
                     {%- if not v.topics %}<a class="meta" href="/import/{{ v.vz }}?schritt=themen">Themen zuordnen (optional)</a>{% endif %}</td>
-                <td><a href="/import/{{ v.vz }}?schritt=pruefen" title="Hinweise und Herausgeber prüfen, Freigabe zurücknehmen">Bearbeiten</a></td>
+                <td class="admin-action"><a class="button small" href="/import/{{ v.vz }}?schritt=pruefen" title="Hinweise und Herausgeber prüfen">Prüfen</a>
+                    <details class="row-menu"><summary title="Weitere Optionen" aria-label="Weitere Optionen">⋯</summary>
+                        <form method="post" action="/import/{{ v.vz }}/zuruecknehmen"
+                              onsubmit="return confirm('Freigabe von Band {{ '%03d' % v.vz }} zurücknehmen? Er verschwindet aus Liste, Suche und Trends, bis er wieder freigegeben wird.')">
+                            <button type="submit" class="button text" title="Macht den Band wieder zum Entwurf, damit sich frühere Schritte ändern lassen.">Freigabe zurücknehmen</button></form></details></td>
             </tr>
             {% endfor %}
             </tbody>

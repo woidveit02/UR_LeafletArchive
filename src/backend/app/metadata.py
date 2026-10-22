@@ -968,7 +968,7 @@ def flagged_leaflets(volume):
     by_range = {(lf.start_page, lf.end_page): lf
                 for lf in fillDatabase.session.query(fillDatabase.Leaflet).filter_by(volume_id=volume.id)
                 if not (lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id))}
-    checked = corrections.by_segment(corrections.load(fillDatabase.CHECKED))
+    checked = corrections.by_segment(e for e in corrections.load(fillDatabase.CHECKED) if e["field"] == "hints")
     fixed = corrections.by_segment(corrections.load(fillDatabase.CORRECTIONS))
 
     def seen(lf):

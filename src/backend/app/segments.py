@@ -51,25 +51,43 @@ def load_looks(volume):
     return doc["pages"] if fits else None
 
 
-def start_looks(volume):
-    """Measures the scan in the background (poll importer.JOBS[(vz, LOOKS_JOB)]), unless that is done or running."""
+def start_looks(volume, again=False):
+    """Measures the scan in the background (poll importer.JOBS[(vz, LOOKS_JOB)]), unless that is done or running, or
+    was stopped by hand (again: start it all the same)."""
     busy = importer.running(volume, LOOKS_JOB) or importer.running(volume)  # or a new scan is being built
-    if busy or not importer.scan_path(volume).is_file() or load_looks(volume) is not None:
+    stopped = importer.JOBS.get((volume.vz, LOOKS_JOB), {}).get("state") == "cancelled" and not again
+    if busy or stopped or not importer.scan_path(volume).is_file() or load_looks(volume) is not None:
         return
     job = importer.JOBS[(volume.vz, LOOKS_JOB)] = {"state": "running", "done": 0, "total": importer.page_count(volume),
                                                    "started": time.time(), "error": ""}
     scan, stamp = importer.scan_path(volume), importer.scan_stamp(volume)
 
+    def report(done, total):
+        if job.get("cancel"):  # stopped by hand, or the draft was deleted
+            raise RuntimeError("cancelled")
+        job.update(done=done, total=total)
+
     def run():
         try:
-            pages = looks.measure_scan(scan, lambda done, total: job.update(done=done, total=total))
+            pages = looks.measure_scan(scan, report)
             write(looks_path(volume), {"version": looks.VERSION, "scan": stamp, "pages": pages})
             job["state"] = "done"
         except Exception as error:  # a thread must report, not die silently
+            if job.get("cancel"):
+                job["state"] = "cancelled"
+                return
             logger.exception("measuring the scan failed")
             job.update(state="error", error=f"Papier, Lochung und Stempel ließen sich nicht erkennen ({error}).")
 
     threading.Thread(target=run, daemon=True).start()
+
+
+def stop_looks(volume):
+    """Stops measuring the scan after the pages being read; the suggestions then come from the text alone."""
+    job = importer.JOBS.get((volume.vz, LOOKS_JOB))
+    if not job or job["state"] != "running":
+        raise ValueError("Papier, Lochung und Stempel werden gerade nicht erkannt.")
+    job["cancel"] = True
 
 
 def reasons(volume):

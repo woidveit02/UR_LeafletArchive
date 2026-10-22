@@ -4,29 +4,39 @@
         <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>Datensatz exportieren</h1>
-            <p class="page-intro">Texte und Metadaten als ZIP mit JSONL, CSV und einer Textdatei pro Flugblatt, lesbar ohne die App. Eine README erklärt die Felder.</p>
+            <p class="page-intro">Lade die freigegebenen Bände als ZIP herunter, etwa für eigene Auswertungen oder zur Weitergabe.
+                Die Dateien lassen sich ohne die App öffnen. Entwürfe und Scans sind nicht dabei.</p>
         </header>
+        <dl class="export-files">
+            <dt><code>flugblaetter.csv</code>, <code>.jsonl</code></dt><dd>Ein Eintrag pro Flugblatt mit allen Metadaten. Die CSV öffnet sich in Excel, die JSONL enthält zusätzlich den Volltext.</dd>
+            <dt><code>texte/</code></dt><dd>Der Volltext jedes Flugblatts als eigene Datei.</dd>
+            <dt><code>herausgeber.csv</code></dt><dd>Das Register der Herausgeber. <code>flugblatt_herausgeber.csv</code> sagt, wer welches Flugblatt herausgegeben hat, mit der Stelle im Text.</dd>
+            <dt><code>baende.csv</code>, <code>themen.csv</code></dt><dd>Die Bände mit Signatur und Link ins Archivportal. Die Themen mit ihren Schlagwörtern.</dd>
+            <dt><code>seiten.jsonl</code></dt><dd>Jede Scanseite mit ihren Textblöcken. Nur dabei, wenn du unten „Textblöcke und ihre Lage“ wählst.</dd>
+            <dt><code>README.md</code></dt><dd>Erklärt jedes Feld und die gewählten Einstellungen.</dd>
+        </dl>
         <form id="export-form" action="/verwaltung/export.zip" class="step-form export-form">
             <fieldset class="mode-choice">
                 <legend>Bände</legend>
                 <div class="export-volumes">
-                    {% for v in volumes %}<label title="{{ v.title }} · {{ v.leaflets }} Flugblätter"><input type="checkbox" name="band" value="{{ v.vz }}" checked> {{ '%03d' % v.vz }}</label>{% endfor %}
+                    {% for v in volumes %}<label title="{{ v.title }} · {{ v.leaflets }} Flugblätter"><input type="checkbox" name="band" value="{{ v.vz }}" data-leaflets="{{ v.leaflets }}" checked> {{ '%03d' % v.vz }} <span class="meta">{{ v.year }}</span></label>{% endfor %}
                 </div>
-                <p class="meta"><a href="#" data-all="1">Alle</a> · <a href="#" data-all="">Keinen</a></p>
+                <p class="meta"><a href="#" data-all="1">Alle</a> · <a href="#" data-all="">Keinen</a> · <span id="export-count"></span></p>
             </fieldset>
             <fieldset class="mode-choice">
                 <legend>Exemplare</legend>
-                <label class="mode-row"><input type="radio" name="exemplare" value="alle" checked><span class="mode-name">Alle</span><span class="meta">Jedes Exemplar, Kopien verweisen auf ihr Hauptexemplar</span><span></span></label>
-                <label class="mode-row"><input type="radio" name="exemplare" value="haupt"><span class="mode-name">Nur Hauptexemplare</span><span class="meta">Jedes Flugblatt einmal, z. B. für Zählungen und Trends</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="exemplare" value="alle" checked><span class="mode-name">Alle</span><span class="meta">Jedes Exemplar. Weitere Exemplare verweisen auf ihr Hauptexemplar.</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="exemplare" value="haupt"><span class="mode-name">Nur Hauptexemplare</span><span class="meta">Jedes Flugblatt nur einmal, etwa zum Zählen.</span><span></span></label>
             </fieldset>
             <fieldset class="mode-choice">
                 <legend>Personen</legend>
-                <label class="mode-row"><input type="radio" name="personen" value="mit" checked><span class="mode-name">Mit Namen</span><span class="meta">Unterzeichnende stehen in den Metadaten</span><span></span></label>
-                <label class="mode-row"><input type="radio" name="personen" value="ohne"><span class="mode-name">Ohne Namen</span><span class="meta">Für eine Weitergabe: Unterzeichnende fehlen in den Metadaten, im Volltext stehen sie weiter</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="personen" value="mit" checked><span class="mode-name">Mit Namen</span><span class="meta">Die Unterzeichnenden stehen in den Metadaten.</span><span></span></label>
+                <label class="mode-row"><input type="radio" name="personen" value="ohne"><span class="mode-name">Ohne Namen</span><span class="meta">Für die Weitergabe. Die Unterzeichnenden fehlen in den Metadaten, im Volltext stehen sie weiterhin.</span><span></span></label>
             </fieldset>
             <fieldset class="mode-choice">
-                <legend>Seiten</legend>
-                <label class="mode-row"><input type="checkbox" name="seiten" value="1"><span class="mode-name">Mit Layout</span><span class="meta">Jede Seite mit ihren Textblöcken und deren Lage, für OCR- und Layout-Auswertungen; etwa doppelt so groß</span><span></span></label>
+                <legend>Zusätzlich</legend>
+                <label class="mode-row"><input type="checkbox" name="seiten" value="1"><span class="mode-name">Textblöcke und ihre Lage</span><span class="meta">Für jede Scanseite die erkannten Blöcke wie Überschrift oder Absatz und wo sie auf der Seite stehen.
+                    Das brauchst du nur, um Aufbau oder Texterkennung auszuwerten. Der Volltext ist auch ohne dies dabei. Das ZIP wird etwa doppelt so groß.</span><span></span></label>
             </fieldset>
             <div class="start-row">
                 <button type="submit" class="button small primary">ZIP erstellen</button>

@@ -2,6 +2,13 @@
 {% from '_leaflets.html' import title %}
 {% block title %}Korrekturen{% endblock %}
 {% block content %}
+        {% macro drop_copies(c, question) %}
+                <form method="post" action="/korrekturen/exemplare/verwerfen" class="task-actions" onsubmit="return confirm('{{ question }}')">
+                    <input type="hidden" name="stamp" value="{{ c.stamp }}">
+                    {% if c.here and not c.waiting %}<a class="button small" href="/leaflets/{{ c.here.id }}/exemplare">Neu prüfen</a>{% endif %}
+                    <button type="submit" class="button small danger">Verwerfen</button>
+                </form>
+        {% endmacro %}
         <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>Korrekturen</h1>
@@ -27,11 +34,24 @@
             </li>
             {% endfor %}
             {% for c in copies %}
-            <li><span class="meta">{{ c.at }}</span> Geprüfte Exemplare, die nicht mehr passen: {{ c.members | join(' · ') }}</li>
+            <li><span class="meta">{{ c.at }}</span> Geprüfte Exemplare, die nicht mehr passen: {{ c.members | join(' · ') }}
+                {{ drop_copies(c, 'Diese Prüfung verwerfen? Die Exemplare gelten dann wieder als ungeprüft.') }}</li>
             {% endfor %}
         </ul>
-        <h2>Zugeordnet</h2>
         {% endif %}
+        {% if waiting %}
+        <h2>Wartet auf Entwürfe <span class="count">· {{ waiting | length }}</span></h2>
+        <p class="meta">Diese Prüfungen von Mehrfachexemplaren betreffen einen Entwurf, dessen Flugblätter gerade nicht angelegt sind, etwa weil
+            die Einteilung neu gemacht wird. Sie gelten wieder von selbst, sobald der Entwurf seine Flugblätter mit derselben Einteilung anlegt.
+            Zu tun ist nur etwas, wenn sich die Einteilung dort ändert.</p>
+        <ul class="fix-list">
+            {% for c in waiting %}
+            <li><span class="meta">{{ c.at }} · wartet auf {{ c.waiting | join(', ') }}</span> {{ c.members | join(' · ') }}
+                {{ drop_copies(c, 'Diese Prüfung verwerfen? Auch wenn der Entwurf wieder angelegt ist, gelten die Exemplare dann als ungeprüft.') }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if rows or copies or waiting %}<h2>Zugeordnet</h2>{% endif %}
 
         <p class="meta">{{ leaflets }} {{ 'Flugblatt' if leaflets == 1 else 'Flugblätter' }} · {{ total }} korrigierte Angaben</p>
         <form method="get" class="fix-filter">

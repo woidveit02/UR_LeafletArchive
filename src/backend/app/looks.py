@@ -141,8 +141,11 @@ def measure_scan(pdf, progress=lambda done, total: None, workers=WORKERS):
     # spawn, not fork: the app runs threads, and a forked child can hang on a lock one of them held
     with ProcessPoolExecutor(workers, mp_context=multiprocessing.get_context("spawn")) as pool:
         running = {pool.submit(measure_range, pdf, a, min(a + CHUNK, total)): a for a in range(0, total, CHUNK)}
-        for future in as_completed(running):  # reported as they finish, put in order at the end
-            parts[running[future]] = future.result()
-            done += len(parts[running[future]])
-            progress(done, total)
+        try:
+            for future in as_completed(running):  # reported as they finish, put in order at the end
+                parts[running[future]] = future.result()
+                done += len(parts[running[future]])
+                progress(done, total)
+        finally:
+            pool.shutdown(cancel_futures=True)  # if progress raised: the pages not begun are dropped
     return [page for first in sorted(parts) for page in parts[first]]

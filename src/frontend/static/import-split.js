@@ -18,6 +18,8 @@
     right.innerHTML = '<div class="split-pair"></div>';
     const pair = right.firstChild;
     const join = document.createElement('div'), sheets = new Map();
+    // Lucide scissors, shown where the pages are cut
+    join.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>';
     const at = () => Math.max(1, Math.min(current || 1, transitions));
 
     const forced = (page) => page < data.pages && excluded.has(page) !== excluded.has(page + 1);
@@ -90,31 +92,49 @@
         const shown = why[a - 1][1].map(([label, w]) => [label, tenth(w)]);
         return [shown, shown.reduce((s, [, w]) => s + w, tenth(data.reasons.prior))];
     };
-    // between the buttons: the score, and a bar from the middle, right to a cut, left to keeping the pages together
-    const scale = (a) => {
+    // between the buttons: the state with the score, and a bar from the middle, right to a cut, left to keeping the pages together
+    let explained = false;  // the reasons stay open after a click on the score, until the next click
+    const HELP = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';  // Lucide circle-help, as in _ui.html
+    const scale = (a, state) => {  // state: what is decided or suggested here, above the bar
         if (!why[a - 1]) return '';
-        const sum = score(a)[1], part = Math.min(Math.abs(sum) / 6, 1) * 50;
-        return `<div class="split-scale"><b class="${sum >= 0 ? 'cut' : ''}">${weight(sum)}</b><span class="split-scale-track"><i class="${sum >= 0 ? 'cut' : ''}"
-            style="left: ${sum >= 0 ? 50 : 50 - part}%; width: ${part}%"></i></span></div>`;
-    };
-    // under the buttons: what the score is made of, strongest first
-    const reasons = (a) => {
-        if (!why[a - 1]) return '';
-        const [shown, sum] = score(a);
+        const [shown, sum] = score(a), part = Math.min(Math.abs(sum) / 6, 1) * 50;
         const pro = shown.filter(([, w]) => w > 0), con = shown.filter(([, w]) => w < 0).reverse();
-        return `<p class="split-reasons">${[...pro, ...con].map(([label, w]) => `<span class="${w > 0 ? 'pro' : 'con'}">${label} <b>${weight(w)}</b></span>`).join('')}
-            <span>Grundwert <b>${weight(tenth(data.reasons.prior))}</b></span><span class="split-sum">= <b>${weight(sum)}</b>${data.reasons.images ? '' : ' (nur aus dem Text)'}</span></p>`;
+        const row = (label, w, cls = '') => `<li class="${cls}"><span>${label}</span><b>${weight(w)}</b></li>`;
+        return `<div class="split-scale${explained ? ' open' : ''}">
+            ${state.replace(/([^\s>]*)<\/span>$/, `<span class="nowrap">$1 <b class="split-score${sum >= 0 ? ' cut' : ''}">(${weight(sum)})</b><button type="button" class="split-q" data-act="why" aria-expanded="${explained}"
+                title="Warum? Woraus sich der Wert ergibt" aria-label="Warum?">${HELP}</button></span></span>`)}
+            <span class="split-scale-track"><i class="${sum >= 0 ? 'cut' : ''}" style="left: ${sum >= 0 ? 50 : 50 - part}%; width: ${part}%"></i></span>
+            <div class="split-why" role="tooltip"><button type="button" class="split-why-close" data-act="why-close" aria-label="Schließen">×</button>
+                <p>Hinweise dafür (+) und dagegen (−).<br>Über 0 wird eine Trennung vorgeschlagen.</p>
+                <ul>${pro.map(([l, w]) => row(l, w, 'pro')).join('')}${con.map(([l, w]) => row(l, w, 'con')).join('')}
+                ${row('Grundwert', tenth(data.reasons.prior))}${row('Summe', sum, 'sum')}</ul></div></div>`;
     };
-    // what the scan shows: the punch holes and the archive's blue stamp and mark, measured after the upload
+    // what the scan shows: the punch holes and the archive's blue stamp and mark, measured after the upload; shown with
+    // the reasons of the score, each named as there
     const marks = (p) => {
         const spot = data.spots?.[p - 1];
         if (!spot) return '';
-        const [w, h] = spot.size, pad = 3;
+        const [w, h] = spot.size, pad = 3, size = w * 0.04, mm = 25.4 / 72;
         const rect = ([x, y, bw, bh], cls, round) => `<rect class="${cls}" x="${x * w - pad}" y="${y * h - pad}" width="${bw * w + 2 * pad}"
             height="${bh * h + 2 * pad}" rx="${round ? (bw * w) / 2 + pad : 4}"/>`;
+        const text = (x, y, anchor, cls, label) => `<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}">${label}</text>`;
+        const hole = spot.holes[0], left = hole && hole[0] < 0.5;
+        // short words, the reasons in the box below name them in full
+        const holeLabel = hole && !left ? text(hole[0] * w - pad - 4, (hole[1] + hole[3] / 2) * h + size / 3, 'end', 'hole', 'Löcher') : '';
+        const blue = ([x, y, bw, bh]) => {  // as looks.py tells them apart: the mark small and high up, a stamp larger
+            const kind = y < 0.3 && bw * w * mm <= 30 && bh * h * mm <= 30 ? 'sign' : 'stamp';
+            const above = y * h - pad - 4 > size, right = x + bw / 2 > 0.5;
+            return rect([x, y, bw, bh], `blue ${kind}`, false) + text(right ? (x + bw) * w : x * w, above ? y * h - pad - 4 : (y + bh) * h + pad + size,
+                right ? 'end' : 'start', `blue ${kind}`, kind === 'sign' ? 'Zeichen' : 'Stempel');
+        };
         return `<svg class="split-marks" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${
-            spot.holes.map((b) => rect(b, 'hole', true)).join('')}${spot.blue.map((b) => rect(b, 'blue', false)).join('')}</svg>`;
+            left ? '' : spot.holes.map((b) => rect(b, 'hole', true)).join('')}${holeLabel}${spot.blue.map(blue).join('')}</svg>`;
     };
+    // the marks that are a reason of the score: on the second page, the one that may start a new leaflet
+    const marked = (a) => ({
+        hole: (why[a - 1]?.[1] || []).some(([label]) => label.startsWith('Löcher rechts')),
+        blue: (why[a - 1]?.[1] || []).some(([label]) => label.includes('Zeichen des Archivs') || label.startsWith('Stempel im Bild')),
+    });
     const renderView = (direction = 0) => {
         const a = at(), [style, text] = kind(a);
         if (shown !== a) {
@@ -122,7 +142,7 @@
                 if (!sheets.has(p)) {
                     const figure = document.createElement('figure');
                     figure.className = 'split-sheet';
-                    figure.innerHTML = `<img alt="Seite ${p}" src="${data.large.replace('{n}', p)}">${marks(p)}<span class="split-page-no">Seite ${p}</span><button type="button" class="split-skip" data-out="${p}"></button>`;
+                    figure.innerHTML = `<img alt="Seite ${p}" src="${data.large.replace('{n}', p)}">${marks(p)}<span class="split-foot"><span class="split-page-no">Seite ${p}</span><button type="button" class="split-skip" data-out="${p}"></button></span>`;
                     sheets.set(p, figure);
                 }
                 return sheets.get(p);
@@ -138,21 +158,23 @@
             }
         }
         pair.classList.toggle('together', reviewed.has(a) && !cuts.has(a) && !suggested.has(a) && !hints.has(a) && !forced(a));
-        join.className = `split-join ${style}`;
-        pair.querySelectorAll('.split-sheet').forEach((f, i) => {  // the button at the outer foot of each page
+        join.className = `split-join ${style}${style && !forced(a) ? ' cut' : ''}`;
+        const reason = marked(a);
+        pair.querySelectorAll('.split-sheet').forEach((f, i) => {  // the button at the foot of each page
+            Object.entries(reason).forEach(([kind, on]) => f.classList.toggle(`mark-${kind}`, i === 1 && on));
             const p = a + i, out = excluded.has(p), skip = f.querySelector('.split-skip'), key = i ? 'L' : 'Shift+L';
             f.classList.toggle('excluded', out);
             skip.setAttribute('aria-pressed', out);
-            skip.innerHTML = `${out ? 'einbeziehen' : 'leer'} <kbd>${key}</kbd>`;
-            skip.title = `${out ? `Seite ${p} wieder einbeziehen` : `Seite ${p} ist eine Leerseite oder ein Trennblatt: gehört zu keinem Flugblatt, wird nicht gezählt`} (Taste ${key})`;
+            skip.innerHTML = `<span class="split-box" aria-hidden="true">${out ? '✓' : ''}</span> Leerseite <kbd>${key}</kbd>`;
+            skip.title = `${out ? `Seite ${p} ist als Leerseite ausgelassen. Klick nimmt sie wieder in ein Flugblatt auf` : `Seite ${p} als Leerseite oder Trennblatt auslassen: Sie gehört dann zu keinem Flugblatt`} (Taste ${key})`;
         });
-        nav.innerHTML = transitions < 1 ? '' : `<button type="button" class="button" data-act="prev" title="Voriger Übergang (←)"${a < 2 ? ' disabled' : ''}><kbd>←</kbd> Zurück</button>
-            <b class="${note ? '' : style}">${note || text || (why[a - 1] ? 'keine Trennung vorgeschlagen' : '')}</b>
-            <button type="button" class="button" data-act="next" title="Nächster Übergang (→)"${current >= data.pages ? ' disabled' : ''}>Weiter <kbd>→</kbd></button>`;
+        // under the bar: what is decided or suggested here (← → page, without buttons)
+        const state = `<span class="split-state ${note ? '' : style}">${note || text || (why[a - 1] ? 'keine Trennung vorgeschlagen' : '')}</span>`;
+        nav.innerHTML = '';
         decide.innerHTML = transitions < 1 ? '' : `<div class="split-buttons">
-            <button type="button" class="button" data-act="keep" title="Seite ${a} und ${a + 1} gehören zusammen (Taste F oder Leertaste)" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}><kbd>F</kbd> Nicht trennen</button>
-            ${(!forced(a) && scale(a)) || '<span></span>'}
-            <button type="button" class="button" data-act="cut" title="Zwischen Seite ${a} und ${a + 1} trennen (Taste J oder Enter)" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Trennen <kbd>J</kbd></button></div>${forced(a) ? '' : reasons(a)}`;  // a blank page decides alone
+            <button type="button" class="button" data-act="keep" title="Seite ${a} und ${a + 1} gehören zusammen (Leertaste)" aria-pressed="${!suggested.has(a) && !hints.has(a) && !cuts.has(a) && reviewed.has(a)}"${forced(a) ? ' disabled' : ''}><kbd>Leertaste</kbd> Nicht trennen</button>
+            ${(!forced(a) && scale(a, state)) || `<div class="split-scale">${state}</div>`}
+            <button type="button" class="button" data-act="cut" title="Zwischen Seite ${a} und ${a + 1} trennen (Enter)" aria-pressed="${!suggested.has(a) && cuts.has(a) && !forced(a)}"${forced(a) ? ' disabled' : ''}>Trennen <kbd>Enter</kbd></button></div>`;  // a blank page decides alone
         $('split-undo').disabled = !undo.length;
         $('split-redo').disabled = !redo.length;
     };
@@ -202,11 +224,14 @@
         const out = e.target.closest('[data-out]');
         if (out) return leaveOut(Number(out.dataset.out));
         const what = e.target.closest('[data-act]')?.dataset.act;
-        if (what === 'cut' || what === 'keep') decideAt(what === 'cut');
+        if (what === 'why' || what === 'why-close') {
+            explained = what === 'why' && !explained;
+            renderView();
+            if (!explained) document.activeElement?.blur();  // focus would keep it open
+        }
+        else if (what === 'cut' || what === 'keep') decideAt(what === 'cut');
         else if (what === 'undo') travel(undo, redo);
         else if (what === 'redo') travel(redo, undo);
-        else if (what === 'prev') go(at() - 1);
-        else if (what === 'next') forward();
     };
     stage.addEventListener('click', act);
 
@@ -308,26 +333,30 @@
     const summary = () => {
         const line = $('split-summary'), job = looksJob, box = $('split-scans');
         box.hidden = job.state !== 'running';
+        box.closest('.step-panel').classList.toggle('waiting', job.state === 'running');  // only the progress until it is done
         if (job.state === 'running') {  // as the jobs of the other steps: a bar, how long, what, how far
             const bar = box.querySelector('progress');
             if (job.total) { bar.max = job.total; bar.value = job.done; } else bar.removeAttribute('value');
-            box.querySelector('.upload-text').textContent = `Läuft seit ${clock(Math.max(0, Date.now() / 1000 + skew - (job.started || Date.now() / 1000)))} Min`
+            box.querySelector('.upload-text').textContent = job.cancel ? 'Wird angehalten …'
+                : `Läuft seit ${clock(Math.max(0, Date.now() / 1000 + skew - (job.started || Date.now() / 1000)))} Min`
                 + ` · Papier, Lochung und Stempel werden erkannt${job.total ? ` · ${job.done} von ${job.total} Seiten` : ''}`;
+            $('split-scans-stop').disabled = !!job.cancel;
         }
         const source = data.reasons && data.saved ? (data.reasons.images ? 'Vorschlag aus Text und Scan' : 'Vorschlag nur aus dem Text') : '';
         const counts = data.saved || cuts.size ? `${cuts.size} ${cuts.size === 1 ? 'Trennung' : 'Trennungen'}${excluded.size ? ` · ${excluded.size} ${excluded.size === 1 ? 'Leerseite' : 'Leerseiten'}` : ''}` : '';
         const scans = job.state === 'error' ? job.error
             : job.state === 'running' ? ''
+            : job.state === 'cancelled' ? 'Erkennung von Papier, Lochung und Stempel angehalten: Vorschläge nur aus dem Text'
             : job.state !== 'done' ? 'Papier, Lochung und Stempel noch nicht erkannt: Vorschläge nur aus dem Text'
             : source && !data.reasons.images ? 'Papier, Lochung und Stempel sind jetzt erkannt: „Neu vorschlagen“ bezieht sie ein' : '';
         line.classList.toggle('form-error', job.state === 'error');
         line.textContent = [source, counts, scans].filter(Boolean).join(' · ');
         line.hidden = !line.textContent;
-        if (job.state === 'error') {
+        if (job.state === 'error' || job.state === 'cancelled') {
             const again = document.createElement('button');
             again.type = 'button';
             again.className = 'button text';
-            again.textContent = 'Erneut versuchen';
+            again.textContent = job.state === 'error' ? 'Erneut versuchen' : 'Doch erkennen';
             again.addEventListener('click', async () => {
                 await fetch(data.resetUrl, { method: 'POST', body: new URLSearchParams({ was: 'bildwerte' }) });
                 follow({ state: 'running' });
@@ -344,6 +373,10 @@
         }, 2000);
     };
     follow(data.looks);
+    $('split-scans-stop').addEventListener('click', async () => {
+        try { await post(data.stopUrl, new FormData()); } catch (e) { /* finished meanwhile */ }
+        follow({ ...looksJob, cancel: true });
+    });
 
     $('split-list').addEventListener('change', async (e) => {
         const file = e.target.files[0];

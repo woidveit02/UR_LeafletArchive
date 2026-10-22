@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pymupdf
 
-from . import importer, keys
+from . import importer, keys, pdf_service
 from .database import fillDatabase
 
 logger = logging.getLogger(__name__)
@@ -192,11 +192,11 @@ def keep_batch(volume, first, last, key, pipeline_id, scan, part=None):
             part.update(state=state, since=time.time())
     phase("upload")
     path.parent.mkdir(parents=True, exist_ok=True)
-    piece = pymupdf.open()
-    with pymupdf.open(scan) as doc:
-        piece.insert_pdf(doc, from_page=first - 1, to_page=last - 1)
     pdf = path.with_suffix(".pdf")
-    piece.save(pdf)
+    with pdf_service._lock:  # PyMuPDF is not thread safe: the batches run side by side, the page images too
+        piece = pymupdf.open()
+        piece.insert_pdf(pdf_service.get_document(scan), from_page=first - 1, to_page=last - 1)
+        piece.save(pdf)
     try:
         result = convert_batch(key, pipeline_id, pdf, phase)
     finally:
