@@ -113,6 +113,8 @@ def german_to_iso(text):
     return '-'.join([parts[0]] + [f"{n:02d}" for n in nums[1:]])
 
 
+# checked once at start; the folder is mounted, so fixing it needs a restart anyway
+templates.env.globals['data_problems'] = fillDatabase.check_data_dir()
 templates.env.globals['german_date'] = german_date
 templates.env.globals['DOC_TYPES'] = DOC_TYPES
 templates.env.globals['DATE_TYPES'] = DATE_TYPES

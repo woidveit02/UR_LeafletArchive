@@ -1,7 +1,6 @@
 """Cuts suggested from the recognized text and the look of the scan, without Datalab's segmentation and without cost.
 
-Features are those of pipelines/01_pdf/check_boundaries.py with extended=True in the pipeline repo (regexes copied
-from there): an archive stamp, a date in the header, a masthead, an imprint on the page before or little in common
+Features: an archive stamp, a date in the header, a masthead, an imprint on the page before or little in common
 with it speak for a new leaflet; a running page number, "b.w.", a hyphen at the end of the page before or
 "Fortsetzung" against it. Words like "Eigendruck" at the end of the page before or "eingelaufen" at the top of the
 page count too (pipelines/01_pdf/cue_words.py). From the scan (looks.py): another paper or size, the archive's stamp
@@ -15,7 +14,7 @@ import json
 import math
 import re
 
-# weights (log likelihood ratios) and prior learned on Nr. 1 to 14 by app_boundaries.py --weights; ponytail: frozen,
+# weights (log likelihood ratios) and prior learned on Nr. 1 to 14 by scripts/learn_boundary_weights.py; ponytail: frozen,
 # learn again there when the archive has grown considerably
 WEIGHTS = {"stamp": 3.542, "headdate": 2.535, "masthead": 1.99, "prev_imprint": 1.865, "pagenum": -1.801,
            "prev_bw": -1.302, "prev_hyphen": -2.087, "cont_word": -1.394, "overlap_low": 0.966, "first_heading": 0.435,

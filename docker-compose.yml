@@ -1,8 +1,9 @@
 services:
   backend:
     build: ./src/backend
+    restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "${LEAFLET_BIND:-127.0.0.1}:8000:8000"  # local only; server setup in docs/handbuch/betrieb.md
     environment:
       - TZ=Europe/Berlin  # stamps of OCR runs, metadata and corrections in local time
       - LEAFLET_DATA_DIR=/app/data
