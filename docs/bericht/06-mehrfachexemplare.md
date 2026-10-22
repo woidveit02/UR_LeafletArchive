@@ -28,11 +28,11 @@ Die Methode der Anwendung findet 309 der 310 geprüften Gruppen, ohne eine API z
 
 ## 6.5 Manuelle Prüfung
 
-Geprüft wird in der Ansicht `/exemplare`. Dort stehen die Exemplare nebeneinander, abweichende Angaben zu Datum, Titel und Herausgeber sind markiert. Falsche Treffer werden aussortiert, und für jede Gruppe wird ein Hauptexemplar festgelegt.
+Die manuelle Prüfung findet in der Ansicht `/exemplare` statt. Hier werden die Exemplare einer Gruppe nebeneinander angezeigt. Abweichungen bei Datum, Titel und Herausgeber werden in einer eigenen Metadaten-Tabelle hervorgehoben. Fehlerhaft erkannte Mehrfachexemplare werden verfworden, während bei einer korrekten Annahme ein Hauptexemplar ausgewählt werden muss. Hiernach können die Metadaten der repräsentativen Version überprüft und bearbeitet werden. Dabei werden auch wesentliche Informationen der anderen Exemplare der Gruppe angezeigt und können samt Beleg (falls vorhanden) übernommen werden. 
 
-Insgesamt wurden 320 Fälle geprüft. 310 davon waren echte Gruppen: 248 Paare, 55 Gruppen mit drei und 7 mit vier oder fünf Exemplaren. In 10 Fällen handelte es sich doch um verschiedene Blätter. Ein Fall dauerte etwa ein bis zwei Minuten.
+Insgesamt wurden 320 Fälle geprüft. Bei 310 dieser Gruppen konnten tatsächlich Mehrfachexemplare festgestellt werden: Darunter sind 248 Duplikate, 55 Gruppen mit jeweils drei Exemplaren und sieben Gruppen mit vier oder fünf Versionen. Bei den übrigen 10 Fällen handelt es sich um unterschiedliche Flugblätter, deren Inhalt fälschlicherweise als identisch erkannt wurde. jede Prüfung dauerte von der Auswahl des Hauptexemplares bis zum Abgleichen der Metadaten ca. 1 - 2 Minuten. 
 
-Die Entscheidungen stehen in `data/copy_decisions.jsonl`. Die Datei wird nur ergänzt, nie überschrieben. Blätter werden darin über Band und Seitenbereich angesprochen, nicht über Gruppennummern.
+Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei wird die Datei fortlaufend ergänzt, bestehende Einträge werden nicht überschrieben. Einzelne Blätter werden anhand ihres Bandes und Seitenbereichs identifiziert. Die Gruppennummern spielen hierbei keine Rolle. Somit können Entscheidungen auch bei Änderungen an der Gruppierung nachvollzogen werden. 
 
 ## 6.6 Ergebnis und Kosten
 
