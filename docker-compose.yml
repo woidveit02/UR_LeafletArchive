@@ -1,9 +1,12 @@
 services:
   backend:
-    build: ./src/backend
+    build:
+      context: ./src/backend
+      additional_contexts:
+        repo: .  # docs/ and mkdocs.yml for the documentation in the image
     restart: unless-stopped
     ports:
-      - "${LEAFLET_BIND:-127.0.0.1}:8000:8000"  # local only; server setup in docs/handbuch/betrieb.md
+      - "${LEAFLET_BIND:-127.0.0.1}:8000:8000"  # local only; server setup in docs/handbuch/installieren-und-betreiben.md
     environment:
       - TZ=Europe/Berlin  # stamps of OCR runs, metadata and corrections in local time
       - LEAFLET_DATA_DIR=/app/data

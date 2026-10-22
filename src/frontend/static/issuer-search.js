@@ -71,6 +71,11 @@
         summarize();
     }));
     summarize();
+    // the evidence: picked in the scan, then marked there like the one found
+    const evidence = document.getElementById('issuer-blocks');
+    initEvidencePicking('.ocr-box');
+    document.querySelector('[data-pick="done"]').addEventListener('click', () => document.querySelectorAll('.issuer-review .ocr-box')
+        .forEach((box) => box.classList.toggle('active', evidence.value.split(' ').includes(box.dataset.block))));
     query.addEventListener('input', show);
     query.addEventListener('keydown', (e) => {  // Enter takes the first hit instead of sending the form
         if (e.key !== 'Enter') return;

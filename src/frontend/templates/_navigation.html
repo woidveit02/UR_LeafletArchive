@@ -18,6 +18,7 @@
                    value="{{ request.query_params.get('q', '') if on_list else '' }}">
         </form>
         {% endif %}
+        <a class="topadmin" href="/doku/" target="_blank" rel="noopener" title="Handbücher und Projektbericht, öffnet in einem neuen Tab">Doku</a>
         <a class="topadmin{% if path.startswith(('/verwaltung', '/import', '/korrekturen', '/exemplare')) %} active" aria-current="page{% endif %}" href="/verwaltung">Verwaltung</a>
         </div>
     </div>

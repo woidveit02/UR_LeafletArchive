@@ -3336,8 +3336,13 @@ body:has(.page-nav) .pair-scan {
     color: var(--ink-soft);
 }
 
-.topsearch + .topadmin {
+.topsearch + .topadmin,
+.topadmin + .topadmin {
     margin-left: 0;
+}
+
+.topadmin:last-child {
+    margin-right: -12px;  /* its text in line with the right edge of the content, as the name on the left */
 }
 
 .topadmin:hover {
@@ -6154,11 +6159,15 @@ h2 .count {
     align-items: start;
 }
 
-.issuer-evidence, .issuer-page {
+.issuer-evidence {
     display: block;
     max-width: 100%;
     margin-bottom: 12px;
     border: 1px solid var(--line);
+}
+
+.issuer-page {
+    margin-bottom: 12px;
 }
 
 .issuer-evidence {

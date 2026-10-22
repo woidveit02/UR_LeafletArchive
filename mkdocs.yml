@@ -2,6 +2,30 @@ site_name: Flugblattsammlung – Dokumentation
 docs_dir: docs
 exclude_docs: |
   arbeitsdokumente/
+nav:
+  - Übersicht: README.md
+  - Bericht:
+      - bericht/01-einleitung.md
+      - bericht/02-bestand.md
+      - bericht/03-text-erkennen.md
+      - bericht/04-trennen.md
+      - bericht/05-metadaten.md
+      - bericht/06-mehrfachexemplare.md
+      - bericht/07-themen.md
+      - bericht/08-korpus-in-zahlen.md
+      - bericht/09-anwendung.md
+      - bericht/10-grenzen-ausblick.md
+      - bericht/11-zusammenfassung.md
+      - bericht/12-projektverlauf.md
+  - Handbücher:
+      - handbuch/recherchieren-und-pflegen.md
+      - handbuch/neue-baende-importieren.md
+      - handbuch/ngramme-auswerten.md
+      - handbuch/installieren-und-betreiben.md
+      - handbuch/weiterentwickeln.md
+  - Anhang:
+      - kennzahlen.md
+      - glossar.md
 theme:
   name: material
   language: de
