@@ -28,17 +28,19 @@ Die Methode der Anwendung findet 309 der 310 geprüften Gruppen, ohne eine API z
 
 ## 6.5 Manuelle Prüfung
 
-Geprüft wird in der Ansicht `/exemplare`. Dort stehen die Exemplare nebeneinander, abweichende Angaben zu Datum, Titel und Herausgeber sind markiert. Falsche Treffer werden aussortiert, und für jede Gruppe wird ein Hauptexemplar festgelegt.
+Die manuelle Prüfung findet in der Ansicht `/exemplare` statt. Hier werden die Exemplare einer Gruppe nebeneinander angezeigt. Abweichungen bei Datum, Titel und Herausgeber werden in einer eigenen Metadaten-Tabelle hervorgehoben. Fehlerhaft erkannte Mehrfachexemplare werden verfworden, während bei einer korrekten Annahme ein Hauptexemplar ausgewählt werden muss. Hiernach können die Metadaten der repräsentativen Version überprüft und bearbeitet werden. Dabei werden auch wesentliche Informationen der anderen Exemplare der Gruppe angezeigt und können samt Beleg (falls vorhanden) übernommen werden. 
 
-Insgesamt wurden 320 Fälle geprüft. 310 davon waren echte Gruppen: 248 Paare, 55 Gruppen mit drei und 7 mit vier oder fünf Exemplaren. In 10 Fällen handelte es sich doch um verschiedene Blätter. Ein Fall dauerte etwa ein bis zwei Minuten.
+Insgesamt wurden 320 Fälle geprüft. Bei 310 dieser Gruppen konnten tatsächlich Mehrfachexemplare festgestellt werden: Darunter sind 248 Duplikate, 55 Gruppen mit jeweils drei Exemplaren und sieben Gruppen mit vier oder fünf Versionen. Bei den übrigen 10 Fällen handelt es sich um unterschiedliche Flugblätter, deren Inhalt fälschlicherweise als identisch erkannt wurde. jede Prüfung dauerte von der Auswahl des Hauptexemplares bis zum Abgleichen der Metadaten ca. 1 - 2 Minuten. 
 
-Die Entscheidungen stehen in `data/copy_decisions.jsonl`. Die Datei wird nur ergänzt, nie überschrieben. Blätter werden darin über Band und Seitenbereich angesprochen, nicht über Gruppennummern.
+Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei wird die Datei fortlaufend ergänzt, bestehende Einträge werden nicht überschrieben. Einzelne Blätter werden anhand ihres Bandes und Seitenbereichs identifiziert. Die Gruppennummern spielen hierbei keine Rolle. Somit können Entscheidungen auch bei Änderungen an der Gruppierung nachvollzogen werden. 
 
 ## 6.6 Ergebnis und Kosten
 
-Die 1 927 Exemplare ergeben 1 547 Flugblätter; 380 sind weitere Exemplare (19,7 %). Sie sind ungleich verteilt: In den Bänden von 1968 bis 1971 liegt ihr Anteil zwischen 10 und 15 %, 1972 bei 24 % und 1973 bei 23 %. Ohne diesen Schritt wäre jede Zählung um ein Fünftel zu hoch, für 1972 und 1973 um ein Viertel.
+Aus den 1 927 Exemplaren ergeben sich insgesamt 1 547 eigenständige Flugblätter. Die übrigen 280 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
 
-Alle Zählungen der Anwendung, also Startseite, Liste, Herausgeber, Themen und Trends, nehmen jedes Flugblatt einmal. Die Suche geht durch alle Exemplare und zeigt das Hauptexemplar an. Kosten entstehen keine.
+Sämtliche Angaben von Zahlen innehralb der Anwendung, die bspw. Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
+
+
 
 ![Anteil der Mehrfachexemplare nach Bandjahr](../abbildungen/3_mehrfachexemplare.png)
 
@@ -48,4 +50,4 @@ Alle Zählungen der Anwendung, also Startseite, Liste, Herausgeber, Themen und T
 
 ## 6.7 Hinweise zur Weiterentwicklung
 
-Fassungen werden bisher nicht automatisch gruppiert. Der erste Themenlauf rechnete über alle Exemplare; die Neuberechnung in der Anwendung nimmt nur die Hauptexemplare (Kap. 7).
+Abweichende Fassungen eines Flugblatts werden bislang nicht automatisch gruppiert. Sie bleiben daher als eigenständige Flugblätter erhalten. Das erste Topic-Modelling wurde über alle Exemplare des Bestandes hinweg durchgeführt. Bei einer Neuberechnung innerhalb der Anwendung werden dagegen in Zukunft nur die Hauptexemplare berücksichtigt (Kap. 7).
