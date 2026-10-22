@@ -725,7 +725,8 @@
     "full_name": "Demokratische Front",
     "type": "",
     "variants": [
-      "DF. Demokratische Front"
+      "DF. Demokratische Front",
+      "Abteilung Psychologie"
     ],
     "jahre": [
       "1972",
@@ -1876,7 +1877,8 @@
       "SHB. Sozialistischer Hochschulbund",
       "Sozialdemokratischer Hochschulbund",
       "Sozialdemokratischer Hochschulbund Regensburg",
-      "Sozialdemokratischer Hochschulbund, Ortsgruppe Regensburg"
+      "Sozialdemokratischer Hochschulbund, Ortsgruppe Regensburg",
+      "Sozialdemokratischer Hochschulbund Gruppe Uni Regensburg"
     ],
     "jahre": [
       "1968",
@@ -2001,8 +2003,7 @@
     "full_name": "",
     "type": "",
     "variants": [
-      "Studentenschaft",
-      "Studentenschaft Uni — PH — Poly-Technikum"
+      "Studentenschaft"
     ],
     "jahre": [
       "1973"
@@ -2667,7 +2668,9 @@
     "full_name": "",
     "type": "",
     "variants": [
-      "Fachbereich Rechtswissenschaft"
+      "Fachbereich Rechtswissenschaft",
+      "Fachbereich Recht",
+      "Der Fachbereichsrat"
     ],
     "jahre": [],
     "vz": [],
@@ -2694,7 +2697,8 @@
     "type": "",
     "variants": [
       "Fachschaft Germanistik",
-      "Arbeitsgruppen Jura/Germanistik"
+      "Arbeitsgruppen Jura/Germanistik",
+      "Der Fachschaftssprecher"
     ],
     "jahre": [],
     "vz": [],
@@ -3301,6 +3305,31 @@
     "type": "",
     "variants": [
       "Arbeiterbund für den Wiederaufbau der KPD"
+    ],
+    "jahre": [],
+    "vz": [],
+    "notes": "in der App angelegt"
+  },
+  {
+    "org_id": "studentenschaft_uni_ph_polytechnikum",
+    "name": "Studentenschaft Uni – PH – Polytechnikum",
+    "full_name": "",
+    "type": "",
+    "variants": [
+      "Studentenschaft Uni – PH – Polytechnikum",
+      "Studentenschaft Uni — PH — Poly-Technikum"
+    ],
+    "jahre": [],
+    "vz": [],
+    "notes": "in der App angelegt"
+  },
+  {
+    "org_id": "buchberger_studenten_zentrum",
+    "name": "Buchberger Studenten-Zentrum",
+    "full_name": "",
+    "type": "",
+    "variants": [
+      "Buchberger Studenten-Zentrum"
     ],
     "jahre": [],
     "vz": [],
