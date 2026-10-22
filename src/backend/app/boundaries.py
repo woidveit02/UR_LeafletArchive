@@ -1,9 +1,13 @@
-"""Cuts suggested from the recognized text, without Datalab's segmentation and without cost.
+"""Cuts suggested from the recognized text and the look of the scan, without Datalab's segmentation and without cost.
 
 Features: an archive stamp, a date in the header, a masthead, an imprint on the page before or little in common
 with it speak for a new leaflet; a running page number, "b.w.", a hyphen at the end of the page before or
-"Fortsetzung" against it. The weights come from scripts/learn_boundary_weights.py. Measured volume by volume on Nr. 1 to 14, the
-suggestion leaves about half of the corrections a volume needs without one (report, chapter 4.4).
+"Fortsetzung" against it. Words like "Eigendruck" at the end of the page before or "eingelaufen" at the top of the
+page count too (pipelines/01_pdf/cue_words.py). From the scan (looks.py): another paper or size, the archive's stamp
+and blue mark, and holes on the right, which make the page the back of a sheet. The weights come from
+pipelines/01_pdf/app_boundaries.py --weights, which also checks that this module cuts where the pipeline does.
+Measured volume by volume on Nr. 1 to 14, about 12 of 100 transitions need a correction, 20 from the text alone
+(docs/korpus/schnittvorschlag.md).
 """
 import html
 import json
@@ -16,6 +20,30 @@ WEIGHTS = {"stamp": 3.542, "headdate": 2.535, "masthead": 1.99, "prev_imprint": 
            "prev_bw": -1.302, "prev_hyphen": -2.087, "cont_word": -1.394, "overlap_low": 0.966, "first_heading": 0.435,
            "prev_blank": 1.983, "overlap_high": -1.1, "blank": 0.229, "prev_end": -0.649}
 PRIOR = -0.216
+IMAGE_WEIGHTS = {"paper_other": 1.215, "paper_very_other": 2.664, "paper_same": -0.706, "size_other": 0.577,
+                 "ink_other": 0.891, "margins_other": 0.879, "back": -2.411, "sign": 3.548, "stamp_seen": 3.08}
+# per transition the strongest word for a cut and the strongest against it count; "end" is the end of the page
+# before, "start" the top of the page
+CUE_WEIGHTS = {
+    "end": {"eigendruck": 2.64, "selbstverlag": 2.42, "selbstverlag.": 3.31, "verantwortlich": 2.09,
+            "verantwortl.": 2.01, "presserechtlich": 1.6, "presserechtl.": 1.78, "gez.": 1.53, "tel.": 2.04,
+            "vorsitzender": 1.74, "kollektiv": 2.09, "aktionsgemeinschaft": 2.09, "uhr": 1.62, "euch": 1.66,
+            "montag": 1.74, "dienstag": 1.66, "mittwoch": 1.42, "donnerstag": 1.46, "freitag": 1.39, "samstag": 0.91,
+            "einzelne": -2.23, "lediglich": -1.98, "wobei": -1.98, "genommen": -1.98, "natürlich": -1.94,
+            "indem": -1.9, "einige": -1.8, "tatsächlich": -1.8, "voraussetzung": -1.86, "dessen": -1.68,
+            "daraus": -1.73, "mittel": -1.78, "sowohl": -1.58, "mindestens": -1.58, "außerhalb": -1.52,
+            "wenden": -1.73},
+    "start": {"ablage": 4.54, "eingelaufen": 3.71, "info": 2.4, "flugblatt": 2.01, "nachrichten": 3.05,
+              "abteilung": 2.67, "abt.": 1.72, "fachschafts": 2.89, "studentenparlament": 1.62,
+              "kommilitoninnen": 2.26, "gestern": 2.58, "gestrigen": 2.05, "amtsjahr": 2.29, "blatt": 2.23,
+              "sache": 1.92, "januar": 0.55, "jan.": 2.25, "februar": 1.13, "feb.": 2.57, "märz": -0.07,
+              "april": 0.83, "mai": 1.17, "juni": 2.08, "juli": 2.02, "august": -0.99, "oktober": 0.57, "okt.": 1.42,
+              "november": 2.01, "nov": 3.58, "nov.": 2.19, "dezember": 0.22, "dez.": 3.26, "gerade": -2.78,
+              "natürlich": -2.56, "gemacht": -2.23, "konkreten": -2.18, "hinaus": -2.04, "allein": -1.98,
+              "sinne": -1.98, "versuchen": -1.98, "hinsicht": -1.86, "sei": -1.86, "etwas": -1.77, "daher": -1.73,
+              "deshalb": -1.71, "jedoch": -1.6, "jeder": -1.66, "darin": -1.66, "völlig": -1.69, "aufgaben": -1.73,
+              "wesentlichen": -1.73, "verfügung": -1.68, "ausdruck": -1.58, "vorstellungen": -1.62, "ist.": -1.55}}
+CUE_CHARS = 250
 # above the prior's 0.45: a page without any feature is not cut
 MIN_PROBABILITY = 0.5
 HINT_PROBABILITY = 0.7  # stricter, for hints on a list that somebody wrote: fewer false alarms (precision 0.84, recall 0.58)
@@ -40,11 +68,21 @@ CONT_WORD = re.compile(r"(?i)^\W*(fortsetzung|forts\.)")
 BW = re.compile(r"(?i)\b(b\.\s?w\.|bitte\s+wenden|bitte\s+umblättern|siehe\s+rückseite)\W*$")
 SKIP = {"PageHeader", "PageFooter", "Picture", "Figure"}
 WORD = re.compile(r"[a-zäöüß]{4,}")
+CUE_WORD = re.compile(r"[a-zäöüß]{3,}\.?")
 SENTENCE_END = re.compile(r"[.!?:)\"“”]\s*$")
 
 LABEL = {"stamp": "Eingangsstempel", "headdate": "Datum in der Kopfzeile", "masthead": "Kopfleiste",
          "prev_imprint": "Impressum auf der Seite davor", "overlap_low": "kaum gemeinsame Wörter mit der Seite davor",
-         "first_heading": "Überschrift am Anfang", "prev_blank": "Seite davor fast leer", "blank": "Seite fast leer"}
+         "first_heading": "Überschrift am Anfang", "prev_blank": "Seite davor fast leer", "blank": "Seite fast leer",
+         "pagenum": "Seitenzahl", "prev_bw": "„b. w.“ auf der Seite davor",
+         "prev_hyphen": "Trennstrich am Ende der Seite davor",
+         "cont_word": "beginnt mit „Fortsetzung“", "overlap_high": "viele gemeinsame Wörter mit der Seite davor",
+         "prev_end": "Seite davor endet mit Satzzeichen", "paper_other": "andere Papierfarbe",
+         "paper_very_other": "deutlich andere Papierfarbe", "paper_same": "gleiche Papierfarbe",
+         "size_other": "anderes Format",
+         "ink_other": "viel mehr oder weniger Tinte", "margins_other": "andere Ränder",
+         "back": "Löcher rechts: Rückseite",
+         "sign": "blaues Zeichen des Archivs", "stamp_seen": "Stempel im Bild"}
 
 
 def is_masthead(text):
@@ -121,17 +159,69 @@ def features(blocks, previous):
     return found
 
 
+def image_features(look, before):
+    """The features of a page's scan, compared with the page before (looks.measure); none without both."""
+    if not look or not before:
+        return set()
+    found = set()
+    paper = math.dist(look["paper"], before["paper"])
+    if paper > 50:
+        found.add("paper_very_other")
+    elif paper > 14:
+        found.add("paper_other")
+    elif paper < 4:
+        found.add("paper_same")
+    if max(abs(a - b) for a, b in zip(look["size"], before["size"])) > 15:
+        found.add("size_other")
+    if abs(math.log((look["ink"] + 1e-3) / (before["ink"] + 1e-3))) > 1.5:
+        found.add("ink_other")
+    if sum(abs(look["margins"][i] - before["margins"][i]) for i in (2, 3)) > 1:
+        found.add("margins_other")
+    if look["holes"] == "right":
+        found.add("back")
+    if look["sign"]:
+        found.add("sign")
+    if look["stamp"]:
+        found.add("stamp_seen")
+    return found
+
+
+def cues(blocks, previous):
+    """[(label, weight)] of the strongest word for a cut and the strongest against it."""
+    def words(bl, part):
+        return set(CUE_WORD.findall(part(" ".join(x for t, x in bl or [] if x and t not in SKIP)).lower()))
+    end, start = CUE_WEIGHTS["end"], CUE_WEIGHTS["start"]
+    found = [(f"„{w}“ am Ende der Seite davor", end[w]) for w in words(previous, lambda t: t[-CUE_CHARS:])
+             if w in end] \
+        + [(f"„{w}“ am Seitenanfang", start[w]) for w in words(blocks, lambda t: t[:CUE_CHARS]) if w in start]
+    pro, con = max(found, key=lambda c: c[1], default=None), min(found, key=lambda c: c[1], default=None)
+    return [c for c in (pro,) if c and c[1] > 0] + [c for c in (con,) if c and c[1] < 0]
+
+
+def explain(blocks, previous, look=None, before=None):
+    """(probability that the page starts a leaflet, [(label, weight)] of what speaks for and against it, strongest
+    for first); without the looks of both pages from the text alone."""
+    reasons = [(LABEL[f], WEIGHTS[f]) for f in features(blocks, previous)] \
+        + [(LABEL[f], IMAGE_WEIGHTS[f]) for f in image_features(look, before)] + cues(blocks, previous)
+    reasons.sort(key=lambda r: -r[1])
+    return 1 / (1 + math.exp(-(PRIOR + sum(w for _, w in reasons)))), reasons
+
+
 def probability(found):
     return 1 / (1 + math.exp(-(PRIOR + sum(WEIGHTS[f] for f in found))))
 
 
-def suggest(ocr_json, min_probability=MIN_PROBABILITY):
-    """({cut after page: why}, page count): a cut for each page that probably starts a leaflet; why names the
-    features that speak for it."""
+def assess(pages, looks=None):
+    """[(probability, reasons)] for the transitions after page 1, 2, …, see explain; pages as from page_blocks,
+    looks one per page or None."""
+    looks = looks if looks and len(looks) == len(pages) else [None] * len(pages)
+    return [explain(pages[n], pages[n - 1], looks[n], looks[n - 1]) for n in range(1, len(pages))]
+
+
+def suggest(ocr_json, min_probability=MIN_PROBABILITY, looks=None):
+    """({cut after page: why}, page count): a cut for each page that probably starts a leaflet; why names what
+    speaks for it."""
     pages = page_blocks(ocr_json)
-    cuts = {}
-    for number in range(2, len(pages) + 1):
-        found = features(pages[number - 1], pages[number - 2])
-        if probability(found) >= min_probability:
-            cuts[number - 1] = ", ".join(LABEL[f] for f in sorted(found) if WEIGHTS[f] > 0)
+    cuts = {n: ", ".join(label for label, w in reasons if w > 0)
+            for n, (p, reasons) in enumerate(assess(pages, looks), 1) if p >= min_probability}
     return cuts, len(pages)

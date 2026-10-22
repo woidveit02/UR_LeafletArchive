@@ -67,3 +67,12 @@ def test_join_and_split():
     auto = {A: (1, True), B: (1, False), C: (1, False), E: (1, False)}
     result = groups(auto, [review("2026-10-01T10:00:00", [A, B], [C, E])])
     assert [g["members"] for g in result] == [[C, E], [A, B]]
+
+
+# Tests if a review follows a leaflet that lost its last page (marked blank later), but not one that was cut in two.
+def test_review_follows_a_shrunk_leaflet():
+    line = review("2026-10-01T10:00:00", [("0118_0004", 50, 52), A], canonical=A)
+    moved = copy_decisions.follow([line], KNOWN)[0]
+    assert [copy_decisions.anchor(m) for m in moved["members"]] == [E, A]
+    split = KNOWN | {("0118_0004", 52, 52)}
+    assert copy_decisions.follow([line], split)[0]["members"][0] == ref(("0118_0004", 50, 52))

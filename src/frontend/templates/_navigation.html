@@ -1,7 +1,7 @@
 {% set path = request.url.path %}
 <header class="topbar">
     <div class="topbar-inner">
-        <a class="brand" href="/" title="Flugblätter im Universitätsarchiv Regensburg (UR), Rep. 118">UR Leaflet Archive</a>
+        <a class="brand" href="/" title="Universitätsarchiv Regensburg, Rep. 118">Flugblattsammlung</a>
         <nav class="topnav" aria-label="Hauptnavigation">
             <a href="/leaflets" {% if path.startswith('/leaflets') %}class="active" aria-current="page"{% endif %}>Flugblätter</a>
             <a href="/organizations" {% if path.startswith('/organizations') %}class="active" aria-current="page"{% endif %}>Herausgeber</a>
@@ -9,6 +9,7 @@
             <a href="/themen" {% if path.startswith('/themen') %}class="active" aria-current="page"{% endif %}>Themen</a>
             <a href="/trends" {% if path.startswith('/trends') %}class="active" aria-current="page"{% endif %}>Trends</a>
         </nav>
+        <div class="topright">
         {% set on_list = path.startswith('/leaflets') %}
         {% if path != '/leaflets' %}{# the list has its search above the results #}
         <form class="topsearch" method="get" action="/leaflets" role="search" data-fields='{{ search_fields | tojson }}'>
@@ -18,5 +19,6 @@
         </form>
         {% endif %}
         <a class="topadmin{% if path.startswith(('/verwaltung', '/import', '/korrekturen', '/exemplare')) %} active" aria-current="page{% endif %}" href="/verwaltung">Verwaltung</a>
+        </div>
     </div>
 </header>

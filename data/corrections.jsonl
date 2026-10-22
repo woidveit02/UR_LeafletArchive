@@ -249,3 +249,14 @@
 {"volume": "0118_0008", "start_page": 320, "end_page": 325, "field": "revert", "value": "all", "at": "2026-10-12"}
 {"volume": "0118_0009", "start_page": 304, "end_page": 305, "field": "revert", "value": "all", "at": "2026-10-12"}
 {"volume": "0118_0012", "start_page": 102, "end_page": 103, "field": "revert", "value": "all", "at": "2026-10-12"}
+{"volume": "0118_0013", "start_page": 59, "end_page": 60, "field": "received", "value": "1973-09-27", "at": "2026-10-22"}
+{"volume": "0118_0008", "start_page": 52, "end_page": 53, "field": "issuers", "value": [{"org": "asta", "blocks": ["52-1"]}], "at": "2026-10-22"}
+{"volume": "0118_0005", "start_page": 616, "end_page": 616, "field": "issuers", "value": [{"org": "kleiner_senat", "blocks": ["616-19", "616-21"]}, {"org": "vereinigung_wissenschaftlicher_mitarbeiter", "blocks": ["616-22", "616-24"]}, {"org": "asta", "blocks": ["616-25", "616-27"]}], "at": "2026-10-22"}
+{"volume": "0118_0003", "start_page": 248, "end_page": 248, "field": "issuers", "value": [{"org": "studentenschaft_uni_ph_polytechnikum", "blocks": ["248-5"]}], "at": "2026-10-22"}
+{"volume": "0118_0013", "start_page": 169, "end_page": 169, "field": "issuers", "value": [{"org": "asta", "blocks": ["169-3"]}], "at": "2026-10-22"}
+{"volume": "0118_0013", "start_page": 180, "end_page": 180, "field": "issuers", "value": [{"org": "asta", "blocks": ["180-3"]}], "at": "2026-10-22"}
+{"volume": "0118_0013", "start_page": 169, "end_page": 169, "field": "issuers", "value": [{"org": "asta", "blocks": ["169-4"]}], "at": "2026-10-22"}
+{"volume": "0118_0013", "start_page": 180, "end_page": 180, "field": "issuers", "value": [{"org": "asta", "blocks": ["180-5"]}], "at": "2026-10-22"}
+{"volume": "0118_0003", "start_page": 161, "end_page": 161, "field": "issuers", "value": [{"org": "dm", "blocks": ["161-11", "161-12"]}], "at": "2026-10-22"}
+{"volume": "0118_0006", "start_page": 65, "end_page": 65, "field": "issuers", "value": [{"org": "als", "blocks": ["65-2"]}], "at": "2026-10-22"}
+{"volume": "0118_0014", "start_page": 494, "end_page": 494, "field": "issuers", "value": [{"org": "buchberger_studenten_zentrum", "blocks": ["494-4"]}], "at": "2026-10-22"}

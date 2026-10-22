@@ -1,64 +1,89 @@
 {% extends "base.html" %}
 {% from '_leaflets.html' import title %}
-{% block title %}Korrekturen – UR Leaflet Archive{% endblock %}
-{% macro history(row) %}
-                <details class="fix-history">
-                    <summary>Änderungsverlauf · {{ row.history | length }} {{ 'Eintrag' if row.history | length == 1 else 'Einträge' }}</summary>
-                    <dl class="fix-fields">
-                        {% for label, value, at in row.history %}<dt>{{ label }}</dt><dd>{{ value }} <span class="meta">{{ at }}</span></dd>{% endfor %}
-                    </dl>
-                </details>
-{% endmacro %}
+{% block title %}Korrekturen{% endblock %}
 {% block content %}
+        {% macro drop_copies(c, question) %}
+                <form method="post" action="/korrekturen/exemplare/verwerfen" class="task-actions" onsubmit="return confirm('{{ question }}')">
+                    <input type="hidden" name="stamp" value="{{ c.stamp }}">
+                    {% if c.here and not c.waiting %}<a class="button small" href="/leaflets/{{ c.here.id }}/exemplare">Neu prüfen</a>{% endif %}
+                    <button type="submit" class="button small danger">Verwerfen</button>
+                </form>
+        {% endmacro %}
         <nav class="detail-nav"><span class="breadcrumb"><a href="/verwaltung">Verwaltung</a></span></nav>
         <header class="page-head">
             <h1>Korrekturen</h1>
-            <p class="page-intro">Hier findest du manuell korrigierte Angaben. Sie werden bei einer erneuten Erfassung wieder angewendet.</p>
+            <p class="page-intro">Von Hand korrigierte Metadaten, jeweils der gültige Stand. Sie werden bei einer erneuten Erfassung wieder angewendet.
+                Ändern oder zurücknehmen lässt sich eine Korrektur auf der Seite des Flugblatts.</p>
         </header>
         {% if rows or copies %}
-        <h2>Ohne Zuordnung <span class="count">· {{ rows | length + copies | length }}</span></h2>
-        <p class="meta">Korrekturen, deren Seitenspanne zu keinem Flugblatt mehr passt, weil sich die Segmentgrenzen geändert haben.
-            Sie werden nicht angewendet. Übernimm sie auf ein Flugblatt, das jetzt dort liegt, oder verwirf sie.
-            Prüfungen möglicher Exemplare, deren Segmente sich geändert haben, stehen darunter.</p>
+        <h2>Offen <span class="count">· {{ rows | length + copies | length }}</span></h2>
+        <p class="meta">Diese Korrekturen passen zu keinem Flugblatt mehr, weil die Einteilung geändert wurde. Sie werden nicht angewendet.
+            Übernimm sie auf das Flugblatt, das jetzt dort liegt, oder verwirf sie.</p>
         <ul class="fix-list">
             {% for row in rows %}
             <li>
                 <span class="meta">{{ row.place }}</span>
-                <span class="fix-title todo">Ohne Zuordnung</span>
                 <dl class="fix-fields">
                     {% for label, value in row.now %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endfor %}
                 </dl>
-                <p class="meta">Überlappende Flugblätter jetzt:
-                    {% for lf in row.overlaps %}<a href="/leaflets/{{ lf.id }}">{{ page_range(lf.start_page, lf.end_page) }}</a>{% if not loop.last %}, {% endif %}{% else %}keine{% endfor %}</p>
                 <form method="post" action="/korrekturen/zuordnen" class="task-actions">
                     <input type="hidden" name="volume" value="{{ row.stem }}"><input type="hidden" name="start" value="{{ row.start }}"><input type="hidden" name="end" value="{{ row.end }}">
-                    {% for lf in row.overlaps %}<button type="submit" name="target" value="{{ lf.id }}" class="button primary">Auf {{ page_range(lf.start_page, lf.end_page) }} übernehmen</button>{% endfor %}
-                    <button type="submit" class="button text danger" onclick="return confirm('Diese Korrektur verwerfen? Sie wird nicht mehr angewendet.')">Verwerfen</button>
+                    {% for lf in row.overlaps %}<button type="submit" name="target" value="{{ lf.id }}" class="button small">Auf {{ page_range(lf.start_page, lf.end_page) }} übernehmen</button>{% endfor %}
+                    <button type="submit" class="button small danger" onclick="return confirm('Diese Korrektur verwerfen? Sie wird nicht mehr angewendet.')">Verwerfen</button>
                 </form>
-                {{ history(row) }}
             </li>
             {% endfor %}
             {% for c in copies %}
-            <li><span class="meta">{{ c.at }}</span> Geprüfte Exemplare, die nicht mehr passen: {{ c.members | join(' · ') }}</li>
+            <li><span class="meta">{{ c.at }}</span> Geprüfte Exemplare, die nicht mehr passen: {{ c.members | join(' · ') }}
+                {{ drop_copies(c, 'Diese Prüfung verwerfen? Die Exemplare gelten dann wieder als ungeprüft.') }}</li>
             {% endfor %}
         </ul>
         {% endif %}
-        {% if rows or copies %}<h2>Zugeordnet <span class="count">· {{ saved | length }}</span></h2>{% endif %}
+        {% if waiting %}
+        <h2>Wartet auf Entwürfe <span class="count">· {{ waiting | length }}</span></h2>
+        <p class="meta">Diese Prüfungen von Mehrfachexemplaren betreffen einen Entwurf, dessen Flugblätter gerade nicht angelegt sind, etwa weil
+            die Einteilung neu gemacht wird. Sie gelten wieder von selbst, sobald der Entwurf seine Flugblätter mit derselben Einteilung anlegt.
+            Zu tun ist nur etwas, wenn sich die Einteilung dort ändert.</p>
         <ul class="fix-list">
-            {% for row in saved %}
-            <li>
-                <span class="meta">{{ row.place }}</span>
-                <a class="fix-title" href="/leaflets/{{ row.leaflet.id }}">{{ title(row.leaflet) }}</a>
-                {% if row.now %}
-                <dl class="fix-fields">
-                    {% for label, value in row.now %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% endfor %}
-                </dl>
-                {% else %}<p class="empty">Keine wirksame Korrektur, alle wurden zurückgenommen.</p>{% endif %}
-                <span class="meta">Zuletzt geändert am {{ row.at }}</span>
-                {% if row.history | length > row.now | length %}{{ history(row) }}{% endif %}
-            </li>
-            {% else %}
-            <li class="empty">Noch keine Korrekturen.</li>
+            {% for c in waiting %}
+            <li><span class="meta">{{ c.at }} · wartet auf {{ c.waiting | join(', ') }}</span> {{ c.members | join(' · ') }}
+                {{ drop_copies(c, 'Diese Prüfung verwerfen? Auch wenn der Entwurf wieder angelegt ist, gelten die Exemplare dann als ungeprüft.') }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
+        {% if rows or copies or waiting %}<h2>Zugeordnet</h2>{% endif %}
+
+        <p class="meta">{{ leaflets }} {{ 'Flugblatt' if leaflets == 1 else 'Flugblätter' }} · {{ total }} korrigierte Angaben</p>
+        <form method="get" class="fix-filter">
+            <nav class="view-switch" aria-label="Feld">
+                <a href="?{{ 'band=' ~ band if band }}"{% if not feld %} aria-current="page"{% endif %}>Alle {{ total }}</a>
+                {% for key, label, n in fields %}<a href="?feld={{ key }}{{ '&band=' ~ band if band }}"{% if feld == key %} aria-current="page"{% endif %}>{{ label }} {{ n }}</a>{% endfor %}
+            </nav>
+            <label class="fix-band">Band <select name="band" onchange="this.form.requestSubmit()">
+                <option value="">alle</option>
+                {% for vz in bands %}<option value="{{ vz }}"{% if vz == band %} selected{% endif %}>{{ '%03d' % vz }}</option>{% endfor %}
+            </select></label>
+            {% if feld %}<input type="hidden" name="feld" value="{{ feld }}">{% endif %}
+            <noscript><button type="submit" class="button small">Anzeigen</button></noscript>
+        </form>
+
+        <table class="data-table fix-table">
+            <thead><tr><th>Band</th><th class="hide-narrow">Seiten</th><th>Flugblatt</th><th>Feld</th>
+                <th class="hide-narrow">Automatisch erkannt</th><th>Korrigiert</th><th class="hide-narrow">Am</th></tr></thead>
+            <tbody>
+            {% for c in changes %}
+            <tr{% if c.first %} class="fix-first" id="l{{ c.leaflet.id }}"{% endif %}>
+                <td>{% if c.first %}{{ '%03d' % c.vz }}{% endif %}</td>
+                <td class="hide-narrow">{% if c.first %}{{ c.pages }}{% endif %}</td>
+                <td class="fix-leaflet">{% if c.first %}<a href="/leaflets/{{ c.leaflet.id }}?korrekturen={{ carry }}" title="{{ title(c.leaflet) | striptags }}">{{ title(c.leaflet) }}</a>{% endif %}</td>
+                <td>{{ c.label }}</td>
+                <td class="hide-narrow meta">{{ c.old or '–' }}</td>
+                <td>{{ c.new or '–' }}<span class="fix-old meta">{{ c.old or '–' }}</span></td>
+                <td class="hide-narrow meta" title="{{ c.at }}">{{ c.day }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="empty">Keine Korrekturen{{ ' für diese Auswahl' if feld or band }}.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
 {% endblock %}

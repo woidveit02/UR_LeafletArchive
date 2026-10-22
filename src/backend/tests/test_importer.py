@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import math
 import time
 import zipfile
 
@@ -42,7 +43,7 @@ def folders(tmp_path, monkeypatch):
 
 # Tests if a unit of the findmittel becomes a draft volume with its data, and an unknown or taken number is refused.
 def test_new_volume_is_a_draft_from_the_findmittel(folders):
-    tmp_path, db = folders
+    tmp_path, _ = folders
     assert [u["vz"] for u in importer.free_units()] == [16, 17]
     volume = importer.new_volume(16, portal_url=" ")
     assert volume.portal_url == "https://portal.example/16"  # the link of the findmittel unless one is typed in
@@ -53,7 +54,6 @@ def test_new_volume_is_a_draft_from_the_findmittel(folders):
         with pytest.raises(ValueError, match="im Findmittel nicht"):
             importer.new_volume(taken)
     assert [e["vz"] for e in json.loads((tmp_path / "volumes.json").read_text(encoding="utf-8"))] == [15, 16]
-    assert importer.pending_volumes() == db.query(Volume).order_by(Volume.vz).all()
 
 
 # Tests if the portal link can be changed or removed, in volumes.json and in the database.
@@ -94,14 +94,16 @@ def test_folder_with_other_files_and_wrong_files(folders):
     assert importer.page_count(volume) is None
 
 
-# Tests if the scan PDF is built in the background and the job reports the pages done, then "done".
-def test_background_job_reports_progress(folders):
+# Tests if the scan PDF is built in the background and the job says what it is doing, then "done".
+def test_background_job_reports_progress(folders, monkeypatch):
     import time
     _, db = folders
     volume = db.query(Volume).one()
+    phases = []
+    copy = importer.copy_with_progress
+    monkeypatch.setattr(importer, "copy_with_progress", lambda *a: phases.append(job["phase"]) or copy(*a))
     importer.start_scans(volume, [(f"{n}.tif", io.BytesIO(image())) for n in "abc"])
     job = importer.JOBS[(volume.vz, "scans")]
-    assert job["total"] == 3
     with pytest.raises(ValueError, match="läuft schon"):
         if job["state"] != "running":
             pytest.skip("finished before the second upload")
@@ -110,7 +112,26 @@ def test_background_job_reports_progress(folders):
         if job["state"] != "running":
             break
         time.sleep(0.05)
-    assert (job["state"], job["done"]) == ("done", 3) and importer.page_count(volume) == 3
+    assert job["state"] == "done" and importer.page_count(volume) == 3
+    assert phases == ["PDF wird erstellt"] and job["phase"].startswith("Alte Vorschaubilder")
+
+
+# Tests if a volume scanned in several folders (15.1, 15.2, ..., 15.10) with a PDF each becomes one PDF in the order
+# of the folders.
+def test_pdfs_in_several_folders_are_joined_in_order(folders):
+    _, db = folders
+    volume = db.query(Volume).one()
+
+    def pdf(width):
+        doc = pymupdf.open()
+        doc.new_page(width=width, height=100)
+        return io.BytesIO(doc.tobytes())
+    files = [("15.10/scan.pdf", pdf(30)), ("15.2/scan.pdf", pdf(20)), ("15.1/scan.pdf", pdf(10))]
+    assert importer.save_scans(volume, files) == 3
+    with pymupdf.open(importer.scan_path(volume)) as doc:
+        assert [p.rect.width for p in doc] == [10, 20, 30]
+    with pytest.raises(ValueError, match="nicht beides"):
+        importer.save_scans(volume, [("a.pdf", pdf(10)), ("b.tif", io.BytesIO(image()))])
 
 
 # Tests if discarding removes the scan and gives the unit back: an added volume disappears, an archive unit
@@ -129,7 +150,9 @@ def test_discard_volume(folders, monkeypatch):
     assert (archive_unit.stem, archive_unit.digitized, archive_unit.status) == (None, False, "freigegeben")
 
     added = importer.new_volume(16)
+    job = importer.JOBS[(16, "bild")] = {"state": "running"}  # a running job does not stop it, it is told to end
     importer.discard(added)
+    assert job["cancel"] and (16, "bild") not in importer.JOBS
     assert db.query(Volume).filter_by(vz=16).count() == 0
     assert [u["vz"] for u in importer.free_units()] == [16, 17]  # number free again
 
@@ -381,13 +404,13 @@ def test_text_step_page(scan, monkeypatch):
     wait_for(scan)
     html = page()
     assert 'name="captions" value="yes" checked' in html and "brauchten zuletzt" not in html
-    assert "120 Seiten · Text erkannt" in html and "/import/15/ocr.zip" in html and "Erneut erkennen" in html
+    assert "120 Seiten · Text erkannt" in html and "/import/15/ocr.zip" in html and "Neu erkennen" in html
     assert 'class="done"' in page("trennen")  # the step bar marks the text as done
     ocr.import_zip(scan, io.BytesIO(ocr.zip_result(scan)))  # loaded from a ZIP, the page says imported, not recognized
-    assert "120 Seiten · Text importiert" in page() and "Datalab, Qualitätsstufe" not in page()
+    assert "120 Seiten · Text aus ZIP geladen" in page() and "Datalab, Qualitätsstufe" not in page()
     scans_page = page("scans")
-    assert "Aktuell gespeichert: <b>120 Seiten</b>" in scans_page and "Scans ersetzen" in scans_page
-    assert '<details class="advanced"><summary class="button small">Scans ersetzen</summary>' in scans_page  # the drop zone is folded away
+    assert "Aktuell gespeichert: 120 Seiten" in scans_page and "Scans ersetzen" in scans_page
+    assert '<summary>Andere Scans hochladen</summary>' in scans_page  # the drop zone is folded away
     assert "Upload abgeschlossen" not in scans_page and page("trennen")
     assert 'step-button disabled' in page("trennen") and 'step-button disabled' not in scans_page  # needs the saved cuts; scans are there
     from backend.app import metadata, segments
@@ -401,6 +424,60 @@ def test_text_step_page(scan, monkeypatch):
     with pytest.raises(ValueError, match="OpenRouter"):
         metadata.start(scan, "a/b", [])
 
+
+# Tests if "Neu erzeugen" after a finished run asks the model again instead of taking the kept answers, and if the
+# price says so; after a new split the leaflets with the same pages are still taken over.
+def test_metadata_again_asks_again(scan, monkeypatch):
+    from backend.app import metadata, segments
+    fake_datalab(monkeypatch, [])
+    ocr.start(scan)
+    wait_for(scan)
+    segments.save(scan, [60], 120)
+    asked = []
+    monkeypatch.setattr(metadata, "extract", lambda key, model, prompt, state, cost: asked.append(model) or {})
+    monkeypatch.setattr(metadata, "models", lambda: [("a/b", "Modell B", 1e-6, 2e-6)])
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-test-9999")
+    totals, recheck = [], metadata.recheck  # the job's total before the next phase: the leaflets asked for
+    monkeypatch.setattr(metadata, "recheck", lambda *a: totals.append(importer.JOBS[(scan.vz, metadata.JOB)]["total"]) or recheck(*a))
+
+    def run():
+        asked.clear()
+        metadata.start(scan, "a/b", [])
+        job = importer.JOBS[(scan.vz, metadata.JOB)]
+        for _ in range(200):
+            if job["state"] != "running":
+                break
+            time.sleep(0.05)
+        assert job["state"] == "done", job
+        return totals[-1]
+    assert run() == 2 and asked and metadata.status(scan)["state"] == "done"
+    assert metadata.prices(scan)["a/b"] == "etwa 0,00 $" and metadata.prices(scan, fresh=True)["a/b"] != "etwa 0,00 $"
+    assert run() == 2  # asked again, not taken from the kept answers
+    segments.save(scan, [30, 60], 120)  # 1-30 and 31-60 are new, 61-120 stays
+    assert run() == 2
+
+# Tests if "Probleme beheben" throws away just what it says: the text takes the metadata with it, the cuts stay.
+def test_resets_without_access_to_the_files(scan, monkeypatch):
+    import backend.app.app as leaflet_app
+    from backend.app import metadata, pdf_service, segments
+    from backend.app.database import fillDatabase
+    monkeypatch.setattr(leaflet_app, "session", fillDatabase.session)
+    fake_datalab(monkeypatch, [])
+    ocr.start(scan)
+    wait_for(scan)
+    segments.save(scan, [60], 120)
+    metadata.result_path(scan).write_text("{}", encoding="utf-8")
+    (importer.ocr_dir(scan) / "metadata-1234abcd.jsonl").write_text("", encoding="utf-8")
+    pdf_service.render_thumb(importer.scan_path(scan), 1, height=100)
+    assert list(pdf_service.THUMB_DIR.glob(f"{scan.stem}-*"))
+
+    leaflet_app.import_reset(None, scan.vz, "vorschau")
+    assert not list(pdf_service.THUMB_DIR.glob(f"{scan.stem}-*"))
+    leaflet_app.import_reset(None, scan.vz, "metadaten")
+    assert not metadata.result_path(scan).exists() and not list(importer.ocr_dir(scan).glob("metadata-*"))
+    assert ocr.status(scan)["state"] == "done"
+    leaflet_app.import_reset(None, scan.vz, "text")
+    assert ocr.status(scan)["state"] == "none" and segments.status(scan)["cuts"] == [60] and importer.page_count(scan) == 120
 
 # Tests if the leaflet page names what is known about the text recognition and leaves out the rest.
 def test_describe_text_recognition():
@@ -453,7 +530,7 @@ def test_draft_opens_at_the_step_it_has_reached(scan, monkeypatch):
 def test_cuts_from_the_text(scan):
     from backend.app import boundaries, segments
     with pytest.raises(ValueError, match="noch nicht erkannt"):
-        segments.suggest_from_text(scan)
+        segments.suggest(scan)
     assert segments.missed_cuts(scan, [9], [], 120) is None  # no text, no hints
     # no hint, no cut: a page without any feature stays below the threshold (check again after learning new weights)
     assert boundaries.probability(set()) < boundaries.MIN_PROBABILITY
@@ -472,11 +549,50 @@ def test_cuts_from_the_text(scan):
     ocr.result_path(scan).write_text(json.dumps({"children": pages}), encoding="utf-8")
     blocks = boundaries.page_blocks(ocr.result_path(scan))
     assert boundaries.features(blocks[49], blocks[48]) == set()
-    assert segments.suggest_from_text(scan) == 2
+    assert segments.suggest(scan) == 2
     status = segments.status(scan)
     assert (status["cuts"], status["suggested"], status["confirmed"]) == ([9, 29], [9, 29], False)
+    why = segments.reasons(scan)  # for every transition, from the text alone while the scan is not measured
+    assert not why["images"] and len(why["transitions"]) == 119 and why["transitions"][8][0] >= 0.5
+    # looks of another scan do not count
+    from backend.app import looks
+    other = {"version": looks.VERSION, "scan": importer.scan_stamp(scan) - 1, "pages": []}
+    segments.write(segments.looks_path(scan), other)
+    assert segments.load_looks(scan) is None
+    # with the looks of this scan its blank pages are left out
+    look = {"size": [595, 842], "paper": [230, 228, 220], "ink": 0.05, "margins": [0.1] * 4, "blank": False,
+            "sign": False, "stamp": False, "holes": "none", "spots": {"holes": [], "blue": []}}
+    pages = [look] * 49 + [look | {"blank": True, "ink": 0.0}] + [look] * 70
+    other["scan"], other["pages"] = importer.scan_stamp(scan), pages
+    segments.write(segments.looks_path(scan), other)
+    segments.suggest(scan)
+    assert segments.status(scan)["excluded"] == [50] and segments.reasons(scan)["images"]
     segments.save(scan, [9, 29, 60], 120)  # saved by somebody: nothing is a suggestion any more
     assert (segments.status(scan)["suggested"], segments.status(scan)["confirmed"]) == ([], True)
     # a list without the cut after 30 gets it as a hint; its own cuts and the ones a left-out page forces are no hints
     assert segments.missed_cuts(scan, [9, 60], [], 120) == [29]
     assert segments.missed_cuts(scan, [9], [30], 120) == []
+
+
+# Tests if the reasons of a suggestion add up to its probability, strongest for first, with only the strongest word
+# for a cut counted, and if the scan adds to the text: holes on the right make a page the back of the sheet before.
+def test_reasons_of_a_suggestion():
+    from backend.app import boundaries
+    previous = [("Text", "Wir fordern alle auf.\nVerantwortlich: A. Muster, Eigendruck")]
+    page = [("Text", "UB Regensburg eingelaufen am: 1. FEB. 1973"), ("Text", "Alle Gruppen protestieren heute")]
+    p, reasons = boundaries.explain(page, previous)
+    assert p == pytest.approx(1 / (1 + math.exp(-(boundaries.PRIOR + sum(w for _, w in reasons)))))
+    assert [w for _, w in reasons] == sorted((w for _, w in reasons), reverse=True)
+    labels = [label for label, _ in reasons]
+    assert "Eingangsstempel" in labels and "Impressum auf der Seite davor" in labels
+    # only the strongest word for a cut counts: "eingelaufen" is stronger than "eigendruck"
+    assert [label for label in labels if "„" in label] == ["„eingelaufen“ am Seitenanfang"]
+
+    look = {"size": [595, 842], "paper": [230, 228, 220], "ink": 0.05, "margins": [0.1, 0.1, 0.1, 0.1],
+            "blank": False, "sign": False, "stamp": False, "holes": "none"}
+    plain = [("Text", "und deshalb fordern wir die Abschaffung")]
+    alone = boundaries.explain(plain, previous)[0]
+    assert boundaries.explain(plain, previous, None, look)[0] == alone  # without the looks of both pages: text only
+    back, reasons = boundaries.explain(plain, previous, look | {"holes": "right"}, look)
+    assert back < alone and ("Löcher rechts: Rückseite", boundaries.IMAGE_WEIGHTS["back"]) in reasons
+    assert ("gleiche Papierfarbe", boundaries.IMAGE_WEIGHTS["paper_same"]) in reasons

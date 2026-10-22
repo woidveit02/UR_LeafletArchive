@@ -15,6 +15,29 @@
 </nav>
 {% endmacro %}
 
+{# previous or next: a link, or grey text where there is none #}
+{% macro step_link(url, label) -%}
+{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span class="disabled" aria-disabled="true">{{ label }}</span>{% endif %}
+{%- endmacro %}
+
+{# above the pages that step 6 of the import links to, back to the step; a caller adds its pager #}
+{% macro review_bar(vz, context) %}
+<nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % vz }}">
+    <span><a href="/import/{{ vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % vz }} prüfen</b> · {{ context }}</span>
+    {% if caller is defined %}{{ caller() }}{% endif %}
+</nav>
+{% endmacro %}
+
+{# the sort choice of a list: it reloads on change, without JavaScript a button does #}
+{% macro sort_select(options, current, button=true) %}
+<label class="sort">Sortiert nach
+    <select name="sortierung" onchange="this.form.requestSubmit()">
+        {% for key, label in options %}<option value="{{ key }}"{% if key == current %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+</label>
+{% if button %}<noscript><button type="submit" class="button small">Sortieren</button></noscript>{% endif %}
+{% endmacro %}
+
 {% macro sort_link(base, current, key, label, first, default='') -%}
 {% set active = current.startswith(key) %}
 {% set next = key ~ ('_ab' if current == key ~ '_auf' else '_auf' if active else first) %}

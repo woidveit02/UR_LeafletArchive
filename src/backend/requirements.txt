@@ -8,3 +8,13 @@ sqlalchemy
 python-multipart
 requests
 datalab-python-sdk
+# topics (app/topics.py), the versions of pipelines/04_topic; bertopic itself comes without its deps (Dockerfile)
+numpy==2.2.6
+scikit-learn==1.7.2
+umap-learn==0.5.12
+hdbscan==0.8.44
+pandas==2.3.3
+plotly==7.1.0
+tqdm
+spacy==3.8.16
+stop-words==2018.7.23

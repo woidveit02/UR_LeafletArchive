@@ -1,13 +1,21 @@
 """Step 4 of an import: where one leaflet ends and the next begins in the scan.
 
-The result is <stem>.segments.json next to the scan PDF, the file format the
-14 volumes of the project were cut in. A cut after page n means that page n + 1 starts a new leaflet.
+The result is <stem>.segments.json next to the scan PDF, the file format of flugblatt_splitter and the
+pipeline. A cut after page n means that page n + 1 starts a new leaflet. Next to it: <stem>.looks.json, what each
+page of the scan looks like (looks.py, measured in the background once the scan is there), and <stem>.reasons.json,
+why the last suggestion cuts where it does.
 """
 import json
+import logging
 import re
+import threading
+import time
 from datetime import datetime, timezone
 
-from . import boundaries, importer, ocr
+from . import boundaries, importer, looks, ocr
+
+logger = logging.getLogger(__name__)
+LOOKS_JOB = "bild"
 
 
 def path(volume):
@@ -17,6 +25,78 @@ def path(volume):
 def load(volume):
     """The saved document, or None."""
     return json.loads(path(volume).read_text(encoding="utf-8")) if path(volume).is_file() else None
+
+
+def looks_path(volume):
+    return path(volume).with_name(f"{volume.stem}.looks.json")
+
+
+def reasons_path(volume):
+    return path(volume).with_name(f"{volume.stem}.reasons.json")
+
+
+def write(target, doc):
+    part = target.with_name(target.name + ".part")  # a broken write must not leave half a file
+    part.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    part.replace(target)
+
+
+def load_looks(volume):
+    """The looks of every page of the current scan, or None if they are not measured (or by an older looks.py)."""
+    try:
+        doc = json.loads(looks_path(volume).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    fits = doc.get("version") == looks.VERSION and doc.get("scan") == importer.scan_stamp(volume)
+    return doc["pages"] if fits else None
+
+
+def start_looks(volume, again=False):
+    """Measures the scan in the background (poll importer.JOBS[(vz, LOOKS_JOB)]), unless that is done or running, or
+    was stopped by hand (again: start it all the same)."""
+    busy = importer.running(volume, LOOKS_JOB) or importer.running(volume)  # or a new scan is being built
+    stopped = importer.JOBS.get((volume.vz, LOOKS_JOB), {}).get("state") == "cancelled" and not again
+    if busy or stopped or not importer.scan_path(volume).is_file() or load_looks(volume) is not None:
+        return
+    job = importer.JOBS[(volume.vz, LOOKS_JOB)] = {"state": "running", "done": 0, "total": importer.page_count(volume),
+                                                   "started": time.time(), "error": ""}
+    scan, stamp = importer.scan_path(volume), importer.scan_stamp(volume)
+
+    def report(done, total):
+        if job.get("cancel"):  # stopped by hand, or the draft was deleted
+            raise RuntimeError("cancelled")
+        job.update(done=done, total=total)
+
+    def run():
+        try:
+            pages = looks.measure_scan(scan, report)
+            write(looks_path(volume), {"version": looks.VERSION, "scan": stamp, "pages": pages})
+            job["state"] = "done"
+        except Exception as error:  # a thread must report, not die silently
+            if job.get("cancel"):
+                job["state"] = "cancelled"
+                return
+            logger.exception("measuring the scan failed")
+            job.update(state="error", error=f"Papier, Lochung und Stempel ließen sich nicht erkennen ({error}).")
+
+    threading.Thread(target=run, daemon=True).start()
+
+
+def stop_looks(volume):
+    """Stops measuring the scan after the pages being read; the suggestions then come from the text alone."""
+    job = importer.JOBS.get((volume.vz, LOOKS_JOB))
+    if not job or job["state"] != "running":
+        raise ValueError("Papier, Lochung und Stempel werden gerade nicht erkannt.")
+    job["cancel"] = True
+
+
+def reasons(volume):
+    """Why the last suggestion cuts where it does: {"images": whether the scan counted, "prior": the weight every
+    transition starts from, "transitions": [[probability, [[label, weight], ...]], ...] after page 1, 2, …}, or None."""
+    try:
+        return json.loads(reasons_path(volume).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
 
 
 def segments_from_cuts(cuts, page_count, confirmed=True):
@@ -64,8 +144,11 @@ def save(volume, cuts, page_count, confirmed=True, excluded=(), suggested=(), re
         doc["reviewed"] = sorted(reviewed)
     if hints:
         doc["hints"] = sorted(hints)
-    path(volume).write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    part = path(volume).with_name(path(volume).name + ".part")  # a broken write must not leave half a file
+    part.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    part.replace(path(volume))
     return doc
+
 
 
 LIST_LINE = re.compile(r"^\s*(?P<out>x|(?:ohne|kein)(?:\s+inhalt)?)?\.?\s*(?P<a>\d+)(?:\s*(?:[-–—:;,\t]|bis)?\s*(?P<b>\d+))?",
@@ -139,20 +222,29 @@ def missed_cuts(volume, cuts, excluded, page_count):
     result = ocr.result_path(volume)
     if not result.is_file():
         return None
-    found, pages = boundaries.suggest(result, boundaries.HINT_PROBABILITY)
+    found, pages = boundaries.suggest(result, boundaries.HINT_PROBABILITY, load_looks(volume))
     if pages != page_count:
         return None
     skip = set(cuts) | forced_cuts(excluded, page_count)
     return sorted(c for c in found if c not in skip and not (c in excluded and c + 1 in excluded))
 
 
-def suggest_from_text(volume):
-    """Saves the cuts that the recognized text makes very probable (boundaries.py), unconfirmed; returns their number."""
+def suggest(volume, images=True):
+    """Saves the cuts that the recognized text, and with images=True the scan once it is measured, make very probable
+    (boundaries.py), unconfirmed, and why for every transition; the blank pages of the scan are left out. Returns the
+    number of cuts."""
     result = ocr.result_path(volume)
     if not result.is_file():
         raise ValueError("Der Text der Scans ist noch nicht erkannt.")
-    cuts, page_count = boundaries.suggest(result)
-    if page_count != importer.page_count(volume):
+    pages = boundaries.page_blocks(result)
+    if len(pages) != importer.page_count(volume):
         raise ValueError("Der erkannte Text passt nicht zu den Scans (andere Seitenzahl). Bitte die Texterkennung wiederholen.")
-    save(volume, cuts, page_count, confirmed=False, reviewed=[], hints=[])
+    seen = load_looks(volume) if images else None
+    seen = seen if seen and len(seen) == len(pages) else None
+    assessed = boundaries.assess(pages, seen)
+    cuts = [n for n, (p, _) in enumerate(assessed, 1) if p >= boundaries.MIN_PROBABILITY]
+    blank = [n for n, look in enumerate(seen or [], 1) if look["blank"]]  # left out; L takes one back
+    save(volume, cuts, len(pages), confirmed=False, excluded=blank, reviewed=[], hints=[])
+    write(reasons_path(volume), {"images": seen is not None, "prior": boundaries.PRIOR,
+                                 "transitions": [[round(p, 3), why] for p, why in assessed]})
     return len(cuts)

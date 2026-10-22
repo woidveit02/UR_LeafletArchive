@@ -213,7 +213,7 @@ def test_topic_bars_share_one_scale_and_list_top_issuers(monkeypatch):
         monkeypatch.setattr(leaflet_app, "templates", Jinja2Templates(directory=frontend_templates))
 
     html = leaflet_app.topic_list(request("/themen")).body.decode()
-    assert "Großes Thema</a>\n                    <span class=\"meta\">3 Flugblätter" in html  # the copy counts once
+    assert "Großes Thema</a>\n                    <span class=\"meta\"><a href=\"/leaflets?thema=10\">3 Flugblätter" in html  # the copy counts once
     assert "2000: 3 von 5 Flugblättern · 60,0 %" in html  # big: 3 of 5 (big, small, untopiced)
     assert "2000: 1 von 5 Flugblättern · 20,0 %" in html  # small: 1 of 5
     # the bigger share is the scale's 100 %, the smaller one is sized relative to it, not to its own max

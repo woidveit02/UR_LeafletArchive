@@ -1,10 +1,12 @@
-// Starts the text recognition and shows its progress. The run goes on in the app, so the page may be closed;
-// without this script the form would show the raw answer.
+// Starts a run in the background (text recognition, metadata, topics) and shows its progress; the run goes on
+// in the app, so the page may be closed. Also the choices of its form: quality level, model, prompt.
 (() => {
     // leaving before the text is recognized is allowed, but asked about
     const guarded = document.querySelector('[data-leave-warning]');
-    document.querySelector('.step-head')?.addEventListener('click', (e) => {
-        if (guarded && e.target.closest('a') && !confirm(guarded.dataset.leaveWarning)) e.preventDefault();
+    document.querySelector('.step-head')?.addEventListener('click', (e) => {  // only going on, not back
+        const link = e.target.closest('a');
+        const ahead = link && (link.closest('.step-next') || link.matches('.todo, [aria-current] ~ a'));
+        if (guarded && ahead && !confirm(guarded.dataset.leaveWarning)) e.preventDefault();
     });
 
     // the folded quality shows the level and its price, which follow the choice
@@ -33,14 +35,14 @@
     const prompt = document.getElementById('prompt');
     document.getElementById('prompt-reset')?.addEventListener('click', () => { prompt.value = prompt.dataset.default; });
 
-    const forms = document.querySelectorAll('form[data-ocr]');
+    const forms = document.querySelectorAll('form[data-job]');
     if (!forms.length) return;
-    const box = document.getElementById('ocr-progress');
+    const box = document.getElementById('job-progress');
     const bar = box.querySelector('progress');
     const text = box.querySelector('.upload-text');
-    const list = document.getElementById('ocr-parts');
-    const error = document.getElementById('ocr-error');
-    const cancel = document.getElementById('ocr-cancel');
+    const list = document.getElementById('job-parts');
+    const error = document.getElementById('job-error');
+    const cancel = document.getElementById('job-cancel');
     cancel?.addEventListener('click', async () => {
         if (!confirm(cancel.dataset.confirm)) return;
         cancel.disabled = true;
@@ -60,7 +62,8 @@
     const render = () => {
         if (!job || job.state !== 'running') return;
         box.hidden = false;
-        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}` +
+        const count = `${job.done} von ${job.total} ${job.unit || 'Seiten erkannt'}`;  // a phase without a count shows its name alone
+        text.textContent = `Läuft seit ${clock(job.started)} Min · ${job.phase ? job.phase + (job.total ? ` · ${count}` : '') : count}` +
             (job.cancel ? ' · wird abgebrochen, bereits gesendete Teile werden noch fertig' : '');
         if (cancel) cancel.disabled = Boolean(job.cancel);
         if (job.done) { bar.max = job.total; bar.value = job.done; } else bar.removeAttribute('value');
@@ -79,8 +82,8 @@
             job = await (await fetch(url)).json();
             skew = job.now - Date.now() / 1000;
             if (job.state === 'running') render();
-            else if (['done', 'error', 'cancelled'].includes(job.state)) {
-                location.reload();  // the page shows the result or the reason
+            else if (['done', 'error', 'cancelled', 'idle'].includes(job.state)) {
+                location.reload();  // the page shows the result or the reason; idle: the app restarted and lost the run
                 return;
             }
         } catch (e) { /* app restarting: try again */ }

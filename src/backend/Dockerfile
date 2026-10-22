@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+# without its deps: they would pull in PyTorch, which the topics do not need (the embeddings come from OpenRouter)
+RUN pip install --no-cache-dir --no-deps bertopic==0.17.4 && python -m spacy download de_core_news_lg
 
 COPY . .
 

@@ -54,7 +54,7 @@ def copy_review():
                 for lf, stem in session.query(Leaflet, Volume.stem).join(Volume)}
     stems = dict(session.query(Volume.label, Volume.stem))
     groups, unresolved = copy_decisions.resolve(
-        copy_groups(stems), corrections.load(COPY_DECISIONS), set(leaflets))
+        copy_groups(stems), copy_decisions.follow(corrections.load(COPY_DECISIONS), set(leaflets)), set(leaflets))
     return groups, unresolved, leaflets
 
 
@@ -63,8 +63,13 @@ def fill_copies():
     session.query(Leaflet).update({Leaflet.copy_group: None, Leaflet.canonical_leaflet_id: None,
                                    Leaflet.copies_checked: False, Leaflet.copy_candidate_of: None})
     groups, _, leaflets = copy_review()
+    drafts = {v.id for v in session.query(Volume).filter_by(status=DRAFT)}
     for number, group in enumerate(groups, 1):
         main = leaflets[group["canonical"]].id
+        released = [leaflets[a] for a in group["members"] if leaflets[a].volume_id not in drafts]
+        if leaflets[group["canonical"]].volume_id in drafts and released:  # a draft must not hide a released leaflet
+            main = max(released, key=lambda lf: sum(len(p.text or "") for p in
+                                                   session.query(Page).filter_by(leaflet_id=lf.id))).id
         for a in group["members"]:
             leaflet = leaflets[a]
             leaflet.copy_group, leaflet.canonical_leaflet_id = number, main
@@ -155,6 +160,8 @@ def fill_topics():
         return
 
     data = load_json("topics.json")
+    session.query(Leaflet).update({Leaflet.topic_id: None})
+    session.query(Topic).filter(Topic.id.notin_([t["id"] for t in data["topics"]])).delete()  # after a new run with fewer topics
     for topic in data["topics"]:
         session.merge(Topic(
             id=topic["id"],

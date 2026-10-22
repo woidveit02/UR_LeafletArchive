@@ -41,7 +41,7 @@
 {# search page: metadata line, title, two passages; all passages fold out #}
 {% macro result_list(items, qs='', locator=True) %}
 <ul class="result-list">
-    {% for item in items %}{% set link = '/leaflets/' ~ item.leaflet.id ~ qs %}
+    {% for item in items %}{% set link = item.link or '/leaflets/' ~ item.leaflet.id ~ qs %}
     <li id="l{{ item.leaflet.id }}">
         <a class="result-thumb" href="{{ link }}" tabindex="-1" aria-hidden="true">
             {%- if item.thumb %}<img src="/volumes/{{ item.vz }}/pages/{{ item.leaflet.start_page }}.jpg" alt="" loading="lazy">{% endif -%}
@@ -60,7 +60,7 @@
         </div>
     </li>
     {% else %}
-    <li class="empty">Keine Dokumente gefunden.</li>
+    <li class="empty">Keine Flugblätter gefunden.</li>
     {% endfor %}
 </ul>
 {% endmacro %}

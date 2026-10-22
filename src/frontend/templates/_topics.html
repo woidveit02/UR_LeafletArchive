@@ -1,0 +1,89 @@
+{# The list of topics with year bars and top issuers, and the map of all topics: on /themen, under Verwaltung > Themen
+   and on the review of a new run. topic_rows takes the heading of each topic from the caller. #}
+{% macro topic_map(map_data) %}
+        {% if map_data.topics %}
+        <div class="active-filters" id="topic-active-filters" hidden></div>
+        <div class="topic-map-wrap">
+            <div class="topic-map-canvas-area">
+                <div class="topic-map-filters">
+                    <label class="topic-map-filter">
+                        <input type="checkbox" id="topic-map-show-uncertain"> Unsichere anzeigen
+                    </label>
+                    <label class="topic-map-filter">
+                        <input type="checkbox" id="topic-map-show-no-topic"> Ohne Thema anzeigen
+                    </label>
+                </div>
+                <div class="topic-map-zoom">
+                    <button type="button" class="button small" id="topic-map-in" aria-label="Vergrößern">+</button>
+                    <button type="button" class="button small" id="topic-map-out" aria-label="Verkleinern">−</button>
+                    <button type="button" class="button small" id="topic-map-reset">Ansicht zurücksetzen</button>
+                    <button type="button" class="button small" id="topic-map-fullscreen">Vollbild</button>
+                </div>
+                <canvas id="topic-map" role="img" aria-label="Alle Flugblätter nach Textähnlichkeit, nach Thema eingefärbt"></canvas>
+                <div class="topic-map-hscroll"><div class="topic-map-thumb" id="topic-map-hthumb"></div></div>
+                <div class="topic-map-vscroll"><div class="topic-map-thumb" id="topic-map-vthumb"></div></div>
+            </div>
+            <ul class="topic-map-legend" id="topic-map-legend"></ul>
+        </div>
+        <p class="meta">Jeder Punkt ein Flugblatt, ähnliche Texte liegen näher beieinander. Nur die Nähe zählt, die Achsen haben keine Bedeutung. Scrollen zoomt, Ziehen verschiebt den Ausschnitt. In der Legende rechts lassen sich Themen zum Hervorheben an- und abwählen.</p>
+        {% endif %}
+{% endmacro %}
+{% macro topic_rows(topics, years, new_tab=false, count_below=false) %}
+        <ul class="topic-list">
+            {% if years %}
+            <li class="topic-row topic-row-head" aria-hidden="true">
+                <div class="topic-text"><span class="meta">{{ topics | length }} Themen</span></div>
+                <div class="topic-years"
+                     style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">
+                    {% for year in years %}<span class="topic-year-label">{{ year }}</span>{% endfor %}
+                </div>
+            </li>
+            {% endif %}
+            {% for topic in topics %}
+            <li class="topic-row" data-id="{{ topic.id }}" id="thema-{{ topic.id }}">
+                <div class="topic-text">
+                {% set count %}<a href="{{ topic.url }}"{% if new_tab %} target="_blank"{% endif %}>{{ topic.count }} {{ 'Flugblatt' if topic.count == 1 else 'Flugblätter' }}</a>{% if topic.uncertain %}, davon {{ topic.uncertain }} unsicher{% endif %}{% endset %}
+                <div class="topic-heading">
+                    {{ caller(topic) }}
+                    {% if not count_below %}<span class="meta">{{ count }}</span>{% endif %}
+                </div>
+                {% if count_below %}
+                <p class="topic-words"><span class="meta">{{ count }}</span>{% if topic.words %} · <span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}{% endif %}</p>
+                {% elif topic.words %}
+                <p class="topic-words"><span class="meta">Schlüsselwörter:</span> {{ topic.words | join(', ') }}</p>
+                {% endif %}
+                {% if topic.note %}
+                <p class="topic-words"><span class="meta">{{ topic.note_label }}:</span> {{ topic.note }}</p>
+                {% endif %}
+                {% if topic.top_orgs %}
+                <p class="topic-words"><span class="meta">Häufigste Herausgeber:</span>
+                    {% for o in topic.top_orgs %}<a href="{{ o.url }}">{{ o.label }}</a> ({{ o.count }}){% if not loop.last %}, {% endif %}{% endfor %}</p>
+                {% endif %}
+                </div>
+                {% if years %}
+                <div class="topic-years" aria-label="Jahresverteilung, Anteil an allen Flugblättern des Jahres"
+                     style="grid-template-columns: repeat({{ years | length }}, minmax(0, 1fr))">
+                    {% for year in topic.years %}
+                    <a class="topic-year" href="{{ year.url }}"
+                       title="{{ year.year }}: {{ year.count }} von {{ year.total }} Flugblättern · {{ year.share }} %"
+                       aria-label="{{ year.year }}: {{ year.count }} von {{ year.total }} Flugblättern, {{ year.share }} Prozent">
+                        <span class="topic-bar-wrap"><span class="topic-year-pct">{{ year.share }} %</span><span class="topic-bar" style="height: {{ year.height }}%"></span></span>
+                        <span class="topic-year-label">{{ year.year }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </li>
+            {% else %}
+            <li class="empty">Noch keine Themen.</li>
+            {% endfor %}
+        </ul>
+{% endmacro %}
+{% macro topic_map_script(map_data) %}
+    {% if map_data.topics %}
+    <script type="application/json" id="topic-map-data">{{ map_data | tojson }}</script>
+    <script src="{{ url_for('static', path='chart.umd.min.js') }}"></script>
+    <script src="{{ url_for('static', path='chartjs-plugin-zoom.min.js') }}"></script>
+    <script src="{{ url_for('static', path='topic-map.js') }}"></script>
+    {% endif %}
+{% endmacro %}

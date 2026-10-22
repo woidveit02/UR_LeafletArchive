@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pymupdf
 
-from . import importer, keys
+from . import importer, keys, pdf_service
 from .database import fillDatabase
 
 logger = logging.getLogger(__name__)
@@ -192,11 +192,11 @@ def keep_batch(volume, first, last, key, pipeline_id, scan, part=None):
             part.update(state=state, since=time.time())
     phase("upload")
     path.parent.mkdir(parents=True, exist_ok=True)
-    piece = pymupdf.open()
-    with pymupdf.open(scan) as doc:
-        piece.insert_pdf(doc, from_page=first - 1, to_page=last - 1)
     pdf = path.with_suffix(".pdf")
-    piece.save(pdf)
+    with pdf_service._lock:  # PyMuPDF is not thread safe: the batches run side by side, the page images too
+        piece = pymupdf.open()
+        piece.insert_pdf(pdf_service.get_document(scan), from_page=first - 1, to_page=last - 1)
+        piece.save(pdf)
     try:
         result = convert_batch(key, pipeline_id, pdf, phase)
     finally:
@@ -270,7 +270,7 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
     if again:
         clear(volume)
     elif kept_mode(volume) not in (None, variant(mode, captions)) or (kept_mode(volume) and kept_size(volume) != size):
-        raise ValueError(f"Die schon erkannten Teile haben die Qualität „{variant_label(kept_mode(volume))}“ und je "
+        raise ValueError(f"Die schon erkannten Teile haben die Qualitätsstufe „{variant_label(kept_mode(volume))}“ und je "
                          f"{kept_size(volume)} Seiten. Entweder damit fortsetzen oder von vorn beginnen.")
     pages = importer.page_count(volume)
     if result_path(volume).is_file():
@@ -284,8 +284,10 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
 
     def run():
         try:
+            job["phase"] = "Verbindung zu Datalab"
             client = make_client(key)
             pipeline_id = find_or_create_pipeline(client, mode, captions)
+            job["phase"] = "Seiten werden erkannt"
             parts = [{"first": first, "last": last, "kept": batch_path(volume, first, last).is_file(), "since": started}
                      for first, last in batches(pages, size)]
             for part in parts:
@@ -306,6 +308,7 @@ def start(volume, mode=DEFAULT_MODE, again=False, captions=True, size=BATCH_PAGE
             with ThreadPoolExecutor(CONCURRENCY) as pool:
                 list(pool.map(one, parts))  # the first failure ends the run; running batches finish and are kept
             if all(p["state"] == "fertig" for p in parts):
+                job["phase"] = "Ergebnis wird zusammengesetzt"
                 merge(volume, pages, variant(mode, captions), round(time.time() - started), size)
                 job["state"] = "done"
             else:

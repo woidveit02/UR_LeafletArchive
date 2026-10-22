@@ -1,0 +1,13 @@
+{# Choice of an OpenRouter model, the strongest and the used ones first, with the estimated price of the run;
+   run-job.js lets a typed model win over the choice. Used for the metadata (step 5) and the topic titles. #}
+{% macro model_choice(model_top, model_names, model_prices, chosen, note) %}
+<select id="model-choice" name="model" aria-label="Modell">
+    {% for label, group in model_top %}<optgroup label="{{ label }}">{% for id, name in group %}<option value="{{ id }}"{% if id == chosen %} selected{% endif %}>{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</optgroup>
+    {% endfor %}
+</select>
+<label class="field-label model-search-other" for="model">Anderes Modell suchen</label>
+<input type="text" id="model" class="model-search-input" list="model-list" placeholder="Name oder Kennung, zum Beispiel „gemini“ oder „gpt“" spellcheck="false">
+<datalist id="model-list">{% for id, name in model_names %}<option value="{{ id }}" data-price="{{ model_prices.get(id, '') }}">{{ name }}{% if model_prices.get(id) %} · {{ model_prices[id] }}{% endif %}</option>{% endfor %}</datalist>
+<p class="model-cost">Geschätzte Kosten für diesen Lauf: <span id="model-price">{{ model_prices.get(chosen) or 'unbekannt' }}</span> (OpenRouter rechnet in Dollar ab)</p>
+{% if note %}<p class="meta">{{ note }}</p>{% endif %}
+{% endmacro %}

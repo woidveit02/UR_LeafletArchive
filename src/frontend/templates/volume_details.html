@@ -1,20 +1,17 @@
 {% extends "base.html" %}
-{% block title %}{{ volume.label }} – UR Leaflet Archive{% endblock %}
+{% from '_ui.html' import step_link, review_bar %}
+{% block title %}{{ volume.label }}{% endblock %}
 {% block app_class %}{% if volume.view == 'seiten' %} app-wide{% endif %}{% endblock %}
 {% block content %}
-        {% if volume.review %}
-        <nav class="review-bar" aria-label="Prüfung von Band {{ '%03d' % volume.vz }}">
-            <span><a href="/import/{{ volume.vz }}?schritt=pruefen">← Schritt 6</a> · <b>Band {{ '%03d' % volume.vz }} prüfen</b> · Alle Flugblätter</span>
-        </nav>
-        {% endif %}
+        {% if volume.review %}{{ review_bar(volume.vz, 'Alle Flugblätter') }}{% endif %}
         <nav class="detail-nav">
-            <span class="breadcrumb"><a href="/volumes">Rep. 118</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
+            <span class="breadcrumb"><a href="/volumes">Bände</a> › <a href="/volumes#{{ volume.anchor }}">{{ volume.group }}</a></span>
             <span>
-                {% if volume.prev_vz %}<a href="/volumes/{{ volume.prev_vz }}">‹ Vorheriger</a>{% else %}<span class="disabled">‹ Vorheriger</span>{% endif %}
-                {% if volume.next_vz %}<a href="/volumes/{{ volume.next_vz }}">Nächster ›</a>{% else %}<span class="disabled">Nächster ›</span>{% endif %}
+                {{ step_link(('/volumes/' ~ volume.prev_vz) if volume.prev_vz, '‹ Voriger') }}
+                {{ step_link(('/volumes/' ~ volume.next_vz) if volume.next_vz, 'Nächster ›') }}
             </span>
         </nav>
-        <header class="page-head page-head-detail">
+        <header class="page-head">
             <h1>{{ volume.label }}{% if volume.draft %} <span class="status-badge">nicht freigegeben</span>{% endif %}</h1>
         </header>
 
@@ -32,7 +29,7 @@
                 {% if volume.organizations %}<details>
                     <summary>{{ volume.organizations | length }} {{ 'Organisation' if volume.organizations | length == 1 else 'Organisationen' }}</summary>
                     {% for org in volume.organizations %}<a href="/organizations/{{ org.id }}">{% if org.full_name %}{{ org.full_name }} ({{ org.name }}){% else %}{{ org.name }}{% endif %}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}
-                </details>{% else %}n.a.{% endif %}
+                </details>{% else %}–{% endif %}
             </dd>
         </dl>
 
@@ -77,34 +74,5 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', path='keep-scroll.js') }}"></script>
-    <script>
-        // a link to a page marks the whole leaflet it belongs to
-        function markRange() {
-            document.querySelectorAll('.grid-page.in-range').forEach((el) => el.classList.remove('in-range'));
-            const hit = document.getElementById(location.hash.slice(1));
-            if (hit?.dataset.leaflet) document.querySelectorAll(`.grid-page[data-leaflet="${hit.dataset.leaflet}"]`).forEach((el) => el.classList.add('in-range'));
-        }
-        markRange();
-        addEventListener('hashchange', markRange);
-
-        // a title runs over the cells of its leaflet that share its row
-        function spanTitles() {
-            document.querySelectorAll('.group-start').forEach((first) => {
-                let n = 1;
-                for (let c = first.nextElementSibling; c && !c.classList.contains('group-start') && c.offsetTop === first.offsetTop; c = c.nextElementSibling) n++;
-                first.style.setProperty('--span', n);
-            });
-        }
-        spanTitles();
-        addEventListener('resize', spanTitles);
-
-        // hovering a page marks its whole leaflet
-        const pageGrid = document.querySelector('.page-grid');
-        const mark = (el, on) => {
-            const id = el?.closest('.grid-page')?.dataset.leaflet;
-            if (id) pageGrid.querySelectorAll(`.grid-page[data-leaflet="${id}"]`).forEach((c) => c.classList.toggle('hover', on));
-        };
-        pageGrid?.addEventListener('mouseover', (e) => mark(e.target, true));
-        pageGrid?.addEventListener('mouseout', (e) => mark(e.target, false));
-    </script>
+    <script src="{{ url_for('static', path='volume-page.js') }}"></script>
 {% endblock %}

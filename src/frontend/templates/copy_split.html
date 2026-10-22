@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% from '_leaflets.html' import title %}
-{% block title %}Trennung prüfen – UR Leaflet Archive{% endblock %}
+{% block title %}Trennung prüfen{% endblock %}
 {% block content %}
         <nav class="detail-nav" aria-label="Ungeprüfte Gruppen">
             <span class="breadcrumb"><a href="/verwaltung">Verwaltung</a> › <a href="/exemplare">Exemplare</a> › <a href="/exemplare?status=geprueft">Geprüft</a></span>
         </nav>
-        <header class="page-head page-head-wide">
+        <header class="page-head">
             <div class="head-row">
                 <h1>Trennung prüfen</h1>
                 <span class="status-badge checked">Getrennt</span>
@@ -21,6 +21,6 @@
         <form method="post" action="/leaflets/{{ leaflet.id }}/exemplare" class="review-actions dup-more">
             {% if message %}<strong role="status">{{ message }}</strong>{% endif %}
             <button type="submit" name="revert" value="1" class="button text">Prüfung zurücknehmen</button>
-            {% if next %}<a class="button small primary review-next" href="/leaflets/{{ next }}/exemplare">Weiter zur nächsten ungeprüften Gruppe ›</a>{% endif %}
+            {% if next %}<a class="button small primary review-next" href="/leaflets/{{ next }}/exemplare">Weiter zum nächsten ungeprüften Mehrfachexemplar ›</a>{% endif %}
         </form>
 {% endblock %}

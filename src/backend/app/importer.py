@@ -3,8 +3,11 @@ as a draft, the scans as one PDF in the scan folder."""
 import csv
 import json
 import logging
+import re
 import shutil
+import tempfile
 import threading
+import time
 from pathlib import Path
 
 import pymupdf
@@ -17,15 +20,16 @@ logger = logging.getLogger(__name__)
 TIFF_SUFFIXES = {".tif", ".tiff"}
 JPEG_QUALITY, DPI = 75, 400  # as the scans of the project; scripts/tiff_to_pdf.py too
 STEPS = {"band": "Band wählen", "scans": "Scans hochladen", "ocr": "Text erkennen", "trennen": "Flugblätter trennen",
-         "angaben": "Metadaten erzeugen", "pruefen": "Prüfen & freigeben", "themen": "Themen zuordnen"}
+         "angaben": "Metadaten erzeugen", "pruefen": "Prüfen und freigeben"}
+TOPICS_STEP = "themen"  # optional, after step 6: not in the step bar
 # what a step is for, said to somebody who does not know the system: under the step bar and as its tooltips
 STEP_HELP = {"band": "Wähle den Band, dessen Scans du hinzufügen möchtest.",
-             "scans": "Die gescannten Seiten des Bandes hochladen.",
-             "ocr": "Der Text der Scans wird automatisch erkannt, damit er sich lesen und durchsuchen lässt.",
-             "trennen": "Festlegen, wo ein Flugblatt endet und das nächste beginnt.",
-             "angaben": "Titel, Reihe, Datum, Herausgeber und weitere Angaben werden automatisch aus dem Text ermittelt.",
-             "pruefen": "Die Ergebnisse durchsehen und den Band in Liste, Suche und Trends aufnehmen.",
-             "themen": "Optional: Die Flugblätter werden Themen zugeordnet. Der Band ist schon nach Schritt 6 fertig."}
+             "scans": "Lade die gescannten Seiten des Bandes hoch.",
+             "ocr": "Die App erkennt den Text der Scans, damit er sich lesen und durchsuchen lässt.",
+             "trennen": "Lege fest, wo ein Flugblatt endet und das nächste beginnt.",
+             "angaben": "Ein Sprachmodell liest Titel, Reihe, Datum, Herausgeber und weitere Metadaten aus dem Text.",
+             "pruefen": "Sieh die Ergebnisse durch und gib den Band frei.",
+             "themen": "Optional: Die App ordnet die Flugblätter den bestehenden Themen zu. Der Band ist schon mit Schritt 6 fertig."}
 
 
 def load_entries():
@@ -56,12 +60,6 @@ def scan_path(volume):
 def ocr_dir(volume):
     """Where the text recognition of the scan lives: <stem>.json, its pictures and the unfinished batches."""
     return scan_path(volume).parent / volume.stem
-
-
-def pending_volumes():
-    """Volumes without leaflets yet: not digitized, or a draft in progress."""
-    session = fillDatabase.session
-    return [v for v in session.query(Volume).order_by(Volume.vz) if not n_leaflets(v)]
 
 
 def free_units():
@@ -133,10 +131,10 @@ def discard(volume):
     """
     if n_leaflets(volume) and volume.status != DRAFT:
         raise ValueError("Dieser Band ist schon freigegeben und lässt sich hier nicht löschen.")
-    if any(running(volume, kind) for kind in ("scans", "ocr", "angaben", "anlegen")):
-        raise ValueError("Für diesen Band läuft gerade ein Upload oder eine Berechnung. Bitte warten, bis sie fertig ist.")
-    for kind in ("scans", "ocr", "angaben", "anlegen"):
-        JOBS.pop((volume.vz, kind), None)
+    if running(volume, "anlegen"):  # writes to the database; takes only moments
+        raise ValueError("Die Flugblätter werden gerade angelegt. Bitte warten, bis das fertig ist.")
+    for job_key in [k for k in JOBS if k[0] == volume.vz]:
+        JOBS.pop(job_key)["cancel"] = True  # a running job stops and keeps nothing
     if volume.stem:
         target = scan_path(volume)
         pdf_service._doc_cache.pop(str(target), None)
@@ -144,8 +142,8 @@ def discard(volume):
             target.unlink(missing_ok=True)
         except OSError as error:
             raise ValueError(storage_problem(error, target)) from error
-        target.with_name(f"{volume.stem}.segments.json").unlink(missing_ok=True)
-        shutil.rmtree(target.parent / f".upload-{volume.vz}", ignore_errors=True)
+        for kind in ("segments", "looks", "reasons"):
+            target.with_name(f"{volume.stem}.{kind}.json").unlink(missing_ok=True)
         shutil.rmtree(ocr_dir(volume), ignore_errors=True)
         drop_thumbs(volume.stem)
         try:
@@ -172,11 +170,16 @@ def discard(volume):
     session.commit()
 
 
-def tiffs_to_pdf(paths, out, progress=None):
-    """One page per image, in the order given, recompressed as JPEG like the pipeline does.
-    progress(n) is called after n pages."""
+def natural(name):
+    """Sort key of an uploaded file by its path: numbers by value, so folder 15.2 comes before 15.10."""
+    return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", name)]
+
+
+def tiffs_to_pdf(paths, out, progress):
+    """One page per image, in the order given, recompressed as JPEG like the pipeline does."""
     doc = pymupdf.open()
     for n, path in enumerate(paths, 1):
+        progress(f"Seite {n} von {len(paths)} wird umgewandelt", n - 1, len(paths))
         pix = pymupdf.Pixmap(str(path))
         if pix.colorspace.n != 3 or pix.alpha:
             pix = pymupdf.Pixmap(pymupdf.csRGB, pix)
@@ -184,9 +187,27 @@ def tiffs_to_pdf(paths, out, progress=None):
             pix = pymupdf.Pixmap(pix, 0)
         page = doc.new_page(width=pix.width * 72 / DPI, height=pix.height * 72 / DPI)
         page.insert_image(page.rect, stream=pix.tobytes("jpg", jpg_quality=JPEG_QUALITY))
-        if progress:
-            progress(n)
+    progress("PDF wird erstellt")
     doc.save(out, garbage=3, deflate=True)
+
+
+def join_pdfs(paths, out, progress):
+    """The PDFs one after the other, their pages as they are."""
+    doc = pymupdf.open()
+    for n, path in enumerate(paths, 1):
+        progress(f"PDF {n} von {len(paths)} wird angehängt", n - 1, len(paths))
+        with pymupdf.open(path) as part:
+            doc.insert_pdf(part)
+    progress("PDF wird erstellt")
+    doc.save(out, garbage=1)
+
+
+def copy_with_progress(source, target, progress):
+    total = source.stat().st_size
+    with open(source, "rb") as src, open(target, "wb") as out:
+        while chunk := src.read(16 << 20):
+            out.write(chunk)
+            progress(f"Scan wird im Scan-Ordner gespeichert ({total / 1e6:.0f} MB)", out.tell(), total)
 
 
 def claim(volume):
@@ -200,36 +221,34 @@ def claim(volume):
 
 
 def stage(volume, files):
-    """Checks the uploaded files (name, file object) and copies them next to the scan; returns
-    (kind, paths, target). One PDF is taken as it is, TIFFs are merged in file name order; other
-    files, such as Thumbs.db from a chosen folder, are left out. Raises ValueError with a message
-    for the user if the files do not fit or the folder cannot be written."""
+    """Checks the uploaded files (name, file object) and copies them to a folder of the app, sorted by their paths
+    (folder 15.2 before 15.10); returns (kind, paths, target). PDFs are joined, TIFFs merged into one PDF; other
+    files, such as Thumbs.db from a chosen folder, are left out. Raises ValueError with a message for the user if
+    the files do not fit."""
     if n_leaflets(volume):
         raise ValueError("Dieser Band ist schon eingelesen, seine Scans lassen sich nicht ersetzen.")
     if running(volume) or running(volume, "ocr"):
         raise ValueError("Für diesen Band läuft schon ein Upload oder die Texterkennung. Bitte warten, bis sie fertig ist.")
-    if len(files) == 1 and Path(files[0][0]).suffix.lower() == ".pdf":
-        kind = "pdf"
-    else:
-        files = [f for f in files if Path(f[0]).suffix.lower() in TIFF_SUFFIXES]
-        kind = "tiff"
-    if not files:
-        raise ValueError("Bitte ein PDF oder TIFF-Dateien (.tif, .tiff) auswählen, einzeln oder als Ordner.")
+    pdfs = [f for f in files if Path(f[0]).suffix.lower() == ".pdf"]
+    tiffs = [f for f in files if Path(f[0]).suffix.lower() in TIFF_SUFFIXES]
+    if pdfs and tiffs:
+        raise ValueError("Bitte entweder PDFs oder TIFF-Dateien hochladen, nicht beides zusammen.")
+    if not pdfs and not tiffs:
+        raise ValueError("Bitte PDF- oder TIFF-Dateien (.tif, .tiff) auswählen, einzeln oder als Ordner.")
+    kind, files = ("pdf", pdfs) if pdfs else ("tiff", tiffs)
 
     claim(volume)
-    target = scan_path(volume)
-    staging = target.parent / f".upload-{volume.vz}"
+    staging = Path(tempfile.mkdtemp(prefix=f"upload-{volume.vz}-"))  # in the container: much faster than the scan folder
     try:
-        shutil.rmtree(staging, ignore_errors=True)
-        staging.mkdir(parents=True)
         paths = []
-        for name, source in sorted(files, key=lambda f: f[0].lower()):
-            paths.append(staging / Path(name).name)
+        for n, (name, source) in enumerate(sorted(files, key=lambda f: natural(f[0])), 1):
+            paths.append(staging / f"{n:05d}{Path(name).suffix.lower()}")  # 15.1/a.pdf and 15.2/a.pdf must not meet
             with open(paths[-1], "wb") as out:
-                shutil.copyfileobj(source, out)
+                shutil.copyfileobj(source, out, 16 << 20)
     except OSError as error:
-        raise ValueError(storage_problem(error, target)) from error
-    return kind, paths, target
+        shutil.rmtree(staging, ignore_errors=True)
+        raise ValueError(f"Die Dateien konnten nicht zwischengespeichert werden: {error}") from error
+    return kind, paths, scan_path(volume)
 
 
 def storage_problem(error, target):
@@ -239,20 +258,28 @@ def storage_problem(error, target):
     return f"Die Scans konnten nicht gespeichert werden: {error}"
 
 
-def build(kind, paths, target, progress=None):
-    """Makes the scan PDF from the staged files and removes them. Raises ValueError like stage."""
+def build(kind, paths, target, progress=lambda text, done=0, total=0: None):
+    """Makes the scan PDF from the staged files and removes them; progress(text, done, total) says what it does.
+    Raises ValueError like stage."""
     staging = paths[0].parent
     result = target.parent / f"{target.name}.part"
     try:
-        if kind == "pdf":
+        if kind == "pdf" and len(paths) == 1:
+            progress("Scan wird geprüft")
             pymupdf.open(paths[0]).close()  # raises if it is no PDF
-            paths[0].replace(result)
+            joined = paths[0]
         else:
-            tiffs_to_pdf(paths, result, progress)
+            joined = staging / "joined.pdf"
+            (join_pdfs if kind == "pdf" else tiffs_to_pdf)(paths, joined, progress)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        copy_with_progress(joined, result, progress)
+        progress("Alte Vorschaubilder und Texterkennung werden entfernt")
         with pdf_service._lock:
             pdf_service._doc_cache.pop(str(target), None)  # a replaced scan must not stay cached
             drop_thumbs(target.stem)
             shutil.rmtree(target.parent / target.stem, ignore_errors=True)  # the text belongs to the old scan
+            for kind in ("looks", "reasons"):  # and so do the looks of its pages
+                target.with_name(f"{target.stem}.{kind}.json").unlink(missing_ok=True)
             result.replace(target)
     except OSError as error:
         raise ValueError(storage_problem(error, target)) from error
@@ -266,8 +293,7 @@ def build(kind, paths, target, progress=None):
 
 def save_scans(volume, files):
     """Stores the files as the volume's scan PDF and returns its page count."""
-    kind, paths, target = stage(volume, files)
-    build(kind, paths, target)
+    build(*stage(volume, files))
     return page_count(volume)
 
 
@@ -278,12 +304,18 @@ JOBS = {}  # ponytail: in memory, gone after a restart; a jobs table when OCR ne
 def start_scans(volume, files):
     """Like save_scans, but the PDF is built in the background; poll JOBS[volume.vz]."""
     kind, paths, target = stage(volume, files)
-    job = JOBS[(volume.vz, "scans")] = {"state": "running", "done": 0, "total": len(paths) if kind == "tiff" else 1, "error": ""}
+    job = JOBS[(volume.vz, "scans")] = {"state": "running", "phase": "Wird gestartet", "done": 0, "total": 0,
+                                        "started": time.time(), "error": ""}
+
+    def report(text, done=0, total=0):
+        if job.get("cancel"):  # the draft was deleted
+            raise ValueError("Der Entwurf wurde gelöscht.")
+        job.update(phase=text, done=done, total=total)
 
     def run():
         try:
-            build(kind, paths, target, lambda n: job.update(done=n))
-            job.update(state="done", done=job["total"])
+            build(kind, paths, target, report)
+            job.update(state="done")
         except ValueError as error:
             job.update(state="error", error=str(error))
         except Exception as error:  # a thread must report, not die silently
@@ -298,5 +330,5 @@ def page_count(volume):
     path = scan_path(volume)
     if not path.is_file():
         return None
-    with pymupdf.open(path) as doc:
-        return doc.page_count
+    with pdf_service._lock:  # the cached document: every thumbnail asks, and opening a big scan each time is slow
+        return pdf_service.get_document(path).page_count
