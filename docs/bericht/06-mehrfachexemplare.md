@@ -4,7 +4,7 @@ Etwa ein Fünftel der 1 927 Exemplare sind weitere identische Versionen eines be
 
 ## 6.1 Aufgabe
 
-Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um bei späteren Auswertungen bzw. Datenanalysen jeden Inhalt nur einfach zu behandeln. Das Auftreten dieser Mehrfachexemplare ist Teil der Sammlungspraxis: Nach Möglichkeit bewahrt das Archiv bewusst mehrere Versionen des gleichen Flugblatts auf, um bspw. bei Ausstellungen auch die Rückseite präsentieren zu können [@uar-rep118] (Kap. 2.5). Es handelt sich dabei also nicht um einen Digitalisierungsfehler, welcher behoben werden muss, sondern um eine Eigenschaft des Bestandes, die bei einer Auswertung Berücksichtigung erfodert.
+Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um bei späteren Auswertungen bzw. Datenanalysen jeden Inhalt nur einfach zu behandeln. Das Auftreten dieser Mehrfachexemplare ist Teil der Sammlungspraxis: Nach Möglichkeit bewahrt das Archiv bewusst mehrere Versionen des gleichen Flugblatts auf, um bspw. bei Ausstellungen auch die Rückseite präsentieren zu können [@uar-rep118] (Kap. 2.5). Es handelt sich dabei also nicht um einen Digitalisierungsfehler, welcher behoben werden muss, sondern um eine Eigenschaft des Bestandes, die bei einer Auswertung Berücksichtigung erfordert.
 
 ## 6.2 Herausforderungen
 
@@ -20,7 +20,7 @@ Enthält ein deutlich längerer Text nahezu vollständig den Text eines kürzere
 
 Beim Import neuer Bände werden keine Embeddings verwendet. In diesem Fall grenzt die Anwendung zunächst mögliche Kandidaten anhand seltener Wörter ein. Anschließend wird die Textähnlichkeit mit derselben 5-Gramm-Methode wie zuvor und den beschriebenen Schwellenwerten bewertet.
 
-Mehrfachexemplare werden als solche markiert, jedoch nicht direkt zusammengeführt. Jedes Exemplar bleibt ein eigständiger Datensatz mit eigener Stelle im Karton, individuellen Stempeln und Vermerken. Auch die Metadaten werden für jedes Exemplar einzeln erzeugt. In Listen, bei Asuwertungen und Exporten vertritt das Hauptexemplar die Gruppe der Mehrfachexemplare. Informationen der übrigen Versionen bleiben erhalten.
+Mehrfachexemplare werden als solche markiert, jedoch nicht direkt zusammengeführt. Jedes Exemplar bleibt ein eigenständiger Datensatz mit eigener Stelle im Karton, individuellen Stempeln und Vermerken. Auch die Metadaten werden für jedes Exemplar einzeln erzeugt. In Listen, bei Auswertungen und Exporten vertritt das Hauptexemplar die Gruppe der Mehrfachexemplare. Informationen der übrigen Versionen bleiben erhalten.
 
 ## 6.4 Qualität
 
@@ -28,17 +28,17 @@ Die Methode der Anwendung findet 309 der 310 geprüften Gruppen, ohne eine API z
 
 ## 6.5 Manuelle Prüfung
 
-Die manuelle Prüfung findet in der Ansicht `/exemplare` statt. Hier werden die Exemplare einer Gruppe nebeneinander angezeigt. Abweichungen bei Datum, Titel und Herausgeber werden in einer eigenen Metadaten-Tabelle hervorgehoben. Fehlerhaft erkannte Mehrfachexemplare werden verfworden, während bei einer korrekten Annahme ein Hauptexemplar ausgewählt werden muss. Hiernach können die Metadaten der repräsentativen Version überprüft und bearbeitet werden. Dabei werden auch wesentliche Informationen der anderen Exemplare der Gruppe angezeigt und können samt Beleg (falls vorhanden) übernommen werden. 
+Die manuelle Prüfung findet in der Ansicht `/exemplare` statt. Hier werden die Exemplare einer Gruppe nebeneinander angezeigt. Abweichungen bei Datum, Titel und Herausgeber werden in einer eigenen Metadaten-Tabelle hervorgehoben. Fehlerhaft erkannte Mehrfachexemplare werden verworfen, während bei einer korrekten Annahme ein Hauptexemplar ausgewählt werden muss. Hiernach können die Metadaten der repräsentativen Version überprüft und bearbeitet werden. Dabei werden auch wesentliche Informationen der anderen Exemplare der Gruppe angezeigt und können samt Beleg (falls vorhanden) übernommen werden. 
 
-Insgesamt wurden 320 Fälle geprüft. Bei 310 dieser Gruppen konnten tatsächlich Mehrfachexemplare festgestellt werden: Darunter sind 248 Duplikate, 55 Gruppen mit jeweils drei Exemplaren und sieben Gruppen mit vier oder fünf Versionen. Bei den übrigen 10 Fällen handelt es sich um unterschiedliche Flugblätter, deren Inhalt fälschlicherweise als identisch erkannt wurde. jede Prüfung dauerte von der Auswahl des Hauptexemplares bis zum Abgleichen der Metadaten ca. 1 - 2 Minuten. 
+Insgesamt wurden 320 Fälle geprüft. Bei 310 dieser Gruppen konnten tatsächlich Mehrfachexemplare festgestellt werden: Darunter sind 248 Duplikate, 55 Gruppen mit jeweils drei Exemplaren und sieben Gruppen mit vier oder fünf Versionen. Bei den übrigen 10 Fällen handelt es sich um unterschiedliche Flugblätter, deren Inhalt fälschlicherweise als identisch erkannt wurde. Jede Prüfung dauerte von der Auswahl des Hauptexemplares bis zum Abgleichen der Metadaten ca. 1 - 2 Minuten. 
 
 Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei wird die Datei fortlaufend ergänzt, bestehende Einträge werden nicht überschrieben. Einzelne Blätter werden anhand ihres Bandes und Seitenbereichs identifiziert. Die Gruppennummern spielen hierbei keine Rolle. Somit können Entscheidungen auch bei Änderungen an der Gruppierung nachvollzogen werden. 
 
 ## 6.6 Ergebnis und Kosten
 
-Aus den 1 927 Exemplaren ergeben sich insgesamt 1 547 eigenständige Flugblätter. Die übrigen 280 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
+Aus den 1 927 Exemplaren ergeben sich insgesamt 1 547 eigenständige Flugblätter. Die übrigen 380 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
 
-Sämtliche Angaben von Zahlen innehralb der Anwendung, die bspw. Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
+Sämtliche Angaben von Zahlen innerhalb der Anwendung, die bspw. Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
 
 
 

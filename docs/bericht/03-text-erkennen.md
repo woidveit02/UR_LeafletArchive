@@ -38,7 +38,7 @@ Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogene
 
 TODO: Infos überprüfen
 
-Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen im Arbeits-Repository (Kap. 12.5).
+Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen im Arbeits-Repository (Kap. 12.6).
 
 | System | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
 |---|---|---|---|---|
@@ -155,4 +155,4 @@ Der Goldstandard entstand durch Nachkorrektur der Datalab-Ausgabe. Wer eine vorh
 
 Zudem gab es im qualitativen Vergleich kein gemeinsames Bewertungsschema, was bei der auswerkung bemerkbar wurde. Die Beobachtungen lassen sich daher nicht auszählen und widersprechen sich in Einzelfällen, etwa bei der Sperrschrift. Die Benchmark-Werte in 3.4 sind Angaben der Anbieter und wurden nicht überprüft.
 
-Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt. Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository (Kap. 12.5) sind deshalb der eigentliche Beleg für den Test.
+Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt. Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository (Kap. 12.6) sind deshalb der eigentliche Beleg für den Test.

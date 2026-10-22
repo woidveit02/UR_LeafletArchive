@@ -16,7 +16,7 @@
 | **Lesereihenfolge** | Reihenfolge, in der die erkannten Blöcke gelesen werden sollen. |
 | **Goldstandard** | Von Hand geprüfte Referenzabschrift, gegen die die OCR gemessen wird. |
 | **CER / WER** | Zeichen- bzw. Wortfehlerrate gegenüber dem Goldstandard. |
-| **Normdatei** | Verzeichnis der Herausgeber mit kanonischem Namen, Kürzel und Schreibvarianten. |
+| **Register** | Verzeichnis der Herausgeber (Organisationen) mit kanonischem Namen, Kürzel und Schreibvarianten, aufgebaut aus dem Findmittel; in der Anwendung unter „Herausgeber“. Nicht mit der GND abgeglichen. |
 | **GND** | Gemeinsame Normdatei der Deutschen Nationalbibliothek. |
 | **Token** | Ein Wort im Sinne der Zählung, nach Tokenisierung. |
 | **Keyness** | Maß dafür, wie charakteristisch ein Wort für ein Teilkorpus ist (hier Dunnings G²). |

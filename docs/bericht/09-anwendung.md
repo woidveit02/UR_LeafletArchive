@@ -1,6 +1,6 @@
 # 9 Die Anwendung
 
-Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie läuft lokal in Docker. Neue Bände kommen in sieben Schritten hinein, von den Scans bis zur Freigabe.
+Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie läuft lokal in Docker. Neue Bände kommen in sechs Schritten hinein, von den Scans bis zur Freigabe; Themen lassen sich danach zuordnen.
 
 ## 9.1 Anforderungen
 
@@ -22,11 +22,14 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 ## 9.3 Pflegen
 
 - Metadaten korrigieren, Mehrfachexemplare prüfen.
+- Herausgeber zuordnen, über alle freigegebenen Bände, auch für Flugblätter ohne erkannten Herausgeber (Verwaltung › Herausgeber zuordnen).
+- Korrekturen und Exemplar-Prüfungen, die nach einer neuen Trennung nicht mehr passen, unter Verwaltung › Korrekturen.
+- Entwürfe löschen und Freigaben zurücknehmen (Verwaltung).
 - Export als ZIP und CSV.
 
 ## 9.4 Import neuer Bände
 
-- Sieben Schritte: Band wählen, Scans hochladen, Text erkennen, Flugblätter trennen, Metadaten erzeugen, Prüfen & freigeben, Themen zuordnen (optional, auch nach der Freigabe).
+- Sechs Schritte: Band wählen, Scans hochladen, Text erkennen, Flugblätter trennen, Metadaten erzeugen, Prüfen & freigeben. Danach optional „Themen zuordnen“, auch nach der Freigabe.
 - Themen neu berechnen mit Prüfseite; Titel lassen sich unter Verwaltung › Themen ändern (Kap. 7).
 - Die API-Keys für Datalab und OpenRouter lassen sich unter Verwaltung › API-Keys eintragen.
 - Bis zur Freigabe ist der Band ein Entwurf und in Liste, Suche und Trends unsichtbar.
@@ -47,7 +50,7 @@ Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie l�
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
 - N-Gramm-Werkzeug (`scripts/ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung in `handbuch/ngrams.md`.
-- `scripts/tiff_to_pdf.py` fügt TIFF-Scans zu einem PDF zusammen, `scripts/learn_boundary_weights.py` lernt die Gewichte des Trennvorschlags neu (Kap. 4.7). Übersicht in `scripts/README.md`.
+- `scripts/tiff_to_pdf.py` fügt TIFF-Scans zu einem PDF zusammen, `scripts/learn_boundary_weights.py` lernt die Gewichte der Textmerkmale des Trennvorschlags neu (Kap. 4.8). Übersicht in `scripts/README.md`.
 - Notebook `vertiefung/forschungsfragen.ipynb`: zeigt, wie sich der Export für Auswertungen nutzen lässt. Die Fragen sind Beispiele, keine Ergebnisse des Projekts.
 
 Beispielhafte Fragen im Notebook:

@@ -84,7 +84,7 @@ Token: nicht aufgeführt. Die Tokenisierung von scripts/ngrams.py arbeitet auf d
 
 ## OCR-Qualität
 
-Goldstandard aus 105 bewerteten Seiten des Testkorpus (Datalab-Ausgabe, siehe bericht/03-ocr.md, 3.7)
+Goldstandard aus 105 bewerteten Seiten des Testkorpus (Datalab-Ausgabe, siehe bericht/03-text-erkennen.md, 3.7)
 
 | Maß | Wert |
 |---|---|
@@ -93,7 +93,7 @@ Goldstandard aus 105 bewerteten Seiten des Testkorpus (Datalab-Ausgabe, siehe be
 | Seiten mit Layout-Fehlern | 18 (17 %) |
 | Seiten mit Fehlern in der Lesereihenfolge | 8 (8 %) |
 
-<!-- Vorbehalt zur Entstehung des Goldstandards in bericht/03-ocr.md, Abschnitt 3.10. -->
+<!-- Vorbehalt zur Entstehung des Goldstandards in bericht/03-text-erkennen.md, Abschnitt 3.10. -->
 
 ## Kosten
 

@@ -1,8 +1,8 @@
 # 1 Einleitung
 
-Das Projekt begann mit einer ersten Besprechung mit Professor Wolff und unserem Projektbetreuer Thomas Schmidt am 12.05.2026. In dieser Besprechung wurde ins von Professor Wolff eine erste Einleitung in das Thema gegeben. So wurden wir über die geschichtlichen Hintergründe (die im Folgenden erläutert werden) informiert, und es wurde die Schaffung eines digitalen Flugblattarchivs als Projektziel diskutiert. Zu diesem Termin wurde auch gleich das erste Dokumentationsobjekt geschaffen, ein Google Docs Dokument, in dem fortan wichtige Inhalte aller Besprechungen und generell relevante Informationen für das Projekt festgehalten wurden. Sämtliche weiteren Informationen zur Projektorganisation befinden sich im Kapitel 12.
+Das Projekt begann mit einer ersten Besprechung mit Professor Wolff und unserem Projektbetreuer Thomas Schmidt am 12.05.2026. In dieser Besprechung wurde uns von Professor Wolff eine erste Einleitung in das Thema gegeben. So wurden wir über die geschichtlichen Hintergründe (die im Folgenden erläutert werden) informiert, und es wurde die Schaffung eines digitalen Flugblattarchivs als Projektziel diskutiert. Zu diesem Termin wurde auch gleich das erste Dokumentationsobjekt geschaffen, ein Google Docs Dokument, in dem fortan wichtige Inhalte aller Besprechungen und generell relevante Informationen für das Projekt festgehalten wurden. Sämtliche weiteren Informationen zur Projektorganisation befinden sich im Kapitel 12.
 
-Im nächsten Treffen am 20.05.2026 durften wir Herrn Dr. Andreas Becker kennenlernen, dieser war für die Dauer unseres Projekts unser Ansprechpartner zum Archiv. In dieser BEsprechung erhielten wir von Herrn Becker eine spannende und detaillierte Einführung über die historische Entstehung der Flugblattsammlung im Archiv und die geschichtlichen und politischen Hintergründe der Anfangszeit der Universität Regensburg.
+Im nächsten Treffen am 20.05.2026 durften wir Herrn Dr. Andreas Becker kennenlernen, dieser war für die Dauer unseres Projekts unser Ansprechpartner zum Archiv. In dieser Besprechung erhielten wir von Herrn Becker eine spannende und detaillierte Einführung über die historische Entstehung der Flugblattsammlung im Archiv und die geschichtlichen und politischen Hintergründe der Anfangszeit der Universität Regensburg.
 
 ## 1.1 Motivation und Ausgangslage
 
@@ -24,7 +24,11 @@ Guhl und Jaeger nennen für die Hamburger Sammlung drei Hürden, die auch in Reg
 | Viele Blätter nennen keine Verantwortlichen | Herausgeber mit Beleg und Register (Kap. 5) | 241 Flugblätter bleiben ohne erkannten Herausgeber |
 | Ohne Parallelüberlieferung ist das Datieren schwer | Datum mit Beleg, sonst Jahr des Bandes (Kap. 5) | 46 % tragen ein Datum auf dem Blatt |
 
-Der größte Teil der Arbeit läuft nun automatisch (Kap. 1.5). Für jeden Wert, den das Sprachmodell ausliest, nennt es die Textstelle, auf die er sich stützt; so lässt sich jede Angabe am Scan nachprüfen. Von Hand bestätigt ein Mensch nur die Grenzen zwischen den Flugblättern und die Gruppen von Mehrfachexemplaren. Texterkennung und Metadaten kosten zusammen rund 18 $ je 1 000 Seiten (hochgerechnet, Kap. 11), und neue Bände liest das Archiv in der Anwendung selbst ein (Kap. 9).
+Der größte Teil der Arbeit läuft nun automatisch (Kap. 3 bis 7). Für jeden Wert, den das Sprachmodell ausliest, nennt es die Textstelle, auf die er sich stützt; so lässt sich jede Angabe am Scan nachprüfen. Von Hand bestätigt ein Mensch nur die Grenzen zwischen den Flugblättern und die Gruppen von Mehrfachexemplaren. Texterkennung und Metadaten kosten zusammen rund 18 $ je 1 000 Seiten (hochgerechnet, Kap. 11), und neue Bände liest das Archiv in der Anwendung selbst ein (Kap. 9).
+
+![Der Weg von Flugblatt 850 durch die Arbeitsschritte](../abbildungen/ablauf.png)
+
+*Abbildung: Der Weg eines Flugblatts durch die Arbeitsschritte, am Beispiel von Flugblatt 850 („Zur Fachschaftssatzung“, Band 006, S. 394). Trennen und Mehrfachexemplare sind Vorschläge, die von Hand geprüft werden; die übrigen Schritte laufen automatisch.*
 
 ## 1.2 Ziele
 

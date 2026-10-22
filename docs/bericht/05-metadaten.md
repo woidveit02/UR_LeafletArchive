@@ -21,13 +21,13 @@ Die Auswahl der zu erhebenden Metadaten orientiert sich an vergleichbaren Sammlu
 
 ## 5.2 Herausforderungen
 
-Ab 1969 weisen einige Flugblätter einen Eingangsstempel des Archivs auf deren Vorderseite auf. Dieses Artefakt kann bei vielen Examplaren der Sammlung bis zum Jahr 2007 gefunden werden [@uar-rep118]. Bei diesen Fällen kann es zu mehreren unterschiedlichen Datumsangaben auf einem einzigen Blatt kommen, bspw. "08.02.1972" als Erscheinungsdatum und "10.02.1972" als Eingangsdatum. Somit ist eine korrekte Unterscheidung dieser beiden Angaben bei der Metadatenextraktion wichtig und stellt zugleich eine Herausforderung für das verwendete Sprachmodell dar.
+Ab 1969 weisen einige Flugblätter einen Eingangsstempel des Archivs auf deren Vorderseite auf. Dieses Artefakt kann bei vielen Exemplaren der Sammlung bis zum Jahr 2007 gefunden werden [@uar-rep118]. Bei diesen Fällen kann es zu mehreren unterschiedlichen Datumsangaben auf einem einzigen Blatt kommen, bspw. "08.02.1972" als Erscheinungsdatum und "10.02.1972" als Eingangsdatum. Somit ist eine korrekte Unterscheidung dieser beiden Angaben bei der Metadatenextraktion wichtig und stellt zugleich eine Herausforderung für das verwendete Sprachmodell dar.
 
-Eine weitere Herausforderung ist die korrekte Erfassung der Herausgeber. Die Namen dieser erscheinen oft als Kürzel in der jeweiligen Kopfleiste und weisen teils unterschiedliche Schreibweisen auf. Um eine zuverlässige und einheitliche Identifizierung zu gewährleisten, müssen die erkannten Angaben einer, in einem zentralen Herausgeberregister gespeicherten, Person zugeordnet werden. 
+Eine weitere Herausforderung ist die korrekte Erfassung der Herausgeber. Die Namen dieser erscheinen oft als Kürzel in der jeweiligen Kopfleiste und weisen teils unterschiedliche Schreibweisen auf. Um eine zuverlässige und einheitliche Identifizierung zu gewährleisten, müssen die erkannten Angaben einer in einem zentralen Herausgeberregister gespeicherten Organisation zugeordnet werden. 
 
 ## 5.3 Verfahren
 
-Am 22.09.2026 wurden zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3 *235B* und *Claude Sonnet 4.5*. Für die anschließende Erschließung der Bände 1–14 wurde hiernach *Claude Sonnet 4.5* (`anthropic/claude-sonnet-4.5`) ausgewählt. Dieses wurde über OpenRouter mit Prompt v2 aufgerufen, wobei je 20 Flugblätter pro Anfrage bearbeitet wurden. Die Ergebnisse der Bände 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`). Die Nummern 005–014 resultierten aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen sind im Arbeits-Repository (Kap. 12.5) dokumentiert.
+Am 22.09.2026 wurden zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3 235B* und *Claude Sonnet 4.5*. Für die anschließende Erschließung der Bände 1–14 wurde hiernach *Claude Sonnet 4.5* (`anthropic/claude-sonnet-4.5`) ausgewählt. Dieses wurde über OpenRouter mit Prompt v2 aufgerufen, wobei je 20 Flugblätter pro Anfrage bearbeitet wurden. Die Ergebnisse der Bände 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`). Die Nummern 005–014 resultierten aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen sind im Arbeits-Repository (Kap. 12.6) dokumentiert.
 
 Das Modell gibt die Ergebnisse nach einem festgelegten Schema im JSON-Format aus. Der zugrundeliegende Prompt kann in `src/backend/app/metadata_prompt.txt` eingesehen werden. Für jedes Feld gilt eine Belegpflicht: Für jedes Feld werden zunächst die wörtliche Textstelle und die OCR-Blöcke angegeben, erst hiernach wird der zugehörige Wert extrahiert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im OCR-Text steht. Um keine nicht durch den Text gestützten Informationen zu verarbeiten, muss diese Prüfung positiv ausfallen, um den Wert in ein Metadatum zu überführen. 
 
@@ -41,11 +41,11 @@ Der Zuordnung der Herausgeber liegt ein Register zugrunde. Dieses wurde zuvor au
 
 ## 5.4 Qualität
 
-Die Belegprüfung der Pipeline wurde für 2.000 Segmente durchgeführt. Bei 1.731 Segmenten (86,5 %) wurden keine Beanstandungen festgestellt. Die Implementierung erfolgte in `check_grounding` in `extract_metadata_v2.py`. Die genauen Ergebnisse können unter `grounding` in `data/nr0XX_metadata.json` eingesehen werden. Zu beachten ist, dass hierbei nicht die Richtigkeit der Erhebungen geprüft werden, sondern lediglich, ob die extrahierten Informationn durch Belege gestützt werden.
+Die Belegprüfung der Pipeline wurde für 2.000 Segmente durchgeführt. Bei 1.731 Segmenten (86,5 %) wurden keine Beanstandungen festgestellt. Die Implementierung erfolgte in `check_grounding` in `extract_metadata_v2.py`. Die genauen Ergebnisse können unter `grounding` in `data/nr0XX_metadata.json` eingesehen werden. Zu beachten ist, dass hierbei nicht die Richtigkeit der Erhebungen geprüft werden, sondern lediglich, ob die extrahierten Informationen durch Belege gestützt werden.
 
 Um Auswirkungen der jeweiligen Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 erneut mit dem für die Bände 005–014 verwendeten Prompt verarbeitet (`claude-r12`). Verglichen mit den früheren Fassungen lag bei den insgesamt 464 Flugblättern 25 mal (5 %) ein anderes Datum vor, die Textsorte änderte sich in 24 (5 %) Exemplaren, 58 mal (13 %, teils nur andere Schreibweisen) unterschieden sich die Herausgeber und 115 mal (25 %, meist Länge und Zeichensetzung) die Titel. 
 
-Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Die wiederholten Läufe sind im Arbeits-Repository dokumentiert (Kap. 12.5). Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Promts als auch ein gewisser Zufallsfaktor vermutet.
+Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Die wiederholten Läufe sind im Arbeits-Repository dokumentiert (Kap. 12.6). Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Prompts als auch ein gewisser Zufallsfaktor vermutet.
 
 Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Promt zu testen, müssen dieselben Bände erneut mit dem *claude-r12*-Modell verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
 
@@ -53,7 +53,7 @@ Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Promt zu testen, mü
 
 *TODO: Wurde die Prüfung noch gemacht?*
 
-Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt.Bei 24 Flugblättern tritt ein Herausgeber auf, welcher nicht Teil des Herausgeberregisters ist. Wie oft die einzelnen Metadatenfelder befüllt sind und welche Auswirkungen Korrekturen auf die Informationen hatten, zeigt die Auswertung in Kapitel 5.5
+Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt. Bei 24 Flugblättern tritt ein Herausgeber auf, welcher nicht Teil des Herausgeberregisters ist. Wie oft die einzelnen Metadatenfelder befüllt sind und welche Auswirkungen Korrekturen auf die Informationen hatten, zeigt die Auswertung in Kapitel 5.5
 
 ## 5.5 Manuelle Prüfung
 

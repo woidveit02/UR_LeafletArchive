@@ -14,7 +14,7 @@ Diese Dokumentation beschreibt, wie aus den Scans der Allgemeinen Flugblattsamml
 | [`literatur.bib`](literatur.bib) | Quellen. |
 | [`abbildungen/`](abbildungen/) | Abbildungen für Bericht und Handbücher. |
 
-Die Belege zur OCR-Evaluation liegen im archivierten Arbeits-Repository (Bericht, Kap. 12.5).
+Die Belege zur OCR-Evaluation liegen im archivierten Arbeits-Repository (Bericht, Kap. 12.6).
 
 ## Lesepfade
 
