@@ -7,7 +7,7 @@
 <!-- BEGIN generiert -->
 ## Korpus nach Band und Jahr
 
-Stand: 17.10.2026, Datenbank vom 17.10.2026 22:18. Erzeugt von scripts/corpus_stats.py – nicht von Hand bearbeiten.
+Stand: 23.10.2026, Datenbank vom 23.10.2026 01:04. Erzeugt von scripts/corpus_stats.py – nicht von Hand bearbeiten.
 
 ### Je Band
 
@@ -15,7 +15,7 @@ Stand: 17.10.2026, Datenbank vom 17.10.2026 22:18. Erzeugt von scripts/corpus_st
 |---|---|---|---|---|
 | 001 | 1967 | 13 | 6 | 6 |
 | 002 | 1968 | 85 | 58 | 51 |
-| 003 | 1969 | 317 | 212 | 184 |
+| 003 | 1969 | 317 | 211 | 183 |
 | 004 | 1970 | 294 | 187 | 169 |
 | 005 | 1971 | 629 | 230 | 196 |
 | 006 | 1972 | 455 | 184 | 143 |
@@ -27,7 +27,7 @@ Stand: 17.10.2026, Datenbank vom 17.10.2026 22:18. Erzeugt von scripts/corpus_st
 | 012 | 1973 | 286 | 131 | 100 |
 | 013 | 1973 | 261 | 137 | 104 |
 | 014 | 1973 | 499 | 168 | 142 |
-| **Summe** |  | **4464** | **1927** | **1547** |
+| **Summe** |  | **4464** | **1926** | **1546** |
 
 Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Exemplare: alle Stücke, die beim Trennen entstanden sind (Segmente). Flugblätter: Exemplare zusammengefasst, nur das Hauptexemplar jeder Gruppe, ohne Trennblätter und leere Seiten (sie gehören zu keinem Segment). Nur freigegebene Bände; ein Band ohne Seiten ist angelegt, aber nicht eingelesen.
 
@@ -37,12 +37,12 @@ Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Exemplare: alle S
 |---|---|---|---|---|---|---|
 | 1967 | 1 | 13 | 6 | 6 | 0 | 0,00 % |
 | 1968 | 1 | 85 | 58 | 51 | 7 | 12,07 % |
-| 1969 | 1 | 317 | 212 | 184 | 28 | 13,21 % |
+| 1969 | 1 | 317 | 211 | 183 | 28 | 13,27 % |
 | 1970 | 1 | 294 | 187 | 169 | 18 | 9,63 % |
 | 1971 | 1 | 629 | 230 | 196 | 34 | 14,78 % |
 | 1972 | 4 | 1608 | 631 | 477 | 154 | 24,41 % |
 | 1973 | 5 | 1518 | 603 | 464 | 139 | 23,05 % |
-| **Summe** | **14** | **4464** | **1927** | **1547** | **380** | **19,72 %** |
+| **Summe** | **14** | **4464** | **1926** | **1546** | **380** | **19,73 %** |
 
 Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Exemplare, die nicht Hauptexemplar ihrer Gruppe sind (Exemplare minus Flugblätter), Anteil an den Exemplaren; sie zählen im Jahr ihres eigenen Bandes, das Hauptexemplar kann in einem anderen liegen. Zählweise sonst wie oben.
 
@@ -57,25 +57,25 @@ Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Exempl
 | 1971 | 119 | 102 |
 | 1972 | 272 | 212 |
 | 1973 | 242 | 181 |
-| undatiert | 1067 | 842 |
-| **Summe** | **1927** | **1547** |
+| undatiert | 1066 | 841 |
+| **Summe** | **1926** | **1546** |
 
 Datierungsjahr: Jahr des Datums auf dem Flugblatt. Zeile „undatiert“: Flugblätter ohne lesbares Datum (in den App-Listen zählen sie im Jahr ihres Bandes). Seiten gibt es hier nicht, sie hängen am Band. Zählweise wie oben.
 
 ## Herausgeber und Textsorten
 
-Herausgeber mit mindestens einem Flugblatt: **169**. Flugblätter ohne erkannten Herausgeber: 241, mit einem Herausgeber, der nicht im Register steht: 24 (dieselben Flugblätter zählen bei mehreren Herausgebern mehrfach).
+Herausgeber mit mindestens einem Flugblatt: **170**. Flugblätter ohne erkannten Herausgeber: 236, mit einem Herausgeber, der nicht im Register steht: 19 (dieselben Flugblätter zählen bei mehreren Herausgebern mehrfach).
 
 | Textsorte | Flugblätter | Anteil |
 |---|---|---|
-| Flugblatt | 1139 | 73,63 % |
-| Einladung | 187 | 12,09 % |
+| Flugblatt | 1139 | 73,67 % |
+| Einladung | 187 | 12,10 % |
 | Broschüre | 83 | 5,37 % |
-| Zeitschrift | 42 | 2,71 % |
+| Zeitschrift | 42 | 2,72 % |
 | Offener Brief | 41 | 2,65 % |
-| unklar | 34 | 2,20 % |
+| unklar | 33 | 2,13 % |
 | Protokoll | 21 | 1,36 % |
-| **Summe** | **1547** | **100,00 %** |
+| **Summe** | **1546** | **100,00 %** |
 
 Herausgeber: Einträge des Registers, bei denen mindestens ein Flugblatt (Hauptexemplar) steht. Textsorte: Feld „Typ“ des Flugblatts (Hauptexemplar), „unklar“ ohne Angabe.
 
@@ -102,11 +102,11 @@ Goldstandard aus 105 bewerteten Seiten des Testkorpus (Datalab-Ausgabe, siehe be
 | Posten | Datum | Betrag | Art |
 |---|---|---|---|
 | OCR Gesamtbestand (Datalab, 4464 Seiten) | August 2026 | ca. 45 $ | Hochrechnung: Listenpreis 10 $ je 1000 Seiten |
-| davon kostenloses Guthaben (Datalab) | bis 18.08.2026 | [offen] | verbraucht |
+| davon kostenloses Guthaben (Datalab) | bis 18.08.2026 | nicht erfasst | verbraucht |
 | davon abgebucht (Datalab) | 18.08.2026 | 20,11 $ (18,04 €) | Abbuchung |
-| weitere Abbuchungen (Datalab) | | [offen] | Abbuchung |
-| Metadaten, Testlauf 56 Flugblätter aus Band 014 | | 1,36 $ | gemessen (OpenRouter) |
+| weitere Abbuchungen (Datalab) | | nicht erfasst | Abbuchung |
+| Metadaten, Testlauf mit Claude Opus 5.5, 56 Flugblätter aus Band 014 (rund 115 Seiten) | 09.10.2026 | 1,36 $ | gemessen (OpenRouter) |
 | Testimport Band 15, erster Teil (230 Seiten): Texterkennung | 20.10.2026 | 2,30 $ | Abrechnung Datalab |
 | Testimport Band 15, erster Teil (230 Seiten, 83 Flugblätter): Metadaten, Claude Sonnet 4.5 | 20.10.2026 | 2,11 $ | Abrechnung OpenRouter |
-| Metadaten Bände 001–014 | September/Oktober 2026 | [offen] | Abrechnung OpenRouter |
-| Metadaten-Neulauf Bände 001–004 (Vergleich, nicht übernommen) | 17.10.2026 | [offen] | Abrechnung OpenRouter |
+| Metadaten Bände 001–014 | September/Oktober 2026 | nicht erfasst | Abrechnung OpenRouter |
+| Metadaten-Neulauf Bände 001–004 (Vergleich, nicht übernommen) | 17.10.2026 | nicht erfasst | Abrechnung OpenRouter |

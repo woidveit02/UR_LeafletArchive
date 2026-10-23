@@ -26,7 +26,7 @@ UNDATED = "undatiert"
 
 
 def number(n):
-    return f"{n:,}".replace(",", " ")
+    return str(n)  # no thousands separator, as in the report
 
 
 def percent(part, whole):
