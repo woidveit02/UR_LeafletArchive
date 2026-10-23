@@ -1,6 +1,6 @@
 # 8 Das Korpus in Zahlen
 
-Das Korpus umfasst 1547 Flugblätter in 1927 Exemplaren auf 4464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Sie stammen aus den [Kennzahlen](../kennzahlen.md) (Stand 17.10.2026).
+Das Korpus umfasst 1546 Flugblätter in 1926 Exemplaren auf 4464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Sie stammen aus den [Kennzahlen](../kennzahlen.md) (Stand 23.10.2026).
 
 ## 8.1 Zähleinheiten und Zählregeln
 
@@ -10,19 +10,19 @@ Jedes Flugblatt zählt einmal. Nennt es mehrere Herausgeber, zählt es bei jedem
 
 ## 8.2 Verteilungen
 
-Mehr als die Hälfte des Korpus stammt aus den letzten beiden Jahren: 1972 und 1973 stellen 940 der 1547 Flugblätter (61 %). Nur 46 % tragen ein Datum auf dem Blatt, für die übrigen gilt das Jahr ihres Bandes.
+Mehr als die Hälfte des Korpus stammt aus den letzten beiden Jahren: 1972 und 1973 stellen 940 der 1546 Flugblätter (61 %). Nur 46 % tragen ein Datum auf dem Blatt, für die übrigen gilt das Jahr ihres Bandes.
 
 ![Flugblätter nach zugeordnetem Jahr](../abbildungen/1_verteilung_jahr.png)
 
 *Abbildung: Flugblätter je Jahr, nach dem Datum auf dem Blatt oder, wo es fehlt, nach dem Jahr des Bandes.*
 
-Im Register stehen 169 Herausgeber mit mindestens einem Flugblatt. Am häufigsten treten der AStA (318 Flugblätter), der RCDS (133), die Aktionsgemeinschaft liberaler Studenten (67), die Demokratische Mitte (66) und der MSB Spartakus (60) auf. Bei 241 Flugblättern wurde kein Herausgeber erkannt.
+Im Register stehen 170 Herausgeber mit mindestens einem Flugblatt. Am häufigsten treten der AStA (320 Flugblätter), der RCDS (134), die Aktionsgemeinschaft liberaler Studenten (68), die Demokratische Mitte (67) und der MSB Spartakus (60) auf. Bei 236 Flugblättern wurde kein Herausgeber erkannt.
 
 ![Flugblätter nach Herausgeber](../abbildungen/4_herausgeber.png)
 
 *Abbildung: Die Herausgeber mit den meisten Flugblättern.*
 
-Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Flugblätter sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
+Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 33 blieb die Textsorte unklar. Die meisten Flugblätter sind kurz: 737 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
 
 ![Flugblätter nach Textsorte](../abbildungen/5_textsorte.png)
 
@@ -42,4 +42,4 @@ Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um �
 
 Die Häufung 1972 und 1973 passt zur Geschichte der Universität mit den Protesten gegen das neue Hochschulgesetz (Kap. 1.1) [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Flugblätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).
 
-Was sich mit dem Korpus darüber hinaus auswerten lässt, zeigen zehn Beispielfragen im Notebook [Forschungsfragen](../forschungsfragen.html), etwa dass gut ein Drittel aller Flugblätter das Bayerische Hochschulgesetz erwähnt.
+Was sich mit dem Korpus darüber hinaus auswerten lässt, zeigen zehn Beispielfragen im Notebook [Forschungsfragen](../forschungsfragen.html), etwa dass gut ein Drittel aller Flugblätter das Bayerische Hochschulgesetz oder das Hochschulrahmengesetz des Bundes nennt.

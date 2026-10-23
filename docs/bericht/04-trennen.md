@@ -1,6 +1,6 @@
 # 4 Flugblätter trennen
 
-In den Bänden liegen die Seiten aller Flugblätter hintereinander, ohne Vermerk, wo eines endet und das nächste beginnt. Dieser Schritt legt die Grenzen fest. Für die Bände 1 bis 14 haben wir das von Hand getan; daraus sind 1927 Exemplare entstanden. Beim Import neuer Bände schlägt die Anwendung die Trennungen vor. Etwa fünf von sechs Vorschlägen stimmen, bestätigen muss sie aber weiterhin ein Mensch.
+In den Bänden liegen die Seiten aller Flugblätter hintereinander, ohne Vermerk, wo eines endet und das nächste beginnt. Dieser Schritt legt die Grenzen fest. Für die Bände 1 bis 14 haben wir das von Hand getan; daraus sind 1926 Exemplare entstanden. Beim Import neuer Bände schlägt die Anwendung die Trennungen vor. Etwa fünf von sechs Vorschlägen stimmen, bestätigen muss sie aber weiterhin ein Mensch.
 
 ## 4.1 Aufgabe
 
@@ -18,17 +18,17 @@ Beim zweiten Durchgang über die Handtrennung am 29.09.2026 haben wir folgende R
 - Mehrfachexemplare bleiben zunächst getrennte Exemplare und werden erst im nächsten Schritt zusammengeführt (Kap. 6).
 - Seiten in falscher Reihenfolge werden nicht umsortiert, sondern beim Flugblatt vermerkt.
 
-Für angehängte Resolutionen und Pressespiegel gibt es bislang keine eindeutige Regel.
+Angehängte Resolutionen und Pressespiegel haben wir in den Bänden 1 bis 14 dem Flugblatt davor zugeordnet; als Regel festgehalten war das beim Trennen noch nicht.
 
 ## 4.3 Altes Verfahren
 
-Die 14 Bände haben wir bis zum 22.08.2026 von Hand mit dem Werkzeug `flugblatt_splitter` getrennt, einem Vorläufer der Trennansicht, die heute in der Anwendung steckt. Ob sich dieser Schritt automatisieren lässt, haben wir an Band 002 geprüft und die Handtrennung mit der automatischen Trennung durch Datalab verglichen. Von Hand entstanden 59 Exemplare, Datalab erkannte nur 13. Alle 13 Schnitte von Datalab hatten wir auch von Hand gesetzt, 46 der 59 hat Datalab aber übersehen. Da keine der beiden Trennungen damals geprüft war, zeigt der Vergleich nur, wie stark sich die Entscheidungen unterschieden. Er reichte aber, um eine vollständige Automatisierung vorerst auszuschließen.
+Die 14 Bände haben wir bis zum 22.08.2026 von Hand mit dem Werkzeug `flugblatt_splitter` getrennt, einem Vorläufer der Trennansicht, die heute in der Anwendung steckt. Ob sich dieser Schritt automatisieren lässt, haben wir an Band 002 geprüft und die Handtrennung mit der automatischen Trennung durch Datalab verglichen. Von Hand entstanden 58 Exemplare, Datalab erkannte nur 13. Alle 13 Schnitte von Datalab hatten wir auch von Hand gesetzt, 45 der 58 hat Datalab aber übersehen. Da keine der beiden Trennungen damals geprüft war, zeigt der Vergleich nur, wie stark sich die Entscheidungen unterschieden. Er reichte aber, um eine vollständige Automatisierung vorerst auszuschließen. Am 29.09.2026 haben wir die Handtrennung außerdem anhand einer automatisch erstellten Liste verdächtiger Seitenwechsel geprüft. Sie markierte mit ähnlichen Textmerkmalen wie der spätere Vorschlag die Stellen, an denen unsere Trennung dem Seiteninhalt widersprach (Kap. 12.5).
 
 Mit dem Import kam später eine erste Fassung der Vorschläge in die Anwendung. Sie stützte sich nur auf den erkannten Text: Jeder Seitenwechsel wurde anhand von 14 Merkmalen bewertet und mit einem naiven Bayes-Klassifikator verrechnet, dessen Gewichte aus der Handtrennung der Bände 1–14 stammen. Ab einer Wahrscheinlichkeit von 0,5 schlug die Anwendung eine Trennung vor. Das Verfahren läuft lokal und ohne Sprachmodell.
 
 Für ein neues Flugblatt sprechen etwa Eingangsstempel, Datumsangaben in der Kopfzeile, eine Kopfleiste mit Gruppenkürzeln, ein Impressum, eine nahezu leere vorausgehende Seite oder wenige gemeinsame Wörter mit der Seite davor. Gegen eine Trennung sprechen Seitenzahlen wie „- 2 -“, Trennstriche oder ein „b. w.“ am Ende der vorherigen Seite, ein „Fortsetzung“ am Seitenanfang und viele gemeinsame Wörter zwischen zwei aufeinanderfolgenden Seiten.
 
-Für die Bände 13 und 14 kam eine Locherkennung hinzu. Sind die Abheftlöcher nur rechts zu sehen, gilt die Seite als Rückseite, und die Anwendung vermutet dort keinen Beginn eines neuen Flugblatts.
+Als erstes Merkmal aus dem Scan kam danach eine Locherkennung hinzu, zunächst nur für die Bände 13 und 14. Sind die Abheftlöcher nur rechts zu sehen, gilt die Seite als Rückseite, und die Anwendung vermutet dort keinen Beginn eines neuen Flugblatts.
 
 Liegt die Einteilung eines Bandes schon vor, lässt sie sich beim Import als Liste übergeben. Die Anwendung übernimmt dann alle Trennungen, und die Prüfung von Hand entfällt. Die Liste enthält eine Zeile je Flugblatt mit erster und letzter Seite; ein „x“ davor markiert eine Leerseite:
 
@@ -43,9 +43,9 @@ x 4
 
 Kurz vor Projektende haben wir die Vorschläge erweitert. Zu den 14 Merkmalen aus dem Text kommen eine Wortliste mit Wörtern, die ein Ende oder einen Anfang anzeigen können, und neun Merkmale aus dem Scan. Die Erkennung der Abheftlöcher funktioniert jetzt in allen Bänden und bei jedem Import, für schwarze wie für weiße Löcher.
 
-Der naive Bayes-Klassifikator selbst ist geblieben. Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen; Wortliste und Scan liefern Hinweise in beide Richtungen. Die Anwendung summiert alle Gewichte und schlägt eine Trennung vor, wenn die Summe über Null liegt. Ohne jeden Hinweis trennt sie nicht; der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1797 von 4219 Seitenwechseln ohne Leerseiten, 42,6 %). Gelernt sind die Gewichte an der Handtrennung der Bände 1–14.
+Der naive Bayes-Klassifikator selbst ist geblieben. Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen; Wortliste und Scan liefern Hinweise in beide Richtungen. Die Anwendung summiert alle Gewichte und schlägt eine Trennung vor, wenn die Summe über Null liegt. Ohne jeden Hinweis trennt sie nicht; der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1797 von 4219 Seitenwechseln, 42,6 %; Seitenwechsel an Leerseiten zählen nicht mit). Gelernt sind die Gewichte an der Handtrennung der Bände 1–14.
 
-Für die Wortliste haben wir die letzten 250 Zeichen der Seite davor und die ersten 250 Zeichen jeder Seite verglichen, an Seitenwechseln mit und ohne Trennung. Übrig blieben etwa 90 Wörter. Namen, Orte und Wörter einzelner Gruppen haben wir herausgenommen, alle Monate und Wochentage hinzugenommen. Je Seitenwechsel zählt nur das stärkste Wort dafür und das stärkste dagegen. Für eine Trennung sprechen etwa „Eigendruck“ am Ende der Seite davor oder „eingelaufen“ und „Ablage“ am Seitenanfang. Dagegen sprechen Wörter, die mitten im Gedankengang stehen, wie „natürlich“, „jedoch“ und „deshalb“.
+Für die Wortliste haben wir die letzten 250 Zeichen der Seite davor und die ersten 250 Zeichen jeder Seite verglichen, an Seitenwechseln mit und ohne Trennung. Übrig blieben die etwa 90 Wörter, die Seitenwechsel mit und ohne Trennung am besten unterschieden; ein Gewicht bekommt ein Wort nur, wenn es an mindestens zehn Seitenwechseln vorkommt. Namen, Orte und Wörter einzelner Gruppen haben wir herausgenommen, alle Monate und Wochentage hinzugenommen. Je Seitenwechsel zählt nur das stärkste Wort dafür und das stärkste dagegen. Für eine Trennung sprechen etwa „Eigendruck“ am Ende der Seite davor oder „eingelaufen“ und „Ablage“ am Seitenanfang. Dagegen sprechen Wörter, die mitten im Gedankengang stehen, wie „natürlich“, „jedoch“ und „deshalb“.
 
 Die Merkmale aus dem Scan gewinnt die Anwendung aus einer verkleinerten Fassung jeder Seite, im Hintergrund und parallel zur Texterkennung. Mit der Seite davor vergleicht sie Papierfarbe, Format, Ränder und Tintenmenge. Sind die Abheftlöcher nur rechts zu sehen, ist die Seite eine Rückseite. Das blaue „F“ und die blauen Stempel des Archivs erkennt sie an der Farbe: Blaue Tinte schluckt mehr Rot als Blau, graue Schreibmaschinenschrift alle Farben gleich. Graue oder blasse Stempel bleiben im Bild deshalb unsichtbar, meist findet sie aber die Texterkennung. Leerseiten mit fast keinen dunklen Kanten bekommen kein Gewicht; der Vorschlag lässt sie als „Leerseite / Trennblatt“ aus, sie gehören zu keinem Flugblatt.
 
@@ -66,9 +66,9 @@ Die erste Fassung nutzte nur den Text, die neue zusätzlich Wortliste und Scan:
 | nur Text (bisher) | 20,2 | 0,79 | 0,72 |
 | Text + Wortliste + Scan (jetzt) | **11,8** | **0,84** | **0,89** |
 
-Ohne Vorschlag müsste man 1797 Trennungen selbst setzen. Mit Vorschlag sind noch 496 Stellen zu ändern (302 zu viel, 194 fehlen), also 72 % weniger als ohne Vorschlag. Bei einer Präzision von 0,84 ist etwa jeder sechste vorgeschlagene Schnitt falsch, bei einer Trefferquote von 0,89 fehlt etwa jeder neunte echte Anfang.
+Ohne Vorschlag wären 1797 Trennungen von Hand zu setzen. Mit Vorschlag sind noch 496 Stellen zu ändern (302 zu viel, 194 fehlen), also 72 % weniger als ohne Vorschlag. Bei einer Präzision von 0,84 ist etwa jeder sechste vorgeschlagene Schnitt falsch, bei einer Trefferquote von 0,89 fehlt etwa jeder neunte echte Anfang.
 
-Die Zahlen sind leicht optimistisch, weil wir Merkmale und Wörter mit Blick auf alle 14 Bände ausgewählt haben; nur die Gewichte sind sauber getrennt gelernt. Leerseiten und die Seitenwechsel an ihnen sind nicht enthalten, weil die Anwendung sie vor dem Vorschlag auslässt (Stand 23.10.2026). Wie gut das Verfahren auf neue Bände übertragbar ist, haben wir nicht getestet; das muss nach Erhalt neuer Bände geschehen.
+Gemessen haben wir reihum: Für jeden Band sind die Gewichte ohne diesen Band gelernt. Leicht optimistisch sind die Zahlen trotzdem, weil wir Merkmale und Wörter mit Blick auf alle 14 Bände ausgewählt haben. Leerseiten und die Seitenwechsel an ihnen sind nicht enthalten, weil die Anwendung sie vor dem Vorschlag auslässt (Stand 23.10.2026). Wie gut das Verfahren auf neue Bände übertragbar ist, haben wir nicht getestet; das muss nach Erhalt neuer Bände geschehen.
 
 ## 4.6 Manuelle Prüfung
 
@@ -80,7 +80,7 @@ Weil die Vorschläge Fehler enthalten, prüft beim Import ein Mensch jeden Seite
 
 ## 4.7 Ergebnis und Kosten
 
-Die 4464 Seiten des Bestands ergeben 1927 Exemplare. Hinzu kommen 115 Seiten, die zu keinem Flugblatt gehören, meist Trennblätter oder leere Rückseiten. Fünf davon enthalten dennoch möglicherweise relevanten Text und sollten noch einmal geprüft werden.
+Die 4464 Seiten des Bestands ergeben 1926 Exemplare. Hinzu kommen 115 Seiten, die zu keinem Flugblatt gehören, meist Trennblätter oder leere Rückseiten. Fünf davon enthalten dennoch möglicherweise relevanten Text und sollten noch einmal geprüft werden.
 
 Die Auswertung der Scans für die Vorschläge dauert je Band höchstens wenige Minuten, der Vorschlag selbst kommt danach sofort. Weil alles lokal läuft, entstehen für diesen Schritt keine Kosten für externe Dienste.
 

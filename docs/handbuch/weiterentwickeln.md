@@ -27,7 +27,6 @@ src/backend/app/
 ├── topics.py            Themen zuordnen und Neuberechnung der Themen
 ├── export.py            Export als ZIP
 ├── keys.py              API-Keys aus .env oder der Verwaltung
-├── cli.py               Import in der Kommandozeile
 ├── pdf_service.py       Scanseiten rendern
 └── warm_thumbs.py       Vorschaubilder im Hintergrund
 src/frontend/            Templates (Jinja2), Stylesheet, JavaScript

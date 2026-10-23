@@ -1,6 +1,6 @@
 # 1 Einleitung
 
-Das Universitätsarchiv Regensburg bewahrt in seiner Allgemeinen Flugblattsammlung die Flugblätter, die an der jungen Universität zwischen 1967 und 1973 verteilt wurden. Bis zu diesem Projekt lagen davon nur Fotos vor, ohne Volltext, ohne Grenzen zwischen den Flugblättern und ohne Angaben zu Titel, Datum oder Herausgeber. Wir haben daraus ein durchsuchbares Korpus mit 1547 Flugblättern gemacht und eine Anwendung gebaut, mit der das Archiv weitere Bände selbst erschließen kann.
+Das Universitätsarchiv Regensburg bewahrt in seiner Allgemeinen Flugblattsammlung die Flugblätter, die an der jungen Universität zwischen 1967 und 1973 verteilt wurden. Bis zu diesem Projekt lagen davon nur Fotos vor, ohne Volltext, ohne Grenzen zwischen den Flugblättern und ohne Angaben zu Titel, Datum oder Herausgeber. Wir haben daraus ein durchsuchbares Korpus mit 1546 Flugblättern gemacht und eine Anwendung gebaut, mit der das Archiv weitere Bände selbst erschließen soll.
 
 ## 1.1 Motivation und Ausgangslage
 
@@ -10,7 +10,7 @@ Warum diese Jahre ergiebig sind, zeigt die Geschichte der Universität. Der Vorl
 
 Darüber hinaus zeigt die Sammlung die Anfänge noch heute bestehender Hochschulgruppen, das beginnende Nachtleben der Studentenstadt, das politische Engagement später bekannter Personen und die Sprache der Studierenden jener Jahre.
 
-Genutzt werden konnte das bisher kaum. Im Herbst 2025 begann das Archiv, die Flugblätter zu digitalisieren; bis zum Beginn des Projekts im Sommer 2026 waren 4464 Seiten fotografiert. Wer etwa wissen wollte, welche Gruppen sich zum Hochschulgesetz äußerten, musste die Bände Seite für Seite durchsehen. In der Anwendung liefert eine Suche danach in wenigen Sekunden 310 Flugblätter von 67 Herausgebern.
+Genutzt werden konnte das bisher kaum. Im Herbst 2025 begann das Archiv, die Flugblätter zu digitalisieren; bis zum Beginn des Projekts im Sommer 2026 waren 4464 Seiten fotografiert. Wer etwa wissen wollte, welche Gruppen sich zum Hochschulgesetz äußerten, musste die Bände Seite für Seite durchsehen. In der Anwendung liefert die Suche nach „Hochschulgesetz“ in wenigen Sekunden 310 Flugblätter von 67 Herausgebern.
 
 Andere Universitäten haben ihre Flugblätter aus dieser Zeit ebenfalls digitalisiert. Die TU Berlin zeigt rund 1800 Flugblätter der Jahre 1965 bis 1972 in Kitodo, mit Volltextsuche [@tub-flugblaetter]. In Frankfurt verzeichnet eine private Sammlung 403 Flugblätter von 1967 bis 1969 von Hand nach Datum, Urheber, Thema und Art [@frankfurt-flugblaetter]. Die Sammlung der Universität Hamburg mit über zehntausend Flugblättern ist nach Anton F. Guhl und Alexandra Jaeger kaum erschlossen [@hamburg-flugblaetter]. Eine Flugblattsammlung einer deutschen Universität, die ähnlich automatisch erschlossen wird und die das Archiv selbst fortführen kann, ist uns nicht bekannt (Stand Oktober 2026).
 
@@ -18,11 +18,11 @@ Guhl und Jaeger nennen für die Hamburger Sammlung drei Hürden, die auch in Reg
 
 | Hürde nach Guhl und Jaeger | Arbeitsschritt | Stand in Regensburg |
 |---|---|---|
-| Dubletten machen die Zahl der Flugblätter unsicher | Mehrfachexemplare zusammenführen (Kap. 6) | 1927 Exemplare ergeben 1547 Flugblätter |
-| Viele Blätter nennen keine Verantwortlichen | Herausgeber mit Beleg und Register (Kap. 5) | 241 Flugblätter bleiben ohne erkannten Herausgeber |
+| Dubletten machen die Zahl der Flugblätter unsicher | Mehrfachexemplare zusammenführen (Kap. 6) | 1926 Exemplare ergeben 1546 Flugblätter |
+| Viele Blätter nennen keine Verantwortlichen | Herausgeber mit Beleg und Register (Kap. 5) | 236 Flugblätter bleiben ohne erkannten Herausgeber |
 | Ohne Parallelüberlieferung ist das Datieren schwer | Datum mit Beleg, sonst Jahr des Bandes (Kap. 5) | 46 % tragen ein Datum auf dem Blatt |
 
-Die meisten dieser Schritte laufen automatisch (Kap. 3 bis 7). Die Texterkennung (OCR, optische Zeichenerkennung) macht aus den Fotos Text, ein Sprachmodell liest daraus die Metadaten und nennt für jeden Wert die Textstelle, auf die er sich stützt; so lässt sich jede Angabe am Scan nachprüfen. Von Hand bestätigen wir die Grenzen zwischen den Flugblättern, unterstützt durch Vorschläge der Anwendung, und die Gruppen von Mehrfachexemplaren. Texterkennung und Metadaten kosten zusammen etwa 19 $ je 1000 Seiten (Kap. 11), und neue Bände liest das Archiv in der Anwendung selbst ein (Kap. 9).
+Die meisten dieser Schritte laufen automatisch (Kap. 3 bis 7). Die Texterkennung (OCR, optische Zeichenerkennung) macht aus den Fotos Text, ein Sprachmodell liest daraus die Metadaten und nennt für fast jeden Wert die Textstelle, auf die er sich stützt; so lassen sich die Angaben am Scan nachprüfen. Von Hand bestätigen wir die Grenzen zwischen den Flugblättern, unterstützt durch Vorschläge der Anwendung, und die Gruppen von Mehrfachexemplaren. Texterkennung und Metadaten kosten zusammen etwa 19 $ je 1000 Seiten (Kap. 11), und neue Bände liest das Archiv in der Anwendung selbst ein (Kap. 9).
 
 ![Der Weg von Flugblatt 850 durch die Arbeitsschritte](../abbildungen/ablauf.png)
 
@@ -30,16 +30,16 @@ Die meisten dieser Schritte laufen automatisch (Kap. 3 bis 7). Die Texterkennung
 
 ## 1.2 Ziele
 
-Wir wollten aus den Scans der Bände 1 bis 14 ein Korpus machen, das sich durchsuchen und auswerten lässt und das das Archiv selbst fortführen kann. Daraus ergeben sich vier Ziele, an denen Kap. 11 das Ergebnis misst:
+Wir wollten aus den Scans der Bände 1 bis 14 ein Korpus machen, das sich durchsuchen und auswerten lässt. Im Lauf des Projekts kam hinzu, dass das Archiv das Korpus selbst fortführen soll (Kap. 12.2). Das Ergebnis messen wir in Kap. 11 an vier Zielen:
 
 | Ziel | Erreicht, wenn |
 |---|---|
-| Erschließen | jede Seite hat Volltext mit gemessener Fehlerrate, jedes Flugblatt hat Grenzen und Metadaten |
-| Nachprüfbar machen | jede automatische Angabe hat einen Beleg im Scan und lässt sich korrigieren, ohne dass Korrekturen bei einer Neuberechnung verloren gehen |
+| Erschließen | jede Seite hat Volltext, dessen Fehlerrate an einer Stichprobe gemessen ist, jedes Flugblatt hat Grenzen und Metadaten |
+| Nachprüfbar machen | jede automatische Angabe lässt sich am Scan prüfen und korrigieren, ohne dass Korrekturen bei einer Neuberechnung verloren gehen |
 | Recherche ohne Technikwissen | Suche, Filter, Leseansicht, Trends und Themen stehen in einer Weboberfläche |
 | Fortführen | ein neuer Band lässt sich ohne Projektmitglied einlesen, die Kosten sind vorher bekannt |
 
-Der Schwerpunkt lag damit auf der Erschließung. Eigene Auswertungen zur politischen Kommunikation, die die Themenstellung ebenfalls nennt, haben wir dafür zurückgestellt. Sie werden umso aussagekräftiger, je mehr Jahrgänge das Archiv scannt und mit der Anwendung erschließt; die Werkzeuge dafür liegen bereit (Kap. 9.7).
+Der Schwerpunkt lag damit auf der Erschließung. Eigene Auswertungen zur politischen Kommunikation, die die Themenstellung ebenfalls nennt, haben wir dafür zurückgestellt, auch weil Erschließung und Anwendung mehr Zeit brauchten als geplant (Kap. 12.8). Sie werden umso aussagekräftiger, je mehr Jahrgänge das Archiv scannt und mit der Anwendung erschließt; die Werkzeuge dafür liegen bereit (Kap. 9.6).
 
 ## 1.3 Projekt und Aufbau des Berichts
 

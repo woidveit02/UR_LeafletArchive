@@ -4,7 +4,7 @@ Bevor wir Text erkennen konnten, mussten wir festlegen, welche Flugblätter das 
 
 ## 2.1 Korpuswahl
 
-Ursprünglich wollten wir das Korpus aus einer anderen Sammlung bilden, der Sammlung Reisner. Sie entstand zur selben Zeit wie die Allgemeine Flugblattsammlung, ist aber nicht digitalisiert; das hätte viele Stunden oder Tage gekostet. Außerdem enthält sie nur Flugblätter links orientierter Hochschulgruppen. Weil rechte Gegenstimmen fehlen, dokumentiert sie die politischen Auseinandersetzungen jener Zeit nicht repräsentativ. In der ersten Besprechung mit Andreas Becker am 20.05.2026 haben wir deshalb festgelegt, die Allgemeine Flugblattsammlung zu nehmen, die schon teilweise digitalisiert war. Eine weitere Flugblattsammlung des Archivs liegt im Privatarchiv Jörg Wiesner (Rep. 113, Teil „Flugblattsammlung“, [Archivrecherche](https://archivrecherche.uni-regensburg.de/archive.xhtml)). Sie umfasst 12 Einheiten aus den Jahren 1970 bis 1987, davon nur drei aus unserem Zeitraum (Flugblätter 1970/71, 1973 und der Fachschaften 1970–1972); den Rest haben wir nicht untersucht.
+Ursprünglich wollten wir das Korpus aus einer anderen Sammlung bilden, der Sammlung Reisner. Sie entstand zur selben Zeit wie die Allgemeine Flugblattsammlung, ist aber nicht digitalisiert; das hätte viele Stunden oder Tage gekostet. Außerdem enthält sie fast nur Flugblätter links orientierter Hochschulgruppen. Weil rechte Gegenstimmen fehlen, dokumentiert sie die politischen Auseinandersetzungen jener Zeit nicht repräsentativ. In der ersten Besprechung mit Andreas Becker am 20.05.2026 haben wir deshalb festgelegt, die Allgemeine Flugblattsammlung zu nehmen, die schon teilweise digitalisiert war. Eine weitere Flugblattsammlung des Archivs liegt im Privatarchiv Jörg Wiesner (Rep. 113, Teil „Flugblattsammlung“, [Archivrecherche](https://archivrecherche.uni-regensburg.de/archive.xhtml)). Sie umfasst 12 Einheiten aus den Jahren 1970 bis 1987, davon nur drei aus unserem Zeitraum (Flugblätter 1970/71, 1973 und der Fachschaften 1970–1972). Sie gehört nicht zur Allgemeinen Flugblattsammlung und ist nicht gescannt, deshalb haben wir sie nicht einbezogen.
 
 ## 2.2 Das Korpus und dessen Gliederung
 
@@ -16,7 +16,7 @@ Gegliedert ist das Korpus nach Jahrgängen und Bänden. Die 7 Jahrgänge liegen 
 
 *Abbildung: Karton „Rep. 118, Nr. 10–12“ mit der Aufschrift 1973 und Flugblatt 1492 im Original (Band 012). Lochung am linken Rand und farbiges Papier sind auch auf dem Scan zu sehen.*
 
-Weil viele Flugblätter mehrere Seiten haben, ergeben diese Seiten 1547 Flugblätter (Stand 17.10.2026, Mehrfachexemplare zusammengefasst). Den größten Teil machen politische Flugblätter aus, daneben Einladungen, Broschüren, offene Briefe und Zeitschriften. Herausgeber sind der AStA, die politischen Hochschulgruppen (u. a. RCDS, MSB Spartakus, SHB, Demokratische Front), Fachschaften, Studentenverbindungen und die Hochschulleitung, insgesamt rund 170. Thematisch dominieren Hochschulpolitik und das Bayerische Hochschulgesetz, Hochschulwahlen und Streiks; hinzu kommen bundespolitische und internationale Themen. Diese Angaben stammen aus der automatischen Erschließung und sind entsprechend ungenau; Zahlen mit Zählregeln stehen in Kap. 8.
+Weil viele Flugblätter mehrere Seiten haben, ergeben diese Seiten 1546 Flugblätter (Stand 23.10.2026, Mehrfachexemplare zusammengefasst). Den größten Teil machen politische Flugblätter aus, daneben Einladungen, Broschüren, offene Briefe und Zeitschriften. Herausgeber sind der AStA, die politischen Hochschulgruppen (u. a. RCDS, MSB Spartakus, SHB, Demokratische Front), Fachschaften, Studentenverbindungen und die Hochschulleitung, insgesamt rund 170. Thematisch dominieren Hochschulpolitik und das Bayerische Hochschulgesetz, Hochschulwahlen und Streiks; hinzu kommen bundespolitische und internationale Themen. Diese Angaben stammen aus der automatischen Erschließung und sind entsprechend ungenau; Zahlen mit Zählregeln stehen in Kap. 8.
 
 Über die Jahre ist der Bestand ungleich verteilt. 70 % der Seiten stammen aus 1972 und 1973, für 1967 liegen nur 13 Seiten mit 6 Flugblättern vor (Band 001). Das spiegelt die Geschichte der Universität (Kap. 1.1): Der Vorlesungsbetrieb begann erst Ende 1967, und die Proteste gegen das neue Hochschulgesetz prägten vor allem die Jahre 1971 bis 1973 [@becker2021]. Was im Bestand fehlt, beschreibt Kap. 2.5.
 
@@ -26,7 +26,7 @@ Die meisten Flugblätter sind mit der Schreibmaschine geschrieben, weil die Grup
 |---|---|---|---|---|
 | 001 | 1967 | 13 | 6 | 6 |
 | 002 | 1968 | 85 | 58 | 51 |
-| 003 | 1969 | 317 | 212 | 184 |
+| 003 | 1969 | 317 | 211 | 183 |
 | 004 | 1970 | 294 | 187 | 169 |
 | 005 | 1971 | 629 | 230 | 196 |
 | 006 | 1972 | 455 | 184 | 143 |
@@ -38,17 +38,19 @@ Die meisten Flugblätter sind mit der Schreibmaschine geschrieben, weil die Grup
 | 012 | 1973 | 286 | 131 | 100 |
 | 013 | 1973 | 261 | 137 | 104 |
 | 014 | 1973 | 499 | 168 | 142 |
-| **Summe** |  | **4464** | **1927** | **1547** |
+| **Summe** |  | **4464** | **1926** | **1546** |
 
 In der Spalte „Exemplare“ zählt jedes Exemplar einzeln, in der Spalte „Flugblätter“ zählen Mehrfachexemplare einmal (Kap. 6).
 
 ![Seiten nach Bandjahr](../abbildungen/6_seiten_jahr.png)
 
+*Abbildung: Seiten je Bandjahr. Die Jahrgänge 1972 und 1973 verteilen sich auf vier und fünf Bände und stellen 70 % der Seiten.*
+
 ## 2.3 Sammlung und Digitalisierung
 
-Wie die Flugblätter gesammelt wurden, ist auf den Scans sichtbar und hilft später beim Trennen und Datieren. Mitarbeitende der Universität sammelten die Flugblätter, lochten sie und hefteten sie in Ordnern ab, bis 2006. Ab 1969 und bis 2007 erhielten viele Flugblätter auf der Vorderseite einen Stempel mit dem Datum des Eingangs, einen Anhaltspunkt für die Zeit, in der sie erschienen [@uar-rep118]. Die Löcher sind am linken Rand der Vorderseite oder am rechten Rand der Rückseite zu sehen. Die Eingangsstempel („eingelaufen“) erkennt die Auswertung ab dem Jahrgang 1969: in Band 003 bei 8 von 212 Exemplaren, in den Bänden ab 1970 bei 13 bis 32 % (nach den Korrekturen von Hand, Kap. 5).
+Wie die Flugblätter gesammelt wurden, ist auf den Scans sichtbar und hilft später beim Trennen und Datieren. Mitarbeitende der Universität sammelten die Flugblätter, lochten sie und hefteten sie in Ordnern ab, bis 2006. Ab 1969 und bis 2007 erhielten viele Flugblätter auf der Vorderseite einen Stempel mit dem Datum des Eingangs, einen Anhaltspunkt für die Zeit, in der sie erschienen [@uar-rep118]. Die Löcher sind am linken Rand der Vorderseite oder am rechten Rand der Rückseite zu sehen. Die Eingangsstempel („eingelaufen“) erkennt die Auswertung ab dem Jahrgang 1969: in Band 003 bei 8 von 211 Exemplaren, in den Bänden ab 1970 bei 13 bis 32 % (nach den Korrekturen von Hand, Kap. 5).
 
-Digitalisiert hat das Archiv die Flugblätter mit einer Kamera über dem Blatt. Ein Flachbettscanner kam nicht in Frage, weil die Blätter in Form und Format zu verschieden und über die Jahre oft brüchig geworden sind. Je Band entstand eine PDF-Datei, zusammen rund 9,2 GB. Die Dateien heißen `0118_0001.pdf` bis `0118_0014.pdf` (Rep. 118, Band), die Anwendung zeigt sie beispielsweise als „Nr. 001 (1967)“. Jede Seite ist ein farbiges JPEG-Bild ohne Textebene. Die Auflösung, bezogen auf die in den PDFs angegebene Seitengröße von etwa A4, ist nicht einheitlich: Band 001 und 002 haben 300 dpi (1787 × 2479 Pixel), die Bände 003 bis 012 überwiegend 600 dpi (4912 × rund 6970 Pixel) mit einzelnen Seiten in 300 dpi, die Bände 013 und 014 rund 400 dpi (etwa 3400 × 4800 Pixel). Die PDFs stammen aus unterschiedlichen Programmen (cChipPDF, PDF24, img2pdf). Einen Band lieferte das Archiv als einzelne TIFF-Dateien; wir haben sie der Einheitlichkeit halber ebenfalls zu einer PDF-Datei zusammengefügt.
+Digitalisiert hat das Archiv die Flugblätter mit einer Kamera über dem Blatt. Ein Flachbettscanner kam nicht in Frage, weil die Blätter in Form und Format zu verschieden und über die Jahre oft brüchig geworden sind. Je Band entstand eine PDF-Datei, zusammen rund 9,2 GB. Die Dateien heißen `0118_0001.pdf` bis `0118_0014.pdf` (Rep. 118, Band), die Anwendung zeigt sie beispielsweise als „Nr. 001 (1967)“. Jede Seite ist ein farbiges JPEG-Bild ohne Textebene. Auflösung und Seitengröße in den PDFs sind nicht einheitlich: Band 001 und 002 haben 300 dpi bei einem Blatt von etwa A5 (1787 × 2479 Pixel), die Bände 003 bis 012 überwiegend 600 dpi bei etwa A4 (4912 × rund 6970 Pixel) mit einzelnen Seiten in 300 dpi, die Bände 013 und 014 rund 400 dpi bei etwas mehr als A4 (etwa 3400 × 4800 Pixel). Die PDFs stammen aus unterschiedlichen Programmen (cChipPDF, PDF24, img2pdf). Einen Band lieferte das Archiv als einzelne TIFF-Dateien; wir haben sie der Einheitlichkeit halber ebenfalls zu einer PDF-Datei zusammengefügt.
 
 ## 2.4 Findmittel
 
@@ -56,7 +58,7 @@ Neben den Scans gibt es das Findmittel des Archivs. Das Universitätsarchiv verz
 
 ## 2.5 Überlieferungslücken
 
-Drei Eigenheiten des Bestands muss man bei jeder Auswertung beachten. Die erste betrifft 1973. Als wir den Umfang des Korpus festlegten, lagen für Band 15 (1973) noch keine Scans vor. Laut Findmittel enthält er unter anderem die Blätter zu Berufsverboten und zum Putsch in Chile. Aussagen zu 1973 sind daher Untergrenzen mit inhaltlicher Schlagseite und sollten erst nach der Ergänzung verallgemeinert werden. Inzwischen hat das Archiv die Bände 15 und 16 gescannt, wie wir am 20.10.2026 im Archiv erfahren haben. Große Bände teilt das Archiv zur Speicherung in mehrere PDFs auf. Den ersten Teil von Band 15 (230 Seiten) haben wir für den Testimport erhalten; er gehört nicht zum Korpus und geht in keine Zahl dieses Berichts ein; die Kosten des Testimports nennt Kap. 5.6.
+Drei Eigenheiten des Bestands sind bei jeder Auswertung zu beachten. Die erste betrifft 1973. Als wir den Umfang des Korpus festlegten, lagen für Band 15 (1973) noch keine Scans vor. Laut Findmittel enthält er unter anderem die Blätter zu Berufsverboten und zum Putsch in Chile. Aussagen zu 1973 sind daher Untergrenzen mit inhaltlicher Schlagseite und sollten erst nach der Ergänzung verallgemeinert werden. Inzwischen hat das Archiv die Bände 15 und 16 gescannt, wie wir am 20.10.2026 im Archiv erfahren haben. Große Bände teilt das Archiv zur Speicherung in mehrere PDFs auf. Den ersten Teil von Band 15 (230 Seiten) haben wir für den Testimport erhalten; er gehört nicht zum Korpus und geht in keine Zahl dieses Berichts ein; die Kosten des Testimports nennt Kap. 5.6.
 
 Die zweite betrifft die ersten Jahre. 1967 und 1968 sind mit 13 und 85 Seiten dünn belegt, weil die Universität gerade erst eröffnet hatte (Kap. 1.1).
 

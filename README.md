@@ -1,8 +1,8 @@
 # UR Leaflet Archive
 
-*English: This repository makes the general leaflet collection of the Regensburg University Archives (Rep. 118, student movement, 1967–1973) searchable. It contains a web application with 1927 scanned leaflet copies, their recognized text and metadata, the tools to add further volumes, and the project report. It was built in a project seminar at the University of Regensburg in summer 2026; the documentation is in German.*
+*English: This repository makes the general leaflet collection of the Regensburg University Archives (Rep. 118, student movement, 1967–1973) searchable. It contains a web application with 1926 scanned leaflet copies, their recognized text and metadata, the tools to add further volumes, and the project report. It was built in a project seminar at the University of Regensburg in summer 2026; the documentation is in German.*
 
-Die Allgemeine Flugblattsammlung des Universitätsarchivs Regensburg (Rep. 118) enthält Flugblätter aus der Studentenbewegung der Jahre 1967 bis 1973. Dieses Repository macht sie durchsuchbar: 1927 Exemplare aus 14 Bänden mit Scan, erkanntem Text, Titel, Datum, Herausgebern und Thema. Es entstand in einem Praxisseminar im Sommersemester 2026 und enthält die Anwendung, den Projektbericht und die Werkzeuge, mit denen weitere Bände eingelesen werden.
+Die Allgemeine Flugblattsammlung des Universitätsarchivs Regensburg (Rep. 118) enthält Flugblätter aus der Studentenbewegung der Jahre 1967 bis 1973. Dieses Repository macht sie durchsuchbar: 1926 Exemplare aus 14 Bänden mit Scan, erkanntem Text, Titel, Datum, Herausgebern und Thema. Es entstand in einem Praxisseminar im Sommersemester 2026 und enthält die Anwendung, den Projektbericht und die Werkzeuge, mit denen weitere Bände eingelesen werden.
 
 ![Leseansicht eines Flugblatts](docs/abbildungen/app_leseansicht.png)
 
@@ -46,7 +46,7 @@ Dann:
 docker compose up --build -d
 ```
 
-Unter Linux ohne Docker-Gruppe mit `sudo` davor. Der erste Start dauert 10 bis 20 Minuten: Docker lädt und baut das Image (etwa 1,5 GB), die Anwendung legt ihre Datenbank an. Auf einem Mac mit Apple-Chip läuft das Image emuliert und ist etwas langsamer.
+`--build` sorgt dafür, dass das Image neu entsteht, auch wenn Sie schon eine ältere Fassung gebaut hatten. Unter Linux ohne Docker-Gruppe mit `sudo` davor. Der erste Start dauert 10 bis 20 Minuten: Docker lädt und baut das Image (etwa 1,5 GB), die Anwendung legt ihre Datenbank an. Auf einem Mac mit Apple-Chip läuft das Image emuliert und ist etwas langsamer.
 
 **4. Öffnen**
 
@@ -94,9 +94,9 @@ Ohne Datenordner startet die Anwendung trotzdem, zeigt dann aber weder Scans noc
 
 Der Projektbericht und die Lesepfade für Archiv, Forschung und Entwicklung beginnen in [`docs/README.md`](docs/README.md). Code, Datenformate und Tests beschreibt [`docs/handbuch/weiterentwickeln.md`](docs/handbuch/weiterentwickeln.md), die Werkzeuge neben der Anwendung [`scripts/README.md`](scripts/README.md).
 
-Als Website ist die Dokumentation in der laufenden Anwendung unter http://localhost:8000/doku/ zu lesen. Wie man sie beim Schreiben als Vorschau startet, steht in [`weiterentwickeln.md`](docs/handbuch/weiterentwickeln.md).
+Als Website ist die Dokumentation in der laufenden Anwendung unter http://localhost:8000/doku/ zu lesen. Wie sich beim Schreiben eine Vorschau starten lässt, steht in [`weiterentwickeln.md`](docs/handbuch/weiterentwickeln.md).
 
-Das Arbeits-Repository des Projekts mit der Evaluation der Texterkennung und den ersten Metadatenläufen ist archiviert: https://github.com/Alphazerfall/flugblatt_praxisseminarSS26
+Das Arbeits-Repository des Projekts mit der Evaluation der Texterkennung und den ersten Metadatenläufen ist archiviert: https://github.com/Alphazerfall/flugblatt_praxisseminarSS26. Screenshots der Werkzeuge OCR-Viewer und Splitter stehen in den READMEs dort.
 
 ## Lizenz
 

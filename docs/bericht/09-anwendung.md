@@ -8,13 +8,13 @@ Aus den Zielen in Kap. 1.2 folgen drei Anforderungen. Für die Recherche muss da
 
 ## 9.2 Recherchieren
 
-Einstieg in die Recherche ist die Flugblattliste. Ein Suchfeld durchsucht Titel, Reihe, Herausgeber, Unterzeichnende und den erkannten Text. Die Suche findet auch Wortteile und alte Schreibweisen (daß und dass), und über weitere Suchbedingungen lassen sich Felder mit UND, ODER und NICHT verknüpfen. Links stehen Filter nach Jahr, Herausgeber, Thema und Textsorte. Die Zahlen an den Filtern beziehen sich immer auf die aktuelle Trefferliste, sodass man sieht, wie sich ein Begriff über Jahre und Gruppen verteilt, bevor man ein einziges Flugblatt öffnet.
+Einstieg in die Recherche ist die Flugblattliste. Ein Suchfeld durchsucht Titel, Reihe, Herausgeber, Unterzeichnende und den erkannten Text. Die Suche findet auch Wortteile und alte Schreibweisen (daß und dass). Sie beruht auf einem Volltextindex mit Trigrammen (SQLite FTS5), den die Anwendung beim Import aufbaut. Einen Erkennungsfehler im gesuchten Wort gleicht sie nicht aus (Kap. 10.4). Die Treffer sind nach Relevanz sortiert und zeigen einen Textausschnitt. Über weitere Suchbedingungen lassen sich Felder mit UND, ODER und NICHT verknüpfen. Links stehen Filter nach Jahr, Herausgeber, Thema und Textsorte. Die Zahlen an den Filtern beziehen sich immer auf die aktuelle Trefferliste. So zeigt sich, wie sich ein Begriff über Jahre und Gruppen verteilt, bevor auch nur ein Flugblatt geöffnet ist.
 
 ![Flugblattliste mit der Suche nach „berufsverbot“](../abbildungen/nutzen_suche.png)
 
 *Abbildung: Die Suche nach „berufsverbot“ ergibt 129 Treffer, fast alle aus 1972 und 1973. Die Filter links zählen die Treffer je Jahr, Herausgeber und Thema; jeder Treffer zeigt die Fundstellen im Text.*
 
-Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneinander, Block für Block verbunden: Zeigt man auf einen Absatz, leuchtet er in Text und Scan zugleich auf, und ein Klick in den Scan springt zur Stelle im Text. Darüber stehen die Metadaten. Neben jedem Wert führt „Beleg“ zu der Stelle im Scan, aus der er stammt. Wie diese Belege entstehen, beschreibt Kap. 5. In der Anwendung machen sie jede Angabe in einem Klick überprüfbar. Unsichere Werte sind als solche gekennzeichnet, etwa ein Datum ohne Jahr oder ein automatisch zugeordnetes Thema.
+Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneinander, Block für Block verbunden: Ein Absatz unter dem Mauszeiger leuchtet in Text und Scan zugleich auf, und ein Klick in den Scan springt zur Stelle im Text. Darüber stehen die Metadaten. Neben jedem Wert führt „Beleg“ zu der Stelle im Scan, aus der er stammt. Wie diese Belege entstehen, beschreibt Kap. 5. In der Anwendung machen sie jede Angabe in einem Klick überprüfbar. Unsichere Werte sind als solche gekennzeichnet, etwa ein Datum ohne Jahr oder ein nachträglich zugeordnetes Thema (Kap. 7.3).
 
 ![Leseansicht von Flugblatt 850](../abbildungen/app_leseansicht.png)
 
@@ -28,13 +28,13 @@ Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneina
 
 ## 9.3 Pflegen
 
-Fehler lassen sich dort beheben, wo man sie findet. „Metadaten korrigieren“ auf der Seite eines Flugblatts öffnet ein Formular, in dem zu jedem Wert auch der Beleg neu gewählt werden kann, indem man Blöcke im Scan anklickt. Korrigierte Felder sind danach als „von Hand korrigiert“ gekennzeichnet, der automatisch erkannte Wert lässt sich wiederherstellen.
+Fehler lassen sich dort beheben, wo sie auffallen. „Metadaten korrigieren“ auf der Seite eines Flugblatts öffnet ein Formular, in dem zu jedem Wert auch der Beleg neu gewählt werden kann, durch Anklicken von Blöcken im Scan. Korrigierte Felder sind danach als „von Hand korrigiert“ gekennzeichnet, der automatisch erkannte Wert lässt sich wiederherstellen.
 
 ![Formular „Metadaten korrigieren“ für Flugblatt 850](../abbildungen/nutzen_korrigieren.png)
 
 *Abbildung: Metadaten korrigieren, am Beispiel von Flugblatt 850. Zu jedem Wert gehört ein Beleg, der sich über „Beleg wählen“ im Scan neu setzen lässt.*
 
-Mehrfachexemplare prüft man in einer Ansicht, die die Exemplare einer Gruppe nebeneinander zeigt (Kap. 6.5). Dort wählt man das Hauptexemplar, nimmt Exemplare heraus, die nicht dazugehören, und korrigiert die gemeinsamen Metadaten einmal für alle. Herausgeber, die das Register noch nicht kennt, ordnet man unter Verwaltung › Herausgeber zuordnen einer Organisation zu oder legt sie neu an. Die Anwendung merkt sich die Schreibweise und erkennt sie in späteren Bänden.
+Mehrfachexemplare werden in einer Ansicht geprüft, die die Exemplare einer Gruppe nebeneinander zeigt (Kap. 6.5). Dort lassen sich das Hauptexemplar wählen, Exemplare herausnehmen, die nicht dazugehören, und die Metadaten des Hauptexemplars korrigieren, das die Gruppe vertritt. Herausgeber, die das Register noch nicht kennt, lassen sich unter Verwaltung › Herausgeber zuordnen einer Organisation zuordnen oder neu anlegen. Die Anwendung merkt sich die Schreibweise und erkennt sie in späteren Bänden.
 
 Damit keine Handarbeit verloren geht, speichert die Anwendung Korrekturen und Prüfentscheidungen außer in der Datenbank auch in Dateien, an die sie nur anhängt. Beim Neuaufbau der Datenbank werden sie wieder angewendet. Sie hängen an den Seiten eines Flugblatts: Wird ein Band neu getrennt und passt eine Korrektur nicht mehr, erscheint sie unter Verwaltung › Korrekturen, statt stillschweigend zu verschwinden. Für Auswertungen außerhalb lässt sich der Bestand als ZIP mit Volltexten und Tabellen exportieren.
 
@@ -48,32 +48,28 @@ Damit Anwenderinnen und Anwender ohne technische Kenntnisse damit zurechtkommen,
 
 *Abbildung: Schritt 6 beim Testimport. Jede der drei Aufgaben nennt die Zahl offener Fälle und führt zu ihnen; freigeben lässt sich der Band auch, wenn noch etwas offen ist.*
 
-Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung und Metadaten brauchen nur einige Minuten Wartezeit. Vorgeführt haben wir den Import im Archiv (Kap. 9.8).
+Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung und Metadaten brauchen nur einige Minuten Wartezeit. Vorgeführt haben wir den Import im Archiv (Kap. 9.7).
 
 ## 9.5 Architektur und Datenmodell
 
-Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite. Die Grundstruktur stammt aus dem ASE-Projekt im Wintersemester 2025/26; deshalb fiel die Wahl auf diese Systeme. Die Seiten werden auf dem Server erzeugt. JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwicklung](../handbuch/weiterentwickeln.md).
+Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite. Die Grundstruktur hat Veit aus seinem Projekt im Masterkurs Advanced Software Engineering (ASE) im Wintersemester 2025/26 übernommen: Ordnerstruktur, FastAPI-Grundgerüst mit ersten Routen, Datenbank mit SQLAlchemy und SQLite, Jinja2-Vorlagen und erste Tests. Deshalb fiel die Wahl auf diese Systeme. Die Seiten werden auf dem Server erzeugt. JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Rund 130 automatische Tests prüfen unter anderem Import, Suche, Korrekturen und Export. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwicklung](../handbuch/weiterentwickeln.md).
 
-## 9.6 Gestaltung
-
-Die Oberfläche folgt wenigen Regeln: wenig Farbe, Markierungen nur für das, was Aufmerksamkeit braucht, und Zahlen, die mit den Listen dahinter übereinstimmen.
-
-## 9.7 Werkzeuge außerhalb der Anwendung
+## 9.6 Werkzeuge außerhalb der Anwendung
 
 Für Auswertungen, die über die Anwendung hinausgehen, gibt es zwei Werkzeuge. `scripts/ngrams.py` berechnet auf den erkannten Texten Häufigkeiten, Trends, typische Wörter je Jahr, Kollokationen und Belegstellen ([Textauswertung](../handbuch/ngramme-auswerten.md)). Das Notebook `scripts/forschungsfragen.ipynb` ([als Webseite](../forschungsfragen.html)) zeigt am Export, wie sich Fragen wie „Welche Gruppen sind wann aktiv?“, „Wer gibt mit wem gemeinsam heraus?“ oder „Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen?“ [@monroe2008] beantworten lassen. Die zehn Fragen im Notebook sind Beispiele, keine Ergebnisse des Projekts. Weitere Skripte, etwa zum Zusammenfügen von TIFF-Scans und zum Neulernen der Gewichte des Trennvorschlags, beschreibt `scripts/README.md`.
 
-Warum eigene Auswertungen hinter der Erschließung zurückstanden, erklärt Kap. 1.2. Die Werkzeuge zeigen, dass das Korpus solche Auswertungen trägt.
+Warum eigene Auswertungen hinter der Erschließung zurückstanden, erklärt Kap. 1.2.
 
-## 9.8 Einsatz im Archiv
+## 9.7 Einsatz im Archiv
 
-Für das Universitätsarchiv, unseren Kooperationspartner, ist die Anwendung ein Werkzeug für die weitere Erschließung des Bestands. Das Archiv wollte vor allem zweierlei: im Korpus recherchieren und neu gescannte Bände selbst einlesen, ohne dass dafür jemand aus dem Projekt nötig ist. Daraus stammen die Anforderungen in 9.1 und der Aufbau des Imports in 9.4.
+Für das Universitätsarchiv, unseren Kooperationspartner, ist die Anwendung ein Werkzeug für die weitere Erschließung des Bestands. Die Anforderungen in 9.1 decken sich mit dem, was das Archiv braucht: im Korpus recherchieren und neu gescannte Bände selbst einlesen, ohne dass dafür jemand aus dem Projekt nötig ist.
 
-Am 20.10.2026 haben wir die Anwendung im Archiv vorgeführt und dabei den ersten Teil von Band 15 eingelesen (230 Seiten), den das Archiv inzwischen gescannt hat (Kap. 2.5). [offen: Rückmeldung des Archivs: was gefragt wurde, was gut ankam, was danach geändert wurde.]
+Dr. Becker hat die Abschlusspräsentation am 14.10.2026 mit der Vorführung der Anwendung gesehen; dort haben wir den Termin im Archiv vereinbart. Am 20.10.2026 haben wir die Anwendung dort vorgeführt und dabei den ersten Teil von Band 15 eingelesen (230 Seiten), den das Archiv inzwischen gescannt hat (Kap. 2.5).
 
-Für den dauerhaften Betrieb haben wir mit dem Archiv verabredet, dass das Rechenzentrum der Universität die Anwendung als Docker-Container betreibt, wie andere Software des Archivs auch. [offen: Datum der Verabredung.] Dafür sind noch drei Fragen zu klären [offen: prüfen, was davon schon geklärt ist].
+Für den dauerhaften Betrieb soll das Rechenzentrum der Universität die Anwendung als Docker-Container betreiben, wie andere Software des Archivs auch. Mit dem Rechenzentrum sprechen wir noch, mit dem Archiv bleiben wir in Kontakt. Dafür sind drei Punkte zu klären.
 
-Die erste betrifft den Zugriff. Die Anwendung hat keine eigene Anmeldung. Bevor sie im Netz der Universität erreichbar ist, braucht sie einen Zugriffsschutz, etwa ein Passwort über einen vorgeschalteten Webserver; die Einrichtung beschreibt das Handbuch [Installation und Betrieb](../handbuch/installieren-und-betreiben.md#auf-einem-server-des-archivs). Wer Zugang bekommt und wie mit Personennamen umzugehen ist, entscheidet das Archiv (Kap. 10.3).
+Der erste betrifft den Zugriff. Die Anwendung hat keine eigene Anmeldung. Bevor sie im Netz der Universität erreichbar ist, braucht sie einen Zugriffsschutz, etwa ein Passwort über einen vorgeschalteten Webserver; einen noch nicht erprobten Vorschlag für die Einrichtung enthält das Handbuch [Installation und Betrieb](../handbuch/installieren-und-betreiben.md#auf-einem-server-des-archivs). Wer Zugang bekommt und wie mit Personennamen umzugehen ist, entscheidet das Archiv (Kap. 10.3).
 
-Die zweite betrifft Konten und Kosten. Für neue Bände braucht die Anwendung API-Keys für Datalab und OpenRouter, und offen ist, auf wessen Konto sie laufen. Ein Band mit 300 Seiten kostet etwa 6 $ ([Kosten](../handbuch/neue-baende-importieren.md#kosten)).
+Der zweite betrifft Konten und Kosten. Für neue Bände braucht die Anwendung API-Keys für Datalab und OpenRouter. Diese Konten richtet das Archiv selbst ein. Ein Band mit 300 Seiten kostet etwa 6 $ ([Kosten](../handbuch/neue-baende-importieren.md#kosten)).
 
-Die dritte betrifft Sicherung und Betreuung. Welche Dateien zu sichern sind, steht im Handbuch; wer Updates einspielt und bei Fehlern hilft, ist noch festzulegen.
+Der dritte betrifft Sicherung und Betreuung. Welche Dateien zu sichern sind, steht im Handbuch; wer Updates einspielt und bei Fehlern hilft, klären wir im Gespräch mit dem Rechenzentrum.

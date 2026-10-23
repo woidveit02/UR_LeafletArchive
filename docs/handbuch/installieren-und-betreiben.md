@@ -19,7 +19,7 @@ Liegt der Datenordner wie oben neben dem Repository, ist keine `.env` nötig. De
 
 Das Image wird für Intel- und AMD-Prozessoren gebaut (`platform: linux/amd64` in `docker-compose.yml`), weil das Paket `hdbscan` für ARM nicht fertig gebaut vorliegt. Auf einem Mac mit Apple-Chip emuliert Docker Desktop es; das funktioniert, ist aber langsamer.
 
-Nach einem Update des Repositorys: Haben sich `Dockerfile`, `requirements.txt` oder die Dokumentation in `docs/` geändert, mit `docker compose up -d --build` neu bauen. Die Dokumentation wird dabei ins Image gebaut und ist in der Anwendung unter http://localhost:8000/doku/ erreichbar. Zum Löschen der Datenbank siehe [Datensicherung](#datensicherung).
+Nach einem Update des Repositorys: Haben sich `Dockerfile`, `requirements.txt` oder die Dokumentation in `docs/` geändert, mit `docker compose up --build -d` neu bauen. Die Dokumentation wird dabei ins Image gebaut und ist in der Anwendung unter http://localhost:8000/doku/ erreichbar. Zum Löschen der Datenbank siehe [Datensicherung](#datensicherung).
 
 ## Konfiguration
 
@@ -40,7 +40,9 @@ Die Anwendung hat keine eigene Anmeldung. Wer sie im Browser erreicht, kann Meta
 
 ### Auf einem Server des Archivs
 
-Voraussetzungen, von der IT zu klären: ein Server mit Docker, ein Rechnername im Uni-Netz (im Beispiel `flugblaetter.example.uni-regensburg.de`) und ein Zertifikat dafür. Wer die Anwendung nutzen darf, legt das Archiv fest. Nach Auskunft des Universitätsarchivs (Dr. Andreas Becker, Oktober 2026) dürfen Korpus und Metadaten öffentlich zugänglich sein, auch mit den Namen von Personen. Das Passwort schützt deshalb vor allem die Pflege: Wer die Anwendung erreicht, kann auch ändern.
+Diese Anleitung haben wir nicht auf einem Server des Archivs erprobt. Sie beschreibt das übliche Vorgehen mit dem Webserver Caddy. Welche Lösung das Rechenzentrum einsetzt, klärt das Archiv mit ihm (Kap. 9.7 des Berichts).
+
+Voraussetzungen, die das Archiv mit dem Rechenzentrum klärt: ein Server mit Docker, ein Rechnername im Uni-Netz und ein Zertifikat dafür. Im Beispiel heißt der Rechner `flugblaetter.example.uni-regensburg.de`; setzen Sie den tatsächlichen Namen ein. Wer die Anwendung nutzen darf, legt das Archiv fest. Nach Auskunft des Universitätsarchivs (Dr. Andreas Becker, Oktober 2026) dürfen Korpus und Metadaten öffentlich zugänglich sein, auch mit den Namen von Personen. Das Passwort schützt deshalb vor allem die Pflege: Wer die Anwendung erreicht, kann auch ändern.
 
 1. Starten Sie die Anwendung wie in der README im Hauptverzeichnis des Repositorys unter „Schnellstart“ beschrieben. Ändern Sie die Portbindung nicht: Die Anwendung bleibt nur für den Server selbst erreichbar.
 2. Installieren Sie auf dem Server den Webserver [Caddy](https://caddyserver.com/docs/install). Er nimmt die Anfragen von außen an, verlangt ein Passwort und reicht sie an die Anwendung weiter.
@@ -60,9 +62,9 @@ Voraussetzungen, von der IT zu klären: ein Server mit Docker, ein Rechnername i
    Ist der Server aus dem Internet erreichbar, kann die Zeile `tls …` entfallen. Caddy holt das Zertifikat dann selbst.
 5. Laden Sie die Konfiguration von Caddy neu: `systemctl reload caddy`.
 
-Die Anwendung startet nach einem Neustart des Servers von selbst (`restart: unless-stopped`), sobald Docker läuft. Wer sie mit `docker compose stop` anhält, muss sie auch wieder selbst starten.
+Prüfen Sie danach zweierlei: `https://<Rechnername>` muss nach Benutzername und Passwort fragen, und von einem anderen Rechner aus darf `http://<Server>:8000` nicht antworten. Antwortet die Anwendung dort, ist die Portbindung geändert worden (Schritt 1).
 
-Ergebnis: `https://flugblaetter.example.uni-regensburg.de` fragt nach Benutzername und Passwort. Von einem anderen Rechner aus antwortet `http://<Server>:8000` nicht.
+Die Anwendung startet nach einem Neustart des Servers von selbst (`restart: unless-stopped`), sobald Docker läuft. Wer sie mit `docker compose stop` anhält, muss sie auch wieder selbst starten.
 
 Das Passwort schützt die ganze Anwendung, auch das Lesen. Getrennte Rechte für Lesen und Bearbeiten gibt es noch nicht. Setzen Sie zusätzlich bei Datalab und OpenRouter ein Ausgabenlimit für die hinterlegten API-Keys.
 
