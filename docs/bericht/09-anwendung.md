@@ -1,10 +1,10 @@
 # 9 Die Anwendung
 
-Am Ende des Projekts steht eine Webanwendung, mit der sich das Korpus durchsuchen, lesen, auswerten und pflegen lässt und mit der das Archiv neue Bände selbst einlesen kann. Sie läuft lokal in Docker und braucht Internet nur für die Texterkennung und die Metadaten neuer Bände und für die Themen. Dieses Kapitel beschreibt, was sie kann und warum sie so gebaut ist. Wie man sie bedient, steht in den Handbüchern [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md) und [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
+Am Ende des Projekts steht eine Webanwendung, mit der sich das Korpus durchsuchen, lesen, auswerten und pflegen lässt und mit der das Archiv neue Bände selbst einlesen kann. Sie läuft lokal in Docker und braucht Internetzugang nur für die Texterkennung und die Metadaten neuer Bände und für die Themen. Dieses Kapitel beschreibt, was sie kann und warum sie so gebaut wurde. Detailierte Informationen zur Bedienung stehen in den Handbüchern [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md) und [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
 
 ## 9.1 Anforderungen
 
-Aus den Zielen in Kap. 1.2 ergeben sich drei Anforderungen. Das Korpus soll durchsuchbar sein, und zwar über eine Oberfläche, die ohne technische Kenntnisse bedienbar ist. Neue Bände sollen sich einpflegen lassen, ohne dass dafür jemand aus dem Projekt nötig ist; genau danach fragten auch die Betreuenden bei der Vorführung am 07.10. (Kap. 12.4). Hinzu kommt eine vierte Anforderung, die aus den Verfahren selbst folgt: Text, Trennung und Metadaten entstehen größtenteils automatisch und sind nicht fehlerfrei (Kap. 10). Jede Angabe soll sich deshalb am Scan prüfen und von Hand korrigieren lassen, und Korrekturen dürfen nicht verloren gehen, wenn Daten neu erzeugt werden.
+Aus den Zielen in Kap. 1.2 ergeben sich drei Anforderungen. Das Korpus soll durchsuchbar sein, und zwar über eine Oberfläche, die ohne technische Kenntnisse bedienbar ist. Neue Bände sollen sich einpflegen lassen, ohne dass dafür jemand aus dem Projekt nötig ist. Genau danach fragten auch die Betreuenden bei der Vorführung am 07.10. (Kap. 12.4). Hinzu kommt eine vierte Anforderung, die aus den Verfahren selbst folgt: Text, Trennung und Metadaten entstehen größtenteils automatisch und sind nicht fehlerfrei (Kap. 10). Jede Angabe soll sich deshalb am Scan prüfen und von Hand korrigieren lassen, und Korrekturen dürfen nicht verloren gehen, wenn Daten neu erzeugt werden.
 
 ## 9.2 Recherchieren
 
@@ -14,7 +14,7 @@ Einstieg ist die Flugblattliste. Ein Suchfeld durchsucht Titel, Reihe, Herausgeb
 
 *Abbildung: Die Suche nach „berufsverbot“ ergibt 129 Treffer, fast alle aus 1972 und 1973. Die Filter links zählen die Treffer je Jahr, Herausgeber und Thema; jeder Treffer zeigt die Fundstellen im Text.*
 
-Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneinander, Block für Block verbunden: Zeigt man auf einen Absatz, leuchtet er in Text und Scan zugleich auf, und ein Klick in den Scan springt zur Stelle im Text. Darüber stehen die Metadaten. Neben jedem Wert führt „Beleg“ zu der Stelle im Scan, aus der er stammt. Wie diese Belege entstehen, beschreibt Kap. 5; in der Anwendung machen sie jede Angabe in einem Klick überprüfbar. Unsichere Werte sind als solche gekennzeichnet, etwa ein Datum ohne Jahr oder ein automatisch zugeordnetes Thema.
+Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneinander, Block für Block verbunden: Zeigt man auf einen Absatz, leuchtet er in Text und Scan zugleich auf, und ein Klick in den Scan springt zur Stelle im Text. Darüber stehen die Metadaten. Neben jedem Wert führt „Beleg“ zu der Stelle im Scan, aus der er stammt. Wie diese Belege entstehen, beschreibt Kap. 5. In der Anwendung machen sie jede Angabe in einem Klick überprüfbar. Unsichere Werte sind als solche gekennzeichnet, etwa ein Datum ohne Jahr oder ein automatisch zugeordnetes Thema.
 
 ![Leseansicht von Flugblatt 850](../abbildungen/app_leseansicht.png)
 
@@ -52,7 +52,7 @@ Den Import haben wir am 20.10. im Archiv mit einem Testimport von 230 Seiten vor
 
 ## 9.5 Architektur und Datenmodell
 
-Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite; die Grundstruktur stammt aus dem ASE-Projekt im Wintersemester 2025/26. Die Seiten werden auf dem Server erzeugt; JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwickeln](../handbuch/weiterentwickeln.md).
+Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite. Die Grundstruktur des  stammt aus dem ASE-Projekt im Wintersemester 2025/26, was auch der Grund für die Entscheidung für die vorher genannten Systeme. Die Seiten werden auf dem Server erzeugt. JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwickeln](../handbuch/weiterentwickeln.md).
 
 ## 9.6 Gestaltung
 

@@ -1,10 +1,10 @@
 # 8 Das Korpus in Zahlen
 
-Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Sie stammen aus den [Kennzahlen](../kennzahlen.md) (Stand 17.10.2026).
+Das Korpus umfasst 1547 Flugblätter in 1927 Exemplaren auf 4464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Sie stammen aus den [Kennzahlen](../kennzahlen.md) (Stand 17.10.2026).
 
 ## 8.1 Zähleinheiten und Zählregeln
 
-Gezählt wird auf drei Ebenen: Seiten, Exemplare und Flugblätter. Ein Flugblatt fasst seine Exemplare zusammen und wird durch sein Hauptexemplar vertreten (Kap. 6); die Begriffe erklärt das [Glossar](../glossar.md).
+Gezählt wird auf drei Ebenen: Seiten, Exemplare und Flugblätter. Ein Flugblatt fasst seine Exemplare zusammen und wird durch sein Hauptexemplar vertreten (Kap. 6). Die Begriffe erklärt das [Glossar](../glossar.md).
 
 Jedes Flugblatt zählt einmal. Nennt es mehrere Herausgeber, zählt es bei jedem, die Summe über die Herausgeber ist deshalb größer als die Zahl der Flugblätter. In den Verteilungen nach Jahr zählen Flugblätter ohne Datum im Jahr ihres Bandes.
 
@@ -36,6 +36,6 @@ Drei Viertel sind Flugblätter im engeren Sinn (1 139, 74 %), dazu kommen 187 Ei
 
 ## 8.3 Einordnung
 
-Flugblätter sind Mittel der Agitation; ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Die Zahlen zeigen deshalb, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
+Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Die Zahlen zeigen deshalb, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
 
 Die Häufung 1972 und 1973 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).

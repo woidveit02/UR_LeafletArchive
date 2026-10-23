@@ -20,7 +20,7 @@ Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab, bi
 
 Manche Flugblätter, die im initialen Topic Modelling Lauf als Outlier klassifiziert wurden und daher kein Thema erhalten hatten, bekommen nachträglich ein Thema zugeordnet, basierend auf der Ähnlichkeit. Diese Zuordnung wurde aber nicht getestet, und dient nur der Vollständigkeit. Diese nachträglichen Zuordnungen wurden auch entsprechend markiert.
 
-## 7.4 Qualität TODO: Mit Aktuellem Lauf beschreiben
+## 7.4 Qualität
 
 Die Qualität der Zuordnung wurde nicht gemessen. 1078 Flugblätter sind sicher zugeordnet, 408 unsicher und 61 haben kein Thema. Die größten Themen sind „Streiks und Vollversammlungen gegen das Hochschulgesetz“ (136 Flugblätter), „Debatte um Hochschulgesetz und Hochschulreform“ (71) und „Hochschulwahlen: Kandidaten, Listen und Ergebnisse“ (47).
 
@@ -32,7 +32,7 @@ Fehlzuordnungen kommen vor. Das Flugblatt zum Streik gegen die Notstandsgesetze 
 
 ## 7.5 Manuelle Prüfung
 
-Von Hand werden die Titel der Themen geprüft und bei Bedarf umbenannt. Das geht in der Anwendung unter Verwaltung › Themen; die Titel stehen in `data/topics.json`.
+Von Hand werden die Titel der Themen geprüft und bei Bedarf umbenannt. Das geht in der Anwendung unter Verwaltung › Themen. Die Titel stehen in `data/topics.json`.
 
 ## 7.6 Kosten
 

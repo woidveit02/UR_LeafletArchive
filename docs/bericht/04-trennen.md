@@ -70,7 +70,7 @@ Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffe
 
 ## 4.6 Manuelle Prüfung
 
-TODO: Grundlegende Beschreibung Trennsystem (Details sollen eher ins Handbuch)
+Eine Beschreibung des Trennens in der Anwendung findet sich im Handbuch.
 
 ## 4.7 Ergebnis und Kosten
 
