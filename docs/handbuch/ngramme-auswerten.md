@@ -13,7 +13,7 @@ Vor dem Befehl stehen zwei Optionen für alle Befehle: `--ordner PFAD` für eine
 
 Die Ausgaben unten stammen aus einem Lauf über die 14 Bände vom 19.10.2026.
 
-## Was mit dem Text passiert
+## Vorverarbeitung
 
 Vor jeder Zählung bereitet das Skript den Text in fünf Schritten auf:
 
@@ -84,7 +84,7 @@ pro 10.000 Token              1967    1968    1969    1970    1971    1972    19
 
 `notstand` gibt es fast nur 1968, `berufsverbot` erst ab 1972 (Radikalenerlass, Januar 1972), `mitbestimmung` steigt stetig. Gezählt werden Token, nicht Blätter: Ein langes Papier, das ein Wort zwanzigmal enthält, erzeugt einen Ausschlag. Ob ein Wert auf vielen Seiten beruht, zeigt `collocates`; nach Flugblättern zählt der Export der Anwendung.
 
-## `keyness`: was für ein Jahr typisch ist
+## `keyness`: typische Wörter je Jahr
 
 Vergleicht jedes Jahr mit allen übrigen (Dunnings G²). Die Suchwörter muss man dafür nicht kennen. In Klammern steht, wie oft das Wort in dem Jahr vorkommt.
 
@@ -106,7 +106,7 @@ Die Liste liest sich als Chronik: 1968 Rektor Mayer, 1971 der Streit um marxisti
 
 Optionen: `-n` (Standard 1), `--min-count` (Mindestzahl im Jahr, Standard 25), `--top` (Standard 10).
 
-## `collocates`: Wörter in der Nähe
+## `collocates`: Kollokationen
 
 Welche Wörter stehen in einem Fenster von fünf Token um einen Ausdruck? Sortiert nach logDice (über 9 sehr stark, 7 bis 9 stark, unter 5 kaum bemerkenswert). Die erste Zeile zeigt, ob die Treffer über viele Seiten verteilt sind oder sich auf wenige lange Papiere bündeln; ab 50 % warnt das Skript.
 

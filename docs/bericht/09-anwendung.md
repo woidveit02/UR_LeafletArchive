@@ -1,68 +1,63 @@
 # 9 Die Anwendung
 
-Die Webanwendung dient zum Recherchieren im Bestand und zu seiner Pflege. Sie läuft lokal in Docker. Neue Bände kommen in sechs Schritten hinein, von den Scans bis zur Freigabe; Themen lassen sich danach zuordnen.
+Am Ende des Projekts steht eine Webanwendung, mit der sich das Korpus durchsuchen, lesen, auswerten und pflegen lässt und mit der das Archiv neue Bände selbst einlesen kann. Sie läuft lokal in Docker und braucht Internet nur für die Texterkennung und die Metadaten neuer Bände und für die Themen. Dieses Kapitel beschreibt, was sie kann und warum sie so gebaut ist. Wie man sie bedient, steht in den Handbüchern [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md) und [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
 
 ## 9.1 Anforderungen
 
-- Bedienbar ohne technische Kenntnisse.
-- Neue Bände selbst einlesen, Angaben korrigieren, Exemplare prüfen.
+Aus den Zielen in Kap. 1.2 ergeben sich drei Anforderungen. Das Korpus soll durchsuchbar sein, und zwar über eine Oberfläche, die ohne technische Kenntnisse bedienbar ist. Neue Bände sollen sich einpflegen lassen, ohne dass dafür jemand aus dem Projekt nötig ist; genau danach fragten auch die Betreuenden bei der Vorführung am 07.10. (Kap. 12.4). Hinzu kommt eine vierte Anforderung, die aus den Verfahren selbst folgt: Text, Trennung und Metadaten entstehen größtenteils automatisch und sind nicht fehlerfrei (Kap. 10). Jede Angabe soll sich deshalb am Scan prüfen und von Hand korrigieren lassen, und Korrekturen dürfen nicht verloren gehen, wenn Daten neu erzeugt werden.
 
 ## 9.2 Recherchieren
 
+Einstieg ist die Flugblattliste. Ein Suchfeld durchsucht Titel, Reihe, Herausgeber, Unterzeichnende und den erkannten Text. Die Suche findet auch Wortteile und alte Schreibweisen (daß und dass), und über weitere Suchbedingungen lassen sich Felder mit UND, ODER und NICHT verknüpfen. Links stehen Filter nach Jahr, Herausgeber, Thema und Textsorte. Die Zahlen an den Filtern beziehen sich immer auf die aktuelle Trefferliste, sodass man sieht, wie sich ein Begriff über Jahre und Gruppen verteilt, bevor man ein einziges Flugblatt öffnet.
+
+![Flugblattliste mit der Suche nach „berufsverbot“](../abbildungen/nutzen_suche.png)
+
+*Abbildung: Die Suche nach „berufsverbot“ ergibt 129 Treffer, fast alle aus 1972 und 1973. Die Filter links zählen die Treffer je Jahr, Herausgeber und Thema; jeder Treffer zeigt die Fundstellen im Text.*
+
+Die Leseansicht eines Flugblatts zeigt den Scan und den erkannten Text nebeneinander, Block für Block verbunden: Zeigt man auf einen Absatz, leuchtet er in Text und Scan zugleich auf, und ein Klick in den Scan springt zur Stelle im Text. Darüber stehen die Metadaten. Neben jedem Wert führt „Beleg“ zu der Stelle im Scan, aus der er stammt. Wie diese Belege entstehen, beschreibt Kap. 5; in der Anwendung machen sie jede Angabe in einem Klick überprüfbar. Unsichere Werte sind als solche gekennzeichnet, etwa ein Datum ohne Jahr oder ein automatisch zugeordnetes Thema.
+
 ![Leseansicht von Flugblatt 850](../abbildungen/app_leseansicht.png)
 
-*Abbildung: Leseansicht von Flugblatt 850. Oben die Angaben mit Links zum Beleg, darunter der erkannte Text neben dem Scan. Rechts stehen Modell und Datum von Texterkennung und Metadaten.*
+*Abbildung: Leseansicht von Flugblatt 850. Oben die Metadaten mit Links zum Beleg, darunter der erkannte Text neben dem Scan. Rechts stehen Modell und Datum von Texterkennung und Metadaten.*
 
-- Leseansicht mit Scan, erkanntem Text und Metadaten samt Belegen; Tastenkürzel zum Blättern.
-- Volltextsuche über Titel, Reihe, Herausgeber und Text (SQLite FTS5); findet Wortteile und Schreibvarianten wie daß/dass; Feldsuche mit UND/ODER/NICHT.
-- Filter nach Jahr, Herausgeber, Thema und Textsorte.
-- Trends: Anteil der Flugblätter je Jahr oder Semester für Suchbegriffe.
-- Themen und Seiten je Herausgeber.
+Für Fragen über das ganze Korpus gibt es drei weitere Zugänge. Die Seiten der Herausgeber und Bände zeigen, wann eine Gruppe aktiv war und was ein Band enthält. Die Themenkarte ordnet die Flugblätter nach Ähnlichkeit ihrer Texte (Kap. 7). Die Trends zeigen für bis zu vier Begriffe, welcher Anteil der Flugblätter eines Jahres oder Semesters sie enthält. Gezählt werden Flugblätter, nicht Wörter, und Mehrfachexemplare nur einmal, damit ein langes Papier oder ein oft gesammeltes Blatt das Bild nicht verzerrt. Unter jedem Jahr steht die Zahl der Flugblätter, auf die sich der Anteil bezieht.
+
+![Trends für Notstand, Berufsverbot und Numerus](../abbildungen/nutzen_trends.png)
+
+*Abbildung: Trends für „Notstand“, „Berufsverbot“ und „Numerus“. Die Notstandsgesetze prägen 1967/68, die Berufsverbote 1972 und 1973. Die dünn belegten ersten Jahre sind zusammengefasst.*
 
 ## 9.3 Pflegen
 
-- Metadaten korrigieren, Mehrfachexemplare prüfen.
-- Herausgeber zuordnen, über alle freigegebenen Bände, auch für Flugblätter ohne erkannten Herausgeber (Verwaltung › Herausgeber zuordnen).
-- Korrekturen und Exemplar-Prüfungen, die nach einer neuen Trennung nicht mehr passen, unter Verwaltung › Korrekturen.
-- Entwürfe löschen und Freigaben zurücknehmen (Verwaltung).
-- Export als ZIP und CSV.
-- Anleitung: [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md).
+Fehler lassen sich dort beheben, wo man sie findet. „Metadaten korrigieren“ auf der Seite eines Flugblatts öffnet ein Formular, in dem zu jedem Wert auch der Beleg neu gewählt werden kann, indem man Blöcke im Scan anklickt. Korrigierte Felder sind danach als „von Hand korrigiert“ gekennzeichnet, der automatisch erkannte Wert lässt sich wiederherstellen.
+
+Mehrfachexemplare prüft man in einer Ansicht, die die Exemplare einer Gruppe nebeneinander zeigt (Kap. 6). Dort wählt man das Hauptexemplar, nimmt Blätter heraus, die nicht dazugehören, und korrigiert die gemeinsamen Metadaten einmal für alle. Herausgeber, die das Register noch nicht kennt, ordnet man unter Verwaltung › Herausgeber zuordnen einer Organisation zu oder legt sie neu an. Die Anwendung merkt sich die Schreibweise und erkennt sie in späteren Bänden.
+
+![Drei Exemplare eines Flugblatts aus Band 006](../abbildungen/nutzen_exemplare.png)
+
+*Abbildung: Drei Exemplare desselben Flugblatts aus Band 006. Abweichende Metadaten sind markiert, hier der Eingangsstempel, den nur das Hauptexemplar trägt.*
+
+Damit keine Handarbeit verloren geht, speichert die Anwendung Korrekturen und Prüfentscheidungen nicht nur in der Datenbank, sondern zusätzlich in Dateien, an die sie nur anhängt. Beim Neuaufbau der Datenbank werden sie wieder angewendet. Sie hängen an den Seiten eines Flugblatts: Wird ein Band neu getrennt und passt eine Korrektur nicht mehr, erscheint sie unter Verwaltung › Korrekturen, statt stillschweigend zu verschwinden. Für Auswertungen außerhalb lässt sich der Bestand als ZIP mit Volltexten und Tabellen exportieren.
 
 ## 9.4 Import neuer Bände
 
-- Sechs Schritte: Band wählen, Scans hochladen, Text erkennen, Flugblätter trennen, Metadaten erzeugen, Prüfen & freigeben. Danach optional „Themen zuordnen“, auch nach der Freigabe.
-- Themen neu berechnen mit Prüfseite; Titel lassen sich unter Verwaltung › Themen ändern (Kap. 7).
-- Die API-Keys für Datalab und OpenRouter lassen sich unter Verwaltung › API-Keys eintragen.
-- Bis zur Freigabe ist der Band ein Entwurf und in Liste, Suche und Trends unsichtbar.
-- Kostenschätzung vor der Texterkennung und den Metadaten; unterbrochene Schritte lassen sich fortsetzen.
-- Anleitung: [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
+Ein neuer Band kommt in sechs Schritten in die Anwendung: Band wählen, Scans hochladen, Text erkennen, Flugblätter trennen, Metadaten erzeugen, prüfen und freigeben. Die Schritte führen nacheinander durch die Verfahren aus Kap. 3 bis 6. Danach lassen sich die neuen Flugblätter den bestehenden Themen zuordnen.
+
+Drei Entscheidungen machen den Import für Anwenderinnen und Anwender ohne technische Kenntnisse handhabbar. Erstens ist ein Band bis zur Freigabe ein Entwurf: Er fehlt in Liste, Suche und Trends, sodass Zwischenstände den Bestand nicht verfälschen. Zweitens speichert jeder Schritt sein Ergebnis; ein abgebrochener Import lässt sich später fortsetzen, und vor den kostenpflichtigen Schritten nennt die Anwendung den geschätzten Preis. Drittens bündelt Schritt 6 alles, was ein Mensch ansehen sollte, in drei Aufgaben: Mehrfachexemplare, unbekannte Herausgeber und Hinweise, wo die Metadaten nicht zum erkannten Text passen. Jede Aufgabe führt direkt zu den betroffenen Flugblättern.
+
+![Schritt 6 des Imports](../abbildungen/import_pruefen.png)
+
+*Abbildung: Schritt 6 beim Testimport. Jede der drei Aufgaben nennt die Zahl offener Fälle und führt zu ihnen; freigeben lässt sich der Band auch, wenn noch etwas offen ist.*
+
+Den Import haben wir am 20.10. im Archiv mit einem Testimport von 230 Seiten vorgeführt. Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung und Metadaten brauchen nur einige Minuten Wartezeit.
 
 ## 9.5 Architektur und Datenmodell
 
-- FastAPI, Jinja2, SQLAlchemy, SQLite, Docker. Grundstruktur aus dem ASE-Projekt im Wintersemester 2025/26.
-- Tabellen für Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu der Suchindex.
-- Korrekturen und Exemplar-Entscheidungen liegen als JSONL-Dateien in `data/`, nur angehängt.
-- Export (Verwaltung, `src/backend/app/export.py`): ZIP mit `flugblaetter.jsonl` (alle Angaben und Volltext), `flugblaetter.csv` (ohne Volltext), `texte/<id>.txt`, `flugblatt_herausgeber.csv`, `herausgeber.csv`, `baende.csv`, `themen.csv` und auf Wunsch `seiten.jsonl` (Textblöcke mit Lage). Optionen: nur Hauptexemplare, ohne Unterzeichnende, ohne Seiten. Die `id` (`0118_0003_S127-128`) bleibt über Exporte gleich, solange die Seitengrenzen bleiben. Die Felder beschreibt die `README.md` im ZIP. Dazu lässt sich jede Liste der Anwendung als CSV laden.
+Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite; die Grundstruktur stammt aus dem ASE-Projekt im Wintersemester 2025/26. Die Seiten werden auf dem Server erzeugt; JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwickeln](../handbuch/weiterentwickeln.md).
 
 ## 9.6 Gestaltung
 
-- Nach den Design-Richtlinien: wenig Farbe, der Normalfall bekommt keine Markierung, Zahlen stimmen mit den Listen dahinter überein.
+Die Oberfläche folgt wenigen Regeln: wenig Farbe, Markierungen nur für das, was Aufmerksamkeit braucht, und Zahlen, die mit den Listen dahinter übereinstimmen.
 
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
-- N-Gramm-Werkzeug (`scripts/ngrams.py`: Häufigkeiten, Trends, Keyness, Kollokationen, KWIC), Anleitung: [N-Gramme auswerten](../handbuch/ngramme-auswerten.md).
-- `scripts/tiff_to_pdf.py` fügt TIFF-Scans zu einem PDF zusammen, `scripts/learn_boundary_weights.py` lernt die Gewichte der Textmerkmale des Trennvorschlags neu (Kap. 4.8). Übersicht in `scripts/README.md`.
-- Notebook `vertiefung/forschungsfragen.ipynb`: zeigt, wie sich der Export für Auswertungen nutzen lässt. Die Fragen sind Beispiele, keine Ergebnisse des Projekts.
-
-Beispielhafte Fragen im Notebook:
-
-1. Wer spricht, und wie stark prägen die Sonderbände das Bild?
-2. Welche Gruppen sind wann aktiv?
-3. Wer gibt mit wem gemeinsam heraus?
-4. Wer schreibt über wen?
-5. Welche Themen besetzen die Gruppen?
-6. Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen? [@monroe2008]
-7. Wie verläuft der Konflikt um das Bayerische Hochschulgesetz?
-8. Wann im Jahr wird mobilisiert?
-9. Wie international ist der Protest?
-10. Wer unterschreibt, und für wen?
+Für Auswertungen, die über die Anwendung hinausgehen, gibt es zwei Werkzeuge. `scripts/ngrams.py` berechnet auf den erkannten Texten Häufigkeiten, Trends, typische Wörter je Jahr, Kollokationen und Belegstellen ([N-Gramme auswerten](../handbuch/ngramme-auswerten.md)). Das Notebook `scripts/forschungsfragen.ipynb` zeigt am Export, wie sich Fragen wie „Welche Gruppen sind wann aktiv?“, „Wer gibt mit wem gemeinsam heraus?“ oder „Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen?“ [@monroe2008] beantworten lassen. Die zehn Fragen im Notebook sind Beispiele, keine Ergebnisse des Projekts. Weitere Skripte, etwa zum Zusammenfügen von TIFF-Scans und zum Neulernen der Gewichte des Trennvorschlags, beschreibt `scripts/README.md`.

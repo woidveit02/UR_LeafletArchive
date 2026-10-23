@@ -1,4 +1,4 @@
-# 2 Der Bestand / Das Korpus
+# 2 Der Bestand
 
 Im Treffen am 20.05.2026 wurde uns von Herrn Becker zudem noch das Universitätsarchiv gezeigt. Hier konnten wir den aktuellen Stand der Flugblattsammlung begutachten. Der Bestand, der die Grundlage für das Korpus des Projekts ist, umfasst 4464 Seiten aus 14 Bänden der Jahre 1967–1973. Jedoch war das nicht von Anfang an klar und sollte später erst festgelegt werden.
 

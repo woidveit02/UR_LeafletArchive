@@ -30,11 +30,11 @@ Alle Einstellungen stehen in `.env`. Für den Normalfall braucht es die Datei ni
 | `LEAFLET_PDF_HOST_DIR` | nein | Pfad zum Datenordner, darin je Band ein Ordner wie „Nr. 002 (1968)“. Ohne Eintrag gilt `UR_LeafletArchive_data` neben dem Repository. Unter Windows mit Schrägstrichen: `C:/Users/Name/UR_LeafletArchive_data`. Stimmt der Pfad nicht, startet die Anwendung ohne Scans und Text und zeigt oben auf jeder Seite einen Hinweis. |
 | `DATALAB_API_KEY` | nur für den Import | Texterkennung (Schritt 3) |
 | `OPENROUTER_API_KEY` | nur für den Import | Metadaten (Schritt 5), Themen |
-| `LEAFLET_BIND` | nein | `0.0.0.0` macht die Anwendung im ganzen Netz erreichbar, siehe [Kurz im lokalen Netz zeigen](#kurz-im-lokalen-netz-zeigen) |
+| `LEAFLET_BIND` | nein | `0.0.0.0` macht die Anwendung im ganzen Netz erreichbar, siehe [Im lokalen Netz](#im-lokalen-netz) |
 
 Die API-Keys lassen sich auch unter Verwaltung › API-Keys eintragen, ändern und entfernen. Ein API-Key in `.env` hat Vorrang vor einem dort gespeicherten. Fehlt ein API-Key, läuft alles außer dem jeweiligen Importschritt; dessen Startknopf bleibt grau.
 
-## Zugriff und Betrieb auf einem Server
+## Betrieb auf einem Server
 
 Die Anwendung hat keine eigene Anmeldung. Wer sie im Browser erreicht, kann Metadaten ändern, Bände löschen, kostenpflichtige OCR- und Metadatenläufe starten und den vollständigen Export mit Personennamen laden. Deshalb ist sie standardmäßig nur auf dem Rechner selbst erreichbar (`docker-compose.yml` bindet den Port an `127.0.0.1`).
 
@@ -66,7 +66,7 @@ Ergebnis: `https://flugblaetter.example.uni-regensburg.de` fragt nach Benutzerna
 
 Das Passwort schützt die ganze Anwendung, auch das Lesen. Getrennte Rechte für Lesen und Bearbeiten gibt es noch nicht. Setzen Sie zusätzlich bei Datalab und OpenRouter ein Ausgabenlimit für die hinterlegten API-Keys.
 
-### Kurz im lokalen Netz zeigen
+### Im lokalen Netz
 
 Für eine Vorführung im eigenen Netz tragen Sie in `.env` die Zeile `LEAFLET_BIND=0.0.0.0` ein und starten mit `docker compose up -d`. Danach ist die Anwendung für alle im Netz ohne Passwort erreichbar. Löschen Sie die Zeile nach der Vorführung und starten Sie erneut mit `docker compose up -d`.
 

@@ -1,38 +1,41 @@
 # 8 Das Korpus in Zahlen
 
-Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Alle Zahlen stammen aus `kennzahlen.md` (Stand 17.10.2026).
+Das Korpus umfasst 1 547 Flugblätter in 1 927 Exemplaren auf 4 464 Seiten. Die Zahlen beschreiben den überlieferten und erschlossenen Bestand, nicht die damalige Publikationstätigkeit. Sie stammen aus den [Kennzahlen](../kennzahlen.md) (Stand 17.10.2026).
 
-## 8.1 Drei Ebenen
+## 8.1 Zähleinheiten und Zählregeln
 
-- Seite (4 464), Exemplar (1 927), Flugblatt (1 547, vertreten durch sein Hauptexemplar).
-- Begriffe: „Flugblatt“ meint wie im Namen der Sammlung jedes Stück, auch Einladungen und Broschüren. „Exemplar“ ist ein physisches Stück; weitere Exemplare heißen im Archiv „Doppelstücke“. Als Textsorte meint „Flugblatt“ enger das einzelne Blatt mit Aufruf oder Stellungnahme.
-- Neuschnitt ohne neue Texterkennung möglich, weil Seiten und Flugblätter getrennt gespeichert sind.
+Gezählt wird auf drei Ebenen: Seiten, Exemplare und Flugblätter. Ein Flugblatt fasst seine Exemplare zusammen und wird durch sein Hauptexemplar vertreten (Kap. 6); die Begriffe erklärt das [Glossar](../glossar.md).
 
-## 8.2 Zählregeln
+Jedes Flugblatt zählt einmal. Nennt es mehrere Herausgeber, zählt es bei jedem, die Summe über die Herausgeber ist deshalb größer als die Zahl der Flugblätter. In den Verteilungen nach Jahr zählen Flugblätter ohne Datum im Jahr ihres Bandes.
 
-- Jedes Flugblatt zählt einmal, über sein Hauptexemplar.
-- Ein Flugblatt mit mehreren Herausgebern zählt bei jedem; die Summe ist dann größer als die Zahl der Flugblätter.
-- Flugblätter ohne Datum auf dem Blatt zählen im Jahr ihres Bandes.
+## 8.2 Verteilungen
 
-## 8.3 Verteilungen
-
-- Jahr: Nach zugeordnetem Jahr (Datum auf dem Blatt, sonst Jahr des Bandes) stellen 1972 und 1973 940 der 1 547 Flugblätter (61 %); nach dem Jahr des Bandes sind es 941 (`kennzahlen.md`). 46 % tragen ein Datum auf dem Blatt.
-- Herausgeber: 169 im Register mit mindestens einem Flugblatt. Die größten: AStA (318), RCDS (133), Aktionsgemeinschaft liberaler Studenten (67), Demokratische Mitte (66), MSB Spartakus (60).
-- Textsorten: Flugblatt im engeren Sinn 1 139 (74 %), Einladung 187 (12 %), Broschüre 83, Zeitschrift 42, offener Brief 41, Protokoll 21, unklar 34.
-- Umfang: Median 2 Seiten, Mittel 2,3, längstes Flugblatt 42 Seiten; 738 Flugblätter haben eine Seite.
+Mehr als die Hälfte des Korpus stammt aus den letzten beiden Jahren: 1972 und 1973 stellen 940 der 1 547 Flugblätter (61 %). Nur 46 % tragen ein Datum auf dem Blatt, für die übrigen gilt das Jahr ihres Bandes.
 
 ![Flugblätter nach zugeordnetem Jahr](../abbildungen/1_verteilung_jahr.png)
 
+*Abbildung: Flugblätter je Jahr, nach dem Datum auf dem Blatt oder, wo es fehlt, nach dem Jahr des Bandes.*
+
+Im Register stehen 169 Herausgeber mit mindestens einem Flugblatt. Am häufigsten treten der AStA (318 Flugblätter), der RCDS (133), die Aktionsgemeinschaft liberaler Studenten (67), die Demokratische Mitte (66) und der MSB Spartakus (60) auf. Bei 241 Flugblättern wurde kein Herausgeber erkannt.
+
 ![Flugblätter nach Herausgeber](../abbildungen/4_herausgeber.png)
+
+*Abbildung: Die Herausgeber mit den meisten Flugblättern.*
+
+Drei Viertel sind Flugblätter im engeren Sinn (1 139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Stücke sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
 
 ![Flugblätter nach Textsorte](../abbildungen/5_textsorte.png)
 
+*Abbildung: Flugblätter nach Textsorte.*
+
 ![Flugblätter nach Seitenzahl](../abbildungen/2_seitenlaenge.png)
+
+*Abbildung: Flugblätter nach Zahl der Seiten.*
 
 <!-- Abbildungen aus scripts/corpus_figures.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
 
-## 8.4 Lesart
+## 8.3 Einordnung
 
-- Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Zahlen zu Themen und Herausgebern zeigen, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
-- Die Häufung 1972/73 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Zugleich zeigt sie, was überliefert ist; aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen.
-- Für 1973 fehlt Einheit 15 (Kap. 2.5).
+Flugblätter sind Mittel der Agitation; ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Die Zahlen zeigen deshalb, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
+
+Die Häufung 1972 und 1973 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).

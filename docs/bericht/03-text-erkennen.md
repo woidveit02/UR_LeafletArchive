@@ -32,7 +32,7 @@ Um die Qualität beziehungsweise Performance der OCR-Systeme zu evaluieren wurde
 
 Gleich viele Seiten je Jahrgang bedeuten eine unterschiedliche Abdeckung. Aus 1969 stammen 20 von 317 Seiten (6,3 %), aus 1973 20 von 1 518 (1,3 %), die frühen und kleineren Jahrgänge sind also gegenüber ihrem Anteil am Bestand übergewichtet. Für den Vergleich der Systeme ist das unproblematisch, weil jeder Jahrgang mit genug Seiten vertreten ist. Eine Fehlerrate für den Gesamtbestand müsste dagegen nach Seitenzahl je Jahrgang gewichtet werden.
 
-Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogenen Seiten nicht. Wir haben die Herkunft jeder Testseite deshalb nachträglich rekonstruiert, indem wir ihren OCR-Text mit allen Bandseiten verglichen haben (Übereinstimmung der Wort-Trigramme, `vertiefung/testkorpus-seiten.csv`). 94 Seiten ließen sich so eindeutig zuordnen. Vier weitere haben wir über einen Bildvergleich bestimmt: zwei Seiten mit wenig Text (ein Formular und eine handgezeichnete Karte) und zwei Blätter, von denen ein weiteres Exemplar in einem Band eines anderen Jahrgangs liegt, das der Textvergleich zuerst gefunden hatte. Zwei Seiten sind leer, eine davon eine Rückseite; ihre Herkunft lässt sich nicht bestimmen.
+Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogenen Seiten nicht. Wir haben die Herkunft jeder Testseite deshalb nachträglich rekonstruiert, indem wir ihren OCR-Text mit allen Bandseiten verglichen haben (Übereinstimmung der Wort-Trigramme, `pipelines/03_eval/testkorpus-seiten.csv` im Arbeits-Repository, Kap. 12.6). 94 Seiten ließen sich so eindeutig zuordnen. Vier weitere haben wir über einen Bildvergleich bestimmt: zwei Seiten mit wenig Text (ein Formular und eine handgezeichnete Karte) und zwei Blätter, von denen ein weiteres Exemplar in einem Band eines anderen Jahrgangs liegt, das der Textvergleich zuerst gefunden hatte. Zwei Seiten sind leer, eine davon eine Rückseite; ihre Herkunft lässt sich nicht bestimmen.
 
 ## 3.4 Kandidaten und Merkmale
 
@@ -58,27 +58,7 @@ Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Sk
      glm_convert.py (Ausgabe jsonGLM vom 17.08.2026) erzeugt über PP-DocLayout-V3 Blöcke mit Lage; falls das
      erwähnt werden soll, als Nachtrag kennzeichnen. -->
 
-Die folgende Übersicht fasst Angaben der Entwickler und veröffentlichte Benchmark-Ergebnisse zusammen (Stand 17.08.2026, vollständig mit allen Quellen in `vertiefung/ocr-modelle-uebersicht.md`). Wenn nicht anders vermerkt, stammen die Werte von den Entwicklern selbst.
-
-| System | Entwickler | Größe und Typ | Lizenz | OmniDocBench | olmOCR-Bench |
-|---|---|---|---|---|---|
-| [GLM-OCR](https://huggingface.co/zai-org/GLM-OCR) [@glmocr] | Zhipu AI / Z.ai | 0,9 B, spezialisiert | MIT | 94,62 (v1.5) | 75,2 ± 1,1 |
-| [PaddleOCR-VL-1.5](https://github.com/PaddlePaddle/PaddleOCR) [@paddleocrvl15] | Baidu / PaddlePaddle | 0,9 B, spezialisiert | Apache-2.0 | 94,50 (v1.5) | 78,5 ± 1,0 |
-| [MinerU2.5-Pro](https://huggingface.co/opendatalab/MinerU2.5-Pro-2604-1.2B) [@mineru25pro] | OpenDataLab / Shanghai AI Lab | 1,2 B, spezialisiert | AGPL-3.0 | 95,69 (v1.6) | 75,2 ± 1,1 (MinerU2.5) |
-| [Qwen3-VL 235B-A22B](https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Instruct) [@qwen3vl] | Alibaba / Qwen | 235 B MoE (22 B aktiv), allgemein | Apache-2.0 | 89,15 (v1.5, Fremdmessung) | ca. 76 (Fremdmessungen) |
-| [Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5) [@claudesonnet5] | Anthropic | proprietär, allgemein | proprietär | kein Wert | kein Wert |
-| [Gemini 3.5 Flash](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash) | Google | proprietär, allgemein | proprietär | kein Wert | kein Wert |
-| [Chandra OCR 2](https://huggingface.co/datalab-to/chandra-ocr-2), offene Gewichte [@chandra2] | Datalab | 4 B, spezialisiert | Code Apache-2.0, Gewichte modifizierte OpenRAIL-M | nicht berichtet | 85,8 ± 0,8 |
-| Datalab API | Datalab | proprietäre Pipeline um Chandra 2 | proprietär | nicht berichtet | 86,7 ± 0,8 |
-| [Mistral OCR 4](https://mistral.ai/news/ocr-4/) [@mistralocr4] | Mistral AI | proprietär, spezialisiert | proprietär | 93,07 | 85,20 |
-
-<!-- OFFEN: Die Zeilen PaddleOCR-VL-1.5 und MinerU2.5-Pro beschreiben neuere Modelle, nicht die getesteten Versionen (klassische PP-OCR-Pipeline, MinerU 3.4.2 mit Backend pipeline). Kennzeichnen oder ersetzen, siehe arbeitsdokumente/offene-punkte.md. -->
-
-Die Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt; Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
-
-<!-- Gemini 3.5 Flash (Mai 2026): Google veröffentlicht keine Werte für OmniDocBench oder olmOCR-Bench.
-     Roboflow führt eigene Vision-Evals (OCR gesamt 76,7 %, Stand 08.10.2026), die mit den Benchmarks oben
-     nicht vergleichbar sind und deshalb nicht in der Tabelle stehen. -->
+Die Entwickler veröffentlichen eigene Benchmark-Ergebnisse, aber nicht für alle Kandidaten und nicht immer für die getesteten Fassungen [@glmocr; @paddleocrvl15; @mineru25pro; @qwen3vl; @claudesonnet5; @chandra2; @mistralocr4]. Eine Übersicht mit Größe, Lizenz, Benchmark-Werten und allen Quellen liegt im Arbeits-Repository unter `pipelines/03_eval/ocr-modelle-uebersicht.md` (Stand 17.08.2026). Diese Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt; Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
 
 ## 3.5 Vorauswahl
 
@@ -104,7 +84,7 @@ Infolge dieser ganzen Faktoren fiel die vorläufige Entscheidung in Abstimmung i
 
 ## 3.7 Goldstandard
 
-Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstellt. Dazu wurde die Datalab-Ausgabe des Testkorpus im Korrekturmodus des OCR-Viewers, eines eigenen Werkzeugs für den Vergleich der Systeme, Block für Block gegen den Scan geprüft und berichtigt. Eine Seite galt als fertig, wenn jeder Block als geprüft oder unleserlich markiert und Layout und Lesereihenfolge bewertet waren. Die Fehlerraten wurden mit dinglehopper berechnet. Die Seiten 1 bis 5 bearbeiteten alle drei Personen, um die Übereinstimmung zwischen ihnen zu prüfen. Insgesamt entstanden bis zum 03.08.2026 113 Seitenannotationen, davon 105 vollständige, die in die Auswertung eingingen. Die Kürzel in den Tabellen stehen für Felix Lindner (fl), Sebastian Simbeck (ss) und Veith Korpies (vk).
+Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstellt. Dazu wurde die Datalab-Ausgabe des Testkorpus im Korrekturmodus des OCR-Viewers, eines eigenen Werkzeugs für den Vergleich der Systeme, Block für Block gegen den Scan geprüft und berichtigt. Eine Seite galt als fertig, wenn jeder Block als geprüft oder unleserlich markiert und Layout und Lesereihenfolge bewertet waren. Die Fehlerraten wurden mit dinglehopper berechnet. Die Seiten 1 bis 5 bearbeiteten alle drei Personen, um die Übereinstimmung zwischen ihnen zu prüfen. Insgesamt entstanden bis zum 03.08.2026 113 Seitenannotationen, davon 105 vollständige, die in die Auswertung eingingen. Die Kürzel in den Tabellen stehen für Felix Lindner (fl), Sebastian Simbeck (ss) und Veit Korpies (vk).
 
 | Person | Seiten | CER (Mittel je Seite) | WER (Mittel je Seite) | CER (längengewichtet) | WER (längengewichtet) |
 |---|---|---|---|---|---|
@@ -113,15 +93,7 @@ Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstel
 | vk | 35 | 0,83 % | 1,54 % | 0,60 % | 1,33 % |
 | gesamt | 105 | 0,89 % | 3,42 % | 0,60 % | 2,53 % |
 
-Über alle 105 bewerteten Seiten liegt die Zeichenfehlerrate bei 0,60 %, die Wortfehlerrate bei 2,53 % (jeweils längengewichtet). Man beachte, dass die Werte voneinander abweichen müssen, da es sich um verschiedene Flugblätter handelt. Auf den fünf Kalibrierungsseiten liegen die Werte der drei Personen eng beieinander, alle unter 1 %:
-
-| Seite | fl | ss | vk |
-|---|---|---|---|
-| 1 | 0,13 % | 0,43 % | 0,30 % |
-| 2 | 0,53 % | 0,53 % | 0,76 % |
-| 3 | 0,64 % | 0,54 % | 0,63 % |
-| 4 | 0,32 % | 0,31 % | 0,26 % |
-| 5 | 0,08 % | 0,00 % | 0,03 % |
+Über alle 105 bewerteten Seiten liegt die Zeichenfehlerrate bei 0,60 %, die Wortfehlerrate bei 2,53 % (jeweils längengewichtet). Man beachte, dass die Werte voneinander abweichen müssen, da es sich um verschiedene Flugblätter handelt. Auf den fünf Kalibrierungsseiten, die alle drei bearbeitet haben, lag die Zeichenfehlerrate bei allen unter 1 % und je Seite höchstens 0,3 Prozentpunkte auseinander.
 
 Fehler im Layout wiesen 18 der 105 Seiten auf (17 %), Fehler in der Lesereihenfolge 8 (8 %). Typisch waren Blöcke in falscher Reihenfolge, Blöcke, die zusammengehören, aber getrennt erkannt wurden, ein spiegelverkehrt gescanntes Blatt, ein als Bild erkannter Stempel und gesperrt geschriebene Buchstaben, die die Erkennung stören. Als unleserlich markiert wurden insgesamt 20 Blöcke. Die übrigen Markierungen für fehlende, überzählige, zusammengefasste oder geteilte Blöcke wurden nicht vergeben.
 

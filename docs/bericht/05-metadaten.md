@@ -47,7 +47,7 @@ Um Auswirkungen der jeweiligen Prompt-Fassungen zu vergleichen, wurden die Bänd
 
 Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Die wiederholten Läufe sind im Arbeits-Repository dokumentiert (Kap. 12.6). Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Prompts als auch ein gewisser Zufallsfaktor vermutet.
 
-Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Promt zu testen, müssen dieselben Bände erneut mit dem *claude-r12*-Modell verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
+Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Prompt zu testen, müssen dieselben Bände erneut mit denselben Einstellungen wie im Lauf `claude-r12` verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
 
 [offen] Wenn die Prüfung gegen Archivtitel an der Referenzstrecke 1968/69 gemacht wurde, gehört ihr Ergebnis hierher, je Feld. Sonst die fehlende Messung in Kap. 10 benennen.
 
@@ -83,8 +83,4 @@ Die Kosten der Metadatenextraktion liegen bei ca. 8 $ für 1 000 Seiten. Diese S
 
 Der Lauf diente der Vorbereitung für die Demo. Da für die Verzeichnungseinheit 15 keine Scans vorliegen, wurde ein Teil der PDF von Band 14 unter der Nummer 015 eingelesen. Die Kostenschätzung basiert damit auf tatsächlichem Material aus unserem Bestand, bildet jedoch keine tatsächliche Verarbeitung des 15. Bandes ab.
 
-## 5.7 Hinweise zur Weiterentwicklung
-
-Die Verwendung von *OpenRouter* erlaubt das Austauschen des verwendeten Sprachmodells. Zudem lassen sich mithilfe der Anwendung die Kosten der einzelnen Arbeitsschritte verfolgen. Dies würde einen späteren Vergleich alternativer Modelle hinsichtlich Kosten und Ergebnisqualität ermöglichen.
-
-Hinweise für eine schlechte Metadatenanalyse können Mehrfachexemplare geben. Weichen extrahierte Angaben innerhalb einer Gruppe von Exemplaren desselben Flugblatts voneinander ab, ist dies ein Indiz für eine fehlerhafte Informationsgewinnung (siehe Kapitel 6).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#metadaten).

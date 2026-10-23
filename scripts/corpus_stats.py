@@ -78,29 +78,25 @@ def table(header, rows, total):
 def render(data, today=None):
     today = (today or datetime.date.today()).strftime("%d.%m.%Y")
     volumes = data["volumes"]
-    bands = table(["Band", "Jahr", "Seiten", "Segmente", "Exemplare", "Flugblätter"],
-                  [(f"{v['vz']:03d}", v["year"], number(v["pages"]), number(v["segments"]), number(v["segments"]),
-                    number(v["documents"])) for v in volumes],
-                  ["Summe", "", number(data["pages"]), number(data["segments"]), number(data["segments"]),
-                   number(data["documents"])])
+    bands = table(["Band", "Jahr", "Seiten", "Exemplare", "Flugblätter"],
+                  [(f"{v['vz']:03d}", v["year"], number(v["pages"]), number(v["segments"]), number(v["documents"]))
+                   for v in volumes],
+                  ["Summe", "", number(data["pages"]), number(data["segments"]), number(data["documents"])])
     years = sorted({y for _, y in data["band_year"]})
     def further(segments, documents):
         return number(segments - documents), percent(segments - documents, segments)
 
-    by_band = table(["Bandjahr", "Bände", "Seiten", "Segmente", "Exemplare", "Flugblätter", "weitere Exemplare",
-                     "Anteil"],
+    by_band = table(["Bandjahr", "Bände", "Seiten", "Exemplare", "Flugblätter", "weitere Exemplare", "Anteil"],
                     [(y, sum(str(v["year"]) == y for v in volumes), number(data["band_pages"][y]),
-                      number(data["band_year"]["segments", y]), number(data["band_year"]["segments", y]),
-                      number(data["band_year"]["documents", y]),
+                      number(data["band_year"]["segments", y]), number(data["band_year"]["documents", y]),
                       *further(data["band_year"]["segments", y], data["band_year"]["documents", y])) for y in years],
-                    ["Summe", len(volumes), number(data["pages"]), number(data["segments"]),
-                     number(data["segments"]), number(data["documents"]),
+                    ["Summe", len(volumes), number(data["pages"]), number(data["segments"]), number(data["documents"]),
                      *further(data["segments"], data["documents"])])
     labels = sorted({y for _, y in data["date_year"] if y != UNDATED}) + [UNDATED]
-    by_date = table(["Datierungsjahr", "Segmente", "Exemplare", "Flugblätter"],
-                    [(y, number(data["date_year"]["segments", y]), number(data["date_year"]["segments", y]),
-                      number(data["date_year"]["documents", y])) for y in labels],
-                    ["Summe", number(data["segments"]), number(data["segments"]), number(data["documents"])])
+    by_date = table(["Datierungsjahr", "Exemplare", "Flugblätter"],
+                    [(y, number(data["date_year"]["segments", y]), number(data["date_year"]["documents", y]))
+                     for y in labels],
+                    ["Summe", number(data["segments"]), number(data["documents"])])
     types = table(["Textsorte", "Flugblätter", "Anteil"],
                   [(app.DOC_TYPES.get(t, t), number(n), percent(n, data["documents"]))
                    for t, n in data["types"].most_common()],
@@ -114,13 +110,13 @@ Stand: {today}, Datenbank vom {data['stamp']}. Erzeugt von scripts/corpus_stats.
 
 {bands}
 
-Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Segmente: alle Stücke, die beim Trennen entstanden sind. Exemplare: jedes Segment ist ein Exemplar eines Flugblatts, deshalb dieselbe Zahl wie Segmente. Flugblätter: Exemplare zusammengefasst, nur das Hauptexemplar jeder Gruppe, ohne Trennblätter und leere Seiten (sie gehören zu keinem Segment). Nur freigegebene Bände; ein Band ohne Seiten ist angelegt, aber nicht eingelesen.
+Seiten: Seiten des Bands in der Datenbank, mit Trennblättern. Exemplare: alle Stücke, die beim Trennen entstanden sind (Segmente). Flugblätter: Exemplare zusammengefasst, nur das Hauptexemplar jeder Gruppe, ohne Trennblätter und leere Seiten (sie gehören zu keinem Segment). Nur freigegebene Bände; ein Band ohne Seiten ist angelegt, aber nicht eingelesen.
 
 ### Je Bandjahr
 
 {by_band}
 
-Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Segmente, die nicht Hauptexemplar ihrer Gruppe sind (Segmente minus Flugblätter), Anteil an den Segmenten; sie zählen im Jahr ihres eigenen Bandes, das Hauptexemplar kann in einem anderen liegen. Zählweise sonst wie oben.
+Bandjahr: das Jahr, das der Band im Findmittel trägt. Weitere Exemplare: Exemplare, die nicht Hauptexemplar ihrer Gruppe sind (Exemplare minus Flugblätter), Anteil an den Exemplaren; sie zählen im Jahr ihres eigenen Bandes, das Hauptexemplar kann in einem anderen liegen. Zählweise sonst wie oben.
 
 ### Je Datierungsjahr
 

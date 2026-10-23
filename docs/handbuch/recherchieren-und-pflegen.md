@@ -24,7 +24,7 @@ Links stehen die Filter: Jahr, Herausgeber, Thema, Datierung, Textsorte und Reih
 
 Ein Flugblatt, das in mehreren Exemplaren im Bestand liegt, steht nur einmal in der Liste, mit dem Hinweis „1 weiteres Exemplar“. Unter „Mehrfach vorhandene Blätter“ › „Jedes Exemplar einzeln zeigen“ erscheinen alle.
 
-### Ein Flugblatt lesen
+### Flugblattansicht
 
 ![Leseansicht eines Flugblatts](../abbildungen/app_leseansicht.png)
 
@@ -106,7 +106,7 @@ Passt eine Korrektur oder Exemplar-Prüfung nicht mehr zu den Seiten, weil sich 
 
 ### Themen umbenennen
 
-Verwaltung › „Themen“ › „Bearbeiten“ ändert den Titel eines Themas. Neue Bände ordnen Sie über [Themen zuordnen](neue-baende-importieren.md#danach-themen-zuordnen) zu. Die Themen ganz neu zu berechnen, beschreibt [Installieren und betreiben](installieren-und-betreiben.md#themen-neu-berechnen).
+Verwaltung › „Themen“ › „Bearbeiten“ ändert den Titel eines Themas. Neue Bände ordnen Sie über [Themen zuordnen](neue-baende-importieren.md#themen-zuordnen) zu. Die Themen ganz neu zu berechnen, beschreibt [Installieren und betreiben](installieren-und-betreiben.md#themen-neu-berechnen).
 
 ### Exportieren
 

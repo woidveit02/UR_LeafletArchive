@@ -95,7 +95,7 @@ Mit der Tastatur geht es schneller: Leertaste lässt die Seiten zusammen, Enter 
 
 Die App speichert laufend. „Noch N offen →“ springt zum nächsten ungeprüften Seitenwechsel. Sind alle geprüft, heißt der Knopf „Einteilung abschließen“. Erst danach geht es weiter zu Schritt 5.
 
-### Woran Sie ein neues Flugblatt erkennen
+### Merkmale eines neuen Flugblatts
 
 - oben rechts der Eingangsstempel des Archivs, oft mit einem blauen „F“,
 - oben eine neue Überschrift, Kopfleiste oder ein Datum,
@@ -153,7 +153,7 @@ Die Schritte 1 bis 5 sind nach der Freigabe gesperrt. Zum Ändern „Freigabe zu
 
 „Neu vorbereiten“ übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Exemplare neu, etwa nachdem in einem anderen Band Exemplare geprüft wurden. Korrekturen und Entscheidungen bleiben erhalten.
 
-## Danach: Themen zuordnen
+## Themen zuordnen
 
 Optional, auch nach der Freigabe. „Themen zuordnen“ gibt jedem Flugblatt das Thema, das unter seinen fünf ähnlichsten Flugblättern überwiegt, und einen Punkt auf der Themenkarte. Braucht den OpenRouter-Key; kostet weniger als einen Cent je Band. Beim ersten Mal holt die App auch die Embeddings aller freigegebenen Flugblätter (etwa 2 Cent, einige Minuten).
 
@@ -161,7 +161,7 @@ Optional, auch nach der Freigabe. „Themen zuordnen“ gibt jedem Flugblatt das
 
 Danach zeigt der Schritt eine Tabelle der Themen mit der Zahl der Flugblätter und der unsicheren, darunter die unsicher zugeordneten Flugblätter mit Link. Flugblätter mit sehr wenig Text bekommen kein Thema, bei Band 014 sind das 7 von 142. Neue Themen entstehen hier nicht. Unter Verwaltung › Themen ist vermerkt, dass der Band nachträglich zugeordnet wurde; nach mehreren neuen Bänden lohnt es sich, die Themen neu zu berechnen ([Installieren und betreiben](installieren-und-betreiben.md#themen-neu-berechnen)).
 
-## Ohne Weboberfläche
+## Import über die Kommandozeile
 
 Dieser Abschnitt ist für alle, die mit Docker und der Kommandozeile vertraut sind. Jeder Schritt lässt sich auch dort ausführen, im laufenden Container:
 
@@ -189,7 +189,7 @@ Die Befehle prüfen dasselbe wie die App und nennen vor kostenpflichtigen Schrit
 
 Nur in der Weboberfläche gehen die Durchsicht der Trennungen am Bild und die drei Aufgaben in Schritt 6 (Exemplare, Herausgeber, Hinweise). Die App weiß nichts von einem Lauf in der Kommandozeile: Denselben Band nicht gleichzeitig in beiden bearbeiten. Zeigt die App danach einen alten Stand, hilft `docker compose restart backend`.
 
-## Wenn etwas schiefgeht
+## Fehlerbehebung
 
 Am Ende jedes Schritts stehen unter „Weitere Optionen“ die Knöpfe zum Zurücksetzen dieses Schritts und „Entwurf löschen“.
 

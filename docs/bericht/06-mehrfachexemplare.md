@@ -48,6 +48,4 @@ Sämtliche Angaben von Zahlen innerhalb der Anwendung, die bspw. Herausgeber, Th
 
 <!-- offen: Abbildung Exemplarvergleich in der Anwendung (/exemplare), z. B. Band 006 S. 396–397 gegen S. 364–365 -->
 
-## 6.7 Hinweise zur Weiterentwicklung
-
-Abweichende Fassungen eines Flugblatts werden bislang nicht automatisch gruppiert. Sie bleiben daher als eigenständige Flugblätter erhalten. Das erste Topic-Modelling wurde über alle Exemplare des Bestandes hinweg durchgeführt. Bei einer Neuberechnung innerhalb der Anwendung werden dagegen in Zukunft nur die Hauptexemplare berücksichtigt (siehe Kapitel 7).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#mehrfachexemplare).
