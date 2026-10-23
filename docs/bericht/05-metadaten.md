@@ -17,7 +17,7 @@ Für jedes Exemplar werden die in der folgenden Tabelle aufgeführten Metadaten 
 | Textsorte | Flugblatt im engeren Sinn, Einladung, Broschüre, Zeitschrift, offener Brief, Protokoll oder unklar | Flugblatt |
 | Selbsteinschätzung | Vom Modell selbst angegebener Wert zwischen 0 und 1, der seine Sicherheit bei der Extraktion einschätzt | 0,85 |
 
-Die Auswahl der zu erhebenden Metadaten orientiert sich an vergleichbaren Sammlungen. So führt bspw. die Frankfurter Sammlung Informationen wie Datum, Urheber, Thema und Art des Dokuments für ihre Flugblätter auf [@frankfurt-flugblaetter]. Die ergänzende Nennung von Belegstellen bei diesem Projekt dient der Transparenz. Zudem werden Herausgeber und Unterzeichnende getrennt erfasst, um herausgebende Organisation von der verantwortlichen bzw. unterzeichnenden Person unterscheiden zu können.
+Die Auswahl der zu erhebenden Metadaten orientiert sich an vergleichbaren Sammlungen. So führt bspw. die Frankfurter Sammlung Informationen wie Datum, Urheber, Thema und Art des Dokuments für ihre Flugblätter auf [@frankfurt-flugblaetter]. Die ergänzende Nennung von Belegstellen bei diesem Projekt dient der Transparenz. Zudem werden Herausgeber und Unterzeichnende getrennt erfasst, um herausgebende Organisation von der verantwortlichen beziehungsweise unterzeichnenden Person unterscheiden zu können.
 
 ## 5.2 Herausforderungen
 
@@ -37,11 +37,9 @@ Der Zuordnung der Herausgeber liegt ein Register zugrunde. Dieses wurde zuvor au
 
 *Abbildung: Belegstellen der Metadaten für Flugblatt 850 (Band 006, S. 394). Das Modell trennt das Datum auf dem Blatt (8.2.72) vom Eingangsstempel des Archivs (10. Feb. 1972) und nennt für jeden Wert den Block, aus dem er stammt.*
 
-<!-- Abbildungen aus scripts/scan_figures.py (App muss laufen); anderes Flugblatt: python scripts/scan_figures.py <id> -->
-
 ## 5.4 Qualität
 
-Die Belegprüfung der Pipeline wurde für 2.000 Segmente durchgeführt. Bei 1.731 Segmenten (86,5 %) wurden keine Beanstandungen festgestellt. Die Implementierung erfolgte in `check_grounding` in `extract_metadata_v2.py`. Die genauen Ergebnisse können unter `grounding` in `data/nr0XX_metadata.json` eingesehen werden. Zu beachten ist, dass hierbei nicht die Richtigkeit der Erhebungen geprüft werden, sondern lediglich, ob die extrahierten Informationen durch Belege gestützt werden.
+Die Belegprüfung der Pipeline wurde für 2000 Segmente durchgeführt. Bei 1731 Segmenten (86,5 %) wurden keine Beanstandungen festgestellt. Die Implementierung erfolgte in `check_grounding` in `extract_metadata_v2.py`. Die genauen Ergebnisse können unter `grounding` in `data/nr0XX_metadata.json` eingesehen werden. Zu beachten ist, dass hierbei nicht die Richtigkeit der Erhebungen geprüft werden, sondern lediglich, ob die extrahierten Informationen durch Belege gestützt werden.
 
 Um Auswirkungen der jeweiligen Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 erneut mit dem für die Bände 005–014 verwendeten Prompt verarbeitet (`claude-r12`). Verglichen mit den früheren Fassungen lag bei den insgesamt 464 Flugblättern 25 mal (5 %) ein anderes Datum vor, die Textsorte änderte sich in 24 (5 %) Exemplaren, 58 mal (13 %, teils nur andere Schreibweisen) unterschieden sich die Herausgeber und 115 mal (25 %, meist Länge und Zeichensetzung) die Titel. 
 
@@ -49,17 +47,13 @@ Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Untersc
 
 Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Prompt zu testen, müssen dieselben Bände erneut mit denselben Einstellungen wie im Lauf `claude-r12` verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
 
-[offen] Wenn die Prüfung gegen Archivtitel an der Referenzstrecke 1968/69 gemacht wurde, gehört ihr Ergebnis hierher, je Feld. Sonst die fehlende Messung in Kap. 10 benennen.
-
-*TODO: Wurde die Prüfung noch gemacht?*
-
 Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt. Bei 24 Flugblättern tritt ein Herausgeber auf, welcher nicht Teil des Herausgeberregisters ist. Wie oft die einzelnen Metadatenfelder befüllt sind und welche Auswirkungen Korrekturen auf die Informationen hatten, zeigt die Auswertung in Kapitel 5.5
 
 ## 5.5 Manuelle Prüfung
 
 Manuelle Korrekturen können in der Leseansicht über „Beleg wählen“ vorgenommen und in `data/corrections.jsonl` gespeichert werden. Felder, die dort geändert wurden, gelten als von Hand korrigiert.
 
-Bis zum 12.10.2026 wurden 142 der 1 547 Flugblätter in mindestens einem Feld korrigiert. Die folgende Tabelle zeigt für jedes Feld, bei wie vielen Flugblättern nach der Extraktion bereits ein Wert vorlag, wie viele Exemplare nach der manuellen Korrektur Informationen aufweisen und bei wie vielen Blättern das jeweilige Feld korrigiert wurde. Berücksichtigt werden ausschließlich die Hauptexemplare (Datenbank vom 17.10.2026).
+Bis zum 12.10.2026 wurden 142 der 1547 Flugblätter in mindestens einem Feld korrigiert. Die folgende Tabelle zeigt für jedes Feld, bei wie vielen Flugblättern nach der Extraktion bereits ein Wert vorlag, wie viele Exemplare nach der manuellen Korrektur Informationen aufweisen und bei wie vielen Blättern das jeweilige Feld korrigiert wurde. Berücksichtigt werden ausschließlich die Hauptexemplare (Datenbank vom 17.10.2026).
 
 | Feld | automatisch | nach Korrektur | korrigiert |
 |---|---|---|---|
@@ -71,15 +65,13 @@ Bis zum 12.10.2026 wurden 142 der 1 547 Flugblätter in mindestens einem Feld ko
 | Unterzeichnende | 695 (45 %) | 697 (45 %) | 8 |
 | Textsorte (nicht „unklar“) | 1 513 (98 %) | 1 513 (98 %) | 1 |
 
-Die meisten Korrekturen betreffen den Eingangsstempel. In 98 Fällen konnte das Modell keinen Stempel erkennen, obwohl ein solcher vorhanden gewesen wäre. In 24 Fällen wurde ein zuvor extrahiertes Datum entfernt, 22 mal hiervon wurde es zugleich als Eingangsstempel eingetragen. Das Modell hatte den Stempel somit als Erscheinungsdatum erkannt. Wie die korrigierten Flugblätter ausgewählt wurden, ist offen [offen]. Die Zahlen erlauben deshalb keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
-
-*TODO: Auswahl der Flugblätter Dokumentieren*
+Die meisten Korrekturen betreffen den Eingangsstempel. In 98 Fällen konnte das Modell keinen Stempel erkennen, obwohl ein solcher vorhanden gewesen wäre. In 24 Fällen wurde ein zuvor extrahiertes Datum entfernt, 22 mal hiervon wurde es zugleich als Eingangsstempel eingetragen. Das Modell hatte den Stempel somit als Erscheinungsdatum erkannt. Die Zahlen repräsentieren nur eine Auswahl, und erlauben keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
 
 Neue Herausgeber werden während des Imports im Schritt „Prüfen & freigeben“ dem Herausgeberregister zugeordnet. Nach dieser Zuordnung ist auch eine automatische Erkennung bei der Verarbeitung späterer Bände möglich.
 
 ## 5.6 Kosten
 
-Die Kosten der Metadatenextraktion liegen bei ca. 8 $ für 1 000 Seiten. Diese Schätzung basiert auf einem einzelnen Testlauf mit 56 Flugblättern. Für einen Lauf mit Claude *Opus 5.5* ergaben sich Kosten von 1,36 $. Bei Verwendung einer gleichen Tokenmenge ergeben sich basierend auf Listenpreisen von *Sonnet 4.5* etwa 0,018 $ je Flugblatt. Für die Hochrechnung wird von rund 430 Exemplaren pro 1 000 Seiten ausgegangen.
+Die Kosten der Metadatenextraktion liegen bei ca. 8$ für 1 000 Seiten. Diese Schätzung basiert auf einem einzelnen Testlauf mit 56 Flugblättern. Für einen Lauf mit Claude *Opus 5.5* ergaben sich Kosten von 1,36$. Bei Verwendung einer gleichen Tokenmenge ergeben sich basierend auf Listenpreisen von *Sonnet 4.5* etwa 0,018$ je Flugblatt. Für die Hochrechnung wird von rund 430 Exemplaren pro 1000 Seiten ausgegangen.
 
 Der Lauf diente der Vorbereitung für die Demo. Da für die Verzeichnungseinheit 15 keine Scans vorliegen, wurde ein Teil der PDF von Band 14 unter der Nummer 015 eingelesen. Die Kostenschätzung basiert damit auf tatsächlichem Material aus unserem Bestand, bildet jedoch keine tatsächliche Verarbeitung des 15. Bandes ab.
 

@@ -1,16 +1,14 @@
 # 6 Mehrfachexemplare zusammenführen
 
-Etwa ein Fünftel der 1 927 Exemplare sind weitere identische Versionen eines bereits im Bestand vorhandenen Flugblatts. Potenzielle Mehrfachexemplare werden zunächst in der Anwendung anhand von Textähnlichkeit gekennzeichnet. Mithilfe eines integrierten Tools kann die Zuordnung anschließend manuell überprüft und bestätigt werden. Bei diesem Schritt wird ein sogenanntes Hauptexemplar bestimmt. Alle Exemplare bleiben auch nach der Kontrolle als eigenständige Datensätze vorhanden.
+Etwa ein Fünftel der 1927 Exemplare sind weitere identische Versionen eines bereits im Bestand vorhandenen Flugblatts. Potenzielle Mehrfachexemplare werden zunächst in der Anwendung anhand von Textähnlichkeit gekennzeichnet. Mithilfe eines integrierten Tools kann die Zuordnung anschließend manuell überprüft und bestätigt werden. Bei diesem Schritt wird ein sogenanntes Hauptexemplar bestimmt. Alle Exemplare bleiben auch nach der Kontrolle als eigenständige Datensätze vorhanden.
 
 ## 6.1 Aufgabe
 
-Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um bei späteren Auswertungen bzw. Datenanalysen jeden Inhalt nur einfach zu behandeln. Das Auftreten dieser Mehrfachexemplare ist Teil der Sammlungspraxis: Nach Möglichkeit bewahrt das Archiv bewusst mehrere Versionen des gleichen Flugblatts auf, um bspw. bei Ausstellungen auch die Rückseite präsentieren zu können [@uar-rep118] (Kap. 2.5). Es handelt sich dabei also nicht um einen Digitalisierungsfehler, welcher behoben werden muss, sondern um eine Eigenschaft des Bestandes, die bei einer Auswertung Berücksichtigung erfordert.
+Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um bei späteren Auswertungen bzw. Datenanalysen jeden Inhalt nur einfach zu behandeln. Das Auftreten dieser Mehrfachexemplare ist Teil der Sammlungspraxis: Nach Möglichkeit bewahrt das Archiv bewusst mehrere Versionen des gleichen Flugblatts auf, um beispielsweise bei Ausstellungen auch die Rückseite präsentieren zu können [@uar-rep118] (Kap. 2.5). Es handelt sich dabei also nicht um einen Digitalisierungsfehler, welcher behoben werden muss, sondern um eine Eigenschaft des Bestandes, die bei einer Auswertung Berücksichtigung erfordert.
 
 ## 6.2 Herausforderungen
 
 Selbst bei identischen Inhalten unterscheiden sich die erkannten Texte mehrerer Exemplare oft geringfügig, da bei jedem Scan unterschiedliche OCR-Fehler auftreten können. Für eine zuverlässige Erkennung von Mehrfachexemplaren ist ein ausschließlicher direkter Textvergleich somit nicht ausreichend. Zusätzlich konnte beobachtet werden, dass identische Exemplare sowohl innerhalb desselben Bandes als auch über mehrere Bände hinweg vorkommen können. So liegt das "Theoriepapier Nr. 4 " des RCDS bspw. viermal in Band 7 vor. Gleichzeitig müssen Nachdrucke, die den Inhalt verändern, als eigene Fassungen erkennbar bleiben, um inhaltliche Untersuchungen aufgrund ihrer Unterschiede anstellen zu können.
-
-*TODO: Ein Beispiel raussuchen, wo sich Mehrfachexemplare über mehrere Bände hinweg verteilen.*
 
 ## 6.3 Verfahren
 
@@ -36,16 +34,15 @@ Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei w
 
 ## 6.6 Ergebnis und Kosten
 
-Aus den 1 927 Exemplaren ergeben sich insgesamt 1 547 eigenständige Flugblätter. Die übrigen 380 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
+Aus den 1927 Exemplaren ergeben sich insgesamt 1547 eigenständige Flugblätter. Die übrigen 380 Exemplare machen somit rund 19,7% des Bestandes aus. Dabei unterscheidet sich der Anteil an Mehrfachexemplaren zwischen den Jahrgängen: In den Bänden, welche die Jahre 1968 bis 1971 umfassen, liegt dieser zwischen 10 und 15 %. Im Jahrgang 1972 beträgt der Anteil 24% und 1973 23%. 
 
-Sämtliche Angaben von Zahlen innerhalb der Anwendung, die bspw. Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
-
+Sämtliche Angaben von Zahlen innerhalb der Anwendung, die beispielsweise Herausgeber, Themen und Trends, Größe des Korpus, Veröffentlichungen innerhalb eines Jahres und viele weitere wichtige Informationen zum Bestand beschreiben, berücksichtigen jedes eigenständige Flugblatt nur einmal. Bei einer Suche werden weiterhin alle Exemplare einbezogen, bei Treffern wird jedoch immer nur das Hauptexemplar angezeigt. Für die Erkennung und Gruppierung der Mehrfachexemplare fallen keine Kosten für externe API-Aufrufe an.
 
 
 ![Anteil der Mehrfachexemplare nach Bandjahr](../abbildungen/3_mehrfachexemplare.png)
 
 ![Geprüfte Fälle von Mehrfachexemplaren](../abbildungen/7_exemplare_faelle.png)
 
-<!-- offen: Abbildung Exemplarvergleich in der Anwendung (/exemplare), z. B. Band 006 S. 396–397 gegen S. 364–365 -->
+TODO: Abbildung des Vergleichs-Interfaces
 
 Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#mehrfachexemplare).

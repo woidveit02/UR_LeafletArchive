@@ -22,9 +22,9 @@ Für angehängte Resolutionen und Pressespiegel wurden bislang keine eindeutigen
 
 ## 4.3 Altes Verfahren
 
-Die 14 Bände wurden mithilfe des Werkzeugs `flugblatt_splitter` manuell abgegrenzt. Dieses Werkzeug war nicht dasselbe wie das aktuell in der Anwendung integrierte Trenn-Tool des Import Verfahrens, letzteres wurde erst später zur Anwendung hinzugefügt. Die Arbeit wurde auf drei Personen verteilt und im August abgeschlossen. Für Band 002 wurde die manuelle Trennung mit einer automatischen Segmentierung durch Datalab verglichen. Während bei der händischen Trennung 59 Segmente entstanden, erkannte Datalab lediglich 13 einzelne Flugblätter. Dabei wurden alle 13 automatischen Segmentierungen auch manuell vorgenommen. Es wurden demnach keine Schnitte durch Datalab gesetzt, die zuvor nicht auch händisch festgelegt wurden. 46 der 59 manuellen Segmentierungen wurden jedoch von Datalab übersehen. Da keine der beiden Trennungen zu diesem Zeitpunkt qualitativ überprüft worden war, konnte aus diesem Schritt lediglich abgeleitet werden, inwiefern sich die Entscheidungen unterschieden. Dennoch wurde eine Vollautomatisierung aufgrund dieser Beobachtungen vorerst für weitere Segmentierungen ausgeschlossen.
+Die 14 Bände wurden mithilfe des Werkzeugs `flugblatt_splitter` bis zum 22.08.2026 manuell abgegrenzt. Dieses Werkzeug war nicht dasselbe wie das aktuell in der Anwendung integrierte Trenn-Tool des Import Verfahrens, letzteres wurde erst später zur Anwendung hinzugefügt. Die Arbeit wurde auf drei Personen verteilt und im August abgeschlossen. Für Band 002 wurde die manuelle Trennung mit einer automatischen Segmentierung durch Datalab verglichen. Während bei der händischen Trennung 59 Segmente entstanden, erkannte Datalab lediglich 13 einzelne Flugblätter. Dabei wurden alle 13 automatischen Segmentierungen auch manuell vorgenommen. Es wurden demnach keine Schnitte durch Datalab gesetzt, die zuvor nicht auch händisch festgelegt wurden. 46 der 59 manuellen Segmentierungen wurden jedoch von Datalab übersehen. Da keine der beiden Trennungen zu diesem Zeitpunkt qualitativ überprüft worden war, konnte aus diesem Schritt lediglich abgeleitet werden, inwiefern sich die Entscheidungen unterschieden. Dennoch wurde eine Vollautomatisierung aufgrund dieser Beobachtungen vorerst für weitere Segmentierungen ausgeschlossen.
 
-Später wurde die Import-Funktion zur Anwendung hinzugefügt, und damit auch die Überarbeitete Version des Flugblatt-Trenners. Für den Import neuer Bände werden gestützt auf dem erkannten Text (`src/backend/app/boundaries.py`) Vorschläge zur Segmentierung bereitgestellt. Jeder Seitenübergang wird hierbei anhand von 14 Merkmalen bewertet und einem naiven Bayes-Klassifikator verrechnet. Die zugrundeliegenden Gewichte wurden mithilfe der manuellen Segmentierung der Bände 1–14 erarbeitet. Demnach wird eine Trennung ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Dieses Verfahren läuft lokal und ohne Zuhilfenahme eines Sprachmodells.
+Später wurde die Import-Funktion zur Anwendung hinzugefügt, und damit auch die überarbeitete Version des Flugblatt-Trenners. Für den Import neuer Bände werden gestützt auf dem erkannten Text (`src/backend/app/boundaries.py`) Vorschläge zur Segmentierung bereitgestellt. Jeder Seitenübergang wird hierbei anhand von 14 Merkmalen bewertet und einem naiven Bayes-Klassifikator verrechnet. Die zugrundeliegenden Gewichte wurden mithilfe der manuellen Segmentierung der Bände 1–14 erarbeitet. Demnach wird eine Trennung ab einer Wahrscheinlichkeit von 0,5 vorgeschlagen. Dieses Verfahren läuft lokal und ohne Zuhilfenahme eines Sprachmodells.
 
 Als Hinweise auf den Beginn eines neuen Flugblatts dienen beispielsweise Eingangsstempel, Datumsangaben in der Kopfzeile, eine Kopfleiste mit Gruppenkürzeln und Impressen sowie eine nahezu leere vorausgehende Seite oder auch eine geringe Anzahl gemeinsamer Wörter mit der vorangegangenen Seite. Gegen eine neue Trennstelle sprechen beispielsweise Seitenzahlen wie „- 2 -“, Trennstriche oder ein „b. w.“ am Ende der vorherigen Seite. Auch wörtliche Hinweise, wie „Fortsetzung“ am Seitenanfang sowie eine große Anzahl gemeinsamer Wörter zwischen zwei aufeinanderfolgenden Seiten deuten auf ein fortlaufendes Flugblatt hin.
 
@@ -32,13 +32,11 @@ Für die Bände 13 und 14 wurde zusätzlich eine Locherkennung eingeführt. Sind
 
 Um den Sektionierungsvorgang zu beschleunigen, wird zusätzlich die Möglichkeit geboten, eine vorannotierte Liste während des Imports zu übergeben, welche sämtliche dokumentierte Trennstellen beinhaltet. Dadurch kann die Sektionierung sofort automatisch durchgeführt werden und eine nachträgliche manuelle Trennung kann umgangen werden. 
 
-*TODO: Beispielbild einer Liste oder Feature hinzufügen*
-
 ## 4.4 Neues Verfahren
 
 Kurz vor Beendigung des Projekts wurde dann nochmal die Splitter-Funktion der Import-Funktion der Anwendung überarbeitet. Jetzt kommen zu den 14 Merkmalen im Text noch eine Wortliste mit konkreten Wörtern, die das Flugblattende signalisieren können und neun visuelle Aspekte, die aus dem Scan extrahiert werden. Jetzt funktioniert die Erkennung der Abheftlöcher auf allen Flugblättern aller Bände und jeden neuen Import. Sowohl schwarze als auch weisse Löcher können erkannt werden.
 
-Der Naive-Bayes-Klassifikator selbst ist geblieben: Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen; neu sind die zusätzlichen Hinweise aus Wortliste und Scan, wodurch sowohl ein Flugblattende erkannt werden kann, als auch ein nicht bevorstehendes Ende bestätigt werden kann. Diese ganzen Gewichte werden aufsummiert, und liegt das Ergebnis über Null, schlägt die App eine Trennung vor. Ohne jeden Hinweis wird nicht getrennt, der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1 797 von 4 219 Seitenwechseln ohne Leerseiten, 42,6 %). Erstellt wurden die Gewichte an der Handtrennung der Bände 1–14.
+Der Naive-Bayes-Klassifikator selbst ist geblieben: Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen. Neu sind die zusätzlichen Hinweise aus Wortliste und Scan, wodurch sowohl ein Flugblattende erkannt werden kann, als auch ein nicht bevorstehendes Ende bestätigt werden kann. Diese ganzen Gewichte werden aufsummiert, und liegt das Ergebnis über Null, schlägt die App eine Trennung vor. Ohne jeden Hinweis wird nicht getrennt, der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1797 von 4219 Seitenwechseln ohne Leerseiten, 42,6 %). Erstellt wurden die Gewichte an der Handtrennung der Bände 1–14.
 
 Für die Wortliste wurden die letzten 250 Zeichen der Seite davor und die ersten 250 Zeichen jeder Seite verglichen, bei Seitenwechseln mit und ohne Trennung. Übrig blieben etwa 90 Wörter. Herausgenommen wurden Namen, Orte und Wörter einzelner Gruppen, dazugenommen alle Monate und Wochentage. Je Seitenwechsel zählt nur das stärkste Wort dafür und das stärkste dagegen. 
 
@@ -72,9 +70,7 @@ Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffe
 
 ## 4.6 Manuelle Prüfung
 
-TODO: Grundlegende Beschreibung Trennsystem
-
-(TODO: A genaue Beschreibung sollte eher im Tutorial sein und ned in der Doku)
+TODO: Grundlegende Beschreibung Trennsystem (Details sollen eher ins Handbuch)
 
 ## 4.7 Ergebnis und Kosten
 
