@@ -2455,7 +2455,8 @@ def import_issuers(request: Request, vz: int, nr: int = 0, blatt: int = 0, fehle
         "pages": page_range(leaflet.start_page, leaflet.end_page),
         "blocks": list(issuer.blocks or []) if issuer else organizations.imprint_blocks(leaflet),
         "signatories": [s['name'] for s in current_values(leaflet)['signatories']],
-        "page_rows": session.query(Page).filter_by(leaflet_id=leaflet.id).order_by(Page.page_no).all(),
+        "page_rows": [(p, pdf_service.page_size(pdf, p.page_no) if pdf.is_file() else None)  # sizes reserve the room of the scans
+                      for pdf in [volume_pdf(session.get(Volume, leaflet.volume_id))] for p in session.query(Page).filter_by(leaflet_id=leaflet.id).order_by(Page.page_no)],
         "candidates": [(org, form, *in_holdings(org.id)) for org, form in organizations.candidates(group['surface'])] if issuer else [],
         "register": register_rows()})
 
@@ -2472,11 +2473,11 @@ def register_rows():
 @app.post("/import/{vz}/herausgeber")
 def import_issuer(vz: int, surface: str = Form(''), choice: list[str] = Form(default=[]), other: str = Form(''),
                   full_name: str = Form(''), short: str = Form(''), nr: int = Form(0), leaflet: int = Form(0),
-                  evidence: str | None = Form(None)):
+                  evidence_for: list[str] = Form(default=[]), evidence: list[str] = Form(default=[])):
     """choice: one or more organizations ("neu" for a new one), or "person" or "erwaehnt"; for a leaflet naming no
     issuer (no surface) "personen" or "unbekannt" instead. One organization learns the spelling; several (a spelling
     naming more than one), or any for a leaflet without issuer, are corrected on each leaflet. evidence: the blocks
-    picked on the shown leaflet, for what is chosen there."""
+    picked on the shown leaflet for each choice in evidence_for (an organization, "neu" or "person")."""
     if vz:
         import_volume_or_404(vz)
     key = organizations.key(surface)
@@ -2492,20 +2493,21 @@ def import_issuer(vz: int, surface: str = Form(''), choice: list[str] = Form(def
         return RedirectResponse(f"/import/{vz}/herausgeber?" + urlencode({'nr': nr, 'fehler': error}), 303)
     choice = list(dict.fromkeys(choice))
     shown, shown_issuer = next(((lf, i) for lf, i in group['issuers'] if lf.id == leaflet), (None, None))
-    picked = None if evidence is None or not shown else [
-        b for b in evidence.split() if re.fullmatch(r"\d+-\d+", b) and shown.start_page <= int(b.split('-')[0]) <= shown.end_page]
+    picked = {c: [b for b in ev.split() if re.fullmatch(r"\d+-\d+", b) and shown.start_page <= int(b.split('-')[0]) <= shown.end_page]
+              for c, ev in zip(evidence_for, evidence)} if shown else {}
 
-    def correct(found, issuer, orgs, picked=None):  # on the leaflet, like in the edit form
-        blocks = picked if picked is not None else list(issuer.blocks or []) if issuer else organizations.imprint_blocks(found)
-        kept = [{'org': i.org_id, 'blocks': blocks if picked is not None and i.org_id in orgs else list(i.blocks or [])}
+    def correct(found, issuer, orgs, picked=None):  # on the leaflet, like in the edit form; picked: blocks by organization or "person"
+        picked = picked or {}
+        blocks = list(issuer.blocks or []) if issuer else organizations.imprint_blocks(found)
+        kept = [{'org': i.org_id, 'blocks': picked.get(i.org_id, list(i.blocks or []))}
                 if i.org_id else {'name': i.surface, 'blocks': list(i.blocks or [])}
                 for i in session.query(LeafletIssuer).filter_by(leaflet_id=found.id, role='issuer').order_by(LeafletIssuer.id)
                 if i.org_id or organizations.key(i.surface) != key]
-        kept += [{'org': o, 'blocks': blocks} for o in orgs if o not in [k.get('org') for k in kept]]
+        kept += [{'org': o, 'blocks': picked.get(o, blocks)} for o in orgs if o not in [k.get('org') for k in kept]]
         changes = [('issuers', kept, [])]
         if choice == ['person']:
             changes.append(('signatories', current_values(found)['signatories']
-                            + [{'name': surface.strip(), 'details': '', 'blocks': blocks}], []))
+                            + [{'name': surface.strip(), 'details': '', 'blocks': picked.get('person', blocks)}], []))
         save_corrections(found, changes)
     if 'andere' in choice:
         found = {org_label(o): o.id for o in session.query(Organization)}.get(other.strip())
@@ -2526,12 +2528,13 @@ def import_issuer(vz: int, surface: str = Form(''), choice: list[str] = Form(def
         return RedirectResponse(f"/import/{vz}/herausgeber?nr={nr}", 303)
     if key and len(choice) == 1 and choice[0] not in none:
         org = organizations.decide(surface, choice[0], full_name, short)
-        if shown and picked is not None and picked != list(shown_issuer.blocks or []):
-            correct(shown, shown_issuer, [org], picked)
+        if choice[0] in picked and picked[choice[0]] != list(shown_issuer.blocks or []):
+            correct(shown, shown_issuer, [org], {org: picked[choice[0]]})
         return RedirectResponse(f"/import/{vz}/herausgeber?nr={nr}", 303)
-    orgs = [organizations.new(short or full_name, full_name) if c == 'neu' else c for c in choice if c not in none]
+    ids = {c: organizations.new(short or full_name, full_name) if c == 'neu' else c for c in choice if c not in none}
+    picked = {ids.get(c, c): blocks for c, blocks in picked.items()}
     for found, issuer in group['issuers']:
-        correct(found, issuer, orgs, picked if found.id == leaflet else None)
+        correct(found, issuer, list(ids.values()), picked if found.id == leaflet else None)
     return RedirectResponse(f"/import/{vz}/herausgeber?nr={nr}", 303)
 
 

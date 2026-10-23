@@ -37,12 +37,44 @@
     // above the button: what saving assigns
     const summary = document.getElementById('issuer-summary');
     const names = Object.fromEntries(register.map((o) => [o.id, o.name]));
+    const surface = summary.dataset.surface;
+    const newName = () => (form.short.value || form.full_name.value).trim() || (surface ? `„${surface}“` : 'Name fehlt noch');
+    const none = { person: `„${surface}“ wird zu den Unterzeichnenden verschoben.`, erwaehnt: `„${surface}“ wird als Herausgeber entfernt.`,
+        personen: 'Kein Herausgeber: Es unterschreiben nur Personen.', unbekannt: 'Kein Herausgeber: nicht feststellbar.' };
+    // one evidence per chosen organization (or the person), picked in the scan; it starts with the place found
+    const evidence = document.getElementById('issuer-evidence'), rows = evidence.querySelector('.issuer-evidence-rows');
+    const picker = initEvidencePicking('.ocr-box');
+    const pickText = (value) => { const n = value.split(' ').filter(Boolean).length; return !n ? 'Beleg wählen' : n === 1 ? 'Beleg: 1 Textstelle' : `Beleg: ${n} Textstellen`; };
+    const showEvidence = (chosen) => {
+        const wanted = chosen.filter((v) => !none[v] || v === 'person');
+        [...rows.children].filter((row) => !wanted.includes(row.dataset.for)).forEach((row) => {
+            if (row.querySelector('[aria-pressed="true"]')) picker.stop(false);
+            row.remove();
+        });
+        wanted.forEach((v) => {
+            let row = [...rows.children].find((r) => r.dataset.for === v);
+            if (!row) {
+                row = Object.assign(document.createElement('div'), { className: 'issuer-evidence-row' });
+                row.dataset.for = v;
+                row.innerHTML = '<span></span><input type="hidden" name="evidence_for"><input type="hidden" name="evidence"><button type="button" class="pick-evidence" aria-pressed="false"></button>';
+                row.querySelector('[name=evidence_for]').value = v;
+                row.querySelector('[name=evidence]').value = evidence.dataset.blocks;
+                row.querySelector('button').textContent = pickText(evidence.dataset.blocks);
+                rows.append(row);
+            }
+            const name = v === 'neu' ? newName() : v === 'person' ? `„${surface}“ (Person)` : names[v] || v;
+            row.querySelector('span').textContent = name;
+            row.querySelector('button').dataset.label = name;
+        });
+        evidence.hidden = !wanted.length;
+    };
+    document.querySelector('[data-pick="done"]').addEventListener('click', () => {  // marked in the scan: all evidence chosen
+        const ids = [...rows.querySelectorAll('[name=evidence]')].flatMap((input) => input.value.split(' '));
+        document.querySelectorAll('.issuer-review .ocr-box').forEach((box) => box.classList.toggle('active', ids.includes(box.dataset.block)));
+    });
     const summarize = () => {
         const chosen = [...new Set([...form.querySelectorAll('input[name=choice]:checked')].map((b) => b.value))];
-        const surface = summary.dataset.surface;
-        const newName = () => (form.short.value || form.full_name.value).trim() || (surface ? `„${surface}“` : 'Name fehlt noch');
-        const none = { person: `„${surface}“ wird zu den Unterzeichnenden verschoben.`, erwaehnt: `„${surface}“ wird als Herausgeber entfernt.`,
-            personen: 'Kein Herausgeber: Es unterschreiben nur Personen.', unbekannt: 'Kein Herausgeber: nicht feststellbar.' };
+        showEvidence(chosen);
         const text = chosen.filter((v) => !none[v]).map((v) => v === 'neu' ? `${newName()} (neu)` : names[v] || v);
         const others = summary.dataset.others;  // on this leaflet already, they stay
         const decided = chosen.find((v) => none[v]);
@@ -71,11 +103,6 @@
         summarize();
     }));
     summarize();
-    // the evidence: picked in the scan, then marked there like the one found
-    const evidence = document.getElementById('issuer-blocks');
-    initEvidencePicking('.ocr-box');
-    document.querySelector('[data-pick="done"]').addEventListener('click', () => document.querySelectorAll('.issuer-review .ocr-box')
-        .forEach((box) => box.classList.toggle('active', evidence.value.split(' ').includes(box.dataset.block))));
     query.addEventListener('input', show);
     query.addEventListener('keydown', (e) => {  // Enter takes the first hit instead of sending the form
         if (e.key !== 'Enter') return;

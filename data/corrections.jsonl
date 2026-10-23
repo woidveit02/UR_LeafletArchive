@@ -260,3 +260,4 @@
 {"volume": "0118_0003", "start_page": 161, "end_page": 161, "field": "issuers", "value": [{"org": "dm", "blocks": ["161-11", "161-12"]}], "at": "2026-10-22"}
 {"volume": "0118_0006", "start_page": 65, "end_page": 65, "field": "issuers", "value": [{"org": "als", "blocks": ["65-2"]}], "at": "2026-10-22"}
 {"volume": "0118_0014", "start_page": 494, "end_page": 494, "field": "issuers", "value": [{"org": "buchberger_studenten_zentrum", "blocks": ["494-4"]}], "at": "2026-10-22"}
+{"volume": "0118_0007", "start_page": 5, "end_page": 6, "field": "issuers", "value": [{"org": "rcds", "blocks": ["6-3"]}], "at": "2026-10-23"}

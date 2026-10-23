@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from '_ui.html' import step_link, review_bar %}
+{% from '_ui.html' import step_link, review_bar, excerpt %}
 {% block title %}Herausgeber zuordnen{% endblock %}
 {% block app_class %} app-wide{% endblock %}
 {% block content %}
@@ -16,33 +16,39 @@
             <span><a href="/verwaltung/herausgeber">← Liste</a> · <b>Herausgeber aller freigegebenen Bände</b> · Herausgeber {{ nr + 1 }} von {{ total }}</span>
             {{ pager }}
         </nav>{% endif %}
-        <h1>{{ leaflet.title or 'Ohne erkannten Titel' }}</h1>
-        <p class="meta">{{ date or 'ohne Datum' }} · Band {{ '%03d' % group.vz[leaflet.id] }}, {{ pages }} ·
-            <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener">Seite des Flugblatts ↗</a></p>
+        <h1>{% if issuer %}Wer ist „{{ group.surface }}“?{% else %}Wer hat dieses Flugblatt herausgegeben?{% endif %}</h1>
+        <p class="issuer-lead">{% if issuer %}Das Register kennt diese Schreibweise aus den Metadaten noch nicht. Ordne sie zu, dann erkennt die App sie künftig.
+            {%- else %}Die Metadaten nennen keinen Herausgeber. Ordne einen zu oder halte rechts fest, warum es keinen gibt.{% endif %}
+            Unsicher? „Nächster ›“ lässt {{ 'sie' if issuer else 'es' }} offen.</p>
+        <p class="meta">Flugblatt <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener">{{ leaflet.title or 'ohne erkannten Titel' }} ↗</a>
+            · {{ date or 'ohne Datum' }} · Band {{ '%03d' % group.vz[leaflet.id] }}, {{ pages }}
+            {%- if leaflet.doc_type and leaflet.doc_type != 'unklar' %} · {{ DOC_TYPES.get(leaflet.doc_type, leaflet.doc_type) }}{% endif %}
+            {%- if leaflet.series %} · Reihe {{ leaflet.series_label }}{% endif %}
+            · <a href="/leaflets/{{ leaflet.id }}?bearbeiten" target="_blank" rel="noopener">Metadaten korrigieren ↗</a></p>
+        <p class="issuer-people"><span class="meta">Unterzeichnet:</span> {{ signatories | join(', ') if signatories else 'niemand erkannt' }}
+            {%- if others %}<br><span class="meta">Weitere Herausgeber:</span> {{ others | join(', ') }}{% endif %}</p>
         <div class="issuer-review">
             <section>
-                {% if issuer %}
-                <p class="issuer-surface"><span class="meta">Herausgeber im Text, noch nicht im Register</span><br>
-                    <b>„{{ group.surface }}“</b>{% if others %}<br><span class="meta">weitere Herausgeber: {{ others | join(', ') }}</span>{% endif %}</p>
-                <p class="meta">Ordnest du ihn zu, erscheint er im Filter „Herausgeber“, und die App erkennt diese Schreibweise auch in
-                    späteren Bänden. Nennt sie mehrere Herausgeber, wähle alle, auch eine neue Organisation dazu. Unsicher? „Nächster ›“ lässt ihn offen.</p>
-                {% else %}
-                <p class="issuer-surface"><span class="meta">Herausgeber</span><br><b>Kein Herausgeber erkannt</b>
-                    {% if signatories %}<br><span class="meta">Unterzeichnende: {{ signatories | join(', ') }}</span>{% endif %}</p>
-                <p class="meta">Steht auf dem Blatt doch ein Herausgeber, ordne ihn zu. Sonst halte unten fest, warum es keinen gibt.
-                    {% if blocks %}Markiert sind die Stellen, die nach einem Impressum klingen („Verantwortlich“, „Eigendruck“ …).{% endif %}
-                    Unsicher? „Nächster ›“ lässt es offen.</p>
-                {% endif %}
-                <p class="meta">
-                    {% if n > 1 %}Flugblatt {{ blatt + 1 }} von {{ n }}:
+                {% if n > 1 %}<p class="meta">Flugblatt {{ blatt + 1 }} von {{ n }} mit dieser Schreibweise:
                     {% if blatt %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt - 1 }}">‹ voriges</a>{% endif %}
-                    {% if blatt + 1 < n %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt + 1 }}">nächstes ›</a>{% endif %} · {% endif %}
-                    <a href="/leaflets/{{ leaflet.id }}?bearbeiten" target="_blank" rel="noopener">{{ 'Dieses Blatt anders zuordnen' if issuer else 'Blatt bearbeiten, etwa Unterzeichnende eintragen' }}</a></p>
+                    {% if blatt + 1 < n %}<a href="{{ url }}?nr={{ nr }}&blatt={{ blatt + 1 }}">nächstes ›</a>{% endif %}</p>{% endif %}
                 {% if blocks %}
                 <img class="issuer-evidence" src="/leaflets/{{ leaflet.id }}/evidence.png?blocks={{ blocks | join(',') }}" alt="{{ 'Stelle im Scan, an der „' ~ group.surface ~ '“ steht' if issuer else 'Stellen im Scan, die nach einem Impressum klingen' }}">
+                {% for page, _ in page_rows %}{% set no = page.page_no %}{% for block in page.blocks or [] %}{% if (no ~ '-' ~ loop.index) in blocks %}
+                {{ excerpt(block.html | replace('<br>', ' ') | striptags, 'Erkannter Text' if issuer else 'Klingt nach Impressum') }}
+                {% endif %}{% endfor %}{% endfor %}
                 {% endif %}
-                <a href="/leaflets/{{ leaflet.id }}" target="_blank" rel="noopener"><img class="issuer-page" loading="lazy"
-                   src="/leaflets/{{ leaflet.id }}/pages/{{ (blocks[0].split('-')[0] if blocks else leaflet.start_page) }}.png" alt="Scan der Seite"></a>
+                {% for page, size in page_rows %}
+                <p class="meta">{% if page_rows | length > 1 %}Blattseite {{ loop.index }} von {{ page_rows | length }} · {% endif %}Bandseite {{ page.page_no }}</p>
+                <div class="page-frame issuer-page">
+                    <a href="/leaflets/{{ leaflet.id }}/pages/{{ page.page_no }}.png?dpi=220" target="_blank" rel="noopener" title="Vergrößern (neuer Tab)"><img
+                       class="leaflet-page" loading="lazy" src="/leaflets/{{ leaflet.id }}/pages/{{ page.page_no }}.png" alt="Scan der Bandseite {{ page.page_no }}"{% if size %} width="{{ size[0] }}" height="{{ size[1] }}"{% endif %} onload="this.classList.add('loaded')"></a>
+                    {% for block in page.blocks or [] %}{% set id = page.page_no ~ '-' ~ loop.index %}{% if block.box %}
+                    <span class="ocr-box{{ ' active' if id in blocks }}" data-block="{{ id }}"
+                          style="left: {{ block.box[0] }}%; top: {{ block.box[1] }}%; width: {{ block.box[2] }}%; height: {{ block.box[3] }}%;"></span>
+                    {% endif %}{% endfor %}
+                </div>
+                {% endfor %}
             </section>
             <form method="post" action="{{ url }}" class="issuer-choice">
                 <input type="hidden" name="surface" value="{{ group.surface }}">
@@ -95,13 +101,20 @@
                         <span>Nicht feststellbar: Das Blatt nennt niemanden</span></label>
                     {% endif %}
                 </fieldset>
+                <fieldset id="issuer-evidence" data-blocks="{{ blocks | join(' ') }}" hidden>
+                    <legend>Beleg</legend>
+                    <div class="issuer-evidence-rows"></div>
+                    <p class="meta note">„Beleg wählen“, dann Textblöcke im Scan links anklicken; ein zweiter Klick entfernt sie. Gilt nur für dieses Flugblatt.</p>
+                </fieldset>
                 <p class="issuer-save"><span id="issuer-summary" class="issuer-summary" aria-live="polite" data-surface="{{ group.surface }}" data-others="{{ others | join(', ') }}">Noch nichts gewählt.</span>
                     <button type="submit" class="button primary">Speichern &amp; weiter</button>
-                    <span class="meta">gilt für {{ 'das Flugblatt' if n == 1 else 'alle ' ~ n ~ ' Flugblätter' }}:
+                    <span class="meta note">Gilt für {{ 'das Flugblatt' if n == 1 else 'alle ' ~ n ~ ' Flugblätter' }}:
                         {% for lf, _ in group.issuers %}{% if not volume %}{{ 'Band %03d S. ' % group.vz[lf.id] if loop.first or group.vz[lf.id] != group.vz[loop.previtem[0].id] }}{% else %}{{ 'S. ' if loop.first }}{% endif %}{{ lf.start_page }}{% if lf.end_page != lf.start_page %}–{{ lf.end_page }}{% endif %}{{ ', ' if not loop.last }}{% endfor %}</span></p>
             </form>
         </div>
+    {% include '_pick_bar.html' %}
 {% endblock %}
 {% block scripts %}
+    <script src="{{ url_for('static', path='evidence-pick.js') }}"></script>
     <script src="{{ url_for('static', path='issuer-search.js') }}"></script>
 {% endblock %}

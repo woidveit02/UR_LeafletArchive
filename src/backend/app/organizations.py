@@ -16,14 +16,19 @@ def key(surface):
     return " ".join(surface.split()).casefold()
 
 
+def other_copy(leaflet):
+    """A copy of a checked group but its main copy: its details are those of the main copy, decided there."""
+    return leaflet.copies_checked and leaflet.canonical_leaflet_id not in (None, leaflet.id)
+
+
 def unmatched(vz=0):
     """[{surface, issuers: [(leaflet, issuer row)], vz: {leaflet id: volume number}}] for the issuers of the volume
-    (0: of all released volumes) without an organization, most frequent first."""
+    (0: of all released volumes) without an organization, most frequent first. Not an other copy."""
     groups = {}
     for issuer, leaflet, number in fillDatabase.session.query(LeafletIssuer, Leaflet, Volume.vz).select_from(LeafletIssuer).join(Leaflet).join(Volume).filter(
             Volume.vz == vz if vz else Volume.status == RELEASED, LeafletIssuer.role == "issuer",
             LeafletIssuer.org_id.is_(None)).order_by(Volume.vz, Leaflet.start_page):
-        if issuer.surface.strip():
+        if issuer.surface.strip() and not other_copy(leaflet):
             group = groups.setdefault(key(issuer.surface), {"surface": issuer.surface.strip(), "issuers": [], "vz": {}})
             if leaflet not in [lf for lf, _ in group["issuers"]]:
                 group["issuers"].append((leaflet, issuer))
@@ -40,7 +45,7 @@ def decisions():
 
 def missing(vz=0):
     """Groups like unmatched, one per leaflet of the volume (0: of all released volumes) that names no issuer and
-    nobody decided on yet; surface "". Not a copy of a checked group: its details are those of the main copy."""
+    nobody decided on yet; surface "". Not an other copy."""
     session, decided = fillDatabase.session, decisions()
     named = {i for (i,) in session.query(LeafletIssuer.leaflet_id).filter(LeafletIssuer.role == "issuer")}
     rows = session.query(Leaflet, Volume.vz, Volume.stem).join(Volume).filter(
@@ -48,7 +53,7 @@ def missing(vz=0):
     return [{"surface": "", "issuers": [(lf, None)], "vz": {lf.id: number}}
             for lf, number, stem in rows
             if lf.id not in named and (stem, lf.start_page, lf.end_page) not in decided
-            and not (lf.copies_checked and lf.canonical_leaflet_id not in (None, lf.id))]
+            and not other_copy(lf)]
 
 
 def decide_none(volume, leaflet, value):

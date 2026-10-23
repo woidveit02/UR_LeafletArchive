@@ -12,7 +12,7 @@
         </header>
         <nav class="admin-actions admin-links" aria-label="Bereiche">
             <a class="button" href="/exemplare{{ '?status=offen' if open_groups }}" title="Flugblätter, die mehrfach im Bestand liegen: offen sind die noch nicht geprüften">Mehrfachexemplare{% if open_groups %} · <span class="todo">{{ open_groups }} offen</span>{% endif %}</a>
-            <a class="button" href="/verwaltung/herausgeber" title="Flugblätter, deren Herausgeber noch nicht im Register steht oder gar nicht erkannt wurde">Herausgeber zuordnen{% if issuers %} · <span class="todo">{{ issuers }} offen</span>{% endif %}</a>
+            <a class="button" href="/verwaltung/herausgeber" title="Flugblätter, deren Herausgeber noch nicht im Register steht oder gar nicht erkannt wurde">Herausgeber zuordnen{% if issuers %} · {{ issuers }} offen{% endif %}</a>
             <a class="button" href="/korrekturen" title="Korrekturen von Hand: offen sind die, deren Flugblatt sich seitdem geändert hat">Korrekturen{% if unmatched %} · <span class="todo">{{ unmatched }} offen</span>{% endif %}</a>
             <a class="button" href="{{ '/verwaltung/themen/neu' if candidate else '/verwaltung/themen' }}" title="Themen der Flugblätter: offen sind neu berechnete, die noch zu prüfen sind">Themen{% if candidate %} · <span class="todo">{{ candidate }} offen</span>{% endif %}</a>
             <a class="button admin-tools" href="/verwaltung/export">Datensatz exportieren</a>
@@ -60,7 +60,7 @@
                 <td class="num hide-narrow">{% if v.groups %}<a href="/exemplare?band={{ v.vz }}">{{ v.groups }}</a>{% else %}–{% endif %}</td>
                 <td class="admin-open">
                     {%- if v.open %}<a class="todo" href="/exemplare?band={{ v.vz }}&status=offen">{{ v.open }} {{ 'mögliches Mehrfachexemplar' if v.open == 1 else 'mögliche Mehrfachexemplare' }} prüfen</a>{% endif %}
-                    {%- if v.issuers %}<a class="todo" href="/verwaltung/herausgeber?band={{ v.vz }}">{{ v.issuers }} Herausgeber zuordnen</a>{% endif %}
+                    {%- if v.issuers %}<a class="meta" href="/verwaltung/herausgeber?band={{ v.vz }}">{{ v.issuers }} Herausgeber zuordnen</a>{% endif %}
                     {%- if not v.topics %}<a class="meta" href="/import/{{ v.vz }}?schritt=themen">Themen zuordnen (optional)</a>{% endif %}</td>
                 <td class="admin-action"><a class="button small" href="/import/{{ v.vz }}?schritt=pruefen" title="Hinweise und Herausgeber prüfen">Prüfen</a>
                     <details class="row-menu"><summary title="Weitere Optionen" aria-label="Weitere Optionen">⋯</summary>

@@ -6179,8 +6179,12 @@ h2 .count {
     margin-bottom: 8px;
 }
 
-.issuer-surface b {
-    font-size: var(--text-lg);
+.issuer-lead {
+    margin: 0 0 8px;
+}
+
+.issuer-people {
+    margin: 4px 0 16px;
 }
 
 .issuer-choice fieldset {
@@ -6204,6 +6208,19 @@ h2 .count {
 .issuer-choice input[type="text"] {
     width: min(100%, 24rem);
     margin-top: 4px;
+}
+
+.issuer-evidence-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.issuer-choice .note {
+    display: block;
+    margin: 6px 0 0;
 }
 
 .issuer-save {

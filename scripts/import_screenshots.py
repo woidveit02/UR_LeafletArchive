@@ -26,6 +26,11 @@ def splitter(page):
     page.click('#split-decide .split-q')
 
 
+def issuer_choice(page):  # the first suggestion chosen, so its evidence shows
+    page.set_viewport_size({'width': 1400, 'height': 1530})
+    page.locator('.org-results input').first.check()
+
+
 # (file, address, action before the shot, clip in CSS pixels or None: from below the menu to the end of the step)
 SHOTS = [('import_verwaltung.png', '/verwaltung', None, (0, 90, 1400, 458)),
          ('import_band.png', '/import/neu', None, None),
@@ -34,8 +39,7 @@ SHOTS = [('import_verwaltung.png', '/verwaltung', None, (0, 90, 1400, 458)),
          ('import_trennen.png', '/import/15?schritt=trennen', splitter, (0, 0, 1400, 900)),
          ('import_metadaten.png', '/import/15?schritt=angaben', open_details(), None),
          ('import_pruefen.png', '/import/15?schritt=pruefen', None, None),
-         ('import_herausgeber.png', '/import/0/herausgeber?nr=4', lambda page: page.set_viewport_size({'width': 1400, 'height': 1300}),
-          (0, 90, 1400, 1180)),
+         ('import_herausgeber.png', '/import/0/herausgeber?nr=2', issuer_choice, (0, 90, 1400, 1440)),
          ('import_themen.png', '/import/14?schritt=themen', None, (0, 90, 1400, 516))]
 
 with sync_playwright() as p:

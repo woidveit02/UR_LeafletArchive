@@ -8,13 +8,13 @@ Diese Anleitung führt durch den Import eines Bandes in der Anwendung, vom Scan 
 |---|---|---|---|---|
 | 1. Band wählen | legt den Band als Entwurf an | Band aus der Liste wählen | Sekunden | – |
 | 2. Scans hochladen | fügt PDF- oder TIFF-Dateien zu einem PDF zusammen | Dateien oder Ordner wählen | Minuten, je nach Größe | – |
-| 3. Text erkennen | schickt die Seiten an Datalab | starten und warten | etwa 4 Minuten | 1,00 $ |
+| 3. Text erkennen | schickt die Seiten an Datalab | starten und warten | etwa 4 Minuten je 100 Seiten | 1,00 $ |
 | 4. Flugblätter trennen | schlägt vor, wo ein Flugblatt endet | jeden Seitenwechsel prüfen | 7 bis 11 Sekunden je Seite, also 12 bis 18 Minuten | – |
 | 5. Metadaten erzeugen | lässt ein Sprachmodell Titel, Datum, Herausgeber usw. lesen | starten und warten | einige Minuten | etwa 0,90 $ |
 | 6. Prüfen und freigeben | findet Mehrfachexemplare, unbekannte Herausgeber und Unstimmigkeiten | drei Aufgaben durchgehen, dann freigeben | etwa 1,5 Minuten je Mehrfachexemplar, dazu Herausgeber und Hinweise | – |
 | danach: Themen zuordnen | ordnet die Flugblätter den bestehenden Themen zu | starten | wenige Minuten | unter 1 Cent je Band |
 
-Die Kosten sind am Testimport gemessen (Texterkennung 2,30 $ in 9 Minuten, Metadaten 2,11 $ für 230 Seiten). Die Zeiten für das Trennen und die Mehrfachexemplare stammen aus der Arbeit an den Bänden 1 bis 14 ([Kapitel 12](../bericht/12-projektverlauf.md)).
+Die Kosten sind am Testimport gemessen, Einzelheiten unter [Installieren und betreiben › Kosten](installieren-und-betreiben.md#kosten). Die Zeiten für das Trennen und die Mehrfachexemplare stammen aus der Arbeit an den Bänden 1 bis 14 ([Kapitel 12](../bericht/12-projektverlauf.md)).
 
 Bis zur Freigabe ist der Band ein Entwurf: Er fehlt in Flugblattliste, Suche, Trends und Themen. Jeder Schritt speichert sein Ergebnis. Sie können die Seite jederzeit schließen und später über Verwaltung › „Fortsetzen“ weitermachen.
 
@@ -91,15 +91,7 @@ Links stehen alle Seiten, rechts groß die beiden Seiten am gewählten Seitenwec
 
 Unten steht der Wert des Vorschlags. Über 0 schlägt die App eine Trennung vor. Das Fragezeichen daneben zeigt, woraus sich der Wert zusammensetzt.
 
-| Taste | Wirkung |
-|---|---|
-| Leertaste | nicht trennen |
-| Enter | trennen |
-| ← → | voriger / nächster Seitenwechsel |
-| Shift+L / L | linke / rechte Seite ist leer |
-| U oder Strg+Z | rückgängig |
-| Strg+Y | wiederholen |
-| Esc | zur Übersicht |
+Mit der Tastatur geht es schneller: Leertaste lässt die Seiten zusammen, Enter trennt, ← → springen zum vorigen oder nächsten Seitenwechsel, Strg+Z nimmt zurück. Alle Tasten stehen in der App unter „Hilfe zum Trennen“.
 
 Die App speichert laufend. „Noch N offen →“ springt zum nächsten ungeprüften Seitenwechsel. Sind alle geprüft, heißt der Knopf „Einteilung abschließen“. Erst danach geht es weiter zu Schritt 5.
 
@@ -143,12 +135,13 @@ Gehen Sie die Exemplare zuerst durch. Bei einem Exemplar, das es schon gibt, mü
 
 ![Herausgeber zuordnen: „Die Fachschaftssprecher“ aus Band 003 mit dem Ausschnitt im Scan](../abbildungen/import_herausgeber.png)
 
-Links steht die Schreibweise aus dem Text mit dem Ausschnitt im Scan, rechts die Auswahl. Das Bild zeigt die Prüfung über alle freigegebenen Bände (Verwaltung › Herausgeber zuordnen); aus Schritt 6 heraus sieht die Seite gleich aus.
+Oben steht die Schreibweise aus dem Text als Frage, darunter das Flugblatt mit seinen Metadaten. Links folgen der Ausschnitt im Scan und alle Seiten, rechts die Auswahl. Das Bild zeigt die Prüfung über alle freigegebenen Bände (Verwaltung › Herausgeber zuordnen); aus Schritt 6 heraus sieht die Seite gleich aus.
 
 - **Schreibweise einer bekannten Organisation:** Die App schlägt ähnlich geschriebene Organisationen vor.
 - **Andere Organisation aus dem Register:** Kürzel oder Namen eingeben. Nennt das Flugblatt mehrere Herausgeber, wählen Sie alle.
 - **Neu im Register:** legt die Organisation neu an.
 - **Kein Herausgeber:** Bei einer Person „zu den Unterzeichnenden verschieben“. Ist die Organisation nur erwähnt, „als Herausgeber entfernen“.
+- **Beleg:** Für jeden gewählten Herausgeber steht unten eine eigene Zeile. Stimmt die markierte Stelle nicht, dort „Beleg wählen“ und die richtigen Textblöcke im Scan anklicken. Der Beleg gilt nur für das gezeigte Flugblatt.
 
 „Speichern & weiter“ übernimmt die Auswahl. Ordnen Sie eine Schreibweise genau einer Organisation zu, erkennt die App sie auch in späteren Bänden. „Nächster ›“ lässt den Herausgeber offen. Bei Flugblättern ganz ohne Herausgeber halten Sie fest, dass nur Personen unterschreiben oder dass sich keiner feststellen lässt.
 
@@ -177,7 +170,7 @@ docker compose exec backend python -m app.cli --help
 docker compose exec backend python -m app.cli trennen --help   # Optionen eines Schritts
 ```
 
-Ein ganzer Band, hier Nr. 16. Die Dateien müssen im Container liegen. `/data/pdfs` ist dort der Scan-Ordner, den `LEAFLET_PDF_HOST_DIR` in `.env` angibt: Was Sie auf Ihrem Rechner in diesen Ordner legen, sieht der Container unter `/data/pdfs`.
+Ein ganzer Band, hier Nr. 16. Die Dateien müssen im Container liegen. `/data/pdfs` ist dort der Datenordner (`UR_LeafletArchive_data` neben dem Repository oder der Pfad aus `LEAFLET_PDF_HOST_DIR` in `.env`): Was Sie auf Ihrem Rechner in diesen Ordner legen, sieht der Container unter `/data/pdfs`.
 
 ```bash
 docker compose exec backend python -m app.cli band 16

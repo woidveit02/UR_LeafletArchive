@@ -34,6 +34,10 @@ def test_decide(tmp_path, monkeypatch):
     volume.status = "entwurf"
     assert organizations.unmatched() == [] and len(organizations.unmatched(15)) == 3  # a draft only on its own
     volume.status = "freigegeben"
+    copy = db.query(Leaflet).filter_by(start_page=2).one()
+    copy.copies_checked, copy.canonical_leaflet_id = True, db.query(Leaflet).filter_by(start_page=1).one().id
+    assert len(organizations.unmatched(15)[0]["issuers"]) == 1  # another copy: decided on its main copy
+    copy.copies_checked = False
     assert [(o.id, form) for o, form in organizations.candidates("ASTA.")] == [("asta", "AStA")]
     assert [o.id for o, _ in organizations.candidates("AStA der Uni Regensburg")] == ["asta"]
     assert organizations.candidates("Hans Meier") == []
