@@ -10,13 +10,13 @@
      Vor der Abgabe prüfen: Kapitel 10 nennt die 176 offenen Stellen beim Trennen und den fehlenden Test von Sonnet 5.
      Alle Daten ohne Jahr sind aus 2026. -->
 
-Dieses Kapitel beschreibt, wer im Projekt was gemacht hat, wie der tatsächliche Verlauf vom Plan aus dem Antrittsvortrag abwich und wie wir die Arbeit organisiert haben. Danach folgen Aufwand und Kosten, unsere Erfahrungen und zum Schluss, welche KI-Werkzeuge wir eingesetzt haben.
+Dieses Kapitel beschreibt, wer im Projekt was gemacht hat, wie der tatsächliche Verlauf vom Plan aus dem Antrittsvortrag abwich und wie wir die Arbeit organisiert haben. Danach folgen Aufwand und Kosten, unsere Erfahrungen und zum Schluss welche KI-Werkzeuge eingesetzt wurden.
 
 ## 12.1 Team und Betreuung
 
-Das Projekt entstand im Praxisseminar des Masterstudiengangs Medieninformatik an der Universität Regensburg im Sommersemester 2026. Im Team waren Veit Korpies, Felix Lindner und Sebastian Simbeck. Betreut wurde es von Prof. Christian Wolff, Thomas Schmidt, Jakob Fehle und Niklas Donhauser; Ansprechpartner im Universitätsarchiv war Dr. Andreas Becker.
+Das Projekt entstand im Praxisseminar des Masterstudiengangs Medieninformatik an der Universität Regensburg im Sommersemester 2026. Im Team waren Veit Korpies, Felix Lindner und Sebastian Simbeck. Betreut wurde es in erster Linie von Thomas Schmidt, und Prof. Christian Wolff, Jakob Fehle und Niklas Donhauser waren zusätzliche Ansprechpartner. Zudem war Ansprechpartner im Universitätsarchiv Dr. Andreas Becker.
 
-Feste Rollen haben wir nicht vergeben. Aus den Aufgaben ergaben sich aber Schwerpunkte, die über das Projekt hinweg weitgehend stabil blieben:
+Feste Rollen wurden nicht vergeben. Aus den Aufgaben ergaben sich aber Schwerpunkte, die über das Projekt hinweg weitgehend stabil blieben:
 
 | Bereich | Wer |
 |---|---|
@@ -36,13 +36,13 @@ Feste Rollen haben wir nicht vergeben. Aus den Aufgaben ergaben sich aber Schwer
 | Anwendung: Datenmodell, Import, Verwaltung, Export, Zusammenführung | Felix |
 | Kontakt zum Archiv (Findmittel, Rückfragen) | Veit |
 
-Die Kapitel dieses Berichts haben Veit (1, 2, 3, 7, 10), Sebastian (4, 5, 6) und Felix (Übersicht, 8, 9, 11, Kennzahlen, Handbücher, Glossar) geschrieben, Kapitel 12 alle gemeinsam. Felix hat außerdem die Texte in der Anwendung und die READMEs verfasst.
+Die Kapitel dieses Berichts haben Veit (1, 2, 3, 7, 10), Sebastian (4, 5, 6) und Felix (Übersicht, 8, 9, 11, Kennzahlen, Handbücher, Glossar) geschrieben, Kapitel 12 alle gemeinsam. Alle Kapitel wurden mehrmals von verschiedenen Teammitgliedern überarbeitet. Felix hat außerdem die Texte in der Anwendung und die READMEs verfasst.
 
 ## 12.2 Zeitlicher Verlauf
 
-Im Antrittsvortrag am 09.06. hatten wir den Ablauf wie folgt geplant: Evaluation der Methoden, Flugblätter trennen, Text erkennen, ein Datenmodell entwickeln und schließlich eine Anwendung zur Datenanalyse bauen, etwa für Topic Modelling, Sentiment-Analyse und N-Gramme.
+Im Antrittsvortrag am 09.06.2026 hatten wir den Ablauf wie folgt geplant: Evaluation der Methoden, Flugblätter trennen, Text erkennen, ein Datenmodell entwickeln und schließlich eine Anwendung zur Datenanalyse bauen, etwa für Topic Modelling, Sentiment-Analyse und N-Gramme.
 
-Tatsächlich verlief das Projekt in drei Phasen. In der Vorbereitung von Mai bis Juni haben wir den Bestand gewählt und das Vorgehen abgestimmt. In der Rohdaten-Phase von Ende Juni bis August haben wir den Umfang auf die 14 bis dahin gescannten Bände festgelegt, ein OCR-System ausgewählt und geprüft, alle Bände erkannt und von Hand getrennt. Trennen und Texterkennung liefen dabei, anders als geplant, parallel, weil das Trennen von Hand nur die Scans brauchte; Felix konnte die Texterkennung abschließen, während Sebastian und Veit trennten. Die Phase "Erschließung und Anwendung" begann mit den Sprechstunden am 25.08. Im September haben wir das Findmittel ausgewertet, die Metadatenextraktion entwickelt und das Topic Modelling aufgebaut. Das Datenmodell konnten wir erst festlegen, als am 22.09. die Felder der Metadaten feststanden; zwei Tage später entstand das Repository der Anwendung. Metadaten aller Bände und Themen folgten Ende September und Anfang Oktober, die Prüfung der Mehrfachexemplare vom 05. bis 11.10.
+Tatsächlich verlief das Projekt in drei Phasen. In der Vorbereitung von Mai bis Juni haben wir den Bestand gewählt und das Vorgehen abgestimmt. In der Rohdaten-Phase von Ende Juni bis August haben wir den Umfang auf die 14 bis dahin gescannten Bände festgelegt, ein OCR-System ausgewählt und geprüft, alle Bände erkannt und von Hand getrennt. Trennen und Texterkennung liefen dabei, anders als geplant, parallel, weil das Trennen von Hand nur die Scans brauchte; Felix konnte die Texterkennung abschließen, während Sebastian und Veit trennten. Die Phase "Erschließung und Anwendung" begann mit den Sprechstunden am 25.08.2026 Im September haben wir das Findmittel ausgewertet, die Metadatenextraktion entwickelt und das Topic Modelling aufgebaut. Das Datenmodell konnten wir erst festlegen, als am 22.09.2026 die Felder der Metadaten feststanden; zwei Tage später entstand das Repository der Anwendung. Metadaten aller Bände und Themen folgten Ende September und Anfang Oktober, die Prüfung der Mehrfachexemplare vom 05. bis 11.10.2026
 
 Die größte Abweichung vom Plan betrifft die Anwendung. Statt einer Anwendung zur Datenanalyse entstand eine zum Erschließen und Pflegen des Bestands, mit Import neuer Bände. Sie zeigt unter „Trends“, welcher Anteil der Flugblätter eines Jahres einen Suchbegriff enthält; weitergehende Analysen liegen außerhalb, im N-Gramm-Werkzeug und im Notebook (Kap. 9.7).
 
@@ -101,7 +101,7 @@ Die größte Abweichung vom Plan betrifft die Anwendung. Statt einer Anwendung z
 
 ## 12.4 Arbeitsweise
 
-### Besprechungen
+### Interne Besprechungen
 
 Wir haben uns während des gesamten Bearbeitungszeitraums wöchentlich getroffen. Die Treffen fanden sowohl in Präsenz an der Uni als auch online über Discord statt. Meist moderierte Felix. Jede Person berichtete ihren Stand, danach haben wir die Aufgaben bis zum nächsten Treffen verteilt. Ab dem 19.08. haben wir dazu ein Protokoll mit dem Stand jeder Person und den offenen Aufgaben geführt. Zwischen den Treffen erfolgte die Kommunikation über WhatsApp. Als Sebastian vom 07. bis 17.09. abwesend war, haben wir die Aufgaben für diese Zeit vorher strikt verteilt.
 
@@ -154,20 +154,20 @@ Exakte Zeiten wurden während des Projekts nicht laufend erfasst. Die folgenden 
 
 | Arbeit | Aufwand | Anmerkung |
 |---|---|---|
-| OCR-Tests der acht Systeme | [offen: schätzen, sonst „nicht erfasst“] | Läufe am 08./09.07. |
+| OCR-Tests der acht Systeme | nicht erfasst | Läufe am 08./09.07. |
 | Seitenvergleich Datalab gegen Mistral | ein Tag | je Person ein Drittel mit Notizen je Seite, abends Besprechung und Entscheidung |
 | Goldstandard | ca. 2,5 Stunden je Person für ein Drittel | in Blöcken von etwa 15 Minuten über mehrere Tage, weil die Arbeit viel Konzentration braucht; dazu Besprechungen zu den Regeln |
 | Splitter, erste Fassung | ca. eine Woche | danach weiterentwickelt, während getrennt wurde |
 | Trennen von Hand | Sebastian ca. 6 Stunden für 1926 Seiten, Veit ca. 4,5 Stunden für 2123 Seiten | 7 bis 11 Sekunden je Seite; Felix trennte Nr. 001–003 (415 Seiten) nebenbei, während er den Splitter entwickelte und die Texterkennung betreute |
 | Zweiter Durchgang beim Trennen | ca. 1,5 Stunden | 77 Entscheidungen, über den Tag verteilt |
-| Metadaten: Prompt und Läufe | [offen: schätzen, sonst „nicht erfasst“] | mehrere Prompt-Fassungen bis zu den Läufen am 30.09. und 02.10. |
-| Topic Modelling | [offen: schätzen, sonst „nicht erfasst“] | mehrere Ansätze, Themenlauf am 03.10. |
+| Metadaten: Prompt und Läufe | mehrere Wochen | mehrere Prompt-Fassungen bis zu den Läufen am 30.09. und 02.10. |
+| Topic Modelling | ca. eine Woche | mehrere Ansätze, Themenlauf am 03.10. |
 | Mehrfachexemplare | Sebastian ca. 8 Stunden für 320 Fälle | etwa 1,5 Minuten je Fall, mit Korrektur der Metadaten |
 | Anwendung | Felix etwa in Vollzeit vom 24.09. bis 22.10. | Anteil von Veit und Sebastian [offen: schätzen, sonst „nicht erfasst“] |
 
 Der Zeitaufwand der Separierungen war stark vom zu bearbeitenden Band abhängig. Da die Bände innerhalb eines Jahrgangs nach herausgebenden Gruppen sortiert sind, ließen sich schnell Muster erkennen, wonach Flugblätter von Gruppen, welche eine strikte Nummerierung anwandten, deutlich schneller zu trennen waren als andere. Zwei der drei Bände, die laut Findmittel überwiegend eine einzige Gruppe enthalten, wurden von Veit bearbeitet (Nr. 011 Demokratische Front, Nr. 013 AStA). Der dritte wurde von Sebastian separiert (Nr. 007 RCDS). Dieser Sachverhalt könnte das teilweise unterschiedliche Bearbeitungstempo begründen.
 
-Für externe Dienste haben wir insgesamt etwa 95 $ bezahlt. Bei Datalab lagen wir rund 30 $ über dem monatlichen Gratisguthaben von 20 $. Bei OpenRouter, wo es für Claude kein Gratiskontingent gibt, kosteten alle Tests und Läufe zusammen rund 65 $. Diese wurden beinahe vollständig für die Metadatenextraktion sowie zu einem kleinen Teil für die Embeddings der Themen aufgewandt. [offen: Beträge aus den Dashboards in `kennzahlen.md` übernehmen.]
+Für externe Dienste haben wir insgesamt etwa 95 \$ bezahlt. Bei Datalab lagen wir rund 30 \$ über dem monatlichen Gratisguthaben von 20 \$. Bei OpenRouter, wo es für Claude kein Gratiskontingent gibt, kosteten alle Tests und Läufe zusammen rund 65 \$. Diese wurden beinahe vollständig für die Metadatenextraktion sowie zu einem kleinen Teil für die Embeddings der Themen aufgewandt. [offen: Beträge aus den Dashboards in `kennzahlen.md` übernehmen.]
 
 ## 12.8 Erfahrungen
 
@@ -181,7 +181,7 @@ Die größte Abweichung stellen wir beim Umfang der Anwendung fest. Der Arbeitsa
 
 ### Modellwechsel
 
-Sowohl bei der Metadatenextraktion als auch beim Topic-Modelling fielen die ersten Ergebnisse nicht zufriedenstellend aus. Dies verlangte Modell-Wechsel. Für die Metadaten hatten wir zuerst *Gemini 2.5 Flash* im Gratiskontingent eingeplant. Die Ergebnisse waren hiermit jedoch zu ungenau, weshalb wir anstelle dessen fortan *Claude Sonnet 4.5* über *OpenRouter* verwendeten. Dies erzeugte zusätzliche Kosten von etwa 65 $ (Kap. 12.7). Beim Topic Modelling ergab der erste Versuch mit *MiniLM* auf einzelnen Textblöcken 234 Themen und ordnete 42 % der Blöcke kein Thema zu, weil der Kontext des Modells für ganze Flugblätter zu klein war. Erst die Verwendung von *bge-m3* auf ganzen Flugblättern führte zu brauchbaren Themen (Kap. 7).
+Sowohl bei der Metadatenextraktion als auch beim Topic-Modelling fielen die ersten Ergebnisse nicht zufriedenstellend aus. Dies verlangte einen Modell-Wechsel. Für die Metadaten hatten wir zuerst *Gemini 2.5 Flash* im Gratiskontingent eingeplant. Die Ergebnisse waren hiermit jedoch zu ungenau, weshalb wir anstelle dessen fortan *Claude Sonnet 4.5* über *OpenRouter* verwendeten. Dies erzeugte zusätzliche Kosten von etwa 65 $ (Kap. 12.7). Beim Topic Modelling ergab der erste Versuch mit *MiniLM* auf einzelnen Textblöcken 234 Themen und ordnete 42 % der Blöcke kein Thema zu, weil der Kontext des Modells für ganze Flugblätter zu klein war. Erst die Verwendung von *bge-m3* auf ganzen Flugblättern führte zu brauchbaren Themen (Kap. 7).
 
 ### Lehren
 
