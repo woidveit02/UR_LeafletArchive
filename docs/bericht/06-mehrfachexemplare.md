@@ -22,7 +22,7 @@ Mehrfachexemplare werden als solche markiert, jedoch nicht direkt zusammengefüh
 
 ## 6.4 Qualität
 
-Die Methode der Anwendung findet 309 der 310 geprüften Gruppen, ohne eine API zu nutzen. Der Vorschlag für das Hauptexemplar, das Exemplar mit dem längsten Text, wurde in 62 % der Gruppen übernommen.
+Von den 320 vermuteten Mehrfachexemplar-Gruppen konnten tatsächlich 310 als solche bestätigt werden. Somit liegt der Anteil an False Positives für unseren Bestand bei 3,13%. Der von der Anwendung bereitgestellte Vorschlag für das Hauptexemplar, welcher auf der Textlänge der einzelnen Exemplare basiert, wurde bei 62% der Gruppen übernommen.
 
 ## 6.5 Manuelle Prüfung
 
