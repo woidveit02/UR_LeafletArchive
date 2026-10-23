@@ -64,5 +64,8 @@ def test_import_volume_as_draft_then_release(tmp_path, monkeypatch):
         fillDatabase.import_volume(9)  # a second import would double the leaflets
     fillDatabase.release_volume(9)
     assert db.query(Volume).one().status == RELEASED
+    assert "status" not in fillDatabase.load_json("volumes.json")[0]
     fillDatabase.release_volume(9, DRAFT)
     assert db.query(Volume).one().status == DRAFT
+    # volumes.json keeps it, so a rebuilt database does not release the draft
+    assert fillDatabase.volume_from_entry(fillDatabase.load_json("volumes.json")[0]).status == DRAFT

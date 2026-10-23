@@ -80,12 +80,12 @@ def new_volume(vz, portal_url=""):
     year = unit["year"]
     entry = {"vz": vz, "label": f"Nr. {vz:03d} ({year})", "stem": f"0118_{vz:04d}", "year": year,
              "title": unit["title"], "signature": unit["signature"],
-             "added": True, "digitized": True, "portal_url": portal_url.strip() or unit["portal_url"], "group": str(year)}
+             "added": True, "digitized": True, "portal_url": portal_url.strip() or unit["portal_url"], "group": str(year),
+             "status": DRAFT}
     entries = load_entries()
     save_entries(entries + [entry])
     session = fillDatabase.session
     volume = fillDatabase.volume_from_entry(entry)
-    volume.status = DRAFT
     session.add(volume)
     session.commit()
     return volume
@@ -166,7 +166,8 @@ def discard(volume):
     if added:
         session.delete(volume)
     else:
-        volume.stem, volume.digitized, volume.status, volume.n_pages = None, False, RELEASED, None
+        volume.stem, volume.digitized, volume.n_pages = None, False, None
+        fillDatabase.set_status(volume, RELEASED)
     session.commit()
 
 
@@ -215,8 +216,9 @@ def claim(volume):
     if volume.stem and volume.digitized and volume.status == DRAFT:
         return
     volume.stem = volume.stem or f"0118_{volume.vz:04d}"
-    volume.digitized, volume.status = True, DRAFT
+    volume.digitized = True
     update_entry(volume.vz, stem=volume.stem, digitized=True)
+    fillDatabase.set_status(volume, DRAFT)
     fillDatabase.session.commit()
 
 

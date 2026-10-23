@@ -141,7 +141,20 @@ def volume_from_entry(v):
                   year=v["year"], title=v["title"], group=v["group"],
                   signature=v["signature"],
                   digitized=v["digitized"],
-                  portal_url=v.get("portal_url"))
+                  portal_url=v.get("portal_url"), status=v.get("status", RELEASED))
+
+
+def set_status(volume, status):
+    """Sets draft or released in the database and in volumes.json, so a rebuilt database keeps it; a released
+    volume has no "status" there."""
+    volume.status = status
+    entries = load_json("volumes.json")
+    for e in entries:
+        if e["vz"] == volume.vz:
+            e.pop("status", None)
+            if status == DRAFT:
+                e["status"] = DRAFT
+    save_json("volumes.json", entries)
 
 
 def fill_volumes():
@@ -400,7 +413,7 @@ def import_volume(vz):
     if volume is None:
         volume = volume_from_entry(entry)
         session.add(volume)
-    volume.status = DRAFT
+    set_status(volume, DRAFT)
     session.commit()
     configs = [c for c in VOLUMES if c["label"] != cfg["label"]] + [cfg]
     fill_volume(cfg, variant_index(), {cfg["label"]: volume}, series_names(configs),
@@ -411,8 +424,7 @@ def import_volume(vz):
 
 def release_volume(vz, status=RELEASED):
     """Makes a draft visible in the list, the search, the trends and the topics; status=DRAFT hides a volume again."""
-    volume = session.query(Volume).filter_by(vz=vz).one()
-    volume.status = status
+    set_status(session.query(Volume).filter_by(vz=vz).one(), status)
     session.commit()
 
 
@@ -420,9 +432,9 @@ def check_data_dir(pdf_dir=PDF_DIR):
     """Returns readable hints if PDFs or OCR files are missing in the
     mounted data folder; empty list if everything is in place."""
     if not pdf_dir.is_dir() or not any(pdf_dir.iterdir()):
-        return [f"{pdf_dir} is empty or missing. Is the path in "
-                "LEAFLET_PDF_HOST_DIR (.env) correct? For a wrong path, "
-                "Docker silently creates an empty folder."]
+        return [f"{pdf_dir} is empty or missing. Does UR_LeafletArchive_data lie next to "
+                "the repository folder, or is the path in LEAFLET_PDF_HOST_DIR (.env) correct? "
+                "For a wrong path, Docker silently creates an empty folder."]
     problems = []
     for cfg in VOLUMES:
         label = cfg["label"]
@@ -434,7 +446,7 @@ def check_data_dir(pdf_dir=PDF_DIR):
             elif any(p.is_dir() for p in pdf_dir.glob(f"*/{label}")):
                 hint = "The path points one level too high."
             elif (pdf_dir / "organizations.json").is_file():
-                hint = "The default folder ./data is mounted. Is the .env missing?"
+                hint = "The repository's data/ is mounted, not the data folder."
             else:
                 found = ", ".join(sorted(p.name for p in pdf_dir.iterdir())[:5])
                 hint = f"Found instead: {found}"
