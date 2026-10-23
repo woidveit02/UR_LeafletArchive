@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def scan_dir(path=None):
-    """path, else LEAFLET_PDF_HOST_DIR from .env."""
+    """path, else LEAFLET_PDF_HOST_DIR from .env, else UR_LeafletArchive_data next to the repository."""
     if path:
         return Path(path)
     env = ROOT / ".env"
@@ -15,7 +15,9 @@ def scan_dir(path=None):
         key, _, value = line.partition("=")
         if key.strip() == "LEAFLET_PDF_HOST_DIR" and value.strip():
             return Path(value.strip().strip('"'))
-    sys.exit("Der Scan-Ordner fehlt: mit --ordner angeben oder LEAFLET_PDF_HOST_DIR in .env eintragen.")
+    if (ROOT.parent / "UR_LeafletArchive_data").is_dir():
+        return ROOT.parent / "UR_LeafletArchive_data"
+    sys.exit("Der Scan-Ordner fehlt: neben das Repository legen, mit --ordner angeben oder LEAFLET_PDF_HOST_DIR in .env eintragen.")
 
 
 def volumes(folder):

@@ -1,5 +1,6 @@
 services:
   backend:
+    platform: linux/amd64  # hdbscan has no ARM build; Macs with Apple chips run the image emulated
     build:
       context: ./src/backend
       additional_contexts:
@@ -11,7 +12,7 @@ services:
       - TZ=Europe/Berlin  # stamps of OCR runs, metadata and corrections in local time
       - LEAFLET_DATA_DIR=/app/data
       - LEAFLET_PDF_DIR=/data/pdfs
-      - LEAFLET_PDF_HOST_DIR=${LEAFLET_PDF_HOST_DIR:-}
+      - LEAFLET_PDF_HOST_DIR=${LEAFLET_PDF_HOST_DIR:-../UR_LeafletArchive_data}
       - LEAFLET_CORRECTIONS=${LEAFLET_CORRECTIONS:-}  # other file, e.g. for UI tests
       - DATALAB_API_KEY=${DATALAB_API_KEY:-}  # only the import of new volumes needs these (.env)
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
@@ -21,4 +22,4 @@ services:
       - ./src/frontend/static:/app/app/static
       - ./data:/app/data
       - ./data/photos:/app/app/static/photos
-      - ${LEAFLET_PDF_HOST_DIR:-./data}:/data/pdfs
+      - ${LEAFLET_PDF_HOST_DIR:-../UR_LeafletArchive_data}:/data/pdfs  # by default next to the repository

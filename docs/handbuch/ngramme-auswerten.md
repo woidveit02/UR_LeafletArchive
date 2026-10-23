@@ -7,7 +7,7 @@ python scripts/ngrams.py <befehl> [optionen]
 python scripts/ngrams.py <befehl> --help
 ```
 
-Das Skript liest die Datalab-JSONs aus dem Scan-Ordner, den `LEAFLET_PDF_HOST_DIR` in `.env` angibt, und das Jahr jedes Bandes aus `data/volumes.json`. Neue Bände zählen also mit, sobald ihre Texterkennung vorliegt. Der erste Lauf speichert den Text im Scan-Ordner unter `.ngrams/` und dauert einige Sekunden; nach einer neuen Texterkennung wird er neu erzeugt.
+Das Skript liest die Datalab-JSONs aus dem Datenordner (`UR_LeafletArchive_data` neben dem Repository oder der Pfad aus `LEAFLET_PDF_HOST_DIR` in `.env`) und das Jahr jedes Bandes aus `data/volumes.json`. Neue Bände zählen also mit, sobald ihre Texterkennung vorliegt. Der erste Lauf speichert den Text im Scan-Ordner unter `.ngrams/` und dauert einige Sekunden; nach einer neuen Texterkennung wird er neu erzeugt.
 
 Vor dem Befehl stehen zwei Optionen für alle Befehle: `--ordner PFAD` für einen anderen Scan-Ordner und `--bands 0118_0002,0118_0009` für einzelne Bände.
 
@@ -45,7 +45,7 @@ Jahr    Seiten     Token  Bände
 ## `top`: häufigste N-Gramme
 
 ```bash
-python scripts/ngrams.py top -n 3 --top 10
+python scripts/ngrams.py top -n 3 --top 8
 ```
 
 ```
@@ -58,20 +58,11 @@ python scripts/ngrams.py top -n 3 --top 10
      149  mehrheit der studenten
      129  freie politische betätigung
      112  der arbeitenden bevölkerung
-     108  aktionsgemeinschaft liberaler studenten
-     104  organe der verfaßten
 ```
 
 Einzelwörter (`-n 1`) zählen ohne Stoppwörter. Ein Zweiwort-N-Gramm braucht mindestens ein Wort, das kein Stoppwort ist, ab drei Wörtern mindestens zwei. Die Liste zeigt feste Formeln: `freiheit der wissenschaft` steht vor allem beim RCDS, `der arbeitenden bevölkerung` bei MSB und SHB.
 
-`--raw` zählt ohne die Aufbereitung. Sieht ein Befund mit und ohne `--raw` gleich aus, hängt er nicht an der Aufbereitung:
-
-```
-3-Gramme (roh, 1096581 Token):
-    1699  rcds rcds rcds
-     642  der universität regensburg
-     627  sprach-lit sprach-lit sprach-lit
-```
+`--raw` zählt ohne die Aufbereitung; dann führen wiederholte Kopfzeilen wie `rcds rcds rcds` die Liste an. Sieht ein Befund mit und ohne `--raw` gleich aus, hängt er nicht an der Aufbereitung.
 
 Optionen: `-n` (Standard 2), `--top` (Standard 20), `--raw`.
 
@@ -80,18 +71,14 @@ Optionen: `-n` (Standard 2), `--top` (Standard 20), `--raw`.
 Häufigkeit je 10 000 Token. Wortfolgen stehen in Anführungszeichen:
 
 ```bash
-python scripts/ngrams.py trend notstand vietnam streik berufsverbot mitbestimmung "numerus clausus" "kampf gegen"
+python scripts/ngrams.py trend notstand berufsverbot mitbestimmung
 ```
 
 ```
 pro 10.000 Token              1967    1968    1969    1970    1971    1972    1973
   notstand                     0.0     3.0     0.0     0.2     0.0     0.0     0.3
-  vietnam                      0.0     0.0     0.7     5.0     0.3     1.3     2.1
-  streik                       0.0     3.5    16.6     1.0     0.3     5.9    11.5
   berufsverbot                 0.0     0.0     0.0     0.0     0.0     2.3     2.6
   mitbestimmung                0.0     2.0     1.3     2.1     3.5     5.2     5.0
-  numerus clausus              0.0     1.0     0.7     5.0     1.6     1.8     2.9
-  kampf gegen                  0.0     2.5     2.9     1.6     1.5     6.0     7.7
   Token je Jahr               5462   19801   71845   62172  149818  362886  392813
 ```
 
@@ -124,7 +111,7 @@ Optionen: `-n` (Standard 1), `--min-count` (Mindestzahl im Jahr, Standard 25), `
 Welche Wörter stehen in einem Fenster von fünf Token um einen Ausdruck? Sortiert nach logDice (über 9 sehr stark, 7 bis 9 stark, unter 5 kaum bemerkenswert). Die erste Zeile zeigt, ob die Treffer über viele Seiten verteilt sind oder sich auf wenige lange Papiere bündeln; ab 50 % warnt das Skript.
 
 ```bash
-python scripts/ngrams.py collocates spd --year 1972 --top 8
+python scripts/ngrams.py collocates spd --year 1972 --top 4
 ```
 
 ```
@@ -134,17 +121,13 @@ python scripts/ngrams.py collocates spd --year 1972 --top 8
   shb                             43     418     10.9
   jungsozialisten                 20      98     10.6
   fdp-regierung                   15      15     10.5
-  landtag                         15      62     10.3
-  gewerkschaften                  11      67      9.8
-  innerhalb                       12     190      9.6
-  cdu                             11     164      9.5
 ```
 
 Ein Beispiel, wie man einen Befund prüft. `keyness` zeigt `spd (324)` für 1972.
 
 1. Die Treffer verteilen sich auf 141 Seiten in allen vier Bänden des Jahres, die zehn stärksten Seiten stellen nur 20 %.
 2. `trend csu cdu barzel brandt spd` zeigt für alle fünf Wörter 1972 den höchsten Wert, `barzel` kommt fast nur 1972 vor. Die Bundespolitik reicht 1972 in die Flugblätter: das gescheiterte Misstrauensvotum im April, die vorgezogene Bundestagswahl im November.
-3. Stärkster Partner ist 1972 `shb`, 1973 fehlt er (dort führen `fdp`, `csu`, `cdu`). Die Belegstellen mit `kwic` zeigen den Streit zwischen SPD und SHB: „Es geht nicht darum, ob (inhaltlich) SPD oder SHB die wahre Sozialdemokratie vertreten…“
+3. Häufigster Partner ist 1972 `shb` (43 gemeinsame Treffer), 1973 fehlt er (dort führen `fdp`, `csu`, `cdu`). Die Belegstellen mit `kwic` zeigen den Streit zwischen SPD und SHB: „Es geht nicht darum, ob (inhaltlich) SPD oder SHB die wahre Sozialdemokratie vertreten…“
 
 Optionen: `--year 1972` oder `--year 1971,1972`, `-w` (Fenster, Standard 5), `--min-count` (Standard 4), `--top` (Standard 20).
 
@@ -169,6 +152,6 @@ Die beiden Belege von 1973 stammen aus zwei Exemplaren desselben Blatts, die die
 
 - Wörter werden nicht auf ihre Grundform gebracht: `studenten` und `student` zählen getrennt.
 - Mehrfachexemplare zählen mehrfach. Das Skript liest alle Seiten aller Bände und weiß nicht, welche Blätter Exemplare desselben Flugblatts sind ([Kapitel 6](../bericht/06-mehrfachexemplare.md)). Ein oft verteiltes Blatt hebt seine Wörter deshalb in `top`, `trend` und `keyness` an; das `kwic`-Beispiel oben zeigt zwei Exemplare nebeneinander. Die Trends der Anwendung zählen jedes Flugblatt dagegen einmal.
-- Gezählt wird nach Seiten und Token, nicht nach Flugblättern. Fragen wie „auf wie vielen Blättern steht X“ oder „welche Gruppe schreibt was“ beantwortet der Export der Anwendung (Beispiele im Notebook `vertiefung/forschungsfragen.ipynb`).
+- Gezählt wird nach Seiten und Token, nicht nach Flugblättern. Fragen wie „auf wie vielen Blättern steht X“ oder „welche Gruppe schreibt was“ beantwortet der Export der Anwendung (Beispiele im Notebook `scripts/forschungsfragen.ipynb`).
 - Fehler der Texterkennung bleiben stehen. `keyness` findet sie gut.
 - G² dient hier nur zum Sortieren, nicht als Test mit Schwellenwert.

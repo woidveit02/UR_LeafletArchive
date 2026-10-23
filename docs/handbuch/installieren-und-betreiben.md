@@ -2,24 +2,32 @@
 
 ## Installation
 
-Die Anwendung läuft in Docker. Sie brauchen Docker mit Docker Compose (unter Windows und macOS Docker Desktop) und den Ordner `UR_LeafletArchive_data` mit Scans und Texterkennung. Die Schritte stehen in der README im Hauptverzeichnis des Repositorys unter „Schnellstart“:
+Die Anwendung läuft in Docker. Sie brauchen Docker mit Docker Compose (unter Windows und macOS Docker Desktop, unter Linux Docker Engine mit dem Compose-Plugin) und den Ordner `UR_LeafletArchive_data` mit Scans und Texterkennung. Die Schritte für Windows, macOS und Linux stehen in der README im Hauptverzeichnis des Repositorys unter „Schnellstart“. Kurz:
+
+```
+Flugblattsammlung/
+├── UR_LeafletArchive/         der Code
+└── UR_LeafletArchive_data/    Scans und Texterkennung
+```
 
 ```bash
-cp .env.example .env          # danach den Pfad zum Datenordner eintragen
+cd UR_LeafletArchive
 docker compose up -d
 ```
 
-Der erste Start baut das Image (etwa 1,5 GB, einige Minuten), legt die Datenbank an und rendert im Hintergrund die Vorschaubilder. Danach ist die Anwendung unter http://localhost:8000/ erreichbar. In der Ausgabe von `docker compose logs backend` muss „Data folder ok“ stehen; sonst nennt die Meldung, was am Pfad nicht stimmt.
+Liegt der Datenordner wie oben neben dem Repository, ist keine `.env` nötig. Der erste Start baut das Image (etwa 1,5 GB, 10 bis 20 Minuten), legt die Datenbank an und rendert im Hintergrund die Vorschaubilder. Danach ist die Anwendung unter http://localhost:8000/ erreichbar. In der Ausgabe von `docker compose logs backend` muss „Data folder ok“ stehen; sonst nennt die Meldung, was am Pfad nicht stimmt.
+
+Das Image wird für Intel- und AMD-Prozessoren gebaut (`platform: linux/amd64` in `docker-compose.yml`), weil das Paket `hdbscan` für ARM nicht fertig gebaut vorliegt. Auf einem Mac mit Apple-Chip emuliert Docker Desktop es; das funktioniert, ist aber langsamer.
 
 Nach einem Update des Repositorys: Haben sich `Dockerfile`, `requirements.txt` oder die Dokumentation in `docs/` geändert, mit `docker compose up -d --build` neu bauen. Die Dokumentation wird dabei ins Image gebaut und ist in der Anwendung unter http://localhost:8000/doku/ erreichbar. Zum Löschen der Datenbank siehe [Sichern](#sichern).
 
 ## Konfiguration
 
-Alle Einstellungen stehen in `.env`. Die Vorlage `.env.example` erklärt jede Zeile.
+Alle Einstellungen stehen in `.env`. Für den Normalfall braucht es die Datei nicht; die Vorlage `.env.example` erklärt jede Zeile.
 
 | Eintrag | Pflicht | Wofür |
 |---|---|---|
-| `LEAFLET_PDF_HOST_DIR` | ja | Pfad zum Datenordner, darin je Band ein Ordner wie „Nr. 002 (1968)“. Unter Windows mit Schrägstrichen: `C:/Users/Name/UR_LeafletArchive_data`. Fehlt er, startet die Anwendung ohne Scans und Text und zeigt oben auf jeder Seite einen Hinweis. |
+| `LEAFLET_PDF_HOST_DIR` | nein | Pfad zum Datenordner, darin je Band ein Ordner wie „Nr. 002 (1968)“. Ohne Eintrag gilt `UR_LeafletArchive_data` neben dem Repository. Unter Windows mit Schrägstrichen: `C:/Users/Name/UR_LeafletArchive_data`. Stimmt der Pfad nicht, startet die Anwendung ohne Scans und Text und zeigt oben auf jeder Seite einen Hinweis. |
 | `DATALAB_API_KEY` | nur für den Import | Texterkennung (Schritt 3) |
 | `OPENROUTER_API_KEY` | nur für den Import | Metadaten (Schritt 5), Themen |
 | `LEAFLET_BIND` | nein | `0.0.0.0` macht die Anwendung im ganzen Netz erreichbar, siehe [Kurz im lokalen Netz zeigen](#kurz-im-lokalen-netz-zeigen) |
@@ -69,7 +77,7 @@ Was die Anwendung weiß, liegt in Dateien an zwei Orten. Sichern Sie beide regel
 | Ort | Inhalt | Wenn er verloren geht |
 |---|---|---|
 | `data/` im Repository | Metadaten je Band (`nr001_metadata.json` …), Register der Herausgeber (`organizations.json`), Themen (`topics.json`, `topic_map.json`), Handkorrekturen (`corrections.jsonl`), geprüfte Exemplare (`copy_decisions.jsonl`), bestätigte Hinweise und Entscheidungen zu Herausgebern (`checked.jsonl`), ein geänderter Prompt (`metadata_prompt.txt`), Embeddings | Die `.jsonl`-Dateien und die Ergänzungen im Register sind Handarbeit und lassen sich nicht wiederherstellen. Metadaten und Embeddings kosten neu. |
-| Datenordner (`LEAFLET_PDF_HOST_DIR`) | Scans, Texterkennung je Band, Trennung (`*.segments.json`), in der Verwaltung gespeicherte API-Keys (`.datalab-key`, `.openrouter-key`) | Die Texterkennung kostet neu, die Trennung ist Handarbeit. Die Ordner `.thumbs` und `.ngrams` müssen nicht gesichert werden, sie entstehen von selbst neu. |
+| Datenordner (`UR_LeafletArchive_data`) | Scans, Texterkennung je Band, Trennung (`*.segments.json`), in der Verwaltung gespeicherte API-Keys (`.datalab-key`, `.openrouter-key`) | Die Texterkennung kostet neu, die Trennung ist Handarbeit. Die Ordner `.thumbs` und `.ngrams` müssen nicht gesichert werden, sie entstehen von selbst neu. |
 
 Die Datenbank `src/backend/leaflet_database.db` ist ein Abbild von `data/`. Beim Start legt die Anwendung fehlende Tabellen und Spalten an. Fehlt die Datenbank, baut sie sie aus `data/` neu auf; eine vorhandene bleibt, wie sie ist. Nach Änderungen an `data/` von außen, etwa durch ein Update des Repositorys, löschen Sie sie deshalb und starten neu:
 

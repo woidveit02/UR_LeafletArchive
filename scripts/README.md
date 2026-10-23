@@ -2,14 +2,14 @@
 
 Werkzeuge, die neben der Anwendung auf dem eigenen Rechner laufen. Aufruf immer aus dem Repository, zum Beispiel `python scripts/ngrams.py size`. Jedes Skript erklärt seine Optionen mit `--help`.
 
-Skripte, die den Scan-Ordner lesen, nehmen den Pfad aus `LEAFLET_PDF_HOST_DIR` in `.env`; mit `--ordner` lässt sich ein anderer angeben.
+Skripte, die den Scan-Ordner lesen, nehmen den Pfad aus `LEAFLET_PDF_HOST_DIR` in `.env`, sonst `UR_LeafletArchive_data` neben dem Repository; mit `--ordner` lässt sich ein anderer angeben.
 
 ## Scans und Pflege
 
 | Skript | Wofür | Braucht |
 |---|---|---|
 | `tiff_to_pdf.py ORDNER` | TIFF-Scans zu einem PDF zusammenfügen, wie Schritt 2 des Imports | PyMuPDF |
-| `learn_boundary_weights.py` | Die Gewichte des Trennvorschlags aus allen getrennten Bänden neu lernen und mit denen in `src/backend/app/boundaries.py` vergleichen. Lohnt sich, wenn deutlich mehr Bände dazugekommen sind. | nur Python |
+| `learn_boundary_weights.py` | Die Gewichte des Trennvorschlags (Text, Wortliste, Scan) aus allen getrennten Bänden neu lernen und mit denen in `src/backend/app/boundaries.py` vergleichen; mit `--pruefen` bandweise messen, wie viele Schnitte zu ändern bleiben (Kap. 4.5). Lohnt sich, wenn deutlich mehr Bände dazugekommen sind. | Pakete der App |
 
 ## Auswertung
 
@@ -17,6 +17,7 @@ Skripte, die den Scan-Ordner lesen, nehmen den Pfad aus `LEAFLET_PDF_HOST_DIR` i
 |---|---|---|
 | `ngrams.py` | N-Gramme, Trends, Kollokationen und Belegstellen auf den OCR-Texten; Handbuch: `docs/handbuch/ngramme-auswerten.md` | nur Python |
 | `stopwords_de.txt` | Stoppwortliste für `ngrams.py` | |
+| `forschungsfragen.ipynb` | Zehn Beispielfragen, ausgewertet am Export der Anwendung (entpackt nach `data/export/flugblaetter-export/`); Bericht Kap. 9.7 | pandas, matplotlib, Jupyter |
 
 ## Bericht
 
