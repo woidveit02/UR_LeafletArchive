@@ -12,7 +12,7 @@ Flugblattsammlung/
 
 ```bash
 cd UR_LeafletArchive
-docker compose up -d
+docker compose up --build -d
 ```
 
 Liegt der Datenordner wie oben neben dem Repository, ist keine `.env` nötig. Der erste Start baut das Image (etwa 1,5 GB, 10 bis 20 Minuten), legt die Datenbank an und rendert im Hintergrund die Vorschaubilder. Danach ist die Anwendung unter http://localhost:8000/ erreichbar. In der Ausgabe von `docker compose logs backend` muss „Data folder ok“ stehen; sonst nennt die Meldung, was am Pfad nicht stimmt.

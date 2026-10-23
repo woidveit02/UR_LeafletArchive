@@ -43,7 +43,7 @@ Flugblattsammlung/
 Dann:
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
 Unter Linux ohne Docker-Gruppe mit `sudo` davor. Der erste Start dauert 10 bis 20 Minuten: Docker lädt und baut das Image (etwa 1,5 GB), die Anwendung legt ihre Datenbank an. Auf einem Mac mit Apple-Chip läuft das Image emuliert und ist etwas langsamer.
