@@ -1,6 +1,6 @@
 # 11 Zusammenfassung
 
-Trotz der ganzen bereits genannten Problemfelder erfüllt die entwickelte Anwendung ihren Zweck. Denn auch wenn kleine Fehler bleiben, hat die Anwendung einen enormen Vorteil im Vergleich zur manuellen Erfassung dieser ganzen Daten. So lässt sich mit der Import-Funktion eine PDF mit mehreren hundert Flugblättern innerhalb von kurzer Zeit zu dem Korpus hinzufügen, und die Daten der Flugblätter auslesen und verarbeiten.
+Trotz der ganzen bereits genannten Problemfelder erfüllt die entwickelte Anwendung ihren Zweck. Denn auch wenn kleine Fehler bleiben, hat die Anwendung einen enormen Vorteil im Vergleich zur manuellen Erfassung dieser ganzen Daten und das einleitend gesetzte Ziel wurde umgesetzt. So lässt sich mit der Import-Funktion eine PDF mit mehreren hundert Flugblättern innerhalb von kurzer Zeit zu dem Korpus hinzufügen, und die Daten der Flugblätter auslesen und verarbeiten.
 
 Aus 4464 gescannten Seiten wurde ein recherchierbarer Bestand mit 1547 Flugblättern. Automatische Verfahren übernehmen den größten Teil der Arbeit. Beim Trennen, bei den Mehrfachexemplaren und bei den Metadaten bleibt eine Prüfung von Hand nötig, die aber durch simple Nutzeroberflächen erheblich vereinfacht werden.
 

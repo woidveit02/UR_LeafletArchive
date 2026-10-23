@@ -1,6 +1,6 @@
 # 10 Grenzen und Ausblick
 
-Im Verlauf der bisherigen Ausführungen wurde bereits mehrmals auf mögliche Grenzen, Probleme oder Fehler eingegangen. Im Folgenden soll erneut eine Übersicht über solche Problemstellungen gegeben werden. 
+Im Verlauf der bisherigen Ausführungen wurde bereits mehrmals auf mögliche Grenzen, Probleme oder Fehler eingegangen. Im Folgenden soll erneut eine Übersicht über solche Problemstellungen und potentielle Erweiterungsmöglichkeiten gegeben werden. 
 
 ## 10.1 Bekannte Fehlerquellen
 
