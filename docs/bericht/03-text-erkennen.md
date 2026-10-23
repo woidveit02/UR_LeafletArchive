@@ -45,16 +45,16 @@ Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogene
 
 Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen im Arbeits-Repository (Kap. 12.6).
 
-| System | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
-|---|---|---|---|---|
-| GLM-OCR | spezialisiertes OCR-Modell, offene Gewichte | selbst gehostet, Modell direkt angesprochen | nein, nur Text | läuft über Ollama auch ohne GPU |
-| PaddleOCR (klassische PP-OCR-Pipeline) | OCR-Pipeline aus Erkennung und Lesung von Zeilen, offene Gewichte | lokal ausgeführt | Zeilen mit Lage, keine Blocktypen | Layout im Test oft falsch erkannt |
-| MinerU 3.4.2 (Backend `pipeline`) | Dokument-Pipeline aus Layout- und OCR-Modellen, offene Gewichte | lokal ausgeführt | ja | geringere Textgenauigkeit |
-| Qwen3-VL (235B-A22B Instruct) | allgemeines Vision-Sprachmodell | API über OpenRouter | nein, nur Text | gute Textgenauigkeit |
-| Claude Sonnet 5 | allgemeines Vision-Sprachmodell | API über OpenRouter, Seiten als Bilder gesendet | nein, nur Text | |
-| Gemini 3.5 Flash | allgemeines Vision-Sprachmodell | Gemini-API | nein, nur Text | |
-| Datalab API (verbesserte Fassung von Chandra OCR 2) | OCR-Dienst | API | ja, mit Blocktypen | Wort-Boxen optional |
-| Mistral OCR 4 | OCR-Dienst | API | ja | Confidence-Wert je Wort |
+| System | Entwickler | Größe | Release | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
+|---|---|---|---|---|---|---|---|
+| GLM-OCR | Zhipu AI / Z.ai / Tsinghua | 0,9 B (CogViT 0,4 B + GLM 0,5 B), spezialisiertes VLM | 11.03.2026 | spezialisiertes OCR-Modell, offene Gewichte | selbst gehostet, Modell direkt angesprochen | nein, nur Text | läuft über Ollama auch ohne GPU |
+| PaddleOCR-VL-1.6 | Baidu / PaddlePaddle | 0,9 B, architektonisch identisch zu 1.5 | 28.05.2026 | OCR-Pipeline aus Erkennung und Lesung von Zeilen, offene Gewichte | lokal ausgeführt | Zeilen mit Lage, keine Blocktypen | Layout im Test oft falsch erkannt |
+| MinerU2.5-Pro | OpenDataLab / Shanghai AI Lab | 1,2 B (NaViT 0,675 B + Qwen2-Instruct 0,5 B) | 2604-Version: Apr. 2026 · 2605-Update: 21.05.2026 | Dokument-Pipeline aus Layout- und OCR-Modellen, offene Gewichte | lokal ausgeführt | ja | geringere Textgenauigkeit |
+| Qwen3-VL (235B-A22B-Instruct) | Alibaba / Qwen Team | 235 B MoE (22 B aktiv), General-Purpose-VLM | 23.09.2025 (Report: Nov. 2025) | allgemeines Vision-Sprachmodell | API über OpenRouter | nein, nur Text | gute Textgenauigkeit |
+| Claude Sonnet 5 | Anthropic | proprietär, General-Purpose-LLM mit Vision | 30.06.2026 | allgemeines Vision-Sprachmodell | API über OpenRouter, Seiten als Bilder gesendet | nein, nur Text |  |
+| Gemini 3.5 Flash | Google | proprietär, General-Purpose-LLM mit Vision | 19.06.2026 | allgemeines Vision-Sprachmodell | Gemini-API | nein, nur Text |  |
+| Datalab API (verbesserte Fassung von Chandra OCR 2) | Datalab | proprietäre Pipeline um Chandra 2 herum — nicht identisch mit den offenen Gewichten | laufend | OCR-Dienst | API | ja, mit Blocktypen | Wort-Boxen optional |
+| Mistral OCR 4 | Mistral AI | proprietär, kompaktes API-Modell (self-hosting per Container möglich) | 23.06.2026 (OCR 4.1 Public Preview: 16.07.2026) | OCR-Dienst | API | ja | Confidence-Wert je Wort |
 
 Die Entwickler veröffentlichen eigene Benchmark-Ergebnisse, aber nicht für alle Kandidaten und nicht immer für die getesteten Fassungen [@glmocr; @paddleocrvl15; @mineru25pro; @qwen3vl; @claudesonnet5; @chandra2; @mistralocr4]. Eine Übersicht mit Größe, Lizenz, Benchmark-Werten und allen Quellen liegt im Arbeits-Repository unter `pipelines/03_eval/ocr-modelle-uebersicht.md` (Stand 17.08.2026). Diese Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt. Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
 
