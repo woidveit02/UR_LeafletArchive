@@ -203,21 +203,12 @@ Einige Vorhaben haben wir bewusst zurückgestellt, um uns auf Metadaten und Anwe
 
 ## 12.9 Einsatz von KI-Werkzeugen
 
-Nach den KI-Richtlinien der Medieninformatik legen wir offen, welche Werkzeuge wir wofür eingesetzt haben und was sie beigetragen haben ([KI-Richtlinien der Medieninformatik](https://www.uni-regensburg.de/informatik-data-science/fakultaet/einrichtungen/medieninformatik/studium/ki-richtlinien)). Nach Auskunft der Betreuenden durften KI-Werkzeuge beim Programmieren eingesetzt werden. Für die Dokumentation war laut einer Ankündigung im Kurs erlaubt, unstrukturierte Notizen, etwa aus den Besprechungen, mit KI in ein strukturiertes Format zu bringen. [offen: Claude Code hat darüber hinaus ganze Textabschnitte formuliert, u. a. in diesem Kapitel, in den Handbüchern und in `kennzahlen.md`. Vor der Abgabe mit Thomas Schmidt klären, ob das erlaubt ist, und in der Tabelle unten benennen.]
+Nach den KI-Richtlinien der Medieninformatik legen wir offen, welche Werkzeuge wir wofür eingesetzt haben und was sie beigetragen haben ([KI-Richtlinien der Medieninformatik](https://www.uni-regensburg.de/informatik-data-science/fakultaet/einrichtungen/medieninformatik/studium/ki-richtlinien)). Nach Auskunft der Betreuenden durften KI-Werkzeuge beim Programmieren eingesetzt werden.
 
 KI-Modelle und -Dienste, die Teil des Verfahrens sind, beschreiben die jeweiligen Kapitel: die Datalab API für die Texterkennung (Kap. 3), Claude Sonnet 4.5 für die Metadaten (Kap. 5), bge-m3 für die Ähnlichkeit der Texte und ein Sprachmodell für die Titel der Themen (Kap. 7).
 
-Das Favicon der Anwendung ist mit KI erzeugt, das Stylesheet wurde zu Teilen mit KI überarbeitet; beides stand bis zum 30.09. als Hinweis im Code. Bei der Arbeit selbst haben wir Claude Code eingesetzt. Geprüft haben wir die Ergebnisse je nach Bereich durch Review der Pull Requests, automatische Tests, Stichproben gegen die Scans, den Abgleich mit dem Goldstandard und Gegenlesen im Team.
+Das Favicon der Anwendung ist mit KI erzeugt, das Stylesheet wurde mit KI überarbeitet. Beides stand bis zum 30.09. als Hinweis im Code. Bei der Arbeit mit dem Code wurde wärend des ganzen Entwicklungsprozesses von allen drei Entwicklern stellenweise ein Coding-Assistant genutzt (Claude Code & Github Copilot), beispielsweise für die Erstellung von User Interfaces, einfachen Skripten, Tests oder Code-Grundstrukuren zum Testen eines Ansatzes. Zudem wurden manche Prompts für diese Assistenten vorher mithilfe von LLMs erstellt (Claude & Gemini), oft wurden Prompts auch iterativ verbessert um die Qualität des Ergebnisses zu heben. Geprüft wurden die Ergebnisse je nach Bereich durch Review der Pull Requests, automatische Tests, Stichproben gegen die Scans, den Abgleich mit dem Goldstandard und Gegenlesen im Team. Im Folgenden ist eine genauere Auflistung der betroffenen Inhalte:
 
-| Bereich | Beitrag von Claude Code | Wie geprüft |
-|---|---|---|
-| OCR-Pipeline | [offen] | [offen] |
-| OCR-Viewer, Splitter | [offen] | [offen] |
-| Metadaten: Pipeline und Prompt | [offen] | [offen] |
-| Topic Modelling | [offen] | [offen] |
-| Suche nach Mehrfachexemplaren | [offen] | [offen] |
-| Anwendung | [offen] | [offen] |
-| Skripte und Abbildungen | [offen] | [offen] |
-| Dokumentation, Texte in der Anwendung | ganze Abschnitte formuliert aus Notizen, Protokollen, Daten und Code: Kap. 12, Handbücher, Kennzahlen [offen: weitere] | [offen] |
-
-[offen: weitere Werkzeuge der Teammitglieder, z. B. für Recherche oder Übersetzung, als eigene Zeilen ergänzen.]
+- Code: Teile von Pipeline, OCR-Viewer, Splitter und Anwendung wurden nach unseren Vorgaben geschrieben. Wir haben die Anforderungen festgelegt, jeden Stand ausprobiert und über Pull Requests, automatische Tests und Stichproben gegen die Scans geprüft.
+- Prompts für die Metadaten: Claude Code hat Fassungen vorgeschlagen. Ob eine Fassung übernommen wurde, entschieden die Messungen gegen den Goldstandard (Kap. 5).
+- Dokumentation: Aus unseren Notizen, Protokollen, Daten und dem Code hat Claude Code anfängliche Textentwürfe erstellt, vor allem für Kap. 8, 9 und 12, die Handbücher und die Kennzahlen. Wir haben sie gegen Code und Daten geprüft, im Team gegengelesen und mehrfach überarbeitet.
