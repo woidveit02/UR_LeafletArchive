@@ -28,7 +28,7 @@ Der größte Teil dieser Arbeit läuft mithilfe dieses Projekts automatisch (Kap
 
 ![Der Weg von Flugblatt 850 durch die Arbeitsschritte](../abbildungen/ablauf.png)
 
-*Abbildung: Der Weg eines Flugblatts durch die Arbeitsschritte, am Beispiel von Flugblatt 850 („Zur Fachschaftssatzung“, Band 006, S. 394). Trennen und Mehrfachexemplare sind Vorschläge, die von Hand geprüft werden; die übrigen Schritte laufen automatisch.*
+*Abbildung: Der Weg eines Flugblatts durch die Arbeitsschritte, am Beispiel von Flugblatt 850 („Zur Fachschaftssatzung“, Band 006, S. 394). Trennen und Mehrfachexemplare sind Vorschläge, die von Hand geprüft werden. Die übrigen Schritte laufen automatisch.*
 
 ## 1.2 Ziele
 

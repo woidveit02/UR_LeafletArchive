@@ -73,6 +73,6 @@ Neue Herausgeber werden während des Imports im Schritt „Prüfen & freigeben�
 
 ## 5.6 Kosten
 
-Für den Testimport am 20.10.2026 hatten wir die ersten 230 Seiten von Band 15 (Kap. 2.5). Mit *Claude Sonnet 4.5*, dem Modell der Bände 1–14, kostet die Metadatenextraktion danach etwa 9 $ je 1000 Seiten (2,11 $ für die 230 Seiten), mit *Claude Opus 5.5* etwa 10 $ (hochgerechnet aus einem Testlauf mit 56 Flugblättern aus Band 014: 1,36 $).
+Für den Testimport am 20.10.2026 hatten wir die ersten 230 Seiten von Band 15 (Kap. 2.5). Mit *Claude Sonnet 4.5*, dem Modell der Bände 1–14, kostet die Metadatenextraktion danach etwa 9 \$ je 1000 Seiten (2,11 \$ für die 230 Seiten), mit *Claude Opus 5.5* etwa 10 \$ (hochgerechnet aus einem Testlauf mit 56 Flugblättern aus Band 014: 1,36 \$).
 
 Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#metadaten).

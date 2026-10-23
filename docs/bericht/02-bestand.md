@@ -36,6 +36,8 @@ Die Flugblätter sind meist schreibmaschinengeschrieben, da sie von den Gruppen 
 | 014 | 1973 | 499 | 168 | 142 |
 | **Summe** |  | **4464** | **1927** | **1547** |
 
+Exemplare bezieht sich in der Tabelle auf die Anzahl der Flugblätter, wo die Mehrfachexemplare noch nicht abgezogen wurden.
+
 ![Seiten nach Bandjahr](../abbildungen/6_seiten_jahr.png)
 
 ## 2.3 Sammlung und Digitalisierung
