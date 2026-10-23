@@ -30,7 +30,7 @@ Flugblattsammlung/
 └── UR_LeafletArchive_data/    Scans und Texterkennung, aus Drive
 ```
 
-`UR_LeafletArchive_data.zip` aus Drive entpacken Sie direkt in `Flugblattsammlung`. Prüfen Sie danach, dass in `UR_LeafletArchive_data` unmittelbar die Ordner `Nr. 001 (1967)` bis `Nr. 015 (1973)` liegen und nicht noch ein Ordner dazwischen.
+`UR_LeafletArchive_data.zip` aus Drive entpacken Sie direkt in `Flugblattsammlung`. Prüfen Sie danach, dass in `UR_LeafletArchive_data` unmittelbar die Ordner `Nr. 001 (1967)` bis `Nr. 014 (1973)` liegen und nicht noch ein Ordner dazwischen.
 
 **3. Starten**
 

@@ -156,24 +156,12 @@
   {
     "vz": 15,
     "label": "Nr. 015 (1973)",
-    "stem": "0118_0015",
+    "stem": null,
     "year": 1973,
     "title": "Flugblätter 1973",
     "signature": "Rep. 118 (Allgemeine Flugblattsammlung Universität Regensburg), 15",
-    "digitized": true,
+    "digitized": false,
     "portal_url": "https://www.archivportal-d.de/item/STMY6TXDNIVQ5A32MLCRJIF4BFSD42RA",
     "group": "1973"
-  },
-  {
-    "vz": 16,
-    "label": "Nr. 016 (1974)",
-    "stem": "0118_0016",
-    "year": 1974,
-    "title": "Flugblätter 1974",
-    "signature": "Rep. 118 (Allgemeine Flugblattsammlung Universität Regensburg), 16",
-    "added": true,
-    "digitized": true,
-    "portal_url": "https://www.archivportal-d.de/item/2G44XUYD7BUPW5B46VKT4ZQ7RLN3PLBP",
-    "group": "1974"
   }
 ]
