@@ -1,6 +1,6 @@
 # 3 Text erkennen
 
-Nachdem der Bestand der Allgemeinen Flugblattsammlung übermittelt und gesichtet worden war, musste die Information aus den Bildern der PDFs extrahiert werden. Für die Texterkennung haben wir acht Systeme verglichen und die Datalab API gewählt, weil sie Text und Layout am genauesten wiedergibt. Gemessen an einem von Hand korrigierten Goldstandard sind etwa 6 von 1000 Zeichen falsch. Die Erkennung kostet rund 10 $ je 1 000 Seiten und läuft ohne Handarbeit. 
+Nachdem der Bestand der Allgemeinen Flugblattsammlung übermittelt und gesichtet worden war, musste die Information aus den Bildern der PDFs extrahiert werden. Für die Texterkennung haben wir acht Systeme verglichen und die Datalab API gewählt, weil sie Text und Layout am genauesten wiedergibt. Gemessen an einem von Hand korrigierten Goldstandard sind etwa 6 von 1000 Zeichen falsch. Die Erkennung kostet rund 10 $ je 1000 Seiten und läuft ohne Handarbeit. 
 
 Die Texterkennung liefert die Grundlage für alle weiteren Schritte: Segmentierung, Metadatenextraktion, Suche und Analyse arbeiten mit ihrem Ergebnis, und Fehler an dieser Stelle wirken sich auf jeden späteren Schritt aus.
 
@@ -10,7 +10,7 @@ Das Material stellt die Texterkennung vor mehrere Schwierigkeiten. Die meisten B
 
 ![Ausschnitte aus vier Seiten mit dem, was die OCR dort gelesen hat](../abbildungen/ocr_schwierigkeiten.png)
 
-*Abbildung: Typische Schwierigkeiten und was die Datalab API daraus las. Die gemalte Überschrift wird zu „VRABSTIMMUNG“ statt „Urabstimmung“; gesperrte Wörter erscheinen Buchstabe für Buchstabe; der stark verblichene Text wird hier richtig gelesen; die Paraphe im Stempel beschreibt die API auf Englisch, die handschriftliche Ablagenummer liest sie richtig.*
+*Abbildung: Typische Schwierigkeiten und was die Datalab API daraus macht. Die gemalte Überschrift wird zu „VRABSTIMMUNG“ statt „Urabstimmung“; gesperrte Wörter erscheinen Buchstabe für Buchstabe; der stark verblichene Text wird hier richtig gelesen; die Paraphe im Stempel beschreibt die API auf Englisch, die handschriftliche Ablagenummer liest sie richtig.*
 
 Für die weitere Verarbeitung reicht reiner Text nicht aus. Die Segmentierung nutzt Kopfzeilen als Hinweis auf den Beginn eines neuen Blatts (Kapitel 4), die Textvorverarbeitung filtert Kopf- und Fußzeilen, Seitenzahlen und Bilder heraus (Kapitel 7). Das System sollte deshalb den Text in Blöcke gliedern, diesen Blöcken einen Typ zuweisen und ihre Lage auf der Seite angeben (Bounding Boxes).
 
@@ -36,14 +36,19 @@ Die Ziehung verwendete keinen festen Zufallswert und protokollierte die gezogene
 
 ## 3.4 Kandidaten und Merkmale
 
-TODO: Infos überprüfen
+(TODO: Betrieb von PaddleOCR und MinerU ergänzen, je Merkmal mit Quelle, Version und Abrufdatum.
+     Modellkennungen laut Ausgabedateien: anthropic/claude-sonnet-5, qwen/qwen3-vl-235b-a22b-instruct
+     (beide über OpenRouter), gemini-3.5-flash; Läufe am 09.07.2026.
+     GLM-OCR: Der Test lief am 08.07.2026 mit GLM-OCR/ocr_test.py, das nur Text je Seite liefert. Das spätere
+     glm_convert.py (Ausgabe jsonGLM vom 17.08.2026) erzeugt über PP-DocLayout-V3 Blöcke mit Lage; falls das
+     erwähnt werden soll, als Nachtrag kennzeichnen.)
 
 Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Skripte dafür liegen im Arbeits-Repository (Kap. 12.6).
 
 | System | Art | Betrieb im Test | Blöcke mit Lage | Anmerkung |
 |---|---|---|---|---|
 | GLM-OCR | spezialisiertes OCR-Modell, offene Gewichte | selbst gehostet, Modell direkt angesprochen | nein, nur Text | läuft über Ollama auch ohne GPU |
-| PaddleOCR (klassische PP-OCR-Pipeline, [offen: Version]) | OCR-Pipeline aus Erkennung und Lesung von Zeilen, offene Gewichte | lokal ausgeführt | Zeilen mit Lage, keine Blocktypen | Layout im Test oft falsch erkannt |
+| PaddleOCR (klassische PP-OCR-Pipeline) | OCR-Pipeline aus Erkennung und Lesung von Zeilen, offene Gewichte | lokal ausgeführt | Zeilen mit Lage, keine Blocktypen | Layout im Test oft falsch erkannt |
 | MinerU 3.4.2 (Backend `pipeline`) | Dokument-Pipeline aus Layout- und OCR-Modellen, offene Gewichte | lokal ausgeführt | ja | geringere Textgenauigkeit |
 | Qwen3-VL (235B-A22B Instruct) | allgemeines Vision-Sprachmodell | API über OpenRouter | nein, nur Text | gute Textgenauigkeit |
 | Claude Sonnet 5 | allgemeines Vision-Sprachmodell | API über OpenRouter, Seiten als Bilder gesendet | nein, nur Text | |
@@ -51,14 +56,7 @@ Acht Systeme wurden am 8. und 9. Juli 2026 auf das Testkorpus angewendet. Die Sk
 | Datalab API (verbesserte Fassung von Chandra OCR 2) | OCR-Dienst | API | ja, mit Blocktypen | Wort-Boxen optional |
 | Mistral OCR 4 | OCR-Dienst | API | ja | Confidence-Wert je Wort |
 
-<!-- OFFEN: Betrieb von PaddleOCR und MinerU ergänzen, je Merkmal mit Quelle, Version und Abrufdatum.
-     Modellkennungen laut Ausgabedateien: anthropic/claude-sonnet-5, qwen/qwen3-vl-235b-a22b-instruct
-     (beide über OpenRouter), gemini-3.5-flash; Läufe am 09.07.2026.
-     GLM-OCR: Der Test lief am 08.07.2026 mit GLM-OCR/ocr_test.py, das nur Text je Seite liefert. Das spätere
-     glm_convert.py (Ausgabe jsonGLM vom 17.08.2026) erzeugt über PP-DocLayout-V3 Blöcke mit Lage; falls das
-     erwähnt werden soll, als Nachtrag kennzeichnen. -->
-
-Die Entwickler veröffentlichen eigene Benchmark-Ergebnisse, aber nicht für alle Kandidaten und nicht immer für die getesteten Fassungen [@glmocr; @paddleocrvl15; @mineru25pro; @qwen3vl; @claudesonnet5; @chandra2; @mistralocr4]. Eine Übersicht mit Größe, Lizenz, Benchmark-Werten und allen Quellen liegt im Arbeits-Repository unter `pipelines/03_eval/ocr-modelle-uebersicht.md` (Stand 17.08.2026). Diese Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt; Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
+Die Entwickler veröffentlichen eigene Benchmark-Ergebnisse, aber nicht für alle Kandidaten und nicht immer für die getesteten Fassungen [@glmocr; @paddleocrvl15; @mineru25pro; @qwen3vl; @claudesonnet5; @chandra2; @mistralocr4]. Eine Übersicht mit Größe, Lizenz, Benchmark-Werten und allen Quellen liegt im Arbeits-Repository unter `pipelines/03_eval/ocr-modelle-uebersicht.md` (Stand 17.08.2026). Diese Zahlen sind nur eingeschränkt vergleichbar. Die Versionen 1.0, 1.5 und 1.6 von OmniDocBench [@omnidocbench] verwenden unterschiedliche Bewertungsverfahren, ihre Werte lassen sich nicht nebeneinanderstellen. olmOCR-Bench [@olmocrbench] hat eine Unsicherheit von etwa einem Punkt. Abstände unter rund zwei Punkten sagen daher wenig. An der Methodik von olmOCR-Bench gibt es außerdem Kritik [@llamaindexolmocr]: Die Testfälle wurden aus Seiten erzeugt, die Claude Sonnet 4.0 geschrieben hat, und die Kategorie für Kopf- und Fußzeilen belohnt das Weglassen sichtbarer Inhalte. Bei Datalab sind die gehostete API und die offenen Gewichte von Chandra OCR 2 verschiedene Systeme mit verschiedenen Ergebnissen. Wir haben die API genutzt.
 
 ## 3.5 Vorauswahl
 
@@ -101,7 +99,7 @@ Fehler im Layout wiesen 18 der 105 Seiten auf (17 %), Fehler in der Lesereihenfo
 
 Der oben beschrieben Test zeigte, dass die Datalab API eine valide Wahl als OCR-Syystem in diesem Kontext ist. Ausschlaggebend waren die höhere Textgenauigkeit im Vergleich, vor allem bei verblichenen Seiten und Eigennamen, und die genauere Wiedergabe des Layouts. Für die weitere Verarbeitung zählt außerdem, dass Datalab Kopf- und Fußzeilen getrennt ausweist und Tabellen als solche erkennt. Die Vorteile von Mistral OCR 4, die Confidence-Werte je Wort und die höhere Geschwindigkeit, wogen das nicht auf.
 
-## 3.9 Produktionslauf TODO@FELIX: Stimmt das?
+## 3.9 Produktionslauf
 
 Den Gesamtbestand von 14 Bänden mit 4464 Seiten haben wir zwischen dem 17. und 19.08.2026 verarbeitet. Das Skript `flugblatt_convert.py` nutzt das offizielle Python-SDK von Datalab mit folgenden Einstellungen: Modus `accurate`, Seitenumbrüche markiert (`paginate`), seitenübergreifende Inhalte zusammengeführt (`merge_cross_page`), Kopf- und Fußzeilen in der Ausgabe behalten, zusätzliche Blocktypen (`new_block_types`) und Bildextraktion aktiv. Wort-Boxen (`word_bboxes`) waren nicht aktiviert.
 
@@ -109,15 +107,9 @@ Datalab nimmt Dateien bis 200 MB an. Das Skript teilt jeden Band deshalb in Absc
 
 Ein Beispiel ist Band 003 (1969): 317 Seiten in 7 Abschnitten, nach 3 Minuten und 10 Sekunden fertig. Die Rechenzeit auf dem Server betrug 2,2 Sekunden je Seite, im Mittel fielen 906 Token je Seite an. Über den Gesamtbestand wurden 1 162 Bilder extrahiert, etwa eines auf 3,8 Seiten.
 
-Datalab berechnet im Modus `accurate` 10 $ je 1 000 Seiten, bei Datenhaltung in der EU das 1,25-Fache. Für die 4 464 Seiten ergeben sich damit rund 45 $; in der Besprechung vom 19.08.2026 haben wir die Kosten auf etwa 40 € beziffert. Der kostenlose Tarif enthält ein monatliches Guthaben von 10 $, bei Anmeldung mit einer Universitätsadresse 20 $. Zunächst wurde dieses Guthaben aufgebraucht, danach wurden am 18.08.2026 20,11 $ (18,04 €) abgebucht.
+Datalab berechnet im Modus `accurate` 10 $ je 1000 Seiten, bei Datenhaltung in der EU das 1,25-Fache. Für die 4464 Seiten ergeben sich damit rund 45 $. In der Besprechung vom 19.08.2026 haben wir die Kosten auf etwa 40 € beziffert. Der kostenlose Tarif enthält ein monatliches Guthaben von 10 $, bei Anmeldung mit einer Universitätsadresse 20 $. Zunächst wurde dieses Guthaben aufgebraucht, danach wurden am 18.08.2026 20,11 $ (18,04 €) abgebucht.
 
-Für neue Bände zeigt die Anwendung vor dem OCR-Lauf eine Kostenschätzung an (Kapitel 9). Sie rechnet mit dem Listenpreis von 10 $ je 1 000 Seiten und stimmt gut mit den abgerechneten Beträgen überein.
-
-<!-- OFFEN: Gesamtkosten des Produktionslaufs aus allen Abbuchungen und verbrauchten Guthaben zusammenstellen
-     und in kennzahlen.md eintragen. Ob die EU-Datenhaltung genutzt wurde, ergänzen. Optional ein Beispiel
-     für Schätzung und Abrechnung eines Bands.
-     Hinweis: In den Notizen steht eine Dashboard-Messung an Band 003 mit 2,24 $ je 100 Seiten und starken
-     Schwankungen zwischen Abschnitten. Sie passt nicht zum Listenpreis und wurde deshalb nicht übernommen. -->
+Für neue Bände zeigt die Anwendung vor dem OCR-Lauf eine Kostenschätzung an (Kapitel 9). Sie rechnet mit dem Listenpreis von 10 $ je 1000 Seiten und stimmt gut mit den abgerechneten Beträgen überein.
 
 ## 3.10 Grenzen der Evaluation
 
@@ -125,6 +117,6 @@ Das Testkorpus ist mit 100 Seiten klein, und seine Zusammensetzung übergewichte
 
 Der Goldstandard entstand durch Nachkorrektur der Datalab-Ausgabe. Wer eine vorhandene Ausgabe korrigiert, übersieht leichter Fehler als jemand, der unabhängig abschreibt. Die gemessene Fehlerrate von Datalab ist daher eher eine Untergrenze. Mistral OCR 4 wurde nicht an diesem Goldstandard gemessen; der Vergleich der beiden Systeme in 3.6 ist qualitativ.
 
-Zudem gab es im qualitativen Vergleich kein gemeinsames Bewertungsschema, was bei der auswerkung bemerkbar wurde. Die Beobachtungen lassen sich daher nicht auszählen und widersprechen sich in Einzelfällen, etwa bei der Sperrschrift. Die Benchmark-Werte in 3.4 sind Angaben der Anbieter und wurden nicht überprüft.
+Zudem gab es im qualitativen Vergleich kein gemeinsames Bewertungsschema, was bei der Auswerkung bemerkbar wurde. Die Beobachtungen lassen sich daher nicht auszählen und widersprechen sich in Einzelfällen, etwa bei der Sperrschrift. Die Benchmark-Werte in 3.4 sind Angaben der Anbieter und wurden nicht überprüft.
 
 Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt. Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository (Kap. 12.6) sind deshalb der eigentliche Beleg für den Test.
