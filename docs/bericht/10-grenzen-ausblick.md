@@ -1,26 +1,28 @@
 # 10 Grenzen und Ausblick
 
-Im Verlauf der bisherigen Ausführungen wurde bereits mehrmals auf mögliche Grenzen, Probleme oder Fehler eingegangen. Im Folgenden soll erneut eine Übersicht über solche Problemstellungen und potentielle Erweiterungsmöglichkeiten gegeben werden. 
+Jedes der Kapitel 3 bis 7 nennt die Grenzen seines Schritts. Wer mit dem Korpus arbeitet, findet sie hier gesammelt, dazu, wie die Anwendung Unsicherheit kennzeichnet, was für Datenschutz und Urheberrecht gilt und wo sich die Arbeit fortsetzen lässt.
 
 ## 10.1 Bekannte Fehlerquellen
 
-- Text: Die ermittelte Fehlerrate repräsentiert aufgrund der Evaluationstechnik eher eine Untergrenze, zudem wird Handschrift noch oft falsch erfasst. Das OCR-System tendiert ausserdem selten zum Halluzinieren. Zudem ist die falsche Erkennung von Sperrtext ein potentielles Hindernis für die Volltextsuche. 
-- Trennung und Mehrfachexemplare: Die automatische Trennung der PDFs in einzelne Flugblätter liefert nur Vorschläge (etwa 13 Fehler je 100 Seitenwechsel, Kap. 4.5). Jeder Übergang muss deshalb von Hand bestätigt werden, da sich Fehler sonst in allen folgenden Schritten fortsetzen.
-- Metadaten: Die Genauigkeit der automatischen Metadaten-Generierung wurde nicht evaluiert. Es gibt einige potentielle Problemquellen wo Daten missinterpretiert werden können, wie beispielsweise die Erkennung des Eingangsstempels als Erscheinungsdatum. Zudem konnten bei vielen Flugblättern manche Metadaten gar nicht ermittelt werden. 
-- Themen: Momentan wird jedem Flugblatt nur ein Thema zugeordnet, manche Flugblätter besitzen aber mehrere Themen. Zudem ist die aktuelle Festlegung auf 40 Themen nur eine persönliche Schätzung.
-- Betrieb: Das System ist aktuell abhängig von externen Diensten (Datalab, OpenRouter) und dessen Läufe sind nicht exakt wiederholbar. Die Anwendung hat keine Anmeldung und ist deshalb standardmäßig nur auf dem eigenen Rechner erreichbar (Freigabe im Netz: `handbuch/installieren-und-betreiben.md`).
-- Tests: Insgesamt wurden viele Aspekte des Systems nicht systematisch getestet sondern basieren auf Einschätzung, Erfahrung oder inkrementeller Verbesserung. Beispielsweise wurde das User Interface auch keinem Nutzertest unterzogen, wodurch Usability-Probleme nicht ausgeschlossen werden können.
+Die Fehlerquellen folgen den Arbeitsschritten. Beim Text ist die gemessene Fehlerrate wegen der Art der Messung eher eine Untergrenze (Kap. 3.10). Handschrift erkennt das System noch oft falsch, selten erfindet es Text, und gesperrt geschriebene Wörter können die Volltextsuche behindern.
 
-Neben technischen Fehlerquellen ergeben sich aus dem Korpus beziehungsweise dem Quellmaterial zudem noch thematische und Korpus-bezogene Fehlerquellen:
+Die Trennung in Flugblätter liefert nur Vorschläge, mit etwa 12 Fehlern je 100 Seitenwechsel (Kap. 4.5). Jeder Seitenwechsel muss deshalb von Hand bestätigt werden, weil sich Fehler sonst in alle folgenden Schritte fortsetzen.
 
-- Bestand/Korpus: Im Korpus fehlt noch eine Verzeichnungseinheit des Jahres 1973 (Einheit 15, Kap. 2.5), wodurch noch keine repräsentativen Aussagen über dieses Jahr getroffen werden können. Zudem sind die Jahre 1967 und 1968 aufgrund einer sehr geringen Zahl an Flugblätter nur dünn belegt. Generell ist der Korpus noch nicht 100% finalisiert, und sollte daher vor potentieller Nutzung für Forschungszwecke erst gründlich überprüft und validiert werden.
-- Quelle: Die Flugblätter zeigen die Selbstdarstellung der Gruppen zu der Zeit, und sind kein sicherer Beleg für reale historische Ereignisse (Kap. 8.4). Jegliche Aussagen, die aus den Flugblätter entnommen werden, sollten entsprechend historisch eingeordnet und kontextualisiert werden, um Missverständnisse und Falschaussagen zu vermeiden.
+Die Genauigkeit der Metadaten haben wir nicht gemessen (Kap. 5.4). Fehldeutungen sind möglich, etwa wenn das Modell den Eingangsstempel für das Erscheinungsdatum hält, und bei vielen Flugblättern fehlen einzelne Felder ganz.
+
+Bei den Themen bekommt jedes Flugblatt nur eines, obwohl manche mehrere behandeln. Die Zahl von 40 Themen ist zudem nur unsere Schätzung.
+
+Für den Betrieb hängt das System von externen Diensten ab (Datalab, OpenRouter), deren Läufe sich nicht exakt wiederholen lassen. Die Anwendung hat keine Anmeldung und ist deshalb standardmäßig nur auf dem eigenen Rechner erreichbar (Freigabe im Netz: `handbuch/installieren-und-betreiben.md`).
+
+Über alle Schritte hinweg gilt: Viele Einstellungen beruhen auf Einschätzung, Erfahrung und schrittweiser Verbesserung, nicht auf systematischen Tests. Auch die Oberfläche hat keinen Nutzertest durchlaufen, Probleme in der Bedienung sind also nicht ausgeschlossen.
+
+Hinzu kommen Grenzen, die im Material selbst liegen. Im Korpus fehlt noch eine Verzeichnungseinheit von 1973 (Einheit 15, Kap. 2.5), sodass sich über dieses Jahr noch keine repräsentativen Aussagen treffen lassen, und 1967 und 1968 sind nur dünn belegt. Das Korpus ist noch nicht vollständig abgeschlossen und sollte vor einer Nutzung für die Forschung gründlich geprüft werden. Vor allem aber zeigen die Flugblätter die Selbstdarstellung der Gruppen und sind kein sicherer Beleg für die Ereignisse selbst (Kap. 8.3). Aussagen aus den Flugblättern sollten deshalb historisch eingeordnet werden, um Missverständnisse und Fehlschlüsse zu vermeiden.
 
 ## 10.2 Kennzeichnung von Unsicherheit
 
-Wie sich im vorhergehenden Kapitel zeigt, ist das System keineswegs perfekt und erzeugen im Verlauf kleine Unsicherheiten. Zudem ist das Quellmaterial ebenso schwierig, da manche Informationen nur in einem Kontext verständlich sind, der heute nicht mehr nachvollziehbar und ermittelbar ist. Das einfachste Beispiel sind Tagesangaben wie "nächsten Donnerstag", was bei einem Flugblatt ohne jegliches Datum unmöglich in eine konkrete Datumsangabe umgewandelt werden kann. Da es an manchen Stellen des Verarbeitungsprozesses unumgänglich ist, dass Unsicherheiten entstehen, wurden diese Unsicherheiten stellenweise einfach deutlich markiert.
+Weil sich diese Fehler nicht ganz vermeiden lassen, kennzeichnet die Anwendung unsichere Angaben. Manche Unsicherheit liegt schon im Material: Angaben wie „nächsten Donnerstag“ lassen sich bei einem Flugblatt ohne Datum nicht in ein konkretes Datum umrechnen, weil der Zusammenhang heute fehlt.
 
-Manche Flugblätter, denen initial kein automatisch generiertes Thema zugewiesen werden konnte, erhielten nachträglich das statistisch passendste Thema. Diese Unsicheren Themen wurden somit entsprechend markiert, sodass diese Information nicht als sicher gewertet wird. Zudem sind die Metadaten auch potentiell fehlerbehaftet, was minimiert wurde, indem die Belege für diese Metadaten leicht aufrufbar sind, so lässt sich die Korrektheit der Angaben leicht prüfen. Zudem lassen sich manche Felder per Hand korrigieren.
+Flugblätter, denen der erste Lauf kein Thema zuweisen konnte, haben nachträglich das passendste Thema erhalten; die Anwendung markiert diese Zuordnungen als unsicher (Kap. 7.3). Bei den Metadaten führt ein Klick auf den Beleg zur Stelle im Scan, sodass sich jede Angabe prüfen lässt, und viele Felder lassen sich von Hand korrigieren (Kap. 9.3).
 
 ## 10.3 Datenschutz und Urheberrecht
 
@@ -30,20 +32,14 @@ Für die Arbeit im Archiv und für die Forschung ist damit alles geklärt. Bei e
 
 ## 10.4 Ausblick
 
-Es gibt viele potentielle Veränderungen, Verbesserungen oder Tests, die im Projekt verwirklicht werden könnten und obige Problemfelder (zumindest teilweise oder ganz) lösen können. Da die Grundstruktur der Anwendung solide steht, sollte in Zukunft der Fokus auf einer Verbesserung der automatisierten Datenverarbeitung liegen. 
+Die Grundstruktur der Anwendung steht. Weiterarbeit lohnt sich deshalb vor allem bei der automatischen Verarbeitung und beim Bestand.
 
-Eine einfache und notwendige Verbesserung ist natürlich das kontinuierliche Hinzufügen neuer Flugblätter, vor allem der verbleibenden Bände des Jahres 1973.
+Am einfachsten und am nötigsten ist es, neue Flugblätter hinzuzufügen, vor allem die übrigen Bände von 1973. Auch die Flugblattsammlung im Privatarchiv Wiesner (Rep. 113, 1970 bis 1987, Kap. 2.1) ließe sich mit den Werkzeugen erschließen und würde den Zeitraum bis in die 1980er Jahre erweitern. Mit jedem Jahrgang werden auch die Auswertungen aussagekräftiger, die wir zugunsten der Erschließung zurückgestellt haben (Kap. 1.2).
 
-Ein Aspekt, der definitiv in Zukunft im Fokus liegen sollte ist das OCR-System. Wie bereits im Kapitel zur Texterkennung beschrieben verschiebt sich aktuell der State-Of-The-Art fast Monatlich, konstant gibt es neue Veröffentlichungen, und daher kann es gut sein, dass ein Wechsel des OCR-System demnächst möglich oder nötig ist.
+Bei der Texterkennung verschiebt sich der Stand der Technik fast monatlich (Kap. 3.2), sodass ein Wechsel des Systems bald möglich oder nötig sein kann. Maschinenschrift und Handschrift ließen sich getrennt erkennen, weil es für Handschrift eigene, spezialisierte Modelle gibt. Eine unscharfe Suche (Fuzzy-Suche) könnte die Folgen von Erkennungsfehlern mildern.
 
-Zudem könnte die Erkennung von Maschinenschrift und Handschrift getrennt werden, da es für die Erkennung handgeschriebener Texte separate und spezialisiertere OCR-Modelle gibt.
+Als neue Funktion käme eine Erkennung von Personen und Orten (Named Entity Recognition) als eigene Felder in Frage, mit Belegstellen und über OCR-Fehler und Schreibvarianten hinweg (Obermair, Obermaier). Der Aufwand liegt weniger in der Erkennung als im Zusammenführen der Varianten und in der Messung an einer Stichprobe.
 
-Ein System zur Fuzzy-Suche könnte zudem die Auswirkungen fehlerhaften OCRs vermindern.
+Vor einer langfristigen Nutzung sollte das System gründlicher getestet werden. Viele Einstellungen und Entwurfsentscheidungen sind das Ergebnis schrittweiser Verbesserung nach unserer eigenen Einschätzung. Messen ließe sich etwa die Richtigkeit der Metadaten oder die Fehlerrate der Texterkennung über den ganzen Bestand.
 
-Ein weiteres Datenverarbeitungssystem, das als neues Feature hinzugefügt werden kann, ist Named entity Recognition, das erwähnte Personen und Orte als eigene Felder erkennt, vor allem mit Belegstellen, mit OCR-Fehlern und Schreibvarianten (Obermair, Obermaier). Der Aufwand liegt weniger in der Erkennung als im Zusammenführen der Varianten und in der Messung an einer Stichprobe.
-
-Zudem sollte und könnte das System vor einer langfristigen Nutzung ausgiebig getestet werden. Wie bereits erwähnt sind viele Variablen, Einstellungen oder Designentscheidungen nur das Produkt gradueller iterativer Verbesserung, meist basierend auf subjektiver Einschätzung durch die Entwickler. So wäre es sinnvoll, zu ermitteln, wie das System denn objektiv performt. Beispielsweise die Korrektheit der extrahierten Metadaten könnte ermittelt werden, oder die reale Character Error Rate des OCR.
-
-Seitens des Universitätsarchivs wurde großes Interesse an der Anwendung bekundet und der Wunsch geäußert, diese auch über das Projektende hinaus nutzen zu können. Eine mögliche Umsetzung wäre die Bereitstellung auf einem Universitätsserver, sodass die Anwendung dem Archiv dauerhaft zur Verfügung steht. Damit wäre jedoch auch ein fortlaufender Betreuungsaufwand verbunden. Dazu zählen insbesondere die Behebung auftretender Fehler, die Anpassung an technische Änderungen sowie gegebenenfalls eine Hilfestellung beim Import weiterer Bände. Um diese Herausforderungen in Zukunft einzugrenzen, wurde während der Entwicklung darauf geachtet, die Anwendung so robust, wartbar und nutzerfreundlich wie möglich zu gestalten. Eine ausführliche Dokumentation soll zudem sicherstellen, dass Einarbeitungszeit in die Anwendung auch für externe Nutzer so gering wie möglich ausfällt.
-
-Aufgrund des positiven Interesses seitens des Universitätsarchivs haben wir uns dazu entschieden, das Gespräch mit den Verantwortlichen zu suchen und gemeinsam eine Lösung für die zukünftige Bereitstellung und Betreuung der Anwendung zu erarbeiten. Dabei sollen insbesondere die technischen und organisatorischen Voraussetzungen für einen dauerhaften Betrieb sowie die Zuständigkeiten für Wartung, Fehlerbehebung und den Import weiterer Bände geklärt werden.
+Das Archiv möchte die Anwendung über das Projektende hinaus nutzen. Das bringt laufenden Betreuungsaufwand mit sich: Fehler beheben, die Anwendung an technische Änderungen anpassen und gegebenenfalls beim Import weiterer Bände helfen. Um diesen Aufwand gering zu halten, haben wir die Anwendung möglichst stabil, wartbar und einfach bedienbar gebaut, und die Dokumentation soll auch Außenstehenden die Einarbeitung erleichtern. Wie der Betrieb verabredet ist und was dafür noch zu klären ist, steht in Kap. 9.8.

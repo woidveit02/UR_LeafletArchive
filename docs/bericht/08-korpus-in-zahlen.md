@@ -22,7 +22,7 @@ Im Register stehen 169 Herausgeber mit mindestens einem Flugblatt. Am häufigste
 
 *Abbildung: Die Herausgeber mit den meisten Flugblättern.*
 
-Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Stücke sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
+Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Flugblätter sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
 
 ![Flugblätter nach Textsorte](../abbildungen/5_textsorte.png)
 
@@ -32,7 +32,7 @@ Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Ein
 
 *Abbildung: Flugblätter nach Zahl der Seiten.*
 
-Wie vollständig die Metadaten sind, hängt vom Feld ab. Einen Titel und eine Textsorte haben 98 % der Flugblätter, einen Herausgeber 84 %, ein Datum auf dem Blatt 46 %, Unterzeichnende 45 %, eine Reihe 27 % und einen Eingangsstempel 23 %. Die Werte schließen die Korrekturen von Hand ein; die Tabelle mit den automatisch erkannten Werten steht in Kap. 5.5.
+Wie vollständig die Metadaten sind, hängt vom Feld ab: von 98 % bei Titel und Textsorte bis 23 % beim Eingangsstempel. Die Werte je Feld, vor und nach den Korrekturen von Hand, stehen in der Tabelle in Kap. 5.5.
 
 <!-- Abbildungen aus scripts/corpus_figures.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
 
@@ -40,6 +40,6 @@ Wie vollständig die Metadaten sind, hängt vom Feld ab. Einen Titel und eine Te
 
 Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Die Zahlen zeigen deshalb, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
 
-Die Häufung 1972 und 1973 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).
+Die Häufung 1972 und 1973 passt zur Geschichte der Universität mit den Protesten gegen das neue Hochschulgesetz (Kap. 1.1) [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Flugblätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).
 
 Was sich mit dem Korpus darüber hinaus auswerten lässt, zeigen zehn Beispielfragen im Notebook [Forschungsfragen](../forschungsfragen.html), etwa dass gut ein Drittel aller Flugblätter das Bayerische Hochschulgesetz erwähnt.

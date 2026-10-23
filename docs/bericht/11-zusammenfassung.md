@@ -9,7 +9,7 @@ Aus 4464 gescannten Seiten der Bände 1 bis 14 ist ein Korpus mit 1927 Exemplare
 | Recherche ohne Technikwissen | Erreicht. Suche, Filter, Leseansicht, Trends und Themen stehen in einer Weboberfläche (Kap. 9). Einen Nutzertest gab es nicht (Kap. 10). |
 | Fortführen | Technisch erreicht. Ein neuer Band lässt sich in sechs Schritten einlesen, die Kosten nennt die Anwendung vorher, und der Testimport mit dem ersten Teil von Band 15 hat funktioniert. Ob das Archiv den Import ohne uns bewältigt, zeigt erst der Betrieb (Kap. 9). |
 
-Den größten Teil der Arbeit übernehmen automatische Verfahren. Von Hand bleiben das Bestätigen der Seitenwechsel, die Prüfung der Mehrfachexemplare und Korrekturen an den Metadaten. Die Anwendung führt durch diese Prüfung und zeigt dabei jeweils den Scan.
+Von Hand bestätigt sind dabei die Grenzen und die Gruppen von Mehrfachexemplaren. Die Metadaten stammen vom Sprachmodell und sind nur dort korrigiert, wo uns Fehler aufgefallen sind (Kap. 5.5). Alles Übrige übernehmen automatische Verfahren, und die Anwendung zeigt bei jeder Prüfung den Scan.
 
 | Schritt | Verfahren | Kosten je 1000 Seiten | Handarbeit |
 |---|---|---|---|
@@ -21,6 +21,6 @@ Den größten Teil der Arbeit übernehmen automatische Verfahren. Von Hand bleib
 
 Texterkennung und Metadaten kosten zusammen etwa 19 $ je 1000 Seiten, gemessen am Testimport. Die meiste Zeit braucht das Prüfen der Seitenwechsel, bei einem Band von rund 300 Seiten etwa 35 bis 55 Minuten, dazu etwa 1,5 Minuten je Gruppe von Mehrfachexemplaren.
 
-Den Schwerpunkt haben wir auf die Erschließung gelegt. Auswertungen zur politischen Kommunikation, die die Themenstellung ebenfalls nennt, sind über Export, N-Gramm-Werkzeug und Notebook möglich (Kap. 9). Sie werden aussagekräftiger, je mehr Jahrgänge das Archiv mit der Anwendung erschließt.
+Auswertungen zur politischen Kommunikation haben wir zugunsten der Erschließung zurückgestellt (Kap. 1.2); die Werkzeuge dafür liegen bereit (Kap. 9.7).
 
-Fehlerfrei ist das Korpus nicht (Kap. 10). Für Recherchen heißt das: Es findet Flugblätter und zeigt Zusammenhänge, Zitate und Zahlen sollten aber am Scan geprüft werden. Die Belege machen das mit einem Klick möglich.
+Fehlerfrei ist das Korpus nicht (Kap. 10). Für Recherchen heißt das: Es findet Flugblätter und zeigt Zusammenhänge, Zitate und Zahlen sollten aber am Scan geprüft werden. Die Belege machen das mit einem Klick möglich (Kap. 9.2).

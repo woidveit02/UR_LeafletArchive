@@ -1,5 +1,7 @@
 # UR Leaflet Archive
 
+*English: This repository makes the general leaflet collection of the Regensburg University Archives (Rep. 118, student movement, 1967–1973) searchable. It contains a web application with 1927 scanned leaflet copies, their recognized text and metadata, the tools to add further volumes, and the project report. It was built in a project seminar at the University of Regensburg in summer 2026; the documentation is in German.*
+
 Die Allgemeine Flugblattsammlung des Universitätsarchivs Regensburg (Rep. 118) enthält Flugblätter aus der Studentenbewegung der Jahre 1967 bis 1973. Dieses Repository macht sie durchsuchbar: 1927 Exemplare aus 14 Bänden mit Scan, erkanntem Text, Titel, Datum, Herausgebern und Thema. Es entstand in einem Praxisseminar im Sommersemester 2026 und enthält die Anwendung, den Projektbericht und die Werkzeuge, mit denen weitere Bände eingelesen werden.
 
 ![Leseansicht eines Flugblatts](docs/abbildungen/app_leseansicht.png)

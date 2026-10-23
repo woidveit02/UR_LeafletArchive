@@ -1,28 +1,26 @@
 # 7 Themen zuordnen
 
-Nach der Erkennung der Mehrfachexemplare sollen nun der Inhalt der Flugblätter automatisch gruppiert werden, sodass das Durchsuchen des Korpus basieren auf den Themen der Flugblätter möglich ist. Zudem vereinfacht es den Suchprozess im Korpus, da so automatisch ähnliche Flugblätter ermittelt werden können, was einen Zugang zum Korpus ermöglicht, das die Findmittel bisher nicht bereitgestellt haben.
-
-Das Topic-Modelling-System wurde mittels iterativer Verbesserungen erstellt. Zu Beginn wurde in einem eigenen Branch des Arbeits-Repositorys (Kap. 12.6) ein einfaches Setup erstellt und dann kontinuierlich verbessert, bis die Ergebnisse zur Anwendung passend waren. Diese Topic-Modelling-Pipeline wurde dann im Laufe der Entwicklung der Import-Funktion in die Anwendung integriert.
+Suche, Bände und Herausgeber erschließen das Korpus über Wörter und Herkunft. Themen fügen einen Zugang über den Inhalt hinzu, den auch das Findmittel nicht bietet. Am Ende hat der größte Teil der Flugblätter ein Thema, ein Teil davon nur unsicher. Entstanden ist das Verfahren in mehreren Anläufen (Kap. 12.6, Kap. 12.8); heute ist es Teil der Anwendung.
 
 ## 7.1 Aufgabe
 
-Ein sogenanntes Topic Modelling System sollte inhaltlich ähnliche Flugblätter in Themen gruppieren. Die Themen sollen einen inhaltlichen Zugang zum Bestand schaffen, neben der Suche nach Wörtern und der Ordnung nach Bänden und Herausgebern.
+Ein Topic Model fasst Flugblätter mit ähnlichem Inhalt automatisch zu Themen zusammen.
 
 ## 7.2 Herausforderungen
 
-Viele Flugblätter behandeln mehrere Themen, das wurde zum aktuellen Stand noch nicht berücksichtigt. Außerdem überlagern formelhafte Wörter, Gruppenkürzel und Reste der Texterkennung den eigentlichen Inhalt.
+Zwei Eigenschaften der Flugblätter erschweren das. Viele behandeln mehrere Themen; das berücksichtigt das Verfahren bisher nicht, jedes Flugblatt bekommt nur eines. Außerdem überlagern formelhafte Wörter, Gruppenkürzel und Reste der Texterkennung den eigentlichen Inhalt. Gegen diese zweite Schwierigkeit richtet sich die Bereinigung in 7.3.
 
 ## 7.3 Verfahren
 
-Vor der Berechnung wird der Text bereinigt. Aus der Texterkennung bleiben nur die Textblöcke,  Bilder, Kopf- und Fußzeilen fallen weg. Vermerke des Archivs wie „Ablage“ mit Eingangsstempel, „z. K.“ oder „Erbitte Rückgabe“ werden entfernt. Flugblätter mit weniger als 50 Zeichen Text gehen nicht ein, längere Texte werden nach 16000 Zeichen abgeschnitten. Silbentrennungen werden nicht zusammengeführt und Gruppenkürzel nicht vereinheitlicht. Das macht nur das N-Gramm-Werkzeug (`handbuch/ngramme-auswerten.md`). Die Anwendung bereitet den Text beim Zuordnen neuer Bände und bei der Neuberechnung genauso auf.
+Vor der Berechnung bereinigen wir den Text. Aus der Texterkennung bleiben nur die Textblöcke; Bilder, Kopf- und Fußzeilen fallen weg. Vermerke des Archivs wie „Ablage“ mit Eingangsstempel, „z. K.“ oder „Erbitte Rückgabe“ entfernen wir. Sehr kurze Flugblätter gehen nicht ein, sehr lange werden gekürzt. Die Anwendung bereitet den Text beim Zuordnen neuer Bände und bei der Neuberechnung genauso auf.
 
-Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab, bis zu einer Länge von 8192 Token. BERTopic gruppiert diese Vektoren mit UMAP und HDBSCAN zu 50 Themen, die anschließend auf 40 zusammengefasst werden. Für die Schlagwörter eines Themas zählen nur Substantive in ihrer Grundform (spaCy, Modell `de_core_news_lg`). Stoppwörter und Kürzel von Organisationen werden dabei nicht berücksichtigt. 
+Das Modell bge-m3 bildet dann den ganzen Text jedes Flugblatts als Vektor ab. BERTopic gruppiert diese Vektoren mit UMAP und HDBSCAN zu 50 Themen, die anschließend auf 40 zusammengefasst werden. Für die Schlagwörter eines Themas zählen nur Substantive in ihrer Grundform, ohne Stoppwörter und Kürzel von Organisationen.
 
-Manche Flugblätter, die im initialen Topic Modelling Lauf als Outlier klassifiziert wurden und daher kein Thema erhalten hatten, bekommen nachträglich ein Thema zugeordnet, basierend auf der Ähnlichkeit. Diese Zuordnung wurde aber nicht getestet, und dient nur der Vollständigkeit. Diese nachträglichen Zuordnungen wurden auch entsprechend markiert.
+Flugblätter, die im ersten Lauf als Ausreißer kein Thema erhalten hatten, bekommen nachträglich das Thema zugeordnet, dem sie am ähnlichsten sind. Diese Zuordnung ist nicht getestet und dient nur der Vollständigkeit; die Anwendung markiert sie entsprechend.
 
 ## 7.4 Qualität
 
-Die Qualität der Zuordnung wurde nicht gemessen. 1078 Flugblätter sind sicher zugeordnet, 408 unsicher und 61 haben kein Thema. Die größten Themen sind „Streiks und Vollversammlungen gegen das Hochschulgesetz“ (136 Flugblätter), „Debatte um Hochschulgesetz und Hochschulreform“ (71) und „Hochschulwahlen: Kandidaten, Listen und Ergebnisse“ (47).
+Gemessen haben wir die Qualität der Zuordnung nicht. 1078 Flugblätter sind sicher zugeordnet, 408 unsicher [offen: sind das die nachträglich zugeordneten Ausreißer aus 7.3?] und 61 haben kein Thema. Die größten Themen sind „Streiks und Vollversammlungen gegen das Hochschulgesetz“ (136 Flugblätter), „Debatte um Hochschulgesetz und Hochschulreform“ (71) und „Hochschulwahlen: Kandidaten, Listen und Ergebnisse“ (47).
 
 Fehlzuordnungen kommen vor. Das Flugblatt zum Streik gegen die Notstandsgesetze vom 29.05.1968 etwa liegt im Thema zum Hochschulgesetz, weil es in beiden um Streiks geht.
 
@@ -32,7 +30,7 @@ Fehlzuordnungen kommen vor. Das Flugblatt zum Streik gegen die Notstandsgesetze 
 
 ## 7.5 Manuelle Prüfung
 
-Von Hand werden die Titel der Themen geprüft und bei Bedarf umbenannt. Das geht in der Anwendung unter Verwaltung › Themen. Die Titel stehen in `data/topics.json`.
+Von Hand prüfen wir nur die Titel der Themen und benennen sie bei Bedarf um, in der Anwendung unter Verwaltung › Themen.
 
 ## 7.6 Kosten
 

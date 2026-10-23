@@ -1,10 +1,10 @@
 # 5 Metadaten erzeugen
 
-Um eine spätere Durchsuchbarkeit der einzelnen Flugblatt-Exemplare zu ermöglichen, werden diese um strukturierte Metadaten ergänzt. Die Metadatenextraktion erfolgt dabei am erkannten Text mithilfe eines Sprachmodells und umfasst Informationen wie Titel, Datum, Herausgeber und weitere Angaben. Um nachvollziehbare Ergebnisse zu gewährleisten, wird das Modell angewiesen, Textstellen als "Belege" für die meisten der erhobenen Metadaten zu hinterlegen. Die Genauigkeit der extrahierten Daten wurde bislang noch nicht evaluiert.
+Damit sich die Flugblätter suchen und filtern lassen, ergänzen wir jedes Exemplar um Metadaten wie Titel, Datum und Herausgeber. Ein Sprachmodell liest sie aus dem erkannten Text und nennt für die meisten Werte die Textstelle, auf die sie sich stützen. Diese Belege machen jeden Wert nachprüfbar. Wie oft die Werte richtig sind, haben wir aber noch nicht gemessen (5.4).
 
 ## 5.1 Aufgabe und Felder
 
-Für jedes Exemplar werden die in der folgenden Tabelle aufgeführten Metadaten ermittelt. Diese werden mit Ausnahme der Textsorte und der Selbsteinschätzung durch mindestens eine wörtliche Belegstelle im Text sowie der Nummern der zugehörigen OCR-Blöcke validiert (siehe Kapitel 5.3). Dieser Schritt ist insbesondere bei der Verwendung eines KI-Sprachmodells notwendig um fehlerhafte Interpretationen sowie Halluzinationen nachvollziehen zu können.
+Für jedes Exemplar ermitteln wir die Felder der folgenden Tabelle. Außer Textsorte und Selbsteinschätzung muss jedes Feld durch mindestens eine wörtliche Belegstelle im Text und die Nummern der zugehörigen OCR-Blöcke gestützt sein (5.3). Bei einem Sprachmodell ist das nötig, um Fehldeutungen und erfundene Angaben (Halluzinationen) erkennen zu können.
 
 | Feld | Inhalt | Beispiel: Flugblatt 850 |
 |---|---|---|
@@ -17,21 +17,21 @@ Für jedes Exemplar werden die in der folgenden Tabelle aufgeführten Metadaten 
 | Textsorte | Flugblatt im engeren Sinn, Einladung, Broschüre, Zeitschrift, offener Brief, Protokoll oder unklar | Flugblatt |
 | Selbsteinschätzung | Vom Modell selbst angegebener Wert zwischen 0 und 1, der seine Sicherheit bei der Extraktion einschätzt | 0,85 |
 
-Die Auswahl der zu erhebenden Metadaten orientiert sich an vergleichbaren Sammlungen. So führt bspw. die Frankfurter Sammlung Informationen wie Datum, Urheber, Thema und Art des Dokuments für ihre Flugblätter auf [@frankfurt-flugblaetter]. Die ergänzende Nennung von Belegstellen bei diesem Projekt dient der Transparenz. Zudem werden Herausgeber und Unterzeichnende getrennt erfasst, um herausgebende Organisation von der verantwortlichen beziehungsweise unterzeichnenden Person unterscheiden zu können.
+Die Felder orientieren sich an vergleichbaren Sammlungen. Die Frankfurter Sammlung etwa führt für ihre Flugblätter Datum, Urheber, Thema und Art des Dokuments auf [@frankfurt-flugblaetter]. Zusätzlich nennen wir Belegstellen, damit die Angaben nachvollziehbar sind. Herausgeber und Unterzeichnende erfassen wir getrennt, um die herausgebende Organisation von der verantwortlichen oder unterzeichnenden Person zu unterscheiden.
 
 ## 5.2 Herausforderungen
 
-Ab 1969 weisen einige Flugblätter einen Eingangsstempel des Archivs auf deren Vorderseite auf. Dieses Artefakt kann bei vielen Exemplaren der Sammlung bis zum Jahr 2007 gefunden werden [@uar-rep118]. Bei diesen Fällen kann es zu mehreren unterschiedlichen Datumsangaben auf einem einzigen Blatt kommen, bspw. "08.02.1972" als Erscheinungsdatum und "10.02.1972" als Eingangsdatum. Somit ist eine korrekte Unterscheidung dieser beiden Angaben bei der Metadatenextraktion wichtig und stellt zugleich eine Herausforderung für das verwendete Sprachmodell dar.
+Zwei Felder sind besonders schwer. Das erste ist das Datum. Viele Flugblätter tragen ab 1969 den Eingangsstempel des Archivs, bis 2007 bei vielen Exemplaren der Sammlung (Kap. 2.3, [@uar-rep118]). Ein Blatt hat dann mehrere Datumsangaben, etwa „08.02.1972“ als Erscheinungsdatum und „10.02.1972“ als Eingangsdatum. Das Sprachmodell muss beide auseinanderhalten.
 
-Eine weitere Herausforderung ist die korrekte Erfassung der Herausgeber. Die Namen dieser erscheinen oft als Kürzel in der jeweiligen Kopfleiste und weisen teils unterschiedliche Schreibweisen auf. Um eine zuverlässige und einheitliche Identifizierung zu gewährleisten, müssen die erkannten Angaben einer in einem zentralen Herausgeberregister gespeicherten Organisation zugeordnet werden. 
+Das zweite sind die Herausgeber. Ihre Namen erscheinen oft als Kürzel in der Kopfleiste und in wechselnden Schreibweisen. Damit dieselbe Gruppe immer gleich erkannt wird, muss jede Angabe einer Organisation aus einem gemeinsamen Herausgeber-Register zugeordnet werden.
 
 ## 5.3 Verfahren
 
-Am 22.09.2026 wurden zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3235B* und *Claude Sonnet 4.5*. Für die anschließende Erschließung der Bände 1–14 wurde hiernach *Claude Sonnet 4.5* (`anthropic/claude-sonnet-4.5`) ausgewählt. Dieses wurde über OpenRouter mit Prompt v2 aufgerufen, wobei je 20 Flugblätter pro Anfrage bearbeitet wurden. Die Ergebnisse der Bände 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`). Die Nummern 005–014 resultierten aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen sind im Arbeits-Repository (Kap. 12.6) dokumentiert.
+Am 22.09.2026 haben wir zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3 235B* und *Claude Sonnet 4.5*. Für die Bände 1–14 haben wir danach *Claude Sonnet 4.5* gewählt und über OpenRouter aufgerufen, mit mehreren Flugblättern je Anfrage. Die Bände 001–004 liefen am 30.09.2026, die Bände 005–014 am 02.10.2026 mit einer angepassten Fassung des Prompts.
 
-Das Modell gibt die Ergebnisse nach einem festgelegten Schema im JSON-Format aus. Der zugrundeliegende Prompt kann in `src/backend/app/metadata_prompt.txt` eingesehen werden. Für jedes Feld gilt eine Belegpflicht: Für jedes Feld werden zunächst die wörtliche Textstelle und die OCR-Blöcke angegeben, erst hiernach wird der zugehörige Wert extrahiert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im OCR-Text steht. Um keine nicht durch den Text gestützten Informationen zu verarbeiten, muss diese Prüfung positiv ausfallen, um den Wert in ein Metadatum zu überführen. 
+Das Modell antwortet nach einem festen Schema im JSON-Format; der Prompt steht in `src/backend/app/metadata_prompt.txt`. Für jedes Feld gilt eine Belegpflicht: Das Modell nennt zuerst die wörtliche Textstelle und die OCR-Blöcke und erst danach den Wert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im erkannten Text steht. Nur wenn diese Prüfung gelingt, übernimmt sie den Wert, damit keine Angabe ohne Stütze im Text in die Metadaten gelangt.
 
-Der Zuordnung der Herausgeber liegt ein Register zugrunde. Dieses wurde zuvor aus dem Findmittel aufgebaut. Jede Organisation ist darin unter einem kanonischen Namen aufgeführt und um ein Kürzel sowie bekannte alternative Schreibweisen ergänzt. Da nur sehr wenige der in den Flugblättern auftretenden Gruppen in der Gemeinsamen Normdatei (GND) eingetragen sind, findet ein Abgleich mit dieser nicht statt. Die Information über den Jahrgang wird grundsätzlich aus dem auf dem Flugblatt angegebenen Datum abgeleitet. Fehlt diese Information, wird das Jahr des zugehörigen Bandes als Metadatum verwendet.
+Die Herausgeber ordnet die Pipeline einem Register zu, das wir aus dem Findmittel aufgebaut haben (Kap. 2.4). Jede Organisation steht darin unter einem kanonischen Namen, mit Kürzel und bekannten Schreibweisen. Einen Abgleich mit der Gemeinsamen Normdatei (GND) gibt es nicht, weil dort nur sehr wenige der Gruppen eingetragen sind. Das Jahr eines Flugblatts leiten wir aus dem Datum auf dem Blatt ab; fehlt es, gilt das Jahr des Bandes.
 
 ![Flugblatt 850 mit den Belegstellen der Metadaten](../abbildungen/metadaten_belege.png)
 
@@ -39,23 +39,19 @@ Der Zuordnung der Herausgeber liegt ein Register zugrunde. Dieses wurde zuvor au
 
 ## 5.4 Qualität
 
-Die Belegprüfung der Pipeline wurde für 2000 Segmente durchgeführt. Bei 1731 Segmenten (86,5 %) wurden keine Beanstandungen festgestellt. Die Implementierung erfolgte in `check_grounding` in `extract_metadata_v2.py`. Die genauen Ergebnisse können unter `grounding` in `data/nr0XX_metadata.json` eingesehen werden. Zu beachten ist, dass hierbei nicht die Richtigkeit der Erhebungen geprüft werden, sondern lediglich, ob die extrahierten Informationen durch Belege gestützt werden.
+Gemessen haben wir bisher nur, ob die Werte belegt sind, nicht, ob sie stimmen. Die Belegprüfung lief beim Erzeugen über 2000 Segmente, nach der Einteilung zum Zeitpunkt der Läufe; darunter sind Leerseiten und Trennungen, die wir danach noch geändert haben. Bei 1731 davon (86,5 %) fand sie keine Beanstandung.
 
-Um Auswirkungen der jeweiligen Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 erneut mit dem für die Bände 005–014 verwendeten Prompt verarbeitet (`claude-r12`). Verglichen mit den früheren Fassungen lag bei den insgesamt 464 Flugblättern 25 mal (5 %) ein anderes Datum vor, die Textsorte änderte sich in 24 (5 %) Exemplaren, 58 mal (13 %, teils nur andere Schreibweisen) unterschieden sich die Herausgeber und 115 mal (25 %, meist Länge und Zeichensetzung) die Titel. 
+Um zu sehen, wie stark die Ergebnisse vom Prompt abhängen, haben wir am 17.10.2026 die Bände 002–004 erneut mit dem Prompt der Bände 005–014 verarbeitet. Bei den 464 Flugblättern unterschied sich 25-mal (5 %) das Datum, 24-mal (5 %) die Textsorte, 58-mal (13 %, teils nur in der Schreibweise) der Herausgeber und 115-mal (25 %, meist in Länge und Zeichensetzung) der Titel. Die Belegprüfung fiel im zweiten Lauf etwas schlechter aus, mit 84,5 %, 87,7 % und 85,1 % statt 86,2 %, 90,6 % und 89,2 %. Weil sich die Angaben teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe. Als Grund für die Unterschiede vermuten wir sowohl den geänderten Prompt als auch einen Zufallsanteil. Um beides zu trennen, müsste man dieselben Bände mit denselben Einstellungen wie am 02.10.2026 erneut verarbeiten und die Ergebnisse vergleichen.
 
-Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Prompts als auch ein gewisser Zufallsfaktor vermutet.
+Eine Messung der Richtigkeit haben wir mit den Titeln des Findmittels für 1968 und 1969 versucht. Als Referenz taugen sie aber nicht: Das Archiv kürzt und vereinheitlicht seine Titel, nennt nur eine Auswahl der Blätter („u. a.“), und schon die Zuordnung eines Archivtitels zu einem unserer Flugblätter ist unsicher. Eine Messung gegen eine verlässliche Referenz fehlt deshalb (Kap. 10.1).
 
-Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Prompt zu testen, müssen dieselben Bände erneut mit denselben Einstellungen wie im Lauf `claude-r12` verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
-
-Außerdem haben wir die Titel mit denen verglichen, die das Findmittel für 1968 und 1969 nennt. Als Referenz für die Genauigkeit taugen sie aber nicht: Das Archiv kürzt und vereinheitlicht seine Titel, nennt nur eine Auswahl der Blätter („u. a.“), und schon die Zuordnung eines Archivtitels zu einem unserer Flugblätter ist unsicher. Eine Messung gegen eine verlässliche Referenz fehlt deshalb (Kap. 10.1).
-
-Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt. Bei 24 Flugblättern tritt ein Herausgeber auf, welcher nicht Teil des Herausgeberregisters ist. Wie oft die einzelnen Metadatenfelder befüllt sind und welche Auswirkungen Korrekturen auf die Informationen hatten, zeigt die Auswertung in Kapitel 5.5
+Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt, und bei 24 Flugblättern tritt ein Herausgeber auf, der nicht im Register steht. Wie oft die einzelnen Felder gefüllt sind und was die Korrekturen daran geändert haben, zeigt 5.5.
 
 ## 5.5 Manuelle Prüfung
 
-Manuelle Korrekturen können in der Leseansicht über „Beleg wählen“ vorgenommen und in `data/corrections.jsonl` gespeichert werden. Felder, die dort geändert wurden, gelten als von Hand korrigiert.
+Fehler, die beim Lesen auffallen, lassen sich in der Leseansicht von Hand korrigieren, samt neuem Beleg über „Beleg wählen“. Die Anwendung speichert Korrekturen getrennt von den erzeugten Metadaten, sodass sie bei einer Neuberechnung erhalten bleiben. Geänderte Felder gelten als von Hand korrigiert.
 
-Bis zum 12.10.2026 wurden 142 der 1547 Flugblätter in mindestens einem Feld korrigiert. Die folgende Tabelle zeigt für jedes Feld, bei wie vielen Flugblättern nach der Extraktion bereits ein Wert vorlag, wie viele Exemplare nach der manuellen Korrektur Informationen aufweisen und bei wie vielen Blättern das jeweilige Feld korrigiert wurde. Berücksichtigt werden ausschließlich die Hauptexemplare (Datenbank vom 17.10.2026).
+Bis zum 12.10.2026 haben wir 142 der 1547 Flugblätter in mindestens einem Feld korrigiert. Gezählt sind nur die Hauptexemplare (Datenbank vom 17.10.2026).
 
 | Feld | automatisch | nach Korrektur | korrigiert |
 |---|---|---|---|
@@ -67,9 +63,9 @@ Bis zum 12.10.2026 wurden 142 der 1547 Flugblätter in mindestens einem Feld kor
 | Unterzeichnende | 695 (45 %) | 697 (45 %) | 8 |
 | Textsorte (nicht „unklar“) | 1513 (98 %) | 1513 (98 %) | 1 |
 
-Die meisten Korrekturen betreffen den Eingangsstempel. In 98 Fällen konnte das Modell keinen Stempel erkennen, obwohl ein solcher vorhanden gewesen wäre. In 24 Fällen wurde ein zuvor extrahiertes Datum entfernt, 22 mal hiervon wurde es zugleich als Eingangsstempel eingetragen. Das Modell hatte den Stempel somit als Erscheinungsdatum erkannt. Die Korrekturen entstanden größtenteils bei der Prüfung der Mehrfachexemplare vom 05. bis 11.10. (Kap. 6.5): Von den 146 Exemplaren, die bis zum 12.10. korrigiert wurden, gehören 131 zu einer Gruppe von Mehrfachexemplaren. Die Auswahl ist also keine Stichprobe, und die Zahlen erlauben keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
+Die meisten Korrekturen betreffen den Eingangsstempel, also genau die Schwierigkeit aus 5.2. In 98 Fällen hatte das Modell einen vorhandenen Stempel nicht erkannt. In 24 Fällen haben wir ein erkanntes Datum entfernt, 22-mal davon zugleich als Eingangsstempel eingetragen; das Modell hatte den Stempel also für das Erscheinungsdatum gehalten. Die Korrekturen entstanden größtenteils bei der Prüfung der Mehrfachexemplare vom 05.10. bis 11.10.2026 (Kap. 6.5): Von den 146 Exemplaren, die bis zum 12.10. korrigiert wurden, gehören 131 zu einer Gruppe von Mehrfachexemplaren. Die Auswahl ist also keine Stichprobe, und die Zahlen erlauben keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
 
-Neue Herausgeber werden während des Imports im Schritt „Prüfen & freigeben“ dem Herausgeberregister zugeordnet. Nach dieser Zuordnung ist auch eine automatische Erkennung bei der Verarbeitung späterer Bände möglich.
+Neue Herausgeber ordnet man beim Import im Schritt „Prüfen & freigeben“ dem Register zu. Danach erkennt die Anwendung sie auch in späteren Bänden.
 
 ## 5.6 Kosten
 
