@@ -1,234 +1,223 @@
 # 12 Projektverlauf und Organisation
 
-<!-- Stand 22.10.2026: Stichpunkte als Gerüst. Anlass: Die Betreuenden möchten Methoden, Werkzeuge, Aufgabenplanung,
-     Meilensteine, Aufwände, positive wie negative Erfahrungen und Fehleinschätzungen deutlicher sehen.
-     Quellen: Google-Doc „Notizen“ (Besprechungen und Sprechstunden), Trello-Board „Praxisseminar-OCR“ (Screenshot
-     vom Endstand), git beider Repositories, Antritts- und Abschlussvortrag, Angaben des Teams vom 22.10.
-     Sammelstelle der Antworten: arbeitsdokumente/offene-punkte.md, Abschnitt „Projektmanagement“.
-     [offen: …] = muss das Team noch klären oder ausformulieren. Am Ende im Stil der übrigen Kapitel ausformulieren. -->
+<!-- Fassung vom 22.10.2026 nach drei Feedback-Runden. Stichpunkte mit Quellen: arbeitsdokumente/kap12-stichpunkte.md
+     und arbeitsdokumente/offene-punkte.md (Abschnitt „Projektmanagement“).
+     Noch offen und im Text mit [offen] markiert: wer MinerU und PaddleOCR getestet hat; App-Zeilen der Rollentabelle;
+     Tag des Seitenvergleichs und Beginn des Trennens; Aufwand für OCR-Tests, Prompt und Topic Modelling; Anteil von Veit
+     und Sebastian an der Anwendung; Beträge aus den Dashboards; ob es zu Beginn eine Aufwandsplanung gab; „Was sich
+     bewährt hat“ vom Team bestätigen; Tabelle zum KI-Einsatz füllen und den Einsatz beim Schreiben klären.
+     Wo sich Aufwände oder Daten nicht mehr klären lassen: „nicht erfasst“ bzw. „um den …“ statt [offen].
+     Vor der Abgabe prüfen: Kapitel 10 nennt die 176 offenen Stellen beim Trennen und den fehlenden Test von Sonnet 5.
+     Alle Daten ohne Jahr sind aus 2026. -->
 
-Dieses Kapitel dokumentiert den zeitlichen Verlauf sowie wesentliche Entscheidungen des Projekts. Es zeigt, wie die Arbeit im Team organisiert und koordiniert wurde, welche Arbeits- und Entwicklungsschritte aufeinanderfolgten und wo die für das Projekt relevanten Informationen und Ansprechpartner zu finden sind.
+Dieses Kapitel beschreibt, wer im Projekt was gemacht hat, wie der tatsächliche Verlauf vom Plan aus dem Antrittsvortrag abwich und wie wir die Arbeit organisiert haben. Danach folgen Aufwand und Kosten, unsere Erfahrungen und zum Schluss, welche KI-Werkzeuge wir eingesetzt haben.
 
-## 12.1 Team, Rollen und Betreuung
+## 12.1 Team und Betreuung
 
-Das Projekt wurde im Rahmen des Praxisseminars des Masterstudiengangs Medieninformatik im Sommersemester 2026 von drei Studierenden durchgeführt. Betreut wurde das Projekt in erster Instanz von Thomas Schmidt sowie von Prof. Dr. Christian Wolff, Niklas Donhauser und Jakob Fehle.  Andreas Becker war als Archivar der Universität der zentrale Ansprechpartner auf Seiten des Archivs und damit ein wesentlicher Stakeholder des Projekts.
+Das Projekt entstand im Praxisseminar des Masterstudiengangs Medieninformatik an der Universität Regensburg im Sommersemester 2026. Im Team waren Veit Korpies, Felix Lindner und Sebastian Simbeck. Betreut wurde es von Prof. Christian Wolff, Thomas Schmidt, Jakob Fehle und Niklas Donhauser; Ansprechpartner im Universitätsarchiv war Dr. Andreas Becker.
 
-Die Schwerpunkte der Arbeit sind in folgender Tabelle aufgelistet:
+Feste Rollen haben wir nicht vergeben. Aus den Aufgaben ergaben sich aber Schwerpunkte, die über das Projekt hinweg weitgehend stabil blieben:
 
-  | Bereich | Wer |
-  |---|---|
-  | Testkorpus für die OCR (Ziehung der 100 Seiten) | Veit |
-  | OCR-Tests: Datalab, Mistral OCR 4, Claude Sonnet 5, Gemini 3.5 Flash, Qwen3-VL | Felix |
-  | OCR-Tests: GLM-OCR | Sebastian |
-  | OCR-Tests: MinerU (über die API), PaddleOCR | [offen: wer] |
-  | Seitenvergleich Datalab gegen Mistral, Goldstandard | alle drei, je ein Drittel |
-  | Werkzeuge: OCR-Viewer, Splitter, OCR-Pipeline für alle Bände | Felix |
-  | Trennen von Hand | Felix Nr. 001–003 (danach von Veit geprüft), Sebastian Nr. 004–008, Veit Nr. 009–014 |
-  | Metadatenextraktion (Prompt, Pipeline, Läufe) | Felix; Felder vom Team gemeinsam festgelegt |
-  | Topic Modelling, erster Versuch NER | Veit |
-  | Mehrfachexemplare prüfen (320 Fälle, mit Korrektur der Metadaten) | Sebastian |
-  | App: Repository, Grundgerüst und Datenbank | Veit und Sebastian |
-  | App: Filter, Suche | Sebastian [offen: prüfen] |
-  | App: Themen in der App | Veit |
-  | App: Datenmodell, Import und Verwaltung, Export, Zusammenführung auf `main` | Felix |
-  | Kommunikation mit dem Archiv (Findmittel, Rückfragen) | Veit |
-
-Das Ausformulieren der einzelnen Kapitel der Dokumentation wurde wie folgt aufgeteilt: Veit, Kapitel 1, 2, 3, 7, 10; Sebastian, Kapitel 4, 5, 6; Felix, Kapitel 0, 8, 9, 11, Kennzahlen, Handbücher, Glossar, READMEs und Texte in der Anwendung; Kapitel 12 wurde gemeinsam erarbeitet
-
-- [offen: Tabelle mit dem Team abgleichen, v. a. die App-Zeilen und wer Trends, Exemplarprüfung und Suche gebaut hat.]
-
-## 12.2 Arbeitsweise und Werkzeuge
-
-**Phasen.** Das Projekt lief in zwei Phasen mit unterschiedlicher Organisation:
-
-- Phase 1 (Ende Juni bis Mitte August): Bestand aufbereiten, OCR auswählen und prüfen, alle Bände erkennen. Organisiert als Kanban in Trello.
-- Phase 2 (ab September): Metadaten, Mehrfachexemplare, Themen und die Anwendung. Organisiert über GitHub-Issues, Branches und Pull Requests im App-Repository.
-
-**Kanban in Trello (Phase 1).**
-
-- Board „Praxisseminar-OCR“, genutzt ab Ende Juni (vor der Ziehung des Testkorpus am 30.06.) bis zur OCR aller Bände.
-- Spalten: Backlog, Diese Woche, Review, Fertig, Fragen. „Diese Woche“ war die Wochenplanung aus dem Treffen, „Review“ die gegenseitige Prüfung, „Fragen“ die Sammlung für Sprechstunden und Archiv.
-- Labels nach Arbeitsbereich: Rohdaten aufbereiten (PDF, TIFF), OCR-Vergleich (Pipelines für die Systeme, Einbindung in den OCR-Viewer), OCR-Validierung (Goldstandard, CER).
-- Jede Karte mit verantwortlicher Person, gemeinsame Arbeit als eigene Karten je Person (z. B. „OCR-Vergleich S. 1–33 / 34–66 / 67–100“). Am Ende 17 Karten erledigt, Fälligkeitsdatum z. B. für „OCR aller Bände mit Datalab“ am 30.08.
-- Vom Board gibt es nur einen Screenshot des Endstands. [offen: JSON-Export des Boards versuchen, er enthält jede Verschiebung mit Datum.]
-
-**GitHub (Phase 2).**
-
-- Grund für den Wechsel: Mit dem neuen Repository lag alles an einem Ort, und die Arbeit fand vor allem im Code statt.
-- Issues meist von Felix angelegt; Labels `data`, `feature`, UI-Änderungen und `topic modelling`.
-- Alle arbeiteten auf eigenen Branches (`dev-search`, `dev-topics`, `dev-trends`, `dev-copy-review`, `dev-import` oder aus einem Issue benannt). Felix verwaltete `main`, testete Pull Requests lokal, löste Konflikte und führte zusammen. Kleinere Änderungen gingen direkt auf `main`.
-- Commit-Nachrichten nach Conventional Commits.
-
-**Besprechungen.**
-
-- Wöchentliches Treffen, meist von Felix moderiert: Jede Person berichtet ihren Stand, dann werden die Aufgaben bis zum nächsten Treffen verteilt. Ab 19.08. mit Protokoll (Stand je Person, TODOs).
-- Kein fester Wochentag, am häufigsten dienstags. Teils in Präsenz an der Universität, teils online auf Discord.
-- Während Sebastians Abwesenheit (08.–16.09.) wurden die Aufgaben vorher fest verteilt.
-- Dazwischen Abstimmung über WhatsApp.
-
-**Sprechstunden und Archiv** (Termine siehe 12.3): Vorstellung der Zwischenstände und Abstimmung der nächsten Schritte, je vor den Präsentationen eine Sprechstunde mit Thomas Schmidt. Rückmeldungen der Betreuung haben die Richtung mitbestimmt, z. B. der Wunsch nach Import und Korrektur in der Anwendung, bedienbar ohne technische Kenntnisse (07.10.).
-
-**Qualitätssicherung bei der Handarbeit.**
-
-- Goldstandard: Regeln, was als Fehler gilt, vorher gemeinsam festgelegt und danach nachgeschärft; die Seiten 1–5 von allen dreien bearbeitet, um die Übereinstimmung zu prüfen (Kap. 3.7).
-- Trennen: zweiter Durchgang am 29.09. mit einer automatischen Verdachtsliste (`check_boundaries.py`, 254 Fälle, 77 entschieden, 30 Schnitte geändert); dabei die Regeln für Grenzfälle festgehalten (Kap. 4.2).
-- Mehrfachexemplare: jede vorgeschlagene Gruppe von Hand bestätigt oder verworfen (Kap. 6.5).
-
-**Werkzeuge.**
-
-| Werkzeug | Wofür |
+| Bereich | Wer |
 |---|---|
-| Trello | Aufgabenplanung in Phase 1 (Kanban) |
-| GitHub | Code, Issues, Branches, Pull Requests; zwei Repositories (Pipeline bis September, danach die Anwendung) |
-| Google Drive und Google Docs | Scans und OCR-Ergebnisse (wegen der Größe), Besprechungsnotizen, Seitenvergleich |
-| Zotero | gemeinsame Bibliothek, u. a. Working Papers und Blogbeiträge zu den OCR-Modellen |
-| Discord, WhatsApp | Online-Treffen, Abstimmung zwischen den Treffen |
-| Eigene Werkzeuge | OCR-Viewer (Vergleich der Systeme, Goldstandard), Splitter (Trennen von Hand, Prüfmodus) |
-| MkDocs, Pandoc | Dokumentation als Website und PDF aus Markdown im Repository |
-| Claude Code | Programmieren und Schreiben, siehe 12.8 |
+| Testkorpus für die Texterkennung | Veit |
+| OCR-Tests mit Datalab, Mistral OCR 4, Claude Sonnet 5, Gemini 3.5 Flash und Qwen3-VL | Felix |
+| OCR-Tests mit GLM-OCR | Sebastian |
+| OCR-Tests mit MinerU und PaddleOCR | [offen] |
+| Seitenvergleich Datalab gegen Mistral, Goldstandard | alle drei, je ein Drittel |
+| OCR-Viewer, Splitter, Texterkennung aller Bände | Felix |
+| Trennen von Hand | Felix Nr. 001–003 (geprüft von Veit), Sebastian Nr. 004–008, Veit Nr. 009–014 |
+| Metadatenextraktion | Felix; die Felder haben wir gemeinsam festgelegt |
+| Topic Modelling, erster Versuch mit Named Entity Recognition | Veit |
+| Prüfung der Mehrfachexemplare | Sebastian |
+| Anwendung: Repository, Grundgerüst und Datenbank | Veit und Sebastian |
+| Anwendung: Filter und Suche | Sebastian |
+| Anwendung: Themen | Veit |
+| Anwendung: Datenmodell, Import, Verwaltung, Export, Zusammenführung | Felix |
+| Kontakt zum Archiv (Findmittel, Rückfragen) | Veit |
 
-- Eine Overleaf-Vorlage für Abschlussarbeiten (Notiz 31.08.) wurde verworfen: Bei vielen Abbildungen und Tabellen und für Anwenderinnen und Anwender ist eine Dokumentation als Website näher an der Struktur der Anwendung. Sie liegt deshalb als Markdown im Repository (MkDocs); das PDF entsteht daraus mit Pandoc.
+Die Kapitel dieses Berichts haben Veit (1, 2, 3, 7, 10), Sebastian (4, 5, 6, 12) und Felix (Kurzfassung, 8, 9, 11, 12, Kennzahlen, Handbücher, Glossar) geschrieben. Felix hat außerdem die Texte in der Anwendung und die READMEs verfasst.
 
-## 12.3 Verlauf und Meilensteine
+## 12.2 Verlauf: Plan und Umsetzung
+
+Im Antrittsvortrag am 09.06. hatten wir den Ablauf wie folgt geplant: Evaluation der Methoden, Flugblätter trennen, Text erkennen, ein Datenmodell entwickeln und schließlich eine Anwendung zur Datenanalyse bauen, etwa für Topic Modelling, Sentiment-Analyse und N-Gramme.
+
+Tatsächlich verlief das Projekt in drei Phasen. In der Vorbereitung von Mai bis Juni haben wir den Bestand gewählt und das Vorgehen abgestimmt. In der Rohdaten-Phase von Ende Juni bis August haben wir den Umfang auf die 14 bis dahin gescannten Bände festgelegt, ein OCR-System ausgewählt und geprüft, alle Bände erkannt und von Hand getrennt. Trennen und Texterkennung liefen dabei, anders als geplant, parallel, weil das Trennen von Hand nur die Scans brauchte; Felix konnte die Texterkennung abschließen, während Sebastian und Veit trennten. Die Phase "Erschließung und Anwendung" begann mit den Sprechstunden am 25.08. Im September haben wir das Findmittel ausgewertet, die Metadatenextraktion entwickelt und das Topic Modelling aufgebaut. Das Datenmodell konnten wir erst festlegen, als am 22.09. die Felder der Metadaten feststanden; zwei Tage später entstand das Repository der Anwendung. Metadaten aller Bände und Themen folgten Ende September und Anfang Oktober, die Prüfung der Mehrfachexemplare vom 05. bis 11.10.
+
+Die größte Abweichung vom Plan betrifft die Anwendung. Statt einer Anwendung zur Datenanalyse entstand ein Tool zum Erschließen und Pflegen des Bestands, mit Import neuer Bände. Sie zeigt unter „Trends“, wie oft ein Suchbegriff je Jahr vorkommt; weitergehende Analysen liegen außerhalb, im N-Gramm-Werkzeug und im Notebook (Kap. 9.7).
 
 | Datum | Ereignis |
 |---|---|
-| 12.05. | Erste Projektsprechstunde (Prof. Wolff, Thomas Schmidt): Ziele, zunächst Sammlung Reisner |
-| 20.05. | Termin mit Andreas Becker, Besichtigung des Archivs; dabei wird klar: Allgemeine Flugblattsammlung statt Sammlung Reisner. Danach Sprechstunde mit Prof. Wolff und Jakob Fehle zum weiteren Vorgehen |
-| 27.05. | Erste Teambesprechung (Discord) |
-| 08.06. | Sprechstunde Thomas Schmidt zur ersten Präsentation |
+| ***Vorbereitung*** | |
+| 12.05. | Erste Projektsprechstunde mit Prof. Wolff und Thomas Schmidt |
+| 20.05. | Termin mit Andreas Becker im Archiv: Allgemeine Flugblattsammlung statt Sammlung Reisner; danach Sprechstunde mit Prof. Wolff und Jakob Fehle zum weiteren Vorgehen |
+| 27.05. | Erste Teambesprechung |
+| 08.06. | Sprechstunde mit Thomas Schmidt zum Antrittsvortrag |
 | **09.06.** | **Antrittsvortrag** |
-| Ende Juni | Start des Trello-Boards; 23.06. erster Test der Datalab API |
+| ***Rohdaten*** | |
+| Ende Juni | Start des Kanban-Boards, erster Test der Datalab API (23.06.) |
 | 30.06. | Testkorpus aus 100 Seiten |
-| 08.07. | Sprechstunde Thomas Schmidt zur zweiten Präsentation |
-| 08./09.07. | Acht OCR-Systeme auf dem Testkorpus; Vergleichswerkzeug (OCR-Viewer) |
+| 08.07. | Sprechstunde mit Thomas Schmidt zur Zwischenpräsentation |
+| 08./09.07. | Acht OCR-Systeme auf dem Testkorpus, Vergleichsansicht im OCR-Viewer |
 | **14.07.** | **Zwischenpräsentation** |
-| 21.07. | Seitenvergleich Datalab gegen Mistral, Entscheidung für Datalab [offen: Tag bestätigen] |
-| 23.07. | Splitter; Trennen von Hand beginnt [offen: Beginn bestätigen] |
-| 28.07. | Ergebnisse des Goldstandards; Auswertung am 04.08. (CER 0,60 %) |
-| 17.–19.08. | OCR aller 14 Bände (geplant bis 30.08.) |
+| 20.07. | Nachfrage beim Archiv: keine weiteren Bände gescannt; Umfang auf die Bände 001–014 festgelegt |
+| 21.07. | Seitenvergleich Datalab gegen Mistral, Entscheidung für Datalab |
+| 23.07. | Erste Fassung des Splitters, Beginn des Trennens von Hand |
+| 28.07. | Goldstandard fertig; Auswertung am 04.08. |
+| 17.–19.08. | Texterkennung aller 14 Bände, wie geplant bis 19.08. |
+| 20.08. | Notizfunktion im Splitter |
 | 22.08. | Trennen von Hand abgeschlossen |
-| 23.08. | Sprechstunde Prof. Wolff und Niklas Donhauser (OCR) |
-| 25.08. | Sprechstunde Thomas Schmidt (online): Metadaten, Themen, NER |
-| September | Findmittel des Archivs (Export aus ACTApro); Andreas Becker bis 02.09. im Urlaub |
-| 17.09. | Topic-Modelling-Pipeline (Veit) |
-| 22.09. | Konzept der Anwendung, Wahl von FastAPI und SQLAlchemy; Sprechstunde Prof. Wolff und Niklas Donhauser |
-| 24.09. | App-Repository angelegt |
-| 29.09. | Zweiter Durchgang Trennen mit Verdachtsliste |
-| 30.09., 02.10. | Metadatenläufe; Bände 005–014 in der Anwendung |
-| 02.–12.10. | Filter, Themen, Suche, Exemplarprüfung, Trends, Import und Export auf `main` |
-| 07.10. | Vorführung der Anwendung in der Sprechstunde (Prof. Wolff, Jakob Fehle) |
+| ***Erschließung und Anwendung*** | |
+| 25.08. | Sprechstunden mit Prof. Wolff und Niklas Donhauser (Texterkennung) und mit Thomas Schmidt (Metadaten, Topic Modelling, Named Entity Recognition) |
+| Anfang September | Findmittel des Archivs erhalten und ausgewertet: 127 Einträge als Grundlage des Herausgeber-Registers |
+| 17.09. | Topic-Modelling-Pipeline |
+| 22.09. | Konzept der Anwendung mit Import neuer Bände, Felder der Metadaten, Wahl von FastAPI und SQLAlchemy; Sprechstunde mit Prof. Wolff und Niklas Donhauser |
+| 24.09. | Repository der Anwendung, Datenmodell |
+| 29.09. | Zweiter Durchgang beim Trennen |
+| 30.09., 02.10. | Metadaten für alle Bände, Übernahme in die Anwendung |
+| 03.10. | Themenlauf mit 40 Themen |
+| 05.–11.10. | Prüfung der Mehrfachexemplare |
+| 07.10. | Vorführung der Anwendung in der Sprechstunde |
 | 08.10. | Erste Seite für den Import neuer Bände |
+| 02.–12.10. | Filter, Themen, Suche, Exemplarprüfung, Trends, Import und Export in der Anwendung |
 | **14.10.** | **Abschlusspräsentation** |
-| 20.10. | Vorführung im Archiv mit Live-Import eines Teils von Band 15 |
-| 22.10. | Dokumentation auf `main` |
+| 20.10. | Vorführung im Archiv mit Import eines Teils von Band 15 |
+| 22.10. | Dokumentation im Hauptzweig |
 
-**Plan und tatsächlicher Ablauf.** Der Antrittsvortrag plante: Evaluation der Methoden → Trennen → OCR → Datenmodell → Anwendung zur Datenanalyse (Sentiment, Keywords, Topic Modelling, N-Gramme).
+## 12.3 Entscheidungen im Überblick
 
-- Trennen und OCR liefen parallel, weil das Trennen von Hand die OCR nicht brauchte.
-- Das Datenmodell entstand erst, als die Metadatenextraktion gut genug lief (Ende September).
-- Aus der Anwendung zur Datenanalyse wurde eine Anwendung zum Erschließen und Pflegen, mit Import neuer Bände; die Analysen liegen als N-Gramm-Werkzeug und Notebook außerhalb (Kap. 9.7).
+| Datum | Entscheidung | Warum | Kapitel |
+|---|---|---|---|
+| 20.05. | Allgemeine Flugblattsammlung (Rep. 118) statt Sammlung Reisner | Die Sammlung Reisner ist nicht digitalisiert und enthält fast nur Blätter linker Gruppen | 2 |
+| 20.07. | Umfang: Bände 001–014 | Laut Archiv waren keine weiteren Bände gescannt; wir wollten den Umfang für die weitere Arbeit festlegen | 2 |
+| 21.07. | Datalab API, Modus accurate | genauester Text und genaueste Gliederung im eigenen Test, Kopf- und Fußzeilen getrennt, Tabellen erkannt | 3 |
+| Juli/August | Trennen von Hand mit eigenem Werkzeug, parallel zur Texterkennung | Die automatische Segmentierung von Datalab fand nur einen Bruchteil der Grenzen; das Trennen brauchte den erkannten Text nicht | 4 |
+| September | Topic Modelling mit bge-m3 auf ganzen Flugblättern | MiniLM konnte nur kurze Textblöcke verarbeiten | 7 |
+| September | Metadaten mit Claude Sonnet 4.5 über OpenRouter, mit Belegpflicht | Gemini 2.5 Flash lieferte zu ungenaue Metadaten; Claude Sonnet 4.5 kannten wir aus den ersten Tests der Metadaten und haben das Modell danach nicht mehr gewechselt | 5 |
+| 22.09. | Anwendung mit FastAPI, Jinja2 und SQLAlchemy, mit Import neuer Bände | Erfahrung aus einem früheren Projekt; das Archiv soll neue Bände selbst einlesen können | 9 |
+| 07./08.10. | Import bedienbar ohne technische Kenntnisse | Fragen in der Sprechstunde am 07.10. | 9 |
+| Oktober | Keine Named Entity Recognition | Fokus auf Metadaten und Anwendung | 10 |
+| Oktober | Dokumentation als Website (MkDocs) statt Overleaf | Form laut Ankündigung im Kurs freigestellt; viele Abbildungen und Tabellen; eine Website lässt sich für Anwenderinnen und Anwender besser nutzen | 12.6 |
 
-## 12.4 Entscheidungen im Überblick
+## 12.4 Arbeitsweise
 
-| Datum | Entscheidung | Kapitel |
-|---|---|---|
-| Mai 2026 | Allgemeine Flugblattsammlung (Rep. 118) statt Sammlung Reisner | 2 |
-| 21.07.2026 | Datalab API, Modus accurate | 3 |
-| Juli/August 2026 | Trennen von Hand mit eigenem Werkzeug, parallel zur OCR | 4 |
-| 22.09.2026 | Anwendung mit FastAPI, Jinja2 und SQLAlchemy, auf Basis eines früheren Projekts | 9 |
-| September 2026 | Metadaten mit Claude Sonnet 4.5 über OpenRouter, mit Belegpflicht | 5 |
-| Oktober 2026 | Import neuer Bände in der Anwendung, bedienbar ohne technische Kenntnisse | 9 |
-| Oktober 2026 | NER nicht umsetzen, Fokus auf Metadaten und Anwendung | 10 |
+### Besprechungen
 
-## 12.5 Arbeits-Repository
+Wir haben uns während des gesamten Bearbeitungszeitraums wöchentlich getroffen. Die internen Sprechstunden fanden dabei sowohl in Präsenz an der Uni als auch Online via Discord statt. Meist moderierte Felix. Jede Person berichtete ihren Stand, danach haben wir die Aufgaben bis zum nächsten Treffen verteilt. Ab dem 19.08. haben wir dazu ein Protokoll mit dem Stand jeder Person und den offenen Aufgaben geführt. Zwischen den Treffen erfolgte die Kommunikation über WhatsApp. Als Sebastian vom 07. bis 17.09. abwesend war, haben wir die Aufgaben für diese Zeit vorher strikt verteilt.
 
-Bevor die Anwendung entstand, lag die Arbeit in einem eigenen Repository. Dort liegen die Skripte für den Vergleich der OCR-Systeme und den Goldstandard, die Metadatenläufe mit allen Prompt-Fassungen, der erste Themenlauf und die Suche nach Mehrfachexemplaren über alle Bände. Auch die beiden Werkzeuge, mit denen die Bände von Hand getrennt und die Texterkennung geprüft wurden, sind dort abgelegt. Das Repository ist archiviert und wird nicht weiter gepflegt: <https://github.com/Alphazerfall/flugblatt_praxisseminarSS26>. Was für Betrieb und Weiterentwicklung nötig ist, steht in diesem Repository, in der Anwendung oder unter `scripts/`.
+Die Art der Dokumentation ausstehender Aufgaben zwischen einzelnen Sprechstunden hat sich phasenweise geändert: zuerst verwendeten wir ein Kanban-Board, nach der Texterkennung aller Bände erstellten wir Protokolle und ab dem 24.09. waren es GitHub-Issues.
 
-- [offen: Das Repository ist noch privat; vor der Abgabe öffentlich stellen oder für das Archiv freigeben und die Skripte in `pipelines/01_pdf/` committen.]
-- Bausteine der Anwendung, die dort zuerst entstanden: Vergleichsansicht der OCR-Ausgaben (09.07.), OCR-Viewer mit Text neben dem Scan samt Bounding Boxes und Vorschaubildern, Splitter (23.07.), Goldstandard-Modus (28.07.), NER-Übersicht (Veit, 07.09.), Topic-Modelling-Pipeline (Veit, 17.09.). Das App-Repository vom 24.09. hat diese Bausteine übernommen.
+### Kanban in Trello
 
-## 12.6 Aufwände
+In der Phase "Rohdaten" waren die Aufgaben gut voneinander abgrenzbar, deshalb haben wir sie auf einem Kanban-Board geplant. Das Board „Praxisseminar-OCR“ hatte die Spalten "Backlog", "Diese Woche", "Review", "Fertig" und "Fragen". In der wöchentlichen Besprechung wurden entsprechende Karten nach „Diese Woche“ gezogen. In der Spalte „Review“ sollten Aufgaben nach dem Fertigstellen abgelegt werden, um geprüft zu werden. Anschließend wurden sie in "Fertig" bewegt. Unter „Fragen“ sammelten wir, was wir in der nächsten Sprechstunde oder im Archiv besprechen wollten. Labels ordneten die Karten den Arbeitsbereichen zu: Rohdaten aufbereiten, OCR-Vergleich und OCR-Validierung. Jede Karte wurde einer Person zugeteilt. Gemeinsame Aufgaben wie der Seitenvergleich waren als eigene Karten je Drittel angelegt. Insgesamt wurden 17 Karten erstellt und erledigt.
 
-Zeiten wurden nicht laufend erfasst. Die Angaben beruhen auf Erinnerung des Teams und auf Zeitstempeln in Dateien und Protokollen.
+### GitHub
+
+Ab dem 24.09. lagen Code, Aufgaben und Dokumentation im Repository der Anwendung an einem Ort, und die Arbeit verlagerte sich weitesgehend im Code statt. Deshalb erfolgte das Managen der Aufgaben nun hauptsächlich mithilfe von Issues auf Github. Die meisten Issues wurden durch Felix angelegt, weil er am meisten im Code gearbeitet hat. Labels kennzeichneten die Arbeitsbereiche "Daten", "neue Funktionen", "Änderungen an der Oberfläche" und "Topic Modelling". Für die Arbeit am Code wurden eigene Branches erstellt, die sich an Issues oder einzelnen Aufgabenblöcken richteten. Felix war für den Hauptzweig verantwortlich: Er hat die Pull Requests lokal getestet, Konflikte gelöst und zusammengeführt. Kleinere Änderungen gingen bei ihm direkt in den Hauptzweig.
+
+### Sprechstunden und Archiv
+
+In den Sprechstunden wurden Zwischenstände vorgestellt und nächste Schritte abgestimmt. Im Vorfeld des Antrittsvortrags und der Zwischenpräsentation haben wir zusätzlich vorgestellte Inhalte und Folien mit Thomas Schmidt besprochen. Aus der Sprechstunde am 25.08. resultierten die Schwerpunkte "Metadaten" und "Topic Modelling". Der Import neuer Bände wurde nach der Sprechstunde am 22.09. in das Konzept der Anwendung aufgenommen. Bei der Demonstration am 07.10. erkundigten sich Herr Prof. Dr. Wolff und Jakob Fehle nach einer Möglichkeit, neue Flugblätter hochzuladen und inwiefern sich Fehler in der Datenbank nachträglich korrigieren lassen könnten. Ebenfalls betonten sie den Wunsch, die Anwendung auch für Nutzer ohne technisches Vorwissen bedienbar zu machen.
+
+## 12.5 Qualitätssicherung bei der Handarbeit
+
+Bei manuellen Arbeitsschritten wurden im Voraus Regeln für die Bearbeitung festgelegt, um ein möglichst konsistentes Vorgehen sicherzustellen und nachvollziehbare sowie vergleichbare Ergebnisse zu erhalten. Die Ergebnisse wurden zusätzlich manuell überprüft und bei Bedarf korrigiert.
+
+- Goldstandard: Vor der Korrektur wurden gemeinsam Kriterien festgelegt, die für eine Bewertung als "fehlerhaft" im OCR-Text vorliegen müssen. Nach einer Bearbeitung von einigen Testseiten wurden diese Regeln weiter präzisiert. Die Seiten 1 bis 5 wurden von allen drei Teammitgliedern bearbeitet, um die Übereinstimmung der Einschätzungen zu vergleichen (Kap. 3.7).
+
+- Trennung der Flugblätter: Die Bände 001–003 wurden zunächst von Felix mit einer frühen Version des Splitters getrennt. Diese verfügte noch über keine Notizfunktion, die erst am 20.08. ergänzt wurde, um Fehler bei bspw. der Reihenfolge fortlaufender Flugblätter dokumentieren zu können. Anschließend überprüfte Veit die Ergebnisse.
+
+- Zweiter Prüfdurchgang: Am 29.09. wurden alle Bände mitihilfe einer automatisch erstellten Liste mit 254 verdächtigen Trennstellen erneut überprüft. Die Liste unterschied drei Stufen der Auffälligkeit. Von den 72 Fällen der Stufen „sicher“ und „wahrscheinlich“ wurden 71 bearbeitet. In einem Fall musste ein manueller Schnitt gesetzt werden. Zusätzlich wurden sieben der 182 Fälle der Stufe „prüfen“ bearbeitet. Insgesamt mussten bei diesem Durchgang 30 Trennungen geändert werden. Die hierbei gewonnenen Erkenntnisse bildeten die Grundlage für die Regeln zum Umgang mit Grenzfällen (Kap. 4.2).
+
+- Mehrfachexemplare: Jede vom System vorgeschlagene Gruppe von Mehrfachexemplaren wurde manuell geprüft und entweder bestätigt oder verworfen (Kap. 6.5).
+
+## 12.6 Werkzeuge und Repositories
+
+| Werkzeug | Wofür |
+|---|---|
+| Trello | Kanban-Board in der Phase Rohdaten |
+| GitHub | Code, Issues, Branches und Pull Requests (Arbeits-Repository und Repository der Anwendung) |
+| Google Drive und Google Docs | Scans und OCR-Ergebnisse, Protokolle, Notizen zum Seitenvergleich |
+| Zotero | gemeinsame Literatursammlung, u. a. Working Papers und Blogbeiträge zu den OCR-Modellen |
+| Discord, WhatsApp | Online-Treffen und Abstimmung dazwischen |
+| OCR-Viewer, Splitter | eigene Werkzeuge zum Vergleich der OCR-Systeme, für den Goldstandard und zum Trennen |
+| MkDocs, Pandoc | diese Dokumentation als Website und als PDF |
+| Claude Code | Programmieren und Schreiben (Kap. 12.9) |
+
+Vor der Anwendungs-Implementierung, lag die Arbeit in einem eigenen Arbeits-Repository: <https://github.com/Alphazerfall/flugblatt_praxisseminarSS26>. Dort liegen die Skripte für den Vergleich der OCR-Systeme und den Goldstandard, die Metadatenläufe mit allen Prompt-Fassungen, der erste Themenlauf und die Suche nach Mehrfachexemplaren über alle Bände, außerdem OCR-Viewer und Splitter. Dort entstanden auch die Bausteine der Anwendung: die Ansicht zum Vergleich der OCR-Ausgaben (09.07.2026), der OCR-Viewer mit dem erkannten Text samt Bounding Boxes neben dem Scan, der Splitter (23.07.2026), der Modus für den Goldstandard (28.07.2026) und die Topic-Modelling-Pipeline (17.09.2026). Das Repository der Anwendung vom 24.09. hat diese übernommen. Das Arbeits-Repository wurde anschließend nicht weiter gepflegt. Alle für Betrieb und Weiterentwicklung wichtigen Informationen sind im Repository der Anwendung aufgelistet. Auch verwendete Werkzeuge sind unter `scripts/` dokumentiert. [offen: Das Arbeits-Repository ist noch privat; vor der Abgabe öffentlich stellen oder für das Archiv freigeben und als archiviert markieren.]
+
+Die Art und Weise der Dokumentation konnte laut einer Ankündigung im Kurs von uns selbst bestimmt werden. Zunächst planten wir, ein Overleaf-Projekt mit einer Vorlage für Abschlussarbeiten aufzusetzen. Weil unsere Dokumentation viele Abbildungen und Tabellen enthalten sollte und sich eine Website für Anwenderinnen und Anwender besser nutzen lässt, entschiede wir uns schließlich dazu, die Doku in unsere Anwendung einzubinden. Sie wurde deshalb als Markdown im Repository der Anwendung untergebracht. Für die Abgabe erzeugt Pandoc hieraus ein PDF.
+
+## 12.7 Aufwand und Kosten
+
+Exakte Zeiten wurden während des Projekts nicht laufend erfasst. Die folgenden Angaben stammen aus Protokollen, Zeitstempeln in Dateien und Repositories oder wurden im Nachhinein basierend auf Erinnerung geschätzt. Der Aufwand der einzlenen Arbeitsschritte wurde zu beginn ebenfalls geschätzt, jedoch lediglich für Präsentationen im Kurs beziffert. Eine dokumentierte Aufwandsplanung liegt daher nicht vor. 
 
 | Arbeit | Aufwand | Anmerkung |
 |---|---|---|
-| Seitenvergleich Datalab gegen Mistral | ein Tag, je Person ein Drittel, abends Besprechung | Notizen je Seite |
-| Goldstandard | ca. 2,5 h je Person für ein Drittel (rund 4,5 min je Seite) | in Blöcken von etwa 15 min über mehrere Tage, weil sehr konzentrationsintensiv; dazu Besprechungen zu den Regeln |
-| OCR aller Bände | wenige Minuten Rechenzeit je Band | über drei Tage verteilt, wegen Guthaben und Wiederholungen |
-| Trennen von Hand | Sebastian ca. 6 h (1 926 Seiten), Veit ca. 4,5 h (2 123 Seiten), Felix nicht beziffert (415 Seiten) | 7–11 s je Seite; nach Herausgeber sortierte Bände gingen schneller. Felix trennte Nr. 001–003 nebenbei, während er den Splitter baute |
-| Splitter entwickeln | ca. eine Woche für die erste Fassung (ab 21.07.) | danach iterativ weiterentwickelt, während getrennt wurde (Kommentare 20.08., Prüfmodus 29.09.) |
-| Zweiter Durchgang Trennen | ca. 1,5 h Entscheidungszeit | am 29.09., verteilt über den Tag |
-| Mehrfachexemplare | Sebastian ca. 8 h für 320 Fälle | rund 1,5 min je Fall, inklusive Metadatenkorrektur |
-| Anwendung | Felix etwa Vollzeit vom 24.09. bis 22.10. | Anteil von Veit und Sebastian [offen] |
+| OCR-Tests der acht Systeme | [offen: schätzen, sonst „nicht erfasst“] | Läufe am 08./09.07. |
+| Seitenvergleich Datalab gegen Mistral | ein Tag | je Person ein Drittel mit Notizen je Seite, abends Besprechung und Entscheidung |
+| Goldstandard | ca. 2,5 Stunden je Person für ein Drittel | in Blöcken von etwa 15 Minuten über mehrere Tage, weil die Arbeit viel Konzentration braucht; dazu Besprechungen zu den Regeln |
+| Splitter, erste Fassung | ca. eine Woche | danach weiterentwickelt, während getrennt wurde |
+| Trennen von Hand | Sebastian ca. 6 Stunden für 1 926 Seiten, Veit ca. 4,5 Stunden für 2 123 Seiten | 7 bis 11 Sekunden je Seite; Felix trennte Nr. 001–003 (415 Seiten) nebenbei, während er den Splitter entwickelte und die Texterkennung betreute |
+| Zweiter Durchgang beim Trennen | ca. 1,5 Stunden | 77 Entscheidungen, über den Tag verteilt |
+| Metadaten: Prompt und Läufe | [offen: schätzen, sonst „nicht erfasst“] | mehrere Prompt-Fassungen bis zu den Läufen am 30.09. und 02.10. |
+| Topic Modelling | [offen: schätzen, sonst „nicht erfasst“] | mehrere Ansätze, Themenlauf am 03.10. |
+| Mehrfachexemplare | Sebastian ca. 8 Stunden für 320 Fälle | etwa 1,5 Minuten je Fall, mit Korrektur der Metadaten |
+| Anwendung | Felix etwa in Vollzeit vom 24.09. bis 22.10. | Anteil von Veit und Sebastian [offen: schätzen, sonst „nicht erfasst“] |
 
-- Kosten externer Dienste: ca. 30 $ bei Datalab über das monatliche Gratisguthaben (20 $ bei Anmeldung mit Uni-Adresse) hinaus; ca. 65 $ bei OpenRouter, fast ganz für Tests und Läufe der Metadaten, ein sehr kleiner Teil für Embeddings. [offen: Beträge aus den Dashboards in `kennzahlen.md` übernehmen.]
-- [offen: Gab es zu Beginn eine Aufwandsplanung (Stunden je Person, ECTS)? Falls nein, so festhalten.]
+Der Zeitaufwand der Separierungen war stark vom zu bearbeitenden Band abhängig. Da die Bände innerhalb eines Jahrgangs nach herausgebenden Gruppen sortiert sind, ließen sich schnell Muster erkennen, wonach Flugblätter von Gruppen, welche eine strikte Nummerierung anwandten, deutlich schneller zu Trennen waren als andere. Zwei der drei Bände, die laut Findmittel überwiegend eine einzige Gruppe enthalten, wurden von Veit bearbeitet (Nr. 011 Demokratische Front, Nr. 013 AStA). Der dritte wurde von Sebastian separiert (Nr. 007 RCDS). Dieser Sachverhalt könnte das teilweise unterschiedliche Bearbeitungstempo begründen.
 
-## 12.7 Erfahrungen
+Für externe Dienste haben wir insgesamt etwa 95 $ bezahlt. Bei Datalab lagen wir rund 30 $ über dem monatlichen Gratisguthaben von 20 $. Bei OpenRouter, wo es für Claude kein Gratiskontingent gibt, kosteten alle Tests und Läufe zusammen rund 65 $. Diese wurden beinahe vollständig für die Metadatenextraktion sowie zu einem kleinen Teil für die Embeddings der Themen aufgewandt. [offen: Beträge aus den Dashboards in `kennzahlen.md` übernehmen.]
 
-**Was gut lief** [offen: vom Team bestätigen, ergänzen oder streichen]
+## 12.8 Erfahrungen
 
-- Gemeinsame Arbeit in Dritteln, mit Kalibrierungsseiten, die alle bearbeitet haben.
-- Regeln vor der Arbeit festlegen (Fehler im Goldstandard, Grenzfälle beim Trennen).
-- Werkzeuge beim Benutzen weiterentwickeln: Die Kommentarfunktion im Splitter machte das Trennen zugleich zur Erkundung des Materials. So fielen die vielen Mehrfachexemplare und die Trennblätter auf, aus denen eigene Arbeitsschritte wurden (Kap. 6, Leerseiten in Kap. 4).
-- Schnelle Entscheidung für die OCR mit eigenem Testkorpus statt nur nach Benchmarks.
-- OCR früh und parallel zum Trennen; sie war elf Tage vor dem geplanten Termin fertig.
-- Regelmäßige Sprechstunden und Vorführungen bei Betreuung und Archiv; ihre Fragen haben die Anwendung geprägt.
+### Was sich bewährt hat
 
-**Was wir anders machen würden**
+Über den Projektverlauf hinweg hat es sich für uns bewährt, Aufgaben, die mit der Erhebung des Korpus zu tun haben gleichmäßig aufzuteilen und zuvor einige ausgewählte Seiten als Testdatensatz gemeinsan zu bearbeiten. So konnten wir sicherstellen, alle Daten gleich zu behandeln und Missverständnisse zu verhindern. Weil wir im Voraus bereits Regeln für die einzelnen Arbeitsschritte festgelegt hatten (Kap. 12.5), ließ sich die Übereinstimmung beim Goldstandard messen, und eine Handhabung von Grenzfälle beim Trennen wurden einheitlich festgelegt. Die verwendeten Werkzeuge wurden während der Nutzung weiterentwickelt. Mithilfe der Notizfunktion im Splitter bemerkten wir, dass es eine Vielzahl an Mehrfachexemplaren im Bestand gibt und dass spätere Bände Trennblätter enthalten. Hieraus ergaben sich weitere Arbeitsschritte (Kap. 4 und 6). Die Entscheidung, welches OCR-Modell wir für die Texterkennung verwenden würden, basierte auf eigenen Tests, öffentliche Benchmarks wurden nicht ausschließlich berücksichtigt. Die Texterkennung aller Bände konnte so bis zum geplanten Termin am 19.08.2026 fertiggestellt werden. 
 
-- Notizen früh systematisch an einem Ort sammeln. Sie lagen verstreut in Google Drive; besser von Anfang an als Markdown im Repository mit Git-Versionierung. Dadurch wurde die Dokumentation erst am Ende gebündelt.
-- Aufwände von Anfang an mitschreiben, vor allem bei der Entwicklung der Anwendung. Dort fehlen Zahlen gerade an der Stelle, an der wir uns am stärksten verschätzt haben.
-- Branches nicht lange getrennt laufen lassen. Sebastians Umbau der Flugblattliste mit htmx (03./04.10.) lag am Ende zu weit hinter `main` zurück und wurde nicht übernommen; auch der Branch der Dokumentation brauchte zum Schluss Konfliktlösungen.
-- Die Genauigkeit der Metadaten früh messen. Geplant waren ein Gold-Set aus 50–60 Flugblättern und später ein Abgleich mit den Archivtiteln 1968/69; beides ist nicht passiert (Kap. 5.4, 10).
-- [offen: weitere Punkte des Teams]
+### Wo wir uns verschätzt haben
 
-**Fehleinschätzungen**
+Die größte Abweichung stellen wir beim Umfang der Anwendung fest. Der Arbeitsaufwand für die Implementierung von Verwaltung und Import neuer Bände schienen für uns zunächst nur das Einbinden der Pipeline in eine Oberfläche der Webanwendung zu sein. Tatsächlich verlangte jeder Import-Schritt das Integrieren eigener Zustände, Fehlerfälle, das Fortsetzen nach Abbrüchen, Kostenanzeigen und Prüfungen. Jede Demonstration der Anwendung ergab neue Anforderungen. Die Version der Import-Oberfläche entstand am 08.10.2026, am Tag nach der Vorführung in der Sprechstunde und sechs Tage vor der Abschlusspräsentation. Bis zum 22.10. folgten 19 Commits an Import und Verwaltung, dazu die Änderungen nach der Vorführung im Archiv.
 
-- Umfang der Anwendung: Die Funktionen wurden immer mehr. Vor allem Verwaltung und Import neuer Bände schienen zunächst nur „die fertige Pipeline in eine Oberfläche bringen“, brauchten aber viele Iterationen: eigene Zustände je Schritt, Fehlerfälle, Wiederaufnahme, Kostenanzeigen, Prüfungen. Die erste Import-Seite entstand am 08.10., danach folgten 19 Commits an Import und Verwaltung bis 22.10., dazu die Änderungen nach der Vorführung im Archiv.
-- Themen: viel Versuch und Irrtum. Der erste Lauf mit MiniLM auf einzelnen Textblöcken ergab 234 Themen und 42 % ohne Thema, weil der Kontext des Modells für ganze Flugblätter zu klein war; erst bge-m3 auf ganzen Flugblättern trug.
-- Kosten: Für die Metadaten war ein Lauf im kostenlosen Kontingent geplant („2 Tage“); tatsächlich lief er bezahlt (ca. 65 $). Insgesamt gering, aber höher als gedacht.
-- [offen: weitere Fehleinschätzungen des Teams]
+### Umwege
 
-**Bewusste Planänderungen** (keine Fehler, aber Abweichungen vom ersten Plan)
+Sowohl bei der Metadatenextraktion als auch beim Topic-Modelling fielen die ersten Ergebnisse nicht zufriedenstellend aus. Dies verlangte Modell-Wechsel. Für die Metadaten hatten wir zuerst *Gemini 2.5 Flash* im Gratiskontingent eingeplant. Die Ergebnisse waren hiermit jedoch zu ungenau, weshalb wir anstelle dessen in Zukunft *Claude Sonnet 4.5* über *OpenRouter* verwendeten. Dies erzeugte zusätzliche Kosten von etwa 65 $ (Kap. 12.7). Beim Topic Modelling ergab der erste Versuch mit *MiniLM* auf einzelnen Textblöcken 234 Themen und ordnete 42 % der Blöcke kein Thema zu, weil der Kontext des Modells für ganze Flugblätter zu klein war. Erst die Verwendung von *bge-m3* auf ganzen Flugblättern führte zu brauchbaren Themen (Kap. 7).
 
-- Sammlung Reisner verworfen: nicht digitalisiert und politisch einseitig (Kap. 2.1).
-- OCR und Trennen parallel statt nacheinander.
-- Datenmodell erst nach der Metadatenextraktion.
-- Analyse-App zu Erschließungs- und Pflege-App, angestoßen durch die Sprechstunden.
-- NER nicht umgesetzt, um sich auf Metadaten und Anwendung zu konzentrieren (Ausblick in 10.4).
+### Was wir anders machen würden
 
-**Geplant, aber nicht umgesetzt**
+Für die Import-Oberfläche würden wir bei einem zukünftigen Projekt einen einfachen Prototypen bauen und diesen zusammen mit dem Archiv testen, anstatt ihn erst in den letzten Wochen zu entwickeln. Die Anforderungen, die erst bei den Vorführungen sichtbar wurden, hätten auf diese Weise bereits früher auffallen können.
 
-- Annotationsrichtlinie für das Trennen (19.08.).
-- OCR mit Wort-Boxen für Treffer im Scan (19.08.).
-- Prüfung der Trennung mit einem Sprachmodell (19.08.); stattdessen später der lokale Trennvorschlag aus Text und Scan (Kap. 4).
-- Sentiment-Analyse (Antrittsvortrag, Sprechstunde 25.08.).
-- Ein bis vier Themen je Flugblatt aus einer festen Liste (25.08.); umgesetzt ist ein Thema je Flugblatt.
-- Namensliste der Professoren als Referenz für OCR-Fehler bei Eigennamen (22.09.).
-- Unabhängige doppelte Annotation der Trennung einer Stichprobe.
+Unsere Notizen lagen lange unsortiert in einem Google-Drive-Ordner. Ein Protokoll haben wurde erst am 19.08.2026 angelegt. Rückblickend hätte das Sammeln aller Aufzeichnungen an einem Ort für ein besseres Projektmanagement gesorgt. Unser Versäumnis in diesem Bereich verlangte von uns, teilweise wichtige Informationen erst am Ende des Projekts im Rahmen der Dokumentation zusammenzuführen.
 
-## 12.8 Einsatz von KI-Werkzeugen
+Den Zeitaufwand der einzelnen Arbeitsschritte würden wir von Beginn an dokumentieren (vgl. Kap. 12.7). Insbesondere bei der Entwicklung der Anwendung hätten uns solche Aufzeichnungen geholfen, den tatsächlichen Aufwand besser einzuschätzen. Gerade für die Arbeitsschritte, bei denen wir uns am stärksten verschätzt haben, fehlen entsprechende Zahlen, um die Abweichungen im Nachhinein nachvollziehen zu können.
 
-Nach den KI-Richtlinien der Medieninformatik ist offenzulegen: Werkzeug oder Modell, Zweck, betroffene Teile der Arbeit und der konkrete Beitrag der KI ([KI-Richtlinien der Medieninformatik](https://www.uni-regensburg.de/informatik-data-science/fakultaet/einrichtungen/medieninformatik/studium/ki-richtlinien)). Im Praxisseminar war auch das Erzeugen wesentlicher Codeteile und der Einsatz von Agenten erlaubt.
+Auch die Arbeit mit Git-Branches würden wir anders organisieren. Entwicklungszweige sollten nicht über längere Zeit getrennt voneinander bestehen, sondern regelmäßig mit dem Hauptzweig abgeglichen werden. Sebastians Umbau der Flugblattliste mit htmx lag am Ende zu weit hinter dem aktuellen Stand des Hauptzweigs zurück und ließ sich deshalb nicht mehr übernehmen. Eine frühzeitigere und regelmäßigere Integration hätte dies möglicherweise verhindert.
 
-- Sprachmodelle als Teil des Verfahrens stehen in den jeweiligen Kapiteln: Datalab API (Kap. 3), Claude Sonnet 4.5 für die Metadaten (Kap. 5), bge-m3 und ein Sprachmodell für Thementitel (Kap. 7).
-- Werkzeuge bei der Arbeit:
-  - Claude Code: [offen: je Bereich angeben, was es beigetragen hat und wie wir es geprüft haben: OCR-Pipeline, OCR-Viewer und Splitter, Metadaten-Prompt, Anwendung, Skripte, Dokumentation und Texte in der Anwendung]
-  - [offen: weitere Werkzeuge der Teammitglieder, z. B. für Recherche oder Übersetzung]
-- Früher stand ein Hinweis zum KI-Einsatz im Stylesheet und beim Favicon der Anwendung; er wurde am 30.09.2026 aus dem Code entfernt und gehört hierher.
-- [offen: Eintrag `ur-ki-richtlinien` in `literatur.bib` anlegen: https://www.uni-regensburg.de/informatik-data-science/fakultaet/einrichtungen/medieninformatik/studium/ki-richtlinien]
+Die Genauigkeit der automatisch generierten Metadaten würden wir ebenfalls früher und systematischer überprüfen. Geplant waren ein Gold-Set aus 50 bis 60 Flugblättern sowie ein späterer Abgleich der extrahierten Titel mit den Einträgen im Findmittel für die Jahre 1968 und 1969. Beide Vorhaben wurden im Projektverlauf nicht umgesetzt (Kap. 5.4 und 10). Eine frühzeitige Evaluation hätte uns ermöglicht, die Qualität der Ergebnisse besser einzuschätzen und Fehler gezielter zu identifizieren.
 
-## Noch zu schreiben
+### Was liegen blieb
 
-Zusammengefasst, was das Team noch klären oder ausformulieren muss:
+Einige Vorhaben haben wir bewusst zurückgestellt, um uns auf Metadaten und Anwendung zu konzentrieren: Named Entity Recognition und Sentiment-Analyse, mehrere Themen je Flugblatt aus einer festen Liste, Wort-Boxen in der Texterkennung, eine Annotationsrichtlinie für das Trennen und eine Liste der damaligen Professorinnen und Professoren als Referenz für OCR-Fehler bei Eigennamen. Die Prüfung der Trennung mit einem Sprachmodell hat der lokale Trennvorschlag aus Text und Scan ersetzt (Kap. 4).
 
-1. Rollen (12.1): App-Zeilen der Tabelle prüfen; wer MinerU und PaddleOCR getestet hat.
-2. Besprechungen (12.2): Trello-JSON-Export versuchen.
-3. Termine (12.3): Tag des Seitenvergleichs, Beginn des Trennens, Datum der Sprechstunde mit Jakob Fehle.
-4. Aufwände (12.6): Anteil von Veit und Sebastian an der Anwendung; Beträge aus den Dashboards; ob es eine Aufwandsplanung gab.
-5. Erfahrungen (12.7): „Was gut lief“ bestätigen; weitere Fehleinschätzungen und Lehren aus Sicht von Veit und Sebastian.
-6. KI-Einsatz (12.8): je Bereich ausformulieren; Quelle in `literatur.bib`.
-7. Danach alles im Stil der übrigen Kapitel als Fließtext ausformulieren und gegen `offene-punkte.md` abgleichen.
+176 Stellen aus der Verdachtsliste beim Trennen sind offen geblieben: 175 der Stufe „prüfen“ und Nr. 003 S. 38–41, die wir für den Abgleich mit dem Findmittel zurückgestellt haben (Kap. 12.5). Für die Metadaten haben wir außerdem kein neueres Modell getestet, auch nicht Claude Sonnet 5. Was davon für eine Weiterentwicklung lohnt, steht in Kapitel 10.
+
+## 12.9 Einsatz von KI-Werkzeugen
+
+Nach den KI-Richtlinien der Medieninformatik legen wir offen, welche Werkzeuge wir wofür eingesetzt haben und was sie beigetragen haben ([KI-Richtlinien der Medieninformatik](https://www.uni-regensburg.de/informatik-data-science/fakultaet/einrichtungen/medieninformatik/studium/ki-richtlinien)). Nach Auskunft der Betreuenden durften KI-Werkzeuge beim Programmieren eingesetzt werden. Für die Dokumentation war laut einer Ankündigung im Kurs erlaubt, unstrukturierte Notizen, etwa aus den Besprechungen, mit KI in ein strukturiertes Format zu bringen. [offen: Claude Code hat darüber hinaus ganze Textabschnitte formuliert, u. a. in diesem Kapitel, in den Handbüchern und in `kennzahlen.md`. Vor der Abgabe mit Thomas Schmidt klären, ob das erlaubt ist, und in der Tabelle unten benennen.]
+
+KI-Modelle und -Dienste, die Teil des Verfahrens sind, beschreiben die jeweiligen Kapitel: die Datalab API für die Texterkennung (Kap. 3), Claude Sonnet 4.5 für die Metadaten (Kap. 5), bge-m3 für die Ähnlichkeit der Texte und ein Sprachmodell für die Titel der Themen (Kap. 7).
+
+Bei der Arbeit selbst haben wir Claude Code eingesetzt. Geprüft haben wir die Ergebnisse je nach Bereich durch Review der Pull Requests, automatische Tests, Stichproben gegen die Scans, den Abgleich mit dem Goldstandard und Gegenlesen im Team.
+
+| Bereich | Beitrag von Claude Code | Wie geprüft |
+|---|---|---|
+| OCR-Pipeline | [offen] | [offen] |
+| OCR-Viewer, Splitter | [offen] | [offen] |
+| Metadaten: Pipeline und Prompt | [offen] | [offen] |
+| Topic Modelling | [offen] | [offen] |
+| Suche nach Mehrfachexemplaren | [offen] | [offen] |
+| Anwendung | [offen] | [offen] |
+| Skripte und Abbildungen | [offen] | [offen] |
+| Dokumentation, Texte in der Anwendung | [offen] | [offen] |
+
+[offen: weitere Werkzeuge der Teammitglieder, z. B. für Recherche oder Übersetzung, als eigene Zeilen ergänzen.]
