@@ -40,7 +40,7 @@ Die Anwendung hat keine eigene Anmeldung. Wer sie im Browser erreicht, kann Meta
 
 ### Auf einem Server des Archivs
 
-Voraussetzungen, von der IT zu klären: ein Server mit Docker, ein Rechnername im Uni-Netz (im Beispiel `flugblaetter.example.uni-regensburg.de`) und ein Zertifikat dafür. Wer die Anwendung nutzen darf, legt das Archiv fest. [offen: Regeln des Archivs für Zugriff und Personennamen]
+Voraussetzungen, von der IT zu klären: ein Server mit Docker, ein Rechnername im Uni-Netz (im Beispiel `flugblaetter.example.uni-regensburg.de`) und ein Zertifikat dafür. Wer die Anwendung nutzen darf, legt das Archiv fest. Nach Auskunft des Universitätsarchivs (Dr. Andreas Becker, Oktober 2026) dürfen Korpus und Metadaten öffentlich zugänglich sein, auch mit den Namen von Personen. Das Passwort schützt deshalb vor allem die Pflege: Wer die Anwendung erreicht, kann auch ändern.
 
 1. Starten Sie die Anwendung wie in der README im Hauptverzeichnis des Repositorys unter „Schnellstart“ beschrieben. Ändern Sie die Portbindung nicht: Die Anwendung bleibt nur für den Server selbst erreichbar.
 2. Installieren Sie auf dem Server den Webserver [Caddy](https://caddyserver.com/docs/install). Er nimmt die Anfragen von außen an, verlangt ein Passwort und reicht sie an die Anwendung weiter.

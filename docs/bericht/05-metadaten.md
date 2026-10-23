@@ -27,7 +27,7 @@ Eine weitere Herausforderung ist die korrekte Erfassung der Herausgeber. Die Nam
 
 ## 5.3 Verfahren
 
-Am 22.09.2026 wurden zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3 235B* und *Claude Sonnet 4.5*. Für die anschließende Erschließung der Bände 1–14 wurde hiernach *Claude Sonnet 4.5* (`anthropic/claude-sonnet-4.5`) ausgewählt. Dieses wurde über OpenRouter mit Prompt v2 aufgerufen, wobei je 20 Flugblätter pro Anfrage bearbeitet wurden. Die Ergebnisse der Bände 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`). Die Nummern 005–014 resultierten aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen sind im Arbeits-Repository (Kap. 12.6) dokumentiert.
+Am 22.09.2026 wurden zunächst vier Modelle an Band 002 getestet: *Gemini 2.5 Flash*, *GPT-5 mini*, *Qwen3235B* und *Claude Sonnet 4.5*. Für die anschließende Erschließung der Bände 1–14 wurde hiernach *Claude Sonnet 4.5* (`anthropic/claude-sonnet-4.5`) ausgewählt. Dieses wurde über OpenRouter mit Prompt v2 aufgerufen, wobei je 20 Flugblätter pro Anfrage bearbeitet wurden. Die Ergebnisse der Bände 001–004 stammen aus Läufen vom 30.09.2026 (Kennungen `claude-r9`, `claude-r11`, `claude-r11a2`). Die Nummern 005–014 resultierten aus einem Lauf vom 02.10.2026 (`claude-r12`). Zwischen diesen Läufen wurde der Prompt weiter überarbeitet. Die einzelnen Fassungen sind im Arbeits-Repository (Kap. 12.6) dokumentiert.
 
 Das Modell gibt die Ergebnisse nach einem festgelegten Schema im JSON-Format aus. Der zugrundeliegende Prompt kann in `src/backend/app/metadata_prompt.txt` eingesehen werden. Für jedes Feld gilt eine Belegpflicht: Für jedes Feld werden zunächst die wörtliche Textstelle und die OCR-Blöcke angegeben, erst hiernach wird der zugehörige Wert extrahiert. Die Pipeline prüft anschließend, ob die genannte Stelle tatsächlich im OCR-Text steht. Um keine nicht durch den Text gestützten Informationen zu verarbeiten, muss diese Prüfung positiv ausfallen, um den Wert in ein Metadatum zu überführen. 
 
@@ -47,6 +47,8 @@ Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Untersc
 
 Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Prompt zu testen, müssen dieselben Bände erneut mit denselben Einstellungen wie im Lauf `claude-r12` verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
 
+Außerdem haben wir die Titel mit denen verglichen, die das Findmittel für 1968 und 1969 nennt. Als Referenz für die Genauigkeit taugen sie aber nicht: Das Archiv kürzt und vereinheitlicht seine Titel, nennt nur eine Auswahl der Blätter („u. a.“), und schon die Zuordnung eines Archivtitels zu einem unserer Flugblätter ist unsicher. Eine Messung gegen eine verlässliche Referenz fehlt deshalb (Kap. 10.1).
+
 Für den Bestand lassen sich folgende Zahlen festhalten: 169 Herausgeber werden auf mindestens einem Flugblatt genannt. Bei 24 Flugblättern tritt ein Herausgeber auf, welcher nicht Teil des Herausgeberregisters ist. Wie oft die einzelnen Metadatenfelder befüllt sind und welche Auswirkungen Korrekturen auf die Informationen hatten, zeigt die Auswertung in Kapitel 5.5
 
 ## 5.5 Manuelle Prüfung
@@ -57,22 +59,20 @@ Bis zum 12.10.2026 wurden 142 der 1547 Flugblätter in mindestens einem Feld kor
 
 | Feld | automatisch | nach Korrektur | korrigiert |
 |---|---|---|---|
-| Titel | 1 520 (98 %) | 1 520 (98 %) | 10 |
+| Titel | 1520 (98 %) | 1520 (98 %) | 10 |
 | Reihe und Heft | 404 (26 %) | 415 (27 %) | 13 |
 | Datum auf dem Blatt | 722 (47 %) | 705 (46 %) | 38 |
 | Eingangsstempel | 255 (16 %) | 353 (23 %) | 105 |
-| Herausgeber | 1 300 (84 %) | 1 306 (84 %) | 13 |
+| Herausgeber | 1300 (84 %) | 1306 (84 %) | 13 |
 | Unterzeichnende | 695 (45 %) | 697 (45 %) | 8 |
-| Textsorte (nicht „unklar“) | 1 513 (98 %) | 1 513 (98 %) | 1 |
+| Textsorte (nicht „unklar“) | 1513 (98 %) | 1513 (98 %) | 1 |
 
-Die meisten Korrekturen betreffen den Eingangsstempel. In 98 Fällen konnte das Modell keinen Stempel erkennen, obwohl ein solcher vorhanden gewesen wäre. In 24 Fällen wurde ein zuvor extrahiertes Datum entfernt, 22 mal hiervon wurde es zugleich als Eingangsstempel eingetragen. Das Modell hatte den Stempel somit als Erscheinungsdatum erkannt. Die Zahlen repräsentieren nur eine Auswahl, und erlauben keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
+Die meisten Korrekturen betreffen den Eingangsstempel. In 98 Fällen konnte das Modell keinen Stempel erkennen, obwohl ein solcher vorhanden gewesen wäre. In 24 Fällen wurde ein zuvor extrahiertes Datum entfernt, 22 mal hiervon wurde es zugleich als Eingangsstempel eingetragen. Das Modell hatte den Stempel somit als Erscheinungsdatum erkannt. Die Korrekturen entstanden größtenteils bei der Prüfung der Mehrfachexemplare vom 05. bis 11.10. (Kap. 6.5): Von den 146 Exemplaren, die bis zum 12.10. korrigiert wurden, gehören 131 zu einer Gruppe von Mehrfachexemplaren. Die Auswahl ist also keine Stichprobe, und die Zahlen erlauben keinen Schluss auf die Genauigkeit der übrigen Flugblätter.
 
 Neue Herausgeber werden während des Imports im Schritt „Prüfen & freigeben“ dem Herausgeberregister zugeordnet. Nach dieser Zuordnung ist auch eine automatische Erkennung bei der Verarbeitung späterer Bände möglich.
 
 ## 5.6 Kosten
 
-Die Kosten der Metadatenextraktion liegen bei ca. 8$ für 1 000 Seiten. Diese Schätzung basiert auf einem einzelnen Testlauf mit 56 Flugblättern. Für einen Lauf mit Claude *Opus 5.5* ergaben sich Kosten von 1,36$. Bei Verwendung einer gleichen Tokenmenge ergeben sich basierend auf Listenpreisen von *Sonnet 4.5* etwa 0,018$ je Flugblatt. Für die Hochrechnung wird von rund 430 Exemplaren pro 1000 Seiten ausgegangen.
-
-Der Lauf diente der Vorbereitung für die Demo. Da für die Verzeichnungseinheit 15 keine Scans vorliegen, wurde ein Teil der PDF von Band 14 unter der Nummer 015 eingelesen. Die Kostenschätzung basiert damit auf tatsächlichem Material aus unserem Bestand, bildet jedoch keine tatsächliche Verarbeitung des 15. Bandes ab.
+Für den Testimport am 20.10.2026 hatten wir die ersten 230 Seiten von Band 15 (Kap. 2.5). Mit *Claude Sonnet 4.5*, dem Modell der Bände 1–14, kostet die Metadatenextraktion danach etwa 9 $ je 1000 Seiten (2,11 $ für die 230 Seiten), mit *Claude Opus 5.5* etwa 10 $ (hochgerechnet aus einem Testlauf mit 56 Flugblättern aus Band 014: 1,36 $).
 
 Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#metadaten).

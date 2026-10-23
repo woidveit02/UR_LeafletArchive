@@ -24,7 +24,9 @@ Manche Flugblätter, denen initial kein automatisch generiertes Thema zugewiesen
 
 ## 10.3 Datenschutz und Urheberrecht
 
-Da in den Flugblättern oft Namen von Personen fallen, wurde das Thema Datenschutz auch berücksichtigt. Jedoch zeigte sich in der Besprechung mit Herrn Becker, dass Datenschutz bei Flugblättern sehr simpel geregelt ist. Da die Flugblätter für die Öffentlichkeit bestimmt waren, ergeben sich im Umgang mit diesen potentiell persönlichen Daten der (möglicherweise noch lebenden) Personen keine datenschutzrechtlichen Hindernisse. Der Inhalt dieser Flugblätter darf frei veröffentlicht werden.
+Die Flugblätter nennen viele Personen mit Namen, vor allem als Unterzeichnende oder als presserechtlich Verantwortliche. Manche von ihnen leben vermutlich noch. Nach Einschätzung des Universitätsarchivs, die Andreas Becker in einer Besprechung erläutert hat, ergeben sich daraus keine datenschutzrechtlichen Hindernisse: Flugblätter waren dafür bestimmt, öffentlich verteilt zu werden, und die Namen stehen bewusst darauf. Dieser Einschätzung folgen wir, und wir halten sie für zutreffend.
+
+Für die Arbeit im Archiv und für die Forschung ist damit alles geklärt. Bei einer Veröffentlichung im Netz wären die Namen zusätzlich über Suche, Filter und Export für alle auffindbar und mit anderen Daten verknüpfbar. Ob und in welcher Form das geschehen soll, entscheidet das Archiv nach den Regeln für seine Bestände. Dasselbe gilt für das Urheberrecht, denn die Texte aus den Jahren 1967 bis 1973 können noch geschützt sein.
 
 ## 10.4 Ausblick
 

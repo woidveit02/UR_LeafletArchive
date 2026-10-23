@@ -30,11 +30,11 @@ Für Fragen über das ganze Korpus gibt es drei weitere Zugänge. Die Seiten der
 
 Fehler lassen sich dort beheben, wo man sie findet. „Metadaten korrigieren“ auf der Seite eines Flugblatts öffnet ein Formular, in dem zu jedem Wert auch der Beleg neu gewählt werden kann, indem man Blöcke im Scan anklickt. Korrigierte Felder sind danach als „von Hand korrigiert“ gekennzeichnet, der automatisch erkannte Wert lässt sich wiederherstellen.
 
-Mehrfachexemplare prüft man in einer Ansicht, die die Exemplare einer Gruppe nebeneinander zeigt (Kap. 6). Dort wählt man das Hauptexemplar, nimmt Blätter heraus, die nicht dazugehören, und korrigiert die gemeinsamen Metadaten einmal für alle. Herausgeber, die das Register noch nicht kennt, ordnet man unter Verwaltung › Herausgeber zuordnen einer Organisation zu oder legt sie neu an. Die Anwendung merkt sich die Schreibweise und erkennt sie in späteren Bänden.
+![Formular „Metadaten korrigieren“ für Flugblatt 850](../abbildungen/nutzen_korrigieren.png)
 
-![Drei Exemplare eines Flugblatts aus Band 006](../abbildungen/nutzen_exemplare.png)
+*Abbildung: Metadaten korrigieren, am Beispiel von Flugblatt 850. Zu jedem Wert gehört ein Beleg, der sich über „Beleg wählen“ im Scan neu setzen lässt.*
 
-*Abbildung: Drei Exemplare desselben Flugblatts aus Band 006. Abweichende Metadaten sind markiert, hier der Eingangsstempel, den nur das Hauptexemplar trägt.*
+Mehrfachexemplare prüft man in einer Ansicht, die die Exemplare einer Gruppe nebeneinander zeigt (Kap. 6.5). Dort wählt man das Hauptexemplar, nimmt Blätter heraus, die nicht dazugehören, und korrigiert die gemeinsamen Metadaten einmal für alle. Herausgeber, die das Register noch nicht kennt, ordnet man unter Verwaltung › Herausgeber zuordnen einer Organisation zu oder legt sie neu an. Die Anwendung merkt sich die Schreibweise und erkennt sie in späteren Bänden.
 
 Damit keine Handarbeit verloren geht, speichert die Anwendung Korrekturen und Prüfentscheidungen nicht nur in der Datenbank, sondern zusätzlich in Dateien, an die sie nur anhängt. Beim Neuaufbau der Datenbank werden sie wieder angewendet. Sie hängen an den Seiten eines Flugblatts: Wird ein Band neu getrennt und passt eine Korrektur nicht mehr, erscheint sie unter Verwaltung › Korrekturen, statt stillschweigend zu verschwinden. Für Auswertungen außerhalb lässt sich der Bestand als ZIP mit Volltexten und Tabellen exportieren.
 
@@ -48,7 +48,7 @@ Drei Entscheidungen machen den Import für Anwenderinnen und Anwender ohne techn
 
 *Abbildung: Schritt 6 beim Testimport. Jede der drei Aufgaben nennt die Zahl offener Fälle und führt zu ihnen; freigeben lässt sich der Band auch, wenn noch etwas offen ist.*
 
-Den Import haben wir am 20.10. im Archiv mit einem Testimport von 230 Seiten vorgeführt. Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung und Metadaten brauchen nur einige Minuten Wartezeit.
+Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung und Metadaten brauchen nur einige Minuten Wartezeit. Vorgeführt haben wir den Import im Archiv (Kap. 9.8).
 
 ## 9.5 Architektur und Datenmodell
 
@@ -61,3 +61,17 @@ Die Oberfläche folgt wenigen Regeln: wenig Farbe, Markierungen nur für das, wa
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
 Für Auswertungen, die über die Anwendung hinausgehen, gibt es zwei Werkzeuge. `scripts/ngrams.py` berechnet auf den erkannten Texten Häufigkeiten, Trends, typische Wörter je Jahr, Kollokationen und Belegstellen ([N-Gramme auswerten](../handbuch/ngramme-auswerten.md)). Das Notebook `scripts/forschungsfragen.ipynb` zeigt am Export, wie sich Fragen wie „Welche Gruppen sind wann aktiv?“, „Wer gibt mit wem gemeinsam heraus?“ oder „Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen?“ [@monroe2008] beantworten lassen. Die zehn Fragen im Notebook sind Beispiele, keine Ergebnisse des Projekts. Weitere Skripte, etwa zum Zusammenfügen von TIFF-Scans und zum Neulernen der Gewichte des Trennvorschlags, beschreibt `scripts/README.md`.
+
+Der Schwerpunkt des Projekts lag auf der Erschließung, nicht auf eigenen Auswertungen. Die Werkzeuge zeigen, dass das Korpus solche Auswertungen trägt. Aussagekräftig werden sie vor allem, wenn das Archiv weitere Jahrgänge scannt und mit der Anwendung erschließt.
+
+## 9.8 Einsatz im Archiv
+
+Für das Universitätsarchiv, unseren Kooperationspartner, ist die Anwendung ein Werkzeug für die weitere Erschließung des Bestands. Das Archiv wollte vor allem zweierlei: im Korpus recherchieren und neu gescannte Bände selbst einlesen, ohne dass dafür jemand aus dem Projekt nötig ist. Daraus stammen die Anforderungen in 9.1 und der Aufbau des Imports in 9.4.
+
+Am 20.10. haben wir die Anwendung im Archiv vorgeführt und dabei den ersten Teil von Band 15 eingelesen (230 Seiten), den das Archiv inzwischen gescannt hat (Kap. 2.5). [offen: Rückmeldung des Archivs: was gefragt wurde, was gut ankam, was danach geändert wurde.]
+
+Für den dauerhaften Betrieb haben wir mit dem Archiv verabredet, dass das Rechenzentrum der Universität die Anwendung als Docker-Container betreibt, wie andere Software des Archivs auch. [offen: Datum der Verabredung.] Dafür ist noch zu klären [offen: prüfen, was davon schon geklärt ist]:
+
+- **Zugriff:** Die Anwendung hat keine eigene Anmeldung. Bevor sie im Netz der Universität erreichbar ist, braucht sie einen Zugriffsschutz, etwa ein Passwort über einen vorgeschalteten Webserver. Die Einrichtung beschreibt das Handbuch [Installieren und betreiben](../handbuch/installieren-und-betreiben.md#auf-einem-server-des-archivs). Wer Zugang bekommt und wie mit Personennamen umzugehen ist, entscheidet das Archiv (Kap. 10.3).
+- **Konten und Kosten:** Für neue Bände braucht die Anwendung API-Keys für Datalab und OpenRouter. Auf wessen Konto sie laufen, ist offen. Ein Band mit 300 Seiten kostet etwa 6 $ ([Kosten](../handbuch/installieren-und-betreiben.md#kosten)).
+- **Sicherung und Betreuung:** Welche Dateien zu sichern sind, steht im Handbuch. Wer Updates einspielt und bei Fehlern hilft, ist noch festzulegen.

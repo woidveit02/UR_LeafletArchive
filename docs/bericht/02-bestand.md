@@ -4,7 +4,7 @@ Im Treffen am 20.05.2026 wurde uns von Herrn Becker zudem noch das Universitäts
 
 ## 2.1 Korpuswahl
 
-Zu Beginn war das eigentliche Ziel, den Korpus aus einer anderen Flugblattsammlung zu schaffen, nämlich der Sammlung Reisner. Diese Sammlung wurde zur selben Zeit wie die Allgemeine Flugblattsammlung durch den damaligen Präsidenten Reisner (TODO: Wer war der Typ?) angefertigt. Jedoch ist diese Sammlung nicht digitalisiert, was viele Stunden oder Tage an Aufwand gewesen wäre. Zudem besteht die Sammlung Reisner nur aus Flugblättern politisch links orientierter Hochschulgruppen, wodurch diese Sammlung keine repräsentative Dokumentation der politischen Geschehnisse zur damaligen Zeit ist, da rechte (Gegen-)Stimmen gänzlich fehlen. Daher wurde in der ersten Besprechung mit Andreas Becker am 12.05.2026 festgelegt, dass statt der Sammlung Reisner die Allgemeine Flugblattsammlung als Korpus dienen sollte, da diese schon teilweise digitalisiert worden ist. Deshalb ist die Allgemeine Flugblattsammlung die Grundlage für das Korpus.
+Zu Beginn war das eigentliche Ziel, den Korpus aus einer anderen Flugblattsammlung zu schaffen, nämlich der Sammlung Reisner. Diese Sammlung entstand zur selben Zeit wie die Allgemeine Flugblattsammlung. Jedoch ist diese Sammlung nicht digitalisiert, was viele Stunden oder Tage an Aufwand gewesen wäre. Zudem besteht die Sammlung Reisner nur aus Flugblättern politisch links orientierter Hochschulgruppen, wodurch diese Sammlung keine repräsentative Dokumentation der politischen Geschehnisse zur damaligen Zeit ist, da rechte (Gegen-)Stimmen gänzlich fehlen. Daher wurde in der ersten Besprechung mit Andreas Becker am 12.05.2026 festgelegt, dass statt der Sammlung Reisner die Allgemeine Flugblattsammlung als Korpus dienen sollte, da diese schon teilweise digitalisiert worden ist. Deshalb ist die Allgemeine Flugblattsammlung die Grundlage für das Korpus.
 
 ## 2.2 Das Korpus und dessen Gliederung
 
@@ -34,7 +34,7 @@ Die Flugblätter sind meist schreibmaschinengeschrieben, da sie von den Gruppen 
 | 012 | 1973 | 286 | 131 | 100 |
 | 013 | 1973 | 261 | 137 | 104 |
 | 014 | 1973 | 499 | 168 | 142 |
-| **Summe** |  | **4 464** | **1 927** | **1 547** |
+| **Summe** |  | **4464** | **1927** | **1547** |
 
 ![Seiten nach Bandjahr](../abbildungen/6_seiten_jahr.png)
 
@@ -50,7 +50,7 @@ Das Universitätsarchiv verzeichnet in der Archivsoftware ACTApro. Der Bestand w
 
 ## 2.5 Überlieferungslücken
 
-Es gibt zudem noch einige Probleme des Korpus, auf die hingewiesen werden muss. Der Band 15 (1973) ist noch nicht digitalisiert. Laut Findmittel enthält sie unter anderem die Blätter zu Berufsverboten und zum Putsch in Chile. Aussagen zu 1973 sind daher Untergrenzen mit inhaltlicher Schlagseite und sollten vor der Ergänzung der restlichen Bände von 1973 für einen allgemeinen repräsentativen Forschungskontext genutzt werden. Zudem ist Band 015 in der Anwendung ein Testimport mit Seiten aus Band 14 (Kap. 5.6) und keine Scans des Band 15.
+Es gibt zudem noch einige Probleme des Korpus, auf die hingewiesen werden muss. Als wir den Umfang des Korpus festgelegt haben, lagen für Band 15 (1973) noch keine Scans vor. Laut Findmittel enthält er unter anderem die Blätter zu Berufsverboten und zum Putsch in Chile. Aussagen zu 1973 sind daher Untergrenzen mit inhaltlicher Schlagseite und sollten erst nach der Ergänzung verallgemeinert werden. Inzwischen hat das Archiv die Bände 15 und 16 gescannt, wie wir am 20.10.2026 im Archiv erfahren haben. Große Bände teilt das Archiv zur Speicherung in mehrere PDFs auf. Den ersten Teil von Band 15 (230 Seiten) haben wir für den Testimport erhalten; er ist in der Anwendung als Entwurf Nr. 015 eingelesen (Kap. 5.6) und geht in keine Zahl dieses Berichts ein.
 
 1967 und 1968 sind dünn belegt (13 und 85 Seiten) da die Universität zu diesem Zeitpunkt gerade erst eröffnet worden ist. (Kap. 1.1). 
 

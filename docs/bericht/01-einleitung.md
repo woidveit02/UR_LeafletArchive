@@ -20,7 +20,7 @@ Guhl und Jaeger nennen für die Hamburger Sammlung drei Hürden, die auch in Reg
 
 | Hürde nach Guhl und Jaeger | Arbeitsschritt | Stand in Regensburg |
 |---|---|---|
-| Dubletten machen die Zahl der Flugblätter unsicher | Mehrfachexemplare zusammenführen (Kap. 6) | 1 927 Exemplare ergeben 1 547 Flugblätter |
+| Dubletten machen die Zahl der Flugblätter unsicher | Mehrfachexemplare zusammenführen (Kap. 6) | 1927 Exemplare ergeben 1547 Flugblätter |
 | Viele Blätter nennen keine Verantwortlichen | Herausgeber mit Beleg und Register (Kap. 5) | 241 Flugblätter bleiben ohne erkannten Herausgeber |
 | Ohne Parallelüberlieferung ist das Datieren schwer | Datum mit Beleg, sonst Jahr des Bandes (Kap. 5) | 46 % tragen ein Datum auf dem Blatt |
 

@@ -1,6 +1,6 @@
 # Neue Bände importieren
 
-Diese Anleitung führt durch den Import eines Bandes in der Anwendung, vom Scan bis zur Freigabe. Die Abbildungen stammen aus einem Testimport mit 230 Seiten, der in der App als Band 015 angelegt ist. Er gehört nicht zum Korpus des Projekts. Schritt 1 zeigt die Auswahl eines neuen Bandes, „Themen zuordnen“ das Ergebnis von Band 014.
+Diese Anleitung führt durch den Import eines Bandes in der Anwendung, vom Scan bis zur Freigabe. Die Abbildungen stammen aus einem Testimport mit den ersten 230 Seiten von Band 15, der in der App als Band 015 angelegt ist. Er gehört nicht zum Korpus des Projekts. Schritt 1 zeigt die Auswahl eines neuen Bandes, „Themen zuordnen“ das Ergebnis von Band 014.
 
 ## Überblick
 

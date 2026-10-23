@@ -8,7 +8,7 @@ Ziel ist es, Mehrfachexemplare eines einzigen Flugblatts zu identifizieren, um b
 
 ## 6.2 Herausforderungen
 
-Selbst bei identischen Inhalten unterscheiden sich die erkannten Texte mehrerer Exemplare oft geringfügig, da bei jedem Scan unterschiedliche OCR-Fehler auftreten können. Für eine zuverlässige Erkennung von Mehrfachexemplaren ist ein ausschließlicher direkter Textvergleich somit nicht ausreichend. Zusätzlich konnte beobachtet werden, dass identische Exemplare sowohl innerhalb desselben Bandes als auch über mehrere Bände hinweg vorkommen können. So liegt das "Theoriepapier Nr. 4 " des RCDS bspw. viermal in Band 7 vor. Gleichzeitig müssen Nachdrucke, die den Inhalt verändern, als eigene Fassungen erkennbar bleiben, um inhaltliche Untersuchungen aufgrund ihrer Unterschiede anstellen zu können.
+Selbst bei identischen Inhalten unterscheiden sich die erkannten Texte mehrerer Exemplare oft geringfügig, da bei jedem Scan unterschiedliche OCR-Fehler auftreten können. Für eine zuverlässige Erkennung von Mehrfachexemplaren ist ein ausschließlicher direkter Textvergleich somit nicht ausreichend. Zusätzlich konnte beobachtet werden, dass identische Exemplare sowohl innerhalb desselben Bandes als auch über mehrere Bände hinweg vorkommen können. So liegt das "Theoriepapier Nr. 4 " des RCDS bspw. viermal in Band 7 vor. Über zwei Bände verteilt sind 59 der 310 Gruppen: „Zulassungs-Stop im Fach Psychologie“ vom 8. Januar 1969 etwa liegt zweimal in Band 002 (1968) und ein weiteres Mal in Band 003 (1969). Gleichzeitig müssen Nachdrucke, die den Inhalt verändern, als eigene Fassungen erkennbar bleiben, um inhaltliche Untersuchungen aufgrund ihrer Unterschiede anstellen zu können.
 
 ## 6.3 Verfahren
 
@@ -28,6 +28,10 @@ Die Methode der Anwendung findet 309 der 310 geprüften Gruppen, ohne eine API z
 
 Die manuelle Prüfung findet in der Ansicht `/exemplare` statt. Hier werden die Exemplare einer Gruppe nebeneinander angezeigt. Abweichungen bei Datum, Titel und Herausgeber werden in einer eigenen Metadaten-Tabelle hervorgehoben. Fehlerhaft erkannte Mehrfachexemplare werden verworfen, während bei einer korrekten Annahme ein Hauptexemplar ausgewählt werden muss. Hiernach können die Metadaten der repräsentativen Version überprüft und bearbeitet werden. Dabei werden auch wesentliche Informationen der anderen Exemplare der Gruppe angezeigt und können samt Beleg (falls vorhanden) übernommen werden. 
 
+![Drei Exemplare eines Flugblatts aus Band 006 nebeneinander](../abbildungen/nutzen_exemplare.png)
+
+*Abbildung: Prüfung einer Gruppe in der Anwendung. Drei Exemplare desselben Flugblatts aus Band 006 (S. 364–365, 376–377 und 396–397) stehen nebeneinander; markiert ist die abweichende Angabe zum Eingangsstempel, den nur das gewählte Hauptexemplar trägt.*
+
 Insgesamt wurden 320 Fälle geprüft. Bei 310 dieser Gruppen konnten tatsächlich Mehrfachexemplare festgestellt werden: Darunter sind 248 Duplikate, 55 Gruppen mit jeweils drei Exemplaren und sieben Gruppen mit vier oder fünf Versionen. Bei den übrigen 10 Fällen handelt es sich um unterschiedliche Flugblätter, deren Inhalt fälschlicherweise als identisch erkannt wurde. Jede Prüfung dauerte von der Auswahl des Hauptexemplares bis zum Abgleichen der Metadaten ca. 1 - 2 Minuten. 
 
 Die Entscheidungen werden in `data/copy_decisions.jsonl` dokumentiert. Hierbei wird die Datei fortlaufend ergänzt, bestehende Einträge werden nicht überschrieben. Einzelne Blätter werden anhand ihres Bandes und Seitenbereichs identifiziert. Die Gruppennummern spielen hierbei keine Rolle. Somit können Entscheidungen auch bei Änderungen an der Gruppierung nachvollzogen werden. 
@@ -42,7 +46,5 @@ Sämtliche Angaben von Zahlen innerhalb der Anwendung, die beispielsweise Heraus
 ![Anteil der Mehrfachexemplare nach Bandjahr](../abbildungen/3_mehrfachexemplare.png)
 
 ![Geprüfte Fälle von Mehrfachexemplaren](../abbildungen/7_exemplare_faelle.png)
-
-TODO: Abbildung des Vergleichs-Interfaces
 
 Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#mehrfachexemplare).

@@ -4,11 +4,11 @@ Trotz der ganzen bereits genannten Problemfelder erfüllt die entwickelte Anwend
 
 Aus 4464 gescannten Seiten wurde ein recherchierbarer Bestand mit 1547 Flugblättern. Automatische Verfahren übernehmen den größten Teil der Arbeit. Beim Trennen, bei den Mehrfachexemplaren und bei den Metadaten bleibt eine Prüfung von Hand nötig, die aber durch simple Nutzeroberflächen erheblich vereinfacht werden.
 
-| Schritt | Verfahren | Kosten je 1 000 Seiten | Handarbeit |
+| Schritt | Verfahren | Kosten je 1000 Seiten | Handarbeit |
 |---|---|---|---|
 | Text erkennen | Datalab API | ca. 10 $ | keine |
 | Flugblätter trennen | naiver Bayes, Vorschläge| keine | jeden Übergang bestätigen |
-| Metadaten erzeugen | Claude Sonnet 4.5, mit Belegen | ca. 8 $| Korrekturen, neue Herausgeber zuordnen |
+| Metadaten erzeugen | Claude Sonnet 4.5, mit Belegen | ca. 9 $ | Korrekturen, neue Herausgeber zuordnen |
 | Mehrfachexemplare | Textähnlichkeit | keine | Gruppen bestätigen, Hauptexemplar wählen |
 | Themen zuordnen | bge-m3 und BERTopic | wenige Cent | Titel prüfen |
 

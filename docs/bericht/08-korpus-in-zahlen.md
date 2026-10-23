@@ -10,7 +10,7 @@ Jedes Flugblatt zählt einmal. Nennt es mehrere Herausgeber, zählt es bei jedem
 
 ## 8.2 Verteilungen
 
-Mehr als die Hälfte des Korpus stammt aus den letzten beiden Jahren: 1972 und 1973 stellen 940 der 1 547 Flugblätter (61 %). Nur 46 % tragen ein Datum auf dem Blatt, für die übrigen gilt das Jahr ihres Bandes.
+Mehr als die Hälfte des Korpus stammt aus den letzten beiden Jahren: 1972 und 1973 stellen 940 der 1547 Flugblätter (61 %). Nur 46 % tragen ein Datum auf dem Blatt, für die übrigen gilt das Jahr ihres Bandes.
 
 ![Flugblätter nach zugeordnetem Jahr](../abbildungen/1_verteilung_jahr.png)
 
@@ -22,7 +22,7 @@ Im Register stehen 169 Herausgeber mit mindestens einem Flugblatt. Am häufigste
 
 *Abbildung: Die Herausgeber mit den meisten Flugblättern.*
 
-Drei Viertel sind Flugblätter im engeren Sinn (1 139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Stücke sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
+Drei Viertel sind Flugblätter im engeren Sinn (1139, 74 %), dazu kommen 187 Einladungen (12 %), 83 Broschüren, 42 Zeitschriften, 41 offene Briefe und 21 Protokolle; bei 34 blieb die Textsorte unklar. Die meisten Stücke sind kurz: 738 Flugblätter haben eine Seite, der Median liegt bei zwei Seiten, das längste hat 42.
 
 ![Flugblätter nach Textsorte](../abbildungen/5_textsorte.png)
 
@@ -31,6 +31,8 @@ Drei Viertel sind Flugblätter im engeren Sinn (1 139, 74 %), dazu kommen 187 Ei
 ![Flugblätter nach Seitenzahl](../abbildungen/2_seitenlaenge.png)
 
 *Abbildung: Flugblätter nach Zahl der Seiten.*
+
+Wie vollständig die Metadaten sind, hängt vom Feld ab. Einen Titel und eine Textsorte haben 98 % der Flugblätter, einen Herausgeber 84 %, ein Datum auf dem Blatt 46 %, Unterzeichnende 45 %, eine Reihe 27 % und einen Eingangsstempel 23 %. Die Werte schließen die Korrekturen von Hand ein; die Tabelle mit den automatisch erkannten Werten steht in Kap. 5.5.
 
 <!-- Abbildungen aus scripts/corpus_figures.ipynb (STIL = 'doku'). Nach Änderungen an der Datenbank neu ausführen. -->
 

@@ -32,6 +32,15 @@ Für die Bände 13 und 14 wurde zusätzlich eine Locherkennung eingeführt. Sind
 
 Um den Sektionierungsvorgang zu beschleunigen, wird zusätzlich die Möglichkeit geboten, eine vorannotierte Liste während des Imports zu übergeben, welche sämtliche dokumentierte Trennstellen beinhaltet. Dadurch kann die Sektionierung sofort automatisch durchgeführt werden und eine nachträgliche manuelle Trennung kann umgangen werden. 
 
+Die Liste enthält eine Zeile je Flugblatt mit erster und letzter Seite; ein „x“ davor markiert eine Leerseite:
+
+```
+1-2
+3
+x 4
+5-9
+```
+
 ## 4.4 Neues Verfahren
 
 Kurz vor Beendigung des Projekts wurde dann nochmal die Splitter-Funktion der Import-Funktion der Anwendung überarbeitet. Jetzt kommen zu den 14 Merkmalen im Text noch eine Wortliste mit konkreten Wörtern, die das Flugblattende signalisieren können und neun visuelle Aspekte, die aus dem Scan extrahiert werden. Jetzt funktioniert die Erkennung der Abheftlöcher auf allen Flugblättern aller Bände und jeden neuen Import. Sowohl schwarze als auch weisse Löcher können erkannt werden.
@@ -61,7 +70,7 @@ Nach dem Hochladen wird jede Seite einmal klein dargestellt und ausgewertet, im 
 | nur Text (bisher) | 20,2 | 0,79 | 0,72 |
 | Text + Wortliste + Scan (jetzt) | **11,8** | **0,84** | **0,89** |
 
-Ohne Vorschlag müsste man 1 797 Trennungen selbst setzen. Mit Vorschlag sind noch **496 Stellen** zu ändern (302 zu viel, 194 fehlen), also **72 % weniger** als ohne Vorschlag.
+Ohne Vorschlag müsste man 1797 Trennungen selbst setzen. Mit Vorschlag sind noch **496 Stellen** zu ändern (302 zu viel, 194 fehlen), also **72 % weniger** als ohne Vorschlag.
 
 - Präzision 0,84: Etwa jeder sechste vorgeschlagene Schnitt ist falsch.
 - Trefferquote 0,89: Etwa jeder neunte echte Anfang fehlt.
@@ -70,7 +79,11 @@ Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffe
 
 ## 4.6 Manuelle Prüfung
 
-Eine Beschreibung des Trennens in der Anwendung findet sich im Handbuch.
+Jeder Vorschlag wird beim Import von Hand geprüft. Die Trennansicht zeigt die beiden Seiten an einem Seitenwechsel groß nebeneinander, dazu den Wert des Vorschlags und die Hinweise, aus denen er sich zusammensetzt; mit einer Taste wird die Trennung bestätigt oder geändert. Die Bedienung beschreibt das Handbuch [Neue Bände importieren](../handbuch/neue-baende-importieren.md#4-flugblatter-trennen). Für die Bände 1 bis 14 gab es den Vorschlag noch nicht: Sie wurden ganz von Hand getrennt und in einem zweiten Durchgang anhand einer Liste verdächtiger Stellen geprüft (Kap. 12.5).
+
+![Trennansicht beim Import](../abbildungen/import_trennen.png)
+
+*Abbildung: Trennansicht beim Import an einem vorgeschlagenen Seitenwechsel, mit geöffneter Erklärung des Werts.*
 
 ## 4.7 Ergebnis und Kosten
 

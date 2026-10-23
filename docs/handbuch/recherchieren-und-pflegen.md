@@ -116,7 +116,7 @@ Verwaltung › „Datensatz exportieren“ lädt die freigegebenen Bände als ZI
 
 1. Bände wählen.
 2. **Exemplare:** „Alle“ oder „Nur Hauptexemplare“, etwa zum Zählen.
-3. **Personen:** „Mit Namen“ oder „Ohne Namen“. Ohne Namen fehlen die Unterzeichnenden in den Metadaten, im Volltext stehen sie weiterhin. Was das Archiv mit Namen weitergeben darf, ist noch zu klären [offen: Regeln des Archivs für Personennamen].
+3. **Personen:** „Mit Namen“ oder „Ohne Namen“. Ohne Namen fehlen die Unterzeichnenden in den Metadaten, im Volltext stehen sie weiterhin. Nach Auskunft des Universitätsarchivs (Dr. Andreas Becker, Oktober 2026) darf der Datensatz auch mit Namen weitergegeben werden.
 4. Unter „Zusätzlich“ auf Wunsch die Textblöcke jeder Scanseite mit ihrer Lage (`seiten.jsonl`).
 5. „ZIP erstellen“.
 
