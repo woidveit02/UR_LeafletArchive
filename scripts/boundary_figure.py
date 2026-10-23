@@ -73,7 +73,7 @@ if __name__ == '__main__':
             ax.barh(y, w, height=0.62, color=CUT if w > 0 else KEEP)
             ax.text(w + (0.08 if w > 0 else -0.08), y, de(w), va='center', ha='left' if w > 0 else 'right')
     ax.set_ylim(len(rows) - 0.4, -0.8)
-    ax.set_xlim(-3.4, 5)
+    ax.set_xlim(min(w for _, w in rows if w is not None) - 0.6, 5)  # room for the label of the longest red bar
     ax.axvline(0, color=INK, lw=1.2)
     ax.set_yticks(range(len(rows)), [label for label, _ in rows])
     ax.tick_params(axis='y', length=0, pad=10)

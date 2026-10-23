@@ -2,7 +2,7 @@
 blue marks and the punch holes.
 
 Measured once per scan on a small colour image of each page (48 dpi) and kept in <stem>.looks.json next to the scan.
-pipelines/01_pdf/page_looks.py loads this module, so the pipeline measures exactly what the app does.
+scripts/learn_boundary_weights.py measures with this module too, so the weights fit what the app sees.
 """
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed

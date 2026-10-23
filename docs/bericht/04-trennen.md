@@ -38,7 +38,7 @@ Um den Sektionierungsvorgang zu beschleunigen, wird zusätzlich die Möglichkeit
 
 Kurz vor Beendigung des Projekts wurde dann nochmal die Splitter-Funktion der Import-Funktion der Anwendung überarbeitet. Jetzt kommen zu den 14 Merkmalen im Text noch eine Wortliste mit konkreten Wörtern, die das Flugblattende signalisieren können und neun visuelle Aspekte, die aus dem Scan extrahiert werden. Jetzt funktioniert die Erkennung der Abheftlöcher auf allen Flugblättern aller Bände und jeden neuen Import. Sowohl schwarze als auch weisse Löcher können erkannt werden.
 
-Der Naive-Bayes-Klassifikator selbst ist geblieben: Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen; neu sind die zusätzlichen Hinweise aus Wortliste und Scan, wodurch sowohl ein Flugblattende erkannt werden kann, als auch ein nicht bevorstehendes Ende bestätigt werden kann. Diese ganzen Gewichte werden aufsummiert, und liegt das Ergebnis über Null, schlägt die App eine Trennung vor. Ohne jeden Hinweis wird nicht getrennt, der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1986 von 4 450, 44,6 %). Erstellt wurden die Gewichte an der Handtrennung der Bände 1–14.
+Der Naive-Bayes-Klassifikator selbst ist geblieben: Jeder Hinweis hat ein Gewicht, positiv für ein neues Flugblatt und negativ dagegen; neu sind die zusätzlichen Hinweise aus Wortliste und Scan, wodurch sowohl ein Flugblattende erkannt werden kann, als auch ein nicht bevorstehendes Ende bestätigt werden kann. Diese ganzen Gewichte werden aufsummiert, und liegt das Ergebnis über Null, schlägt die App eine Trennung vor. Ohne jeden Hinweis wird nicht getrennt, der Grundwert entspricht dem Anteil der Seitenwechsel mit Trennung in den Bänden 1–14 (1 797 von 4 219 Seitenwechseln ohne Leerseiten, 42,6 %). Erstellt wurden die Gewichte an der Handtrennung der Bände 1–14.
 
 Für die Wortliste wurden die letzten 250 Zeichen der Seite davor und die ersten 250 Zeichen jeder Seite verglichen, bei Seitenwechseln mit und ohne Trennung. Übrig blieben etwa 90 Wörter. Herausgenommen wurden Namen, Orte und Wörter einzelner Gruppen, dazugenommen alle Monate und Wochentage. Je Seitenwechsel zählt nur das stärkste Wort dafür und das stärkste dagegen. 
 
@@ -54,21 +54,21 @@ Nach dem Hochladen wird jede Seite einmal klein dargestellt und ausgewertet, im 
 
 ![Zwei Seitenwechsel aus Band 006 mit ihren Hinweisen](../abbildungen/trennbeispiel.png)
 
-*Abbildung: Zwei knappe Seitenwechsel aus Band 006 mit den Hinweisen, die die Anwendung dort findet. Oben beginnt mit S. 442 ein neues Flugblatt („Was ist ein Strauzel???“), obwohl das Papier gleich ist und „deshalb“ unter den ersten 250 Zeichen des erkannten Texts steht. Den Ausschlag gibt das Impressum unten auf S. 441, die Summe ist +1,2. Unten endet S. 454 ebenfalls mit einem Impressum, doch S. 455 hat die Abheftlöcher rechts und ist damit eine Rückseite. Mit −1,3 schlägt die Anwendung richtig keine Trennung vor.*
+*Abbildung: Zwei knappe Seitenwechsel aus Band 006 mit den Hinweisen, die die Anwendung dort findet. Oben beginnt mit S. 442 ein neues Flugblatt („Was ist ein Strauzel???“), obwohl das Papier gleich ist und „deshalb“ unter den ersten 250 Zeichen des erkannten Texts steht. Den Ausschlag gibt das Impressum unten auf S. 441, die Summe ist +1,3. Unten endet S. 454 ebenfalls mit einem Impressum, doch S. 455 hat die Abheftlöcher rechts und ist damit eine Rückseite. Mit −1,7 schlägt die Anwendung richtig keine Trennung vor.*
 
 ## 4.5 Qualität des neuen Verfahrens
 
 | Vorschlag | Fehler je 100 Seitenwechsel | Präzision | Trefferquote |
 |---|---|---|---|
-| nur Text (bisher) | 20,3 | 0,78 | 0,76 |
-| Text + Wortliste + Scan (jetzt) | **12,7** | **0,83** | **0,91** |
+| nur Text (bisher) | 20,2 | 0,79 | 0,72 |
+| Text + Wortliste + Scan (jetzt) | **11,8** | **0,84** | **0,89** |
 
-Ohne Vorschlag müsste man 1986 Trennungen selbst setzen. Mit Vorschlag sind noch **565 Stellen** zu ändern (377 zu viel, 188 fehlen), also **72 % weniger** verglichen mit dem alten System.
+Ohne Vorschlag müsste man 1 797 Trennungen selbst setzen. Mit Vorschlag sind noch **496 Stellen** zu ändern (302 zu viel, 194 fehlen), also **72 % weniger** als ohne Vorschlag.
 
-- Präzision 0,83: Etwa jeder sechste vorgeschlagene Schnitt ist falsch.
-- Trefferquote 0,91: Etwa jeder elfte echte Anfang fehlt.
+- Präzision 0,84: Etwa jeder sechste vorgeschlagene Schnitt ist falsch.
+- Trefferquote 0,89: Etwa jeder neunte echte Anfang fehlt.
 
-Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffen, nur die Gewichte sind sauber getrennt gelernt. Die Zahlen sind deshalb leicht optimistisch. Leerseiten sind in den Zahlen nicht enthalten. Wie gut das System auf neue Bände anwendbar ist, wurde nicht getestet und muss nach Erhalt neuer Bände getestet werden.
+Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffen, nur die Gewichte sind sauber getrennt gelernt. Die Zahlen sind deshalb leicht optimistisch. Leerseiten und die Seitenwechsel an ihnen sind in den Zahlen nicht enthalten, weil die Anwendung sie vor dem Vorschlag auslässt (gemessen am 23.10.2026 mit `scripts/learn_boundary_weights.py --pruefen`). Wie gut das System auf neue Bände anwendbar ist, wurde nicht getestet und muss nach Erhalt neuer Bände getestet werden.
 
 ## 4.6 Manuelle Prüfung
 
@@ -88,8 +88,4 @@ Aufgrund der vollständig lokalen Verarbeitung entstehen für diesen Arbeitsschr
 
 *Abbildung: Ergebnis der Trennung in der Bandansicht (Band 006, S. 392–397). Jede Spalte ist ein Flugblatt; Flugblatt 850 („Zur Fachschaftssatzung“, S. 394) ist markiert. Leere Rückseiten sind ausgeschlossen, S. 392 und 396–397 sind weitere Exemplare; ihr Hauptexemplar liegt in Band 008 bzw. weiter vorn in Band 006.*
 
-## 4.8 Hinweise zur Weiterentwicklung (TODO: Do soll da Felix moi schauen)
-
-Die Implementierung der Trennvorschläge befindet sich in src/backend/app/boundaries.py und src/backend/app/segments.py. Die Herkunft der verwendeten Merkmale und Gewichte ist im Arbeits-Repository unter pipelines/01_pdf/ auffindbar. 
-
-Bei einer wesentlichen Erweiterung des Bestandes sollte vor dem Import geprüft werden, ob eine wiederholte Anpassung der Gewichte erforderlich sein könnte. Als besondere Herausforderung für eine Weiterentwicklung erweist sich die zuverlässige Erkennung von Rückseiten. Diese weisen oftmals keinerlei eindeutigen Merkmale auf, die auf das Ende bzw. einen Anfang eines Flugblattes hindeuten.
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#trennen).

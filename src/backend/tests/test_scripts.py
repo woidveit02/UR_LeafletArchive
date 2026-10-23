@@ -67,15 +67,19 @@ def test_tiff_to_pdf(tmp_path):
 
 
 # Tests if the weights are learned from the cuts: the stamp only on first pages, the page number only after them.
-def test_learn_boundary_weights(folder):
-    found = learn_boundary_weights.split_volumes(folder)
-    assert [(label, starts) for label, _, starts in found] == [("Nr. 016 (1974)", {1, 3})]
-    weights, prior = learn_boundary_weights.calibrate([(pages, starts) for _, pages, starts in found])
+def test_learn_boundary_weights(folder, capsys):
+    found = learn_boundary_weights.load(folder)
+    assert [(label, starts) for label, _, _, starts, _ in found] == [("Nr. 016 (1974)", {1, 3})]
+    weights, prior, image, cues = learn_boundary_weights.learn(found)
     assert weights["stamp"] > 0 > weights["pagenum"] and prior == 0
     assert set(weights) == set(learn_boundary_weights.boundaries.WEIGHTS)
+    assert set(image) == set(learn_boundary_weights.boundaries.IMAGE_WEIGHTS) and cues == {"end": {}, "start": {}}
+    learn_boundary_weights.check(found * 2)
+    assert "Fehler je 100" in capsys.readouterr().out
+    assert learn_boundary_weights.boundaries.WEIGHTS["stamp"] != weights["stamp"]  # the app's weights are back
     segments = folder / "Nr. 016 (1974)" / "0118_0016.segments.json"
     segments.write_text(json.dumps({"finished": False, "segments": [{"start_page": 1, "end_page": 3}]}), encoding="utf-8")
-    assert learn_boundary_weights.split_volumes(folder) == []
+    assert learn_boundary_weights.load(folder) == []
 
 
 # Tests if the n-gram tool reads the scan folder: years from volumes.json, hyphens joined, the text cached.

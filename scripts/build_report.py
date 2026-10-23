@@ -5,14 +5,20 @@
 import datetime
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / 'docs'
 out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'bericht.pdf'
 
+# the summary lives on the start page of the website, under "Kurzfassung"
+start = (DOCS / 'README.md').read_text(encoding='utf-8')
+summary = Path(tempfile.gettempdir()) / 'kurzfassung.md'
+summary.write_text('# Kurzfassung\n' + start.split('## Kurzfassung', 1)[1].split('\n## ', 1)[0], encoding='utf-8')
+
 subprocess.run([
-    'pandoc', *sorted(str(p) for p in (DOCS / 'bericht').glob('*.md')), str(DOCS / 'glossar.md'),
+    'pandoc', str(summary), *sorted(str(p) for p in (DOCS / 'bericht').glob('*.md')), str(DOCS / 'glossar.md'),
     # images stay where they are; the italic line below each image is its caption
     '-f', 'markdown-implicit_figures',
     '--citeproc', '--bibliography', str(DOCS / 'literatur.bib'),

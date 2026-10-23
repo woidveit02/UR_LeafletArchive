@@ -3,50 +3,49 @@
 Features: an archive stamp, a date in the header, a masthead, an imprint on the page before or little in common
 with it speak for a new leaflet; a running page number, "b.w.", a hyphen at the end of the page before or
 "Fortsetzung" against it. Words like "Eigendruck" at the end of the page before or "eingelaufen" at the top of the
-page count too (pipelines/01_pdf/cue_words.py). From the scan (looks.py): another paper or size, the archive's stamp
-and blue mark, and holes on the right, which make the page the back of a sheet. The weights come from
-pipelines/01_pdf/app_boundaries.py --weights, which also checks that this module cuts where the pipeline does.
-Measured volume by volume on Nr. 1 to 14, about 12 of 100 transitions need a correction, 20 from the text alone
-(docs/korpus/schnittvorschlag.md).
+page count too. From the scan (looks.py): another paper or size, the archive's stamp and blue mark, and holes on the
+right, which make the page the back of a sheet. All weights are learned from the cut volumes by
+scripts/learn_boundary_weights.py; with --pruefen it measures volume by volume how many cuts are left to change
+(report chapter 4.5).
 """
 import html
 import json
 import math
 import re
 
-# weights (log likelihood ratios) and prior learned on Nr. 1 to 14 by scripts/learn_boundary_weights.py; ponytail: frozen,
+# weights (log likelihood ratios) and prior learned on Nr. 1 to 14 by scripts/learn_boundary_weights.py, as are the
+# image and word weights below; ponytail: frozen,
 # learn again there when the archive has grown considerably
-WEIGHTS = {"stamp": 3.542, "headdate": 2.535, "masthead": 1.99, "prev_imprint": 1.865, "pagenum": -1.801,
-           "prev_bw": -1.302, "prev_hyphen": -2.087, "cont_word": -1.394, "overlap_low": 0.966, "first_heading": 0.435,
-           "prev_blank": 1.983, "overlap_high": -1.1, "blank": 0.229, "prev_end": -0.649}
-PRIOR = -0.216
-IMAGE_WEIGHTS = {"paper_other": 1.215, "paper_very_other": 2.664, "paper_same": -0.706, "size_other": 0.577,
-                 "ink_other": 0.891, "margins_other": 0.879, "back": -2.411, "sign": 3.548, "stamp_seen": 3.08}
+WEIGHTS = {"stamp": 3.565, "headdate": 2.549, "masthead": 2.063, "prev_imprint": 2.013, "pagenum": -1.807,
+           "prev_bw": -1.22, "prev_hyphen": -2.004, "cont_word": -1.311, "overlap_low": 0.892, "first_heading": 0.456,
+           "prev_blank": -0.107, "overlap_high": -1.042, "blank": -1.344, "prev_end": -0.606}
+PRIOR = -0.298
+IMAGE_WEIGHTS = {"paper_other": 1.238, "paper_very_other": 2.688, "paper_same": -0.73, "size_other": 0.547,
+                 "ink_other": 0.771, "margins_other": -0.493, "back": -3.216, "sign": 3.559, "stamp_seen": 3.189}
 # per transition the strongest word for a cut and the strongest against it count; "end" is the end of the page
 # before, "start" the top of the page
 CUE_WEIGHTS = {
-    "end": {"eigendruck": 2.64, "selbstverlag": 2.42, "selbstverlag.": 3.31, "verantwortlich": 2.09,
-            "verantwortl.": 2.01, "presserechtlich": 1.6, "presserechtl.": 1.78, "gez.": 1.53, "tel.": 2.04,
-            "vorsitzender": 1.74, "kollektiv": 2.09, "aktionsgemeinschaft": 2.09, "uhr": 1.62, "euch": 1.66,
-            "montag": 1.74, "dienstag": 1.66, "mittwoch": 1.42, "donnerstag": 1.46, "freitag": 1.39, "samstag": 0.91,
-            "einzelne": -2.23, "lediglich": -1.98, "wobei": -1.98, "genommen": -1.98, "natürlich": -1.94,
-            "indem": -1.9, "einige": -1.8, "tatsächlich": -1.8, "voraussetzung": -1.86, "dessen": -1.68,
-            "daraus": -1.73, "mittel": -1.78, "sowohl": -1.58, "mindestens": -1.58, "außerhalb": -1.52,
-            "wenden": -1.73},
-    "start": {"ablage": 4.54, "eingelaufen": 3.71, "info": 2.4, "flugblatt": 2.01, "nachrichten": 3.05,
-              "abteilung": 2.67, "abt.": 1.72, "fachschafts": 2.89, "studentenparlament": 1.62,
-              "kommilitoninnen": 2.26, "gestern": 2.58, "gestrigen": 2.05, "amtsjahr": 2.29, "blatt": 2.23,
-              "sache": 1.92, "januar": 0.55, "jan.": 2.25, "februar": 1.13, "feb.": 2.57, "märz": -0.07,
-              "april": 0.83, "mai": 1.17, "juni": 2.08, "juli": 2.02, "august": -0.99, "oktober": 0.57, "okt.": 1.42,
-              "november": 2.01, "nov": 3.58, "nov.": 2.19, "dezember": 0.22, "dez.": 3.26, "gerade": -2.78,
-              "natürlich": -2.56, "gemacht": -2.23, "konkreten": -2.18, "hinaus": -2.04, "allein": -1.98,
-              "sinne": -1.98, "versuchen": -1.98, "hinsicht": -1.86, "sei": -1.86, "etwas": -1.77, "daher": -1.73,
-              "deshalb": -1.71, "jedoch": -1.6, "jeder": -1.66, "darin": -1.66, "völlig": -1.69, "aufgaben": -1.73,
-              "wesentlichen": -1.73, "verfügung": -1.68, "ausdruck": -1.58, "vorstellungen": -1.62, "ist.": -1.55}}
+    "end": {"eigendruck": 2.78, "selbstverlag": 2.56, "selbstverlag.": 3.39, "verantwortlich": 2.25,
+            "verantwortl.": 2.78, "presserechtlich": 1.83, "presserechtl.": 2.05, "gez.": 1.59, "tel.": 2.09,
+            "vorsitzender": 1.82, "kollektiv": 2.12, "aktionsgemeinschaft": 2.17, "uhr": 1.76, "euch": 1.8,
+            "montag": 1.78, "dienstag": 1.82, "mittwoch": 1.53, "donnerstag": 1.55, "freitag": 1.51, "samstag": 0.9,
+            "einzelne": -2.14, "lediglich": -1.72, "wobei": -1.9, "genommen": -1.9, "natürlich": -2.27, "indem": -1.82,
+            "einige": -1.65, "tatsächlich": -1.72, "voraussetzung": -1.78, "dessen": -1.6, "daraus": -1.65,
+            "mittel": -1.69, "sowohl": -1.49, "mindestens": -1.44, "außerhalb": -1.38, "wenden": -1.83},
+    "start": {"ablage": 4.57, "eingelaufen": 3.63, "info": 2.43, "flugblatt": 2.0, "nachrichten": 3.07,
+              "abteilung": 2.73, "abt.": 1.75, "fachschafts": 2.94, "studentenparlament": 1.65, "kommilitoninnen": 2.35,
+              "gestern": 2.57, "gestrigen": 2.05, "amtsjahr": 2.38, "blatt": 2.17, "sache": 1.84, "januar": 0.63,
+              "jan.": 2.24, "februar": 0.99, "feb.": 2.5, "märz": 0.01, "april": 0.75, "mai": 1.18, "juni": 2.09,
+              "juli": 2.06, "august": -0.91, "oktober": 0.6, "okt.": 1.4, "november": 1.97, "nov": 3.63, "nov.": 2.22,
+              "dezember": 0.3, "dez.": 3.29, "gerade": -2.7, "natürlich": -2.47, "gemacht": -2.14, "konkreten": -2.1,
+              "hinaus": -1.95, "allein": -1.9, "sinne": -1.9, "versuchen": -1.9, "hinsicht": -1.78, "sei": -1.78,
+              "etwas": -1.68, "daher": -1.65, "deshalb": -1.81, "jedoch": -1.51, "jeder": -1.71, "darin": -1.57,
+              "völlig": -1.61, "aufgaben": -2.05, "wesentlichen": -1.65, "verfügung": -1.6, "ausdruck": -1.49,
+              "vorstellungen": -1.53, "ist.": -1.47}}
 CUE_CHARS = 250
-# above the prior's 0.45: a page without any feature is not cut
+# above the prior's 0.43: a page without any feature is not cut
 MIN_PROBABILITY = 0.5
-HINT_PROBABILITY = 0.7  # stricter, for hints on a list that somebody wrote: fewer false alarms (precision 0.84, recall 0.58)
+HINT_PROBABILITY = 0.7  # stricter, for hints on a list that somebody wrote: fewer false alarms (precision 0.89, recall 0.84)
 
 DATE_RE = re.compile(
     r"\b\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}\b"
@@ -186,14 +185,19 @@ def image_features(look, before):
     return found
 
 
+def cue_words(blocks, previous):
+    """(words at the end of the page before, words at the top of the page), where CUE_WEIGHTS looks."""
+    def text(bl):
+        return " ".join(x for t, x in bl or [] if x and t not in SKIP)
+    return set(CUE_WORD.findall(text(previous)[-CUE_CHARS:].lower())), set(CUE_WORD.findall(text(blocks)[:CUE_CHARS].lower()))
+
+
 def cues(blocks, previous):
     """[(label, weight)] of the strongest word for a cut and the strongest against it."""
-    def words(bl, part):
-        return set(CUE_WORD.findall(part(" ".join(x for t, x in bl or [] if x and t not in SKIP)).lower()))
+    end_words, start_words = cue_words(blocks, previous)
     end, start = CUE_WEIGHTS["end"], CUE_WEIGHTS["start"]
-    found = [(f"„{w}“ am Ende der Seite davor", end[w]) for w in words(previous, lambda t: t[-CUE_CHARS:])
-             if w in end] \
-        + [(f"„{w}“ am Seitenanfang", start[w]) for w in words(blocks, lambda t: t[:CUE_CHARS]) if w in start]
+    found = [(f"„{w}“ am Ende der Seite davor", end[w]) for w in end_words if w in end] \
+        + [(f"„{w}“ am Seitenanfang", start[w]) for w in start_words if w in start]
     pro, con = max(found, key=lambda c: c[1], default=None), min(found, key=lambda c: c[1], default=None)
     return [c for c in (pro,) if c and c[1] > 0] + [c for c in (con,) if c and c[1] < 0]
 
