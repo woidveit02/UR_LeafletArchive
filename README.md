@@ -96,7 +96,7 @@ Der Projektbericht und die Lesepfade für Archiv, Forschung und Entwicklung begi
 
 Als Website ist die Dokumentation in der laufenden Anwendung unter http://localhost:8000/doku/ zu lesen. Wie sich beim Schreiben eine Vorschau starten lässt, steht in [`weiterentwickeln.md`](docs/handbuch/weiterentwickeln.md).
 
-Das Arbeits-Repository des Projekts mit der Evaluation der Texterkennung und den ersten Metadatenläufen ist archiviert: https://github.com/Alphazerfall/flugblatt_praxisseminarSS26. Screenshots der Werkzeuge OCR-Viewer und Splitter stehen in den READMEs dort.
+Das Arbeits-Repository des Projekts mit den Vorarbeiten (OCR-Vergleich und Goldstandard, Metadaten-Prompts und -Läufe, erste Versuche zu Themen und Mehrfachexemplaren, OCR-Viewer und Splitter) liegt unter https://github.com/Alphazerfall/flugblatt_praxisseminarSS26. Es wird nicht weiter gepflegt. Screenshots der Werkzeuge OCR-Viewer und Splitter stehen in den READMEs dort.
 
 ## Lizenz
 
