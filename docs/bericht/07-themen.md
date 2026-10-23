@@ -38,4 +38,4 @@ Von Hand werden die Titel der Themen geprüft und bei Bedarf umbenannt. Das geht
 
 Ein Lauf über den ganzen Bestand kostet wenige Cent.
 
-Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#themen).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwicklung](../handbuch/weiterentwickeln.md#themen).

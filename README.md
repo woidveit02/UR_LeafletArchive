@@ -60,7 +60,7 @@ Die Anwendung hat keine Anmeldung und ist deshalb nur auf dem eigenen Rechner er
 
 Die Anwendung durchsucht den ganzen Text und zeigt die Fundstellen. Die Treffer lassen sich nach Jahr, Herausgeber, Thema und Textsorte filtern; dazu kommen Trends über die Jahre und eigene Seiten für Themen, Organisationen und Bände. Jedes Flugblatt zeigt Scan und Text nebeneinander, jede Angabe mit ihrem Beleg im Text.
 
-Metadaten lassen sich von Hand korrigieren, Mehrfachexemplare prüfen und der Bestand als ZIP exportieren ([Anleitung](docs/handbuch/recherchieren-und-pflegen.md)). Neue Bände kommen in sechs Schritten von den Scans bis zur Freigabe dazu, im Browser oder in der Kommandozeile ([Anleitung](docs/handbuch/neue-baende-importieren.md)).
+Metadaten lassen sich von Hand korrigieren, Mehrfachexemplare prüfen und der Bestand als ZIP exportieren ([Anleitung](docs/handbuch/pflegen.md)). Neue Bände kommen in sechs Schritten von den Scans bis zur Freigabe dazu, im Browser oder in der Kommandozeile ([Anleitung](docs/handbuch/neue-baende-importieren.md)).
 
 ## Aufbau
 

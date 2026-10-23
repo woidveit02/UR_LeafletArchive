@@ -1,4 +1,4 @@
-# N-Gramme auswerten
+# Textauswertung
 
 `scripts/ngrams.py` zählt Wörter und Wortfolgen in den OCR-Texten: häufigste N-Gramme, Verläufe über die Jahre, typische Wörter eines Jahres, Kollokationen und Belegstellen. Es braucht nur Python, keine weiteren Pakete und keine API-Keys.
 
@@ -23,7 +23,7 @@ Vor jeder Zählung bereitet das Skript den Text in fünf Schritten auf:
 4. Steht dasselbe Wort dreimal oder öfter hintereinander, bleiben zwei. So fallen Kopfleisten wie „LSD - LSD - LSD“ weg, die als Text erkannt wurden.
 5. Stoppwörter zählen nur, wo es sinnvoll ist (siehe die Befehle). Die Liste `scripts/stopwords_de.txt` hat 629 Einträge aus stopwords-iso und spaCy.
 
-## `size`: Umfang je Jahr
+## Umfang je Jahr (`size`)
 
 ```bash
 python scripts/ngrams.py size
@@ -42,7 +42,7 @@ Jahr    Seiten     Token  Bände
 
 1973 hat 72-mal so viele Token wie 1967. Absolute Zahlen messen deshalb vor allem den Umfang der Bände; für Vergleiche über die Jahre `trend` nehmen. Für 1967 trägt keine Häufigkeitsaussage.
 
-## `top`: häufigste N-Gramme
+## Häufigste Wörter und Wortfolgen (`top`)
 
 ```bash
 python scripts/ngrams.py top -n 3 --top 8
@@ -66,7 +66,7 @@ Einzelwörter (`-n 1`) zählen ohne Stoppwörter. Ein Zweiwort-N-Gramm braucht m
 
 Optionen: `-n` (Standard 2), `--top` (Standard 20), `--raw`.
 
-## `trend`: Häufigkeit je Jahr
+## Verlauf über die Jahre (`trend`)
 
 Häufigkeit je 10 000 Token. Wortfolgen stehen in Anführungszeichen:
 
@@ -84,7 +84,7 @@ pro 10.000 Token              1967    1968    1969    1970    1971    1972    19
 
 `notstand` gibt es fast nur 1968, `berufsverbot` erst ab 1972 (Radikalenerlass, Januar 1972), `mitbestimmung` steigt stetig. Gezählt werden Token, nicht Blätter: Ein langes Papier, das ein Wort zwanzigmal enthält, erzeugt einen Ausschlag. Ob ein Wert auf vielen Seiten beruht, zeigt `collocates`; nach Flugblättern zählt der Export der Anwendung.
 
-## `keyness`: typische Wörter je Jahr
+## Typische Wörter eines Jahres (`keyness`)
 
 Vergleicht jedes Jahr mit allen übrigen (Dunnings G²). Die Suchwörter muss man dafür nicht kennen. In Klammern steht, wie oft das Wort in dem Jahr vorkommt.
 
@@ -106,7 +106,7 @@ Die Liste liest sich als Chronik: 1968 Rektor Mayer, 1971 der Streit um marxisti
 
 Optionen: `-n` (Standard 1), `--min-count` (Mindestzahl im Jahr, Standard 25), `--top` (Standard 10).
 
-## `collocates`: Kollokationen
+## Wörter im Umfeld (`collocates`)
 
 Welche Wörter stehen in einem Fenster von fünf Token um einen Ausdruck? Sortiert nach logDice (über 9 sehr stark, 7 bis 9 stark, unter 5 kaum bemerkenswert). Die erste Zeile zeigt, ob die Treffer über viele Seiten verteilt sind oder sich auf wenige lange Papiere bündeln; ab 50 % warnt das Skript.
 
@@ -131,7 +131,7 @@ Ein Beispiel, wie man einen Befund prüft. `keyness` zeigt `spd (324)` für 1972
 
 Optionen: `--year 1972` oder `--year 1971,1972`, `-w` (Fenster, Standard 5), `--min-count` (Standard 4), `--top` (Standard 20).
 
-## `kwic`: Belegstellen
+## Belegstellen (`kwic`)
 
 Keine Zahl sollte in einen Text, bevor jemand ein Dutzend Belegstellen gelesen hat.
 

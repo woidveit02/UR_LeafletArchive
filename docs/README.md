@@ -14,8 +14,8 @@ Diese Dokumentation beschreibt, wie aus den Scans der Allgemeinen Flugblattsamml
 
 Der **Bericht** folgt einem Band durch die Verarbeitung, vom Bestand über Texterkennung, Trennen, Metadaten, Mehrfachexemplare und Themen bis zur Anwendung, und endet mit Grenzen, Zusammenfassung und Projektverlauf. Die **Handbücher** sind Anleitungen zum Nachschlagen. Im **Anhang** stehen alle Kennzahlen mit Datum und die Begriffe.
 
-- **Universitätsarchiv:** [Recherchieren und pflegen](handbuch/recherchieren-und-pflegen.md), [Neue Bände importieren](handbuch/neue-baende-importieren.md), dann [Kapitel 8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md).
-- **Forschung:** [Kapitel 2 Bestand](bericht/02-bestand.md), [8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md), dann [N-Gramme auswerten](handbuch/ngramme-auswerten.md) und das Notebook `scripts/forschungsfragen.ipynb`.
-- **Entwicklung:** [Weiterentwickeln](handbuch/weiterentwickeln.md), [Installieren und betreiben](handbuch/installieren-und-betreiben.md) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
+- **Universitätsarchiv:** [Recherche](handbuch/recherchieren.md), [Pflege](handbuch/pflegen.md), [Import neuer Bände](handbuch/neue-baende-importieren.md), dann [Kapitel 8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md).
+- **Forschung:** [Kapitel 2 Bestand](bericht/02-bestand.md), [8 Korpus in Zahlen](bericht/08-korpus-in-zahlen.md) und [10 Grenzen](bericht/10-grenzen-ausblick.md), dann [Textauswertung](handbuch/ngramme-auswerten.md) und das Notebook `scripts/forschungsfragen.ipynb`.
+- **Entwicklung:** [Weiterentwicklung](handbuch/weiterentwickeln.md), [Installation und Betrieb](handbuch/installieren-und-betreiben.md) und [Kapitel 9 Anwendung](bericht/09-anwendung.md).
 
 Die Belege zur OCR-Evaluation liegen im archivierten Arbeits-Repository ([Kapitel 12.6](bericht/12-projektverlauf.md#126-werkzeuge-und-repositories)).

@@ -79,7 +79,7 @@ Die Auswahl der Merkmale und Wörter wurde mit Blick auf alle 14 Bände getroffe
 
 ## 4.6 Manuelle Prüfung
 
-Jeder Vorschlag wird beim Import von Hand geprüft. Die Trennansicht zeigt die beiden Seiten an einem Seitenwechsel groß nebeneinander, dazu den Wert des Vorschlags und die Hinweise, aus denen er sich zusammensetzt; mit einer Taste wird die Trennung bestätigt oder geändert. Die Bedienung beschreibt das Handbuch [Neue Bände importieren](../handbuch/neue-baende-importieren.md#4-flugblatter-trennen). Für die Bände 1 bis 14 gab es den Vorschlag noch nicht: Sie wurden ganz von Hand getrennt und in einem zweiten Durchgang anhand einer Liste verdächtiger Stellen geprüft (Kap. 12.5).
+Jeder Vorschlag wird beim Import von Hand geprüft. Die Trennansicht zeigt die beiden Seiten an einem Seitenwechsel groß nebeneinander, dazu den Wert des Vorschlags und die Hinweise, aus denen er sich zusammensetzt; mit einer Taste wird die Trennung bestätigt oder geändert. Die Bedienung beschreibt das Handbuch [Import neuer Bände](../handbuch/neue-baende-importieren.md#4-flugblatter-trennen). Für die Bände 1 bis 14 gab es den Vorschlag noch nicht: Sie wurden ganz von Hand getrennt und in einem zweiten Durchgang anhand einer Liste verdächtiger Stellen geprüft (Kap. 12.5).
 
 ![Trennansicht beim Import](../abbildungen/import_trennen.png)
 
@@ -97,4 +97,4 @@ Aufgrund der vollständig lokalen Verarbeitung entstehen für diesen Arbeitsschr
 
 *Abbildung: Ergebnis der Trennung in der Bandansicht (Band 006, S. 392–397). Jede Spalte ist ein Flugblatt; Flugblatt 850 („Zur Fachschaftssatzung“, S. 394) ist markiert. Leere Rückseiten sind ausgeschlossen, S. 392 und 396–397 sind weitere Exemplare; ihr Hauptexemplar liegt in Band 008 bzw. weiter vorn in Band 006.*
 
-Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#trennen).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwicklung](../handbuch/weiterentwickeln.md#trennen).

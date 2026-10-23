@@ -47,4 +47,4 @@ Sämtliche Angaben von Zahlen innerhalb der Anwendung, die beispielsweise Heraus
 
 ![Geprüfte Fälle von Mehrfachexemplaren](../abbildungen/7_exemplare_faelle.png)
 
-Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#mehrfachexemplare).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwicklung](../handbuch/weiterentwickeln.md#mehrfachexemplare).

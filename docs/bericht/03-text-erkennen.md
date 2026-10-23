@@ -91,7 +91,7 @@ Um die Genauigkeit von Datalab zu beziffern, haben wir einen Goldstandard erstel
 | vk | 35 | 0,83 % | 1,54 % | 0,60 % | 1,33 % |
 | gesamt | 105 | 0,89 % | 3,42 % | 0,60 % | 2,53 % |
 
-Über alle 105 bewerteten Seiten liegt die Zeichenfehlerrate (Character Error Rate CER) bei 0,60 %, die Wortfehlerrate (Worde Error Rate WER)bei 2,53 % (jeweils längengewichtet). Man beachte, dass die Werte voneinander abweichen müssen, da es sich um verschiedene Flugblätter handelt. Auf den fünf Kalibrierungsseiten, die alle drei bearbeitet haben, lag die Zeichenfehlerrate bei allen unter 1 % und je Seite höchstens 0,3 Prozentpunkte auseinander.
+Über alle 105 bewerteten Seiten liegt die Zeichenfehlerrate (Character Error Rate, CER) bei 0,60 %, die Wortfehlerrate (Word Error Rate, WER) bei 2,53 % (jeweils längengewichtet). Man beachte, dass die Werte voneinander abweichen müssen, da es sich um verschiedene Flugblätter handelt. Auf den fünf Kalibrierungsseiten, die alle drei bearbeitet haben, lag die Zeichenfehlerrate bei allen unter 1 % und je Seite höchstens 0,3 Prozentpunkte auseinander.
 
 Fehler im Layout wiesen 18 der 105 Seiten auf (17 %), Fehler in der Lesereihenfolge 8 (8 %). Typisch waren Blöcke in falscher Reihenfolge, Blöcke, die zusammengehören, aber getrennt erkannt wurden, ein spiegelverkehrt gescanntes Blatt, ein als Bild erkannter Stempel und gesperrt geschriebene Buchstaben, die die Erkennung stören. Als unleserlich markiert wurden insgesamt 20 Blöcke. Die übrigen Markierungen für fehlende, überzählige, zusammengefasste oder geteilte Blöcke wurden nicht vergeben.
 
@@ -119,4 +119,4 @@ Der Goldstandard entstand durch Nachkorrektur der Datalab-Ausgabe. Wer eine vorh
 
 Zudem gab es im qualitativen Vergleich kein gemeinsames Bewertungsschema, was bei der Auswerkung bemerkbar wurde. Die Beobachtungen lassen sich daher nicht auszählen und widersprechen sich in Einzelfällen, etwa bei der Sperrschrift. Die Benchmark-Werte in 3.4 sind Angaben der Anbieter und wurden nicht überprüft.
 
-Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt. Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell. Die gespeicherten Ausgaben im Arbeits-Repository (Kap. 12.6) sind deshalb der eigentliche Beleg für den Test.
+Die Läufe lassen sich nur eingeschränkt wiederholen, weil sich die Modelle hinter den Diensten ändern. Gemini 3.5 Flash ist inzwischen abgekündigt. Anfragen unter dieser Modellkennung werden auf Gemini 3.6 Flash umgeleitet und liefern heute also ein anderes Modell.

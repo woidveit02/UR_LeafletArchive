@@ -1,4 +1,4 @@
-"""Screenshots of the running app for the report and docs/handbuch/recherchieren-und-pflegen.md
+"""Screenshots of the running app for the report and docs/handbuch/recherchieren.md and pflegen.md
 (needs playwright: pip install playwright; playwright install chromium).
 
     python scripts/app_screenshots.py                     (app on http://localhost:8000)

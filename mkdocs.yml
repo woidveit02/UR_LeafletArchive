@@ -18,10 +18,11 @@ nav:
       - bericht/11-zusammenfassung.md
       - bericht/12-projektverlauf.md
   - Handbücher:
-      - handbuch/recherchieren-und-pflegen.md
+      - handbuch/installieren-und-betreiben.md
+      - handbuch/recherchieren.md
+      - handbuch/pflegen.md
       - handbuch/neue-baende-importieren.md
       - handbuch/ngramme-auswerten.md
-      - handbuch/installieren-und-betreiben.md
       - handbuch/weiterentwickeln.md
   - Anhang:
       - kennzahlen.md
@@ -39,6 +40,7 @@ markdown_extensions:
       permalink: true
   - admonition
   - footnotes
+  - pymdownx.escapeall  # \$ renders as $; editors with math previews need the escape
 plugins:
   - search:
       lang: de

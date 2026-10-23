@@ -1,8 +1,8 @@
-# Weiterentwickeln
+# Weiterentwicklung
 
-Für alle, die am Code arbeiten. Wie die Anwendung gestartet wird, steht in der README im Hauptverzeichnis des Repositorys, wie sie auf einem Server läuft, in [Installieren und betreiben](installieren-und-betreiben.md).
+Für alle, die am Code arbeiten. Wie die Anwendung gestartet wird, steht in der README im Hauptverzeichnis des Repositorys, wie sie auf einem Server läuft, in [Installation und Betrieb](installieren-und-betreiben.md).
 
-## Code
+## Aufbau des Codes
 
 ```
 src/backend/app/
@@ -39,7 +39,7 @@ Beim Start legt `createDatabase.py` fehlende Tabellen und Spalten an. Ist die Da
 
 Was in `.env` stehen kann, erklärt `.env.example`. `docker-compose.yml` setzt die Pfade im Container (`LEAFLET_DATA_DIR`, `LEAFLET_PDF_DIR`) und bindet den Scan-Ordner aus `LEAFLET_PDF_HOST_DIR` ein. Wer ohne Docker arbeitet oder Tests schreibt, kann die Datenbank (`LEAFLET_DB`) und die Dateien der Handarbeit (`LEAFLET_CORRECTIONS`, `LEAFLET_COPY_DECISIONS`, `LEAFLET_CHECKED`) umlenken; die Standardwerte stehen in `database/session.py` und `database/fillDatabase.py`. Tests mit der Markierung `built_db` laufen auf einer Kopie der Datenbank aus `LEAFLET_BUILT_DB`.
 
-## Seiten
+## Seiten der Anwendung
 
 Jede Seite ist eine Route in `app.py` mit eigenem Template in `templates/`. Gelesen wird unter `/`, `/leaflets`, `/volumes`, `/organizations`, `/themen` und `/trends`, gepflegt unter `/verwaltung`, `/exemplare`, `/korrekturen` und `/import/{vz}`. Die Adresse eines Bandes ist seine Vz-Nummer und bleibt beim Neubau der Datenbank gleich.
 

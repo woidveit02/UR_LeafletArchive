@@ -16,7 +16,7 @@ Neben technischen Fehlerquellen ergeben sich aus dem Korpus beziehungsweise dem 
 - Bestand/Korpus: Im Korpus fehlt noch eine Verzeichnungseinheit des Jahres 1973 (Einheit 15, Kap. 2.5), wodurch noch keine repräsentativen Aussagen über dieses Jahr getroffen werden können. Zudem sind die Jahre 1967 und 1968 aufgrund einer sehr geringen Zahl an Flugblätter nur dünn belegt. Generell ist der Korpus noch nicht 100% finalisiert, und sollte daher vor potentieller Nutzung für Forschungszwecke erst gründlich überprüft und validiert werden.
 - Quelle: Die Flugblätter zeigen die Selbstdarstellung der Gruppen zu der Zeit, und sind kein sicherer Beleg für reale historische Ereignisse (Kap. 8.4). Jegliche Aussagen, die aus den Flugblätter entnommen werden, sollten entsprechend historisch eingeordnet und kontextualisiert werden, um Missverständnisse und Falschaussagen zu vermeiden.
 
-## 10.2 Wo Unsicherheit markiert ist
+## 10.2 Kennzeichnung von Unsicherheit
 
 Wie sich im vorhergehenden Kapitel zeigt, ist das System keineswegs perfekt und erzeugen im Verlauf kleine Unsicherheiten. Zudem ist das Quellmaterial ebenso schwierig, da manche Informationen nur in einem Kontext verständlich sind, der heute nicht mehr nachvollziehbar und ermittelbar ist. Das einfachste Beispiel sind Tagesangaben wie "nächsten Donnerstag", was bei einem Flugblatt ohne jegliches Datum unmöglich in eine konkrete Datumsangabe umgewandelt werden kann. Da es an manchen Stellen des Verarbeitungsprozesses unumgänglich ist, dass Unsicherheiten entstehen, wurden diese Unsicherheiten stellenweise einfach deutlich markiert.
 

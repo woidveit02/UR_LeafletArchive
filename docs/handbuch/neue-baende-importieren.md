@@ -1,4 +1,4 @@
-# Neue Bände importieren
+# Import neuer Bände
 
 Diese Anleitung führt durch den Import eines Bandes in der Anwendung, vom Scan bis zur Freigabe. Die Abbildungen stammen aus einem Testimport mit den ersten 230 Seiten von Band 15, der in der App als Band 015 angelegt ist. Er gehört nicht zum Korpus des Projekts. Schritt 1 zeigt die Auswahl eines neuen Bandes, „Themen zuordnen“ das Ergebnis von Band 014.
 
@@ -14,7 +14,7 @@ Diese Anleitung führt durch den Import eines Bandes in der Anwendung, vom Scan 
 | 6. Prüfen und freigeben | findet Mehrfachexemplare, unbekannte Herausgeber und Unstimmigkeiten | drei Aufgaben durchgehen, dann freigeben | etwa 1,5 Minuten je Mehrfachexemplar, dazu Herausgeber und Hinweise | – |
 | danach: Themen zuordnen | ordnet die Flugblätter den bestehenden Themen zu | starten | wenige Minuten | unter 1 Cent je Band |
 
-Die Kosten sind am Testimport gemessen, Einzelheiten unter [Installieren und betreiben › Kosten](installieren-und-betreiben.md#kosten). Die Zeiten für das Trennen und die Mehrfachexemplare stammen aus der Arbeit an den Bänden 1 bis 14 ([Kapitel 12](../bericht/12-projektverlauf.md)).
+Die Kosten sind am Testimport gemessen, Einzelheiten unter [Kosten](#kosten). Die Zeiten für das Trennen und die Mehrfachexemplare stammen aus der Arbeit an den Bänden 1 bis 14 ([Kapitel 12](../bericht/12-projektverlauf.md)).
 
 Bis zur Freigabe ist der Band ein Entwurf: Er fehlt in Flugblattliste, Suche, Trends und Themen. Jeder Schritt speichert sein Ergebnis. Sie können die Seite jederzeit schließen und später über Verwaltung › „Fortsetzen“ weitermachen.
 
@@ -24,9 +24,23 @@ In der Verwaltung steht jeder Entwurf mit seinem Stand: Die sechs Striche sind d
 
 ## Voraussetzungen
 
-- Die Anwendung läuft (siehe [Installieren und betreiben](installieren-und-betreiben.md)).
+- Die Anwendung läuft (siehe [Installation und Betrieb](installieren-und-betreiben.md)).
 - Für Schritt 3 ein API-Key von [Datalab](https://www.datalab.to), für Schritt 5 und die Themen einer von [OpenRouter](https://openrouter.ai). Eintragen unter Verwaltung › API-Keys oder direkt im Schritt unter „Zugang verwalten“. Beide Dienste rechnen in Dollar über Ihr Konto ab. Setzen Sie dort ein Ausgabenlimit.
 - Die Scans liegen als PDF oder als TIFF-Dateien vor.
+
+## Kosten
+
+Kosten entstehen nur beim Import und beim Neuberechnen der Themen. Lesen, Suchen, Korrigieren und Exportieren kosten nichts. Beide Dienste rechnen in Dollar über das Konto ab, zu dem der API-Key gehört.
+
+| Posten | Dienst | Kosten | Grundlage |
+|---|---|---|---|
+| Texterkennung, Stufe „Genau“ | Datalab | 1,00 $ je 100 Seiten | Preisliste vom 7.10.2026, am Testimport bestätigt (230 Seiten: 2,30 $) |
+| Texterkennung, Stufe „Günstig“ | Datalab | 0,40 $ je 100 Seiten | Preisliste |
+| Metadaten, Claude Sonnet 4.5 | OpenRouter | etwa 0,90 $ je 100 Seiten | Testimport (230 Seiten, 83 Flugblätter: 2,11 $) |
+| Themen zuordnen | OpenRouter | unter 1 Cent je Band, beim ersten Mal etwa 2 Cent | |
+| Themen neu berechnen | OpenRouter | höchstens etwa 0,10 $ für die Titel, dazu Embeddings neuer Texte | |
+
+Ein Band mit 300 Seiten kostet damit etwa 6 $. Vor jedem kostenpflichtigen Schritt zeigt die Anwendung den geschätzten Preis. Was das Projekt für die Bände 1 bis 14 bezahlt hat, steht in den [Kennzahlen](../kennzahlen.md#kosten).
 
 ## 1. Band wählen
 
@@ -153,13 +167,13 @@ Die Schritte 1 bis 5 sind nach der Freigabe gesperrt. Zum Ändern „Freigabe zu
 
 „Neu vorbereiten“ übernimmt die Flugblätter noch einmal aus Schritt 5 und sucht die Exemplare neu, etwa nachdem in einem anderen Band Exemplare geprüft wurden. Korrekturen und Entscheidungen bleiben erhalten.
 
-## Themen zuordnen
+## Nach der Freigabe: Themen zuordnen
 
 Optional, auch nach der Freigabe. „Themen zuordnen“ gibt jedem Flugblatt das Thema, das unter seinen fünf ähnlichsten Flugblättern überwiegt, und einen Punkt auf der Themenkarte. Braucht den OpenRouter-Key; kostet weniger als einen Cent je Band. Beim ersten Mal holt die App auch die Embeddings aller freigegebenen Flugblätter (etwa 2 Cent, einige Minuten).
 
 ![Themen zuordnen: Ergebnis für Band 014](../abbildungen/import_themen.png)
 
-Danach zeigt der Schritt eine Tabelle der Themen mit der Zahl der Flugblätter und der unsicheren, darunter die unsicher zugeordneten Flugblätter mit Link. Flugblätter mit sehr wenig Text bekommen kein Thema, bei Band 014 sind das 7 von 142. Neue Themen entstehen hier nicht. Unter Verwaltung › Themen ist vermerkt, dass der Band nachträglich zugeordnet wurde; nach mehreren neuen Bänden lohnt es sich, die Themen neu zu berechnen ([Installieren und betreiben](installieren-und-betreiben.md#themen-neu-berechnen)).
+Danach zeigt der Schritt eine Tabelle der Themen mit der Zahl der Flugblätter und der unsicheren, darunter die unsicher zugeordneten Flugblätter mit Link. Flugblätter mit sehr wenig Text bekommen kein Thema, bei Band 014 sind das 7 von 142. Neue Themen entstehen hier nicht. Unter Verwaltung › Themen ist vermerkt, dass der Band nachträglich zugeordnet wurde; nach mehreren neuen Bänden lohnt es sich, die Themen neu zu berechnen ([Pflege › Themen neu berechnen](pflegen.md#themen-neu-berechnen)).
 
 ## Import über die Kommandozeile
 

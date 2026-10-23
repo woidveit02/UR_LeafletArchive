@@ -1,6 +1,6 @@
 # 9 Die Anwendung
 
-Am Ende des Projekts steht eine Webanwendung, mit der sich das Korpus durchsuchen, lesen, auswerten und pflegen lässt und mit der das Archiv neue Bände selbst einlesen kann. Sie läuft lokal in Docker und braucht Internetzugang nur für die Texterkennung und die Metadaten neuer Bände und für die Themen. Dieses Kapitel beschreibt, was sie kann und warum sie so gebaut wurde. Detailierte Informationen zur Bedienung stehen in den Handbüchern [Recherchieren und pflegen](../handbuch/recherchieren-und-pflegen.md) und [Neue Bände importieren](../handbuch/neue-baende-importieren.md).
+Am Ende des Projekts steht eine Webanwendung, mit der sich das Korpus durchsuchen, lesen, auswerten und pflegen lässt und mit der das Archiv neue Bände selbst einlesen kann. Sie läuft lokal in Docker und braucht Internetzugang nur für die Texterkennung und die Metadaten neuer Bände und für die Themen. Dieses Kapitel beschreibt, was sie kann und warum sie so gebaut wurde. Detaillierte Informationen zur Bedienung stehen in den Handbüchern [Recherche](../handbuch/recherchieren.md), [Pflege](../handbuch/pflegen.md) und [Import neuer Bände](../handbuch/neue-baende-importieren.md).
 
 ## 9.1 Anforderungen
 
@@ -52,7 +52,7 @@ Die meiste Zeit kostet das Prüfen der Seitenwechsel beim Trennen; Texterkennung
 
 ## 9.5 Architektur und Datenmodell
 
-Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite. Die Grundstruktur des  stammt aus dem ASE-Projekt im Wintersemester 2025/26, was auch der Grund für die Entscheidung für die vorher genannten Systeme. Die Seiten werden auf dem Server erzeugt. JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwickeln](../handbuch/weiterentwickeln.md).
+Die Anwendung ist mit FastAPI, Jinja2 und SQLAlchemy gebaut und speichert in SQLite. Die Grundstruktur des  stammt aus dem ASE-Projekt im Wintersemester 2025/26, was auch der Grund für die Entscheidung für die vorher genannten Systeme. Die Seiten werden auf dem Server erzeugt. JavaScript ohne Framework und ohne Build-Schritt ergänzt einzelne Ansichten wie die Trennansicht. Die Datenbank enthält Bände, Seiten, Flugblätter, Organisationen, Herausgeber-Zuordnungen und Themen, dazu einen Volltextindex (SQLite FTS5). Seiten und Flugblätter sind getrennt gespeichert, deshalb lässt sich ein Band neu trennen, ohne den Text neu zu erkennen. Die Datenbank lässt sich jederzeit aus den Dateien in `data/` und im Scan-Ordner neu aufbauen. Einzelheiten für die Weiterentwicklung stehen in [Weiterentwicklung](../handbuch/weiterentwickeln.md).
 
 ## 9.6 Gestaltung
 
@@ -60,7 +60,7 @@ Die Oberfläche folgt wenigen Regeln: wenig Farbe, Markierungen nur für das, wa
 
 ## 9.7 Werkzeuge außerhalb der Anwendung
 
-Für Auswertungen, die über die Anwendung hinausgehen, gibt es zwei Werkzeuge. `scripts/ngrams.py` berechnet auf den erkannten Texten Häufigkeiten, Trends, typische Wörter je Jahr, Kollokationen und Belegstellen ([N-Gramme auswerten](../handbuch/ngramme-auswerten.md)). Das Notebook `scripts/forschungsfragen.ipynb` zeigt am Export, wie sich Fragen wie „Welche Gruppen sind wann aktiv?“, „Wer gibt mit wem gemeinsam heraus?“ oder „Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen?“ [@monroe2008] beantworten lassen. Die zehn Fragen im Notebook sind Beispiele, keine Ergebnisse des Projekts. Weitere Skripte, etwa zum Zusammenfügen von TIFF-Scans und zum Neulernen der Gewichte des Trennvorschlags, beschreibt `scripts/README.md`.
+Für Auswertungen, die über die Anwendung hinausgehen, gibt es zwei Werkzeuge. `scripts/ngrams.py` berechnet auf den erkannten Texten Häufigkeiten, Trends, typische Wörter je Jahr, Kollokationen und Belegstellen ([Textauswertung](../handbuch/ngramme-auswerten.md)). Das Notebook `scripts/forschungsfragen.ipynb` ([als Webseite](../forschungsfragen.html)) zeigt am Export, wie sich Fragen wie „Welche Gruppen sind wann aktiv?“, „Wer gibt mit wem gemeinsam heraus?“ oder „Wie unterscheidet sich das Vokabular von RCDS und sozialistischen Gruppen?“ [@monroe2008] beantworten lassen. Die zehn Fragen im Notebook sind Beispiele, keine Ergebnisse des Projekts. Weitere Skripte, etwa zum Zusammenfügen von TIFF-Scans und zum Neulernen der Gewichte des Trennvorschlags, beschreibt `scripts/README.md`.
 
 Der Schwerpunkt des Projekts lag auf der Erschließung, nicht auf eigenen Auswertungen. Die Werkzeuge zeigen, dass das Korpus solche Auswertungen trägt. Aussagekräftig werden sie vor allem, wenn das Archiv weitere Jahrgänge scannt und mit der Anwendung erschließt.
 
@@ -72,6 +72,6 @@ Am 20.10. haben wir die Anwendung im Archiv vorgeführt und dabei den ersten Tei
 
 Für den dauerhaften Betrieb haben wir mit dem Archiv verabredet, dass das Rechenzentrum der Universität die Anwendung als Docker-Container betreibt, wie andere Software des Archivs auch. [offen: Datum der Verabredung.] Dafür ist noch zu klären [offen: prüfen, was davon schon geklärt ist]:
 
-- **Zugriff:** Die Anwendung hat keine eigene Anmeldung. Bevor sie im Netz der Universität erreichbar ist, braucht sie einen Zugriffsschutz, etwa ein Passwort über einen vorgeschalteten Webserver. Die Einrichtung beschreibt das Handbuch [Installieren und betreiben](../handbuch/installieren-und-betreiben.md#auf-einem-server-des-archivs). Wer Zugang bekommt und wie mit Personennamen umzugehen ist, entscheidet das Archiv (Kap. 10.3).
-- **Konten und Kosten:** Für neue Bände braucht die Anwendung API-Keys für Datalab und OpenRouter. Auf wessen Konto sie laufen, ist offen. Ein Band mit 300 Seiten kostet etwa 6 $ ([Kosten](../handbuch/installieren-und-betreiben.md#kosten)).
+- **Zugriff:** Die Anwendung hat keine eigene Anmeldung. Bevor sie im Netz der Universität erreichbar ist, braucht sie einen Zugriffsschutz, etwa ein Passwort über einen vorgeschalteten Webserver. Die Einrichtung beschreibt das Handbuch [Installation und Betrieb](../handbuch/installieren-und-betreiben.md#auf-einem-server-des-archivs). Wer Zugang bekommt und wie mit Personennamen umzugehen ist, entscheidet das Archiv (Kap. 10.3).
+- **Konten und Kosten:** Für neue Bände braucht die Anwendung API-Keys für Datalab und OpenRouter. Auf wessen Konto sie laufen, ist offen. Ein Band mit 300 Seiten kostet etwa 6 $ ([Kosten](../handbuch/neue-baende-importieren.md#kosten)).
 - **Sicherung und Betreuung:** Welche Dateien zu sichern sind, steht im Handbuch. Wer Updates einspielt und bei Fehlern hilft, ist noch festzulegen.

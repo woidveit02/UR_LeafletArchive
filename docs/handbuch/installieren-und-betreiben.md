@@ -1,4 +1,4 @@
-# Installieren und betreiben
+# Installation und Betrieb
 
 ## Installation
 
@@ -19,7 +19,7 @@ Liegt der Datenordner wie oben neben dem Repository, ist keine `.env` nötig. De
 
 Das Image wird für Intel- und AMD-Prozessoren gebaut (`platform: linux/amd64` in `docker-compose.yml`), weil das Paket `hdbscan` für ARM nicht fertig gebaut vorliegt. Auf einem Mac mit Apple-Chip emuliert Docker Desktop es; das funktioniert, ist aber langsamer.
 
-Nach einem Update des Repositorys: Haben sich `Dockerfile`, `requirements.txt` oder die Dokumentation in `docs/` geändert, mit `docker compose up -d --build` neu bauen. Die Dokumentation wird dabei ins Image gebaut und ist in der Anwendung unter http://localhost:8000/doku/ erreichbar. Zum Löschen der Datenbank siehe [Sichern](#sichern).
+Nach einem Update des Repositorys: Haben sich `Dockerfile`, `requirements.txt` oder die Dokumentation in `docs/` geändert, mit `docker compose up -d --build` neu bauen. Die Dokumentation wird dabei ins Image gebaut und ist in der Anwendung unter http://localhost:8000/doku/ erreichbar. Zum Löschen der Datenbank siehe [Datensicherung](#datensicherung).
 
 ## Konfiguration
 
@@ -70,7 +70,7 @@ Das Passwort schützt die ganze Anwendung, auch das Lesen. Getrennte Rechte für
 
 Für eine Vorführung im eigenen Netz tragen Sie in `.env` die Zeile `LEAFLET_BIND=0.0.0.0` ein und starten mit `docker compose up -d`. Danach ist die Anwendung für alle im Netz ohne Passwort erreichbar. Löschen Sie die Zeile nach der Vorführung und starten Sie erneut mit `docker compose up -d`.
 
-## Sichern
+## Datensicherung
 
 Was die Anwendung weiß, liegt in Dateien an zwei Orten. Sichern Sie beide regelmäßig, mindestens nach jedem Import und jeder größeren Runde von Korrekturen.
 
@@ -87,31 +87,3 @@ docker compose restart
 ```
 
 Ob ein Band Entwurf oder freigegeben ist, steht auch in `data/volumes.json` (`"status": "entwurf"`). Ein Neuaufbau übernimmt es, ein Entwurf bleibt also Entwurf. Den Fortschritt eines laufenden Imports (Texterkennung, Trennung) hält der Datenordner fest. Starten Sie den Neuaufbau trotzdem nicht, während ein Importschritt läuft.
-
-## Themen neu berechnen
-
-Unter Verwaltung › Themen › „Themen neu berechnen“. Braucht den OpenRouter-Key; die Berechnung läuft einige Minuten im Hintergrund. Auf der Seite Verwaltung › Themen lassen sich außerdem die Titel der jetzigen Themen ändern („Bearbeiten“).
-
-1. Höchstzahl der Themen und Sprachmodell für die Titel wählen, „Themen neu berechnen“. Voreingestellt sind die Zahl der jetzigen Themen und das Modell der bisherigen Titel. Die geschätzten Kosten stehen beim Modell. Die Ähnlichkeit berechnet immer bge-m3.
-2. Das Ergebnis liegt als `data/topics.kandidat.json` und `data/topic_map.kandidat.json` neben den bisherigen Dateien und ist noch nicht in Gebrauch.
-3. Auf der Prüfseite die Titel durchgehen. In den Feldern stehen die Vorschläge des Sprachmodells. Je Thema steht darunter, aus welchem bisherigen Thema die meisten Flugblätter stammen; „… Flugblätter“ öffnet sie in der Flugblattliste.
-4. „Neue Einteilung übernehmen“ ersetzt `topics.json` und `topic_map.json`; die alten Dateien bleiben als `topics.bis-<Zeit>.json` und `topic_map.bis-<Zeit>.json`. „Neuberechnung verwerfen“ löscht nur den Kandidaten.
-5. Entwürfe danach mit „Themen zuordnen“ neu zuordnen.
-
-Fehlt das bisherige Titelmodell bei OpenRouter, ist das stärkste Modell vorausgewählt, das für den Lauf höchstens etwa 0,10 $ kostet. Scheitern zu viele Titelanfragen, bricht der Lauf ab, statt Schlüsselwörter als Titel zu liefern.
-
-Die Embeddings speichert die Anwendung in `data/embeddings.bge-m3.npz`; ein zweiter Lauf fragt nur neue Texte an. Das Image enthält dafür BERTopic, UMAP, HDBSCAN und das spaCy-Modell `de_core_news_lg` und ist dadurch etwa 1,5 GB groß.
-
-## Kosten
-
-Kosten entstehen nur beim Import und beim Neuberechnen der Themen. Lesen, Suchen, Korrigieren und Exportieren kosten nichts. Beide Dienste rechnen in Dollar über das Konto ab, zu dem der API-Key gehört.
-
-| Posten | Dienst | Kosten | Grundlage |
-|---|---|---|---|
-| Texterkennung, Stufe „Genau“ | Datalab | 1,00 $ je 100 Seiten | Preisliste vom 7.10.2026, am Testimport bestätigt (230 Seiten: 2,30 $) |
-| Texterkennung, Stufe „Günstig“ | Datalab | 0,40 $ je 100 Seiten | Preisliste |
-| Metadaten, Claude Sonnet 4.5 | OpenRouter | etwa 0,90 $ je 100 Seiten | Testimport (230 Seiten, 83 Flugblätter: 2,11 $) |
-| Themen zuordnen | OpenRouter | unter 1 Cent je Band, beim ersten Mal etwa 2 Cent | |
-| Themen neu berechnen | OpenRouter | höchstens etwa 0,10 $ für die Titel, dazu Embeddings neuer Texte | |
-
-Ein Band mit 300 Seiten kostet damit etwa 6 $. Vor jedem kostenpflichtigen Schritt zeigt die Anwendung den geschätzten Preis. Was das Projekt für die Bände 1 bis 14 bezahlt hat, steht in den [Kennzahlen](../kennzahlen.md#kosten).

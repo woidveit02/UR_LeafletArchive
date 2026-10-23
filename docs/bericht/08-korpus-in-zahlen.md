@@ -41,3 +41,5 @@ Wie vollständig die Metadaten sind, hängt vom Feld ab. Einen Titel und eine Te
 Flugblätter sind Mittel der Agitation. Ihren Verfassern ging es oft nicht um „die korrekte Wiedergabe von Fakten“ [@hamburg-flugblaetter]. Die Zahlen zeigen deshalb, wer sich wie oft zu Wort meldete und wie sich die Gruppen selbst darstellten, nicht, was tatsächlich geschah.
 
 Die Häufung 1972 und 1973 passt zur Geschichte der Universität: Andreas Becker nennt 1971 bis 1973 die „eigentlich revolutionäre Zeit“ der Universität, geprägt von den Protesten gegen das neue Hochschulgesetz [@becker2021]. Sie zeigt aber auch, was überliefert und gescannt ist. Aus der Zahl der Blätter allein lässt sich nicht auf die Stärke der Proteste schließen, zumal für 1973 der Band 15 noch fehlt (Kap. 2.5).
+
+Was sich mit dem Korpus darüber hinaus auswerten lässt, zeigen zehn Beispielfragen im Notebook [Forschungsfragen](../forschungsfragen.html), etwa dass gut ein Drittel aller Flugblätter das Bayerische Hochschulgesetz erwähnt.

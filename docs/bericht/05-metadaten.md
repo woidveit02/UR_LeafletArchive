@@ -43,7 +43,7 @@ Die Belegprüfung der Pipeline wurde für 2000 Segmente durchgeführt. Bei 1731 
 
 Um Auswirkungen der jeweiligen Prompt-Fassungen zu vergleichen, wurden die Bände 002–004 am 17.10.2026 erneut mit dem für die Bände 005–014 verwendeten Prompt verarbeitet (`claude-r12`). Verglichen mit den früheren Fassungen lag bei den insgesamt 464 Flugblättern 25 mal (5 %) ein anderes Datum vor, die Textsorte änderte sich in 24 (5 %) Exemplaren, 58 mal (13 %, teils nur andere Schreibweisen) unterschieden sich die Herausgeber und 115 mal (25 %, meist Länge und Zeichensetzung) die Titel. 
 
-Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Die wiederholten Läufe sind im Arbeits-Repository dokumentiert (Kap. 12.6). Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Prompts als auch ein gewisser Zufallsfaktor vermutet.
+Die Ergebnisse der Belegprüfung wiesen bei den erneuten Läufen leichte Unterschiede auf. Die Werte lagen bei 86,2 %, 90,6 % und 89,2 %, während für die ersten Läufe 84,5 %, 87,7 % und 85,1 % erreicht wurden. Da sich die extrahierten Angaben zwischen den Läufen teilweise änderten, behält die Anwendung die Ergebnisse der ursprünglichen Läufe bei. Als Grund für die entstandenen Unterschiede wurden sowohl die Änderung des Prompts als auch ein gewisser Zufallsfaktor vermutet.
 
 Um die Reproduzierbarkeit der Ergebnisse bei unverändertem Prompt zu testen, müssen dieselben Bände erneut mit denselben Einstellungen wie im Lauf `claude-r12` verarbeitet und die Resultate beider Läufe miteinander verglichen werden.
 
@@ -75,4 +75,4 @@ Neue Herausgeber werden während des Imports im Schritt „Prüfen & freigeben�
 
 Für den Testimport am 20.10.2026 hatten wir die ersten 230 Seiten von Band 15 (Kap. 2.5). Mit *Claude Sonnet 4.5*, dem Modell der Bände 1–14, kostet die Metadatenextraktion danach etwa 9 \$ je 1000 Seiten (2,11 \$ für die 230 Seiten), mit *Claude Opus 5.5* etwa 10 \$ (hochgerechnet aus einem Testlauf mit 56 Flugblättern aus Band 014: 1,36 \$).
 
-Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwickeln](../handbuch/weiterentwickeln.md#metadaten).
+Hinweise für die Weiterentwicklung stehen im Handbuch [Weiterentwicklung](../handbuch/weiterentwickeln.md#metadaten).
